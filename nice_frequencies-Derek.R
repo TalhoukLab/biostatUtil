@@ -51,3 +51,47 @@ confusion.matrix <- function(x,y,seed=20,num.boot=1000,conf.level=0.95,digits=4)
   
   return(list(Accuracy=Accuracy,Sensitivity=Sensitivity,Specificity=Specificity,PPV=PPV,NPV=NPV,kappa=kappa))
 }
+
+x <- rbinom(100, 1, 0.5)
+y <- rbinom(100, 1, 0.2)
+confusion.matrix(x, y, conf.level = 0.9)
+
+#########################################################
+# generate a table of row percentages given the table t
+row.percent <- function(t, pretty.text=FALSE, digits=4) {
+  if (pretty.text) {
+    # e.g. 12%	
+    return(
+      apply(
+        t/apply(t,1,sum)*100,
+        c(1,2),
+        function(x){
+          if (!is.nan(x)) {
+            return(paste0(format(x,digits=digits),"%"))
+          } else {
+            return("-")
+          }
+        }
+      )
+    )
+  } 
+  return(t/apply(t,1,sum))
+}
+
+#########################################################
+# generate a table of row percentages given a table with 
+# a single row
+# - i.e. percent over total
+single.row.percent <- function(t,pretty.text=FALSE, digits=4) {
+  row.percent <- t/sum(t)
+  if (pretty.text) {
+    row.percent <- sapply(
+      t/sum(t)*100,
+      function(x){
+        paste(format(x,digits=digits),"%",sep="")
+      },
+      USE.NAMES=FALSE
+    )
+  } 
+  return(rbind(t,row.percent))
+}
