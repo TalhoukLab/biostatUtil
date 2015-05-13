@@ -39,7 +39,7 @@ confusionMatrix <- function(x, y, seed = 20, num.boot = 1000,
   
   cat(paste0("\n", "Accuracy: ", printCI(Accuracy), "\n", "Sensitivity: ",
              printCI(Sensitivity), "\n", "Specificity: ", printCI(Specificity),
-             "\n", "PPV: ", printCI(PPV), "\n","NPV: ", printCI(NPV), "\n",
+             "\n", "PPV: ", printCI(PPV), "\n", "NPV: ", printCI(NPV), "\n",
              "kappa: ", printCI(kappa), "\n", "\n"))
   
   return(list(Accuracy = Accuracy, Sensitivity = Sensitivity,
