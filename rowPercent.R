@@ -1,4 +1,4 @@
-rowPercent <- function(t, pretty.text = FALSE, digits = 4) {
+rowPercent <- function(t, pretty.text = FALSE, keep = FALSE, digits = 4) {
   # Generate a table of row percentages given table t
   pcts <- t / apply(t, 1, sum)
   if (pretty.text) {
@@ -6,8 +6,16 @@ rowPercent <- function(t, pretty.text = FALSE, digits = 4) {
                   function(x) ifelse(!is.nan(x),
                                      paste0(format(x, digits = digits), "%"),
                                      "-"))
-    return(pcts)
+    if (keep) {
+      return(rbind(t, pcts))
+    } else {
+      return(pcts)  
+    }
   } else {
-    return(round(pcts, digits = digits))
+    if (keep) {
+      return(rbind(t, round(pcts, digits = digits)))
+    } else {
+      return(round(pcts, digits = digits))
+    }
   }
 }
