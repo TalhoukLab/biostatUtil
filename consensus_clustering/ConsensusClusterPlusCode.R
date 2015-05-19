@@ -22,8 +22,8 @@ mets=c("hcAEucl","hcDianaEucl","hcAgnesEucl","kmEucl","kmSpear","kmMI","pamEucl"
 D=format(Sys.Date(),format="%b%d")
 
 hc.AL = ConsensusClusterPlus(d,maxK=4,reps=r,pItem=p,pFeature=1,title=paste(D,"hcAEucl",sep=""), plot="png", writeTable=TRUE)
-hc.diana = ConsensusClusterPlus(d,maxK=4,reps=r,pItem=p,pFeature=1,title=paste(D,"hcDianaEucl",sep=""),clusterAlg="dianaHook", plot="png", writeTable=TRUE)
-hc.agnes = ConsensusClusterPlus(d,maxK=4,reps=r,pItem=p,pFeature=1,title=paste(D,"hcAgnesEucl",sep=""),clusterAlg="agnesHook", plot="png", writeTable=TRUE)
+hc.diana = ConsensusClusterPlus(d,maxK=4,reps=r,pItem=p,pFeature=1,clusterAlg="dianaHook",title=paste(D,"hcDianaEucl",sep=""), plot="png", writeTable=TRUE)
+hc.agnes = ConsensusClusterPlus(d,maxK=4,reps=r,pItem=p,pFeature=1,clusterAlg="agnesHook",title=paste(D,"hcAgnesEucl",sep=""), plot="png", writeTable=TRUE)
 km.eucl = ConsensusClusterPlus(d,maxK=4,reps=r,pItem=p,pFeature=1,distance="euclidean",clusterAlg="km",title=paste(D,"kmEucl",sep=""),plot="png", writeTable=TRUE)
 km.spear = ConsensusClusterPlus(d,maxK=4,reps=r,pItem=p,pFeature=1,distance="spearman",clusterAlg="kmdist",title=paste(D,"kmSpear",sep=""),plot="png", writeTable=TRUE)
 km.MI = ConsensusClusterPlus(d,maxK=4,reps=r,pItem=p,pFeature=1,distance="myMIdist",clusterAlg="kmdist",title=paste(D,"kmMI",sep=""),plot="png", writeTable=TRUE)
