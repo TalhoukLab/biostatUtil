@@ -20,7 +20,7 @@ confusionMatrix <- function(x, y, seed = 20, num.boot = 1000,
   Specificity = round(binconf(CM[2, 2], m2, alpha = 1 - conf.level,
                               method = "wilson"), digits)
   PPV = round(binconf(CM[1, 1], n1, alpha = 1 - conf.level,
-                      method =" wilson"), digits)
+                      method = "wilson"), digits)
   NPV = round(binconf(CM[2, 2], n2, alpha = 1 - conf.level,
                       method = "wilson"), digits)
   kappa = round(kappaCIboot(x, y, seed, num.boot, conf.level),
