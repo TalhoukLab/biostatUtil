@@ -1,3 +1,5 @@
+source("consensus_clustering/distance_functions.R")
+
 ConsensusCluster <- function(x, pItem, reps, k, OF) {
   # Function that generates multiple runs for consensusClustering (among samples)
   # x: data matrix (genes are rows and samples are columns)
@@ -49,37 +51,39 @@ ConsensusCluster <- function(x, pItem, reps, k, OF) {
   
   for (i in 1:reps) {
     setTxtProgressBar(pb, i)
-    set.seed(123)
     ind.new <- sample(n, n.new, replace = F)
-    #   nmfDiv
-    #   nmf.x=x2[!(apply(x2[,ind.new],1,function(x)all(x==0))),ind.new]
-    #   coclus[ind.new,i,1] <- predict(nmf(nmf.x,rank=k,method="brunet",seed=123456789))
-    #   nmfEucl
-    #   coclus[ind.new,i,2] <- predict(nmf(nmf.x,rank=k,method="lee",seed=123456789))
-    #   hcAEucl
-      coclus[ind.new, i, 3] <- cutree(hclust(dist(t(x.rest[, ind.new])), method = "average"), k)
-    #   hcDianaEucl
+#       nmfDiv
+#       x.nmf.samp <- x.nmf[!(apply(x.nmf[, ind.new], 1, function(x) all(x == 0))), ind.new]
+#       coclus[ind.new, i, 1] <- predict(nmf(x.nmf.samp, rank = k, method = "brunet", seed = 123456789))
+#       nmfEucl
+#       coclus[ind.new, i, 2] <- predict(nmf(x.nmf.samp, rank = k, method = "lee", seed = 123456789))
+#       hcAEucl
+#       coclus[ind.new, i, 3] <- cutree(hclust(dist(t(x.rest[, ind.new])), method = "average"), k)
+#       hcDianaEucl
 #       coclus[ind.new, i, 4] <- cutree(diana(euc(t(x.rest[, ind.new])), diss = TRUE), k)
-    #   hcAgnesEucl
-    #   coclus[ind.new,i,5] <- cutree(agnes(euc(t(x1[,ind.new])),diss=TRUE),k )
-    #   kmeans Euclidean
-    #   coclus[ind.new,i,6] <- kmeans(euc(t(x1[,ind.new])),k)$cluster
-    #   kmeans Spearman
-    #   coclus[ind.new,i,7] <- kmeans(spearman.dist(t(x1[,ind.new])),k)$cluster
-    #   kmeans MI
-    #   coclus[ind.new,i,8] <- kmeans(MIdist(t(x1[,ind.new])),k)$cluster
-    #   pamEucl
-    #   coclus[ind.new,i,9] <- pam(euc(t(x1[,ind.new])),k,cluster.only=TRUE)
-    #   pamSpear
-    #   coclus[ind.new,i,10] <- pam(spearman.dist(t(x1[,ind.new])),k,cluster.only=TRUE)
-    #   pamMI
-    #   coclus[ind.new,i,11] <- pam(spearman.dist(t(x1[,ind.new])),k,cluster.only=TRUE)
+#       hcAgnesEucl
+#       coclus[ind.new, i, 5] <- cutree(agnes(euc(t(x.rest[, ind.new])), diss = TRUE), k)
+#       kmeans Euclidean
+#       coclus[ind.new, i, 6] <- kmeans(euc(t(x.rest[, ind.new])), k)$cluster
+#       kmeans Spearman
+#       coclus[ind.new, i, 7] <- kmeans(spearman.dist(t(x.rest[, ind.new])), k)$cluster
+#       kmeans MI
+#       coclus[ind.new, i, 8] <- kmeans(myMIdist(x.rest[, ind.new]), k)$cluster
+#       pamEucl
+#       coclus[ind.new, i, 9] <- pam(euc(t(x.rest[, ind.new])), k, cluster.only = TRUE)
+#       pamSpear
+#       coclus[ind.new, i, 10] <- pam(spearman.dist(t(x.rest[, ind.new])), k, cluster.only = TRUE)
+#       pamMI
+#       coclus[ind.new, i, 11] <- pam(myMIdist(x.rest[, ind.new]), k, cluster.only = TRUE)
   }
-  saveRDS(coclus, paste0(OF, "test.rds"))
+#   saveRDS(coclus, paste0(OF, "test.rds"))
+return(coclus)
 }
 
-slice <- 4
-test.class <- coclus %>%
+ccc <- ConsensusCluster(TCGA.raw, pItem = 0.8, reps = 1000, k = 4, OF = "consensus_clustering/")
+
+slice <- 10
+test.class <- ccc %>%
   extract(, , slice) %>%
   apply(., 1, function(x) names(which.max(table(x)))) %>%
   set_names(substring(names(.), first = 18, last = 19)) %>%

@@ -18,5 +18,5 @@ agnesHook = function(this_dist,k){
 
 # Mutual Information
 myMIdist = function(x) { 
-  MIdist(t(d))
+  MIdist(t(x))
 }
