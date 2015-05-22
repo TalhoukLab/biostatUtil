@@ -35,7 +35,7 @@ if (ALINE) {
   LIB.DIR <- "C:\\Users\\samuelc\\Documents\\workspace\\R\\R_scripts\\"
   SETUP_KNITR.R <- "SetUp_knitr.R"
   DEFINEEVENTDATE.R <- "C:\\Users\\samuelc\\Documents\\workspace\\R\\endometrial\\jessica_2014-04-08\\DefineEventDate.R"
-  ED.CSV <- "R:\\data\\analyses\\endometrial\\jessica_2014-04-08\\excel exports\\endometrial_n518_2015-05-12.csv"
+  ED.CSV <- "R:\\data\\analyses\\endometrial\\jessica_2014-04-08\\excel exports\\endometrial_n518_2015-05-21.csv"
   SETUP_DB.R <- "SetUp_db.R"
   DATE.FORMAT="%m/%d/%Y" # this should be R's default date format
   CASE.SELECTION.FLOW.CHART <- "R:\\data\\analyses\\endometrial\\paper_pole\\remark.png" # CANNOT TAKE SPACE IN FILE PATH!!!!
