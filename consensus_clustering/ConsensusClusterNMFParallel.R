@@ -72,6 +72,7 @@ ConsensusClusterNMFParallel(x, pItem = 0.8, reps = 1000, k = 4, OF = "consensus_
 # Get consensus clusters
 results.nmf <- readRDS("consensus_clustering/TCGA/nmf_output_05-19-2015.rds")
 
+# TODO: incorrect must fix with connectivityMatrix and consensusMatrix
 nmf.div <- results.nmf %>%
   extract(, , 1) %>%
   apply(., 1, function(x) names(which.max(table(x)))) %>%

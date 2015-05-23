@@ -81,10 +81,3 @@ return(coclus)
 }
 
 ccc <- ConsensusCluster(TCGA.raw, pItem = 0.8, reps = 1000, k = 4, OF = "consensus_clustering/")
-
-slice <- 10
-test.class <- ccc %>%
-  extract(, , slice) %>%
-  apply(., 1, function(x) names(which.max(table(x)))) %>%
-  set_names(substring(names(.), first = 18, last = 19)) %>%
-  table(., names(.))
