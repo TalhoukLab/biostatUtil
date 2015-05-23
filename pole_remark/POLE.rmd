@@ -1,0 +1,549 @@
+---
+title: "POLE Remark Criteria"
+output:
+  html_document:
+    css: ~/custom.css
+  pdf_document: default
+  word_document: default
+---
+
+
+```{r Preamble, message=FALSE,echo=FALSE,warning=FALSE,results='hide'}
+# markdown manual: http://rmarkdown.rstudio.com/authoring_basics.html
+rm(list=ls(all=TRUE)) #Clean up
+```
+
+```{r Versions,message=FALSE,echo=FALSE,results='hide',warning=FALSE}
+info <- sessionInfo()
+r_ver <- paste(info$R.version$major, info$R.version$minor, sep=".")
+```
+
+```{r input_constants,message=FALSE,echo=FALSE,results='hide',warning=FALSE}
+ALINE <- FALSE # if run on Aline's computer
+RUN.IN.MARKDOWN=TRUE # a flag to indicate that the codes are called from this markdown file
+if (ALINE) {
+  LIB.DIR <- "~/Desktop/Rcode/R_scripts/"
+  SETUP_KNITR.R <- "~/Desktop/Rcode/SetUp_knitr.R"
+  DEFINEEVENTDATE.R <- "~/Desktop/Rcode/DefineEventDate.R"
+  ED.CSV <- "~/Documents/Endometrial/Database/ed.csv"
+  SETUP_DB.R <- "~/Documents/Endometrial/POLE/SetUp_db.R"
+  DATE.FORMAT="%Y-%m-%d" # this should be R's default date format
+  CASE.SELECTION.FLOW.CHART <- "/Users/atalhouk/Documents/Endometrial/POLE/remark.png"
+  DO.CITATIONS=TRUE
+} else {
+  options(encoding = "UTF-8")
+  LIB.DIR <- "C:\\Users\\samuelc\\Documents\\workspace\\R\\R_scripts\\"
+  SETUP_KNITR.R <- "SetUp_knitr.R"
+  DEFINEEVENTDATE.R <- "C:\\Users\\samuelc\\Documents\\workspace\\R\\endometrial\\jessica_2014-04-08\\DefineEventDate.R"
+  ED.CSV <- "R:\\data\\analyses\\endometrial\\jessica_2014-04-08\\excel exports\\endometrial_n518_2015-05-21.csv"
+  SETUP_DB.R <- "SetUp_db.R"
+  DATE.FORMAT="%m/%d/%Y" # this should be R's default date format
+  CASE.SELECTION.FLOW.CHART <- "R:\\data\\analyses\\endometrial\\paper_pole\\remark.png" # CANNOT TAKE SPACE IN FILE PATH!!!!
+  DO.CITATIONS=FALSE
+}
+options(scipen=999) # disable scientific notation e.g. instead of 1x10E-3, show 0.001
+```
+
+
+```{r loadnMunge,message=FALSE,echo=FALSE,results='hide',warning=FALSE}
+library(dplyr)
+require(Gmisc)
+library(survival)
+library(knitcitations)
+library(powerSurvEpi)
+source(SETUP_KNITR.R)
+source(DEFINEEVENTDATE.R)
+source(SETUP_DB.R) # setup database ... e.g. censoring, remove cases
+
+```
+
+#### Item 1. State the marker examined, the study objectives, and any pre-specified hypotheses.
+
+Using a cohort of `r nrow(emdb)` endometrial cancer patients, the main purpose of this study is to determine whether the mutation status of POLE (hotspot mutations), assessed in tumour samples obtained prior to treatment, at time of surgery or from clinical biopsy, can serve as a prognostic marker of overall survival in endometrial cancer patients. A secondary objective is to study the interaction of treatment with POLE status in how it affects overall survival (OS), progression free (RFS), and disease specific (DSS).
+
+The pre-specified hypothesis (from literature) is that POLE mutations occur in 5-10% of patients, these are generally younger patients with endometrioid subtype. They usually have very good survival outcomes in comparison with the non-mutated group. 
+
+#### Item 2. Describe the characteristics (for example, disease stage or co-morbidities) of the study patients, including their source and inclusion and exclusion criteria.
+
+For this study, all cases of endometrial cancer were identified in the tumour bank and archives to see if they met the following inclusion criteria 
+
+**Inclusion criteria:**
+
+- Primary endometrial cancer with tumour tissue accessible from tumour bank and archive
+-	The availability of adequate specimens and availability of reliable clinical outcome data
+-	Hysterectomy specimen endometrial specimen (`r paste("n=",sum(emdb$Method.of.Initial.Pathologic.Diagnosis!="Office endometrial biopsy"))`) or endometrial biopsy in close time proximity to hysterectomy (`r paste("n=",sum(emdb$Method.of.Initial.Pathologic.Diagnosis=="Office endometrial biopsy"))`)
+- Patients with surgery dates prior to January 1, 2012, which insures two years of minimum potential follow-up.
+- Viable tissue and decent quality of DNA for Fluidigm-Miseq sequencing
+
+**Exclusions:**
+
+-	Pre-cancers or cancers metastatic to the uterus
+-	Treatment (chemotherapy, radiation, other) prior to hysterectomy
+-	Concurrent cancer being treated at the same time or influencing outcome
+-	No hysterectomy performed
+-	Potential follow up shorter than two years
+- POLE germline mutation
+
+Clinical and pathologic data was obtained and translational work undertaken. A portion of these cases had translational investigations from other studies (e.g., McConechy J Path).
+
+All women approached for surgery for presumed or biopsy-proven gynecologic malignancies are also approached for consent to tissue/fluid/blood banking for research purposes. Once consent is signed, they are assigned an identifier through which only the tumor bank director and three appointed designates have access to. 
+
+In addition to tumor bank cases, we also have archival FFPE endometrial cancer cases collected over the years at our center for projects geared towards improved immunohistochemical classification of endometrial tumors. After obtaining IRB (Institutional Review Board?) approval, these cases underwent pathology review, areas of tumor were circled, tissue microarrays built, and clinicopathologic data extracted. Immunohistochemical studies have been undertaken in these cases as well as some translational work.
+
+Whether by tumor bank or archival means, all endometrial cancer cases described herein are from our institution. In BC, gynecologic cancers are referred to and surgically managed in Vancouver. We are the only provincial cancer center and unless the gynecologic cancer diagnosis is a surprise, e.g., diagnosed during other surgical procedures, or on some occasion low grade (ie grade 1 endometrial cancer clinical stage I) they are referred to our team and thus would have been approached for tissue banking. Our catchment includes the entire province of BC, the Yukon Territory and a portion of women from Alberta and North West Territories may also be referred. This yields a sizeable case volume over a population of approximately 5 million individuals in these geographic catchment areas. In BC alone there were 742 new endometrial cancers diagnosed in 2012 (http://www.bccancer.bc.ca).
+
+Follow-up practice varies. If patients live remote from Vancouver all follow-up may be with her local physicians. If the patient is local, she may see us until completion of adjuvant therapy,  up to 5 years from therapy, or longer if undergoing continued treatment for recurrent disease. Follow-up data for patients living remotely may be missing or unobtainable in this cohort but was often and actively pursued by contacting the primary physician. Follow-up data was also obtained from cancer registry data (provincial) where date of recurrence, date of death, date of last contact and status of last contact are periodically updated. 
+
+None of the women in this study, that we are aware of, were involved in a clinical trial.
+
+#### Item 3.Describe treatments received and how it's chosen (for example, randomized or rule-based). 
+
+Globally and within our center, treatment for EC, including type of surgery performed, chemotherapy, radiation and hormonal therapy varies widely. There are however published guidelines on our BC Cancer Agency website that as a group we work to adhere to. The BCCA treatment algorithms have changed five times in the last decade. Chemotherapy is more broadly used now. Radiation type and dosing has changed over the study period. Surgical algorithms have also changed. In addition, the FIGO staging system for endometrial cancer has changed twice over the period of time encompassed in the study  
+
+http://www.bccancer.bc.ca/HPI/CancerManagementGuidelines/Gynecology/Endometrium/Mngmt.htm
+
+We have worked to capture these differences providing as much detail as possible and updating the surgical stage based on detailed pathology reports at our disposal.
+
+Further challenge is posed by the lack of reproducibility of histologic subtype by pathologists `r if(DO.CITATIONS){citep("10.1097/PAS.0b013e31827f576a")}`, even with the addition of immunohsitochemistry `r if(DO.CITATIONS){citep("10.1097/PAS.0b013e31828c63ed")}`. However, even acknowledging these limitations, histomorphologic typing, grading, and detailed parameters are according to global standard of care.
+
+Clinical follow-up frequency and duration are also per our BCCA guidelines and consistent with global recommendations.
+
+http://www.bccancer.bc.ca/HPI/CancerManagementGuidelines/Gynecology/Endometrium/FU.htm
+
+#### Item 4.Describe type of biological material used (including control samples) and preservation and storage methods.
+
+Patient samples were identified from five endometrial tumour tissue microarrays (TMA). DNA was extracted from available flash frozen tumours (n=`r sum(!is.na(emdb.w.duplicate$POLE.mut.germline.as.missing) & emdb.w.duplicate$TMA %in% c(TMA.NAME.11.010, TMA.NAME.14.001, ADDITIONAL.CASES))`) or formalin fixed paraffin embedded (FFPE) tumour blocks(n=`r sum(!is.na(emdb.w.duplicate$POLE.mut.germline.as.missing) & emdb.w.duplicate$TMA %in% c(TMA.NAME.09.004, TMA.NAME.10.005, TMA.NAME.10.006))`). If both FFPE and flash frozen tumours were available for the case, then DNA was extracted from the flash frozen tumours. To determine somatic status, the normal DNA was either extracted from available buffy coat or representative normal FFPE blocks. 
+Hysterectomy specimens are sampled in the anatomic pathology laboratory immediately post operatively and assigned a unique identifier. All tissues are snapped frozen, stored at -80 oC temporarily and then transferred to a cryopreservation unit at -196 oC for long term storage.
+
+FFPE blocks were preserved as per standard clinical pathology lab protocol.
+
+#### Item 5. Specify the assay method used and provide (or reference) a detailed protocol, including specific reagents or kits used, quality control procedures, reproducibility assessments, quantitation methods, and scoring and reporting protocols. Specify whether and how assays were performed blinded to the study endpoint.
+
+**DNA extractions**
+
+DNA from fresh frozen tumours and DNA from buffy coat were extracted with the Qiagen Gentra Puregene  kit (Qiagen) as per manufacturers protocols. The FFPE tumours and normal were extracted using the Qiagen FFPE kit as per manufacturers protocols. All DNA was quatified using the Qubit fluorometer kit (Life Technologies).
+
+**Fluidigm-Miseq Sequencing**
+
+Targeted primers were designed to cover the POLE exonuclease domains exons 9-14, and synthesized by IDT Technologies. All primers were tested and re-synthesized if no amplification product was present. In brief, primer sets were designed using Primer 3 to amplify the specific gene regions, and tagged with CS1 (5'-ACACTGACGACATGGTTCTACA-3') and CS2 (5'-TACGGTAGCAGAGACTTGGTCT-3') sequencing tags. PCR products (150-200bp) were amplified using the Fluidigm 48X48 Access Arrays, as per manufacturers protocol, with input of 100ng for FFPE derived DNA, and 50ng for high-quality DNA from buffy coat or frozen tumour DNA. DNA barcodes (10bp) with Illumina cluster-generating adapters were added to the libraries post-Fluidigm harvest as previously described [168], and cleaned-up using Agencourt AMpure XP beads (Beckman Coulter). Barcoded PCR product pools were then quantified using the high sensitivity DNA assay and Qubit fluorometer (Life Technologies) and pooled to one total library by normalizing to equal amounts of PCR product. In total, 96 samples were pooled, denatured according to Illumina standard protocols, and sequenced using a MiSeq 300 cycle V2 kit on the Illumina MiSeq for ultra-deep validations. Uni-directional barcode sequencing was performed. All bam and VCF files were generated using Illumnia MiSeq reporter. Analysis was performed using the VCF files generated by the somatic variant caller 3.2.3.0, then filtered based on reads passing filter, non-synonymous, and >5% variant allele frequency.  All potential mutations were then manually interrogated and filtered using the Integrated Genome Viewer (IGV). For validations, repeat Fluidigm-Miseq sequencing was performed along with select Sanger sequencing, however CS1 and CS2 primers were used as a universal sequencing primers on the ABI 3130xl Genetic Analyzer (Applied Biosystems) and analyzed as previously described (McConechy, JPath 2011). Normal DNA was also sequenced to check somatic status. All validated tumour POLE mutations were bi-directionally sequenced twice at minimum, and once in the normal to validate somatic or germline status.
+
+#### Item 6. State the method of case selection, including whether prospective or retrospective and whether stratification or matching (for example, by stage of disease or age) was used. Specify the time period from which cases were taken, the end of the follow-up period, and the median follow-up time. 
+```{r}
+source("remark6.R")
+```
+
+a)  Case Selection
+
+We analyzed tumour obtained retrospectively by searching for all patients with adequate specimen availability in our tumour bank or obtained from archives. We did not attempt to stratify by any clinicopathological parameter. Adequate representation from the major histological subtypes (endometrioid and serous, encompassing > 90% of EC'€™s), and all stages, and grades was achieved. We did not want to focus on the complex and poorly understood and more rare histologies (MMMT or carcinosarcomas, clear cell, undifferentiated) although a few of such cases are represented.
+
+Both clinical and pathological data was collected and at the time of banking. Follow-up data was obtained until Oct 14th, 2014 then locked. The assays for this paper were newly performed using stored specimen. 
+
+```{r Followup,message=FALSE,echo=FALSE,results='asis'}
+T1=as.Date(emdb[,"followup.start.date.mm.dd.yyyy"],format=DATE.FORMAT)
+T2=as.Date(O$ev.Date) # no need to use do format=DATE.FORMAT since O$ev.Date should be date objects already
+status=O$ev.status=="os.event"
+
+FU=AssessSurvTime(T1,T2,status)
+```
+
+b)	Time Period
+
+Patients entered the study between `r min(Year)` and `r max(Year)`. Patients with potential follow-up less than two years were not considered at this time. Moreover, observation were randomly censored on December 31st of the fifth year following the year in which they entered the study. This is done to ensure random censoring and minimize ascertainment bias. 
+
+We computed several measures to assess follow-up, described below:
+
+1.  The observation time is computed as the difference between the final recorded date and the entry date of all patients.  This is also known as the follow-up time. This method is influenced by early deaths of high-risk patients and produces smaller follow-up times in cases of increasing death hazard. The median observation time in this cohort is `r FU$Otime` years.
+
+2.	The censoring time is the follow-up time for censored patients or survivors. This computed as the difference between the last recorded date and the entry date for censored events only. This value can be unstable if the number of survivors is small.The median censoring time in this cohort is `r FU$Stime` years.
+
+3.	The time to end of study is computed as the difference between the date marked as the end of study date and the entry date for all patients. The median time to end of study in this cohort is `r FU$Etime` years.
+
+4.	The known function time is the difference between the end of study date and the entry date for those patients that are censored, and the difference between the study end date and the entry date for patients with events. This method is a hybrid between the observation time and the time to end of study and tends to over estimate the follow-up time. The median KFT in this cohort is `r FU$KFT` years. 
+
+5.	Kaplan Meier estimate of potential follow-up also known as the reverse Kaplan Meier method is calculated in the same way a KM estimate is calculated, but with the censoring variable reversed. Thus patients who have died are censored on their day of death, and the patients who are still alive have an event on the date they are censored. This allows the computation of the unobservable follow-up time which could have been potentially obtained for patients had they not died. This method is the most reliable and is considered the preferred choice in the literature `r if(DO.CITATIONS){citep("10.1016/0197-2456(96)00075-X")}`. The median potential follow-up time based on the reverse Kaplan Meir method in this cohort is `r FU$RevKM` years.
+
+
+_Table of median follow-up time (in years)_
+`r item6.fu.summary.table.os`
+`r item6.fu.summary.table.dss`
+`r item6.fu.summary.table.rfs`
+
+From the above table we can see that we have adequate follow-up for all three outcome measures. Moreover, there does not seem to be a any difference in follow up between the POLE mutated cases verus the wild type cases.
+
+#### Item 7. Precisely define all clinical endpoints examined.
+
+Three outcomes of interest are considered: time to death, time to death of disease, time to relapse. 
+In this study, the time origin is the date of surgery. In order to avoid ascertainment bias, because we are dealing with registry data, we censored patients on the following censoring date: December 31st of the fifth year following the year of their surgery.
+
+The definition of an event depends on the outcome of interest:
+
+1.  **Time to death or overall survival (OS)**, patients have an event if they die of any cause prior to the censoring date. If patients don't have an event, they are censored at the time of last follow up.If the event status or the date of last followup is unknown data is considered missing.
+
+2. **Time to death from disease or disease specific survival (DSS)**, patients have an event if they die and the reason of death is endometrial cancer prior to the censoring date. If they are alive prior to the censoring date or if they died of an unrelated cause, they are censored at the time of last follow-up.  If the event status or the date of last followup is unknown data is considered missing. The event status is considered unknown if patients die of an intercurrent disease or if the reason for death is unspecified. These patients are not  considered in the disease specific survival analysis.
+
+3.	**Time to relapse or relapse-free survival (RFS)**, patients have an event if there is evidence of the disease or a metastatic disease or if they died of the disease prior to the censoring date.If they are alive and disease free prior to the censoring date or if they died of an unrelated cause, they are censored at the time of last follow-up.  If the event status or the date of last followup is unknown data is considered missing.
+
+#### Item 8: List all candidate variables initially examined or considered for inclusion in models.
+
+```{r}
+#source("remark8.R")
+```
+
+
+As a primary analysis, we consider a cox survival model with POLE mutation status and adjuvant treatment (no vs. any) as predictors. As a secondary analysis we consider the change in hazard ratio with the adjustment for the following parameters:
+  
+*Please refer to item 10-a for a detailed definition of each predictor and an explanation of any recoding scheme.*
+
+- POLE mutation status (mutated vs wild type)
+
+- adjuvant treatment (no vs. any)
+
+- age at surgery (years)
+
+- body mass index (in kilograms per square meter)
+
+- tumor grade (1 or 2 vs 3)
+
+- tumor stage (I vs. II, III or IV)
+
+- histology (endometrioid vs. non-endometrioid)
+
+- lymphovascular invasion (no vs. yes)
+
+- any positive nodes (no vs. yes)
+
+All assays are done on samples collected at or before time of surgery. Similarly, clinical predictors are recorded or before the time of origin, in this case time of surgery, except for clinical outcome.
+
+#### Item 9:  Give rationale for sample size; if the study was designed to detect a specified effect size, give the target power and effect size.
+```{r}
+source("remark9.R")
+```
+This cohort (n=`r nrow(emdb)`) was obtained retrospectively by searching for all patients with adequate specimen availability in our tumour bank or obtained from archives. We did not attempt to select specific patients or to stratify by any clinicopathological parameter. While this is considered a sample of convenience, it appears to be representative of an endometrial cancer population. 
+
+Any positive findings from this analysis would need to be validated on an independent cohort.
+
+**A Priori Power Calculation**
+
+POLE mutation have been shown to occur in roughly 5-10% of the endometrial cancer population (reference TCGA and goodfellow). We use the results from Billingsley to compute the power a priori. They observed a mutation rate of 5.6% a recurrence rate of 3% in the mutated group and 17% in the wild type group, and a hazard ratio of recurrence of 0.22. Using these numbers in order to have a 80% power to detect a HR of 0.22 at alpha significance level of 0.05, a sample size of `r sum(ssizeCT.default(power=0.80,k=.056, pE=.03, pC=.17, RR=0.22, alpha=0.05))` is needed. For a significance level of 0.01, a sample size of `r sum(ssizeCT.default(power=0.80,k=.056, pE=.03, pC=.17, RR=0.22, alpha=0.01))` is needed. 
+
+
+We can see that any single prognostic study is going to be potentially underpowered to detect significant differences, especially after a multiple comparison correction.  Meta-analyses or combining data may be needed to confirm the findings.
+
+The following table shows the number of events among the POLE wild type and mutated group.
+
+
+`r item9.events.table$result.table.html`
+
+#### Item 10: Specify all statistical methods, including details of any variable selection procedures and other model-building issues, how model assumptions were verified, and how missing data were handled.
+
+* Item 10-a. Preliminary data preparation
+* Item 10-b. Association of marker values with other variables
+* Item 10-c. Methods to evaluate a marker's univariable association with clinical outcome.
+* Item 10-d. Multivariable analyses
+* Item 10-e. Missing data
+* Item 10-f. Variable selection
+* Item 10-g. Checking model assumptions
+* Item 10-h. Model validation
+
+#### [Item 10](#item10)-a.  Preliminary data preparation
+
+The POLE marker and all other predictors of interest are examined for extreme and anomalous values resulting from data entry and manipulation. Recoding of categories was performed where appropriate to group together categories with few observation. Summary statistics are considered for each variable in the analysis (results shown under [item 13](#item13)).  P-value of all statistical tests are rounded off to the fourth decimal place. 
+
+- POLE mutation status was analyzed as a binary variable i.e. wild type vs. mutation.
+
+- Age at surgery was calcuated as: date of surgery - birth date.  There are `r sum(emdb$Date.of.Surgery %in% ALL.MISSING.CODES)` cases with unknown date of surgery.  For these cases, June 30th of the year of the corresponding surgical block is taken as the "imputed" date of surgery.
+
+- Body mass index (BMI) is calculated from the weight and height data: weight (kg) / height (m)^2^
+
+- Stage was first recoded as stage IA, IB, II, III and IV; no substages (except for IA/B).  Since there are only `r sum(emdb$stage %in% c("II","III","IV") & emdb$POLE.mut.consolidated.numeric==1)` cases with POLE mutation among stage II, III and IV (combined), these stages were combined in association/correlation and survival analysis.  i.e. stage was analysed as stage IA/B vs. {II, III or IV}
+
+- Grade, categorized as 1, 2 or 3, is not evenly represented with `r round(sum(emdb$Tumour.Grade=="Grade 1")/nrow(emdb)*100,0)`% grade 1, `r round(sum(emdb$Tumour.Grade=="Grade 2")/nrow(emdb)*100,0)`% grade 2 and `r round(sum(emdb$Tumour.Grade=="Grade 3")/nrow(emdb)*100,0)`% grade 3.  To maximize statistical power, grade was analyzed as {1 or 2} vs. 3 in association/correlation and survival analysis.
+
+- Histolological subtype was categorized as `r paste(names(table(emdb$Histological.Subtype)),collapse=", ")`.  To maximize statistical power, histological subtype was analyzed as endometrioid vs. non-endometrioid in association/correlation and survival analysis.  However, association tables will be shown for individual categories (item 13).
+
+- Lymphovascular invasion (LVSI) was captured as "Yes" and "No" during the assembly of the database.  No further recoding required.
+
+- Any positive nodes.  Lymph nodes related data were captured as total number of pelvic lymph nodes and total number of aortic lymph nodes.  The parameter "any positive nodes" refers to any positive nodes either from pelvic or aortic.  For this variable, missing, includes cases where lumph node dissection was not performed.
+
+- Initial adjuvant treatment was captured as start/end date of treatment and type of treatment (drug name for chemotherapy and location for radiation therapy).  This data is recoded as `r paste(names(table(emdb$init.treatment))[-1],collapse=", ")`.  Adjuvant treatment given before relapse was considered part of the initial treatment plan.  In cases with unknown relapse dates, adjuvant treatment was considered initial if the treatment was started within 90 days of surgery.  
+
+
+Since there are very few events in the POLE group (`r sum(emdb$POLE.mut.consolidated.numeric[emdb$os.sts=="os.event"]==1)` overall survival, `r sum(emdb$POLE.mut.consolidated.numeric[!is.na(emdb$dss.sts) & emdb$dss.sts=="dss.event"]==1)` disease specific, and `r sum(emdb$POLE.mut.consolidated.numeric[!is.na(emdb$rfs.sts) & !is.na(emdb$rfs.yrs) & emdb$rfs.sts=="rfs.event"]==1)` relapse free survival events among the POLE mutated group), it is more reasonable to combine treatment groups such that we capture any adjuvent treatment versus none.  Therefore, initial adjuvant treatment was recoded as `r paste(names(table(emdb$any.init.treatment)), collapse=" vs. ")`. 
+
+Finally for all dates computed in this study, going from days to years was achieved by dividing the number of days by 365.24 (http://en.wikipedia.org/wiki/Year).
+
+#### [Item 10](#item10)-b.  Association of marker values with other variables
+
+The association of POLE with other variables such as demographic (Age), clinical (Treatment), pathological (Stage, Grade, Histology, LVSI) were tested with non-parametric tests.  Spearman rank correlation was used for continuous variables (age and BMI), Kendall tau-b correlation was used for ordinal variables (stage, grade, LVSI, any positive nodes and MMR status; all dichotomized) and a Chi-square test was used for nominal (histology and initial adjuvant treatment). 
+
+- Spearman rank correlation test was used to assess the correlation between two variables that are ordinal or continuous.  The Spearman correlation coefficient (rho) is a value that indicates the magnitude and direction of the correlation.  It ranges from -1 (perfect anti-correlation) to 1 (perfect correlation).
+
+- Kendall tau-b correlation test was used to assess the correlation between two dichotomized variables. The Kendall tau-b correlation coefficient (tau) is a value that indicates the level of agreement.  It ranges from -1 (perfect disagreement) to 1 (perfect agreement).  If the two variables being tested are independant, the cofficient is exptected to be approximately zero.
+
+- Chi-square test was used to assess the association between two nominal variables.
+
+#### [Item 10](#item10)-c.  Methods to evaluate a marker's univariable association with clinical outcome.
+
+We begin by conducting a univariable analysis (without adjustment for additional predictors) to understand the association between the presence of a POLE mutation on the end points of interest.
+
+- Univariate association between survival time and POLE mutation status were examined using Kaplan-Meier plots (visual examination), log-rank test and Cox proportional hazard regression models (to assess effect size). 
+
+#### [Item 10](#item10)-d.	Multivariable analyses
+Because one of the primary aims of this paper is to assess the joint effect of POLE and treatment on survival endpoints, a first analysis was done using a cox proportional hazard model and including  POLE mutational status and treatment in order to determine whether POLE had a predictive effect on treatment. This was tested using an omnibus test.
+
+Subsequently,the cox model was expanded to include other standard prognostic factors (age, BMI, grade, stage, histology, LVSI, treatment and MMR status).
+
+
+#### [Item 10](#item10)-e.	Missing data
+There are three types of missing values encountered during the assembly of the database.
+
+a. '[blank]' means data that is missing because of a condition was not tested in translational data.  In the case of a pathological parameter, no (further) attempt was made to lookup that particular parameter.  This was left as blank.
+
+b. '`r MISSING.EXPLICIT`' means data that is implicitly missing because some condition is not applicable. For example date of radiation therapy for patients who did not receive radiation therapy. These fields are marked "N/A".    						
+
+c. '`r MISSING.BIOMARKER.EXPLICIT`' means data that is unknown because there aren't sufficient materials or assay failed, or clinician did not capture.
+
+#### [Item 10](#item10)-f.	Variable selection
+Since the purpose of this study is to assess the prognostic significance of a single marker, POLE mutation status, variable selection is not applicable.
+
+### [Item 10](#item10)-g.	Checking model assumptions
+An important assumption of a survival model is non-informative censoring. For this assumption to be satisfied the mechanism giving rise to censoring of individual subjects are not related to the probability of an event occuring. In otherwords, the continuation of follow-up must not depend on the participant's medical condition or health status. Violation of this assumption invalidades any sort of survival analysis including Kaplan-Meir and Cox proportional hazard models. Moroever, in an older patient population, we are often faced with the issues of competing risks of death. For this reason, we have limited the potential follow-up  period to a minimum of 2 and a maximum of 5 years to ensure that it is clinically informative and attenuate the effect of both informative censoring and competing risk.
+
+The proportional hazard assumption was evaluated by means of smoothed Schoenfeld residual plots and tested as suggested by `r if(DO.CITATIONS){citep("10.1007/978-1-4757-3294-8")}` and as well by considering the graph of the log(-log(survival)) versus log of survival time. Obtaining parallel curves  would indicate that the  predictor is proportional over time. This method works for categorical predictors with few levels.
+
+### [Item 10](#item10)-h.	Model validation
+In this paper, we are not model building, but rather trying to estimate the improvement in hazard of death and recurrence of patients with POLE mutations suffering from endometrial cancer. However, in order to have a better idea of the properties of the estimate of the hazard ratio, we will use a bootstrap analysis to resample 100 of the 440 cases and compute the hazarad ratio based on the smaller sample. This procedure will be repeated with 1000 bootstrap sample. From this analysis we will be able to show the robustness of the estimate.
+
+#### Item 11. Clarify how marker values were handled in the analyses; if relevant, describe methods used for cutpoint determination.
+
+POLE mutation status was analyzed as a binary variable i.e. wild type vs. mutation.  There is one case with POLE germline mutation observed.  This case was excluded from the analysis.
+```{r}
+source("remark11.R")
+```
+
+`r item11.pole.mutation.amino.acid.changes`
+
+#### Item 12. Describe the flow of patients through the study, including the number of patients included in each stage of the analysis and reasons for dropout.
+```{r}
+source("remark12.R")
+```
+
+![title](`r CASE.SELECTION.FLOW.CHART`)
+
+`r item12.tma.breakdown$result.table.html`
+
+#### Item 13. Report distributions of basic demographic characteristics, standard prognostic variables, and tumor marker, including numbers of missing values.
+
+```{r}
+source("remark13.R")
+```
+`r item13.cohort.characteristics$result.table.html`
+`r item13.cohort.characteristics.no.tx$result.table.html`
+`r item13.cohort.characteristics.any.tx$result.table.html`
+`r item13.cohort.missing$result.table.html`
+
+#### Item 14. Show the relation of the marker to standard prognostic variables.
+```{r}
+source("remark14.R")
+```
+`r item14.correlation.table$result.table.html`
+
+#### Item 15. Present univariable analyses showing the relation between the marker and outcome, with the estimated effect.  Preferrably provide similar analyses for all other variables being analyzed.
+```{r fig.keep='none'}
+source("remark15.R")
+```
+<!-- 
+**listing of cases censored before 2 years**
+`r htmlTable(censored.bf.2.years.os, caption="OS", ctable=TRUE)`
+`r htmlTable(censored.bf.2.years.dss, caption="DSS", ctable=TRUE)`
+`r htmlTable(censored.bf.2.years.rfs, caption="RFS", ctable=TRUE)`
+-->
+
+*Please note: (F) indicates that the Firth's penalized maximum likelihood bias reduction method was used to estimate the hazard ratio.*
+
+**Univariable survival analysis - Whole cohort**
+
+`r uni.cox.summary.all.variables$result.table.html`
+
+**Univariable survival analysis - stratified by initial adjuvant treatment**
+
+`r uni.cox.summary.all.variables.no.init.treatment$result.table.html`
+
+`r uni.cox.summary.all.variables.any.init.treatment$result.table.html`
+
+Please note, there are `r sum(is.na(emdb$any.init.treatment))` cases with unknown initial adjuvant treatment status.
+
+**KM plots - overall survival**
+
+The interaction graph gives an idea of the trend and size of the effect.
+
+```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=13, fig.height=5}
+par(mfrow=c(1,2))
+do.km.plots.pole("os")
+```
+```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
+do.km.plots.pole.x.init.treatment("os")
+```
+
+**KM plots - disease specific survival**
+```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=13, fig.height=5}
+par(mfrow=c(1,2))
+do.km.plots.pole("dss")
+```
+```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
+do.km.plots.pole.x.init.treatment("dss")
+```
+
+**KM plots - relapse free survival**
+```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=13, fig.height=5}
+par(mfrow=c(1,2))
+do.km.plots.pole("rfs")
+```
+```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
+do.km.plots.pole.x.init.treatment("rfs")
+```
+
+#### Item 16. For key multivariable analyses, report estimated effects (e.g. hazard ratio) with confidence intervals for the marker and, at least for the final model, all other variables in the model.
+
+One of the main objectives of this paper is to test whether there is an interaction between treatment and POLE mutation status.  A significant interaction indicates that the effect of the treatment will be significantly different for a patient with a POLE mutation. 
+
+In order to address this question, three cox regression models are fit to the data. For the purpose of this analysis, and because the POLE wild type patients have a worse prognosis, the POLE mutation group was set as a reference in order to facilitate the interpretation of hazard ratios.
+
+The first model (model 1)  includes only POLE mutation status as a predictor of each of the outcome variables of interest (overall, disease specific and progression-free survival). 
+
+In the second model (model 2), we adjust the effect of POLE mutation by accounting for treatment in an additive model.  A significant effect for treatment in this model, indicates that treatment might be a confounding factor.
+
+In the third model (model 3), we add to model 2 an interaction term which represents the additional effect attributed to the interaction between POLE mutation status and treatment (Rx). A significant interaction term means that the mutation status for POLE is predictive of treatment effect.
+
+Model 1 is nested within model 2 which in turn is nested within model 3. In order to compare the three models, we used a likelihood ratio test. 
+
+##### Overall Survival Results
+*Please note: Cox regression with Firth's penalized likelihood was used*
+
+```{r results='asis'}
+source("remark16b.R")
+
+
+dat0=data.frame(Rx=emdb$any.init.treatment,POLE=emdb$POLE.mut.germline.as.missing,
+                OS.yrs=as.numeric(emdb$os.yrs),OS.sts=emdb$os.sts)
+dat0$POLE[dat0$POLE=="Unk"]=NA
+dat0$POLE=factor(dat0$POLE, levels=c("mutated","wild type"))
+
+dat1=dat0[complete.cases(dat0),]
+
+taos=testInter(dat1,event="OS",use.firth=TRUE)
+printInterModels(taos[[1]],taos[[2]],taos[[3]],"Overall Survival. ")
+pander(ftable(xtabs(~POLE+Rx+OS.sts,data=dat1)),style='rmarkdown')
+```
+
+
+When considering only POLE mutation status, we can see that a POLE mutation has a protective effect, since those with POLE wild type have a death hazard risk of `r taos[[1]][7]` relative to the mutated group (Model 1). Accounting for treatment, the hazard ratio associated with POLE wild type increases slightly to `r taos[[2]][1,7]` but in addition, those patients receiving treatment have an increased hazard of `r taos[[2]][2,7]` relative to those who didn't receive treatment. This is expected since adjuvent treatment is typically given to higher risk patients with more advanced disease. 
+
+Moreover, by accounting for treatment, there is a statistcially significant improvement to the likelihood Pvalue: `r round(taos[[4]]["P(>|Chi|)"][2,],4)`. The final step is to try to assess the statistical significance of adding an interaction term to the model (model 3). This appears to not be statistically signaficant, p value `r round(taos[[5]]["P(>|Chi|)"][2,],3)`. In conclusion, treatment is confounded with POLE but does not interact with POLE is as far as predicting time to death.
+
+
+##### Disease Specific Survival Results
+*Please note: Cox regression with Firth's penalized likelihood was used*
+
+```{r}
+dat0=data.frame(Rx=emdb$any.init.treatment,POLE=emdb$POLE.mut.germline.as.missing,
+                DSS.yrs=as.numeric(emdb$dss.yrs),DSS.sts=emdb$dss.sts)
+dat0$POLE[dat0$POLE=="Unk"]=NA
+dat0$POLE=factor(dat0$POLE, levels=c("mutated","wild type"))
+dat1=dat0[complete.cases(dat0),]
+
+tao=testInter(dat1,event="DSS",use.firth=TRUE)
+printInterModels(tao[[1]],tao[[2]],tao[[3]],"Disease Specific Survival. ")
+
+pander(ftable(xtabs(~POLE+Rx+DSS.sts,data=dat1)),style='rmarkdown')
+```
+
+For disease specific survival, we are not able to properly assess the interaction effect, because the mutated, no treatment group has no events. However a similar trend as seen in the time to death analysis hold. The confounding effect of treatment is significant (LRT P-Value: `r round(taos[[4]]["P(>|Chi|)"][2,],4)`).
+
+##### Relapse-Free Survival Results
+*Please note: Cox regression with Firth's penalized likelihood was used*
+
+```{r}
+dat0=data.frame(Rx=emdb$any.init.treatment,POLE=emdb$POLE.mut.germline.as.missing,
+                RFS.yrs=as.numeric(emdb$rfs.yrs),RFS.sts=emdb$rfs.sts)
+dat0$POLE[dat0$POLE=="Unk"]=NA
+dat0$POLE=factor(dat0$POLE, levels=c("mutated","wild type"))
+dat1=dat0[complete.cases(dat0),]
+
+tao=testInter(dat1,event="RFS",use.firth=TRUE)
+printInterModels(tao[[1]],tao[[2]],tao[[3]],"Relapse Free Survival. ")
+
+pander(ftable(xtabs(~POLE+Rx+RFS.sts,data=dat1)),style='rmarkdown')
+
+
+```
+
+
+For relapse-free survival, we are not able to properly assess the interaction effect either, because the mutated, no treatment group has no events. However a similar trend as seen in the time to death analysis hold. The confounding effect of treatment is significant (LRT P-Value: `r round(taos[[4]]["P(>|Chi|)"][2,],4)`).
+
+
+#### Item 17: Among reported results, provide estimated effects with confidence intervals from an analysis in which the marker and standard prognostic variables are included, regardless of their statistical significance.
+```{r}
+source("remark17.R")
+```
+
+**Multivariable Model with All Prognostic Factors**
+<!--
+```{r}
+dat0=data.frame(Rx=emdb$any.init.treatment,Age=emdb$age.at.surgery,Stage=emdb$stage_b1v234,grade=emdb$Tumour.Grade_b12v3,Histology=emdb$Histological.Subtype_non_endo,POLE=emdb$POLE.mut.germline.as.missing,OS.yrs=as.numeric(emdb$os.yrs),OS.sts=emdb$os.sts)
+dat0$POLE[dat0$POLE=="Unk"]=NA
+dat0$POLE=factor(dat0$POLE, levels=c("mutated","wild type"))
+
+dat1=dat0[complete.cases(dat0),]
+mod=coxphOut(coxph(Surv(OS.yrs,OS.sts=="os.event")~POLE+Age+grade+Histology+Rx,data=dat1),c("POLE wt","Age","Grade","Histology","Any Rx"))
+printCoxMod(mod,"Multivariable Model excluding Stage and BMI")
+```
+
+```{r}
+dat0=data.frame(Rx=emdb$any.init.treatment,Age=emdb$age.at.surgery,Stage=emdb$stage_b1v234,grade=emdb$Tumour.Grade_b12v3,Histology=emdb$Histological.Subtype_non_endo,bmi=emdb$bmi,POLE=emdb$POLE.mut.germline.as.missing,OS.yrs=as.numeric(emdb$os.yrs),OS.sts=emdb$os.sts,nodes=emdb$any.positive.nodes_NArm) #
+dat0$POLE[dat0$POLE=="Unk"]=NA
+dat0$POLE=factor(dat0$POLE, levels=c("mutated","wild type"))
+
+dat1=dat0[complete.cases(dat0),]
+mod=coxphOut(coxph(Surv(OS.yrs,OS.sts=="os.event")~POLE+Age+grade+Histology+Rx+bmi+nodes,data=dat1),c("POLE wt","Age","High Grade","Histology Endo","Any Rx","BMI","Any Nodes"))
+printCoxMod(mod,"Multivariable Model excluding Stage")
+```
+-->
+
+*Please note: (F) indicates that the Firth's penalized maximum likelihood bias reduction method was used to estimate the hazard ratio.*
+
+`r multi.cox.summary$result.table.html`
+
+#### Item 18. Report results of any further investigations, such as checking assumptions, sensitivity analyses, and internval validation.
+```{r}
+source("remark18.R")
+```
+
+```{r}
+#library(rms)
+#myfit = survfit(Surv(time, status) ~ catvar)
+#whatsurvplot(myfit, loglog=T)
+```
+
+
+In the basic form of the Cox regression model, the coefficients corresponded to the logarithm of the harzard ratio and were constant in time.  This assumption was graphically evaluated by means of smoothed Schoenfeld residual plots and tested as suggested by `r if(DO.CITATIONS){citep("10.1007/978-1-4757-3294-8")}`.
+
+#### Schoenfeld residual plots ####
+
+```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=9, fig.height=3}
+par(mfrow=c(1,3))
+do.check.ph("POLE.mut.germline.as.missing","POLE mutation")
+```
+
+Visual examination of the Schoenfeld residual plots indicate no evidence of POLE mutation status violating the proportional hazard assumption. 
+
+## References
+```{r message=FALSE,echo=FALSE,results='asis'}
+if(DO.CITATIONS){
+  bibliography()
+}
+```
+
+
+
+
