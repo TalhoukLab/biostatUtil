@@ -1,6 +1,6 @@
-connectivityMatrix <- function(clusters) {
-  # Given a cluster membership vector, returns the connectivity matrix
-  # 1 if both samples in same cluster, 0 otherwise
+indicatorMatrix <- function(clusters) {
+  # Given a cluster membership vector, returns the indicator matrix
+  # 1 if both samples selected in subsample, 0 otherwise
   cm <- clusters %>%
     rep(., length(.)) %>%
     matrix(ncol = sqrt(length(.)))
@@ -9,7 +9,7 @@ connectivityMatrix <- function(clusters) {
     if (is.na(cm[j, j])) {
       cm[, j] <- 0
     } else {
-      cm[, j] <- ifelse(cm[j, j] != cm[, j] | is.na(cm[, j]), 0, 1)
+      cm[, j] <- ifelse(is.na(cm[, j]), 0, 1)
     }
   }
   
