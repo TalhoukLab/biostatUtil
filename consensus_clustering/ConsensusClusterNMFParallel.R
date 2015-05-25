@@ -14,7 +14,6 @@ ConsensusClusterNMFParallel <- function(x, pItem, reps, k, OF, mets = c("nmfDiv"
   require(RColorBrewer)
   require(NMF)
   require(foreach)
-  require(doSNOW)
   require(doMC)
   
   # Remove genes with low signal, scale, and deal with negative entries
@@ -63,19 +62,3 @@ ConsensusClusterNMFParallel <- function(x, pItem, reps, k, OF, mets = c("nmfDiv"
     
   saveRDS(coclus, paste0(OF, "nmf_output_", format(Sys.time(), "%m-%d-%Y"), ".rds"))
 }
-
-
-# Test 1000 reps for k = 4
-x <- read.csv("~/Documents/Project 1 - HGSC Subtype/Datasets/TCGA.csv")
-ConsensusClusterNMFParallel(x, pItem = 0.8, reps = 1000, k = 4, OF = "consensus_clustering/")
-
-# Get consensus clusters
-results.nmf <- readRDS("consensus_clustering/TCGA/nmf_output_05-19-2015.rds")
-
-nmf.div <- results.nmf %>%
-  extract(, , 1) %>%
-  consensusMatrix
-
-nmf.eucl <- results.nmf %>%
-  extract(, , 2) %>%
-  consensusMatrix
