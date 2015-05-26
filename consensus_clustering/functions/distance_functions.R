@@ -9,7 +9,7 @@ dianaHook = function(this_dist,k){
   return(assignment)  
 }
 
-# Agglomerative Nesting
+# AGglomerative NESting
 agnesHook = function(this_dist,k){
   tmp = agnes(this_dist,diss=TRUE)
   assignment = cutree(tmp,k)

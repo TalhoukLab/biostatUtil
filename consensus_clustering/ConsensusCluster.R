@@ -1,4 +1,4 @@
-source("consensus_clustering/distance_functions.R")
+source("consensus_clustering/functions/distance_functions.R")
 
 ConsensusCluster <- function(x, pItem, reps, k, OF) {
   # Function that generates multiple runs for consensusClustering (among samples)
@@ -35,10 +35,10 @@ ConsensusCluster <- function(x, pItem, reps, k, OF) {
   samples <- colnames(x.rest)
   genes <- rownames(x.rest)
   n <- ncol(x.rest)
-  connect.matrix <- array(0, c(n, n, 11))
-  coclus <- array(NA, c(n, reps, 11),
+  connect.matrix <- array(0, c(n, n, 10))
+  coclus <- array(NA, c(n, reps, 10),
                   dimnames = list(samples, paste0("R", 1:reps),
-                                  c("nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "hcAgnesEucl",
+                                  c("nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl",
                                     "kmEucl", "kmSpear", "kmMI", "pamEucl", "pamSpear", "pamMI")))
   
   # rows are samples
@@ -68,7 +68,7 @@ ConsensusCluster <- function(x, pItem, reps, k, OF) {
 #       kmeans Spearman
 #       coclus[ind.new, i, 7] <- kmeans(spearman.dist(t(x.rest[, ind.new])), k)$cluster
 #       kmeans MI
-#       coclus[ind.new, i, 8] <- kmeans(myMIdist(x.rest[, ind.new]), k)$cluster
+#       coclus[ind.new, i, 8] <- kmeans(myMIdist(t(x.rest[, ind.new])), k)$cluster
 #       pamEucl
 #       coclus[ind.new, i, 9] <- pam(euc(t(x.rest[, ind.new])), k, cluster.only = TRUE)
 #       pamSpear
@@ -80,4 +80,4 @@ ConsensusCluster <- function(x, pItem, reps, k, OF) {
 return(coclus)
 }
 
-ccc <- ConsensusCluster(TCGA.raw, pItem = 0.8, reps = 1000, k = 4, OF = "consensus_clustering/")
+# ccc <- ConsensusCluster(TCGA.raw, pItem = 0.8, reps = 1000, k = 4, OF = "consensus_clustering/")

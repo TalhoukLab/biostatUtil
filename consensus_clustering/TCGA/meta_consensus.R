@@ -18,7 +18,7 @@ heatmap(meta.clusts, labRow = NA, labCol = NA, col = palBuPu)
 final.compare <- hclust(dist(meta.clusts), method = "average") %>%
   cutree(4) %>%
   as.factor %>%
-  set_names(hclust(dist(nmf.div), method = "average")$labels) %>%
+  set_names(hclust(dist(meta.clusts), method = "average")$labels) %>%
   set_names(substring(names(.), first = 18)) %>%
   table(., names(.))
   

@@ -2,18 +2,18 @@ indicatorMatrix <- function(clusters) {
   # Given a cluster membership vector, returns the indicator matrix
   # 1 if both samples selected in subsample, 0 otherwise
   require(dplyr)
-  cm <- clusters %>%
+  im <- clusters %>%
     rep(., length(.)) %>%
     matrix(ncol = sqrt(length(.)))
   
-  for (j in 1:ncol(cm)) {
-    if (is.na(cm[j, j])) {
-      cm[, j] <- 0
+  for (j in 1:ncol(im)) {
+    if (is.na(im[j, j])) {
+      im[, j] <- 0
     } else {
-      cm[, j] <- ifelse(is.na(cm[, j]), 0, 1)
+      im[, j] <- ifelse(is.na(im[, j]), 0, 1)
     }
   }
   
-  rownames(cm) <- colnames(cm) <- names(clusters)
-  return(cm)
+  rownames(im) <- colnames(im) <- names(clusters)
+  return(im)
 }
