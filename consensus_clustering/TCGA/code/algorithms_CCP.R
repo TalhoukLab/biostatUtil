@@ -1,5 +1,5 @@
 # Load
-source("consensus_clustering/distance_functions.R")
+source("consensus_clustering/functions/distance_functions.R")
 library(ConsensusClusterPlus)
 library(dplyr)
 library(magrittr)
@@ -68,4 +68,4 @@ pam.min.tab <- pam.min[[4]]$consensusClass
 cbind(hc.euc.tab, hc.diana.tab, km.euc.tab, km.spr.tab,
       km.min.tab, pam.euc.tab, pam.spr.tab, pam.min.tab) %>%
   set_colnames(c("hcAEucl","hcDianaEucl","kmEucl","kmSpear","kmMI","pamEucl","pamSpear","pamMI")) %>%
-  saveRDS("consensus_clustering/TCGA/CCP_output.rds")
+  saveRDS("consensus_clustering/TCGA/CCP_classes.rds")

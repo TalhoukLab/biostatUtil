@@ -1,9 +1,8 @@
-source("consensus_clustering/consensusMatrix.R")
+source("consensus_clustering/functions/consensusMatrix.R")
 
-CCP.clusts <- readRDS("consensus_clustering/TCGA/CCP_output.rds")
-NMF.clusts <- readRDS("consensus_clustering/TCGA/nmf_clust.RDS")
+CCP.clusts <- readRDS("consensus_clustering/TCGA/outputs/classes_CCP.rds")
+NMF.clusts <- readRDS("consensus_clustering/TCGA/outputs/classes_NMF.rds")
 all.clusts <- cbind(CCP.clusts, NMF.clusts)
-
 meta.clusts <- consensusMatrix(all.clusts)
 
 library(RColorBrewer)
