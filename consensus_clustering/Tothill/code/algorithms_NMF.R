@@ -1,7 +1,7 @@
 source("consensus_clustering/ConsensusClusterNMFParallel.R")
 x <- read.csv("~/Documents/Project 1 - HGSC Subtype/Datasets/Tothill.csv")
 ConsensusClusterNMFParallel(x, pItem = 0.8, reps = 1000, k = 4,
-                            OF = "consensus_clustering/Tothill/")
+                            OF = "consensus_clustering/Tothill/outputs/")
 
 # Get consensus clusters
 results.nmf <- readRDS(paste0("consensus_clustering/Tothill/nmf_output_",
