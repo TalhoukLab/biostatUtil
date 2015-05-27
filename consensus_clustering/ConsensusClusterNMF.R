@@ -52,23 +52,3 @@ ConsensusClusterNMF <- function(x, pItem, reps, k, OF, mets = c("nmfDiv","nmfEuc
     saveRDS(coclus, paste0(OF, "nmf_output_", format(Sys.time(), "%m-%d-%Y"), ".rds"))
   }
 }
-
-
-# Test 1000 reps for k = 4
-x <- read.csv("~/Documents/Project 1 - HGSC Subtype/Datasets/TCGA.csv")
-ConsensusClusterNMF(x, pItem = 0.8, reps = 1000, k = 4, OF = "consensus_clustering/")
-
-# Get consensus clusters
-results.nmf <- readRDS("consensus_clustering/outputMay19.rds")
-
-nmfDiv.class <- results.nmf %>%
-  extract(, , 1) %>%
-  apply(., 1, function(x) names(which.max(table(x)))) %>%
-  set_names(substring(names(.), first = 18, last = 19))
-table(nmfDiv.class, names(nmfDiv.class))
-
-nmfEucl.class <- results.nmf %>%
-  extract(, , 2) %>%
-  apply(., 1, function(x) names(which.max(table(x)))) %>%
-  set_names(substring(names(.), first = 18, last = 19))
-table(nmfEucl.class, names(nmfEucl.class))

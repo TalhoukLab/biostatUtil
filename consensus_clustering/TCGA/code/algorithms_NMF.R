@@ -2,6 +2,7 @@ source("consensus_clustering/ConsensusClusterNMFParallel.R")
 source("consensus_clustering/functions/consensusMatrix.R")
 
 # Get consensus clusters
+x <- read.csv("~/Documents/Project 1 - HGSC Subtype/Datasets/TCGA.csv")
 results.nmf <- readRDS("consensus_clustering/TCGA/outputs/nmf_output_05-19-2015.rds")
 
 # Takes about ~ 3 mins to run each
