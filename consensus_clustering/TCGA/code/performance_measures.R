@@ -29,3 +29,6 @@ sort(apply(all.clust, 2, adjustedRandIndex, x = rownames(all.clust)))
 # Mutual Information
 sort(apply(all.clust, 2, mutinformation, Y = rownames(all.clust)))
 mi.plugin(final.compare)
+
+# Cohen's kappa and Fleiss' kappa
+wkappa(final.compare)
