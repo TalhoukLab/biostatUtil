@@ -19,5 +19,10 @@ final.compare <- hclust(dist(meta.clusts), method = "average") %>%
   as.factor %>%
   set_names(hclust(dist(meta.clusts), method = "average")$labels) %>%
   set_names(substring(names(.), first = 18)) %>%
-  table(., names(.))
-  
+  table(., names(.)) %>%
+  extract(names(sort(apply(., 1, which.max))), ) %>%
+  set_rownames(colnames(.)) %>%
+  as.table
+
+names(dimnames(final.compare)) <- c("Predicted", "Reference")
+confusionMatrix(final.compare)
