@@ -1,3 +1,4 @@
+source("consensus_clustering/functions/PAC.R")
 library(mclust)
 library(entropy)
 library(caret)
@@ -32,3 +33,14 @@ mi.plugin(final.compare)
 
 # Cohen's kappa and Fleiss' kappa
 wkappa(final.compare)
+
+# CDF
+test <- readRDS(file = "consensus_clustering/TCGA/outputs/nmf_output_05-19-2015.rds")
+nmf.div <- consensusMatrix(dat = test[, , 1])
+qplot(nmf.div[lower.tri(nmf.div)], stat = "ecdf", geom = "line")
+
+qplot(km.euc[[4]]$consensusMatrix[lower.tri(km.euc[[4]]$consensusMatrix)], stat = "ecdf", geom = "step")
+
+# PAC
+nmf.div.PAC <- PAC(nmf.div)
+km.euc.PAC <- PAC(km.euc[[4]]$consensusMatrix)
