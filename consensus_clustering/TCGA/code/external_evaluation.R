@@ -10,10 +10,10 @@ library(dplyr)
 library(tidyr)
 library(magrittr)
 library(RColorBrewer)
+library(psych)
 
 # Load results and classes objects
-nmf.output <- readRDS("consensus_clustering/TCGA/outputs/
-                      nmf_output_05-19-2015.rds")
+nmf.output <- readRDS("consensus_clustering/TCGA/outputs/nmf_output_05-19-2015.rds")
 ccp.clust <- readRDS("consensus_clustering/TCGA/outputs/results_CCP.rds")
 nmf.clust <- readRDS("consensus_clustering/TCGA/outputs/classes_NMF.rds")
 all.clust <- ccp.clust %>%
@@ -80,7 +80,7 @@ ggplot(CDF.each, aes(x = CDF, colour = Method)) +
 ## Each method
 PAC.each <- ccp.clust %>%
   sapply(., function(x) PAC(x[[4]]$consensusMatrix)) %>%
-  c(nmfDiv = PAC(nmf.div), nmfEucl = PAC(nmf.eucl)) %>%
+  c(nmfDiv = PAC(nmf.div, 0.1, 0.9), nmfEucl = PAC(nmf.eucl, 0.1, 0.9)) %>%
   sort
 
 # Final consensus
