@@ -3,16 +3,16 @@ library(cluster)
 library(bioDist)
 
 # DIvisive ANAlysis Clustering
-dianaHook = function(this_dist,k){
-  tmp = diana(this_dist,diss=TRUE)
-  assignment = cutree(tmp,k)
+dianaHook = function(this_dist, k){
+  tmp = diana(this_dist,diss = TRUE)
+  assignment = cutree(tmp, k)
   return(assignment)  
 }
 
 # AGglomerative NESting
-agnesHook = function(this_dist,k){
-  tmp = agnes(this_dist,diss=TRUE)
-  assignment = cutree(tmp,k)
+agnesHook = function(this_dist, k){
+  tmp = agnes(this_dist, diss = TRUE)
+  assignment = cutree(tmp, k)
   return(assignment)  
 }
 
