@@ -3,10 +3,20 @@ library(mclust)
 library(entropy)
 library(caret)
 library(infotheo)
+library(ggplot2)
+library(plyr)
+library(dplyr)
+library(tidyr)
+library(magrittr)
 
-all.clust <- readRDS("consensus_clustering/TCGA/outputs/results_CCP.rds") %>%
+# Load results and classes objects
+nmf.output <- readRDS("consensus_clustering/TCGA/outputs/
+                      nmf_output_05-19-2015.rds")
+ccp.clust <- readRDS("consensus_clustering/TCGA/outputs/results_CCP.rds")
+nmf.clust <- readRDS("consensus_clustering/TCGA/outputs/classes_NMF.rds")
+all.clust <- ccp.clust %>%
   sapply(., function(x) x[[4]]$consensusClass) %>%
-  cbind(., readRDS("consensus_clustering/TCGA/outputs/classes_NMF.rds"))
+  cbind(., nmf.clust)
 meta.cm <- consensusMatrix(all.clust)
 
 # Confusion Matrix
@@ -24,27 +34,38 @@ names(dimnames(final.compare)) <- c("Predicted", "Reference")
 confusionMatrix(final.compare)
 
 # Adjusted Rand Index
-sort(apply(all.clust, 2, adjustedRandIndex, x = substring(rownames(all.clust), first = 18)))
+sort(apply(all.clust, 2, adjustedRandIndex, x = substring(rownames(all.clust),
+                                                          first = 18)))
 
 # Mutual Information
-sort(apply(all.clust, 2, mutinformation, Y = substring(rownames(all.clust), first = 18)))
+sort(apply(all.clust, 2, mutinformation, Y = substring(rownames(all.clust),
+                                                       first = 18)))
 mi.plugin(final.compare)
 
 # Fleiss' kappa: unweighted/weighted
 wkappa(final.compare)
 
 # CDF
-test <- readRDS(file = "consensus_clustering/TCGA/outputs/nmf_output_05-19-2015.rds")
-nmf.div <- consensusMatrix(dat = test[, , 1])
-nmf.eucl <- consensusMatrix(dat = test[, , 2])
-qplot(nmf.div[lower.tri(nmf.div)], stat = "ecdf", geom = "line")
+nmf.div <- consensusMatrix(nmf.output[, , 1])
+nmf.eucl <- consensusMatrix(nmf.output[, , 2])
 
-qplot(km.euc[[4]]$consensusMatrix[lower.tri(km.euc[[4]]$consensusMatrix)], stat = "ecdf", geom = "step")
+CDF.all <- list(nmfDiv = nmf.div, nmfEucl = nmf.eucl) %>%
+  ldply(.fun = function(x) x[lower.tri(x)]) %>%
+  rbind(., ldply(ccp.clust, function(x) 
+    x[[4]]$consensusMatrix[lower.tri(x[[4]]$consensusMatrix)])) %>%
+  as.data.frame %>%
+  set_rownames(.$.id) %>%
+  select(-.id) %>%
+  t %>%
+  as.data.frame %>%
+  gather(key = Method, value = CDF, 1:ncol(.)) 
+
+ggplot(CDF.all, aes(x = CDF, colour = Method)) +
+  stat_ecdf() +
+  facet_wrap(~ Method)
 
 # PAC
-PAC(nmf.div)
-PAC(nmf.eucl)
-
-PAC.all <- readRDS("consensus_clustering/TCGA/outputs/results_CCP.rds") %>%
+PAC.all <- ccp.clust %>%
   sapply(., function(x) PAC(x[[4]]$consensusMatrix)) %>%
+  c(nmfDiv = PAC(nmf.div), nmfEucl = PAC(nmf.eucl)) %>%
   sort
