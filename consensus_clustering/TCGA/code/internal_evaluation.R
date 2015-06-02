@@ -1,5 +1,7 @@
 
 library(clv)
+library(dplyr)
+library(magrittr)
 
 ccp.clust <- readRDS("consensus_clustering/TCGA/outputs/results_CCP.rds")
 nmf.clust <- readRDS("consensus_clustering/TCGA/outputs/classes_NMF.rds")
