@@ -18,4 +18,5 @@ colPercent <- function(t, pretty.text = FALSE, keep = FALSE, digits = 4) {
       return(round(pcts, digits = digits))
     }
   }
+  
 }
