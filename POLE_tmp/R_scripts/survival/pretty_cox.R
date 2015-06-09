@@ -1,0 +1,472 @@
+# print cox models nicely
+# 
+# Author: sleung
+###############################################################################
+library(rms) # needed for cph
+library(coxphf) # needed for coxphf
+
+if (!exists("FIRTH.CAPTION")) {
+	# html text to be placed beside the p-value to indicate that the Cox model used Firth
+	FIRTH.CAPTION <- "<sup>(F)</sup>" 
+}
+
+# the following constants are defined in misc_helpers.R ... define it again
+# if its not defined already ... in case misc_helpers.R did not get source'd
+if (!exists("COL.TH.STYLE"))              {COL.TH.STYLE               <- "border-bottom: 1px solid grey; border-top: 4px double grey; text-align: center; padding-right:10px; padding-right:10px;"}
+if (!exists("ROW.TH.STYLE"))              {ROW.TH.STYLE               <- "text-align: center; padding-right:10px; padding-right:10px;"}
+if (!exists("ROW.TD.STYLE.FOR.MULTI.COX")){ROW.TD.STYLE.FOR.MULTI.COX <- "border-bottom: 1px solid grey; text-align: center; padding-right:10px; padding-right:10px;"}
+if (!exists("ROW.TD.STYLE.FOR.MULTI.COX.ALIGN.TOP")){ROW.TD.STYLE.FOR.MULTI.COX.ALIGN.TOP <- "border-bottom: 1px solid grey; text-align: center; vertical-align: text-top; padding-right:10px; padding-right:10px;"}
+if (!exists("TABLE.CAPTION.STYLE")){TABLE.CAPTION.STYLE <- "display: table-caption; text-align: left;"}
+
+##########################################
+# print cox models (from coxph) nicely
+#
+# input.formula = input formula
+# input.d = input data
+# use.firth = 1 - the percentage of censored cases before using the Firth method for Cox regression
+#               - setting use.firth to 1 (default) means NEVER use Firth
+#               - setting use.firth to -1 means ALWAYS use Firth 
+# check.ph = check for PH
+# ph.test.plot.filename = file name of residual plot.  If equal to "no.file", plot to console, if equal to NA, will not generate plot at all.
+#
+pretty.coxph <- function(input.formula, input.d, use.firth=1, check.ph=FALSE, ph.test.plot.filename="no.file", ...) {
+	
+	# set local variable in environment searchable by local function calls
+	assign(".my.formula",input.formula, pos=1) 
+	assign(".my.data",input.d, pos=1)
+	
+	# figure out if percentage of censored cases large enough to use Firth
+	ok.to.use.firth <- ifelse(use.firth == -1, TRUE, FALSE)
+	if (use.firth < 1 & use.firth > -1) { # no need to check if use.firth is 1 or -1
+		all.vars(.my.formula)[2]
+		for (var.name in  all.vars(.my.formula)[-c(1,2)]) {
+			if (is.factor(.my.data[,var.name])) {
+				# only need to check if its a factor
+				fit <- survfit(as.formula(paste(deparse(.my.formula[[2]]),"~",var.name)),data=.my.data)
+				for (i in 1:nrow(fit)) {
+					if((sum(fit[i]$n.censor)/fit[i]$n) > use.firth) {
+						ok.to.use.firth <- TRUE
+						break # no need to check further
+					}
+				}
+				if (ok.to.use.firth) {break} # no need to check further
+			}
+		}
+	} 
+	
+	if (ok.to.use.firth) {
+		fit.firth <- coxphf(.my.formula, data=.my.data, ...)	
+		fit.firth$nevent <- sum(fit.firth$y[,"status"]) # coxphf fit object does not have nevent
+	} else {
+		fit.firth <- NA
+	}
+	fit <- coxph(.my.formula, data=.my.data, ...) # fit is coxph ALWAYS!!!
+	.my.formula <- fit$formula
+	ph.check <- "NOT CALCULATED"
+
+	if (check.ph) {
+		
+		ph.test <- cox.zph(fit)
+		
+		ph.check <- matrix(ph.test$table[rownames(ph.test$table)!="GLOBAL", 3],
+					nrow=length(names(fit$coefficients)), 
+					ncol=1,
+					dimnames=c(list(names(fit$coefficients)),list(c('PH test')))
+		)		
+		
+		if (!is.na(ph.test.plot.filename)) {
+			if (ph.test.plot.filename!="no.file") {
+				pdf(ph.test.plot.filename)
+			}
+			plot(ph.test)
+			if (ph.test.plot.filename!="no.file") {
+				dev.off()
+			}
+		}
+	}
+	
+	if (ok.to.use.firth) {
+		# coxphf fit object
+		result <- cbind(
+				matrix(cbind(exp(fit.firth$coefficients),fit.firth$ci.lower,fit.firth$ci.upper), 
+						nrow=length(names(fit.firth$coefficients)), 
+						ncol=3, 
+						dimnames=c(list(names(fit.firth$coefficients)),list(c('exp(coef)','lower .95', 'upper .95')))
+				),
+				matrix( fit.firth$prob,
+						nrow=length(names(fit.firth$coefficients)), 
+						ncol=1,
+						dimnames=c(list(names(fit.firth$coefficients)),list(c('Pr(>|z|)')))
+				),
+				ph.check
+		)	
+	} else {
+		# coxph fit object
+		result <- cbind(
+				matrix(summary(fit)$conf.int[,c('exp(coef)','lower .95', 'upper .95')], 
+			       		nrow=length(names(fit$coefficients)), 
+			       		ncol=3, 
+			       		dimnames=c(list(names(fit$coefficients)),list(c('exp(coef)','lower .95', 'upper .95')))
+		              ),
+		        matrix(summary(fit)$coefficients[,'Pr(>|z|)'],
+					   nrow=length(names(fit$coefficients)), 
+					   ncol=1,
+					   dimnames=c(list(names(fit$coefficients)),list(c('Pr(>|z|)')))
+	                  ),
+				ph.check
+         )
+	}
+	result.colnames <- colnames(result)
+	#result.colnames[c(ncol(result)-1,ncol(result))] <- c('p-value','cox.zph p-value')
+	colnames(result) <- result.colnames
+	
+	if (check.ph) {
+		return.obj        <- list(result,   fit,   fit.firth, fit$n, fit$nevent, ph.test,  ok.to.use.firth)
+		names(return.obj) <- c(   "output", "fit", "fit.firth", "n",   "nevent",   "ph.test","used.firth")
+	} else {
+		return.obj        <- list(result,   fit,   fit.firth,fit$n, fit$nevent,ok.to.use.firth)
+		names(return.obj) <- c(   "output", "fit", "fit.firth", "n",   "nevent"  ,"used.firth")
+	}
+	
+	return (return.obj)
+}
+
+###################################################################
+# helper function to do coxph of all markers (univariable) with all endpoints
+#
+# please note the following ASSUMPTIONS:
+# - assume marker can be binary, continuous or categorical
+# - assume missing survival time/status variable are coded as NA i.e. will only be checked by is.na()
+# - assume survival time/status variable name specified in the following order: os, dss, rfs
+# - assume coding of survival status is binary only i.e. cannot take survival status of > 2 categories.
+#
+do.coxph.generic <- function(
+		input.d, 
+		var.names, 
+		var.descriptions,
+		var.ref.groups=NULL, # a list of reference group, if NULL, assume ALL variables are binary/continuous, if individual item in array is NA, assume that particular marker is binary or continuous ... i.e. treat it as a numeric variable
+		var.names.surv.time   = c("os.yrs",  "dss.yrs",  "rfs.yrs"  ), # variable names of survival time
+		var.names.surv.status = c("os.sts",  "dss.sts",  "rfs.sts"  ), # variable names of survival status
+		event.codes.surv      = c("os.event","dss.event","rfs.event"), # event coding of survival status variable
+		surv.descriptions     = c("OS",      "DSS",      "RFS"      ), # description of survival endpoint
+		missing.codes=c("N/A","","Unk"),
+		use.firth=1, # the percentage of censored cases before using the Firth method for Cox regression, 1 means NEVER use
+		firth.caption=FIRTH.CAPTION, # a text in html table to indicate that Firth was used.
+		stat.test="waldtest", # can be "logtest", "waldtest", "sctest" ... if use Firth, can only do Likelihood ratio test
+		round.digits.p.value=4, # number of digits for p-value
+		caption=NA, # caption for table
+		html.table.border=0,
+		banded.rows=FALSE,
+		css.class.name.odd="odd",
+		css.class.name.even="even") {
+	
+	col.th.style <- COL.TH.STYLE
+	row.th.style <- ROW.TH.STYLE
+	for (var.name in var.names) {
+		if (is.factor(input.d[,var.name])) {
+			input.d[,var.name] <- droplevels(input.d[,var.name])
+		}
+	}
+	
+	num.surv.endpoints <- length(var.names.surv.time)
+	
+	# qc ... make sure length of var.names.surv.time=var.names.surv.status=event.codes.surv=surv.descriptions
+	if (length(var.names.surv.time) != length(var.names.surv.status) | 
+			length(var.names.surv.time) != length(event.codes.surv) |
+			length(var.names.surv.time) != length(surv.descriptions)) {
+		cat("ERROR IN do.coxph.generic!!!! input error ... please double check\n")
+	}
+	for (i in 1:num.surv.endpoints) {
+		input.d[,var.names.surv.time[i]] <- as.numeric(input.d[,var.names.surv.time[i]])
+	}
+	
+	if (is.null(var.ref.groups)) {
+		var.ref.groups <- rep(NA,length(var.names))
+	}
+	result.table <- c()
+	for (i in 1:length(var.names)) {
+		var.name <- var.names[i]
+		temp.d <- input.d[!is.na(input.d[,var.name]),] # remove any cases with NA's for marker
+		temp.d <- temp.d[!sapply(temp.d[,var.name],as.character) %in% missing.codes,]
+		if (is.na(var.ref.groups[i])) {
+			temp.d[,var.name] <- as.numeric(temp.d[,var.name]) # numeric
+			var.levels <- c(0,1) # dummy levels ... used to build result.table
+		} else {
+			# assume ref group exist!!!
+			var.levels <- names(table(temp.d[,var.name]))
+			var.levels <- c(var.ref.groups[i],var.levels[-which(var.levels==var.ref.groups[i])])
+			temp.d[,var.name] <- factor(temp.d[,var.name],levels=var.levels)
+		}
+	
+		for (j in 1:num.surv.endpoints) {
+			surv.formula <- as.formula(paste("Surv(",var.names.surv.time[j], ", ",var.names.surv.status[j], "=='",event.codes.surv[j], "'  ) ~",var.name,sep=""))
+			temp.d.no.missing.survival <- temp.d[!is.na(temp.d[,var.names.surv.status[j]]) & !is.na(temp.d[,var.names.surv.time[j]]),]
+			cox.stats  <- pretty.coxph(
+				surv.formula, 
+				input.d=temp.d.no.missing.survival,
+				use.firth=use.firth
+			)
+			result.table <- rbind(
+				result.table,
+				"DUMMY_ROW_NAME" =c(
+					#paste(cox.stats$nevent,cox.stats$n,sep="/"),
+					paste(cox.stats$nevent,cox.stats$n,sep=" / "),
+					paste(paste(
+						sprintf("%.2f",round(as.numeric(cox.stats$output[,1]),2))," (",
+						sprintf("%.2f",round(as.numeric(cox.stats$output[,2]),2)),"-",
+						sprintf("%.2f",round(as.numeric(cox.stats$output[,3]),2)),")",
+						ifelse(cox.stats$used.firth,firth.caption,""),
+						sep=""
+					),collapse="<br>"),
+					sprintf(
+						paste("%.",round.digits.p.value,"f",sep=""),
+						round(
+							# per instruction from Aline 2015-04-14,15 ... for p-value, ALWAYS use coxph
+							as.numeric(summary(cox.stats$fit)[[stat.test]]["pvalue"]), # waldtest for Wald test, logtest for likelihood ratio test
+							digits=round.digits.p.value
+						)
+					) 
+				)
+			)
+		}
+	}
+	result.table.col.names <- c("# of events / n","Hazard Ratio (95% CI)",paste(ifelse(stat.test=="logtest","LRT ",""),"P-value",sep=""))
+	colnames(result.table) <- result.table.col.names
+	result.table.row.names <- c()
+	for (i in 1:length(var.names)) {
+		result.table.row.names <- c(result.table.row.names,paste(var.name,paste("-",surv.descriptions,sep=""),sep=""))
+	}
+	rownames(result.table) <- result.table.row.names
+	
+	# generate html table ...
+	result.table.html <- paste("<table border=",html.table.border,">",ifelse(is.na(caption),"",paste("<caption style='",TABLE.CAPTION.STYLE,"'>",add.table.number(caption),"</caption>",sep="")),sep="")
+	result.table.html <- paste(result.table.html,"<tr><th style='",col.th.style,"' colspan=2></th><th style='",col.th.style,"'>",paste(result.table.col.names,collapse=paste("</th><th style='",col.th.style,"'>",sep="")),"</th></tr>",sep="")
+	# print values
+	i <- 1
+	num.row.per.cat <- length(var.names.surv.time)
+	while(i<=nrow(result.table)) {
+		is.first.row <- TRUE
+		tr.class <- ifelse(banded.rows,paste(" class='",ifelse((floor(i/num.surv.endpoints)+1)%%2==0,css.class.name.even,css.class.name.odd),"'",sep=""),"")
+		result.table.html <- paste(result.table.html,"<tr",tr.class,"><th style='",row.th.style,"' rowspan=",num.row.per.cat,">",var.descriptions[floor((i-1)/num.surv.endpoints)+1],"</th>",sep="")
+		for (surv.description in surv.descriptions) {
+			result.table.html <- paste(
+				result.table.html,
+				ifelse(is.first.row,"",paste("<tr",tr.class,">",sep="")),
+				"<th style='",row.th.style,"'>",surv.description,"</th><td>",paste(result.table[i,],collapse="</td><td>"),"</td></tr>",sep=""
+			)
+			is.first.row <- FALSE # if run any time after the first row, must not be the first row any more
+			i<-i+1
+		}
+	}
+	result.table.html <- paste(result.table.html,"</table>",sep="")
+	return(list("result.table"=result.table, "result.table.html"=result.table.html))
+}
+
+
+
+###################################################################
+# helper function to do coxph of all markers (univariable) with all endpoints
+#
+# please note the following ASSUMPTIONS:
+# - assume marker is either binary or continuous i.e. no categorical!!!
+# - assume missing survival time/status variable are coded as NA i.e. will only be checked by is.na()
+# - assume survival time/status variable name specified in the following order: os, dss, rfs
+# - assume coding of survival status is binary only i.e. cannot take survival status of > 2 categories.
+#
+do.coxph.continuous <- function(
+		input.d, 
+		var.names, 
+		var.descriptions,
+		var.names.surv.time   = c("os.yrs",  "dss.yrs",  "rfs.yrs"  ), # variable names of survival time
+		var.names.surv.status = c("os.sts",  "dss.sts",  "rfs.sts"  ), # variable names of survival status
+		event.codes.surv      = c("os.event","dss.event","rfs.event"), # event coding of survival status variable
+		surv.descriptions     = c("OS",      "DSS",      "RFS"      ), # description of survival endpoint
+		use.firth=1, # the percentage of censored cases before using the Firth method for Cox regression, 1 means NEVER use
+		stat.test="waldtest", # can be "logtest", "waldtest", "sctest" (log rank)
+		round.digits.p.value=4, # number of digits for p-value
+		caption=NA, # caption for table
+		html.table.border=0,
+		banded.rows=FALSE,
+		css.class.name.odd="odd",
+		css.class.name.even="even") {
+	return(do.coxph.generic(
+			input.d         = input.d, 
+			var.names       = var.names, 
+			var.descriptions= var.descriptions,
+			var.ref.groups  = NULL, # a list of reference group, if NULL, assume ALL variables are binary/continuous
+			var.names.surv.time   = var.names.surv.time,
+			var.names.surv.status = var.names.surv.status,
+			event.codes.surv      = event.codes.surv,
+			surv.descriptions     = surv.descriptions,
+			use.firth             = use.firth,
+			stat.test             = stat.test,
+			round.digits.p.value  = round.digits.p.value,
+			caption               = caption,
+			html.table.border     = html.table.border,
+			banded.rows           = banded.rows,
+			css.class.name.odd    = css.class.name.odd,
+			css.class.name.even   = css.class.name.even))
+}
+
+###################################################################
+# helper function to do coxph of all markers (multivariable) with all endpoints
+#
+# please note the following ASSUMPTIONS:
+# - assume marker can be binary, continuous or categorical
+# - assume missing survival time/status variable are coded as NA i.e. will only be checked by is.na()
+# - assume survival time/status variable name specified in the following order: os, dss, rfs
+# - assume coding of survival status is binary only i.e. cannot take survival status of > 2 categories.
+#
+do.coxph.multivariable <- function(
+	input.d, 
+	var.names, 
+	var.descriptions,
+	var.ref.groups=NULL, # a list of reference group, if NULL, assume ALL variables are binary/continuous, if individual item in array is NA, assume that particular marker is binary or continuous ... i.e. treat it as a numeric variable
+	var.names.surv.time   = c("os.yrs",  "dss.yrs",  "rfs.yrs"  ), # variable names of survival time
+	var.names.surv.status = c("os.sts",  "dss.sts",  "rfs.sts"  ), # variable names of survival status
+	event.codes.surv      = c("os.event","dss.event","rfs.event"), # event coding of survival status variable
+	surv.descriptions     = c("OS",      "DSS",      "RFS"      ), # description of survival endpoint
+	missing.codes=c("N/A","","Unk"),
+	use.firth=1, # the percentage of censored cases before using the Firth method for Cox regression, 1 means NEVER use
+	firth.caption=FIRTH.CAPTION, # a text in html table to indicate that Firth was used.
+	stat.test="waldtest", # can be "logtest", "waldtest" ... CANNOT DO "sctest" (log rank)... if use Firth, can only do Likelihood ratio test
+	round.digits.p.value=4, # number of digits for p-value
+	caption=NA, # caption for table
+	html.table.border=0,
+	banded.rows=FALSE,
+	css.class.name.odd="odd",
+	css.class.name.even="even",...) {
+
+	col.th.style <- COL.TH.STYLE
+	row.th.style <- ROW.TH.STYLE
+	row.td.style.for.multi.cox <- ROW.TD.STYLE.FOR.MULTI.COX
+	row.td.style.for.multi.cox.align.top <- ROW.TD.STYLE.FOR.MULTI.COX.ALIGN.TOP
+	for (var.name in var.names) {
+		if (is.factor(input.d[,var.name])) {
+			input.d[,var.name] <- droplevels(input.d[,var.name])
+		}
+	}
+
+	num.surv.endpoints <- length(var.names.surv.time)
+
+	# qc ... make sure length of var.names.surv.time=var.names.surv.status=event.codes.surv=surv.descriptions
+	if (length(var.names.surv.time) != length(var.names.surv.status) | 
+		length(var.names.surv.time) != length(event.codes.surv) |
+		length(var.names.surv.time) != length(surv.descriptions)) {
+		cat("ERROR IN do.coxph.generic!!!! input error ... please double check\n")
+	}
+	for (i in 1:num.surv.endpoints) {
+		input.d[,var.names.surv.time[i]] <- as.numeric(input.d[,var.names.surv.time[i]])
+	}
+
+	if (is.null(var.ref.groups)) {
+		var.ref.groups <- rep(NA,length(var.names))
+	}
+	result.table <- c()
+	for (i in 1:length(var.names)) {
+		var.name <- var.names[i]
+		input.d <- input.d[!sapply(input.d[,var.name],as.character) %in% missing.codes,]
+		input.d <- input.d[!is.na(input.d[,var.name]),]
+		if (is.na(var.ref.groups[i])) {
+			input.d[,var.name] <- as.numeric(input.d[,var.name]) # numeric
+			var.levels <- c(0,1) # dummy levels ... used to build result.table
+		} else {
+			# assume ref group exist!!!
+			var.levels <- names(table(input.d[,var.name]))
+			var.levels <- c(var.ref.groups[i],var.levels[-which(var.levels==var.ref.groups[i])])
+			input.d[,var.name] <- factor(input.d[,var.name],levels=var.levels)
+		}
+	}
+	
+	cox.stats.output <- list()
+	for (j in 1:num.surv.endpoints) {
+		temp.d <- input.d[!is.na(input.d[,var.names.surv.status[j]]) & !is.na(input.d[,var.names.surv.time[j]]),]
+		full.model.formula <- as.formula(paste("Surv(",var.names.surv.time[j], ", ",var.names.surv.status[j], "=='",event.codes.surv[j], "'  ) ~",paste(var.names,collapse="+"),sep=""))
+		cox.stats  <- pretty.coxph(
+			full.model.formula, 
+			input.d=temp.d,
+			use.firth=use.firth,...
+		)
+		cox.stats.output.indexes <- c(0)
+		for (i in 1:length(var.names)) {
+			var.name <- var.names[i]
+			cox.stats.output.indexes <- max(cox.stats.output.indexes)+1
+			if (!is.na(var.ref.groups[i])) {
+				cox.stats.output.indexes <- c(cox.stats.output.indexes:(cox.stats.output.indexes+length(names(table(temp.d[,var.name])))-1-1))
+			}
+			
+			p.value <- NA
+			switch(stat.test, 
+				logtest={
+					# calculate likelihood ratio test by nested model
+					cox.exclude.var <- coxph(as.formula(paste("Surv(",var.names.surv.time[j], ", ",var.names.surv.status[j], "=='",event.codes.surv[j], "'  ) ~",paste(var.names[-i],collapse="+"),sep="")),temp.d)	
+					p.value <- anova(cox.stats$fit,cox.exclude.var)[[4]][2] # always the second one, since its comparing only two nested model
+				},
+				waldtest={
+					# use anova(cph())
+					p.value <- anova(cph(as.formula(paste("Surv(",var.names.surv.time[j], ", ",var.names.surv.status[j], "=='",event.codes.surv[j], "'  ) ~",paste(var.names,collapse="+"),sep="")),temp.d))[i,"P"]
+				}
+			)	
+		
+			result.table <- rbind(
+				result.table,
+				"DUMMY_ROW_NAME" =c(
+					paste(cox.stats$nevent,"/",cox.stats$n),
+					paste(paste(
+						sprintf("%.2f",round(as.numeric(cox.stats$output[cox.stats.output.indexes,1]),2))," (",
+						sprintf("%.2f",round(as.numeric(cox.stats$output[cox.stats.output.indexes,2]),2)),"-",
+						sprintf("%.2f",round(as.numeric(cox.stats$output[cox.stats.output.indexes,3]),2)),")",
+						ifelse(cox.stats$used.firth,firth.caption,""),
+						sep=""
+					),collapse="<br>"),
+					sprintf(paste("%.",round.digits.p.value,"f",sep=""),round(as.numeric(p.value),digits=round.digits.p.value))) # waldtest for Wald test, logtest for likelihood ratio test
+			)
+			
+			cox.stats.output[[surv.descriptions[j]]] <- cox.stats
+		}
+	}
+	
+	result.table.col.names <- c("# of events / n","Hazard Ratio (95% CI)",paste(ifelse(stat.test=="logtest","LRT ",""),"P-value",sep=""))
+	colnames(result.table) <- result.table.col.names
+	result.table.row.names <- c()
+	for (i in 1:num.surv.endpoints) {
+		result.table.row.names <- c(result.table.row.names,paste(var.names,paste("-",surv.descriptions[i],sep=""),sep=""))
+	}
+	rownames(result.table) <- result.table.row.names
+	
+	# generate html table ...
+	result.table.html <- paste("<table border=",html.table.border,">",ifelse(is.na(caption),"",paste("<caption style='",TABLE.CAPTION.STYLE,"'>",add.table.number(caption),"</caption>",sep="")),sep="")
+	result.table.html <- paste(result.table.html,"<tr><th style='",col.th.style,"' colspan=2></th><th style='",col.th.style,"'>",paste(result.table.col.names,collapse=paste("</th><th style='",col.th.style,"'>",sep="")),"</th></tr>",sep="")
+	# print values
+	i <- 1
+	num.row.per.surv.type <- length(var.names)
+	while(i<=nrow(result.table)) {
+		is.first.row <- TRUE
+		tr.class <- ifelse(banded.rows,paste(" class='",ifelse((floor(i/num.row.per.surv.type)+1)%%2==0,css.class.name.even,css.class.name.odd),"'",sep=""),"")
+		result.table.html <- paste(result.table.html,"<tr",tr.class,"><th style='",row.td.style.for.multi.cox.align.top,"' rowspan=",num.row.per.surv.type,">",surv.descriptions[floor((i-1)/num.row.per.surv.type)+1],"</th>",sep="")
+		for (j in 1:length(var.names)) {
+			result.table.html <- paste(
+				result.table.html,
+				ifelse(is.first.row,"",paste("<tr",tr.class,">",sep="")),
+				"<th style='",row.td.style.for.multi.cox,"'>",
+				var.descriptions[j],
+				#"</th><td style='",row.td.style.for.multi.cox,"'>",paste(result.table[i,],collapse=paste("</td><td style='",row.td.style.for.multi.cox,"'>"),sep=""),"</td></tr>",
+				ifelse(
+					is.first.row,
+					paste(
+						"</th><td style='",row.td.style.for.multi.cox.align.top,"' rowspan=",num.row.per.surv.type,">",
+						result.table[i,1],
+						sep=""
+					),
+					""
+				),
+				"</td><td style='",row.td.style.for.multi.cox,"'>",paste(result.table[i,2:3],collapse=paste("</td><td style='",row.td.style.for.multi.cox,"'>"),sep=""),"</td></tr>",
+				sep=""
+			)
+			is.first.row <- FALSE # if run any time after the first row, must not be the first row any more
+			i<-i+1
+		}
+	}
+	result.table.html <- paste(result.table.html,"</table>",sep="")
+	return(list("result.table"=result.table, "result.table.html"=result.table.html, "cox.stats"=cox.stats.output))
+}

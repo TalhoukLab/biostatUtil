@@ -19,28 +19,17 @@ r_ver <- paste(info$R.version$major, info$R.version$minor, sep=".")
 ```
 
 ```{r input_constants,message=FALSE,echo=FALSE,results='hide',warning=FALSE}
-ALINE <- FALSE # if run on Aline's computer
 RUN.IN.MARKDOWN=TRUE # a flag to indicate that the codes are called from this markdown file
-if (ALINE) {
-  LIB.DIR <- "~/Desktop/Rcode/R_scripts/"
-  SETUP_KNITR.R <- "~/Desktop/Rcode/SetUp_knitr.R"
-  DEFINEEVENTDATE.R <- "~/Desktop/Rcode/DefineEventDate.R"
-  ED.CSV <- "~/Documents/Endometrial/Database/ed.csv"
-  SETUP_DB.R <- "~/Documents/Endometrial/POLE/SetUp_db.R"
-  DATE.FORMAT="%Y-%m-%d" # this should be R's default date format
-  CASE.SELECTION.FLOW.CHART <- "/Users/atalhouk/Documents/Endometrial/POLE/remark.png"
-  DO.CITATIONS=TRUE
-} else {
-  options(encoding = "UTF-8")
-  LIB.DIR <- "C:\\Users\\samuelc\\Documents\\workspace\\R\\R_scripts\\"
-  SETUP_KNITR.R <- "SetUp_knitr.R"
-  DEFINEEVENTDATE.R <- "C:\\Users\\samuelc\\Documents\\workspace\\R\\endometrial\\jessica_2014-04-08\\DefineEventDate.R"
-  ED.CSV <- "R:\\data\\analyses\\endometrial\\jessica_2014-04-08\\excel exports\\endometrial_n518_2015-05-21.csv"
-  SETUP_DB.R <- "SetUp_db.R"
-  DATE.FORMAT="%m/%d/%Y" # this should be R's default date format
-  CASE.SELECTION.FLOW.CHART <- "R:\\data\\analyses\\endometrial\\paper_pole\\remark.png" # CANNOT TAKE SPACE IN FILE PATH!!!!
-  DO.CITATIONS=FALSE
-}
+options(encoding = "UTF-8")
+LIB.DIR <- "R_scripts/"
+SETUP_KNITR.R <- paste(LIB.DIR,"SetUp_knitr.R",sep="")
+DEFINEEVENTDATE.R <- paste(LIB.DIR,"DefineEventDate.R",sep="")
+ED.CSV <- "data/endometrial_n518_2015-05-21.csv"
+SETUP_DB.R <- "SetUp_db.R"
+DATE.FORMAT="%m/%d/%Y" # this should be R's default date format
+CASE.SELECTION.FLOW.CHART <- "images/remark.png" # CANNOT TAKE SPACE IN FILE PATH!!!!
+DO.CITATIONS=FALSE
+
 options(scipen=999) # disable scientific notation e.g. instead of 1x10E-3, show 0.001
 ```
 
@@ -343,7 +332,7 @@ source("remark13.R")
 `r item13.cohort.missing$result.table.html`
 
 #### Item 14. Show the relation of the marker to standard prognostic variables.
-```{r}
+```{r message=FALSE,echo=FALSE,results='hide'}
 source("remark14.R")
 ```
 `r item14.correlation.table$result.table.html`
@@ -377,30 +366,31 @@ Please note, there are `r sum(is.na(emdb$any.init.treatment))` cases with unknow
 
 The interaction graph gives an idea of the trend and size of the effect.
 
-```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=13, fig.height=5}
-par(mfrow=c(1,2))
-do.km.plots.pole("os")
+```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
+# width/height = 13/5
+#par(mfrow=c(1,2))
+do.km.plots.pole("os",use.aline.plot=USE.ALINE.KM.PLOT)
 ```
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
-do.km.plots.pole.x.init.treatment("os")
+do.km.plots.pole.x.init.treatment("os",use.aline.plot=USE.ALINE.KM.PLOT)
 ```
 
 **KM plots - disease specific survival**
-```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=13, fig.height=5}
-par(mfrow=c(1,2))
-do.km.plots.pole("dss")
+```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
+#par(mfrow=c(1,2))
+do.km.plots.pole("dss",use.aline.plot=USE.ALINE.KM.PLOT)
 ```
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
-do.km.plots.pole.x.init.treatment("dss")
+do.km.plots.pole.x.init.treatment("dss",use.aline.plot=USE.ALINE.KM.PLOT)
 ```
 
 **KM plots - relapse free survival**
-```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=13, fig.height=5}
-par(mfrow=c(1,2))
-do.km.plots.pole("rfs")
+```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
+#par(mfrow=c(1,2))
+do.km.plots.pole("rfs",use.aline.plot=USE.ALINE.KM.PLOT)
 ```
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
-do.km.plots.pole.x.init.treatment("rfs")
+do.km.plots.pole.x.init.treatment("rfs",use.aline.plot=USE.ALINE.KM.PLOT)
 ```
 
 #### Item 16. For key multivariable analyses, report estimated effects (e.g. hazard ratio) with confidence intervals for the marker and, at least for the final model, all other variables in the model.
@@ -439,7 +429,7 @@ pander(ftable(xtabs(~POLE+Rx+OS.sts,data=dat1)),style='rmarkdown')
 
 When considering only POLE mutation status, we can see that a POLE mutation has a protective effect, since those with POLE wild type have a death hazard risk of `r taos[[1]][7]` relative to the mutated group (Model 1). Accounting for treatment, the hazard ratio associated with POLE wild type increases slightly to `r taos[[2]][1,7]` but in addition, those patients receiving treatment have an increased hazard of `r taos[[2]][2,7]` relative to those who didn't receive treatment. This is expected since adjuvent treatment is typically given to higher risk patients with more advanced disease. 
 
-Moreover, by accounting for treatment, there is a statistcially significant improvement to the likelihood Pvalue: `r round(taos[[4]]["P(>|Chi|)"][2,],4)`. The final step is to try to assess the statistical significance of adding an interaction term to the model (model 3). This appears to not be statistically signaficant, p value `r round(taos[[5]]["P(>|Chi|)"][2,],3)`. In conclusion, treatment is confounded with POLE but does not interact with POLE is as far as predicting time to death.
+Moreover, by accounting for treatment, there is a statistcially significant improvement to the likelihood Pvalue: `r round(taos$lrt1.p,4)`. The final step is to try to assess the statistical significance of adding an interaction term to the model (model 3). This appears to not be statistically signaficant, p value `r round(taos$lrt2.p,3)`. In conclusion, treatment is confounded with POLE but does not interact with POLE is as far as predicting time to death.
 
 
 ##### Disease Specific Survival Results
@@ -458,7 +448,7 @@ printInterModels(tao[[1]],tao[[2]],tao[[3]],"Disease Specific Survival. ")
 pander(ftable(xtabs(~POLE+Rx+DSS.sts,data=dat1)),style='rmarkdown')
 ```
 
-For disease specific survival, we are not able to properly assess the interaction effect, because the mutated, no treatment group has no events. However a similar trend as seen in the time to death analysis hold. The confounding effect of treatment is significant (LRT P-Value: `r round(taos[[4]]["P(>|Chi|)"][2,],4)`).
+For disease specific survival, we are not able to properly assess the interaction effect, because the mutated, no treatment group has no events. However a similar trend as seen in the time to death analysis hold. The confounding effect of treatment is significant (LRT P-Value: `r round(taos$lrt1.p,4)`).
 
 ##### Relapse-Free Survival Results
 *Please note: Cox regression with Firth's penalized likelihood was used*
@@ -479,7 +469,7 @@ pander(ftable(xtabs(~POLE+Rx+RFS.sts,data=dat1)),style='rmarkdown')
 ```
 
 
-For relapse-free survival, we are not able to properly assess the interaction effect either, because the mutated, no treatment group has no events. However a similar trend as seen in the time to death analysis hold. The confounding effect of treatment is significant (LRT P-Value: `r round(taos[[4]]["P(>|Chi|)"][2,],4)`).
+For relapse-free survival, we are not able to properly assess the interaction effect either, because the mutated, no treatment group has no events. However a similar trend as seen in the time to death analysis hold. The confounding effect of treatment is significant (LRT P-Value: `r round(taos$lrt1.p,4)`).
 
 
 #### Item 17: Among reported results, provide estimated effects with confidence intervals from an analysis in which the marker and standard prognostic variables are included, regardless of their statistical significance.
@@ -525,6 +515,7 @@ source("remark18.R")
 #whatsurvplot(myfit, loglog=T)
 ```
 
+`r item18.dx.year.correlation.table$result.table.html`
 
 In the basic form of the Cox regression model, the coefficients corresponded to the logarithm of the harzard ratio and were constant in time.  This assumption was graphically evaluated by means of smoothed Schoenfeld residual plots and tested as suggested by `r if(DO.CITATIONS){citep("10.1007/978-1-4757-3294-8")}`.
 
