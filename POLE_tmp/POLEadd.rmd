@@ -290,7 +290,7 @@ multi.cox.summary.g3 <- do.coxph.multivariable(
 		HTML.COX.VAR.DESC.ANY.POS.NODES,
 		HTML.COX.VAR.DESC.ANY.INIT.ADJ.TX
 	),
-	use.firth=FIRTH.THRESHOLD,
+	use.firth=FIRTH.THRESHOLD, 
 	stat.test="logtest",
 	var.ref.groups=c(POLE.REF.GROUP,NA,NA,NA,NA,NA,NA),
 	caption=paste("Multivariable analyses of POLE (exclude BMI) among grade 3",sep=""),
