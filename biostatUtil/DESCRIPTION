@@ -1,0 +1,14 @@
+Package: biostatUtil
+Type: Package
+Title: Utility functions used in biostatistical projects
+Version: 0.0.0.9001
+Date: 2015-06-09
+Author: Derek Chiu, Aline Talhouk, Samuel Leung
+Maintainer: Derek Chiu <dchiu@bccrc.ca>
+Description: Provides some commonly used utility functions used in biostatistics,
+    such as row and column percentages in a table, date formatting, and more.
+Depends:
+    R (>= 3.2.0)
+Imports:
+    boot, psy, gdata, Hmisc
+License: CC0

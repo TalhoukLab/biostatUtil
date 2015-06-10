@@ -123,7 +123,7 @@ source("remark6.R")
 
 a)  Case Selection
 
-We analyzed tumour obtained retrospectively by searching for all patients with adequate specimen availability in our tumour bank or obtained from archives. We did not attempt to stratify by any clinicopathological parameter. Adequate representation from the major histological subtypes (endometrioid and serous, encompassing > 90% of EC'€™s), and all stages, and grades was achieved. We did not want to focus on the complex and poorly understood and more rare histologies (MMMT or carcinosarcomas, clear cell, undifferentiated) although a few of such cases are represented.
+We analyzed tumour obtained retrospectively by searching for all patients with adequate specimen availability in our tumour bank or obtained from archives. We did not attempt to stratify by any clinicopathological parameter. Adequate representation from the major histological subtypes (endometrioid and serous, encompassing > 90% of EC'??s), and all stages, and grades was achieved. We did not want to focus on the complex and poorly understood and more rare histologies (MMMT or carcinosarcomas, clear cell, undifferentiated) although a few of such cases are represented.
 
 Both clinical and pathological data was collected and at the time of banking. Follow-up data was obtained until Oct 14th, 2014 then locked. The assays for this paper were newly performed using stored specimen. 
 
