@@ -19,7 +19,7 @@ kappaBootCI <- function(x, y, seed = 20, num.boot = 1000, conf.level = 0.95) {
     psy::ckappa(data[x, ])[[2]]
   }
   
-  res <- boot(cbind(x, y), ckappa.boot, num.boot)
+  res <- boot::boot(cbind(x, y), ckappa.boot, num.boot)
   bootCI <- boot::boot.ci(res, type = "bca", conf = conf.level)
   kappa <- c(PointEst = bootCI[[2]], bootCI[[4]][4:5])
   names(kappa)[2:3] <- c(paste0((1 - conf.level) / 2 * 100, "%"),

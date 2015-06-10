@@ -1,8 +1,8 @@
 Package: biostatUtil
 Type: Package
 Title: Utility functions used in biostatistical projects
-Version: 0.0.0.9001
-Date: 2015-06-09
+Version: 0.0.0.9002
+Date: 2015-06-10
 Author: Derek Chiu, Aline Talhouk, Samuel Leung
 Maintainer: Derek Chiu <dchiu@bccrc.ca>
 Description: Provides some commonly used utility functions used in biostatistics,
@@ -10,5 +10,5 @@ Description: Provides some commonly used utility functions used in biostatistics
 Depends:
     R (>= 3.2.0)
 Imports:
-    boot, psy, gdata, Hmisc
+    boot, psy, gdata, Hmisc, survival
 License: CC0

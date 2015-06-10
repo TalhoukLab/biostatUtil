@@ -1,6 +1,5 @@
 confusionMatrix <- function(x, y, seed = 20, num.boot = 1000,
                             conf.level = 0.95, digits = 4) {
-  require(Hmisc)
   cat("Confusion Matrix", "\n")
   CM = table(Prediction = x, Reference = y)
   print(CM)
