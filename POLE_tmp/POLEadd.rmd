@@ -223,40 +223,84 @@ pole_vs_stage_x_age_x_bmi <- do.cohort.characteristics(emdb, "POLE.mut.germline.
 `r pole_vs_age_x_bmi$result.table.html`
 `r pole_vs_stage_x_age_x_bmi$result.table.html`
 
-<!--#### Item 15 (additional). Present univariable analyses showing the relation between the marker and outcome, with the estimated effect.  Preferrably provide similar analyses for all other variables being analyzed.-->
+#### Item 15 (additional). Present univariable analyses showing the relation between the marker and outcome, with the estimated effect.  Preferrably provide similar analyses for all other variables being analyzed.
+
+**Analysis among grade 3**
+
 ```{r fig.keep='none'}
 source("remark15.R")
+
+```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
+# width/height = 13/5
+  do.km.plots(
+		emdb[!emdb$POLE.mut.germline.as.missing%in%ALL.MISSING.CODES & emdb$Tumour.Grade=="Grade 3",],
+		"POLE.mut.germline.as.missing", 
+		"POLE mutation status - grade 3",
+		single.test.type="logrank",
+		surv.type="os",
+		conf.int=TRUE, # per missing 2015-01-09 ... wanted confidence interval on KM plots
+		use.aline.plot=TRUE
+	)
+  do.km.plots(
+  	emdb[!emdb$POLE.mut.germline.as.missing%in%ALL.MISSING.CODES & emdb$Tumour.Grade=="Grade 3",],
+		"POLE.mut.germline.as.missing", 
+    "POLE mutation status - grade 3",
+		single.test.type="logrank",
+		surv.type="dss",
+		conf.int=TRUE,
+		use.aline.plot=TRUE
+	)
+  do.km.plots(
+  	emdb[!emdb$POLE.mut.germline.as.missing%in%ALL.MISSING.CODES & emdb$Tumour.Grade=="Grade 3",],
+		"POLE.mut.germline.as.missing", 
+		"POLE mutation status - grade 3",
+		single.test.type="logrank",
+		surv.type="rfs",
+		conf.int=TRUE, # per missing 2015-01-09 ... wanted confidence interval on KM plots
+		use.aline.plot=TRUE
+	)
+
 options(table_counter=4)
-uni.cox.tx <- do.coxph.generic( # a table of univariable cox models of treatment vs. no treatment
-  	emdb, 
-		c("any.init.treatment"), 
-		c(HTML.COX.VAR.DESC.ANY.INIT.ADJ.TX),
+uni.cox.pole.g3 <- do.coxph.generic( # a table of univariable cox models of treatment vs. no treatment
+  	emdb[emdb$Tumour.Grade=="Grade 3",], 
+		c("POLE.mut.germline.as.missing"), 
+		c("POLE mutation status<br>wild type=0/mutated=1"),
 		use.firth=FIRTH.THRESHOLD,
 		stat.test="logtest",
-		var.ref.groups=c(NA),
-		caption="Univariable Cox model of treatment vs. no treatment (OS/DSS/RFS) in whole cohort",
+		var.ref.groups=c(POLE.REF.GROUP),
+		caption="Univariable analyses of relation of POLE mutation status to OS/DSS/RFS among patients with grade 3 tumors",
 		banded.rows=TRUE)
-uni.cox.tx.pole.wt <- do.coxph.generic( # a table of univariable cox models of treatment vs. no treatment
-    emdb[emdb$POLE.mut.germline.as.missing=="wild type",], 
-		c("any.init.treatment"), 
-		c(HTML.COX.VAR.DESC.ANY.INIT.ADJ.TX),
-		use.firth=FIRTH.THRESHOLD,
-		stat.test="logtest",
-		var.ref.groups=c(NA),
-		caption="Univariable Cox model of treatment vs. no treatment (OS/DSS/RFS) among POLE wild type",
-		banded.rows=TRUE)
-uni.cox.tx.pole.mut <- do.coxph.generic( # a table of univariable cox models of treatment vs. no treatment
-    emdb[emdb$POLE.mut.germline.as.missing=="mutated",], 
-  	c("any.init.treatment"), 
-		c(HTML.COX.VAR.DESC.ANY.INIT.ADJ.TX),
-		use.firth=-1,
-		stat.test="logtest",
-		var.ref.groups=c(NA),
-		caption="Univariable Cox model of treatment vs. no treatment (OS/DSS/RFS) among POLE mutated",
-		banded.rows=TRUE)
-# per meeting with Aline 2015-05-29, no need to show this any more.
+multi.cox.summary.g3 <- do.coxph.multivariable( 
+    emdb[emdb$Tumour.Grade=="Grade 3",], 
+	c(
+		"POLE.mut.germline.as.missing",
+		"age.at.surgery",
+		"stage_b1v234",
+		"Histological.Subtype_non_endo",
+		"LVSI",
+		"any.positive.nodes",
+		"any.init.treatment"
+	), 
+	c(
+		HTML.COX.VAR.DESC.POLE,
+		HTML.COX.VAR.DESC.AGE,
+		HTML.COX.VAR.DESC.STAGE,
+		HTML.COX.VAR.DESC.HIST,
+		HTML.COX.VAR.DESC.LVSI,
+		HTML.COX.VAR.DESC.ANY.POS.NODES,
+		HTML.COX.VAR.DESC.ANY.INIT.ADJ.TX
+	),
+	use.firth=1,
+	stat.test="logtest",
+	var.ref.groups=c(POLE.REF.GROUP,NA,NA,NA,NA,NA,NA),
+	caption=paste("Multivariable analyses of POLE (exclude BMI) among grade 3",sep=""),
+	banded.rows=TRUE
+)
+
 ```
 
-`r #uni.cox.tx$result.table.html`
-`r #uni.cox.tx.pole.wt$result.table.html`
-`r #uni.cox.tx.pole.mut$result.table.html`
+*Please note: (F) indicates that the Firth's penalized maximum likelihood bias reduction method was used to estimate the hazard ratio.*
+
+`r uni.cox.pole.g3$result.table.html`
+`r multi.cox.summary.g3$result.table.html`
+
