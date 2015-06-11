@@ -1,3 +1,6 @@
+#' Earliest Date
+#' @param dates vector of dates
+#' @param na.rm logical. Should NAs be removed?
 minDate <- function(dates, na.rm = TRUE) {
   if(na.rm)
     dates <- dates[!is.na(dates)]
