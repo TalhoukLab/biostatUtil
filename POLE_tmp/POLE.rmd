@@ -36,10 +36,11 @@ options(scipen=999) # disable scientific notation e.g. instead of 1x10E-3, show 
 
 ```{r loadnMunge,message=FALSE,echo=FALSE,results='hide',warning=FALSE}
 library(dplyr)
-require(Gmisc)
+library(Gmisc)
 library(survival)
 library(knitcitations)
 library(powerSurvEpi)
+library(biostatUtil)
 source(SETUP_KNITR.R)
 source(DEFINEEVENTDATE.R)
 source(SETUP_DB.R) # setup database ... e.g. censoring, remove cases
@@ -132,7 +133,7 @@ T1=as.Date(emdb[,"followup.start.date.mm.dd.yyyy"],format=DATE.FORMAT)
 T2=as.Date(O$ev.Date) # no need to use do format=DATE.FORMAT since O$ev.Date should be date objects already
 status=O$ev.status=="os.event"
 
-FU=AssessSurvTime(T1,T2,status)
+FU=assessSurvTime(T1,T2,status)
 ```
 
 b)	Time Period
@@ -369,28 +370,28 @@ The interaction graph gives an idea of the trend and size of the effect.
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
 # width/height = 13/5
 #par(mfrow=c(1,2))
-do.km.plots.pole("os",use.aline.plot=USE.ALINE.KM.PLOT)
+doKMPlotsPOLE("os",use.aline.plot=USE.ALINE.KM.PLOT)
 ```
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
-do.km.plots.pole.x.init.treatment("os",use.aline.plot=USE.ALINE.KM.PLOT)
+doKMPlotsPOLEInitTrt("os",use.aline.plot=USE.ALINE.KM.PLOT)
 ```
 
 **KM plots - disease specific survival**
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
 #par(mfrow=c(1,2))
-do.km.plots.pole("dss",use.aline.plot=USE.ALINE.KM.PLOT)
+doKMPlotsPOLE("dss",use.aline.plot=USE.ALINE.KM.PLOT)
 ```
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
-do.km.plots.pole.x.init.treatment("dss",use.aline.plot=USE.ALINE.KM.PLOT)
+doKMPlotsPOLEInitTrt("dss",use.aline.plot=USE.ALINE.KM.PLOT)
 ```
 
 **KM plots - relapse free survival**
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
 #par(mfrow=c(1,2))
-do.km.plots.pole("rfs",use.aline.plot=USE.ALINE.KM.PLOT)
+doKMPlotsPOLE("rfs",use.aline.plot=USE.ALINE.KM.PLOT)
 ```
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
-do.km.plots.pole.x.init.treatment("rfs",use.aline.plot=USE.ALINE.KM.PLOT)
+doKMPlotsPOLEInitTrt("rfs",use.aline.plot=USE.ALINE.KM.PLOT)
 ```
 
 #### Item 16. For key multivariable analyses, report estimated effects (e.g. hazard ratio) with confidence intervals for the marker and, at least for the final model, all other variables in the model.
@@ -421,8 +422,8 @@ dat0$POLE=factor(dat0$POLE, levels=c("mutated","wild type"))
 
 dat1=dat0[complete.cases(dat0),]
 
-taos=testInter(dat1,event="OS",use.firth=TRUE)
-printInterModels(taos[[1]],taos[[2]],taos[[3]],"Overall Survival. ")
+taos=biostatUtil::testInter(dat1,event="OS",use.firth=TRUE)
+biostatUtil::printInterModels(taos[[1]],taos[[2]],taos[[3]],"Overall Survival. ")
 pander(ftable(xtabs(~POLE+Rx+OS.sts,data=dat1)),style='rmarkdown')
 ```
 
@@ -442,8 +443,8 @@ dat0$POLE[dat0$POLE=="Unk"]=NA
 dat0$POLE=factor(dat0$POLE, levels=c("mutated","wild type"))
 dat1=dat0[complete.cases(dat0),]
 
-tao=testInter(dat1,event="DSS",use.firth=TRUE)
-printInterModels(tao[[1]],tao[[2]],tao[[3]],"Disease Specific Survival. ")
+tao=biostatUtil::testInter(dat1,event="DSS",use.firth=TRUE)
+biostatUtil::printInterModels(tao[[1]],tao[[2]],tao[[3]],"Disease Specific Survival. ")
 
 pander(ftable(xtabs(~POLE+Rx+DSS.sts,data=dat1)),style='rmarkdown')
 ```
@@ -460,8 +461,8 @@ dat0$POLE[dat0$POLE=="Unk"]=NA
 dat0$POLE=factor(dat0$POLE, levels=c("mutated","wild type"))
 dat1=dat0[complete.cases(dat0),]
 
-tao=testInter(dat1,event="RFS",use.firth=TRUE)
-printInterModels(tao[[1]],tao[[2]],tao[[3]],"Relapse Free Survival. ")
+tao=biostatUtil::testInter(dat1,event="RFS",use.firth=TRUE)
+biostatUtil::printInterModels(tao[[1]],tao[[2]],tao[[3]],"Relapse Free Survival. ")
 
 pander(ftable(xtabs(~POLE+Rx+RFS.sts,data=dat1)),style='rmarkdown')
 
@@ -485,8 +486,8 @@ dat0$POLE[dat0$POLE=="Unk"]=NA
 dat0$POLE=factor(dat0$POLE, levels=c("mutated","wild type"))
 
 dat1=dat0[complete.cases(dat0),]
-mod=coxphOut(coxph(Surv(OS.yrs,OS.sts=="os.event")~POLE+Age+grade+Histology+Rx,data=dat1),c("POLE wt","Age","Grade","Histology","Any Rx"))
-printCoxMod(mod,"Multivariable Model excluding Stage and BMI")
+mod=biostatUtil::coxphOut(coxph(Surv(OS.yrs,OS.sts=="os.event")~POLE+Age+grade+Histology+Rx,data=dat1),c("POLE wt","Age","Grade","Histology","Any Rx"))
+biostatUtil::printCoxMod(mod,"Multivariable Model excluding Stage and BMI")
 ```
 
 ```{r}
@@ -495,8 +496,8 @@ dat0$POLE[dat0$POLE=="Unk"]=NA
 dat0$POLE=factor(dat0$POLE, levels=c("mutated","wild type"))
 
 dat1=dat0[complete.cases(dat0),]
-mod=coxphOut(coxph(Surv(OS.yrs,OS.sts=="os.event")~POLE+Age+grade+Histology+Rx+bmi+nodes,data=dat1),c("POLE wt","Age","High Grade","Histology Endo","Any Rx","BMI","Any Nodes"))
-printCoxMod(mod,"Multivariable Model excluding Stage")
+mod=biostatUtil::coxphOut(coxph(Surv(OS.yrs,OS.sts=="os.event")~POLE+Age+grade+Histology+Rx+bmi+nodes,data=dat1),c("POLE wt","Age","High Grade","Histology Endo","Any Rx","BMI","Any Nodes"))
+biostatUtil::printCoxMod(mod,"Multivariable Model excluding Stage")
 ```
 -->
 
@@ -523,7 +524,7 @@ In the basic form of the Cox regression model, the coefficients corresponded to 
 
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=9, fig.height=3}
 par(mfrow=c(1,3))
-do.check.ph("POLE.mut.germline.as.missing","POLE mutation")
+doCheckPH("POLE.mut.germline.as.missing","POLE mutation")
 ```
 
 Visual examination of the Schoenfeld residual plots indicate no evidence of POLE mutation status violating the proportional hazard assumption. 
