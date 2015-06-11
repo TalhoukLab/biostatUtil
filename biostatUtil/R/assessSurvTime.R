@@ -34,8 +34,6 @@ assessSurvTime <- function(T1, T2, status) {
   return(MedianTime)
 }
 
-
-# AssessSurvTime
 # do.km.plots.pole
 # do.km.plots.pole.x.init.treatment
 # testInter
