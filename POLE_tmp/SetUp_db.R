@@ -82,7 +82,9 @@ USE.ALINE.KM.PLOT <- TRUE
 ### end of constants ###
 
 ### READ DATA FILE ###
-ed=read.csv(ED.CSV, header=T, stringsAsFactors =FALSE) # read database file ...
+#ed=read.csv(ED.CSV, header=T, stringsAsFactors =FALSE) # read database file ...
+library(bccaEndometrial)
+data(ed)
 ed.raw <- ed # absolutely no filtered out cases
 
 # per meeting 2015-01-09, want to start with ALL POLE interpretable
