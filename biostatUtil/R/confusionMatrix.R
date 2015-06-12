@@ -16,8 +16,35 @@
 #' @param conf.level confidence level. Defaults to 95\%.
 #' @param digits number of digits to round summaries to
 #' @return A confusion matrix for the predicted and reference classes. Then
-#' the estimated statistics along with bootstrapped confidence intervals.
+#' the estimated statistics along with bootstrapped confidence intervals. A
+#' list with the following elements
+#' \item{Accuracy}{Accuracy point estimate, lower bound and upper bound for
+#' bootstrapped CI}
+#' \item{Sensitivity}{Sensitivity point estimate, lower bound and upper bound for
+#' bootstrapped CI}
+#' \item{Specificity}{Specificity point estimate, lower bound and upper bound for
+#' bootstrapped CI}
+#' \item{PPV}{PPV point estimate, lower bound and upper bound for
+#' bootstrapped CI}
+#' \item{NPV}{NPV point estimate, lower bound and upper bound for
+#' bootstrapped CI}
+#' \item{kappa}{kappa point estimate, lower bound and upper bound for
+#' bootstrapped CI}
 #' @author Aline Talhouk, Derek Chiu
+#' @export
+#' @examples
+#' ### 95% CI from 1000 bootstraped samples
+#' set.seed(547)
+#' n <- 80
+#' x <- rbinom(n, size = 1, prob = 0.6)
+#' y <- rbinom(n, size = 1, prob = 0.4)
+#' confusionMatrix(x, y)
+#' 
+#' ### 90% CI from 500 bootstrapped samples
+#' confusionMatrix(x, y, num.boot = 500, conf.level = 0.90)
+#' 
+#' ### Round to 2 digits
+#' confusionMatrix(x, y, digits = 2)
 confusionMatrix <- function(x, y, seed = 20, num.boot = 1000,
                             conf.level = 0.95, digits = 4) {
   cat("Confusion Matrix", "\n")
@@ -25,24 +52,24 @@ confusionMatrix <- function(x, y, seed = 20, num.boot = 1000,
   print(CM)
   
   # Compute marginal totals and correct predictions
-  m1 = CM[1, 1] + CM[2, 1]
-  m2 = CM[1, 2] + CM[2, 2]
-  n1 = CM[1, 1] + CM[1, 2]
-  n2 = CM[2, 1] + CM[2, 2]
-  PO = CM[1, 1] + CM[2, 2]
+  m1 <- CM[1, 1] + CM[2, 1]
+  m2 <- CM[1, 2] + CM[2, 2]
+  n1 <- CM[1, 1] + CM[1, 2]
+  n2 <- CM[2, 1] + CM[2, 2]
+  PO <- CM[1, 1] + CM[2, 2]
   
   # Calculate statistics and obtain confidence intervals
-  Accuracy = round(Hmisc::binconf(PO, m1 + m2, alpha = 1 - conf.level,
+  Accuracy <- round(Hmisc::binconf(PO, m1 + m2, alpha = 1 - conf.level,
                            method = "wilson"), digits)
-  Sensitivity = round(Hmisc::binconf(CM[1, 1], m1, alpha = 1 - conf.level,
+  Sensitivity <- round(Hmisc::binconf(CM[1, 1], m1, alpha = 1 - conf.level,
                               method = "wilson"), digits)
-  Specificity = round(Hmisc::binconf(CM[2, 2], m2, alpha = 1 - conf.level,
+  Specificity <- round(Hmisc::binconf(CM[2, 2], m2, alpha = 1 - conf.level,
                               method = "wilson"), digits)
-  PPV = round(Hmisc::binconf(CM[1, 1], n1, alpha = 1 - conf.level,
+  PPV <- round(Hmisc::binconf(CM[1, 1], n1, alpha = 1 - conf.level,
                       method = "wilson"), digits)
-  NPV = round(Hmisc::binconf(CM[2, 2], n2, alpha = 1 - conf.level,
+  NPV <- round(Hmisc::binconf(CM[2, 2], n2, alpha = 1 - conf.level,
                       method = "wilson"), digits)
-  kappa = round(kappaBootCI(x, y, seed, num.boot, conf.level),
+  kappa <- round(kappaBootCI(x, y, seed, num.boot, conf.level),
                 digits)
   
   # Modify the printouts to have the right confidence interval quantiles

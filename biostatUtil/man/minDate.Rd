@@ -11,7 +11,28 @@ minDate(dates, na.rm = TRUE)
 
 \item{na.rm}{logical. Should NAs be removed?}
 }
+\value{
+The earliest date from a vector of dates.
+}
 \description{
-Earliest Date
+Finds the earliest date given a vector of dates.
+}
+\details{
+The input vector should have dates formatted as YYYY-MM-DD. If \code{na.rm}
+is not set to the default (\code{TRUE}) and \code{dates} has \code{NA}
+values, then the function will also return \code{NA}.
+}
+\examples{
+### No NA
+t1 <- c("2015-03-01", "2015-02-15", "2015-05-01")
+minDate(t1)
+
+### With NA
+t2 <- c("2015-03-01", "2015-02-15", NA, "2015-05-01")
+minDate(t2)
+minDate(t2, na.rm = FALSE)
+}
+\author{
+Samuel Leung
 }
 

@@ -6,6 +6,7 @@
 #' @param dataframe A data frame containing numeric variables of interest
 #' @return All pairwise absolute correlations, correlations, p-values, adjusted p-values by decreasing order of absolute correlations.
 #' @author Aline Talhouk, Derek Chiu
+#' @export
 pairwiseCor <- function(dataframe) {
   # Check that the data provided is numeric 
   if (!all(apply(dataframe, 2, is.numeric))) {

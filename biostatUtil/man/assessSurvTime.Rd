@@ -13,7 +13,18 @@ assessSurvTime(T1, T2, status)
 
 \item{status}{censoring status}
 }
+\value{
+A list with elements
+\item{Otime}{Observation time}
+\item{Stime}{Censoring time}
+\item{Etime}{Time to end of study}
+\item{KFT}{Known Function Time}
+\item{RevKM}{Kaplan-Meier Time}
+}
 \description{
 Given two survival times and censoring status, assesses the survival times...[To Be Completed]
+}
+\details{
+Details to be filled.
 }
 

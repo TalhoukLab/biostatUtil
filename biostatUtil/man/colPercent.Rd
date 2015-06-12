@@ -2,7 +2,7 @@
 % Please edit documentation in R/colPercent.R
 \name{colPercent}
 \alias{colPercent}
-\title{Column-wise percentages}
+\title{Column percentages}
 \usage{
 colPercent(t, pretty.text = FALSE, keep = FALSE, digits = 4)
 }

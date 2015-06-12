@@ -13,6 +13,7 @@
 #' @return A table with row-wise percentages added. That is, for every row,
 #' the percentages sum to 1.
 #' @author Aline Talhouk, Derek Chiu
+#' @export
 #' @examples
 #' A <- matrix(c(2, 3, 5, 10), nrow = 2)
 #' rowPercent(A)

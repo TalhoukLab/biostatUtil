@@ -14,6 +14,7 @@
 #' @param sep string used to separate \code{d}, \code{m}, and \code{y}. Defaults to "/".
 #' @return A character string of a formatted date.
 #' @author Samuel Leung, Derek Chiu
+#' @export
 #' @examples
 #' formatDate(8, 7, 2011)
 #' formatDate(8, 7, 2011, date.format = "YYYY.MM.DD")

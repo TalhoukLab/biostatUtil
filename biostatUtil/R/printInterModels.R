@@ -1,4 +1,5 @@
 #' Print inter models
+#' @export
 printInterModels<- function(mod1,mod2,mod3,Capt){
   vars <- rbind(mod1,mod2,mod3)
   

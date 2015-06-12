@@ -1,4 +1,5 @@
 #' Make Kaplan-Meier plots for POLE
+#' @export
 doKMPlotsPOLE <- function(surv.type, use.aline.plot = FALSE) {
   doKMPlots(
     emdb[!emdb$POLE.mut.germline.as.missing%in%ALL.MISSING.CODES,],

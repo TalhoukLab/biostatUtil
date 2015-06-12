@@ -1,4 +1,5 @@
 #' coxphOut function
+#' @export
 coxphOut <- function (x,coefnames=NULL,digits=2,use.firth=FALSE) {
   cox <- x # this can be either an object from coxph() or coxphf() ... slightly different output
   Coef <- cox$coef

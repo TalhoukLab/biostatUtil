@@ -22,7 +22,20 @@ confusionMatrix(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
 }
 \value{
 A confusion matrix for the predicted and reference classes. Then
-the estimated statistics along with bootstrapped confidence intervals.
+the estimated statistics along with bootstrapped confidence intervals. A
+list with the following elements
+\item{Accuracy}{Accuracy point estimate, lower bound and upper bound for
+bootstrapped CI}
+\item{Sensitivity}{Sensitivity point estimate, lower bound and upper bound for
+bootstrapped CI}
+\item{Specificity}{Specificity point estimate, lower bound and upper bound for
+bootstrapped CI}
+\item{PPV}{PPV point estimate, lower bound and upper bound for
+bootstrapped CI}
+\item{NPV}{NPV point estimate, lower bound and upper bound for
+bootstrapped CI}
+\item{kappa}{kappa point estimate, lower bound and upper bound for
+bootstrapped CI}
 }
 \description{
 Calculates summaries from cross-tabulated reference and prediction labels
@@ -34,6 +47,20 @@ function provides performance summaries. The accuracy, sensitivity,
 specificity, positive predictive value (PPV), negative predictive value
 (NPV), and the kappa statistic, along with their bootstrapped confidence
 intervals are returned.
+}
+\examples{
+### 95\% CI from 1000 bootstraped samples
+set.seed(547)
+n <- 80
+x <- rbinom(n, size = 1, prob = 0.6)
+y <- rbinom(n, size = 1, prob = 0.4)
+confusionMatrix(x, y)
+
+### 90\% CI from 500 bootstrapped samples
+confusionMatrix(x, y, num.boot = 500, conf.level = 0.90)
+
+### Round to 2 digits
+confusionMatrix(x, y, digits = 2)
 }
 \author{
 Aline Talhouk, Derek Chiu

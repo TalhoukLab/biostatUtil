@@ -2,10 +2,18 @@
 #' 
 #' Given two survival times and censoring status, assesses the survival times...[To Be Completed]
 #' 
+#' Details to be filled.
 #' 
 #' @param T1 time 1
 #' @param T2 time 2
 #' @param status censoring status
+#' @return A list with elements
+#' \item{Otime}{Observation time}
+#' \item{Stime}{Censoring time}
+#' \item{Etime}{Time to end of study}
+#' \item{KFT}{Known Function Time}
+#' \item{RevKM}{Kaplan-Meier Time}
+#' @export
 assessSurvTime <- function(T1, T2, status) { 
   # in case there are any is.na(status)
   # T2 may be NA as well for rfs!!!
@@ -14,9 +22,9 @@ assessSurvTime <- function(T1, T2, status) {
   T2 <- T2[non.missing.cases]
   status <- status[non.missing.cases]
   
-  Otime <- T2 - T1  # observation time
-  Stime <- T2[status] - T1[status]  # censoring time
-  Etime <- max(T2) - T1  # time to end of study
+  Otime <- T2 - T1
+  Stime <- T2[status] - T1[status]
+  Etime <- max(T2) - T1
   SurvTime <- T2 - T1
   KFT <- SurvTime
   KFT[status] <- T2[status] - T1[status]  # known function time

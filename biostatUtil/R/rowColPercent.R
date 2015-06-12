@@ -11,6 +11,7 @@
 #' @author Aline Talhouk, Derek Chiu
 #' @seealso \code{\link{rowPercent}} for row percentages only,
 #' \code{\link{colPercent}} for column percentages only.
+#' @export
 rowColPercent <- function(t, ...) {
   # generate a table with count, row %, column % given table t
   # i.e. the return table will have row = nrow(t)*3

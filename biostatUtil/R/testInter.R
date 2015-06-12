@@ -1,4 +1,5 @@
 #' testInter function
+#' @export
 testInter<-function(dmat,event, labs=c("POLE wt","Rx","POLE wt * Rx"), use.firth=FALSE){
   dmat$POLE <- as.numeric(dmat$POLE)-1
   dmat$Rx <- as.numeric(dmat$Rx)-1

@@ -12,6 +12,7 @@
 #' @param conf.level confidence level. Defaults to 95\%.
 #' @return bootstraped confidence interval for Cohen's kappa.
 #' @author Aline Talhouk, Derek Chiu
+#' @export
 kappaBootCI <- function(x, y, seed = 20, num.boot = 1000, conf.level = 0.95) {
   set.seed(seed)
   
