@@ -10,6 +10,7 @@
 #' @param na.rm logical. Should NAs be removed?
 #' @return The earliest date from a vector of dates.
 #' @author Samuel Leung
+#' @export
 #' @examples
 #' ### No NA
 #' t1 <- c("2015-03-01", "2015-02-15", "2015-05-01")
