@@ -1,12 +1,15 @@
 #' Assess survival time
 #' 
-#' Given two survival times and censoring status, assesses the survival times...[To Be Completed]
+#' Given range of survival times and censoring status, provides different
+#' time-related summary statistics
 #' 
-#' Details to be filled.
+#' The observation time is defined as the median time in days between all
+#' \code{T1} and \code{T2}. Censoring time is the median time in days between
+#' all \code{T1} and \code{T2} for events only.
 #' 
-#' @param T1 time 1
-#' @param T2 time 2
-#' @param status censoring status
+#' @param T1 vector of start dates
+#' @param T2 vector of end dates
+#' @param status logical; 
 #' @return A list with elements
 #' \item{Otime}{Observation time}
 #' \item{Stime}{Censoring time}
@@ -27,10 +30,10 @@ assessSurvTime <- function(T1, T2, status) {
   Etime <- max(T2) - T1
   SurvTime <- T2 - T1
   KFT <- SurvTime
-  KFT[status] <- T2[status] - T1[status]  # known function time
+  KFT[status] <- T2[status] - T1[status]
   rev.status <- rep(1,length(status))
   rev.status[status] <- 0
-  Ftime <- survival::survfit(Surv(as.numeric(SurvTime), rev.status) ~ 1)
+  Ftime <- survival::survfit(survival::Surv(as.numeric(SurvTime), rev.status) ~ 1)
   SumServ <- read.table(textConnection(capture.output(Ftime)), skip = 2, header = TRUE)
   
   MedianTime <- list(
@@ -41,11 +44,3 @@ assessSurvTime <- function(T1, T2, status) {
     RevKM = as.numeric(round(SumServ[, "median"] / 365.24, 2)))
   return(MedianTime)
 }
-
-# do.km.plots.pole
-# do.km.plots.pole.x.init.treatment
-# testInter
-# printInterModels
-# coxphOut
-# printCoxMod
-# do.check.ph

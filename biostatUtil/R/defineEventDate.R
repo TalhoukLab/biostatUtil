@@ -1,42 +1,41 @@
 #' Define event date
-# function to calculate event/status given censor date
-# original version received from Aline 2014-09-26
-# 
-# Author: samuelc
-
-
-#
-# ed = input data
-# event = event type: OS, DSS
-# cutoff.date.format = date format of cut off date
-# format.dates.in.ed = (TRUE/FALSE) indicate whether to format dates in ed
-# cutoff.date.format = format of cutoff
-# status.only = (TRUE/FALSE) indicating whether to return survival status only
-#
-# return
-#    ev.status = string e.g. "os.censor", "os.event"
-#    ev.Date = date object 
-#
+#' 
+#' Calculate event/status given censor date
+#' 
+#' Details to be filled.
+#' 
+#' @param ed input data, typically a data.frame or matrix
+#' @param cutoff cutoff date
+#' @param event event type; one of OS(default), DSS, or RFS
+#' @param format.dates.in.ed logical; if TRUE(default), dates will be
+#' formatted in \code{ed}
+#' @param cutoff.date.format format of cutoff date
+#' @param status.only logical; if TRUE, only survival status will be returned
+#' @return A list with elements
+#' \item{ev.status}{A string indicating status: such as "os.censor" or "os.event}
+#' \item{ev.Date}{Date object}
+#' \item{ev.years}{Date in years}
+#' @note Since there may be some string, e.g. "Unk" in the return date
+#' \code{ev.Date}, R changed the date to string. Therefore, you need to do 
+#' \code{as.numeric()} and \code{as.Date()} to change \code{ev.Date} from
+#' a string back to a \code{Date} object.
+#' Original version received from Aline 2014-09-26.
+#' @author Samuel Leung, Aline Talhouk
+#' @export 
 # example usage:
 # 
 # EXAMPLE 1. to get updated survival dates only for censor date of 2013-12-12 ...
 # > as.Date(DefineEventDate(d,"2013-12-12",format.dates.in.ed=TRUE, status.only=FALSE)$ev.Date, origin="1970-01-01")
-#
-# Please note, because there may be some string i.e. "Unk" in the return date (ev.Date), R changed
-#    the date to string ... therefore, you need to do a as.numeric() and a as.Date() to change
-#    the ev.Date from string back to Date object. 
-#' @author Samuel Leung, Aline Talhouk
-#' @export
 defineEventDate <- function(ed, cutoff, event = "OS",
                             format.dates.in.ed = TRUE,
                             cutoff.date.format = "%Y-%m-%d",
                             status.only = FALSE) {
-  #  three possible events OS DSS and RFS
-  ev.status=NULL
-  ev.Date=NULL
-  MISSING.UNK=NA #"Unk"
+  # three possible events OS DSS and RFS
+  ev.status <- NULL
+  ev.Date <- NULL
+  MISSING.UNK <- NA  # "Unk"
   
-  # some constants ...
+  # Constants
   OS.EVENT  <- "os.event"
   OS.CENSOR <- "os.censor"
   DSS.EVENT  <- "dss.event"
@@ -44,14 +43,15 @@ defineEventDate <- function(ed, cutoff, event = "OS",
   RFS.EVENT  <- "rfs.event"
   RFS.CENSOR <- "rfs.censor"
   
-  MISSING.UNK=NA #"Unk"
-  ALL.MISSING.CODES=c("","N/A","Unk") # WARNING: make sur this is ALL the possible missing codes!!!
+  MISSING.UNK <- NA #"Unk"
+  ALL.MISSING.CODES <- c("", "N/A", "Unk")
+  # WARNING: make sure these are ALL the possible missing codes!!!
   
   # if cutoff is a single value, make repeats of it, otherwise just leave it.
-  cutoff.length=length(cutoff)
-  if (cutoff.length==1) {
-    cutoff=rep(cutoff,nrow(ed))
-  } else if (cutoff.length!=nrow(ed)) {
+  cutoff.length <- length(cutoff)
+  if (cutoff.length == 1) {
+    cutoff <- rep(cutoff, nrow(ed))
+  } else if (cutoff.length != nrow(ed)) {
     print("ERROR!!! cutoff passed to DefineEventDate is neither a single value or a vector of length=# or rows of the passed in data matrix.  Please double check")
     return(NA)
   }

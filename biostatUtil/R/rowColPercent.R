@@ -2,7 +2,8 @@
 #' 
 #' Calculate row and column percentages in a table.
 #' 
-#' Details to be filled.
+#' A table with counts, row %, and column % are generated given table t.
+#' The return table will have \code{nrow(t) * 3} rows.
 #' 
 #' @param t a matrix
 #' @param ... additional arguments for \code{\link{rowPercent}}
@@ -12,9 +13,11 @@
 #' @seealso \code{\link{rowPercent}} for row percentages only,
 #' \code{\link{colPercent}} for column percentages only.
 #' @export
+#' @examples
+#' mat <- matrix(c(5, 3, 8, 9, 2, 4), nrow = 2)
+#' rowColPercent(mat)
+#' rowColPercent(mat, pretty.text = TRUE)
 rowColPercent <- function(t, ...) {
-  # generate a table with count, row %, column % given table t
-  # i.e. the return table will have row = nrow(t)*3
   row.p <- rowPercent(t, ...)
   col.p <- colPercent(t, ...)
   result <- as.matrix(gdata::interleave(t, row.p, col.p))

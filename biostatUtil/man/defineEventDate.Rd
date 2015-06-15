@@ -7,8 +7,38 @@
 defineEventDate(ed, cutoff, event = "OS", format.dates.in.ed = TRUE,
   cutoff.date.format = "\%Y-\%m-\%d", status.only = FALSE)
 }
+\arguments{
+\item{ed}{input data, typically a data.frame or matrix}
+
+\item{cutoff}{cutoff date}
+
+\item{event}{event type; one of OS(default), DSS, or RFS}
+
+\item{format.dates.in.ed}{logical; if TRUE(default), dates will be
+formatted in \code{ed}}
+
+\item{cutoff.date.format}{format of cutoff date}
+
+\item{status.only}{logical; if TRUE, only survival status will be returned}
+}
+\value{
+A list with elements
+\item{ev.status}{A string indicating status: such as "os.censor" or "os.event}
+\item{ev.Date}{Date object}
+\item{ev.years}{Date in years}
+}
 \description{
-Define event date
+Calculate event/status given censor date
+}
+\details{
+Details to be filled.
+}
+\note{
+Since there may be some string, e.g. "Unk" in the return date
+\code{ev.Date}, R changed the date to string. Therefore, you need to do
+\code{as.numeric()} and \code{as.Date()} to change \code{ev.Date} from
+a string back to a \code{Date} object.
+Original version received from Aline 2014-09-26.
 }
 \author{
 Samuel Leung, Aline Talhouk

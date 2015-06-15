@@ -19,7 +19,13 @@ A table with row and column percentages interleaved.
 Calculate row and column percentages in a table.
 }
 \details{
-Details to be filled.
+A table with counts, row %, and column % are generated given table t.
+The return table will have \code{nrow(t) * 3} rows.
+}
+\examples{
+mat <- matrix(c(5, 3, 8, 9, 2, 4), nrow = 2)
+rowColPercent(mat)
+rowColPercent(mat, pretty.text = TRUE)
 }
 \author{
 Aline Talhouk, Derek Chiu

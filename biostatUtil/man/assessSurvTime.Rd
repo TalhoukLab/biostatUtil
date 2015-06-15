@@ -7,11 +7,11 @@
 assessSurvTime(T1, T2, status)
 }
 \arguments{
-\item{T1}{time 1}
+\item{T1}{vector of start dates}
 
-\item{T2}{time 2}
+\item{T2}{vector of end dates}
 
-\item{status}{censoring status}
+\item{status}{logical;}
 }
 \value{
 A list with elements
@@ -22,9 +22,12 @@ A list with elements
 \item{RevKM}{Kaplan-Meier Time}
 }
 \description{
-Given two survival times and censoring status, assesses the survival times...[To Be Completed]
+Given range of survival times and censoring status, provides different
+time-related summary statistics
 }
 \details{
-Details to be filled.
+The observation time is defined as the median time in days between all
+\code{T1} and \code{T2}. Censoring time is the median time in days between
+all \code{T1} and \code{T2} for events only.
 }
 
