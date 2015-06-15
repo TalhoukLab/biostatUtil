@@ -30,16 +30,10 @@ options(scipen=999) # disable scientific notation e.g. instead of 1x10E-3, show 
 
 
 ```{r loadnMunge,message=FALSE,echo=FALSE,results='hide',warning=FALSE}
-library(dplyr)
-require(Gmisc)
-library(survival)
-library(knitcitations)
-library(powerSurvEpi)
 source(SETUP_KNITR.R)
 source(DEFINEEVENTDATE.R)
 source(SETUP_DB.R) # setup database ... e.g. censoring, remove cases
 
 ```
-
 
 
