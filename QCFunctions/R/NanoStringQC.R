@@ -12,21 +12,21 @@
 
 
 NanoStringQC <- function(raw, exp, detect = 80, sn = 150, plots = TRUE, ttl =" ", explore = TRUE){
-  genes = raw$Name; rownames (raw) = genes 
+  genes = raw$Name; rownames (raw) = genes
   HKgenes = genes[raw$Code.Class == "Housekeeping"]
   PCgenes = genes[raw$Code.Class == "Positive"]
   NCgenes = genes[raw$Code.Class == "Negative"]
-  PCconc = sub("\\).*", "", sub(".*\\(", "", PCgenes)) 
+  PCconc = sub("\\).*", "", sub(".*\\(", "", PCgenes))
   PCconc = log(as.numeric(PCconc), base = 2)
   lin = function(x){
     if (any(x == 0)){
-      res = NA 
+      res = NA
     } else {
-      fit <- lm(log(x,base=2) ~ PCconc) 
+      fit <- lm(log(x,base=2) ~ PCconc)
       res = summary(fit)$r.squared }
     return(res)
   }
-  
+
   exp$linPC <- apply(raw[PCgenes, -(1:3)], 2, lin)
   exp$linFlag <- exp$linPC < 0.9 | is.na(exp$linPC)
   exp$perFOV <- exp$fov.counted / exp$fov.count
@@ -40,20 +40,20 @@ NanoStringQC <- function(raw, exp, detect = 80, sn = 150, plots = TRUE, ttl =" "
   exp$sn <- exp$averageHK / exp$lod
   exp$sn[exp$lod < 0.001] <- 0 # This is so that it does not underflow
   exp$bdFlag <- (exp$binding.density < 0.05 | exp$binding.density > 2.25)
-  
-  if (plots) {
+
+  if (plots==TRUE) {
     par(mfrow = c(1,2))
-    plot(exp$sn, exp$pergd, pch=20, col="deepskyblue", xaxt="n", ylim=c(0,100), 
+    plot(exp$sn, exp$pergd, pch=20, col="deepskyblue", xaxt="n", ylim=c(0,100),
          xlab = "Signal to Noise Ratio", ylab = "Ratio of Genes Detected")
     axis(1, at = seq(0, max(exp$sn) + 1, 300))
     abline(v = sn, col = "red", lwd = 2)
     abline(h = detect, lty = 2)
-    
+
     hist(exp$sn, 50, col = "cornsilk", prob = TRUE,
          xlab = "Signal to Noise", ylab = "Probability", main = "")
     abline(v = sn,lwd = 3)
+    title(ttl, outer = TRUE, line = -2)
   }
-  title(ttl, outer = TRUE, line = -2)
   exp$normFlag <- (exp$sn < sn | exp$pergd < detect)
   exp$QCFlag <- as.vector(exp$lodFlag == TRUE | exp$normFlag == TRUE | exp$imagingFlag == TRUE | exp$linFlag == TRUE)
   if (!explore)
