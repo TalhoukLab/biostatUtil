@@ -1,4 +1,5 @@
 #' Do a boxplot among subtypes
+#' @export
 doBoxplotAmongSubtypes <- function(input.d,data.description,biomarker.var.name,biomarker.name,subtype.var.name,subtype.name,pch=4,jitter=0.1,digits=2,...) {
   temp.d <- input.d[
     (!is.na(input.d[,biomarker.var.name])) & 

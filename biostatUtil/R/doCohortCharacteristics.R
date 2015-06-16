@@ -1,4 +1,5 @@
 #' Generate cohort characteristics
+#' @export
 doCohortCharacteristics <- function(
   input.d, 
   marker.name, 

@@ -1,4 +1,5 @@
 #' Generates barplot
+#' @export
 doBarplot <- function(input.d, data.description, biomarker.var.name, biomarker.name, biomarker.value.names, digits=3) {
   biomarker <- input.d[,biomarker.var.name]
   

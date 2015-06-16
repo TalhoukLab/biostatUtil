@@ -1,4 +1,5 @@
 #' ggkm
+#' @export
 ggkm <- function(sfit,sfit2=NULL,
                  table = TRUE,
                  returns = FALSE,

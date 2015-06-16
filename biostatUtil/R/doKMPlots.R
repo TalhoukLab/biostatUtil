@@ -1,4 +1,5 @@
 #' Make Kaplan-Meier plots
+#' @export
 doKMPlots <- function(input.d, var.name, var.description, line.color = NULL,
                       line.pattern = NULL, km.plot.ref.group = "single",  # specify KM plot reference group, "single" means a lump log-rank statistic 
                       single.test.type = "logrank", surv.type = "os",  # end point: os, dss, rfs

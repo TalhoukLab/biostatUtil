@@ -1,4 +1,5 @@
 #' Get the p-value
+#' @export
 getPval <- function(x) 
 { 
   if( is.matrix(x$obs)) 

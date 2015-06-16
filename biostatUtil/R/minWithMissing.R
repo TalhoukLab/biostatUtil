@@ -9,6 +9,7 @@
 # NOTE: NA's are ignored
 # default.missing.value is the value to return when all items in x are of missing value
 #
+#' @export
 minWithMissing <- function(x, missing.value = -1, return.missing.value = -1) {
   x.missing <- x %in% missing.value
   

@@ -1,4 +1,5 @@
 #' Do histogram with median
+#' @export
 doHist <- function(input.d, data.description, biomarker.var.name, biomarker.name, show.title=TRUE, br=100, digits=3,interpretable.label="scorable") {
   xlab.text <- biomarker.name
   biomarker <- input.d[,biomarker.var.name]

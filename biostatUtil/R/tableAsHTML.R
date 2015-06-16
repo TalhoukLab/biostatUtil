@@ -1,4 +1,5 @@
 #' Change table to HTML format
+#' @export
 tableAsHTML <- function(
   t, 
   row.names=NULL,

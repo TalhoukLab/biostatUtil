@@ -1,4 +1,5 @@
 #' Check if string ends in partciular way
+#' @export
 endsWith <- function(a, b) {
   if (length(grep(b, a))==0) {
     return(FALSE) # not even substring ... must be false
