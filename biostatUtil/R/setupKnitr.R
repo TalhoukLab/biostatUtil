@@ -1,13 +1,13 @@
 #' Setup knitr
 #' @export
-setupKnitr <- function(){
+setupKnitr <- function(fw=8,fh=6){
   require(pander)
   # Don't set knitr options outside knitr
   if ("package:knitr" %in% search()){
     # Set some basic options. You usually do not
     # want your code, messages, warnings etc
     # to show in your actual manuscript
-    opts_chunk$set(warning=FALSE,message=FALSE,echo=FALSE, dpi=96, fig.width=4, fig.height=4, dev="png", dev.args=list(type="cairo"),  error=FALSE, cache=FALSE)
+    opts_chunk$set(warning=FALSE,message=FALSE,echo=FALSE, dpi=96, fig.width=fw, fig.height=fh, dev="png", dev.args=list(type="cairo"),  error=FALSE, cache=FALSE)
     # Change to dev="postscript" if you want the EPS-files
     # for submitting. Also remove the dev.args() as the postscript
     # doesn't accept the type="cairo" argument.
@@ -86,7 +86,7 @@ setupKnitr <- function(){
     warning=FALSE,
     echo=FALSE,
     dpi=96,
-    fig.width=4, fig.height=4, # Default figure widths
+    fig.width=fw, fig.height=fh, # Default figure widths
     dev="png", dev.args=list(type="cairo"), # The png device
     # Change to dev="postscript" if you want the EPS-files
     # for submitting. Also remove the dev.args() as the postscript
