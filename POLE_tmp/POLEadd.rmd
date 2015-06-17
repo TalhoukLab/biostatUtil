@@ -304,3 +304,29 @@ multi.cox.summary.g3 <- do.coxph.multivariable(
 `r uni.cox.pole.g3$result.table.html`
 `r multi.cox.summary.g3$result.table.html`
 
+There is a discrepancy between likelihood ratio test (table 6) and the P-values from Wald test (not shown, but implied by the reported hazard ratio confidence interval in table 6.  i.e. we expected to see the confidence interval to not cross "1"" for all parameters with likelihood ratio test p-values < 0.05).  Steve McKinney suggested a bootstrap analysis be performed to observe how the hazard ratio will be distributed on bootstrap samples.  For example, if 97.5% of the hazard ratios obtained from bootstrap samples are above "1", we will be able to say that the hazard ratio is significantly greater than "1", p=0.05.
+
+*Bootstrap analysis - hazard ratio from Cox regression models with Firth's penalized likelihood*
+
+```{r message=FALSE,echo=FALSE,results='hide'}
+source("remark17.R")
+```
+
+Overall survival: 
+
+- median (95 CI): `r format(exp(median(boot.hrs.os)),digits=3)` (`r format(exp(boot.hrs.os[num.boot*0.025]),digits=3)` to `r format(exp(boot.hrs.os[num.boot*0.975]),digits=3)`)
+
+Disease specific survival: 
+
+- median (95 CI): `r format(exp(median(boot.hrs.dss)),digits=3)` (`r format(exp(boot.hrs.dss[num.boot*0.025]),digits=3)` to `r format(exp(boot.hrs.dss[num.boot*0.975]),digits=3)`)
+
+Progression free survival: 
+
+- median (95 CI): `r format(exp(median(boot.hrs.rfs)),digits=3)` (`r format(exp(boot.hrs.rfs[num.boot*0.025]),digits=3)` to `r format(exp(boot.hrs.rfs[num.boot*0.975]),digits=3)`)
+
+```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=9, fig.height=3}
+par(mfrow=c(1,3))
+hist(boot.hrs.os, main="Overall survival", xlab="log hazard ratio on bootstrap samples")
+hist(boot.hrs.dss,main="Disease specific survival", xlab="log hazard ratio on bootstrap samples")
+hist(boot.hrs.rfs,main="Progression free survival", xlab="log hazard ratio on bootstrap samples")
+```
