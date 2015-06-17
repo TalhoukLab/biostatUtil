@@ -1,0 +1,43 @@
+---
+title: "Tables in Word Test"
+author: "Derek Chiu"
+date: "June 17, 2015"
+output: word_document
+---
+
+```{r}
+library(pander)
+library(knitr)
+set.seed(555)
+n <- 50
+num.col <- 10
+mdat <- matrix(rnorm(n), ncol = num.col, byrow = TRUE,
+               dimnames = list(paste0("Row", 1:(n / num.col)),
+                               paste0("Col", 1:num.col)))
+```
+
+The first table uses `kable()`, which gives an output with awkward spacing as it tries to fit the table without separations
+
+```{r}
+kable(mdat, caption = "Table 1")
+```
+
+The second table uses `pander()`, and the formatting is OK, but the columns get split.
+
+```{r}
+pander(mdat, caption = "Table 2")
+```
+
+The third table uses `pander()` again but now we specify **not** to split the table, and also round the values.
+Note also that this chunk needs the option `results='asis'`.
+
+```{r, results='asis'}
+pander(mdat, caption = "Table 3", split.table = Inf, round = 2)
+```
+
+There's a clever workaround from [Stack Overflow](http://stackoverflow.com/questions/30866999/how-to-emphasize-column-names-header-when-using-pandoc-in-r) showing how to **bold** the column headers (which isn't provided in `pander` because the header automatically gets highlighted by the thicker separating line in the table). The last table does this:
+
+```{r, results='asis'}
+colnames(mdat) <- pandoc.strong.return(colnames(mdat))
+pander(mdat, caption = "Table 4", split.table = Inf, round = 2)
+```
