@@ -14,5 +14,5 @@ Description: Provides some commonly used utility functions used in biostatistics
 Depends:
     R (>= 3.2.0)
 Imports:
-    boot, psy, gdata, Hmisc, survival, pander
+    boot, psy, gdata, Hmisc, survival, coxphf, pander
 License: CC0
