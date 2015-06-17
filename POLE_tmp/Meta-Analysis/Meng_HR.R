@@ -29,16 +29,21 @@ dat.residual <- dat.overall %>%
   filter(Residual_Disease != "Yes") %>%
   droplevels
 
-# Compute univariable model POLE mutation HRs for OS, DSS, RFS
+# univariable POLE mutation HRs for OS, DSS, RFS
+uni.os <- prettyCoxph(Surv(Follow.up.duration, Censor.OS) ~ POLE.mutation,
+                      dat.overall, use.firth = -1)
+uni.dss <- prettyCoxph(Surv(Follow.up.duration, Censor.DSS) ~ POLE.mutation,
+                         dat.residual, use.firth = -1)
+uni.rfs <- prettyCoxph(Surv(Follow.up.duration, Censor.recurrence) ~ POLE.mutation,
+                         dat.residual, use.firth = -1)
 
-
-# Compute multivariable model POLE mutation HRs for OS, DSS, RFS
-mod.os <- coxphf(Surv(Follow.up.duration, Censor.OS) ~ POLE.mutation + Age.at.SX + Chemotherapy + Radiation + Stage, dat.overall)
-mod.dss <- coxphf(Surv(Follow.up.duration, Censor.DSS) ~ POLE.mutation + Age.at.SX + Chemotherapy + Radiation + Stage, dat.residual)
-mod.rfs <- coxphf(Surv(Time.to.Rec, Censor.recurrence) ~ POLE.mutation + Age.at.SX + Chemotherapy + Radiation + Stage, dat.residual)
-
-HR.os <- exp(coef(mod.os))[grep("POLE", names(coef(mod.os)))]
-HR.dss <- exp(coef(mod.dss))[grep("POLE", names(coef(mod.dss)))]
-HR.rfs <- exp(coef(mod.rfs))[grep("POLE", names(coef(mod.rfs)))]
-
-
+# multivariable POLE mutation HRs for OS, DSS, RFS
+multi.os <- prettyCoxph(Surv(Follow.up.duration, Censor.OS) ~ POLE.mutation +
+                        Age.at.SX + Chemotherapy + Radiation + Stage,
+                      dat.overall, use.firth = -1)
+multi.dss <- prettyCoxph(Surv(Follow.up.duration, Censor.DSS) ~ POLE.mutation +
+                        Age.at.SX + Chemotherapy + Radiation + Stage,
+                      dat.residual, use.firth = -1)
+multi.rfs <- prettyCoxph(Surv(Follow.up.duration, Censor.recurrence) ~ POLE.mutation +
+                        Age.at.SX + Chemotherapy + Radiation + Stage,
+                      dat.residual, use.firth = -1)
