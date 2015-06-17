@@ -1,4 +1,5 @@
 #' Is the first letter uppercase?
+#' @export
 isFirstLetterUpperCase <- function(x) {
   arr <- strsplit(x,"")[[1]]
   if (length(arr) == 0) {

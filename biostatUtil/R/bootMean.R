@@ -1,4 +1,5 @@
 #' Bootstraped mean
+#' @export
 bootMean<- function(x,num.boot=1000,random.seed=12,...){
   set.seed(random.seed)
   obs.mean <- mean(x,...)

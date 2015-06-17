@@ -1,4 +1,5 @@
 #' Add table number to caption
+#' export
 addTableNumber <- function(caption, default.table_counter_str = "Table %s: ") {
   # generate table number ...
   if (!is.na(caption)) {

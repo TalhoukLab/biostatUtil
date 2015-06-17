@@ -1,6 +1,14 @@
 #' Generate cohort characteristics
-doCohortCharacteristics <- function(
-  input.d, 
+#' @param input.d: The dataframe containing the data
+#' @param marker.name: The variable that you want to split into different columns
+#' @param var.names: The variables that you want the statistics for
+#' @param is.var.continuous: Vector of length equal to the length of var.names with 1 indicating a continuous variable and 0 otherwise (this should be inferred in the function)
+#' @param var.descriptions: Vector of strings to describe the variables as they are to appear in the table
+
+
+
+#' @export
+doCohortCharacteristics <- function(input.d, 
   marker.name, 
   marker.description, 
   var.names, 
@@ -25,7 +33,8 @@ doCohortCharacteristics <- function(
   css.class.name.odd="odd",
   css.class.name.even="even"
 ) {
-  col.th.style <- COL.TH.STYLE
+  
+  col.th.style <- "border-bottom: 1px solid grey; border-top: 4px double grey; text-align: center; padding-right:10px; padding-right:10px;"
   row.th.style <- "text-align: left; padding-right:10px; padding-right:10px;"
   
   if (is.null(missing.codes.highlight)) {

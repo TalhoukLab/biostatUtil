@@ -1,4 +1,5 @@
 #' Do a jitterplot among subtypes
+#' @export
 doJitterplotAmongSubtypes <- function(input.d,data.description,biomarker.var.name,biomarker.name,subtype.var.name,subtype.name,pch=".",jitter=0.05,digits=3,cex.axis=0.9) {
   
   temp.d <- input.d[

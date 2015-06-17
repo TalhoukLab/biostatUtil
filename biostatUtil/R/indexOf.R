@@ -1,4 +1,5 @@
 #' Find occurences of string within another stirng
+#' @export
 indexOf <- function(a, b, ignore.case = FALSE) {
   if (ignore.case) {
     a <- toupper(a)

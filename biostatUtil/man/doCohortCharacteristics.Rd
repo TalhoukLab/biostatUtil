@@ -14,6 +14,17 @@ doCohortCharacteristics(input.d, marker.name, marker.description, var.names,
   decimal = 0, caption = NA, html.table.border = 0, banded.rows = FALSE,
   css.class.name.odd = "odd", css.class.name.even = "even")
 }
+\arguments{
+\item{input.d:}{The dataframe containing the data}
+
+\item{marker.name:}{The variable that you want to split into different columns}
+
+\item{var.names:}{The variables that you want the statistics for}
+
+\item{is.var.continuous:}{Vector of length equal to the length of var.names with 1 indicating a continuous variable and 0 otherwise (this should be inferred in the function)}
+
+\item{var.descriptions:}{Vector of strings to describe the variables as they are to appear in the table}
+}
 \description{
 Generate cohort characteristics
 }

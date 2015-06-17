@@ -1,4 +1,5 @@
 #' Find cutpoint by coxph
+#' @export
 findCutpointByCoxph <- function(input.d,surv.formula){
   # make sure is univariable formula 
   if (length(surv.formula[[3]]) > 1) {

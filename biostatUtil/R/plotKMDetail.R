@@ -1,4 +1,5 @@
 #' Plot detailed Kaplan-Meier curve
+#' @export
 plotKMDetail <- function(input.data,
                            surv.formula,
                            main.text, 

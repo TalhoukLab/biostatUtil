@@ -1,4 +1,5 @@
 #' Standard error of the mean
+#' @export
 sem <- function(x, missing.value = NA, return.missing.value = NA) { 
   # remove missing values ...
   x <- x[!is.na(x)]

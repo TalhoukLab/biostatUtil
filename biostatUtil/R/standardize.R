@@ -1,4 +1,5 @@
 #' Standardize a matrix
+#' @export
 standardize <- function(x){
   annAll <- dimnames(x)
   x <- scale(x) # scale is generic function whose DEFAULT method 

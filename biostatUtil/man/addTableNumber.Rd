@@ -2,11 +2,13 @@
 % Please edit documentation in R/addTableNumber.R
 \name{addTableNumber}
 \alias{addTableNumber}
-\title{Add table number to caption}
+\title{Add table number to caption
+export}
 \usage{
 addTableNumber(caption, default.table_counter_str = "Table \%s: ")
 }
 \description{
 Add table number to caption
+export
 }
 

@@ -1,4 +1,5 @@
 #' Plot Kaplan-Meier curve
+#' @export
 plotKM <- function(input.d,
                     input.formula,
                     main.text,

@@ -1,4 +1,5 @@
 #' Median center rows
+#' @export
 medianCtr <- function(x) {
   annAll <- dimnames(x)
   medians <- apply(x, 1, median, na.rm = T)  # calculate median for each row

@@ -1,4 +1,5 @@
 #' Univariate cox proprtional hazards model
+#' @export
 Xunivcoxph <-function(mod, digits = 3, coxph.type = "coxph") {
   #returns HR and CI and LR pval and events per n
   switch(coxph.type,

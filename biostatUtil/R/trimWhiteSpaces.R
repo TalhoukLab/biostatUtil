@@ -1,4 +1,5 @@
 #' Trim white spaces
+#' @export
 trimWhiteSpaces <- function(input.text) {
   last.one <- TRUE
   #print(length(input.text))

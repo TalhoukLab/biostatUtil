@@ -1,4 +1,5 @@
 #' Geometric mean
+#' @export
 geoMean <- function(x) {
   x <- x[!is.na(x)]
   result <- NA
