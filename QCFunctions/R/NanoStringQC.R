@@ -36,7 +36,7 @@ NanoStringQC <- function(raw, exp, detect = 80, sn = 150, plots = TRUE, ttl =" "
   exp$lodFlag <- t(as.vector(raw["POS_E(0.5)", -(1:3)]) < exp$lod)
   exp$gd <- apply(raw[, -(1:3)] > exp$lod, 2, sum) # Number of genes above background
   exp$pergd <- (exp$gd / nrow(raw)) * 100
-  exp$averageHK <- apply(raw[HKgenes, -(1:3)], 2, mean)
+  exp$averageHK <- exp(apply(log(raw[HKgenes, -(1:3)], base = 2), 2, mean)) # Geometric Mean
   exp$sn <- exp$averageHK / exp$lod
   exp$sn[exp$lod < 0.001] <- 0 # This is so that it does not underflow
   exp$bdFlag <- (exp$binding.density < 0.05 | exp$binding.density > 2.25)

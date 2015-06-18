@@ -211,48 +211,42 @@ if (do.stats) {switch (stat.tests[i],
                                   "P = ", sprintf(paste("%.", round.digits.p.value, "f", sep = ""),
                             round(chisq.result$p.value, digits = round.digits.p.value)), sep = "")
                 },
-                fisher={
-                  fisher.result <- fisher.test(table(
-                    input.d.no.missing.var[,var.name],
-                    input.d.no.missing.var[,marker.name]
-                  ),workspace=2e6)
-                  stat.test.result <- paste(
-                    "Fisher's exact test<br>",
-                    "P = ",sprintf(paste("%.",round.digits.p.value,"f",sep=""),round(fisher.result$p.value,digits=round.digits.p.value)),
-                    sep=""
-                  )
+      fisher = {fisher.result <- fisher.test(table(input.d.no.missing.var[, var.name],
+                    input.d.no.missing.var[, marker.name]), workspace = 2e6)
+                  stat.test.result <- paste("Fisher's exact test<br>", "P = ", 
+                            sprintf(paste("%.", round.digits.p.value, "f", sep = ""),
+                            round(fisher.result$p.value,digits=round.digits.p.value)), sep = "")
                 },
-                confusionMarkerAsRef={ # confusion matrix, marker as the reference
-                  # require both marker and var to be factor ...
-                  # if not, just print err msg
-                  if (!is.factor(input.d.no.missing.var[,var.name]) | !is.factor(input.d.no.missing.var[,marker.name])) {
-                    stat.test.result <- "error: both marker and variable needs to be factor"
-                  } else {
-                    stat.test.result <- confusionResultToHtmlTable(
-                      as.numeric(input.d.no.missing.var[,var.name]),as.numeric(input.d.no.missing.var[,marker.name]), 
-                      marker.description,
-                      round.digits.p.value,
-                      num.boot.for.ci=num.boot.for.ci
-                    )
-                  }
-                },
-                confusionVarAsRef={ # confusion matrix, variable as the reference
-                  # require both marker and var to be factor ...
-                  # if not, just print err msg
-                  if (!is.factor(input.d.no.missing.var[,var.name]) | !is.factor(input.d.no.missing.var[,marker.name])) {
-                    stat.test.result <- "error: both marker and variable needs to be factor"
-                  } else {
-                    stat.test.result <- confusionResultToHtmlTable(
-                      as.numeric(input.d.no.missing.var[,marker.name]),as.numeric(input.d.no.missing.var[,var.name]), 
-                      var.description,
-                      round.digits.p.value,
-                      num.boot.for.ci=num.boot.for.ci
-                    )
-                  }
-                }
-        )
-        stat.tests.results <- c(stat.tests.results,stat.test.result)
-      }
+      confusionMarkerAsRef={ 
+        # confusion matrix, marker as the reference
+        # require both marker and var to be factor ...
+        # if not, just print err msg
+if (!is.factor(input.d.no.missing.var[,var.name]) | !is.factor(input.d.no.missing.var[, marker.name])) {
+    stat.test.result <- "error: both marker and variable needs to be factor"
+    } else {
+    stat.test.result <- confusionResultToHtmlTable(as.numeric(input.d.no.missing.var[, var.name]),
+                                                   as.numeric(input.d.no.missing.var[,marker.name]),
+                                                   marker.description,round.digits.p.value,
+                                                   num.boot.for.ci=num.boot.for.ci)
+            }
+                            },
+      confusionVarAsRef={ 
+        # confusion matrix, variable as the reference
+        # require both marker and var to be factor ...
+        # if not, just print err msg
+if (!is.factor(input.d.no.missing.var[, var.name]) | !is.factor(input.d.no.missing.var[, marker.name])) {
+    stat.test.result <- "error: both marker and variable needs to be factor"
+    } else {
+    stat.test.result <- confusionResultToHtmlTable(as.numeric(input.d.no.missing.var[, marker.name]),
+                                                   as.numeric(input.d.no.missing.var[, var.name]),
+                                                   var.description, round.digits.p.value,
+                                                   num.boot.for.ci=num.boot.for.ci)
+            }
+                          }
+)
+
+ stat.tests.results <- c(stat.tests.results, stat.test.result)
+}
       
       for (var.category in var.categories) {
         total.value <- paste(
