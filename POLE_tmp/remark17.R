@@ -107,7 +107,7 @@ multi.cox.summary.g3 <- do.coxph.multivariable(
 # per suggesting from Steve McKinney, try bootstrap Firth hazard ratio and see if ci 
 # of confidence interval crosses one
 WRITE.RESULTS.TO.FILE <- FALSE # it takes very long to do all the Firth models
-num.boot <- 200 # number of bootstrap samples to try
+num.boot <- 1000 # number of bootstrap samples to try
 
 if (WRITE.RESULTS.TO.FILE) {
 	multi.formula.os  <- Surv(os.yrs,  os.sts =="os.event" ) ~ POLE.mut.consolidated.numeric + age.at.surgery + stage_b1v234 + Histological.Subtype_non_endo + LVSI + any.positive.nodes + any.init.treatment
@@ -140,22 +140,22 @@ if (WRITE.RESULTS.TO.FILE) {
 	cox.dss.d <- cox.d[!is.na(cox.d$dss.sts),]
 	cox.rfs.d <- cox.d[!is.na(cox.d$rfs.yrs),]
 
-	boot.hrs.os <- rep(NA,num.boot)
-	boot.hrs.dss <- rep(NA,num.boot)
-	boot.hrs.rfs <- rep(NA,num.boot)
+	boot.hrs.os <- c()
+	boot.hrs.dss <- c()
+	boot.hrs.rfs <- c()
 	set.seed(12)
 	for (i in 1:num.boot) {
 		boot.cox.d <- cox.d[sample(1:nrow(cox.d),replace=TRUE),]
 		coxphf.obj <- coxphf(multi.formula.os,data=boot.cox.d)
-		boot.hrs.os[i] <- coxphf.obj$coefficients["POLE.mut.consolidated.numeric"][[1]]
+		boot.hrs.os <- rbind(boot.hrs.os,coxphf.obj$coefficients)
 		
 		boot.cox.dss.d <- cox.dss.d[sample(1:nrow(cox.dss.d),replace=TRUE),]
 		coxphf.obj <- coxphf(multi.formula.dss,data=boot.cox.dss.d)
-		boot.hrs.dss[i] <- coxphf.obj$coefficients["POLE.mut.consolidated.numeric"][[1]]
+		boot.hrs.dss <- rbind(boot.hrs.dss,coxphf.obj$coefficients)
 		
 		boot.cox.rfs.d <- cox.rfs.d[sample(1:nrow(cox.rfs.d),replace=TRUE),]
 		coxphf.obj <- coxphf(multi.formula.rfs,data=boot.cox.rfs.d)
-		boot.hrs.rfs[i] <- coxphf.obj$coefficients["POLE.mut.consolidated.numeric"][[1]]
+		boot.hrs.rfs <- rbind(boot.hrs.rfs,coxphf.obj$coefficients)
 	}
 
 	# warning messages during the code execution ...
@@ -177,27 +177,72 @@ if (WRITE.RESULTS.TO.FILE) {
 	
 	# write data to file.
 	write.table(
-		cbind(
-			boot.hrs.os =boot.hrs.os,
-			boot.hrs.dss=boot.hrs.dss,
-			boot.hrs.rfs=boot.hrs.rfs
-		),
-		file="data/boot_firth_multi_cox_hrs.txt",
+		boot.hrs.os,
+		file="data/boot_firth_multi_cox_hrs_os.txt",
 		sep="\t",
 		col.names=TRUE,
 		row.names=FALSE
 	)
 	
-	boot.hrs.os  <- sort(boot.hrs.os)
-	boot.hrs.dss <- sort(boot.hrs.dss)
-	boot.hrs.rfs <- sort(boot.hrs.rfs)
+	write.table(
+		boot.hrs.dss,
+		file="data/boot_firth_multi_cox_hrs_dss.txt",
+		sep="\t",
+		col.names=TRUE,
+		row.names=FALSE
+	)
+	
+	write.table(
+		boot.hrs.rfs,
+		file="data/boot_firth_multi_cox_hrs_rfs.txt",
+		sep="\t",
+		col.names=TRUE,
+		row.names=FALSE
+	)
+	
 } else {
-	boot.hrs.d   <- read.delim(file="data/boot_firth_multi_cox_hrs.txt",sep="\t",header=TRUE,as.is=TRUE)
-	boot.hrs.os  <- sort(boot.hrs.d$boot.hrs.os)
-	boot.hrs.dss <- sort(boot.hrs.d$boot.hrs.dss)
-	boot.hrs.rfs <- sort(boot.hrs.d$boot.hrs.rfs)
+	boot.hrs.os  <- read.delim(file="data/boot_firth_multi_cox_hrs_os.txt", sep="\t",header=TRUE,as.is=TRUE)
+	boot.hrs.dss <- read.delim(file="data/boot_firth_multi_cox_hrs_dss.txt",sep="\t",header=TRUE,as.is=TRUE)
+	boot.hrs.rfs <- read.delim(file="data/boot_firth_multi_cox_hrs_rfs.txt",sep="\t",header=TRUE,as.is=TRUE)
 }
 
 
+# generate table ...
+var.names <- colnames(boot.hrs.os)
+boot.hrs.os.table  <- cbind(var.names,rep(NA,length(var.names)))
+boot.hrs.dss.table <- cbind(var.names,rep(NA,length(var.names)))
+boot.hrs.rfs.table <- cbind(var.names,rep(NA,length(var.names)))
+colnames(boot.hrs.os.table)  <- c("variable","hazard ratio (95% CI)")
+colnames(boot.hrs.dss.table) <- c("variable","hazard ratio (95% CI)")
+colnames(boot.hrs.rfs.table) <- c("variable","hazard ratio (95% CI)")
 
+for (var.name in var.names) {
+	temp <- sort(exp(as.numeric(boot.hrs.os[,var.name])))
+	boot.hrs.os.table[boot.hrs.os.table[,1]==var.name,2] <-
+		paste(
+			round(median(temp),digits=2),
+			" (",
+			paste(round(temp[ceiling(num.boot * c(0.025,0.975))],digits=2),collapse=" to "),
+			")",
+			sep=""
+		)
+	temp <- sort(exp(as.numeric(boot.hrs.dss[,var.name])))
+	boot.hrs.dss.table[boot.hrs.dss.table[,1]==var.name,2] <-
+		paste(
+				round(median(temp),digits=2),
+				" (",
+				paste(round(temp[ceiling(num.boot * c(0.025,0.975))],digits=2),collapse=" to "),
+				")",
+				sep=""
+		)
+	temp <- sort(exp(as.numeric(boot.hrs.rfs[,var.name])))
+	boot.hrs.rfs.table[boot.hrs.rfs.table[,1]==var.name,2] <-
+		paste(
+				round(median(temp),digits=2),
+				" (",
+				paste(round(temp[ceiling(num.boot * c(0.025,0.975))],digits=2),collapse=" to "),
+				")",
+				sep=""
+		)
+}
 

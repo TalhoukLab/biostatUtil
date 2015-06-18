@@ -314,21 +314,13 @@ source("remark17.R")
 
 Number of bootstrap samples: `r num.boot`
 
-Overall survival: 
-
-- median (95 CI): `r format(exp(median(boot.hrs.os)),digits=3)` (`r format(exp(boot.hrs.os[num.boot*0.025]),digits=3)` to `r format(exp(boot.hrs.os[num.boot*0.975]),digits=3)`)
-
-Disease specific survival: 
-
-- median (95 CI): `r format(exp(median(boot.hrs.dss)),digits=3)` (`r format(exp(boot.hrs.dss[num.boot*0.025]),digits=3)` to `r format(exp(boot.hrs.dss[num.boot*0.975]),digits=3)`)
-
-Progression free survival: 
-
-- median (95 CI): `r format(exp(median(boot.hrs.rfs)),digits=3)` (`r format(exp(boot.hrs.rfs[num.boot*0.025]),digits=3)` to `r format(exp(boot.hrs.rfs[num.boot*0.975]),digits=3)`)
+`r kable(boot.hrs.os.table, align='c',caption=paste('Table 7. Median (overall survival) hazard ratio and 95% CI among',num.boot,'bootstrap samples'))`
+`r kable(boot.hrs.dss.table,align='c',caption=paste('Table 8. Median (disease specific survival) hazard ratio and 95% CI among',num.boot,'bootstrap samples'))`
+`r kable(boot.hrs.rfs.table,align='c',caption=paste('Table 9. Median (progression free survival) hazard ratio and 95% CI among',num.boot,'bootstrap samples'))`
 
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=9, fig.height=3}
 par(mfrow=c(1,3))
-hist(boot.hrs.os, main=paste("Overall survival\n(n=",sum(!is.na(boot.hrs.os)),")",sep=""), xlab="log hazard ratio on bootstrap samples")
-hist(boot.hrs.dss,main=paste("Disease specific survival\n(n=",sum(!is.na(boot.hrs.dss)),")",sep=""), xlab="log hazard ratio on bootstrap samples")
-hist(boot.hrs.rfs,main=paste("Progression free survival\n(n=",sum(!is.na(boot.hrs.rfs)),")",sep=""), xlab="log hazard ratio on bootstrap samples")
+hist(as.numeric(boot.hrs.os[ ,"POLE.mut.consolidated.numeric"]),main=paste("Overall survival\n(n=",sum(!is.na(boot.hrs.os[ ,"POLE.mut.consolidated.numeric"])),")",sep=""), xlab="log hazard ratio on bootstrap samples")
+hist(as.numeric(boot.hrs.dss[,"POLE.mut.consolidated.numeric"]),main=paste("Disease specific survival\n(n=",sum(!is.na(boot.hrs.dss[ ,"POLE.mut.consolidated.numeric"])),")",sep=""), xlab="log hazard ratio on bootstrap samples")
+hist(as.numeric(boot.hrs.rfs[,"POLE.mut.consolidated.numeric"]),main=paste("Progression free survival\n(n=",sum(!is.na(boot.hrs.rfs[ ,"POLE.mut.consolidated.numeric"])),")",sep=""), xlab="log hazard ratio on bootstrap samples")
 ```
