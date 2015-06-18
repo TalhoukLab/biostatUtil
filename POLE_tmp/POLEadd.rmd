@@ -225,7 +225,7 @@ pole_vs_stage_x_age_x_bmi <- do.cohort.characteristics(emdb, "POLE.mut.germline.
 
 #### Item 15 (additional). Present univariable analyses showing the relation between the marker and outcome, with the estimated effect.  Preferrably provide similar analyses for all other variables being analyzed.
 
-**Analysis among grade 3**
+**Analysis among grade 3 - univariable**
 
 ```{r fig.keep='none'}
 source("remark15.R")
@@ -302,6 +302,11 @@ multi.cox.summary.g3 <- do.coxph.multivariable(
 *Please note: (F) indicates that the Firth's penalized maximum likelihood bias reduction method was used to estimate the hazard ratio.*
 
 `r uni.cox.pole.g3$result.table.html`
+
+**Analysis among grade 3 - multivariable**
+
+*Summary*: **when taking into account clinicopathological parameters in a multivariable Cox model,  POLE does not appear to change the hazard associated with OS and PFS, there is only evidence that POLE is protective of DSS.**
+
 `r multi.cox.summary.g3$result.table.html`
 
 There is a discrepancy between likelihood ratio test (table 6) and the P-values from Wald test (not shown, but implied by the reported hazard ratio confidence interval in table 6.  i.e. we expected to see the confidence interval to not cross "1"" for all parameters with likelihood ratio test p-values < 0.05).  Steve McKinney suggested a bootstrap analysis be performed to observe how the hazard ratio will be distributed on bootstrap samples.  For example, if 97.5% of the hazard ratios obtained from bootstrap samples are above "1", we will be able to say that the hazard ratio is significantly greater than "1", p=0.05.
