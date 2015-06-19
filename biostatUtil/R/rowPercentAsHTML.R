@@ -15,7 +15,7 @@ rowPercentAsHTML <- function(
 ) {
   col.th.style <- COL.TH.STYLE
   row.th.style <- ROW.TH.STYLE
-  table.values <- rowPercent(t, pretty.text = TRUE, digits = digits)
+  table.values <- rowPercent(t, pretty.text = TRUE, keep = TRUE, digits = digits)
   # header
   if (!is.null(column.names)) {
     colnames(table.values) <- column.names

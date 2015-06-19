@@ -23,3 +23,23 @@ MISSING...NOT.FOUND.IN.DATA.FILE <- "" # data point not mentioned in data file.
 MISSING.BIOMARKER.EXPLICIT <- MISSING.UNK # missing value code for values that are explicitily indicated as missing from data source e.g. "X" in grade
 MISSING.BIOMARKER...NOT.FOUND.IN.DATA.FILE <- "" # data point not mentioned in data file.
 ALL.MISSING.CODES <- unique(c(MISSING.EXPLICIT, MISSING...NOT.FOUND.IN.DATA.FILE, MISSING.UNK, MISSING.BIOMARKER.EXPLICIT, MISSING.BIOMARKER...NOT.FOUND.IN.DATA.FILE))
+
+# Labels
+BCSS.TITLE <- "Breast cancer specific survival"
+BCSS.XLAB  <- "Total follow-up (years)"
+BCSS.YLAB  <- "Cumulative breast cancer specific survival (BCSS)"
+
+DSS.TITLE <- "Disease specific survival (DSS)"
+DSS.XLAB  <- BCSS.XLAB
+DSS.YLAB  <- DSS.TITLE
+
+OS.TITLE <- "Overall survival"
+OS.XLAB <- DSS.XLAB
+OS.YLAB <- OS.TITLE
+
+RFS.TITLE <- "Any relapse-free survival"
+RFS.XLAB <- paste(RFS.TITLE,"time")
+RFS.YLAB <- RFS.TITLE
+
+ROW.TD.STYLE.FOR.MULTI.COX <- "border-bottom: 1px solid grey; text-align: center; padding-right:10px; padding-right:10px;"
+ROW.TD.STYLE.FOR.MULTI.COX.ALIGN.TOP <- "border-bottom: 1px solid grey; text-align: center; vertical-align: text-top; padding-right:10px; padding-right:10px;"

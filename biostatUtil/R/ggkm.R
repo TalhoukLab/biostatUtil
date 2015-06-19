@@ -133,7 +133,7 @@ ggkm <- function(sfit,sfit2=NULL,
       pvaltxt <- ifelse(pval < 0.001,"Log Rank p < 0.001",paste("Log Rank p =", signif(pval, 3)))
       if(HR) {
         #coxm<-coxph(eval(sfit$call$formula), data = eval(sfit$call$data))
-        pretty.coxph.obj <- pretty.coxph(eval(sfit$call$formula), input.d= eval(sfit$call$data), use.firth=use.firth)
+        pretty.coxph.obj <- prettyCoxph(eval(sfit$call$formula), input.d= eval(sfit$call$data), use.firth=use.firth)
         if (pretty.coxph.obj$used.firth) {
           coxm<-pretty.coxph.obj$fit.firth
           HRtxts <- Xunivcoxph(coxm,coxph.type="coxphf")
@@ -159,7 +159,7 @@ ggkm <- function(sfit,sfit2=NULL,
       pvaltxt <- ifelse(pval < 0.001,"Log Rank p < 0.001",paste("Log Rank p =", signif(pval, 3)))
       if(HR) {
         #coxm<-coxph(eval(sfit2$call$formula), data = eval(sfit2$call$data))
-        pretty.coxph.obj <- pretty.coxph(eval(sfit2$call$formula), input.d= eval(sfit2$call$data), use.firth=use.firth)
+        pretty.coxph.obj <- prettyCoxph(eval(sfit2$call$formula), input.d= eval(sfit2$call$data), use.firth=use.firth)
         if (pretty.coxph.obj$used.firth) {
           coxm<-pretty.coxph.obj$fit.firth
           HRtxts <- Xunivcoxph(coxm,coxph.type="coxphf")
