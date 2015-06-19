@@ -248,36 +248,25 @@ if (!is.factor(input.d.no.missing.var[, var.name]) | !is.factor(input.d.no.missi
  stat.tests.results <- c(stat.tests.results, stat.test.result)
 }
       
-      for (var.category in var.categories) {
-        total.value <- paste(
-          sum(input.d.no.missing.var.only[,var.name]==var.category),
-          " (",
-          round(sum(input.d.no.missing.var.only[,var.name]==var.category)/nrow(input.d.no.missing.var.only)*100,decimal),
-          "%)",
-          sep=""
-        )
+for (var.category in var.categories) {
+        total.value <- paste(sum(input.d.no.missing.var.only[, var.name] == var.category), " (",
+          round(sum(input.d.no.missing.var.only[, var.name] == var.category) / 
+                  nrow(input.d.no.missing.var.only) * 100, decimal), "%)",sep = "")
         result.table <- rbind(result.table,
-                              switch(show.percent,
-                                     row={c(
-                                       total.value,
-                                       sapply(marker.categories,function(x){
-                                         return(paste(
-                                           sum(input.d.no.missing.var[,var.name]==var.category & input.d.no.missing.var[,marker.name]==x),
-                                           " (",
-                                           ifelse(
-                                             sum(input.d.no.missing.var[,var.name]==var.category) > 0,
-                                             round(sum(input.d.no.missing.var[,var.name]==var.category & input.d.no.missing.var[,marker.name]==x)/sum(input.d.no.missing.var[,var.name]==var.category)*100,decimal),
-                                             0
-                                           ),
-                                           "%)",
-                                           sep=""
-                                         ))
-                                       })
-                                     )},
-                                     column={},
-                                     both={c(
-                                       total.value,
-                                       sapply(marker.categories,function(x){
+    switch(show.percent,
+    row={c(total.value, sapply(marker.categories, function(x){
+    return(paste(sum(input.d.no.missing.var[, var.name] == var.category & 
+                       input.d.no.missing.var[,marker.name] == x), " (",
+                 ifelse(sum(input.d.no.missing.var[, var.name] == var.category) > 0,
+                        round(sum(input.d.no.missing.var[, var.name] == var.category & 
+                          input.d.no.missing.var[,marker.name] == x) / 
+                            sum(input.d.no.missing.var[, var.name] == var.category) * 100, decimal),
+                            0), 
+                 "%)", sep = ""))
+      })
+    )},
+    column={},
+    both={c(total.value, sapply(marker.categories,function(x){
                                          return(paste(
                                            sum(input.d.no.missing.var[,var.name]==var.category & input.d.no.missing.var[,marker.name]==x),
                                            "<i><br>",
