@@ -19,12 +19,15 @@
 #' formatDate(8, 7, 2011)
 #' formatDate(8, 7, 2011, date.format = "YYYY.MM.DD")
 #' formatDate(8, 7, 2011, date.format = "DD.MM.YYYY", sep = "-")
-formatDate <- function(d, m, y, date.format = "MM.DD.YYYY", sep = "/") {
-  if (date.format == "MM.DD.YYYY") {
+formatDate <- function(d, m, y, date.format = MM.DD.YYYY, sep = "/") {
+  d <- as.numeric(d)
+  m <- as.numeric(m)
+  y <- as.numeric(y)
+  if (date.format == MM.DD.YYYY) {
     return(paste(sprintf("%02d", m), sprintf("%02d", d), y, sep = sep))
-  } else if (date.format == "DD.MM.YYYY") {
+  } else if (date.format == DD.MM.YYYY) {
     return(paste(sprintf("%02d", d), sprintf("%02d", m), y, sep = sep))
-  } else if (date.format == "YYYY.MM.DD") {
+  } else if (date.format == YYYY.MM.DD) {
     return(paste(y, sprintf("%02d", m), sprintf("%02d", d), sep = sep))
   } else {
     stop('unknown format: "', date.format, '". Use one of "MM.DD.YYYY", "DD.MM.YYYY", "YYYY.MM.DD".')
