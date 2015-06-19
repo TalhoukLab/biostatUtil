@@ -1,17 +1,14 @@
 #' Change table to HTML format
 #' @export
-tableAsHTML <- function(
-  t, 
-  row.names=NULL,
-  column.names=NULL,
-  caption=NA,
-  html.table.border=0,
-  banded.rows=FALSE,
-  css.class.name.odd="odd",
-  css.class.name.even="even"
-) {
+tableAsHTML <- function(t, row.names = NULL, column.names = NULL, caption = NA,
+                        html.table.border = 0, banded.rows = FALSE,
+                        css.class.name.odd = "odd",
+                        css.class.name.even = "even") {
   th.style <- "border-bottom: 1px solid grey; border-top: 4px double grey; text-align: center; padding-right:10px; padding-right:10px;"
-  result <- paste("<table border=",html.table.border,">",ifelse(is.na(caption),"",paste("<caption style='",TABLE.CAPTION.STYLE,"'>",add.table.number(caption),"</caption>",sep="")),sep="")
+  result <- paste0("<table border=", html.table.border, ">",
+                  ifelse(is.na(caption), "",
+                         paste0("<caption style='", TABLE.CAPTION.STYLE, "'>",
+                                addTableNumber(caption), "</caption>")))
   # print header
   if (!is.null(row.names)) {
     rownames(t) <- row.names
@@ -23,11 +20,20 @@ tableAsHTML <- function(
   } else {
     column.names <- colnames(t)
   }
-  result <- paste(result,"<tr><th style='",th.style,"'></th><th style='",th.style,"'>",paste(column.names,collapse=paste("</th><th style='",th.style,"'>",sep="")),"</th></tr>",sep="")
+  result <- paste0(result, "<tr><th style='", th.style, "'></th><th style='",
+                  th.style, "'>", paste(column.names,
+                                        collapse = paste0("</th><th style='",
+                                                          th.style, "'>")),
+                  "</th></tr>")
   for (i in 1:nrow(t)) {
-    tr.class <- ifelse(banded.rows,paste(" class='",ifelse(i%%2==0,css.class.name.even,css.class.name.odd),"'",sep=""),"")
-    result <- paste(result,"<tr",tr.class,"><th>",row.names[i],"</th><td>",paste(t[i,],collapse="</td><td>"),"</td></tr>",sep="")
+    tr.class <- ifelse(banded.rows,
+                       paste0(" class='", ifelse(i %% 2 == 0,
+                                                 css.class.name.even,
+                                                 css.class.name.odd), "'"), "")
+    result <- paste0(result, "<tr", tr.class, "><th>", row.names[i],
+                     "</th><td>", paste(t[i, ], collapse = "</td><td>"),
+                     "</td></tr>")
   }
-  result <- paste(result,"</table>",sep="")
+  result <- paste0(result, "</table>")
   return(result)
 }

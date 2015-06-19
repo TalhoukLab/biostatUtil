@@ -4,7 +4,7 @@
 \alias{formatDate}
 \title{Format a date.}
 \usage{
-formatDate(d, m, y, date.format = "MM.DD.YYYY", sep = "/")
+formatDate(d, m, y, date.format = MM.DD.YYYY, sep = "/")
 }
 \arguments{
 \item{d}{day of the month (1-31)}
