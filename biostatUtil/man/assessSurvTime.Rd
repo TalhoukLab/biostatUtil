@@ -19,7 +19,7 @@ A list with elements
 \item{Stime}{Censoring time}
 \item{Etime}{Time to end of study}
 \item{KFT}{Known Function Time}
-\item{RevKM}{Kaplan-Meier Time}
+\item{RevKM}{Reverse Kaplan-Meier Time}
 }
 \description{
 Given range of survival times and censoring status, provides different

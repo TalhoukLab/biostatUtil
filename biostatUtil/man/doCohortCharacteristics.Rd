@@ -15,6 +15,14 @@ doCohortCharacteristics(input.d, marker.name, marker.description, var.names,
   css.class.name.odd = "odd", css.class.name.even = "even")
 }
 \arguments{
+\item{stat.tests}{}
+
+\item{missing.codes}{a vector to indicate how missing values are coded, default is c("N/A","","Unk")}
+
+\item{decimal}{Set to 0}
+
+\item{caption}{is the caption to use for the Table}
+
 \item{input.d:}{The dataframe containing the data}
 
 \item{marker.name:}{The variable that you want to split into different columns}
@@ -24,6 +32,24 @@ doCohortCharacteristics(input.d, marker.name, marker.description, var.names,
 \item{is.var.continuous:}{Vector of length equal to the length of var.names with 1 indicating a continuous variable and 0 otherwise (this should be inferred in the function)}
 
 \item{var.descriptions:}{Vector of strings to describe the variables as they are to appear in the table}
+
+\item{marker.value.labels.tolower:}{Indicator as to whether to put marker value labels to lower case}
+
+\item{show.missing:}{an indicator to whether to show missing values}
+
+\item{show.missing.continuous:}{if set to FALSE and show.missing==FALSE, will not show the number of missing cases for continuous variables,  otherwise, it shows the number of missing for continuous variables even if show.missing==FALSE.}
+
+\item{do.droplevels:}{drop categories of unobserved levels set to TRUE}
+
+\item{show.percent:}{defaults to "both" which shows both rows and columns other possible values: "column", "row".}
+
+\item{stat.test.column.header:}{The name to show on the header defaults to "association/correlation test"}
+
+\item{round.digits.p.value:}{the number of digits to round the P values}
+
+\item{num.boot.for.ci:}{the number of bootstrap samples for any bootstrap method that may be used}
+
+\item{missing.codes.highlight:}{default to NULL this indicates whether we wanted the missing values broken down down or lumped together.}
 }
 \description{
 Generate cohort characteristics

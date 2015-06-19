@@ -1,6 +1,6 @@
 #' Setup knitr
 #' @export
-setupKnitr <- function(fw=8,fh=6){
+setupKnitr <- function(fw = 8, fh = 6) {
   require(pander)
   # Don't set knitr options outside knitr
   if ("package:knitr" %in% search()){

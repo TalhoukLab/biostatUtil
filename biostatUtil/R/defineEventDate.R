@@ -58,12 +58,12 @@ defineEventDate <- function(ed, cutoff, event = "OS",
   
   # format date ...
   if (format.dates.in.ed) {
-    cutoff <- as.Date(cutoff,format=cutoff.date.format)
-    followup.start.date.mm.dd.yyyy <- as.Date(ed$followup.start.date.mm.dd.yyyy,format=cutoff.date.format) # missing value "" or "N/A" will return NA
-    Date.of.Death.mm.dd.yyyy <- as.Date(ed$Date.of.Death.mm.dd.yyyy,format=cutoff.date.format) # missing value "" or "N/A" will return NA
-    followup.max.date.mm.dd.yyyy <- as.Date(ed$followup.max.date.mm.dd.yyyy,format=cutoff.date.format)# missing value "" or "N/A" will return NA
-    followup.end.date.mm.dd.yyyy <- as.Date(ed$followup.end.date.mm.dd.yyyy,format=cutoff.date.format)# missing value "" or "N/A" will return NA
-    Date.of.First.Recorded.Recurrence.mm.dd.yyyy <- as.Date(ed$Date.of.First.Recorded.Recurrence.mm.dd.yyyy,format=cutoff.date.format)# missing value "" or "N/A" will return NA
+    cutoff <- as.Date(cutoff,format = cutoff.date.format)
+    followup.start.date.mm.dd.yyyy <- as.Date(ed$followup.start.date.mm.dd.yyyy, format = cutoff.date.format) # missing value "" or "N/A" will return NA
+    Date.of.Death.mm.dd.yyyy <- as.Date(ed$Date.of.Death.mm.dd.yyyy, format = cutoff.date.format) # missing value "" or "N/A" will return NA
+    followup.max.date.mm.dd.yyyy <- as.Date(ed$followup.max.date.mm.dd.yyyy, format = cutoff.date.format)# missing value "" or "N/A" will return NA
+    followup.end.date.mm.dd.yyyy <- as.Date(ed$followup.end.date.mm.dd.yyyy, format = cutoff.date.format)# missing value "" or "N/A" will return NA
+    Date.of.First.Recorded.Recurrence.mm.dd.yyyy <- as.Date(ed$Date.of.First.Recorded.Recurrence.mm.dd.yyyy, format = cutoff.date.format)# missing value "" or "N/A" will return NA
   } else {
     followup.start.date.mm.dd.yyyy <- ed$followup.start.date.mm.dd.yyyy
     Date.of.Death.mm.dd.yyyy <- ed$Date.of.Death.mm.dd.yyyy
@@ -174,32 +174,32 @@ defineEventDate <- function(ed, cutoff, event = "OS",
             in.cens2 = is.na(Date.of.First.Recorded.Recurrence.mm.dd.yyyy) & 
               ((ed$Status.at.Death        %in% c("Dead of Other")) | (ed$Status.at.Last.Contact %in% c("Alive No Evidence of Disease","Alive With Morbidity") 
                                                                       & ed$Status.at.Death %in% ALL.MISSING.CODES)) & !in.ev
-            ev.status[in.cens2] = RFS.CENSOR
-            ev.Date[in.cens2] = apply(cbind(followup.end.date.mm.dd.yyyy,cutoff),1,min)[in.cens2]
+            ev.status[in.cens2] <- RFS.CENSOR
+            ev.Date[in.cens2] <- apply(cbind(followup.end.date.mm.dd.yyyy,cutoff), 1, min)[in.cens2]
             
             # case when BOTH status and last contact and status at death are available ...
             in.cens3 =!ed$Status.at.Death %in% ALL.MISSING.CODES & !ed$Status.at.Last.Contact %in% ALL.MISSING.CODES &
               !is.na(followup.max.date.mm.dd.yyyy) & followup.max.date.mm.dd.yyyy > cutoff & 
-              ed$Status.at.Last.Contact %in% c("Alive No Evidence of Disease","Alive With Morbidity") & 
+              ed$Status.at.Last.Contact %in% c("Alive No Evidence of Disease", "Alive With Morbidity") & 
               !in.ev
-            ev.status[in.cens3] = RFS.CENSOR
-            ev.Date[in.cens3] = cutoff[in.cens3]
+            ev.status[in.cens3] <- RFS.CENSOR
+            ev.Date[in.cens3] <- cutoff[in.cens3]
             
             in.cens4 =
               !ed$Status.at.Death %in% ALL.MISSING.CODES & !ed$Status.at.Last.Contact %in% ALL.MISSING.CODES &
               !is.na(followup.max.date.mm.dd.yyyy) & followup.max.date.mm.dd.yyyy < cutoff &
               ed$Status.at.Death %in% c("Dead of Other") & # no need to look at status at last followup since this is AFTER date of last followup
               !in.ev
-            ev.status[in.cens4] = RFS.CENSOR
-            ev.Date[in.cens4] = followup.end.date.mm.dd.yyyy[in.cens4] #cutoff[in.cens4]
+            ev.status[in.cens4] <- RFS.CENSOR
+            ev.Date[in.cens4] <- followup.end.date.mm.dd.yyyy[in.cens4] #cutoff[in.cens4]
             
             in.cens5 = # cut off date sandwiched between followup.max/end.date
               !ed$Status.at.Death %in% ALL.MISSING.CODES & !ed$Status.at.Last.Contact %in% ALL.MISSING.CODES &
               !is.na(followup.max.date.mm.dd.yyyy) & !is.na(followup.end.date.mm.dd.yyyy) & followup.max.date.mm.dd.yyyy <= cutoff & followup.end.date.mm.dd.yyyy > cutoff &
               ed$Status.at.Death %in% c("Dead of Other") & # no need to look at status at last followup since this is AFTER date of last followup
               !in.ev	
-            ev.status[in.cens5] = RFS.CENSOR
-            ev.Date[in.cens5] = cutoff[in.cens5]
+            ev.status[in.cens5] <- RFS.CENSOR
+            ev.Date[in.cens5] <- cutoff[in.cens5]
             # all other cases would be rfs unknown date/status
             # all other cases would be rfs unknown date/status
           }
@@ -207,20 +207,22 @@ defineEventDate <- function(ed, cutoff, event = "OS",
   
   # 'remove' all case with cutoff < followup start date
   before.fu <- followup.start.date.mm.dd.yyyy > cutoff
-  ev.status[before.fu]=MISSING.UNK
-  ev.Date[before.fu]=MISSING.UNK
+  ev.status[before.fu] <- MISSING.UNK
+  ev.Date[before.fu] <- MISSING.UNK
   
   # the cases that were lost to following ... always N/A regardless of followup cut off
-  in.NA=ed$followup.lost=="Yes"
-  ev.status[in.NA]=MISSING.UNK
-  ev.Date[in.NA]=MISSING.UNK
+  in.NA <- ed$followup.lost == "Yes"
+  ev.status[in.NA] <- MISSING.UNK
+  ev.Date[in.NA] <- MISSING.UNK
   if (status.only) {
     return(ev.status)
   } else {
     return(list(
-      "ev.status"=ev.status,
-      "ev.Date"=as.Date(ev.Date, origin="1970-01-01"),
-      "ev.years"=as.numeric((as.Date(ev.Date, origin="1970-01-01")-followup.start.date.mm.dd.yyyy)/365.24)
+      "ev.status" = ev.status,
+      "ev.Date" = as.Date(ev.Date, origin = "1970-01-01"),
+      "ev.years" = as.numeric((as.Date(ev.Date, origin = "1970-01-01") -
+                                 followup.start.date.mm.dd.yyyy) /
+                                NUM.DAYS.IN.YEAR)
     ))
   }
 }

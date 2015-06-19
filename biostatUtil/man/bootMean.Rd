@@ -4,9 +4,26 @@
 \alias{bootMean}
 \title{Bootstraped mean}
 \usage{
-bootMean(x, num.boot = 1000, random.seed = 12, ...)
+bootMean(x, num.boot = 1000, conf.level = 0.95, random.seed = 12, ...)
+}
+\arguments{
+\item{x}{a vector}
+
+\item{num.boot}{number of bootstrap samples. Defaults to 1000.}
+
+\item{conf.level}{confidence level.}
+
+\item{random.seed}{random seed for resampling}
+
+\item{...}{additional arguments to \code{mean}}
+}
+\value{
+A bootstraped mean.
 }
 \description{
 Bootstraped mean
+}
+\author{
+Aline Talhouk
 }
 

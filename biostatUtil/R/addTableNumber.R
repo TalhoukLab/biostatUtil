@@ -9,9 +9,10 @@ addTableNumber <- function(caption, default.table_counter_str = "Table %s: ") {
     } else {
       tc <- 1
     }
-    options(table_counter=tc)
-    caption_template <- getOption("table_counter_str", default.table_counter_str)
-    caption <- paste(sprintf(caption_template,as.character(tc)), caption, sep="")
+    options(table_counter = tc)
+    caption_template <- getOption("table_counter_str",
+                                  default.table_counter_str)
+    caption <- paste0(sprintf(caption_template,as.character(tc)), caption)
   } 
   return(caption)
 }

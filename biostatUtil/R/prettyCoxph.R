@@ -26,7 +26,7 @@ prettyCoxph <- function(input.formula, input.d, use.firth=1, check.ph=FALSE, ph.
   } 
   
   if (ok.to.use.firth) {
-    fit.firth <- coxphf(.my.formula, data=.my.data, ...)	
+    fit.firth <- coxphf::coxphf(.my.formula, data=.my.data, ...)	
     fit.firth$nevent <- sum(fit.firth$y[,"status"]) # coxphf fit object does not have nevent
   } else {
     fit.firth <- NA
