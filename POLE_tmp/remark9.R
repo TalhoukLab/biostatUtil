@@ -12,7 +12,7 @@ if (!exists("RUN.IN.MARKDOWN")) {
 }
 
 # Overall survival
-item9.events.table <- do.cohort.characteristics(emdb, "POLE.mut.germline.as.missing", "POLE", 
+item9.events.table <- doCohortCharacteristics(emdb, "POLE.mut.germline.as.missing", "POLE", 
 		c("os.sts","dss.sts","rfs.sts.no.unk.yrs"), 
 		c(FALSE,FALSE,FALSE), 
 		c("Overall survival","Disease specific survival","Relapse free survival"),

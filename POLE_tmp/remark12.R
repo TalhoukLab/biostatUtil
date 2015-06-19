@@ -15,9 +15,9 @@ if (!exists("RUN.IN.MARKDOWN")) {
 if (!RUN.IN.MARKDOWN) {
 	for (tma.name in names(table(emdb.w.duplicate$TMA))) {
 		cat(tma.name,":",
-			min.date.string(emdb.w.duplicate$Date.of.Surgery.mm.dd.yyyy[emdb.w.duplicate$TMA==tma.name], existing.missing.codes=ALL.MISSING.CODES,return.missing.code=NA),
+			minDateArray(emdb.w.duplicate$Date.of.Surgery.mm.dd.yyyy[emdb.w.duplicate$TMA==tma.name], existing.missing.codes=ALL.MISSING.CODES,return.missing.code=NA),
 			"-",
-			max.date.string(emdb.w.duplicate$Date.of.Surgery.mm.dd.yyyy[emdb.w.duplicate$TMA==tma.name], existing.missing.codes=ALL.MISSING.CODES,return.missing.code=NA),
+			maxDateArray(emdb.w.duplicate$Date.of.Surgery.mm.dd.yyyy[emdb.w.duplicate$TMA==tma.name], existing.missing.codes=ALL.MISSING.CODES,return.missing.code=NA),
 			"\n"
 		)
 	}
@@ -39,9 +39,9 @@ temp.d <- temp.d[temp.d$comment.about.duplicate != "first occurrence",]
 for (tma.name in names(table(emdb.w.duplicate$TMA))) {
 	temp.d$TMA_wSurgYrs[temp.d$TMA==tma.name] <- paste(
 		tma.name,"<br><i style='font-size:10px'>surgery years: ",
-		substr(min.date.string(emdb.w.duplicate$Date.of.Surgery.mm.dd.yyyy[emdb.w.duplicate$TMA==tma.name], existing.missing.codes=ALL.MISSING.CODES,return.missing.code=NA),7,10),
+		substr(minDateArray(emdb.w.duplicate$Date.of.Surgery.mm.dd.yyyy[emdb.w.duplicate$TMA==tma.name], existing.missing.codes=ALL.MISSING.CODES,return.missing.code=NA),7,10),
 		"-",
-		substr(max.date.string(emdb.w.duplicate$Date.of.Surgery.mm.dd.yyyy[emdb.w.duplicate$TMA==tma.name], existing.missing.codes=ALL.MISSING.CODES,return.missing.code=NA),7,10),
+		substr(maxDateArray(emdb.w.duplicate$Date.of.Surgery.mm.dd.yyyy[emdb.w.duplicate$TMA==tma.name], existing.missing.codes=ALL.MISSING.CODES,return.missing.code=NA),7,10),
 		"; ",
 		ifelse(tma.name %in% c("09-004 (Endometrial carcinoma)","10-005 (High grade endometrioid)","10-006 (High grade serous)"),"FFPE","frozen"),
 		" sample sequenced",

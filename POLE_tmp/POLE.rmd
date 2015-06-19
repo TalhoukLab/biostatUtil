@@ -42,7 +42,7 @@ library(knitcitations)
 library(powerSurvEpi)
 library(biostatUtil)
 source(SETUP_KNITR.R)
-source(DEFINEEVENTDATE.R)
+# source(DEFINEEVENTDATE.R)
 source(SETUP_DB.R) # setup database ... e.g. censoring, remove cases
 
 ```

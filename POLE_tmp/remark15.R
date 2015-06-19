@@ -45,7 +45,7 @@ do.km.plots <- function(
 		assign("temp.d",temp.d, pos=1) 
 		
 		if (!use.aline.plot) {
-			plot_km(temp.d,
+			plotKM(temp.d,
 				formula.obj, #as.formula(paste("Surv(os.yrs,os.sts=='os.event') ~",var.name)),
 				paste(var.description," (OS)",sep=""),
 				OS.XLAB, # x-axis label
@@ -259,7 +259,7 @@ do.km.plots.pole.x.init.treatment <- function(
 # Unknown treatment
 # MMR IHC loss
 # MMR IHC intact  (still deciding if we will share this in this paper)
-uni.cox.summary.all.variables <- do.coxph.generic( # a table of univariable cox models of POLE and other variables
+uni.cox.summary.all.variables <- doCoxphGeneric( # a table of univariable cox models of POLE and other variables
 		emdb, 
 		c("POLE.mut.germline.as.missing","age.at.surgery","bmi","stage_b1v234","Tumour.Grade_b12v3","Histological.Subtype_non_endo","LVSI","any.positive.nodes","any.init.treatment"), 
 		c(
@@ -279,7 +279,7 @@ uni.cox.summary.all.variables <- do.coxph.generic( # a table of univariable cox 
 		caption="Univariable analyses of relation of POLE mutation status and standard variables to OS/DSS/RFS in whole cohort",
 		banded.rows=TRUE)
 
-uni.cox.summary.all.variables.no.init.treatment <- do.coxph.generic( # a table of univariable cox models of POLE and other variables
+uni.cox.summary.all.variables.no.init.treatment <- doCoxphGeneric( # a table of univariable cox models of POLE and other variables
 		emdb[emdb$any.init.treatment=="no.treatment",], 
 		c("POLE.mut.germline.as.missing"                 ),#,"age.at.surgery","bmi","stage","Tumour.Grade","LVSI","MMR.IHC"), 
 		c("POLE mutation status<br>wild type=0/mutated=1"),#,"age at surgery","BMI","stage","grade",       "LVSI","MMR<br>intact=0/absent=1"),
@@ -289,7 +289,7 @@ uni.cox.summary.all.variables.no.init.treatment <- do.coxph.generic( # a table o
 		caption="Univariable analyses of relation of POLE mutation status and standard variables to OS/DSS/RFS in cases with no initial adjuvant treatment",
 		banded.rows=FALSE)
 
-uni.cox.summary.all.variables.any.init.treatment <- do.coxph.generic( # a table of univariable cox models of POLE and other variables
+uni.cox.summary.all.variables.any.init.treatment <- doCoxphGeneric( # a table of univariable cox models of POLE and other variables
 		emdb[emdb$any.init.treatment=="any.treatment",], 
 		c("POLE.mut.germline.as.missing"                 ),#"age.at.surgery","bmi","stage","Tumour.Grade","LVSI","MMR.IHC"), 
 		c("POLE mutation status<br>wild type=0/mutated=1"),#"age at surgery","BMI","stage","grade",       "LVSI","MMR<br>intact=0/absent=1"),

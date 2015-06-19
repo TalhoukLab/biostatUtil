@@ -17,21 +17,21 @@ if (!exists("RUN.IN.MARKDOWN")) {
 # Median DSS
 select.pole.wt  <- emdb$POLE.mut.consolidated.numeric==0
 select.pole.mut <- emdb$POLE.mut.consolidated.numeric==1
-sdates.os          =DefineEventDate(emdb,                  cutoff=cutoffDate,                 cutoff.date.format=DATE.FORMAT, event="OS")
-sdates.os.pole.wt  =DefineEventDate(emdb[select.pole.wt, ],cutoff=cutoffDate[select.pole.wt ],cutoff.date.format=DATE.FORMAT, event="OS") # excludes germline
-sdates.os.pole.mut =DefineEventDate(emdb[select.pole.mut,],cutoff=cutoffDate[select.pole.mut],cutoff.date.format=DATE.FORMAT, event="OS") # excludes germline 
+sdates.os          =defineEventDate(emdb,                  cutoff=cutoffDate,                 cutoff.date.format=DATE.FORMAT, event="OS")
+sdates.os.pole.wt  =defineEventDate(emdb[select.pole.wt, ],cutoff=cutoffDate[select.pole.wt ],cutoff.date.format=DATE.FORMAT, event="OS") # excludes germline
+sdates.os.pole.mut =defineEventDate(emdb[select.pole.mut,],cutoff=cutoffDate[select.pole.mut],cutoff.date.format=DATE.FORMAT, event="OS") # excludes germline 
 
-sdates.dss          =DefineEventDate(emdb,                  cutoff=cutoffDate,                 cutoff.date.format=DATE.FORMAT, event="DSS")
-sdates.dss.pole.wt  =DefineEventDate(emdb[select.pole.wt, ],cutoff=cutoffDate[select.pole.wt ],cutoff.date.format=DATE.FORMAT, event="DSS") # excludes germline
-sdates.dss.pole.mut =DefineEventDate(emdb[select.pole.mut,],cutoff=cutoffDate[select.pole.mut],cutoff.date.format=DATE.FORMAT, event="DSS") # excludes germline 
+sdates.dss          =defineEventDate(emdb,                  cutoff=cutoffDate,                 cutoff.date.format=DATE.FORMAT, event="DSS")
+sdates.dss.pole.wt  =defineEventDate(emdb[select.pole.wt, ],cutoff=cutoffDate[select.pole.wt ],cutoff.date.format=DATE.FORMAT, event="DSS") # excludes germline
+sdates.dss.pole.mut =defineEventDate(emdb[select.pole.mut,],cutoff=cutoffDate[select.pole.mut],cutoff.date.format=DATE.FORMAT, event="DSS") # excludes germline 
 
-sdates.rfs          =DefineEventDate(emdb,                  cutoff=cutoffDate,                 cutoff.date.format=DATE.FORMAT, event="RFS")
-sdates.rfs.pole.wt  =DefineEventDate(emdb[select.pole.wt, ],cutoff=cutoffDate[select.pole.wt ],cutoff.date.format=DATE.FORMAT, event="RFS") # excludes germline
-sdates.rfs.pole.mut =DefineEventDate(emdb[select.pole.mut,],cutoff=cutoffDate[select.pole.mut],cutoff.date.format=DATE.FORMAT, event="RFS") # excludes germline 
+sdates.rfs          =defineEventDate(emdb,                  cutoff=cutoffDate,                 cutoff.date.format=DATE.FORMAT, event="RFS")
+sdates.rfs.pole.wt  =defineEventDate(emdb[select.pole.wt, ],cutoff=cutoffDate[select.pole.wt ],cutoff.date.format=DATE.FORMAT, event="RFS") # excludes germline
+sdates.rfs.pole.mut =defineEventDate(emdb[select.pole.mut,],cutoff=cutoffDate[select.pole.mut],cutoff.date.format=DATE.FORMAT, event="RFS") # excludes germline 
 
 # generate a table of followup summary ...
 fu.summary.table.column.names <- c("observation<br>time","censoring<br>time","time to<br>end of study","known function<br>time","reverse<br>Kaplan Meier","n")
-item6.fu.summary.table.os <- table.as.html(
+item6.fu.summary.table.os <- tableAsHTML(
 	rbind(
 		"whole"         =c(
 			AssessSurvTime(as.Date(emdb[,               "followup.start.date.mm.dd.yyyy"],format=DATE.FORMAT),as.Date(sdates.os$ev.Date         ),sdates.os$ev.status         =="os.event" ),
@@ -47,7 +47,7 @@ item6.fu.summary.table.os <- table.as.html(
 	banded.row=TRUE, 
 	column.names=fu.summary.table.column.names
 )
-item6.fu.summary.table.dss <- table.as.html(
+item6.fu.summary.table.dss <- tableAsHTML(
 	rbind(
 		"whole"         =c(
 			AssessSurvTime(as.Date(emdb[,               "followup.start.date.mm.dd.yyyy"],format=DATE.FORMAT),as.Date(sdates.dss$ev.Date         ),sdates.dss$ev.status         =="dss.event" ),
@@ -63,7 +63,7 @@ item6.fu.summary.table.dss <- table.as.html(
 	banded.row=TRUE, 
 	column.names=fu.summary.table.column.names
 )
-item6.fu.summary.table.rfs <- table.as.html(
+item6.fu.summary.table.rfs <- tableAsHTML(
 	rbind(
 		"whole"         =c(
 			AssessSurvTime(as.Date(emdb[,               "followup.start.date.mm.dd.yyyy"],format=DATE.FORMAT),as.Date(sdates.rfs$ev.Date         ),sdates.rfs$ev.status         =="rfs.event" ),

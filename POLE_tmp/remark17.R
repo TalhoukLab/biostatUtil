@@ -11,7 +11,7 @@ if (!exists("RUN.IN.MARKDOWN")) {
 	source('remark_setup.R')
 }
 
-multi.cox.summary <- do.coxph.multivariable( # a table of univariable cox models of POLE and other variables
+multi.cox.summary <- doCoxphMultivariable( # a table of univariable cox models of POLE and other variables
 	emdb,
 	c(
 		"POLE.mut.germline.as.missing",
@@ -75,7 +75,7 @@ if (FALSE) {
 }
 
 
-multi.cox.summary.g3 <- do.coxph.multivariable( 
+multi.cox.summary.g3 <- doCoxphMultivariable( 
 		emdb[emdb$Tumour.Grade=="Grade 3",], 
 		c(
 				"POLE.mut.germline.as.missing",
