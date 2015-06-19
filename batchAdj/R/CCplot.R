@@ -2,12 +2,13 @@
 #' @param method1 is the measurements obtained in batch 1 or using method 1
 #' @param method2 is the measurements obtained in batch 2 or using method 2
 #' @param Ptype is the type of plot to be outputted c("scatter","MAplot")
+#' @param Metrics if return metrics is set to true(default is FALSE) returns Rc, Ca and R2
 #' @param xlabel is the label to be used for x axis
 #' @param ylabel is the label to be used for y axis
 #' @param ttitle the title for the main plot
 #' @param subtitle is the subtitle if requested
 
-CCplot <- function(method1, method2, Ptype="scatter",
+CCplot <- function(method1, method2, Ptype = "none", metrics = FALSE,
                    xlabel = "", ylabel = "", ttile = "", subtitle = ""){
   require(epiR)
   ## Concordance correlation plot
@@ -49,5 +50,7 @@ CCplot <- function(method1, method2, Ptype="scatter",
     text(0.5, 0.81, cclab, adj = 0)
     par(usr = usr)	# restore original user coordinates
   }
-
+if (metrics==TRUE){
+  return(list(Rc = round(tmp.ccc$rho.c[,1], digits = 2), Ca = round(tmp.ccc$C.b, 2), R2 = round(cor(method1,method2),2)))
+}
 }

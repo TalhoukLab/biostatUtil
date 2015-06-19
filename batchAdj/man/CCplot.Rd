@@ -4,8 +4,8 @@
 \alias{CCplot}
 \title{Plotting function for Reliability}
 \usage{
-CCplot(method1, method2, Ptype = "scatter", xlabel = "", ylabel = "",
-  ttile = "", subtitle = "")
+CCplot(method1, method2, Ptype = "none", metrics = FALSE, xlabel = "",
+  ylabel = "", ttile = "", subtitle = "")
 }
 \arguments{
 \item{method1}{is the measurements obtained in batch 1 or using method 1}
@@ -19,6 +19,8 @@ CCplot(method1, method2, Ptype = "scatter", xlabel = "", ylabel = "",
 \item{ylabel}{is the label to be used for y axis}
 
 \item{subtitle}{is the subtitle if requested}
+
+\item{Metrics}{if return metrics is set to true(default is FALSE) returns Rc, Ca and R2}
 
 \item{ttitle}{the title for the main plot}
 }
