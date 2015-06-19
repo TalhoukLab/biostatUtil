@@ -2,9 +2,9 @@
 #' @export
 printCoxMod <- function(cox, Capt) {
   TAB <- htmlTable(cox, 
-                rowlabel="Predictors", 
+                rowlabel = "Predictors", 
                 #rgroupCSSstyle="", rgroupCSSseparator="", 
-                caption=Capt, 
-                ctable=TRUE)
-  pander(TAB, style='rmarkdown')
+                caption = Capt, 
+                ctable = TRUE)
+  pander::pander(TAB, style = 'rmarkdown')
 }

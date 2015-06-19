@@ -65,7 +65,7 @@ doCoxphMultivariable <- function(
   for (j in 1:num.surv.endpoints) {
     temp.d <- input.d[!is.na(input.d[,var.names.surv.status[j]]) & !is.na(input.d[,var.names.surv.time[j]]),]
     full.model.formula <- as.formula(paste("Surv(",var.names.surv.time[j], ", ",var.names.surv.status[j], "=='",event.codes.surv[j], "'  ) ~",paste(var.names,collapse="+"),sep=""))
-    cox.stats  <- pretty.coxph(
+    cox.stats  <- prettyCoxph(
       full.model.formula, 
       input.d=temp.d,
       use.firth=use.firth,...
@@ -123,9 +123,9 @@ doCoxphMultivariable <- function(
   # print values
   i <- 1
   num.row.per.surv.type <- length(var.names)
-  while(i<=nrow(result.table)) {
+  while(i <= nrow(result.table)) {
     is.first.row <- TRUE
-    tr.class <- ifelse(banded.rows,paste(" class='",ifelse((floor(i/num.row.per.surv.type)+1)%%2==0,css.class.name.even,css.class.name.odd),"'",sep=""),"")
+    tr.class <- ifelse(banded.rows,paste(" class='",ifelse((floor(i/num.row.per.surv.type) + 1) %% 2 == 0, css.class.name.even,       css.class.name.odd),"'",sep=""),"")
     result.table.html <- paste(result.table.html,"<tr",tr.class,"><th style='",row.td.style.for.multi.cox.align.top,"' rowspan=",num.row.per.surv.type,">",surv.descriptions[floor((i-1)/num.row.per.surv.type)+1],"</th>",sep="")
     for (j in 1:length(var.names)) {
       result.table.html <- paste(
@@ -147,9 +147,11 @@ doCoxphMultivariable <- function(
         sep=""
       )
       is.first.row <- FALSE # if run any time after the first row, must not be the first row any more
-      i<-i+1
+      i <- i + 1
     }
   }
-  result.table.html <- paste(result.table.html,"</table>",sep="")
-  return(list("result.table"=result.table, "result.table.html"=result.table.html, "cox.stats"=cox.stats.output))
+  result.table.html <- paste0(result.table.html, "</table>")
+  return(list("result.table" = result.table,
+              "result.table.html" = result.table.html,
+              "cox.stats" = cox.stats.output))
 }

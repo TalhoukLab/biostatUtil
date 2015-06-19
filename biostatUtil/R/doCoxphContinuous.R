@@ -16,7 +16,7 @@ doCoxphContinuous <- function(
   banded.rows=FALSE,
   css.class.name.odd="odd",
   css.class.name.even="even") {
-  return(do.coxph.generic(
+  return(doCoxphGeneric(
     input.d         = input.d, 
     var.names       = var.names, 
     var.descriptions= var.descriptions,

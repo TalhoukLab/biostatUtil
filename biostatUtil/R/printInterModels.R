@@ -11,8 +11,8 @@ printInterModels <- function(mod1, mod2, mod3, Capt){
                    rgroup = rgroup,
                    n.rgroup = n.rgroup, 
                    # rgroupCSSstyle="", rgroupCSSseparator="", 
-                   caption = paste(Capt,"Models <sup>&dagger;</sup> testing for
-                                interactions", sep = ""), 
+                   caption = paste0(Capt, "Models <sup>&dagger;</sup>
+                                    testing for interactions"), 
                    tfoot = "<sup>&dagger;</sup> Model 1 includes POLE only,
                    Model 2 includes POLE adjusted for treatment,
                    and Model 3 includes POLE, treatment and an interaction",
