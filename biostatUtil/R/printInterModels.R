@@ -10,7 +10,6 @@ printInterModels <- function(mod1, mod2, mod3, Capt){
                    rowlabel = "Models Considered", 
                    rgroup = rgroup,
                    n.rgroup = n.rgroup, 
-                   # rgroupCSSstyle="", rgroupCSSseparator="", 
                    caption = paste0(Capt, "Models <sup>&dagger;</sup>
                                     testing for interactions"), 
                    tfoot = "<sup>&dagger;</sup> Model 1 includes POLE only,
