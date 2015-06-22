@@ -4,9 +4,16 @@
 \alias{Xunivcoxph}
 \title{Univariate cox proprtional hazards model}
 \usage{
-Xunivcoxph(mod, digits = 3, coxph.type = "coxph")
+Xunivcoxph(mod, coxph.type = "coxph", digits = 3)
+}
+\value{
+Hazard ratio, confidence interval, and likelihood ratio test
+p-value
 }
 \description{
 Univariate cox proprtional hazards model
+}
+\author{
+Aline Talhouk
 }
 
