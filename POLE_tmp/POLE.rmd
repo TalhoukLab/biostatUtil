@@ -7,32 +7,28 @@ output:
   word_document: default
 ---
 
-
 ```{r Preamble, message=FALSE,echo=FALSE,warning=FALSE,results='hide'}
 # markdown manual: http://rmarkdown.rstudio.com/authoring_basics.html
-rm(list=ls(all=TRUE)) #Clean up
+rm(list = ls(all = TRUE))  # Clean up global environment
 ```
 
-```{r Versions,message=FALSE,echo=FALSE,results='hide',warning=FALSE}
+```{r Versions, message=FALSE,echo=FALSE,warning=FALSE,results='hide'}
 info <- sessionInfo()
-r_ver <- paste(info$R.version$major, info$R.version$minor, sep=".")
+r_ver <- paste(info$R.version$major, info$R.version$minor, sep = ".")
 ```
 
-```{r input_constants,message=FALSE,echo=FALSE,results='hide',warning=FALSE}
-RUN.IN.MARKDOWN=TRUE # a flag to indicate that the codes are called from this markdown file
-options(encoding = "UTF-8")
+```{r input_constants, message=FALSE,echo=FALSE,warning=FALSE,results='hide'}
+RUN.IN.MARKDOWN <- TRUE  # a flag to indicate that the codes are called from this markdown file
 LIB.DIR <- "R_scripts/"
-SETUP_KNITR.R <- paste(LIB.DIR,"SetUp_knitr.R",sep="")
-DEFINEEVENTDATE.R <- paste(LIB.DIR,"DefineEventDate.R",sep="")
-ED.CSV <- "data/endometrial_n518_2015-05-21.csv"
+SETUP_KNITR.R <- paste0(LIB.DIR, "SetUp_knitr.R")
 SETUP_DB.R <- "SetUp_db.R"
-DATE.FORMAT="%m/%d/%Y" # this should be R's default date format
-CASE.SELECTION.FLOW.CHART <- "images/remark.png" # CANNOT TAKE SPACE IN FILE PATH!!!!
-DO.CITATIONS=FALSE
+ED.CSV <- "data/endometrial_n518_2015-05-21.csv"
+DATE.FORMAT <- "%m/%d/%Y"  # this should be R's default date format
+CASE.SELECTION.FLOW.CHART <- "images/remark.png"  # CANNOT TAKE SPACE IN FILE PATH!!!!
+DO.CITATIONS <- FALSE
 
-options(scipen=999) # disable scientific notation e.g. instead of 1x10E-3, show 0.001
+options(encoding = "UTF-8", scipen = 999)  # disable scientific notation e.g. instead of 1x10E-3, show 0.001
 ```
-
 
 ```{r loadnMunge,message=FALSE,echo=FALSE,results='hide',warning=FALSE}
 library(dplyr)
@@ -42,9 +38,7 @@ library(knitcitations)
 library(powerSurvEpi)
 library(biostatUtil)
 source(SETUP_KNITR.R)
-# source(DEFINEEVENTDATE.R)
 source(SETUP_DB.R) # setup database ... e.g. censoring, remove cases
-
 ```
 
 #### Item 1. State the marker examined, the study objectives, and any pre-specified hypotheses.
@@ -128,12 +122,12 @@ We analyzed tumour obtained retrospectively by searching for all patients with a
 
 Both clinical and pathological data was collected and at the time of banking. Follow-up data was obtained until Oct 14th, 2014 then locked. The assays for this paper were newly performed using stored specimen. 
 
-```{r Followup,message=FALSE,echo=FALSE,results='asis'}
-T1=as.Date(emdb[,"followup.start.date.mm.dd.yyyy"],format=DATE.FORMAT)
-T2=as.Date(O$ev.Date) # no need to use do format=DATE.FORMAT since O$ev.Date should be date objects already
-status=O$ev.status=="os.event"
+```{r Followup, message=FALSE,echo=FALSE,results='asis'}
+T1 <- as.Date(emdb[, "followup.start.date.mm.dd.yyyy"], format = DATE.FORMAT)
+T2 <- as.Date(O$ev.Date) # no need to use do format=DATE.FORMAT since O$ev.Date should be date objects already
+status <- O$ev.status == "os.event"
 
-FU=assessSurvTime(T1,T2,status)
+FU <- assessSurvTime(T1, T2, status)
 ```
 
 b)	Time Period
@@ -422,8 +416,8 @@ dat0$POLE=factor(dat0$POLE, levels=c("mutated","wild type"))
 
 dat1=dat0[complete.cases(dat0),]
 
-taos=biostatUtil::testInter(dat1,event="OS",use.firth=TRUE)
-biostatUtil::printInterModels(taos[[1]],taos[[2]],taos[[3]],"Overall Survival. ")
+taos=testInter(dat1,event="OS",use.firth=TRUE)
+printInterModels(taos[[1]],taos[[2]],taos[[3]],"Overall Survival. ")
 pander(ftable(xtabs(~POLE+Rx+OS.sts,data=dat1)),style='rmarkdown')
 ```
 
@@ -443,8 +437,8 @@ dat0$POLE[dat0$POLE=="Unk"]=NA
 dat0$POLE=factor(dat0$POLE, levels=c("mutated","wild type"))
 dat1=dat0[complete.cases(dat0),]
 
-tao=biostatUtil::testInter(dat1,event="DSS",use.firth=TRUE)
-biostatUtil::printInterModels(tao[[1]],tao[[2]],tao[[3]],"Disease Specific Survival. ")
+tao=testInter(dat1,event="DSS",use.firth=TRUE)
+printInterModels(tao[[1]],tao[[2]],tao[[3]],"Disease Specific Survival. ")
 
 pander(ftable(xtabs(~POLE+Rx+DSS.sts,data=dat1)),style='rmarkdown')
 ```
@@ -461,8 +455,8 @@ dat0$POLE[dat0$POLE=="Unk"]=NA
 dat0$POLE=factor(dat0$POLE, levels=c("mutated","wild type"))
 dat1=dat0[complete.cases(dat0),]
 
-tao=biostatUtil::testInter(dat1,event="RFS",use.firth=TRUE)
-biostatUtil::printInterModels(tao[[1]],tao[[2]],tao[[3]],"Relapse Free Survival. ")
+tao=testInter(dat1,event="RFS",use.firth=TRUE)
+printInterModels(tao[[1]],tao[[2]],tao[[3]],"Relapse Free Survival. ")
 
 pander(ftable(xtabs(~POLE+Rx+RFS.sts,data=dat1)),style='rmarkdown')
 
@@ -486,8 +480,8 @@ dat0$POLE[dat0$POLE=="Unk"]=NA
 dat0$POLE=factor(dat0$POLE, levels=c("mutated","wild type"))
 
 dat1=dat0[complete.cases(dat0),]
-mod=biostatUtil::coxphOut(coxph(Surv(OS.yrs,OS.sts=="os.event")~POLE+Age+grade+Histology+Rx,data=dat1),c("POLE wt","Age","Grade","Histology","Any Rx"))
-biostatUtil::printCoxMod(mod,"Multivariable Model excluding Stage and BMI")
+mod=coxphOut(coxph(Surv(OS.yrs,OS.sts=="os.event")~POLE+Age+grade+Histology+Rx,data=dat1),c("POLE wt","Age","Grade","Histology","Any Rx"))
+printCoxMod(mod,"Multivariable Model excluding Stage and BMI")
 ```
 
 ```{r}
@@ -496,8 +490,8 @@ dat0$POLE[dat0$POLE=="Unk"]=NA
 dat0$POLE=factor(dat0$POLE, levels=c("mutated","wild type"))
 
 dat1=dat0[complete.cases(dat0),]
-mod=biostatUtil::coxphOut(coxph(Surv(OS.yrs,OS.sts=="os.event")~POLE+Age+grade+Histology+Rx+bmi+nodes,data=dat1),c("POLE wt","Age","High Grade","Histology Endo","Any Rx","BMI","Any Nodes"))
-biostatUtil::printCoxMod(mod,"Multivariable Model excluding Stage")
+mod=coxphOut(coxph(Surv(OS.yrs,OS.sts=="os.event")~POLE+Age+grade+Histology+Rx+bmi+nodes,data=dat1),c("POLE wt","Age","High Grade","Histology Endo","Any Rx","BMI","Any Nodes"))
+printCoxMod(mod,"Multivariable Model excluding Stage")
 ```
 -->
 
