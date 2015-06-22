@@ -4,7 +4,7 @@
 \alias{rowPercent}
 \title{Row percentages}
 \usage{
-rowPercent(t, pretty.text = FALSE, keep = FALSE, digits = 4)
+rowPercent(t, pretty.text = FALSE, keep = TRUE, digits = 4)
 }
 \arguments{
 \item{t}{a matrix}

@@ -19,23 +19,42 @@
 #' rowPercent(A)
 #' rowPercent(A, pretty.text = TRUE)
 #' rowPercent(A, pretty.text = TRUE, keep = TRUE)
-rowPercent <- function(t, pretty.text = FALSE, keep = FALSE, digits = 4) {
-  pcts <- t / apply(t, 1, sum)
-  if (pretty.text) {
-    pcts <- apply(pcts * 100, c(1, 2),
-                  function(x) ifelse(!is.nan(x),
-                                     paste0(format(x, digits = digits), "%"),
-                                     "-"))
-    if (keep) {
-      return(rbind(t, pcts))
+rowPercent <- function(t, pretty.text = FALSE, keep = TRUE, digits = 4) {
+  if(is.matrix(t)) {
+    pcts <- t / apply(t, 1, sum)
+    if (pretty.text) {
+      pcts <- apply(pcts * 100, c(1, 2),
+                    function(x) ifelse(!is.nan(x),
+                                       paste0(format(x, digits = digits), "%"),
+                                       "-"))
+      if (keep) {
+        return(rbind(t, row.percent = pcts))
+      } else {
+        return(pcts)  
+      }
     } else {
-      return(pcts)  
+      if (keep) {
+        return(rbind(t, row.percent = round(pcts, digits = digits)))
+      } else {
+        return(round(pcts, digits = digits))
+      }
     }
   } else {
-    if (keep) {
-      return(rbind(t, round(pcts, digits = digits)))
+    pcts <- t / sum(t)
+    if (pretty.text) {
+      pcts <- sapply(pcts * 100, function(x) {
+          paste0(format(x, digits = digits), "%")}, USE.NAMES = FALSE)
+      if (keep) {
+        return(rbind(t, row.percent = pcts))
+      } else {
+        return(pcts)  
+      }
     } else {
-      return(round(pcts, digits = digits))
+      if (keep) {
+        return(rbind(t, row.percent = round(pcts, digits = digits)))
+      } else {
+        return(round(pcts, digits = digits))
+      }
     }
   }
 }

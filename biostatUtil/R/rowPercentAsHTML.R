@@ -15,14 +15,14 @@ rowPercentAsHTML <- function(
 ) {
   col.th.style <- COL.TH.STYLE
   row.th.style <- ROW.TH.STYLE
-  table.values <- rowPercent(t, pretty.text = TRUE, keep = TRUE, digits = digits)
+  table.values <- rowPercent(t, pretty.text = TRUE, digits = digits, ...)
   # header
   if (!is.null(column.names)) {
     colnames(table.values) <- column.names
   } else {
     column.names <- names(t)
   }
-  result <- paste("<table border=",html.table.border,">",ifelse(is.na(caption),"",paste("<caption style='",TABLE.CAPTION.STYLE,"'>",add.table.number(caption),"</caption>",sep="")),sep="")
+  result <- paste("<table border=",html.table.border,">",ifelse(is.na(caption),"",paste("<caption style='",TABLE.CAPTION.STYLE,"'>",addTableNumber(caption),"</caption>",sep="")),sep="")
   if (transpose) {
     tr.classes <- c() # tr classes for banded rows
     if (banded.rows) {
