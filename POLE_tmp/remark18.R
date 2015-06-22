@@ -44,7 +44,7 @@ do.check.ph <- function(var.name,var.description) {
 # - want to check if diagnosis year is related to clincopathological parameters
 #
 # group yrs in to decades ...
-item18.dx.year.correlation.table <- do.cohort.characteristics(emdb, "dx.decade", "Year", 
+item18.dx.year.correlation.table <- doCohortCharacteristics(emdb, "dx.decade", "Year", 
 	c("POLE.mut.germline.as.missing","age.at.surgery","bmi","stage_b1v234","Tumour.Grade_b12v3","Histological.Subtype_non_endo","stage_x_endo","LVSI","any.positive.nodes","any.init.treatment"), 
 	c(FALSE,TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE), 
 	c(
