@@ -8,6 +8,7 @@
 #' @param ttitle the title for the main plot
 #' @param subtitle is the subtitle if requested
 
+
 CCplot <- function(method1, method2, Ptype = "none", metrics = FALSE,
                    xlabel = "", ylabel = "", ttile = "", subtitle = ""){
   require(epiR)
@@ -50,7 +51,7 @@ CCplot <- function(method1, method2, Ptype = "none", metrics = FALSE,
     text(0.5, 0.81, cclab, adj = 0)
     par(usr = usr)	# restore original user coordinates
   }
-if (metrics==TRUE){
-  return(list(Rc = round(tmp.ccc$rho.c[,1], digits = 2), Ca = round(tmp.ccc$C.b, 2), R2 = round(cor(method1,method2),2)))
-}
+  if (metrics==TRUE){
+    return(c(Rc = round(tmp.ccc$rho.c[,1], digits = 2), Ca = round(tmp.ccc$C.b, 2), R2 = round(cor(method1,method2),2)))
+  }
 }
