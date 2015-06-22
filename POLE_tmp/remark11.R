@@ -19,7 +19,7 @@ temp.d <- emdb.w.duplicate[emdb.w.duplicate$comment.about.duplicate == "" |
 
 # want to list the frequences of amino acid changes
 pole.mut.amino.acid.changes <- sapply(temp.d$POLE.mut, function(x){
-  x <- trimWhiteSpaces(x)
+  x <- trimws(x)
   if (x %in% c("", "Wild Type")) {
     return(x)
   } else if (x == "S297A, V411L") {
@@ -27,7 +27,7 @@ pole.mut.amino.acid.changes <- sapply(temp.d$POLE.mut, function(x){
   } else if (x == "H422Y(40%)- is germline") {
     return("germline")
   } else {
-    return(trimWhiteSpaces(strsplit(strsplit(x, "\\(")[[1]][1], " ")[[1]][1]))			
+    return(trimws(strsplit(strsplit(x, "\\(")[[1]][1], " ")[[1]][1]))		
   }
 })
    
