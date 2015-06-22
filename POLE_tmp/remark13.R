@@ -65,7 +65,7 @@ factor.levels <- c(names(table(emdb.for.cohort.char$init.treatment)),MISSING.EXP
 emdb.for.cohort.char$init.treatment[emdb.for.cohort.char$init.treatment==""] <- MISSING.EXPLICIT
 emdb.for.cohort.char$init.treatment <- factor(emdb.for.cohort.char$init.treatment,factor.levels)
 
-item13.cohort.characteristics <- do.cohort.characteristics(emdb.for.cohort.char, "POLE.mut.germline.as.missing", "POLE", 
+item13.cohort.characteristics <- doCohortCharacteristics(emdb.for.cohort.char, "POLE.mut.germline.as.missing", "POLE", 
 	c("age.at.surgery","bmi","stage","Tumour.Grade","Histological.Subtype","grade_x_endo","LVSI","any.positive.nodes.for.cohort.char","init.treatment"), 
 	c(TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE), 
 	c("Age at surgery","BMI","Stage","Grade","Histological subtype","Grade x Histological subtype","Lymphovascular invasion","Any positive nodes","Initial adjuvant treatment"),
@@ -76,7 +76,7 @@ item13.cohort.characteristics <- do.cohort.characteristics(emdb.for.cohort.char,
 	banded.rows=TRUE
 )
 # a version of cohort charactistics with any adjuvant treatment
-item13.cohort.characteristics.any.tx <- do.cohort.characteristics(emdb.for.cohort.char[!emdb$init.treatment%in%ALL.MISSING.CODES & emdb$init.treatment!="no.treatment",], "POLE.mut.germline.as.missing", "POLE", 
+item13.cohort.characteristics.any.tx <- doCohortCharacteristics(emdb.for.cohort.char[!emdb$init.treatment%in%ALL.MISSING.CODES & emdb$init.treatment!="no.treatment",], "POLE.mut.germline.as.missing", "POLE", 
 	c("age.at.surgery","bmi","stage","Tumour.Grade","Histological.Subtype","grade_x_endo","LVSI","any.positive.nodes.for.cohort.char","init.treatment"), 
 	c(TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE), 
 	c("Age at surgery","BMI","Stage","Grade","Histological subtype","Grade x Histological subtype","Lymphovascular invasion","Any positive nodes","Initial adjuvant treatment"),
@@ -87,7 +87,7 @@ item13.cohort.characteristics.any.tx <- do.cohort.characteristics(emdb.for.cohor
 	banded.rows=TRUE
 )
 # a version of cohort charactistics with no adjuvant treatment
-item13.cohort.characteristics.no.tx <- do.cohort.characteristics(emdb.for.cohort.char[!emdb$init.treatment%in%ALL.MISSING.CODES & emdb$init.treatment=="no.treatment",], "POLE.mut.germline.as.missing", "POLE", 
+item13.cohort.characteristics.no.tx <- doCohortCharacteristics(emdb.for.cohort.char[!emdb$init.treatment%in%ALL.MISSING.CODES & emdb$init.treatment=="no.treatment",], "POLE.mut.germline.as.missing", "POLE", 
 	c("age.at.surgery","bmi","stage","Tumour.Grade","Histological.Subtype","grade_x_endo","LVSI","any.positive.nodes.for.cohort.char","init.treatment"), 
 	c(TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE), 
 	c("Age at surgery","BMI","Stage","Grade","Histological subtype","Grade x Histological subtype","Lymphovascular invasion","Any positive nodes","Initial adjuvant treatment"),
@@ -98,7 +98,7 @@ item13.cohort.characteristics.no.tx <- do.cohort.characteristics(emdb.for.cohort
 	banded.rows=TRUE
 )
 
-item13.cohort.missing <- do.cohort.characteristics(emdb,"POLE.mut.germline.as.missing","POLE",
+item13.cohort.missing <- doCohortCharacteristics(emdb,"POLE.mut.germline.as.missing","POLE",
 	c("age.at.surgery_bXvS","bmi_bXvS","stage_bXvS","Tumour.Grade_bXvS","Histological.Subtype_bXvS","LVSI_bXvS","any.positive.nodes_bXvS","any.init.treatment_bXvS"),
 	c(FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE), 
 	c("Age at surgery","BMI","Stage","Grade","Histological subtype","Lymphovascular invasion","Any positive nodes","Initial adjuvant treatment"),

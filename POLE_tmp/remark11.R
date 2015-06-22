@@ -28,12 +28,12 @@ pole.mut.amino.acid.changes <- sapply(temp.d$POLE.mut,function(x){
 		return(trimWhiteSpaces(strsplit(strsplit(x,"\\(")[[1]][1]," ")[[1]][1]))				
 	}
 })
-
-item11.pole.mutation.amino.acid.changes <- single.row.percent.as.html(
-	table(pole.mut.amino.acid.changes[!temp.d$POLE.mut.germline.as.missing%in%c(ALL.MISSING.CODES,"wild type")]),
-	digits=2,
-	show.count=TRUE,
-	caption="Frequencies of POLE mutation amino acid changes",
-	transpose=TRUE,
-	banded.rows=TRUE
+   
+item11.pole.mutation.amino.acid.changes <- rowPercentAsHTML(
+	table(pole.mut.amino.acid.changes[!temp.d$POLE.mut.germline.as.missing%in%c(ALL.MISSING.CODES, "wild type")]),
+	digits = 2,
+	show.count = TRUE,
+	caption = "Frequencies of POLE mutation amino acid changes",
+	transpose = TRUE,
+	banded.rows = TRUE
 )

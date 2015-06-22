@@ -50,7 +50,7 @@ for (tma.name in names(table(emdb.w.duplicate$TMA))) {
 	)
 }
 
-item12.tma.breakdown <- do.cohort.characteristics(temp.d, "POLE.mut.germline.as.missing", "POLE", 
+item12.tma.breakdown <- doCohortCharacteristics(temp.d, "POLE.mut.germline.as.missing", "POLE", 
 		c("TMA_wSurgYrs"), 
 		c(FALSE), 
 		c("tissue microarray"),

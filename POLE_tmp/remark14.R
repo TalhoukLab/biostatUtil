@@ -12,7 +12,7 @@ if (!exists("RUN.IN.MARKDOWN")) {
 	options("width"=200) # more columns for easier viewing via console
 }
 
-item14.correlation.table <- do.cohort.characteristics(emdb, "POLE.mut.germline.as.missing", "POLE", 
+item14.correlation.table <- doCohortCharacteristics(emdb, "POLE.mut.germline.as.missing", "POLE", 
 	c("age.at.surgery","bmi","stage_b1v234","Tumour.Grade_b12v3","Histological.Subtype_non_endo","LVSI","any.positive.nodes","any.init.treatment"), 
 	c(TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE), 
 	c(
