@@ -16,6 +16,7 @@
 #' \item{Etime}{Time to end of study}
 #' \item{KFT}{Known Function Time}
 #' \item{RevKM}{Reverse Kaplan-Meier Time}
+#' @author Samuel Leung
 #' @export
 assessSurvTime <- function(T1, T2, status) { 
   # in case there are any is.na(status)
@@ -31,7 +32,7 @@ assessSurvTime <- function(T1, T2, status) {
   SurvTime <- T2 - T1
   KFT <- SurvTime
   KFT[status] <- T2[status] - T1[status]
-  rev.status <- rep(1,length(status))
+  rev.status <- rep(1, length(status))
   rev.status[status] <- 0
   Ftime <- survival::survfit(survival::Surv(as.numeric(SurvTime),
                                             rev.status) ~ 1)

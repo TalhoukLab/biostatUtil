@@ -16,6 +16,9 @@ COL.TH.STYLE <- "border-bottom: 1px solid grey; border-top: 4px double grey; tex
 ROW.TH.STYLE <- "text-align: center; padding-right:10px; padding-right:10px;"
 TABLE.CAPTION.STYLE <- "display: table-caption; text-align: left;"
 
+ROW.TD.STYLE.FOR.MULTI.COX <- "border-bottom: 1px solid grey; text-align: center; padding-right:10px; padding-right:10px;"
+ROW.TD.STYLE.FOR.MULTI.COX.ALIGN.TOP <- "border-bottom: 1px solid grey; text-align: center; vertical-align: text-top; padding-right:10px; padding-right:10px;"
+
 # Missing codes
 MISSING.EXPLICIT <- "N/A" # missing value code for values that are explicitily indicated as missing from data source e.g. "X" in grade
 MISSING.UNK <- "Unk" # missing because values was not found (e.g. in data files) but the value must exist somewhere.
@@ -41,5 +44,18 @@ RFS.TITLE <- "Any relapse-free survival"
 RFS.XLAB <- paste(RFS.TITLE,"time")
 RFS.YLAB <- RFS.TITLE
 
-ROW.TD.STYLE.FOR.MULTI.COX <- "border-bottom: 1px solid grey; text-align: center; padding-right:10px; padding-right:10px;"
-ROW.TD.STYLE.FOR.MULTI.COX.ALIGN.TOP <- "border-bottom: 1px solid grey; text-align: center; vertical-align: text-top; padding-right:10px; padding-right:10px;"
+DRFS.TITLE <- "Distant relapse-free survival"
+DRFS.XLAB <- paste(DRFS.TITLE,"time")
+DRFS.YLAB <- DRFS.TITLE
+
+LRFS.TITLE <- "Rocal relapse-free survival"
+LRFS.XLAB <- paste(LRFS.TITLE,"time")
+LRFS.YLAB <- LRFS.TITLE
+
+RRFS.TITLE <- "regional relapse-free survival"
+RRFS.XLAB <- paste(RRFS.TITLE,"time")
+RRFS.YLAB <- RRFS.TITLE
+
+LRRFS.TITLE <- "Locoregional relapse-free survival"
+LRRFS.XLAB <- paste(LRRFS.TITLE,"time")
+LRRFS.YLAB <- LRRFS.TITLE

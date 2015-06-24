@@ -2,11 +2,36 @@
 % Please edit documentation in R/endsWith.R
 \name{endsWith}
 \alias{endsWith}
-\title{Check if string ends in partciular way}
+\title{Check if a string ends with a partciular string}
 \usage{
 endsWith(a, b)
 }
+\arguments{
+\item{a}{string to be checked against}
+
+\item{b}{string ending to be checked}
+}
+\value{
+logical; if TRUE, \code{a} is a string that ends in \code{b}.
+}
 \description{
-Check if string ends in partciular way
+Returns a logical indicating whether the string in the first argument ends
+with the string in the second argument.
+}
+\details{
+Although intended for strings, \code{endsWith} works with numeric vectors
+as well.
+}
+\examples{
+## Strings
+endsWith("pineapple", "apple")
+endsWith("apple", "app")
+
+## Numerics
+endsWith(123.4, 3.4)
+endsWith(45, 4)
+}
+\author{
+Samuel Leung
 }
 

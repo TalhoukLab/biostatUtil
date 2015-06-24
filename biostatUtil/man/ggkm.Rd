@@ -6,9 +6,9 @@
 \usage{
 ggkm(sfit, sfit2 = NULL, table = TRUE, returns = FALSE, marks = TRUE,
   cols = rainbow(100), shading.colors = c("blue2", "red2", "deepskyblue",
-  "indianred3"), xlabs = "Time", ylabs = "Survival Probability",
-  xlims = c(0, max(sfit$time)), ylims = c(0, 1), ystratalabs = NULL,
-  ystrataname = NULL, timeby = 5, main = "Kaplan-Meier Plot",
+  "indianred3"), main = "Kaplan-Meier Plot", xlabs = "Time",
+  ylabs = "Survival Probability", xlims = c(0, max(sfit$time)),
+  ylims = c(0, 1), ystratalabs = NULL, ystrataname = NULL, timeby = 5,
   pval = TRUE, HR = TRUE, use.firth = 1, CI = TRUE, subs = NULL,
   legend = FALSE, ...)
 }

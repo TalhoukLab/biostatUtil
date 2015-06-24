@@ -2,13 +2,30 @@
 % Please edit documentation in R/addTableNumber.R
 \name{addTableNumber}
 \alias{addTableNumber}
-\title{Add table number to caption
-export}
+\title{Add table number to caption}
 \usage{
-addTableNumber(caption, default.table_counter_str = "Table \%s: ")
+addTableNumber(caption, table.counter.str.default = "Table \%s: ")
+}
+\arguments{
+\item{caption}{table caption}
+
+\item{table.counter.str.default}{the default string preceding the table count}
+}
+\value{
+A caption with a table counter prepended to its text.
 }
 \description{
-Add table number to caption
-export
+Prepends a table counter label to a table caption.
+}
+\details{
+The table counter automatically increments based on the number of
+existing tables that have already called  using \code{addTableNumber}.
+}
+\examples{
+addTableNumber("Overall Survival Hazard Ratios")
+addTableNumber("Correlation Heatmap", table.counter.str.default = "Figure \%s: ")
+}
+\author{
+Samuel Leung
 }
 

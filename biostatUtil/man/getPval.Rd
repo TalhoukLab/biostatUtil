@@ -9,4 +9,7 @@ getPval(x)
 \description{
 Get the p-value
 }
+\references{
+Robert Gentleman (http://tolstoy.newcastle.edu.au/R/help/01c/2809.html)
+}
 

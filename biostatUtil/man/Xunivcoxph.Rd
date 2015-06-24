@@ -6,6 +6,15 @@
 \usage{
 Xunivcoxph(mod, coxph.type = "coxph", digits = 3)
 }
+\arguments{
+\item{mod}{model fit object, returned from either \code{coxph}
+or \code{coxphf}.}
+
+\item{coxph.type}{model fit type; either \code{coxph} (default)
+or \code{coxphf} (Firth's correction).}
+
+\item{digits}{number of digits to round}
+}
 \value{
 Hazard ratio, confidence interval, and likelihood ratio test
 p-value

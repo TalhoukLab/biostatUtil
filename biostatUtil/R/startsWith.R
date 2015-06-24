@@ -1,4 +1,5 @@
 #' Check if string starts in partciular way
+#' @author Samuel Leung
 #' @export
 startsWith <- function(a, b) {
   if (length(grep(b, a)) == 0) {

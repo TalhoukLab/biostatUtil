@@ -1,27 +1,24 @@
-#' Plot detailed Kaplan-Meier curve
+#' Plot detailed Kaplan-Meier curves
+#' 
+#' KM plots with details of event counts.
+#' 
+#' @param legend.pos legend position keyword
+#' @param show.test show single or the reference group value (for pairwise comparisons)
+#' @param single.test.type test to show if specified \code{show.test = "single"}. Possible
+#' choices are \code{"logrank"} (default), \code{"wilcoxon"}, \code{"taroneware"}, or \code{"all"}.
+#' @param round.digits.p.value number of digits for p-value
+#' @author Samuel Leung
+#' @references http://courses.nus.edu.sg/course/stacar/internet/st3242/handouts/notes2.pdf
+#' @seealso \code{\link{plotKM}}
 #' @export
-plotKMDetail <- function(input.data,
-                           surv.formula,
-                           main.text, 
-                           xlab.text, 
-                           ylab.text,
-                           line.name,
-                           ten.years.surv.95CI,
-                           event.count,
-                           line.color,
-                           obs.survyrs,
-                           line.pattern = NULL,
-                           line.width = NULL,
-                           legend.pos = "bottomleft", # legend position keyword
-                           file.name = "no.file",
-                           file.width = 7,
-                           file.height = 7,
-                           show.test = "single", # show single or the reference group value (for pairwise comparison)
-                           single.test.type = "logrank", # the test to show if specified show.test="single". 
-                           # the possible choices are logrank, wilcoxon, taroneware, all
-                           round.digits.p.value, # number of digits for p-value
-                           grey.scale = FALSE,
-                           show.single.test.pos, ...) {
+plotKMDetail <- function(input.data, surv.formula, main.text, xlab.text,
+                         ylab.text, line.name, ten.years.surv.95CI,
+                         event.count, line.color, obs.survyrs,
+                         line.pattern = NULL, line.width = NULL,
+                         legend.pos = "bottomleft", file.name = "no.file",
+                         file.width = 7, file.height = 7, show.test = "single",
+                         single.test.type = "logrank", round.digits.p.value,
+                         grey.scale = FALSE, show.single.test.pos, ...) {
   
   var.name <- deparse(surv.formula[[3]]) # this should be the biomarker name
   # the deparse() function is used to make sure var.name is a string
@@ -39,18 +36,17 @@ plotKMDetail <- function(input.data,
       file.name.extension <- tolower(substr(file.name,
                                             file.name.len - 2, file.name.len))
       if (file.name.extension == "pdf") {
-        #pdf(file=file.name)
-        cairo_pdf(file = file.name, width = file.width, height = file.height) # good for unicode character in e.g. line.name
+        cairo_pdf(file = file.name, width = file.width, height = file.height)  # good for unicode character in e.g. line.name
       } else if (file.name.extension %in% c("wmf", "emf", "wmz", "emz")) {
         win.metafile(file = file.name, width = file.width, height = file.height)	
-      } else if (file.name.extension %in% c("tif")) { # does not with with tiff since only check last three character!!!
+      } else if (file.name.extension %in% c("tif")) {  # does not with with tiff since only check last three character!!!
         tiff(file = file.name, width = file.width * 100, height = file.height * 100)
       } else {
         # unknown extension ... do nothing
         file.name <- "no.file"
       }
     }
-  } 
+  }
   which.strata.have.cases <- table(input.data[, var.name]) > 0 # in case some strata do not have any cases
   if (grey.scale) {
     # gray scale plot
@@ -60,16 +56,11 @@ plotKMDetail <- function(input.data,
     if (is.null(line.width)) {
       line.width <- 1
     }
-    plot(fit,
-         lty = line.pattern,  
-         lwd = line.width,
-         main = main.text,
-         xlab = xlab.text,
-         ylab = ylab.text, ...
-    )
+    plot(fit, lty = line.pattern, lwd = line.width, main = main.text,
+         xlab = xlab.text, ylab = ylab.text, ...)
     if (legend.pos == "top") {
       l1 <- legend(x = (max(fit$time, na.rm = TRUE) -
-                          min(fit$time, na.rm = TRUE)) / 2, y = 0.99, # i.e. top 1% ... since survival plot always start at 100% survival
+                          min(fit$time, na.rm = TRUE)) / 2, y = 0.99, # i.e. top 1% ... since survival plot always starts at 100% survival
                    legend = line.name,
                    lty = line.pattern,
                    lwd = line.width,
@@ -135,7 +126,7 @@ plotKMDetail <- function(input.data,
   
   l3 <- legend(
     x = l1$rect$w + l1$rect$left + l2$rect$w,
-    y = y.pos,#l1$rect$h-dy,
+    y = y.pos,
     legend = event.count,
     title = "Events/N",
     title.col = 1,
@@ -148,7 +139,7 @@ plotKMDetail <- function(input.data,
     gehan.wilcox.test <- survival::survdiff(surv.formula, data = input.data,
                                             rho = 1)
     tarone.ware.test  <- survival::survdiff(surv.formula, data = input.data,
-                                            rho = 0.5) # http://courses.nus.edu.sg/course/stacar/internet/st3242/handouts/notes2.pdf
+                                            rho = 0.5)
     p.value <- getPval(log.rank.test)
     log.rank.p.values <- p.value
     p.value <- round(p.value, digits = round.digits.p.value)

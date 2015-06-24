@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotKMDetail.R
 \name{plotKMDetail}
 \alias{plotKMDetail}
-\title{Plot detailed Kaplan-Meier curve}
+\title{Plot detailed Kaplan-Meier curves}
 \usage{
 plotKMDetail(input.data, surv.formula, main.text, xlab.text, ylab.text,
   line.name, ten.years.surv.95CI, event.count, line.color, obs.survyrs,
@@ -11,7 +11,26 @@ plotKMDetail(input.data, surv.formula, main.text, xlab.text, ylab.text,
   show.test = "single", single.test.type = "logrank", round.digits.p.value,
   grey.scale = FALSE, show.single.test.pos, ...)
 }
+\arguments{
+\item{legend.pos}{legend position keyword}
+
+\item{show.test}{show single or the reference group value (for pairwise comparisons)}
+
+\item{single.test.type}{test to show if specified \code{show.test = "single"}. Possible
+choices are \code{"logrank"} (default), \code{"wilcoxon"}, \code{"taroneware"}, or \code{"all"}.}
+
+\item{round.digits.p.value}{number of digits for p-value}
+}
 \description{
-Plot detailed Kaplan-Meier curve
+KM plots with details of event counts.
+}
+\author{
+Samuel Leung
+}
+\references{
+http://courses.nus.edu.sg/course/stacar/internet/st3242/handouts/notes2.pdf
+}
+\seealso{
+\code{\link{plotKM}}
 }
 

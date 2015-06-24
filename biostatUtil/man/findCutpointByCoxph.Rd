@@ -2,11 +2,18 @@
 % Please edit documentation in R/findCutpointByCoxph.R
 \name{findCutpointByCoxph}
 \alias{findCutpointByCoxph}
-\title{Find cutpoint by coxph}
+\title{Find cutpoint by Cox model statistics}
 \usage{
 findCutpointByCoxph(input.d, surv.formula)
 }
 \description{
-Find cutpoint by coxph
+Try to find a single cutpoint by maximizing the hazard ratio or
+minimizing the AIC.
+}
+\section{Warning}{
+
+ \code{surv.formula} cannot be multivariable. For
+example, \code{Surv(time, status) ~ x + age} doesn't work but
+\code{Surv(time, status) ~ x} is fine.
 }
 

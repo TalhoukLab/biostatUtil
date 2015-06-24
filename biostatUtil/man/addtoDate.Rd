@@ -10,4 +10,7 @@ addtoDate(org.date, delta, date.format = MM.DD.YYYY, units = "days",
 \description{
 Add to a date
 }
+\author{
+Samuel Leung
+}
 

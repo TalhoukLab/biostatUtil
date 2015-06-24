@@ -11,7 +11,29 @@ plotKM(input.d, input.formula, main.text, xlab.text, ylab.text, line.name,
   file.name = "no.file", file.width = 7, file.height = 7,
   grey.scale = FALSE, show.single.test.pos = "default", ...)
 }
+\arguments{
+\item{show.test}{show single or the reference group value (for pairwise comparisons).
+If \code{"none"}, then no test is show.}
+
+\item{single.test.type}{test to show if specified \code{show.test = "single"}. Possible
+choices are \code{"logrank"} (default), \code{"wilcoxon"}, \code{"taroneware"}, or \code{"all"}.}
+
+\item{round.digits.p.value}{number of digits for p-value}
+
+\item{obs.survyrs}{show the observed survival years survival rate on KM plot}
+
+\item{legend.pos}{legend position keyword}
+
+\item{show.single.test.pos}{position to show single test; defaults to 0.5 if
+\code{legend.pos = "top"}. Otherwise 0.1}
+}
 \description{
 Plot Kaplan-Meier curve
+}
+\author{
+Samuel Leung
+}
+\seealso{
+\code{\link{plotKMDetail}}
 }
 

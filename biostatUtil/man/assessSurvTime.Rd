@@ -30,4 +30,7 @@ The observation time is defined as the median time in days between all
 \code{T1} and \code{T2}. Censoring time is the median time in days between
 all \code{T1} and \code{T2} for events only.
 }
+\author{
+Samuel Leung
+}
 
