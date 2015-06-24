@@ -1,24 +1,31 @@
+library(biostatUtil)
 library(meta)
 
-Name <- c("Portec", "Leuven", "TCGA", "Zurich")
-n.trt <- c(15, 9, 18, 16)
-n.ctrl <- c(94, 161, 211, 223)
-col.trt <- c(4, 0, 0, 0)
-col.ctrl <- c(46, 36, 21, 57)
-endo <- data.frame(Name, n.trt, n.ctrl, col.trt, col.ctrl)
-a <- meta.MH(n.trt, n.ctrl, col.trt, col.ctrl, data = endo, names = Name)
-plot(a)
-varianceFromCI(0.43,0.13,1.37,0.05)
-varianceFromCI(0.18,0.01,3.11,0.05)
-varianceFromCI(0.12,0.01,2.11,0.05)
-varianceFromCI(0.21,0.01,4.26,0.05)
+# Recurrence-Free Survival Hazard Ratios
+studlab <- c("PORTEC", "Leuven", "TCGA", "Billingsley", "Meng")
+effects <- log(c(0.43, 0.18, 0.12, 0.37, 0.7558702))
+se_effects <- c(sdFromCI(0.43, 0.13, 1.37)$sd,
+                sdFromCI(0.18, 0.01, 3.11)$sd,
+                sdFromCI(0.12, 0.01, 2.11)$sd,
+                sdFromCI(0.37, 0.09, 1.54)$sd,
+                sdFromCI(0.7558702, 0.03634426, 112.860470)$sd)
+metagen(effects, se_effects, studlab, sm = "HR", comb.fixed = T)
 
-studlab <- c("Portec", "Leuven", "TCGA", "Billingsley")
-effects <- log(c(0.43, 0.18, 0.12, 0.37))
-se_effects <- c(sqrt(varianceFromCI(0.43,0.13,1.37,0.05)$var),
-              sqrt(varianceFromCI(0.18,0.01,3.11,0.05)$var),
-              sqrt(varianceFromCI(0.12,0.01,2.11,0.05)$var),
-              sqrt(varianceFromCI(0.37,0.09,1.54,0.05)$var))
+# Cancer-Specific Survival Hazard Ratios
+studlab <- c("PORTEC", "Leuven", "Zurich/Basel", "Meng")
+effects <- log(c(0.19, 0.66, 0.21, 0.8880270))
+se_effects <- c(sdFromCI(0.19, 0.03, 1.44)$sd,
+                sdFromCI(0.66, 0.04, 11.4)$sd,
+                sdFromCI(0.21, 0.01, 4.26)$sd,
+                sdFromCI(0.8880270, 0.04420431, 131.750737)$sd)
+metagen(effects, se_effects, studlab, sm = "HR", comb.fixed = T)
 
-test <- metagen(effects, se_effects, studlab = studlab, sm = "HR", comb.fixed = T)
-metagen(effects, se_effects, studlab = studlab, sm = "HR")
+# Five-year Survival Rates
+studlab <- c("PORTEC", "Stelloo", "Billingsley", "TCGA", "Meng")
+effects <- c(0.9725, 0.93, 0.9622, 1, 1)
+se_effects <- c(sqrt(0.9725 * (1 - 0.9725) / 48),
+                sqrt(0.93 * (1 - 0.93) / 14),
+                sqrt(0.9622 * (1 - 0.9622) / 30),
+                sqrt(1 / 17),
+                sqrt(1 / 8))
+metagen(effects, se_effects, studlab, sm = "PRAW", comb.fixed = T)
