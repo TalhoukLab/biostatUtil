@@ -3,6 +3,7 @@ library(stringr)
 library(plyr)
 library(dplyr)
 library(Kmisc)
+library(survival)
 library(biostatUtil)
 dat.raw <- read.csv("./POLE_tmp/data/ClinicalandpathinfoofPOLEmutatedandWTEC3_fromCH_Jun82015.csv")
 

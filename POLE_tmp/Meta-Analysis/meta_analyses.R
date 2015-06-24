@@ -2,12 +2,11 @@ library(biostatUtil)
 library(meta)
 
 # Recurrence-Free Survival Hazard Ratios
-studlab <- c("PORTEC", "Leuven", "TCGA", "Billingsley", "Meng")
-effects <- log(c(0.43, 0.18, 0.12, 0.37, 0.7558702))
+studlab <- c("PORTEC", "Leuven", "TCGA", "Meng")
+effects <- log(c(0.43, 0.18, 0.12, 0.7558702))
 se_effects <- c(sdFromCI(0.43, 0.13, 1.37)$sd,
                 sdFromCI(0.18, 0.01, 3.11)$sd,
                 sdFromCI(0.12, 0.01, 2.11)$sd,
-                sdFromCI(0.37, 0.09, 1.54)$sd,
                 sdFromCI(0.7558702, 0.03634426, 112.860470)$sd)
 metagen(effects, se_effects, studlab, sm = "HR", comb.fixed = T)
 
@@ -18,6 +17,14 @@ se_effects <- c(sdFromCI(0.19, 0.03, 1.44)$sd,
                 sdFromCI(0.66, 0.04, 11.4)$sd,
                 sdFromCI(0.21, 0.01, 4.26)$sd,
                 sdFromCI(0.8880270, 0.04420431, 131.750737)$sd)
+metagen(effects, se_effects, studlab, sm = "HR", comb.fixed = T)
+
+# Overall Survival Hazard Ratios
+studlab <- c("PORTEC", "Billingsley", "Meng")
+effects <- log(c(1.06, 0.37, 0.6796932))
+se_effects <- c(sdFromCI(0.37, 0.09, 1.54)$sd,
+                sdFromCI(1.06, 0.59, 1.92)$sd,
+                sdFromCI(0.6796932, 0.08808737, 7.598728)$sd)
 metagen(effects, se_effects, studlab, sm = "HR", comb.fixed = T)
 
 # Five-year Survival Rates
