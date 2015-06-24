@@ -10,7 +10,8 @@
 
 
 CCplot <- function(method1, method2, Ptype = "none", metrics = FALSE,
-                   xlabel = "", ylabel = "", ttile = "", subtitle = ""){
+                   xlabel = "", ylabel = "", ttile = "", subtitle = "",
+                   xrange = NULL, yrange = NULL, MArange = c(-3.5, 5.5)){
   require(epiR)
   ## Concordance correlation plot
   tmp.ccc <- epi.ccc(method1, method2, ci = "z-transform",
@@ -25,9 +26,16 @@ CCplot <- function(method1, method2, Ptype = "none", metrics = FALSE,
   z <- lm(method2 ~ method1)
   tmp.mean <- mean(tmp.ccc$blalt$delta)
   tmp.sd <- sqrt(var(tmp.ccc$blalt$delta))
+if (is.null(xrange)) {
+  xrange <- range(method1)
+}
+
+if (is.null(yrange)) {
+    yrange <- range(method2)
+}
 
   if (Ptype == "scatter") { # Scatter Plot
-    plot(method1, method2, xlab = xlabel, xlim = c(0,8), ylim = c(0, 8),
+    plot(method1, method2, xlab = xlabel, xlim = xrange, ylim = yrange,
          ylab = ylabel, pch = 16, sub = paste("(",subtitle,")"))
     abline(a = 0, b = 1, lty = 2)
     abline(z, lty = 1)
@@ -39,7 +47,7 @@ CCplot <- function(method1, method2, Ptype = "none", metrics = FALSE,
     par(usr = usr)	# restore original user coordinates
   } else if (Ptype=="MAplot") { #Bland-Altman or MAplot
     plot(tmp.ccc$blalt$mean, tmp.ccc$blalt$delta, pch = 16, xlab = "Average",
-         ylab = "Difference", sub=paste("(",subtitle,")"), ylim=c(-3.5, 5.5))
+         ylab = "Difference", sub=paste("(",subtitle,")"), ylim = MArange )
     abline(h = tmp.mean, lty = 1, col = "gray")
     abline(h = tmp.mean - (2 * tmp.sd), lty = 2, col = "gray")
     abline(h = tmp.mean + (2 * tmp.sd), lty = 2, col = "gray")

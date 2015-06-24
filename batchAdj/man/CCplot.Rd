@@ -5,7 +5,8 @@
 \title{Plotting function for Reliability}
 \usage{
 CCplot(method1, method2, Ptype = "none", metrics = FALSE, xlabel = "",
-  ylabel = "", ttile = "", subtitle = "")
+  ylabel = "", ttile = "", subtitle = "", xrange = NULL,
+  yrange = NULL, MArange = c(-3.5, 5.5))
 }
 \arguments{
 \item{method1}{is the measurements obtained in batch 1 or using method 1}
