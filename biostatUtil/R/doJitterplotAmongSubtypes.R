@@ -7,7 +7,7 @@ doJitterplotAmongSubtypes <- function(input.d, data.description,
                                       cex.axis = 0.9) {
   
   temp.d <- input.d[(!is.na(input.d[, biomarker.var.name])) &
-                      (!is.na(input.d[,subtype.var.name])), ]
+                      (!is.na(input.d[, subtype.var.name])), ]
   
   biomarker <- temp.d[, biomarker.var.name]
   subtype <- temp.d[, subtype.var.name]

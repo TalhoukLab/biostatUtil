@@ -6,7 +6,8 @@ doHist <- function(input.d, data.description, biomarker.var.name,
   xlab.text <- biomarker.name
   biomarker <- input.d[, biomarker.var.name]
   quantile.output <- quantile(biomarker, na.rm = TRUE)
-  data.description <- ifelse(is.na(data.description), "", paste0(data.description,"\n"))
+  data.description <- ifelse(is.na(data.description), "",
+                             paste0(data.description, "\n"))
   hist(
     biomarker,
     br = br,
