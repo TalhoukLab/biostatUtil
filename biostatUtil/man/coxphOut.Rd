@@ -2,11 +2,40 @@
 % Please edit documentation in R/coxphOut.R
 \name{coxphOut}
 \alias{coxphOut}
-\title{coxphOut function}
+\title{Nice output from Cox regression object}
 \usage{
-coxphOut(x, coefnames = NULL, digits = 2, use.firth = FALSE)
+coxphOut(object, coefnames = NULL, level = 0.95, digits = 2)
+}
+\arguments{
+\item{object}{a model fit object returned from \code{coxph} or \code{coxphf}}
+
+\item{coefnames}{a vector of labels for the coefficient names returned by the fit.
+\code{NULL} by default, uses original coefficient names.}
+
+\item{digits}{number of digits to round to}
+}
+\value{
+A matrix with a row for each coefficient, and a column for each of the following
+elements
+\item{n}{the number of observations used in the fit.}
+\item{events}{the number of events used in the fit.}
+\item{coef}{log hazard ratio}
+\item{se}{standard error of \code{coef}}
+\item{Z-Score}{Wald test statistic}
+\item{P-value}{p-value for \code{Z-Score}}
+\item{HR}{hazard ratio}
+\item{Lower CI Limit}{Defaults to \code{2.5 \%}}
+\item{Upper CI Limit}{Defaults to \code{97.5 \%}}
 }
 \description{
-coxphOut function
+Nicely formatted output from a Cox regression object,
+either \code{coxph} or \code{coxphf}.
+}
+\details{
+For objects of class \code{coxphf}, the calculation of the number of events used
+in the fit is slightly different.
+}
+\author{
+Aline Talhouk, Derek Chiu
 }
 

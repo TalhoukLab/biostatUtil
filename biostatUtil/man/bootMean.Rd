@@ -2,12 +2,12 @@
 % Please edit documentation in R/bootMean.R
 \name{bootMean}
 \alias{bootMean}
-\title{Bootstraped mean}
+\title{Mean and bootstrap confidence interval}
 \usage{
 bootMean(x, num.boot = 1000, conf.level = 0.95, random.seed = 12, ...)
 }
 \arguments{
-\item{x}{a vector}
+\item{x}{a vector (or matrix)}
 
 \item{num.boot}{number of bootstrap samples. Defaults to 1000.}
 
@@ -18,12 +18,33 @@ bootMean(x, num.boot = 1000, conf.level = 0.95, random.seed = 12, ...)
 \item{...}{additional arguments to \code{mean}}
 }
 \value{
-A bootstraped mean.
+A list with elements
+\item{obs.mean}{mean}
+\item{ci}{bootstraped confidence interval}
+\item{n}{number of bootstrap samples used}
 }
 \description{
-Bootstraped mean
+Finds mean of a vector, with bootstrapped confidence bounds.
+}
+\details{
+Takes a numeric vector and resamples with replacement \code{num.boot} times.
+If the input vector has any \code{NA} entries, include the argument
+\code{na.rm = TRUE} from \code{mean}.
+}
+\examples{
+## Vectors
+set.seed(344)
+bootMean(rnorm(100, 5, 3))
+bootMean(rnorm(100, 5, 3), num.boot = 500)
+bootMean(rnorm(100, 4, 3), conf.level = 0.90)
+
+## Missing Values
+set.seed(344)
+s <- ifelse(rexp(100, 0.5) < 1, NA, rexp(100, 0.5))
+bootMean(s)  # doesn't work
+bootMean(s, na.rm = T)
 }
 \author{
-Aline Talhouk
+Aline Talhouk, Derek Chiu
 }
 
