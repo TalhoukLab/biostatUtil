@@ -37,7 +37,7 @@ prettyCoxph <- function(input.formula, input.d, use.firth = 1,
   } else {
     fit.firth <- NA
   }
-  fit <- coxph(.my.formula, data = .my.data, ...) # fit is coxph ALWAYS!!!
+  fit <- survival::coxph(.my.formula, data = .my.data, ...) # fit is coxph ALWAYS!!!
   .my.formula <- fit$formula
   ph.check <- "NOT CALCULATED"
   

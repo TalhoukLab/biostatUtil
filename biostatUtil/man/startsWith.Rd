@@ -9,4 +9,7 @@ startsWith(a, b)
 \description{
 Check if string starts in partciular way
 }
+\author{
+Samuel Leung
+}
 

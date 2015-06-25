@@ -6,14 +6,28 @@
 \usage{
 findCutpointByCoxph(input.d, surv.formula)
 }
+\arguments{
+\item{input.d}{input data, typically a matrix or data frame}
+
+\item{surv.formula}{a formula of type \code{Surv(time, status) ~ x}, where
+\code{x} is the variable of interest.}
+}
+\value{
+best cutpoint as determined by different metrics. Returns \code{NA}
+if \code{surv.formula} is not univariable, the variable is not numeric, or
+there is no variation in the variable of interest.
+}
 \description{
 Try to find a single cutpoint by maximizing the hazard ratio or
 minimizing the AIC.
 }
 \section{Warning}{
 
- \code{surv.formula} cannot be multivariable. For
-example, \code{Surv(time, status) ~ x + age} doesn't work but
+\code{surv.formula} cannot be multivariable. For
+example, \code{Surv(time, status) ~ x + age} won't work but
 \code{Surv(time, status) ~ x} is fine.
+}
+\author{
+Samuel Leung
 }
 
