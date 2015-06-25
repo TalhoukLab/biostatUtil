@@ -12,7 +12,7 @@ endsWith(a, b)
 \item{b}{string ending to be checked}
 }
 \value{
-logical; if TRUE, \code{a} is a string that ends in \code{b}.
+logical; if TRUE, \code{a} is a string that ends with \code{b}.
 }
 \description{
 Returns a logical indicating whether the string in the first argument ends
@@ -33,5 +33,8 @@ endsWith(45, 4)
 }
 \author{
 Samuel Leung
+}
+\seealso{
+\code{\link{startsWith}}
 }
 

@@ -8,8 +8,9 @@
 #' 
 #' @param a string to be checked against
 #' @param b string ending to be checked
-#' @return logical; if TRUE, \code{a} is a string that ends in \code{b}.
+#' @return logical; if TRUE, \code{a} is a string that ends with \code{b}.
 #' @author Samuel Leung
+#' @seealso \code{\link{startsWith}}
 #' @export
 #' @examples 
 #' ## Strings

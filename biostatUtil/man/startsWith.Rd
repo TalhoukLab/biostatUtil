@@ -2,14 +2,40 @@
 % Please edit documentation in R/startsWith.R
 \name{startsWith}
 \alias{startsWith}
-\title{Check if string starts in partciular way}
+\title{Check if a string starts with a partciular string}
 \usage{
 startsWith(a, b)
 }
+\arguments{
+\item{a}{string to be checked against}
+
+\item{b}{string ending to be checked}
+}
+\value{
+logical; if TRUE, \code{a} is a string that starts with \code{b}.
+}
 \description{
-Check if string starts in partciular way
+Returns a logical indicating whether the string in the first argument starts
+with the string in the second argument.
+}
+\details{
+Although intended for strings, \code{startsWith} works with numeric vectors
+as well.
+}
+\examples{
+## Strings
+startsWith("pineapple", "pine")
+startsWith("apple", "app")
+startsWith("apple", "ppl")
+
+## Numerics
+startsWith(123.4, 123)
+startsWith(45, 5)
 }
 \author{
 Samuel Leung
+}
+\seealso{
+\code{\link{endsWith}}
 }
 
