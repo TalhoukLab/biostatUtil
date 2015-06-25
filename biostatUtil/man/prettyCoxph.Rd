@@ -2,12 +2,48 @@
 % Please edit documentation in R/prettyCoxph.R
 \name{prettyCoxph}
 \alias{prettyCoxph}
-\title{Coxph with nicer output}
+\title{Nicer outputs from coxph model fits}
 \usage{
 prettyCoxph(input.formula, input.d, use.firth = 1, check.ph = FALSE,
   ph.test.plot.filename = "no.file", ...)
 }
+\arguments{
+\item{input.formula}{a formula object, with the response on the left of a
+\code{~} operator, and the terms on the right. The response must be a
+survival object as returned by the \code{Surv} function.}
+
+\item{input.d}{data.frame containing the variables in \code{input.formula}}
+
+\item{use.firth}{if set to -1, Firth's correction is applied using
+\code{coxphf}. The default value is 1, which uses \code{coxph}.}
+
+\item{check.ph}{if \code{TRUE}, checks the proportional hazard assumption.}
+
+\item{ph.test.plot.filename}{filename of residual plot. If set to
+\code{no.file} (default), plots to console. If \code{NA}, no plot will be
+generated.}
+}
+\value{
+A list with elements
+\item{output}{A character matrix showing the hazard ratio, confidence bounds,
+and p-value for each coefficient. If \code{check.ph = TRUE}, the last column
+shows the results of the PH test, otherwise it reads "NOT CALCULATED" for
+every coefficient.}
+\item{fit}{The fit output call returned from \code{coxph} or \code{coxphf}}
+\item{n}{The number of observations used in the fit}
+\item{nevent}{The number of events used in the fit}
+\item{ph.test}{The rho, Chi-squared statistic, and p-value for each coefficient.
+Not shown if \code{check.ph = FALSE}}
+\item{used.firth}{logical; if \code{TRUE}, Firth's correction was applied
+using \code{coxphf}}
+}
 \description{
-Coxph with nicer output
+Formats the coxph (or coxphf) model outputs into a prettier display.
+}
+\details{
+The original fit call is returned, along with other useful statistics.
+}
+\author{
+Samuel Leung, Derek Chiu
 }
 
