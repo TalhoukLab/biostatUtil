@@ -5,11 +5,11 @@ library(dplyr)
 library(Kmisc)
 library(survival)
 library(biostatUtil)
-dat.raw <- read.csv("./POLE_tmp/data/ClinicalandpathinfoofPOLEmutatedandWTEC3_fromCH_Jun82015.csv")
+dat.raw <- read.csv("../POLE_tmp/data/ClinicalandpathinfoofPOLEmutatedandWTEC3_fromCH_Jun82015.csv")
 
 # Munge data to proper format
 dat.overall <- dat.raw %>%
-  mutate(POLE.mutation = factor(str_sub(POLE.mutation, start = 1, end = 3)),
+  mutate(POLE.mutation = relevel(factor(str_sub(POLE.mutation, start = 1, end = 3)), ref = "wt"),
          FIGO.2009 = gsub(",", "", 
                           apply(str_split_fixed(FIGO.2009, " ", 3)[, -3],
                                 1, function(x) paste(x, collapse = " "))),
@@ -48,3 +48,5 @@ multi.dss <- prettyCoxph(Surv(Follow.up.duration, Censor.DSS) ~ POLE.mutation +
 multi.rfs <- prettyCoxph(Surv(Follow.up.duration, Censor.recurrence) ~ POLE.mutation +
                         Age.at.SX + Chemotherapy + Radiation + Stage,
                       dat.residual, use.firth = -1)
+
+
