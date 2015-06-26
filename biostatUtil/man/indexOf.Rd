@@ -2,11 +2,36 @@
 % Please edit documentation in R/indexOf.R
 \name{indexOf}
 \alias{indexOf}
-\title{Find occurences of string within another stirng}
+\title{Find occurences of string within another string}
 \usage{
 indexOf(a, b, ignore.case = FALSE)
 }
+\arguments{
+\item{a}{string to be checked against}
+
+\item{b}{string to check}
+
+\item{ignore.case}{logical; if \code{TRUE}, case is ignored when
+performing the check}
+}
+\value{
+Indices where \code{b} occurs in \code{a}.
+}
 \description{
-Find occurences of string within another stirng
+Returns a vector of the indices where a string occurs in another string
+}
+\details{
+If \code{b} is longer than \code{a}, \code{indexOf} returns \code{NA},
+since it is not possible for a longer string to occur in a shorter
+string.
+}
+\examples{
+indexOf("derek", "e")
+indexOf("Animals", "a")
+indexOf("Animals", "A")
+indexOf("Animals", "a", ignore.case = TRUE)
+}
+\author{
+Samuel Leung
 }
 
