@@ -6,7 +6,24 @@
 \usage{
 medianCtr(x)
 }
+\arguments{
+\item{x}{a matrix}
+}
+\value{
+A matrix with median centered rows.
+}
 \description{
-Median center rows
+Takes a matrix and centers the rows by their median.
+}
+\details{
+The data matrix should have genes as rows and samples as columns. After
+centering, each row should have median approximately 0.
+}
+\examples{
+x <- matrix(rnorm(200), nrow = 10)
+medianCtr(x)
+}
+\author{
+Samuel Leung
 }
 

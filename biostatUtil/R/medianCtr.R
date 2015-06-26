@@ -1,12 +1,21 @@
 #' Median center rows
+#' 
+#' Takes a matrix and centers the rows by their median.
+#' 
+#' The data matrix should have genes as rows and samples as columns. After
+#' centering, each row should have median approximately 0.
+#' 
+#' @param x a matrix
+#' @return A matrix with median centered rows.
+#' @author Samuel Leung
 #' @export
+#' @examples 
+#' x <- matrix(rnorm(200), nrow = 10)
+#' medianCtr(x)
 medianCtr <- function(x) {
   annAll <- dimnames(x)
-  medians <- apply(x, 1, median, na.rm = T)  # calculate median for each row
-  
-  # center each row of matrix so that all rows (genes) have a median of approx. 0
-  x <- t(scale(t(x), center = medians, scale = F)) # scale is generic function whose default method 
-  # centers and/or scales the COLUMNS of a numeric matrix. 
-  dimnames(x) <- annAll # reset the row/column names back to original ones
+  medians <- apply(x, 1, median, na.rm = T)
+  x <- t(scale(t(x), center = medians, scale = F))  
+  dimnames(x) <- annAll
   return(x)
 }
