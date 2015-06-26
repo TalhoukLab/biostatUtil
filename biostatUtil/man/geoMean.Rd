@@ -4,9 +4,32 @@
 \alias{geoMean}
 \title{Geometric mean}
 \usage{
-geoMean(x)
+geoMean(x, na.rm = FALSE)
+}
+\arguments{
+\item{x}{a vector. Matrices are allowed.}
+
+\item{na.rm}{logical; should NA values be removed?}
+}
+\value{
+If \code{x} has any \code{NA} values then \code{geoMean}
+will return \code{NA} just like \code{mean} unless \code{na.rm = TRUE}
+is specified. Otherwise, the geometric mean of \code{x} is returned.
+If the input only has \code{NA} values then \code{NA} is returned as well.
 }
 \description{
-Geometric mean
+Calculates the geometric mean
+}
+\examples{
+set.seed(1)
+x <- rexp(100, rate = 0.5)
+y <- rexp(100, rate = 0.3)
+y[3] <- NA
+geoMean(x)
+geoMean(y)
+geoMean(y, na.rm = T)
+}
+\author{
+Samuel Leung, Derek Chiu
 }
 
