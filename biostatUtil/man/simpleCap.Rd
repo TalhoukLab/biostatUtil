@@ -4,9 +4,32 @@
 \alias{simpleCap}
 \title{Simple capitalization}
 \usage{
-simpleCap(x, first.word.only = FALSE)
+simpleCap(x, first.only = FALSE)
+}
+\arguments{
+\item{x}{character string}
+
+\item{first.only}{logical; if \code{TRUE}, only the first word
+will be capitalized}
+}
+\value{
+A character string with every word's first letter capitalized.
 }
 \description{
-Simple capitalization
+Capitalize the first letter of every word in a character string.
+}
+\details{
+To capitalize only the first word, use \code{first.only = TRUE}.
+}
+\examples{
+simpleCap("clear cell")
+simplecap("high grade serous carcinoma")
+simpleCap("ovarian cancer", first.only = TRUE)
+}
+\author{
+Samuel Leung
+}
+\references{
+http://stackoverflow.com/questions/6364783/capitalize-the-first-letter-of-both-words-in-a-two-word-string
 }
 
