@@ -1,0 +1,96 @@
+---
+title: "POLE mutation Meta-Analysis"
+author: "Derek Chiu, Aline Talhouk"
+date: "June 26, 2015"
+output: word_document
+---
+
+```{r, message=FALSE}
+library(biostatUtil)
+library(meta)
+```
+
+# Hazard Ratios
+All of these are from multivariable models that include POLE mutation status and other covariates.
+
+In the PORTEC cohort, multivariable analysis included age, tumor type, grade, LVSI, depth of myometrial invasion, and treatment as covariates.
+
+Billingsley et. al conducted multivariable analysis using age (>= 60), stage (I/II vs. III/IV), grade (1 vs. 2), grade (1 vs. 3), LVSI, deep myometrial invastion (>= 50%), any kind of adjuvant therapy, and BMI (>= 30) as covariates. Since POLE mutation was not significant at 10% level in univariable analysis for progression-free survival, it was not included in the multivariable model. Therefore, the hazard ratio we use in the meta-analysis is from the univariable model with only POLE. 
+
+## Recurrence-Free Survival
+
+```{r, echo=FALSE}
+# Recurrence-Free Survival Hazard Ratios
+studlab <- c("PORTEC", "Leuven", "TCGA", "Billingsley", "Meng", "VGH")
+effects <- log(c(0.43, 0.18, 0.12, 0.22, 0.7558702, 0.23))
+se_effects <- c(sdFromCI(0.43, 0.13, 1.37)$sd,
+                sdFromCI(0.18, 0.01, 3.11)$sd,
+                sdFromCI(0.12, 0.01, 2.11)$sd,
+                sdFromCI(0.22, 0.03, 1.55)$sd,
+                sdFromCI(0.7558702, 0.03634426, 112.860470)$sd,
+                sdFromCI(0.23, 0.03, 0.89)$sd)
+a <- metagen(effects, se_effects, studlab, sm = "HR", comb.fixed = T)
+```
+
+There are `r length(studlab)` studies used for recurrence-free survival hazard ratios: `r studlab`.
+
+```{r rfs_forest, echo=FALSE}
+forest.meta(a)
+```
+
+## Disease-Specific Survival
+
+```{r, echo=FALSE}
+studlab <- c("PORTEC", "Leuven", "Zurich/Basel", "Meng", "VGH")
+effects <- log(c(0.19, 0.66, 0.21, 0.8880270,0.4))
+se_effects <- c(sdFromCI(0.19, 0.03, 1.44)$sd,
+                sdFromCI(0.66, 0.04, 11.4)$sd,
+                sdFromCI(0.21, 0.01, 4.26)$sd,
+                sdFromCI(0.8880270, 0.04420431, 131.750737)$sd,
+                sdFromCI(0.4, 0.04, 1.64)$sd)
+a <- metagen(effects, se_effects, studlab, sm = "HR", comb.fixed = T)
+```
+
+```{r dss_forest, echo=FALSE}
+forest.meta(a)
+```
+
+## Overall Survival
+
+```{r, echo=FALSE}
+# Overall Survival Hazard Ratios
+studlab <- c("PORTEC", "TCGA", "Billingsley", "Meng", "VGH")
+effects <- log(c(1.06, 0.827598, 0.37, 0.6796932,0.8))
+se_effects <- c(sdFromCI(1.06, 0.59, 1.92)$sd,
+                sdFromCI(0.827598, 0.159809, 2.788817)$sd,
+                sdFromCI(0.37, 0.09, 1.54)$sd,
+                sdFromCI(0.6796932, 0.08808737, 7.598728)$sd,
+                sdFromCI(0.8, 0.21, 2.25)$sd)
+a <- metagen(effects, se_effects, studlab, sm = "HR", comb.fixed = T)
+```
+
+```{r os_forest, echo=FALSE}
+forest.meta(a)
+```
+
+# Five-Year Survival Rate
+Stelloo et. al did not report hazard ratios in their paper, but did report 5-year survival rates. We decided to perform a meta-analysis on 5-year survival rates based on this measure. The problem is that the other papers did not report these rates, but they did have Kaplan-Meier curves including up to five years. To extract the survival rates, we printed our the curves, and estimated the rates by finding where the curve intersects with the five year follow-up time point.
+
+To obtain standard errors for these survival rates, we used the equation for the stanadard deviation of a sample proportion.
+
+```{r, echo=FALSE, warning=FALSE}
+studlab <- c("PORTEC", "Stelloo", "Billingsley", "TCGA", "Meng", "VGH")
+effects <- c(0.9725, 0.93, 0.9622, 1, 1, 0.8893)
+se_effects <- c(sqrt(0.9725 * (1 - 0.9725) / 48),
+                sqrt(0.93 * (1 - 0.93) / 14),
+                sqrt(0.9622 * (1 - 0.9622) / 30),
+                sqrt(1 / 17),
+                sqrt(1 / 8),
+                sqrt(0.8893 * (1 - 0.8893) / 39))
+a <- metagen(effects, se_effects, studlab, sm = "PRAW", comb.fixed = T)
+```
+
+```{r fiveyear, echo=FALSE, warning=FALSE}
+forest.meta(a)
+```
+
