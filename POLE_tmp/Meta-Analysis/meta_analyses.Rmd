@@ -2,10 +2,13 @@
 title: "POLE mutation Meta-Analysis"
 author: "Derek Chiu, Aline Talhouk"
 date: "June 26, 2015"
-output: word_document
+output: 
+  word_document: 
+    fig_height: 4
+    fig_width: 8.5
 ---
 
-```{r, message=FALSE}
+```{r, echo=FALSE, message=FALSE}
 library(biostatUtil)
 library(meta)
 ```
@@ -15,19 +18,22 @@ All of these are from multivariable models that include POLE mutation status and
 
 In the PORTEC cohort, multivariable analysis included age, tumor type, grade, LVSI, depth of myometrial invasion, and treatment as covariates.
 
-Billingsley et. al conducted multivariable analysis using age (>= 60), stage (I/II vs. III/IV), grade (1 vs. 2), grade (1 vs. 3), LVSI, deep myometrial invastion (>= 50%), any kind of adjuvant therapy, and BMI (>= 30) as covariates. Since POLE mutation was not significant at 10% level in univariable analysis for progression-free survival, it was not included in the multivariable model. Therefore, the hazard ratio we use in the meta-analysis is from the univariable model with only POLE. 
+Billingsley et. al conducted multivariable analysis using age (>= 60), stage (I/II vs. III/IV), grade (1 vs. 2), grade (1 vs. 3), LVSI, deep myometrial invastion (>= 50%), any kind of adjuvant therapy, and BMI (>= 30) as covariates. Since POLE mutation was not significant at 10% level in univariable analysis for progression-free survival, it was not included in the multivariable model. Therefore, the hazard ratio we use in the meta-analysis is from the univariable model with only POLE.
+
+Hazard ratios from Meng et. al were calculated from clinical data provided to us. Covariates included were age at surgery, whether they
+had any chemotherapy or radiation therapy, and stage.
 
 ## Recurrence-Free Survival
 
 ```{r, echo=FALSE}
 # Recurrence-Free Survival Hazard Ratios
 studlab <- c("PORTEC", "Leuven", "TCGA", "Billingsley", "Meng", "VGH")
-effects <- log(c(0.43, 0.18, 0.12, 0.22, 0.7558702, 0.23))
+effects <- log(c(0.43, 0.18, 0.12, 0.22, 0.993003, 0.23))
 se_effects <- c(sdFromCI(0.43, 0.13, 1.37)$sd,
                 sdFromCI(0.18, 0.01, 3.11)$sd,
                 sdFromCI(0.12, 0.01, 2.11)$sd,
                 sdFromCI(0.22, 0.03, 1.55)$sd,
-                sdFromCI(0.7558702, 0.03634426, 112.860470)$sd,
+                sdFromCI(0.993003, 0.006790, 18.71035)$sd,
                 sdFromCI(0.23, 0.03, 0.89)$sd)
 a <- metagen(effects, se_effects, studlab, sm = "HR", comb.fixed = T)
 ```
@@ -38,15 +44,17 @@ There are `r length(studlab)` studies used for recurrence-free survival hazard r
 forest.meta(a)
 ```
 
+From the forest plot, we see that the overall hazard reatio is `r exp(a$TE.fixed)`, and is significant at the 5% level.
+
 ## Disease-Specific Survival
 
 ```{r, echo=FALSE}
 studlab <- c("PORTEC", "Leuven", "Zurich/Basel", "Meng", "VGH")
-effects <- log(c(0.19, 0.66, 0.21, 0.8880270,0.4))
+effects <- log(c(0.19, 0.66, 0.21, 0.939513,0.4))
 se_effects <- c(sdFromCI(0.19, 0.03, 1.44)$sd,
                 sdFromCI(0.66, 0.04, 11.4)$sd,
                 sdFromCI(0.21, 0.01, 4.26)$sd,
-                sdFromCI(0.8880270, 0.04420431, 131.750737)$sd,
+                sdFromCI(0.939513, 0.00679, 18.710354)$sd,
                 sdFromCI(0.4, 0.04, 1.64)$sd)
 a <- metagen(effects, se_effects, studlab, sm = "HR", comb.fixed = T)
 ```
@@ -55,16 +63,18 @@ a <- metagen(effects, se_effects, studlab, sm = "HR", comb.fixed = T)
 forest.meta(a)
 ```
 
+From the forest plot, we see that overall hazard ratio is `r exp(a$TE.fixed)`, and is *barely* significant at 5% level.
+
 ## Overall Survival
 
 ```{r, echo=FALSE}
 # Overall Survival Hazard Ratios
 studlab <- c("PORTEC", "TCGA", "Billingsley", "Meng", "VGH")
-effects <- log(c(1.06, 0.827598, 0.37, 0.6796932,0.8))
+effects <- log(c(1.06, 0.827598, 0.37, 1.317292,0.8))
 se_effects <- c(sdFromCI(1.06, 0.59, 1.92)$sd,
                 sdFromCI(0.827598, 0.159809, 2.788817)$sd,
                 sdFromCI(0.37, 0.09, 1.54)$sd,
-                sdFromCI(0.6796932, 0.08808737, 7.598728)$sd,
+                sdFromCI(1.317292, 0.116517, 10.230540)$sd,
                 sdFromCI(0.8, 0.21, 2.25)$sd)
 a <- metagen(effects, se_effects, studlab, sm = "HR", comb.fixed = T)
 ```
@@ -72,6 +82,12 @@ a <- metagen(effects, se_effects, studlab, sm = "HR", comb.fixed = T)
 ```{r os_forest, echo=FALSE}
 forest.meta(a)
 ```
+
+From the forest plot, we see that the overall hazard ratio is `r exp(a$TE.fixed)`, but is not significant at 5% level.
+
+In general, the reassuring take-home message is that for all 3 survival outcomes, POLE mutation has a protective effect.
+
+\newpage
 
 # Five-Year Survival Rate
 Stelloo et. al did not report hazard ratios in their paper, but did report 5-year survival rates. We decided to perform a meta-analysis on 5-year survival rates based on this measure. The problem is that the other papers did not report these rates, but they did have Kaplan-Meier curves including up to five years. To extract the survival rates, we printed our the curves, and estimated the rates by finding where the curve intersects with the five year follow-up time point.
@@ -94,3 +110,4 @@ a <- metagen(effects, se_effects, studlab, sm = "PRAW", comb.fixed = T)
 forest.meta(a)
 ```
 
+Five-year survival is quite high for POLE mutations at `r a$TE.fixed`.
