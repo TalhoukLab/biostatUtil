@@ -23,7 +23,8 @@ dat.overall <- dat.raw %>%
                names(.)[grep("Censor", names(.))]) %>%
   mutate_each_(funs(as.factor), names(.)[grep("Chemo|Radia", names(.))]) %>% 
   mutate(Chemotherapy = as.factor(ifelse(is.na(Chemotherapy), "NA", Chemotherapy)),
-         Radiation = as.factor(ifelse(is.na(Radiation), "NA", Radiation)))
+         Radiation = as.factor(ifelse(is.na(Radiation), "NA", Radiation)),
+         Treatments = as.factor(ifelse(Chemotherapy == 1 | Radiation == 1, 1, 0)))
 
 # Remove cases with residual disease for DSS and RFS outcomes
 dat.residual <- dat.overall %>%
@@ -40,13 +41,13 @@ uni.rfs <- prettyCoxph(Surv(Follow.up.duration, Censor.recurrence) ~ POLE.mutati
 
 # multivariable POLE mutation HRs for OS, DSS, RFS
 multi.os <- prettyCoxph(Surv(Follow.up.duration, Censor.OS) ~ POLE.mutation +
-                        Age.at.SX + Chemotherapy + Radiation + Stage,
+                        Age.at.SX + Treatments + Stage,
                       dat.overall, use.firth = -1)
 multi.dss <- prettyCoxph(Surv(Follow.up.duration, Censor.DSS) ~ POLE.mutation +
-                        Age.at.SX + Chemotherapy + Radiation + Stage,
+                        Age.at.SX + Treatments + Stage,
                       dat.residual, use.firth = -1)
 multi.rfs <- prettyCoxph(Surv(Follow.up.duration, Censor.recurrence) ~ POLE.mutation +
-                        Age.at.SX + Chemotherapy + Radiation + Stage,
+                        Age.at.SX + Treatments + Stage,
                       dat.residual, use.firth = -1)
 
 
