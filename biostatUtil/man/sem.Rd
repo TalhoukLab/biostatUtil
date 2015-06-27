@@ -9,4 +9,10 @@ sem(x, missing.value = NA, return.missing.value = NA)
 \description{
 Standard error of the mean
 }
+\author{
+Samuel Leung
+}
+\references{
+http://en.wikipedia.org/wiki/Standard_error
+}
 

@@ -6,7 +6,21 @@
 \usage{
 escapeForGrep(x)
 }
+\arguments{
+\item{x}{a character vector}
+}
+\value{
+A character vector with opening and closing square brackets and parentheses
+escaped for use in \code{grep}.
+}
 \description{
-Escape string for regular expression
+Escape [, ], (, and ) for use in \code{grep}.
+}
+\examples{
+escapeForGrep("[index]")
+escapeForGrep("(parentheses)")
+}
+\author{
+Samuel Leung
 }
 

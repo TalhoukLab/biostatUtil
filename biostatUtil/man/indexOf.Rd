@@ -15,7 +15,8 @@ indexOf(a, b, ignore.case = FALSE)
 performing the check}
 }
 \value{
-Indices where \code{b} occurs in \code{a}.
+Indices where \code{b} occurs in \code{a}. Returns \code{NA}
+if there are no occurences.
 }
 \description{
 Returns a vector of the indices where a string occurs in another string

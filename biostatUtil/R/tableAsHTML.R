@@ -1,4 +1,6 @@
 #' Change table to HTML format
+#' 
+#' Generate HTML code for a table output. Assumes table as more than one row.
 #' @export
 tableAsHTML <- function(t, row.names = NULL, column.names = NULL, caption = NA,
                         html.table.border = 0, banded.rows = FALSE,
@@ -9,7 +11,6 @@ tableAsHTML <- function(t, row.names = NULL, column.names = NULL, caption = NA,
                   ifelse(is.na(caption), "",
                          paste0("<caption style='", TABLE.CAPTION.STYLE, "'>",
                                 addTableNumber(caption), "</caption>")))
-  # print header
   if (!is.null(row.names)) {
     rownames(t) <- row.names
   } else {
