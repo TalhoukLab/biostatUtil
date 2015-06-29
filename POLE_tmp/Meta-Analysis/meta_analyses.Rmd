@@ -53,7 +53,7 @@ a <- metagen(effects, se_effects, studlab, sm = "HR", method.tau = "SJ")
 ```
 
 ```{r rfs_forest, echo=FALSE}
-forest.meta(a, comb.random = F, comb.fixed = T)
+forest.meta(a)
 ```
 
 The above figure is a forest plot. Each study has a reported hazard ratio and a 95% confidence interval, shown as a notch on a horizontal line, respectively. The weights (W) shows how much of a study is used in the calculation of the overall summary measure, and is illustrated by the size of the square. Note that the weights are slightly different between the fixed and random effects models. The overall summary measure is marked by the vertical dashed line. Finally, the overall summary measure confidence interval is bounded by the width of the diamond. Also note that the forest plot is on the log scale.
