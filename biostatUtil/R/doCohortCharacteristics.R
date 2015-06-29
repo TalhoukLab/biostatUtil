@@ -107,7 +107,7 @@ input.d.no.missing.var.only[, var.name] <- as.numeric(input.d.no.missing.var.onl
 input.d.no.missing.var[, var.name] <- as.numeric(input.d.no.missing.var[, var.name])
 
 # 4 rows: mean (+/- std dev) / median / IQR / number of missing
-var.row.names <- c("mean","median","interquartile range")
+var.row.names <- c("mean","median","interquartile range","range")
 if (show.missing | show.missing.continuous) {
         var.row.names <- c(var.row.names, num.missing.row.header.name)
       }
@@ -142,7 +142,8 @@ switch (stat.tests[i],
  
   stat.tests.results <- c(stat.tests.results, stat.test.result)
 }
-      
+ 
+# Assemble Continuous Results     
 result.table <- rbind(result.table, # Add the mean
                   c(paste(round(mean(input.d.no.missing.var.only[, var.name]), decimal),
                           round(sem( input.d.no.missing.var.only[, var.name]), decimal),
@@ -185,7 +186,20 @@ result.table <- rbind(result.table, # Add the mean
                                                collapse = " to "))		
                                 }
                               })
-                            )
+                    ),
+                    c( # Add range
+                      paste(round(range(input.d.no.missing.var.only[, var.name]),
+                                  decimal), collapse = " to "), 
+                      sapply(marker.categories,function(x){
+                        temp.d <- input.d.no.missing.var[input.d.no.missing.var[, marker.name] == x,
+                                                         var.name]
+                        if (length(temp.d) == 0){
+                          return(MISSING.EXPLICIT)
+                        } else {
+                          return(paste(round(range(temp.d), decimal),
+                                       collapse = " to "))		
+                        }
+                      }))
       )
     } else { # If categorical variable
 var.categories <- names(table(input.d.no.missing.var.only[, var.name]))
@@ -260,15 +274,25 @@ for (var.category in var.categories) {
                  ifelse(sum(input.d.no.missing.var[, var.name] == var.category) > 0,
                         round(sum(input.d.no.missing.var[, var.name] == var.category & 
                           input.d.no.missing.var[,marker.name] == x) / 
-                            sum(input.d.no.missing.var[, var.name] == var.category) * 100, decimal),
+                            sum(input.d.no.missing.var[, var.name] == x) * 100, decimal),
                             0), 
                  "%)", sep = ""))
       })
     )},
-    column={},
+    column={c(total.value, sapply(marker.categories, function(x){
+      return(paste(sum(input.d.no.missing.var[, var.name] == var.category & 
+                         input.d.no.missing.var[,marker.name] == x), " (",
+                   ifelse(sum(input.d.no.missing.var[, var.name] == var.category) > 0,
+                          round(sum(input.d.no.missing.var[, var.name] == var.category & 
+                                      input.d.no.missing.var[,marker.name] == x) / 
+                                  sum(input.d.no.missing.var[, var.name] == var.category) * 100, decimal),
+                          0), 
+                   "%)", sep = ""))
+    })
+    )},
     both={c(total.value, sapply(marker.categories,function(x){
-                                         return(paste(
-                                           sum(input.d.no.missing.var[,var.name]==var.category & input.d.no.missing.var[,marker.name]==x),
+                return(paste(sum(input.d.no.missing.var[, var.name] == var.category & 
+                                   input.d.no.missing.var[,marker.name] == x),
                                            "<i><br>",
                                            ifelse(
                                              sum(input.d.no.missing.var[,var.name]==var.category) > 0,
