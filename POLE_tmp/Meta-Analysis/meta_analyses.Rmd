@@ -1,31 +1,45 @@
 ---
 title: "POLE mutation Meta-Analysis"
 author: "Derek Chiu, Aline Talhouk"
-date: "June 26, 2015"
+date: "June 29, 2015"
 output: 
   word_document: 
     fig_height: 4
     fig_width: 8.5
 ---
 
-```{r, echo=FALSE, message=FALSE}
+```{r load, echo=FALSE, message=FALSE}
 library(biostatUtil)
 library(meta)
 ```
 
-# Hazard Ratios
-All of these are from multivariable models that include POLE mutation status and other covariates.
+# Introduction
+We are interested in the effect of Polymerase $\epsilon$ (POLE) proofreading mutations on the survival outcome of patients diagnosed with endometrial cancer. Other studies have shown that POLE mutations have a protective effect on survival compared to POLE wild types. To confirm this hypothesis, we conducted a series of meta-analyses. A meta-analysis aggregates summary measures from different studies and arrives at an overall summary measure. The purpose is to obtain an overall summary measure that accounts for the common patterns and differences between the studies. Furthermore, combining studies allows us to achieve greater power, as most studies suffer from a small sample size and a lack of rare events in survival analysis. In our meta-analysis, we performed meta-analysis on hazard ratios and survival rates.
 
-In the PORTEC cohort, multivariable analysis included age, tumor type, grade, LVSI, depth of myometrial invasion, and treatment as covariates.
+The publications we considered are by Church, Billingsley, Meng, TCGA, Leuven, Basel/Zurich, and Stelloo. In addition, we also included data from our own VGH cohort, ending at 8 different studies. The cohorts all originated from North America and Europe, and were followed as early as 1990 until 2015. Median follow-up time differed substantially, ranging from 28.6 to 159.6 months. Sample size was also very different. An excel spreadsheet outlining more details on the cohorts is attached.
 
-Billingsley et. al conducted multivariable analysis using age (>= 60), stage (I/II vs. III/IV), grade (1 vs. 2), grade (1 vs. 3), LVSI, deep myometrial invastion (>= 50%), any kind of adjuvant therapy, and BMI (>= 30) as covariates. Since POLE mutation was not significant at 10% level in univariable analysis for progression-free survival, it was not included in the multivariable model. Therefore, the hazard ratio we use in the meta-analysis is from the univariable model with only POLE.
+# Hazard Ratio Extraction
+All of the hazard ratios were extracted from available publications or were computed from available data. Where possible, hazard ratios from multivariable models that include POLE mutation status and other predictors were used. Firth's penalized maximum likelihood bias reduction method was needed in the Cox regression analysis when there were zero events in the POLE mutated group.
 
-Hazard ratios from Meng et. al were calculated from clinical data provided to us. Covariates included were age at surgery, whether they
-had any chemotherapy or radiation therapy, and stage.
+The three survival outcomes we will conduct meta-analysis on are recurrence-free survival, disease-specific survival, and overall survival. Each of the meta-analyses will not contain all studies, but only those that reported the specific outcome.
+
+- In the PORTEC cohort (Church), multivariable analysis included age, tumor type, grade, LVSI, depth of myometrial invasion, and treatment as covariates.
+
+- Billingsley et. al conducted multivariable analysis using age (>= 60), stage (I/II vs. III/IV), grade (1 vs. 2), grade (1 vs. 3), LVSI, deep myometrial invasion (>= 50%), any kind of adjuvant therapy, and BMI (>= 30) as covariates. Since POLE mutation was not significant at 10% level in univariable analysis for progression-free survival, it was not included in the multivariable model. Therefore, the hazard ratio we use in the meta-analysis is from the univariable model with only POLE.
+
+- Hazard ratios from Meng et. al were calculated from clinical data provided to us. Covariates included in the Cox model were age at surgery, whether they had any chemotherapy or radiation therapy, and stage.
+
+- We had access to TCGA data, and like the Meng paper, calculated an overall survival hazard ratio. The Cox model had age, grade, stage, and histological subtype as covariates. Church had already reported the recurrence-free survival hazard ratio.
+
+- The Leuven Endometrial Cancer Study and Zurich/Basel series used the same predictors in the Cox regression as the PORTEC cohort, except that stage was included, and LVSI, myometrial invasion, and treatment were excluded due to lack of data
+
+- The Stelloo paper did not report any hazard ratios, and was not used for this series of meta-analyses
+
+- Our own VGH cohort was the last study considered in the meta-analyses for hazard ratios. The statistics were extracted from the POLE Remark report, calculated from data we have access to. In the multivariable Cox regression, the covariates considered were age at surgery, stage(I vs. II/III/IV), grade(1/2 vs. 3), histological subtype (endometrioid vs. non-endometrioid), lymphovascular invasion, positive nodes (0 vs. >0), and initial adjuvant treatment(no treatment vs. treatment).
 
 ## Recurrence-Free Survival
 
-```{r, echo=FALSE}
+```{r rfs_hr, echo=FALSE}
 # Recurrence-Free Survival Hazard Ratios
 studlab <- c("PORTEC", "Leuven", "TCGA", "Billingsley", "Meng", "VGH")
 effects <- log(c(0.43, 0.18, 0.12, 0.22, 0.993003, 0.23))
@@ -35,66 +49,68 @@ se_effects <- c(sdFromCI(0.43, 0.13, 1.37)$sd,
                 sdFromCI(0.22, 0.03, 1.55)$sd,
                 sdFromCI(0.993003, 0.006790, 18.71035)$sd,
                 sdFromCI(0.23, 0.03, 0.89)$sd)
-a <- metagen(effects, se_effects, studlab, sm = "HR", comb.fixed = T)
+a <- metagen(effects, se_effects, studlab, sm = "HR", method.tau = "SJ")
 ```
-
-There are `r length(studlab)` studies used for recurrence-free survival hazard ratios: `r studlab`.
 
 ```{r rfs_forest, echo=FALSE}
-forest.meta(a)
+forest.meta(a, comb.random = F, comb.fixed = T)
 ```
 
-From the forest plot, we see that the overall hazard reatio is `r exp(a$TE.fixed)`, and is significant at the 5% level.
+The above figure is a forest plot. Each study has a reported hazard ratio and a 95% confidence interval, shown as a notch on a horizontal line, respectively. The weights (W) shows how much of a study is used in the calculation of the overall summary measure, and is illustrated by the size of the square. Note that the weights are slightly different between the fixed and random effects models. The overall summary measure is marked by the vertical dashed line. Finally, the overall summary measure confidence interval is bounded by the width of the diamond. Also note that the forest plot is on the log scale.
+
+From the forest plot, we see that the overall hazard ratio is `r round(exp(a$TE.fixed), 3)` (p < 0.05) and is in the direction indicating a protective effect of POLE mutation.
+
+The heterogeneity test in meta-analysis tests whether the summary measures from the studies are significantly different. If significant, we should use a random effects model to account for the variation between studies in addition to the variation within studies. Otherwise, a fixed effects model is sufficient. The Sidik-Jonkman estimator was used to estimate the between-study variance. In the above forest plot, the heterogeneity test is highly insignificant, which also explains why the weights are so similar.
 
 ## Disease-Specific Survival
 
-```{r, echo=FALSE}
+```{r dss_hr, echo=FALSE}
 studlab <- c("PORTEC", "Leuven", "Zurich/Basel", "Meng", "VGH")
-effects <- log(c(0.19, 0.66, 0.21, 0.939513,0.4))
+effects <- log(c(0.19, 0.66, 0.21, 0.939513, 0.4))
 se_effects <- c(sdFromCI(0.19, 0.03, 1.44)$sd,
                 sdFromCI(0.66, 0.04, 11.4)$sd,
                 sdFromCI(0.21, 0.01, 4.26)$sd,
                 sdFromCI(0.939513, 0.00679, 18.710354)$sd,
                 sdFromCI(0.4, 0.04, 1.64)$sd)
-a <- metagen(effects, se_effects, studlab, sm = "HR", comb.fixed = T)
+a <- metagen(effects, se_effects, studlab, sm = "HR", method.tau = "SJ")
 ```
 
 ```{r dss_forest, echo=FALSE}
 forest.meta(a)
 ```
 
-From the forest plot, we see that overall hazard ratio is `r exp(a$TE.fixed)`, and is *barely* significant at 5% level.
+From the forest plot, we see that the overall hazard ratio is `r round(exp(a$TE.fixed), 3)` (p < 0.05), and again the direction is indicative of a protective effect of POLE mutation. Compared to the overall hazard ratio for recurrence-free survival, the disease-specific survival overall hazard ratio is slightly less protective.
+
+Again, the heterogeneity test is not significant.
 
 ## Overall Survival
 
-```{r, echo=FALSE}
+```{r os_hr, echo=FALSE}
 # Overall Survival Hazard Ratios
 studlab <- c("PORTEC", "TCGA", "Billingsley", "Meng", "VGH")
-effects <- log(c(1.06, 0.827598, 0.37, 1.317292,0.8))
+effects <- log(c(1.06, 0.827598, 0.37, 1.317292, 0.8))
 se_effects <- c(sdFromCI(1.06, 0.59, 1.92)$sd,
                 sdFromCI(0.827598, 0.159809, 2.788817)$sd,
                 sdFromCI(0.37, 0.09, 1.54)$sd,
                 sdFromCI(1.317292, 0.116517, 10.230540)$sd,
                 sdFromCI(0.8, 0.21, 2.25)$sd)
-a <- metagen(effects, se_effects, studlab, sm = "HR", comb.fixed = T)
+a <- metagen(effects, se_effects, studlab, sm = "HR", method.tau = "SJ")
 ```
 
 ```{r os_forest, echo=FALSE}
 forest.meta(a)
 ```
 
-From the forest plot, we see that the overall hazard ratio is `r exp(a$TE.fixed)`, but is not significant at 5% level.
+From the forest plot, we see that the overall hazard ratio for overall survival is `r round(exp(a$TE.fixed), 3)` (p > 0.05), showing a borderline protective effect. The heterogeneity test is not significant.
 
-In general, the reassuring take-home message is that for all 3 survival outcomes, POLE mutation has a protective effect.
-
-\newpage
+The take-home message is that for all three survival outcomes, POLE mutation generally has a protective effect.
 
 # Five-Year Survival Rate
-Stelloo et. al did not report hazard ratios in their paper, but did report 5-year survival rates. We decided to perform a meta-analysis on 5-year survival rates based on this measure. The problem is that the other papers did not report these rates, but they did have Kaplan-Meier curves including up to five years. To extract the survival rates, we printed our the curves, and estimated the rates by finding where the curve intersects with the five year follow-up time point.
+Stelloo et. al did not report hazard ratios in their paper, but did report 5-year survival rates. We decided to perform a meta-analysis on 5-year survival rates based on this measure. The problem is that the other papers did not report these rates, but they did have Kaplan-Meier curves including up to five years. To extract the survival rates, we printed out the curves, and estimated the rates by finding where the curve intersects with the five year follow-up time point.
 
-To obtain standard errors for these survival rates, we used the equation for the stanadard deviation of a sample proportion.
+To obtain standard errors for these survival rates, we used the equation for the standard deviation of a sample proportion.
 
-```{r, echo=FALSE, warning=FALSE}
+```{r fiveyear_survival, echo=FALSE, warning=FALSE}
 studlab <- c("PORTEC", "Stelloo", "Billingsley", "TCGA", "Meng", "VGH")
 effects <- c(0.9725, 0.93, 0.9622, 1, 1, 0.8893)
 se_effects <- c(sqrt(0.9725 * (1 - 0.9725) / 48),
@@ -103,11 +119,11 @@ se_effects <- c(sqrt(0.9725 * (1 - 0.9725) / 48),
                 sqrt(1 / 17),
                 sqrt(1 / 8),
                 sqrt(0.8893 * (1 - 0.8893) / 39))
-a <- metagen(effects, se_effects, studlab, sm = "PRAW", comb.fixed = T)
+a <- metagen(effects, se_effects, studlab, sm = "PRAW", method.tau = "SJ")
 ```
 
-```{r fiveyear, echo=FALSE, warning=FALSE}
+```{r fiveyear_forest, echo=FALSE, warning=FALSE, fig.width=9}
 forest.meta(a)
 ```
 
-Five-year survival is quite high for POLE mutations at `r a$TE.fixed`.
+Five-year survival is quite high for POLE mutations at `r round(a$TE.fixed, 3)`. Note that in the TCGA and Meng, there were zero events in the POLE mutated group.
