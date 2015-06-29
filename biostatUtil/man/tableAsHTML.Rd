@@ -9,6 +9,6 @@ tableAsHTML(t, row.names = NULL, column.names = NULL, caption = NA,
   css.class.name.even = "even")
 }
 \description{
-Change table to HTML format
+Generate HTML code for a table output. Assumes table as more than one row.
 }
 
