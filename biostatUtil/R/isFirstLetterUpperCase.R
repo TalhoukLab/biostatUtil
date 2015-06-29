@@ -11,11 +11,11 @@
 #' @author Samuel Leung
 #' @export
 #' @examples 
-#' isUpper("peanut butter")
-#' isUpper("peanut Butter")
-#' isUpper("Samuel butter")
-#' isUpper("")
-isUpper <- function(x) {
+#' isFirstLetterUpperCase("peanut butter")
+#' isFirstLetterUpperCase("peanut Butter")
+#' isFirstLetterUpperCase("Samuel butter")
+#' isFirstLetterUpperCase("")
+isFirstLetterUpperCase <- function(x) {
   arr <- strsplit(x, "")[[1]]
   if (length(arr) == 0) {
     return(TRUE)
