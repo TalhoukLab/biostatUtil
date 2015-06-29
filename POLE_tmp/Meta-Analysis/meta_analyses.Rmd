@@ -32,7 +32,7 @@ The three survival outcomes we conduct meta-analysis for are recurrence-free sur
 
 - In the PORTEC cohort (Church), multivariable analysis included age, tumor type, grade, LVSI, depth of myometrial invasion, and treatment as covariates.
 
-- Billingsley et. al conducted multivariable analysis using age (>= 60), stage (I/II vs. III/IV), grade (1 vs. 2), grade (1 vs. 3), LVSI, deep myometrial invasion (>= 50%), any kind of adjuvant therapy, and BMI (>= 30) as covariates. Since POLE mutation was not significant at 10% level in univariable analysis for progression-free survival, it was not included in the multivariable model. Therefore, the hazard ratio we use in the meta-analysis is from the univariable model with only *POLE*
+- Billingsley et. al conducted multivariable analysis using age (>= 60), stage (I/II vs. III/IV), grade (1 vs. 2), grade (1 vs. 3), LVSI, deep myometrial invasion (>= 50%), any kind of adjuvant therapy, and BMI (>= 30) as covariates. Since *POLE* mutation was not significant at 10% level in univariable analysis for progression-free survival, it was not included in the multivariable model. Therefore, the hazard ratio we use in the meta-analysis is from the univariable model with only *POLE*
 
 - Hazard ratios from Meng et. al were calculated from clinical data provided to us. Covariates included in the Cox model were age at surgery, whether they had any treatment (chemotherapy or radiation therapy), and stage.
 
@@ -67,7 +67,7 @@ Church defines progression or recurrence-free survival as "time from random assi
 
 The above figure is a forest plot that summarizes the results of the meta-analysis of progression-free survival. Each study has a reported hazard ratio and a 95% confidence interval, shown as a notch on a horizontal line, respectively. The weights (W) show how much a study contributes to the calculation of the overall summary measure, and is illustrated by the size of the square. Note that the weights are slightly different between the fixed and random effects models. The hazard ratio pooled over all studies is marked by a vertical dashed line, ending with a diamond whose width represents the pooled confidence interval. Also note that the confidence intervals are plotted on the normal scale but the axis labels are on the log scale.
 
-From the forest plot, we see that the overall hazard ratio for progression-free survival is `r round(exp(a$TE.fixed), 3)` (p < 0.05) and is in the direction indicating a protective effect of POLE mutation.
+From the forest plot, we see that the overall hazard ratio for progression-free survival is `r round(exp(a$TE.fixed), 3)` (p < 0.05) and is in the direction indicating a protective effect of *POLE* mutation.
 
 The test for heterogeneity is a test to see whether the effect sizes from the different studies are similar to one another. A small p-value would indicate that the studies are not homogeneous and therefore, a random effects model that accounts for both the variability within studies and between studies should be used. Otherwise, a fixed effects model is adequate. The Sidik-Jonkman estimator was used to estimate the between-study variance. In the above forest plot, the heterogeneity test is highly insignificant, which also explains why the weights are so similar.
 
@@ -88,7 +88,7 @@ a <- metagen(effects, se_effects, studlab, sm = "HR", method.tau = "SJ")
 forest.meta(a)
 ```
 
-From the forest plot, we see that the pooled hazard ratio for disease-specific survival is `r round(exp(a$TE.fixed), 3)` (p < 0.05), and again the direction is indicative of a protective effect of POLE mutation. Compared to the overall hazard ratio for recurrence-free survival, the disease-specific survival overall hazard ratio is slightly less protective.
+From the forest plot, we see that the pooled hazard ratio for disease-specific survival is `r round(exp(a$TE.fixed), 3)` (p < 0.05), and again the direction is indicative of a protective effect of *POLE* mutation. Compared to the overall hazard ratio for recurrence-free survival, the disease-specific survival overall hazard ratio is slightly less protective.
 
 Again, the heterogeneity test is not significant, so a fixed effects model is adequate.
 
@@ -112,7 +112,7 @@ forest.meta(a)
 
 From the forest plot, we see that the pooled hazard ratio for overall survival is `r round(exp(a$TE.fixed), 3)` (p > 0.05), showing a borderline protective effect. The heterogeneity test is not significant once again.
 
-The take-home message is that for all three survival outcomes, POLE mutation generally has a protective effect.
+The take-home message is that for all three survival outcomes, *POLE* mutation generally has a protective effect.
 
 # Five-Year Survival Rate
 Stelloo et. al did not report hazard ratios in their paper, but did report 5-year survival rates. We decided to perform a meta-analysis on 5-year survival rates based on this measure. The problem is that the other papers did not report these rates, but they did have Kaplan-Meier curves including up to five years. To extract the survival rates, we printed out the curves, and estimated the rates by finding where the curve intersects with the five year follow-up time point.
@@ -135,7 +135,7 @@ a <- metagen(effects, se_effects, studlab, sm = "PRAW", method.tau = "SJ")
 forest.meta(a)
 ```
 
-Five-year survival is quite high for POLE mutations at `r round(a$TE.fixed, 3)`. Note that in the TCGA and Meng, there were zero events in the POLE mutated group.
+Five-year survival is quite high for *POLE* mutations at `r round(a$TE.fixed, 3)`. Note that in the TCGA and Meng, there were zero events in the *POLE* mutated group.
 
 # References
 1. Church, David N., et al. "Prognostic significance of POLE proofreading mutations in endometrial cancer." Journal of the National Cancer Institute 107.1 (2015): dju402.
