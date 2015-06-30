@@ -4,7 +4,7 @@
 \alias{formatDate}
 \title{Format a date.}
 \usage{
-formatDate(d, m, y, date.format = MM.DD.YYYY, sep = "/")
+formatDate(d, m, y, date.format = "MM.DD.YYYY", sep = "/")
 }
 \arguments{
 \item{d}{day of the month (1-31)}
@@ -26,13 +26,14 @@ Prints a date into a pretty format.
 \details{
 Given the day, month, and year of a date, returns the date in a specific format.
 The order and separating string can be modified using \code{date.format} and \code{sep} respectively.
-Take note the order of the arguments: day, month, and year. The current version
-only accepts "MM.DD.YYYY", "DD.MM.YYYY", "YYYY.MM.DD".
+Take note the order of the arguments: day, month, and year. Only accepts "MM.DD.YYYY", "MMM.DD.YYYY",
+"DD.MM.YYYY", "DD.MMM.YYYY", "YYYY.MM.DD", "YYYY.MMM.DD".
 }
 \examples{
 formatDate(8, 7, 2011)
 formatDate(8, 7, 2011, date.format = "YYYY.MM.DD")
 formatDate(8, 7, 2011, date.format = "DD.MM.YYYY", sep = "-")
+formatDate(10, 1, 2015, date.format = "MMM.DD.YYYY", sep = "-")
 }
 \author{
 Samuel Leung, Derek Chiu

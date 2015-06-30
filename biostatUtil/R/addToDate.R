@@ -1,7 +1,7 @@
 #' Add to a date
 #' @author Samuel Leung
 #' @export
-addtoDate <- function(org.date, delta, date.format = MM.DD.YYYY,
+addtoDate <- function(org.date, delta, date.format = "MM.DD.YYYY",
                       units = "days", existing.missing.codes = NA,
                       return.missing.code = NA) {
   if (is.na(org.date) | is.na(delta)) 
