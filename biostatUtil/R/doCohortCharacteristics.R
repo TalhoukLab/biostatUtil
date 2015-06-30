@@ -107,7 +107,7 @@ input.d.no.missing.var.only[, var.name] <- as.numeric(input.d.no.missing.var.onl
 input.d.no.missing.var[, var.name] <- as.numeric(input.d.no.missing.var[, var.name])
 
 # 4 rows: mean (+/- std dev) / median / IQR / number of missing
-var.row.names <- c("mean","median","interquartile range","range")
+var.row.names <- c("mean","median","IQR","range")
 if (show.missing | show.missing.continuous) {
         var.row.names <- c(var.row.names, num.missing.row.header.name)
       }
