@@ -19,10 +19,18 @@
 #' @param caption is the caption to use for the Table
 
 #' @export
-doCohortCharacteristics <- function(input.d, marker.name, marker.description, var.names, is.var.continuous, var.descriptions, marker.value.labels.tolower = TRUE, show.missing = TRUE,show.missing.continuous = TRUE, 
-  do.droplevels = TRUE, show.percent = "both", stat.tests = NULL,
-  stat.test.column.header = "association/correlation test", round.digits.p.value = 4, num.boot.for.ci = 1000, missing.codes.highlight=NULL, missing.codes=c("N/A","","Unk"), decimal=0, caption=NA, html.table.border=0,
-  banded.rows=FALSE, css.class.name.odd="odd", css.class.name.even="even") {
+
+doCohortCharacteristics <- function(input.d, marker.name, marker.description, 
+                                    var.names, is.var.continuous, var.descriptions, 
+                                    marker.value.labels.tolower = TRUE, show.missing = TRUE,
+                                    show.missing.continuous = TRUE, do.droplevels = TRUE, 
+                                    show.percent = "both", stat.tests = NULL, 
+                                    stat.test.column.header = "association/correlation test", 
+                                    round.digits.p.value = 4, num.boot.for.ci = 1000, 
+                                    missing.codes.highlight=NULL, missing.codes=c("N/A","","Unk"),
+                                    decimal=0, caption=NA, html.table.border=0,
+                                    banded.rows=FALSE, css.class.name.odd="odd", 
+                                    css.class.name.even="even") {
   
 col.th.style <- "border-bottom: 1px solid grey; border-top: 4px double grey; text-align: center; padding-right:10px; padding-right:10px;"
 row.th.style <- "text-align: left; padding-right:10px; padding-right:10px;"
@@ -273,7 +281,7 @@ for (var.category in var.categories) {
                        input.d.no.missing.var[,marker.name] == x), " (",
                  ifelse(sum(input.d.no.missing.var[, var.name] == var.category) > 0,
                         round(sum(input.d.no.missing.var[, var.name] == var.category & 
-                          input.d.no.missing.var[,marker.name] == x) / 
+                          input.d.no.missing.var[, marker.name] == x) / 
                             sum(input.d.no.missing.var[, var.name] == x) * 100, decimal),
                             0), 
                  "%)", sep = ""))
@@ -281,40 +289,36 @@ for (var.category in var.categories) {
     )},
     column={c(total.value, sapply(marker.categories, function(x){
       return(paste(sum(input.d.no.missing.var[, var.name] == var.category & 
-                         input.d.no.missing.var[,marker.name] == x), " (",
-                   ifelse(sum(input.d.no.missing.var[, var.name] == var.category) > 0,
+                         input.d.no.missing.var[, marker.name] == x), " (",
+                   ifelse(sum(input.d.no.missing.var[, marker.name] == x) > 0,
                           round(sum(input.d.no.missing.var[, var.name] == var.category & 
-                                      input.d.no.missing.var[,marker.name] == x) / 
-                                  sum(input.d.no.missing.var[, var.name] == var.category) * 100, decimal),
-                          0), 
-                   "%)", sep = ""))
+                          input.d.no.missing.var[, marker.name] == x) / 
+                          sum(input.d.no.missing.var[, marker.name] == x) * 100, decimal), 0),
+                "%)", sep = ""))
     })
     )},
     both={c(total.value, sapply(marker.categories,function(x){
-                return(paste(sum(input.d.no.missing.var[, var.name] == var.category & 
-                                   input.d.no.missing.var[,marker.name] == x),
-                                           "<i><br>",
-                                           ifelse(
-                                             sum(input.d.no.missing.var[,var.name]==var.category) > 0,
-                                             round(sum(input.d.no.missing.var[,var.name]==var.category & input.d.no.missing.var[,marker.name]==x)/sum(input.d.no.missing.var[,var.name]==var.category)*100,decimal),
-                                             0
-                                           ),
-                                           "%<br>",
-                                           ifelse(
-                                             sum(input.d.no.missing.var[,marker.name]==x) > 0,
-                                             round(sum(input.d.no.missing.var[,var.name]==var.category & input.d.no.missing.var[,marker.name]==x)/sum(input.d.no.missing.var[,marker.name]==x)*100,decimal),
-                                             0
-                                           ),
-                                           "%</i>",
-                                           sep=""
-                                         ))
-                                       })
-                                     )}
-                              )
+      return(paste(sum(input.d.no.missing.var[, var.name] == var.category & 
+                         input.d.no.missing.var[,marker.name] == x),
+                         "<i><br>",
+                    ifelse(sum(input.d.no.missing.var[, var.name] == var.category) > 0,
+                         round(sum(input.d.no.missing.var[, var.name] == var.category & 
+                         input.d.no.missing.var[, marker.name] == x) / 
+                         sum(input.d.no.missing.var[,var.name] == var.category) * 100, decimal), 0),
+                         "%<br>",
+                    ifelse(sum(input.d.no.missing.var[, marker.name] == x) > 0,
+                         round(sum(input.d.no.missing.var[, var.name] == var.category & 
+                         input.d.no.missing.var[, marker.name] == x) / 
+                         sum(input.d.no.missing.var[, marker.name] == x) * 100, decimal), 0),
+                          "%</i>", sep = ""))
+          })
+      )}
+    )
         )
-      }
-    }
-    if (show.missing | is.var.continuous[i]&show.missing.continuous) {
+}
+}
+
+if (show.missing | is.var.continuous[i]&show.missing.continuous) {
       if (sum(!is.na(missing.codes.highlight[[var.name]]))>0) {
         # there's some missing values we want to highlight ...
         for (missing.code in missing.codes.highlight[[var.name]]) {
