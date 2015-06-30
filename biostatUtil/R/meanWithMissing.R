@@ -1,24 +1,25 @@
-# calculating mean with specifying missing values ...
-# 
-# Author: sleung
-###############################################################################
-
-###########################################################################
-# return mean of x 
-# using specified missing value
-# NOTE: NA's are ignored
-# default.missing.value is the value to return when all items in x are of missing value
-#
+#' Calculates mean with specifying missing values
+#' 
+#' Returns the mean of input vector, with the ability to specify
+#' which values are missing
+#' @param x input vector
+#' @param missing.value missing values in \code{x}
+#' @param return.missing.value character to return for missing values
+#' @note \code{NAs} are ignored.
+#' @author Samuel Leung
 #' @export
+#' @examples 
+#' z <- c(10:1)
+#' meanWithMissing(z, c(3:7))
+#' 
+#' ## All missing
+#' meanWithMissing(z, c(1:10))
+#' meanWithMissing(z, c(1:10), return.missing.value = "all missing")
 meanWithMissing <- function(x, missing.value = -1, return.missing.value = -1) {
   x.missing <- x %in% missing.value
   
-  # all items in x are of missing value
-  if (sum(x.missing) == length(x)) {return(return.missing.value)}
-  if (sum(is.na(x)) == length(x)) {return(return.missing.value)} # all values are NA's
+  if (sum(x.missing) == length(x) | sum(is.na(x)) == length(x))
+    return(return.missing.value)
   
-  # return mean of items in x that are not of the missing value
-  return (mean(as.numeric(x[!x.missing]), na.rm = TRUE))
+  return(mean(as.numeric(x[!x.missing]), na.rm = TRUE))
 }
-
-
