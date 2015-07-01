@@ -1,10 +1,11 @@
 #' Clean dates
+#' @author Samuel Leung
 #' @export
 cleanDate <- function(x, original.format, preferred.format,
                       existing.missing.codes = "", return.missing.code = NA) {
   if (is.na(x))
     return(return.missing.code)
-  x <- trimWhiteSpaces(x)
+  x <- trimws(x)
   if (x %in% existing.missing.codes)
     return(x)  # preserve error coding
   # need to break the date string into components 

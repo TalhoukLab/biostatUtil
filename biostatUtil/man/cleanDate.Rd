@@ -10,4 +10,7 @@ cleanDate(x, original.format, preferred.format, existing.missing.codes = "",
 \description{
 Clean dates
 }
+\author{
+Samuel Leung
+}
 
