@@ -4,8 +4,21 @@
 \alias{addtoDate}
 \title{Add to a date}
 \usage{
-addtoDate(org.date, delta, date.format = MM.DD.YYYY, units = "days",
+addtoDate(org.date, delta, date.format = "MM.DD.YYYY", units = "days",
   existing.missing.codes = NA, return.missing.code = NA)
+}
+\arguments{
+\item{org.date}{original date}
+
+\item{delta}{amount of time to add to \code{org.date}}
+
+\item{date.format}{how to format the resulting date}
+
+\item{units}{the unit of time for which to take the difference. Defaults to "days".}
+
+\item{existing.missing.codes}{missing dates}
+
+\item{return.missing.code}{what to return if there is a missing input}
 }
 \description{
 Add to a date

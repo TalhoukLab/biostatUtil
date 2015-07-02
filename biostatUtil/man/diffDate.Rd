@@ -4,10 +4,41 @@
 \alias{diffDate}
 \title{Difference between two dates}
 \usage{
-diffDate(d1, d2, date.format = MM.DD.YYYY, units = "days",
+diffDate(d1, d2, date.format = "MM.DD.YYYY", units = "days",
   existing.missing.codes = NA, return.missing.code = NA)
 }
+\arguments{
+\item{d1}{first date}
+
+\item{d2}{second date}
+
+\item{date.format}{how to format the resulting date}
+
+\item{units}{the unit of time for which to take the difference. Defaults to "days".}
+
+\item{existing.missing.codes}{missing dates}
+
+\item{return.missing.code}{what to return if there is a missing input}
+}
+\value{
+The difference between two dates \code{d1 - d2} returned in the specified
+unit of time.
+}
 \description{
-Difference between two dates
+Takes the difference between two dates and returns in the specified
+unit of time.
+}
+\details{
+The unit of time can be \code{"days"} (default), \code{"months"}, or \code{"years").}
+}
+\examples{
+## Wrong Order
+diffDate("1992/01/27", "2003/03/21", date.format = "YYYY.MM.DD")
+
+## Later date comes first, subtracts the second date
+diffDate("2003/03/21", "1992/01/27", date.format = "YYYY.MM.DD")
+}
+\author{
+Samuel Leung, Derek Chiu
 }
 
