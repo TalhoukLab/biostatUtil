@@ -1,7 +1,7 @@
 ---
 title: "POLE mutation Meta-Analysis"
 author: "Derek Chiu, Aline Talhouk"
-date: "June 30, 2015"
+date: "July 2, 2015"
 output: 
   word_document: 
     fig_height: 4
@@ -12,6 +12,7 @@ output:
 library(biostatUtil)
 library(meta)
 library(scales)
+library(grid)
 ```
 
 # Introduction
@@ -63,6 +64,7 @@ a <- metagen(effects, se_effects, studlab, sm = "HR", method.tau = "SJ")
 
 ```{r rfs_forest, echo=FALSE, results='hide'}
 forest.meta(a)
+grid.text("Pooled Hazard Ratio for Recurrence-Free Survival", .5, .9)
 dev.copy2pdf(file = "HR_rfs_forest.pdf")
 ```
 
@@ -89,6 +91,7 @@ a <- metagen(effects, se_effects, studlab, sm = "HR", method.tau = "SJ")
 
 ```{r dss_forest, echo=FALSE, results='hide'}
 forest.meta(a)
+grid.text("Pooled Hazard Ratio for Disease-Specific Survival", .5, .9)
 dev.copy2pdf(file = "HR_dss_forest.pdf")
 ```
 
@@ -112,6 +115,7 @@ a <- metagen(effects, se_effects, studlab, sm = "HR", method.tau = "SJ")
 
 ```{r os_forest, echo=FALSE, results='hide'}
 forest.meta(a)
+grid.text("Pooled Hazard Ratio for Overall Survival", .5, .9)
 dev.copy2pdf(file = "HR_os_forest.pdf")
 ```
 
@@ -136,6 +140,7 @@ a <- metagen(effects, se_effects, studlab, sm = "PRAW", method.tau = "SJ")
 
 ```{r fiveyear_forest, echo=FALSE, results='hide', warning=FALSE, fig.width=9}
 forest.meta(a)
+grid.text("Pooled Five-Year Survival Rate", .5, .9)
 dev.copy2pdf(file = "survrate_forest.pdf")
 ```
 
