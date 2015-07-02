@@ -1,7 +1,7 @@
 ---
 title: "POLE mutation Meta-Analysis"
 author: "Derek Chiu, Aline Talhouk"
-date: "June 29, 2015"
+date: "June 30, 2015"
 output: 
   word_document: 
     fig_height: 4
@@ -61,8 +61,9 @@ se_effects <- c(sdFromCI(0.43, 0.13, 1.37)$sd,
 a <- metagen(effects, se_effects, studlab, sm = "HR", method.tau = "SJ")
 ```
 
-```{r rfs_forest, echo=FALSE}
+```{r rfs_forest, echo=FALSE, results='hide'}
 forest.meta(a)
+dev.copy2pdf(file = "HR_rfs_forest.pdf")
 ```
 
 The above figure is a forest plot that summarizes the results of the meta-analysis of progression-free survival. Each study has a reported hazard ratio and a 95% confidence interval, shown as a notch on a horizontal line, respectively. The weights (W) show how much a study contributes to the calculation of the overall pooled hazard ratio, and is illustrated by the size of the square. The weights are computed using the inverse variance method. The standard deviations are computed from the confidence intervals. The weights are directly related to sample size. Two models are used to compute the overall pooled effect: the fixed and random effects models.
@@ -86,8 +87,9 @@ se_effects <- c(sdFromCI(0.19, 0.03, 1.44)$sd,
 a <- metagen(effects, se_effects, studlab, sm = "HR", method.tau = "SJ")
 ```
 
-```{r dss_forest, echo=FALSE}
+```{r dss_forest, echo=FALSE, results='hide'}
 forest.meta(a)
+dev.copy2pdf(file = "HR_dss_forest.pdf")
 ```
 
 From the above forest plot, we see that the pooled hazard ratio for disease-specific survival is `r round(exp(a$TE.fixed), 3)` (p < 0.05). The direction is indicative of a three fold protective effect of *POLE* mutations. Compared to the pooled hazard ratio for recurrence-free survival, the pooled hazard ratio for disease-specific survival is slightly less protective.
@@ -108,8 +110,9 @@ se_effects <- c(sdFromCI(1.06, 0.59, 1.92)$sd,
 a <- metagen(effects, se_effects, studlab, sm = "HR", method.tau = "SJ")
 ```
 
-```{r os_forest, echo=FALSE}
+```{r os_forest, echo=FALSE, results='hide'}
 forest.meta(a)
+dev.copy2pdf(file = "HR_os_forest.pdf")
 ```
 
 From the above forest plot, we see that the pooled hazard ratio for overall survival is `r round(exp(a$TE.fixed), 3)` (p > 0.05), showing a very moderate protective effect for overall survival. The heterogeneity test is not significant, indicating a fixed effect model is adequate.
@@ -131,8 +134,9 @@ se_effects <- c(sqrt(0.9725 * (1 - 0.9725) / 48),
 a <- metagen(effects, se_effects, studlab, sm = "PRAW", method.tau = "SJ")
 ```
 
-```{r fiveyear_forest, echo=FALSE, warning=FALSE, fig.width=9}
+```{r fiveyear_forest, echo=FALSE, results='hide', warning=FALSE, fig.width=9}
 forest.meta(a)
+dev.copy2pdf(file = "survrate_forest.pdf")
 ```
 
 The five-year survival rate is very high for *POLE* mutations pooled at `r percent(round(a$TE.fixed, 3))`. Note that in the TCGA and Meng studies, there were no events reported in the *POLE* mutated group.
