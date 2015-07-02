@@ -7,8 +7,27 @@
 cleanDate(x, original.format, preferred.format, existing.missing.codes = "",
   return.missing.code = NA)
 }
+\arguments{
+\item{x}{a date string or a numeric representation of a date
+(e.g. January 13th, 1991 would be 19910113)}
+
+\item{original.format}{format of input \code{x}}
+
+\item{preferred.format}{format to change \code{x} to}
+
+\item{existing.missing.codes}{missing dates}
+
+\item{return.missing.codes}{what to return if there is a missing input}
+}
+\value{
+A date string cleaned and formatted from the original (unformatted)
+date
+}
 \description{
-Clean dates
+Clean a date and reformat it to another style.
+}
+\examples{
+cleanDate("09/11/1991", original.format = "MM.DD.YYYY", preferred.format = "DD.MM.YYYY")
 }
 \author{
 Samuel Leung
