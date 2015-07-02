@@ -5,7 +5,7 @@
 \title{Clean dates}
 \usage{
 cleanDate(x, original.format, preferred.format, existing.missing.codes = "",
-  return.missing.code = NA)
+  return.missing.code = NA, ...)
 }
 \arguments{
 \item{x}{a date string or a numeric representation of a date
@@ -16,6 +16,8 @@ cleanDate(x, original.format, preferred.format, existing.missing.codes = "",
 \item{preferred.format}{format to change \code{x} to}
 
 \item{existing.missing.codes}{missing dates}
+
+\item{...}{additional arguments to \code{\link{formatDate}}}
 
 \item{return.missing.codes}{what to return if there is a missing input}
 }
@@ -28,8 +30,10 @@ Clean a date and reformat it to another style.
 }
 \examples{
 cleanDate("09/11/1991", original.format = "MM.DD.YYYY", preferred.format = "DD.MM.YYYY")
+cleanDate(11091991, original.format = "DD.MM.YYYY", preferred.format = "YYYY.MMM.DD")
+cleanDate(11091991, original.format = "DD.MM.YYYY", preferred.format = "YYYY.MMM.DD", sep = "-")
 }
 \author{
-Samuel Leung
+Samuel Leung, Derek Chiu
 }
 
