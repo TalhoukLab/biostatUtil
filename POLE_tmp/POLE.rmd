@@ -416,7 +416,7 @@ dat0$POLE=factor(dat0$POLE, levels=c("mutated","wild type"))
 
 dat1=dat0[complete.cases(dat0),]
 
-taos=testInter(dat1,event="OS",use.firth=TRUE)
+taos=testInter(dat1,event="OS")
 printInterModels(taos[[1]],taos[[2]],taos[[3]],"Overall Survival. ")
 pander(ftable(xtabs(~POLE+Rx+OS.sts,data=dat1)),style='rmarkdown')
 ```

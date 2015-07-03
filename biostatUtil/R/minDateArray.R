@@ -1,6 +1,6 @@
 #' Minimum date of an array
 #' @export
-minDateArray <- function(t.arr, date.format = MM.DD.YYYY,
+minDateArray <- function(t.arr, date.format = "MM.DD.YYYY",
                     existing.missing.codes = NA, return.missing.code = NA) {
   t.arr <- t.arr[!is.na(t.arr)]
   if (length(unique(existing.missing.codes

@@ -1,6 +1,6 @@
 #' Maximum of date array
 #' @export
-maxDateArray <- function(t.arr, date.format = MM.DD.YYYY,
+maxDateArray <- function(t.arr, date.format = "MM.DD.YYYY",
                     existing.missing.codes = NA, return.missing.code = NA) {
   t.arr <- t.arr[!is.na(t.arr)]
   if (length(unique(existing.missing.codes
