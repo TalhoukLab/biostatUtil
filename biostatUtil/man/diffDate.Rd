@@ -29,7 +29,7 @@ Takes the difference between two dates and returns in the specified
 unit of time.
 }
 \details{
-The unit of time can be \code{"days"} (default), \code{"months"}, or \code{"years").}
+The unit of time can be \code{"days"} (default), \code{"months"}, or \code{"years"}.
 }
 \examples{
 ## Wrong Order

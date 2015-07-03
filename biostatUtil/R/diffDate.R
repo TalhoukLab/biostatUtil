@@ -3,7 +3,7 @@
 #' Takes the difference between two dates and returns in the specified
 #' unit of time.
 #' 
-#' The unit of time can be \code{"days"} (default), \code{"months"}, or \code{"years").}
+#' The unit of time can be \code{"days"} (default), \code{"months"}, or \code{"years"}.
 #' 
 #' @param d1 first date
 #' @param d2 second date
