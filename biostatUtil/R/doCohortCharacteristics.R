@@ -31,7 +31,11 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
                                     decimal=0, caption=NA, html.table.border=0,
                                     banded.rows=FALSE, css.class.name.odd="odd", 
                                     css.class.name.even="even") {
-  
+kLocalConstantRowColPercentBeginFlag <- "kLocalConstantRowColPercentBeginFlag" 
+kLocalConstantRowColPercentEndFlag <- "kLocalConstantRowColPercentEndFlag" 
+kLocalConstantRowColPercentSepFlag <- "kLocalConstantRowColPercentSepFlag" 
+kLocalConstantItalicBeginFlag <- "kLocalConstantItalicBeginFlag"
+kLocalConstantItalicEndFlag <- "kLocalConstantItalicEndFlag"
 col.th.style <- "border-bottom: 1px solid grey; border-top: 4px double grey; text-align: center; padding-right:10px; padding-right:10px;"
 row.th.style <- "text-align: left; padding-right:10px; padding-right:10px;"
   
@@ -87,7 +91,7 @@ for (i in 1:num.var) {
     
 # Header row for each var
 result.table <- rbind(result.table, c("", rep("", length(marker.categories))))
-result.table.row.names <- c(result.table.row.names, paste("**", var.descriptions[i], "**", sep=""))
+result.table.row.names <- c(result.table.row.names, var.descriptions[i])
 var.name <- var.names[i]
 var.description <- var.descriptions[i]
     
@@ -95,7 +99,7 @@ num.missing.row.header.name <- c()
 if (sum(!is.na(missing.codes.highlight[[var.name]])) > 0) {
       num.missing.row.header.name <- c(num.missing.row.header.name, missing.codes.highlight[[var.name]]) # need double [[]] for missing.codes.highlight because its a list
     }
-num.missing.row.header.name <- c(num.missing.row.header.name, "Missing")
+num.missing.row.header.name <- c(num.missing.row.header.name, "missing")
     
 # input.d.no.missing.var.only DEFINED HERE!!!
 input.d.no.missing.var.only <- input.d[!is.na(input.d[, var.name]) & !input.d[, var.name] %in% missing.codes & !input.d[, var.name] %in% missing.codes.highlight[[var.name]], ]
@@ -300,17 +304,17 @@ for (var.category in var.categories) {
     both={c(total.value, sapply(marker.categories,function(x){
       return(paste(sum(input.d.no.missing.var[, var.name] == var.category & 
                          input.d.no.missing.var[,marker.name] == x),
-                         "<i><br>",
+                         kLocalConstantRowColPercentBeginFlag,
                     ifelse(sum(input.d.no.missing.var[, var.name] == var.category) > 0,
                          round(sum(input.d.no.missing.var[, var.name] == var.category & 
                          input.d.no.missing.var[, marker.name] == x) / 
                          sum(input.d.no.missing.var[,var.name] == var.category) * 100, decimal), 0),
-                         "%<br>",
+                         "%",kLocalConstantRowColPercentSepFlag,
                     ifelse(sum(input.d.no.missing.var[, marker.name] == x) > 0,
                          round(sum(input.d.no.missing.var[, var.name] == var.category & 
                          input.d.no.missing.var[, marker.name] == x) / 
                          sum(input.d.no.missing.var[, marker.name] == x) * 100, decimal), 0),
-                          "%</i>", sep = ""))
+                          "%",kLocalConstantRowColPercentEndFlag, sep = ""))
           })
       )}
     )
@@ -347,7 +351,10 @@ if (show.missing | is.var.continuous[i]&show.missing.continuous) {
   colnames(result.table) <- result.table.col.names
   rownames(result.table) <- result.table.row.names
   
-  # generate html table ...	
+  ### end of "data" generation ###
+  
+  ##################################
+  ### generate html table ...	 ###
   result.table.html <- paste("<table border=",html.table.border,">",ifelse(is.na(caption),"",paste("<caption style='",TABLE.CAPTION.STYLE,"'>",addTableNumber(caption),"</caption>",sep="")),sep="")
   result.table.html <- paste(
     result.table.html,
@@ -411,7 +418,10 @@ if (show.missing | is.var.continuous[i]&show.missing.continuous) {
     
     result.table.html <- paste(
       result.table.html,
-      "<td>",paste(result.table[i,],collapse="</td><td>"),"</td>",
+      "<td>",paste(
+	    gsub(kLocalConstantRowColPercentBeginFlag,"<br><i>",gsub(kLocalConstantRowColPercentEndFlag,"</i>",gsub(kLocalConstantRowColPercentSepFlag,"<br>",result.table[i,]))),
+		collapse="</td><td>"
+      ),"</td>",
       ifelse(
         (var.header.row & do.stats & var.count>0) | i==1, 
         ifelse(i==1,
@@ -437,5 +447,26 @@ if (show.missing | is.var.continuous[i]&show.missing.continuous) {
   }
   
   result.table.html <- paste(result.table.html,"</table>",sep="")
-  return(list("result.table"=result.table, "stat.tests.results"=stat.tests.results, "result.table.html"=result.table.html))
+  ### end of generate html table ###
+  ##################################  
+  
+  ##################################
+  ### generate table for pander  ###
+  result.table.bamboo <- result.table
+  for (i in 1:nrow(result.table.bamboo)) {
+    for (j in 1:ncol(result.table.bamboo)) {
+      result.table.bamboo[i,j] <- gsub(kLocalConstantRowColPercentBeginFlag,"(*",gsub(kLocalConstantRowColPercentEndFlag,"*)",gsub(kLocalConstantRowColPercentSepFlag,"*, *",result.table.bamboo[i,j])))
+	}
+  }
+  for (i in 1:nrow(result.table)) {
+    var.header.row <- FALSE
+    if ( i==1 | sum(result.table[i,]=="",na.rm=TRUE)>1) {
+      # this must be the start of a first category since row contains >1 empty cells (there will be 1 empty cell for any var with no stats test)
+      var.header.row <- TRUE
+      var.count <- var.count+1
+      rownames(result.table.bamboo)[i] <- paste("**",rownames(result.table)[i],"**",sep="") # make it bold
+    }
+  }
+  
+  return(list("result.table"=result.table, "stat.tests.results"=stat.tests.results, "result.table.html"=result.table.html, "result.table.bamboo"=result.table.bamboo))
 }
