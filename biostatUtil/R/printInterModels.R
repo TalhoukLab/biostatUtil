@@ -6,7 +6,7 @@ printInterModels <- function(mod1, mod2, mod3, Capt){
   n.cgroup <- c(4, 3)
   rgroup <- c("Model 1", "Model 2", "Model 3")
   n.rgroup <- c(nrow(mod1), nrow(mod2), nrow(mod3))
-  TAB <- htmlTable(vars, 
+  TAB <- htmlTable::htmlTable(vars, 
                    rowlabel = "Models Considered", 
                    rgroup = rgroup,
                    n.rgroup = n.rgroup, 
