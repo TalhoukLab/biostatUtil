@@ -2,7 +2,7 @@
 title: "POLE Remark Criteria - Additional Analysis"
 output:
   html_document:
-    css: ~/custom.css
+    css: custom.css
   pdf_document: default
   word_document: default
 ---
@@ -40,8 +40,9 @@ require(Gmisc)
 library(survival)
 library(knitcitations)
 library(powerSurvEpi)
+library(biostatUtil)
 source(SETUP_KNITR.R)
-source(DEFINEEVENTDATE.R)
+# source(DEFINEEVENTDATE.R)
 source(SETUP_DB.R) # setup database ... e.g. censoring, remove cases
 
 ```
@@ -55,51 +56,60 @@ Tabulate the proportion of patients receiving different types of initial adjuvan
 source("treatment_trend.R")
 ```
 
-
-
-```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=10, fig.height=6}
-do.treatment.trend.barplot(
-  emdb[!emdb$init.treatment%in%ALL.MISSING.CODES,],
-  title=paste("Adjuvant treatment, whole cohort\n(",sum(emdb$init.treatment%in%ALL.MISSING.CODES)," cases with missing data)",sep=""),
-  legend.space=0.2
+```{r message=FALSE, echo=FALSE, results='hide', fig.keep='all', fig.width=10, fig.height=6}
+doTrtTrendBarplot(
+  emdb[!emdb$init.treatment %in% ALL.MISSING.CODES, ],
+  title = paste0("Adjuvant treatment, whole cohort\n(",
+                sum(emdb$init.treatment%in%ALL.MISSING.CODES),
+                " cases with missing data)"),
+  legend.space = 0.2
 )
-do.treatment.trend.barplot(
-  emdb[!emdb$init.treatment%in%ALL.MISSING.CODES & emdb$POLE.mut.germline.as.missing==VALUE.CODING.MUTATED,],
-  title=paste("Adjuvant treatment, among POLE mutated\n(",sum(emdb$init.treatment[emdb$POLE.mut.germline.as.missing==VALUE.CODING.MUTATED]%in%ALL.MISSING.CODES)," case with missing data)",sep=""),
+
+doTrtTrendBarplot(
+  emdb[!emdb$init.treatment %in% ALL.MISSING.CODES & emdb$POLE.mut.germline.as.missing == VALUE.CODING.MUTATED, ],
+  title = paste0("Adjuvant treatment, among POLE mutated\n(",
+                sum(emdb$init.treatment[emdb$POLE.mut.germline.as.missing == VALUE.CODING.MUTATED] %in% ALL.MISSING.CODES),
+                " case with missing data)"),
   legend.space=0.2
 )
 
 obs.yrs <- 5
-do.survival.trend.barplot(
-  emdb[emdb$POLE.mut.germline.as.missing==VALUE.CODING.MUTATED,],
-  paste(obs.yrs,"-years overall survival, among POLE mutated\n(no missing data)",sep=""), 
+doSurvTrendBarplot(
+  emdb[emdb$POLE.mut.germline.as.missing == VALUE.CODING.MUTATED, ],
+  paste0(obs.yrs, "-years overall survival, among POLE mutated\n(no missing data)"), 
   "os.yrs", 
   "os.sts", 
   "os.event", 
   "dead", 
-  "alive", obs.yrs=obs.yrs, legend.space=0.2)
-do.survival.trend.barplot(
-  emdb[!is.na(emdb$dss.yrs) & emdb$POLE.mut.germline.as.missing==VALUE.CODING.MUTATED,],
-  paste(obs.yrs,"-years disease specific survival, among POLE mutated\n(",sum(is.na(emdb$dss.yrs[emdb$POLE.mut.germline.as.missing==VALUE.CODING.MUTATED]))," case with missing data)",sep=""), 
+  "alive", obs.yrs = obs.yrs, legend.space = 0.2)
+
+doSurvTrendBarplot(
+  emdb[!is.na(emdb$dss.yrs) & emdb$POLE.mut.germline.as.missing == VALUE.CODING.MUTATED, ],
+  paste0(obs.yrs, "-years disease specific survival, among POLE mutated\n(",
+        sum(is.na(emdb$dss.yrs[emdb$POLE.mut.germline.as.missing == VALUE.CODING.MUTATED])),
+        " case with missing data)"), 
   "dss.yrs", 
   "dss.sts", 
   "dss.event", 
   "died of disease", 
-  "died of other cause or alive", obs.yrs=obs.yrs, legend.space=0.2)
-do.survival.trend.barplot(
-  emdb[!is.na(emdb$rfs.yrs) & emdb$POLE.mut.germline.as.missing==VALUE.CODING.MUTATED,],
-  paste(obs.yrs,"-years relapse free survival, among POLE mutated\n(",sum(is.na(emdb$rfs.yrs[emdb$POLE.mut.germline.as.missing==VALUE.CODING.MUTATED]))," cases with missing data)",sep=""), 
+  "died of other cause or alive", obs.yrs = obs.yrs, legend.space = 0.2)
+
+doSurvTrendBarplot(
+  emdb[!is.na(emdb$rfs.yrs) & emdb$POLE.mut.germline.as.missing == VALUE.CODING.MUTATED, ],
+  paste0(obs.yrs,"-years relapse free survival, among POLE mutated\n(",
+        sum(is.na(emdb$rfs.yrs[emdb$POLE.mut.germline.as.missing == VALUE.CODING.MUTATED])),
+        " cases with missing data)"), 
   "rfs.yrs", 
   "rfs.sts", 
   "rfs.event", 
   "relapsed", 
-  "no recurrence", obs.yrs=obs.yrs, legend.space=0.2)
-do.grade.trend.barplot(
-  emdb[emdb$POLE.mut.germline.as.missing==VALUE.CODING.MUTATED,],
-  title=paste("Grade, among POLE mutated\n(no missing data)",sep=""),
-  legend.space=0.2)
-```
+  "no recurrence", obs.yrs = obs.yrs, legend.space = 0.2)
 
+doGrdTrendBarplot(
+  emdb[emdb$POLE.mut.germline.as.missing == VALUE.CODING.MUTATED, ],
+  title = paste0("Grade, among POLE mutated\n(no missing data)"),
+  legend.space = 0.2)
+```
 
 
 #### Item 14 (additional). Show the relation of the marker to standard prognostic variables.
@@ -119,7 +129,6 @@ summary(logit.full)$coefficients
 ```
 
 Stepwise model selection using AIC (R function step() on glm() fit object) ...
-
 ```{r}
 anova(logit.full.reduced,test="LRT")
 ```
@@ -130,7 +139,6 @@ logit.full.firth
 ```
 
 Backward model selection (backward() function from logistf package) ...
-
 ```{r}
 logit.full.firth.reduced
 ```
@@ -142,7 +150,6 @@ summary(logit.full.ex.bmi)$coefficients
 ```
 
 Stepwise model selection using AIC (R function step() on glm() fit object) ...
-
 ```{r}
 anova(logit.full.ex.bmi.reduced,test="LRT")
 ```
@@ -153,7 +160,6 @@ print.logistf.fit(logit.full.ex.bmi.firth)
 ```
 
 Backward model selection (backward() function from logistf package) ...
-
 ```{r}
 logit.full.ex.bmi.firth.reduced
 ```
@@ -169,7 +175,7 @@ logit.full.ex.bmi.firth.reduced
 ```{r}
 # want to see POLE x (stage x age)
 options(table_counter=0)
-pole_vs_stage_x_age <- do.cohort.characteristics(emdb, "POLE.mut.germline.as.missing", "POLE", 
+pole_vs_stage_x_age <- doCohortCharacteristics(emdb, "POLE.mut.germline.as.missing", "POLE", 
   	c("stage_x_age"), 
 		c(FALSE), 
 		c("Stage x age"),
@@ -181,7 +187,7 @@ pole_vs_stage_x_age <- do.cohort.characteristics(emdb, "POLE.mut.germline.as.mis
 		banded.rows=TRUE
 )
 # want to see POLE x (stage x bmi)
-pole_vs_stage_x_bmi <- do.cohort.characteristics(emdb, "POLE.mut.germline.as.missing", "POLE", 
+pole_vs_stage_x_bmi <- doCohortCharacteristics(emdb, "POLE.mut.germline.as.missing", "POLE", 
     c("stage_x_bmi"), 
 		c(FALSE), 
 		c("Stage x BMI"),
@@ -193,7 +199,7 @@ pole_vs_stage_x_bmi <- do.cohort.characteristics(emdb, "POLE.mut.germline.as.mis
 		banded.rows=TRUE
 )
 # want to see POLE x (age x bmi)
-pole_vs_age_x_bmi <- do.cohort.characteristics(emdb, "POLE.mut.germline.as.missing", "POLE", 
+pole_vs_age_x_bmi <- doCohortCharacteristics(emdb, "POLE.mut.germline.as.missing", "POLE", 
     c("age_x_bmi"), 
   	c(FALSE), 
 		c("Age x BMI"),
@@ -205,7 +211,7 @@ pole_vs_age_x_bmi <- do.cohort.characteristics(emdb, "POLE.mut.germline.as.missi
 		banded.rows=TRUE
 )
 # want to see POLE x (stage x age x bmi)
-pole_vs_stage_x_age_x_bmi <- do.cohort.characteristics(emdb, "POLE.mut.germline.as.missing", "POLE", 
+pole_vs_stage_x_age_x_bmi <- doCohortCharacteristics(emdb, "POLE.mut.germline.as.missing", "POLE", 
     c("stage_x_age_x_bmi"), 
   	c(FALSE), 
 		c("Stage x age x BMI"),
@@ -229,10 +235,11 @@ pole_vs_stage_x_age_x_bmi <- do.cohort.characteristics(emdb, "POLE.mut.germline.
 
 ```{r fig.keep='none'}
 source("remark15.R")
+```
 
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
 # width/height = 13/5
-  do.km.plots(
+  doKMPlots(
 		emdb[!emdb$POLE.mut.germline.as.missing%in%ALL.MISSING.CODES & emdb$Tumour.Grade=="Grade 3",],
 		"POLE.mut.germline.as.missing", 
 		"POLE mutation status - grade 3",
@@ -241,7 +248,7 @@ source("remark15.R")
 		conf.int=TRUE, # per missing 2015-01-09 ... wanted confidence interval on KM plots
 		use.aline.plot=TRUE
 	)
-  do.km.plots(
+  doKMPlots(
   	emdb[!emdb$POLE.mut.germline.as.missing%in%ALL.MISSING.CODES & emdb$Tumour.Grade=="Grade 3",],
 		"POLE.mut.germline.as.missing", 
     "POLE mutation status - grade 3",
@@ -250,7 +257,7 @@ source("remark15.R")
 		conf.int=TRUE,
 		use.aline.plot=TRUE
 	)
-  do.km.plots(
+  doKMPlots(
   	emdb[!emdb$POLE.mut.germline.as.missing%in%ALL.MISSING.CODES & emdb$Tumour.Grade=="Grade 3",],
 		"POLE.mut.germline.as.missing", 
 		"POLE mutation status - grade 3",
@@ -261,7 +268,7 @@ source("remark15.R")
 	)
 
 options(table_counter=4)
-uni.cox.pole.g3 <- do.coxph.generic( # a table of univariable cox models of treatment vs. no treatment
+uni.cox.pole.g3 <- doCoxphGeneric( # a table of univariable cox models of treatment vs. no treatment
   	emdb[emdb$Tumour.Grade=="Grade 3",], 
 		c("POLE.mut.germline.as.missing"), 
 		c("POLE mutation status<br>wild type=0/mutated=1"),
@@ -270,7 +277,7 @@ uni.cox.pole.g3 <- do.coxph.generic( # a table of univariable cox models of trea
 		var.ref.groups=c(POLE.REF.GROUP),
 		caption="Univariable analyses of relation of POLE mutation status to OS/DSS/RFS among patients with grade 3 tumors",
 		banded.rows=TRUE)
-multi.cox.summary.g3 <- do.coxph.multivariable( 
+multi.cox.summary.g3 <- doCoxphMultivariable( 
     emdb[emdb$Tumour.Grade=="Grade 3",], 
 	c(
 		"POLE.mut.germline.as.missing",
@@ -296,7 +303,6 @@ multi.cox.summary.g3 <- do.coxph.multivariable(
 	caption=paste("Multivariable analyses of POLE (exclude BMI) among grade 3",sep=""),
 	banded.rows=TRUE
 )
-
 ```
 
 *Please note: (F) indicates that the Firth's penalized maximum likelihood bias reduction method was used to estimate the hazard ratio.*
