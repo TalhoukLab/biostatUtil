@@ -52,10 +52,6 @@ source(SETUP_DB.R) # setup database ... e.g. censoring, remove cases
 #### Treatment Trend
 Tabulate the proportion of patients receiving different types of initial adjuvant treatment and observe any trend changes over the years. 
 
-```{r}
-source("treatment_trend.R")
-```
-
 ```{r message=FALSE, echo=FALSE, results='hide', fig.keep='all', fig.width=10, fig.height=6}
 doTrtTrendBarplot(
   emdb[!emdb$init.treatment %in% ALL.MISSING.CODES, ],
