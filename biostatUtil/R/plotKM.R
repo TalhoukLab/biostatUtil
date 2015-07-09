@@ -20,7 +20,7 @@ plotKM <- function(input.d, input.formula, main.text, xlab.text, ylab.text,
                    grey.scale = FALSE, show.single.test.pos = "default", ...) {
   
   # calculate "obs.survyrs"-yrs survival
-  summary.surv.fit <- summary(survival::survfit(input.formula, data = input.d),
+  summary.surv.fit <- summary(survfit(input.formula, data = input.d),
                               time = obs.survyrs, extend = T)
   
   n.cases <- table(input.d[, deparse(input.formula[[3]])]) # number of cases in each group variable = deparse(input.formula[[3]])
@@ -44,7 +44,7 @@ plotKM <- function(input.d, input.formula, main.text, xlab.text, ylab.text,
   }                   
   
   # summary of survival object to end of followup
-  fit.obj <- survival::survfit(input.formula, data = input.d)		
+  fit.obj <- survfit(input.formula, data = input.d)		
   summary.surv.fit.all <- summary(fit.obj)[['table']]
   
   # NEED TO RESET decrement.count!!!!

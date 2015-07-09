@@ -4,7 +4,7 @@
 \alias{doKMPlotsPOLEInitTrt}
 \title{Make Kaplan-Meier plots with initial treatment}
 \usage{
-doKMPlotsPOLEInitTrt(surv.type, use.aline.plot = FALSE)
+doKMPlotsPOLEInitTrt(surv.type, use.aline.plot = FALSE, ...)
 }
 \description{
 Make Kaplan-Meier plots with initial treatment

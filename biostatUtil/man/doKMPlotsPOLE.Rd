@@ -4,7 +4,7 @@
 \alias{doKMPlotsPOLE}
 \title{Make Kaplan-Meier plots for POLE}
 \usage{
-doKMPlotsPOLE(surv.type, use.aline.plot = FALSE)
+doKMPlotsPOLE(surv.type, use.aline.plot = FALSE, ...)
 }
 \description{
 Make Kaplan-Meier plots for POLE

@@ -58,7 +58,8 @@ doKMPlots <- function(input.d, var.name, var.description, line.color = NULL,
            use.firth = FIRTH.THRESHOLD,
            CI = TRUE,
            subs = NULL,
-           legend = FALSE)	
+           legend = FALSE,
+           ...)	
     }
   } else if (surv.type == "dss") {
     temp.d <- input.d[!is.na(input.d$dss.sts), ]
@@ -106,7 +107,8 @@ doKMPlots <- function(input.d, var.name, var.description, line.color = NULL,
            use.firth = FIRTH.THRESHOLD,
            CI = TRUE,
            subs = NULL,
-           legend = FALSE)	
+           legend = FALSE,
+           ...)	
     }
   } else if (surv.type == "rfs") {
     temp.d <- input.d[!is.na(input.d$rfs.sts) & !is.na(input.d$rfs.yrs), ]
@@ -154,7 +156,8 @@ doKMPlots <- function(input.d, var.name, var.description, line.color = NULL,
            use.firth = FIRTH.THRESHOLD,
            CI = TRUE,
            subs = NULL,
-           legend = FALSE)	
+           legend = FALSE,
+           ...)	
     }
   }
 }
