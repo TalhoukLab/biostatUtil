@@ -2,12 +2,21 @@
 % Please edit documentation in R/minDateArray.R
 \name{minDateArray}
 \alias{minDateArray}
-\title{Minimum date of an array}
+\title{Minimum of date array}
 \usage{
-minDateArray(t.arr, date.format = MM.DD.YYYY, existing.missing.codes = NA,
+minDateArray(t.arr, date.format = "MM.DD.YYYY", existing.missing.codes = NA,
   return.missing.code = NA)
 }
+\arguments{
+\item{t.arr}{array of date strings}
+
+\item{date.format}{how to format the resulting date}
+
+\item{existing.missing.codes}{missing dates}
+
+\item{return.missing.code}{what to return if there is a missing input}
+}
 \description{
-Minimum date of an array
+Finds the minimum (earliest) date in an array of date strings.
 }
 

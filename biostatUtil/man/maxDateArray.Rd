@@ -4,10 +4,19 @@
 \alias{maxDateArray}
 \title{Maximum of date array}
 \usage{
-maxDateArray(t.arr, date.format = MM.DD.YYYY, existing.missing.codes = NA,
+maxDateArray(t.arr, date.format = "MM.DD.YYYY", existing.missing.codes = NA,
   return.missing.code = NA)
 }
+\arguments{
+\item{t.arr}{array of date strings}
+
+\item{date.format}{how to format the resulting date}
+
+\item{existing.missing.codes}{missing dates}
+
+\item{return.missing.code}{what to return if there is a missing input}
+}
 \description{
-Maximum of date array
+Finds the maximum (latest) date in an array of date strings.
 }
 

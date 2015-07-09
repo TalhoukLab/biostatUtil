@@ -11,6 +11,7 @@
 #' @param units the unit of time for which to take the difference. Defaults to "days".
 #' @param existing.missing.codes missing dates
 #' @param return.missing.code what to return if there is a missing input
+#' @param ... additional arguments to \code{formatDate}
 #' @return The difference between two dates \code{d1 - d2} returned in the specified 
 #' unit of time.
 #' @author Samuel Leung, Derek Chiu
@@ -21,9 +22,12 @@
 #' 
 #' ## Later date comes first, subtracts the second date
 #' diffDate("2003/03/21", "1992/01/27", date.format = "YYYY.MM.DD")
+#' 
+#' ## Different separator
+#' diffDate("2003-03-21", "1992-01-27", date.format = "YYYY.MM.DD", sep = "-")
 diffDate <- function(d1, d2, date.format = "MM.DD.YYYY", units = "days",
                              existing.missing.codes = NA,
-                             return.missing.code = NA) {
+                             return.missing.code = NA, ...) {
   if(is.na(d1) | is.na(d2))
     return(NA)
   if (length(unique(existing.missing.codes
@@ -35,11 +39,11 @@ diffDate <- function(d1, d2, date.format = "MM.DD.YYYY", units = "days",
     difftime(
       strptime(cleanDate(d1, date.format, date.format,
                          existing.missing.codes = existing.missing.codes,
-                         return.missing.code = return.missing.code),
+                         return.missing.code = return.missing.code, ...),
                format = getFormat(d1, date.format)),
       strptime(cleanDate(d2, date.format, date.format,
                          existing.missing.codes = existing.missing.codes,
-                         return.missing.code = return.missing.code),
+                         return.missing.code = return.missing.code, ...),
                format = getFormat(d2, date.format)),
       units = ifelse(units %in% c("months", "years"), "days", units)))
   if (units == "months") {

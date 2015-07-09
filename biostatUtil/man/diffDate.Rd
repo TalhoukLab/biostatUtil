@@ -5,7 +5,7 @@
 \title{Difference between two dates}
 \usage{
 diffDate(d1, d2, date.format = "MM.DD.YYYY", units = "days",
-  existing.missing.codes = NA, return.missing.code = NA)
+  existing.missing.codes = NA, return.missing.code = NA, ...)
 }
 \arguments{
 \item{d1}{first date}
@@ -19,6 +19,8 @@ diffDate(d1, d2, date.format = "MM.DD.YYYY", units = "days",
 \item{existing.missing.codes}{missing dates}
 
 \item{return.missing.code}{what to return if there is a missing input}
+
+\item{...}{additional arguments to \code{formatDate}}
 }
 \value{
 The difference between two dates \code{d1 - d2} returned in the specified
@@ -37,6 +39,9 @@ diffDate("1992/01/27", "2003/03/21", date.format = "YYYY.MM.DD")
 
 ## Later date comes first, subtracts the second date
 diffDate("2003/03/21", "1992/01/27", date.format = "YYYY.MM.DD")
+
+## Different separator
+diffDate("2003-03-21", "1992-01-27", date.format = "YYYY.MM.DD", sep = "-")
 }
 \author{
 Samuel Leung, Derek Chiu

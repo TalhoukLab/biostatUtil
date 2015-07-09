@@ -11,6 +11,7 @@
 #' @param units the unit of time for which to take the difference. Defaults to "days".
 #' @param existing.missing.codes missing dates
 #' @param return.missing.code what to return if there is a missing input
+#' @param ... additional arguments to \code{formatDate}
 #' @return Returns 1 if \code{d1 > d2}, -1 if \code{d1 < d2}, and 0 if \code{d1 == d2}.
 #' @author Samuel Leung, Derek Chiu
 #' @export
@@ -18,12 +19,13 @@
 #' compareDate("01/22/1949", "04/13/1950", date.format = "MM.DD.YYYY")
 #' compareDate("04/13/1950", "04/13/1950", date.format = "MM.DD.YYYY")
 #' compareDate("04/13/1959", "04/13/1950", date.format = "MM.DD.YYYY")
+#' compareDate("01-22-1949", "04-13-1950", date.format = "MM.DD.YYYY", sep = "-")
 compareDate <- function(d1, d2, date.format = "MM.DD.YYYY", units = "days",
                         existing.missing.codes = NA,
-                        return.missing.code = NA) {
+                        return.missing.code = NA, ...) {
   difference <- diffDate(d1, d2, date.format = date.format, units = units,
                          existing.missing.codes = existing.missing.codes,
-                         return.missing.code = return.missing.code)
+                         return.missing.code = return.missing.code, ...)
   if (is.na(difference)) {
     return(return.missing.code)
   }
