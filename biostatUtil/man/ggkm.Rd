@@ -2,17 +2,51 @@
 % Please edit documentation in R/ggkm.R
 \name{ggkm}
 \alias{ggkm}
-\title{ggkm}
+\title{Kaplan-Meier Plots using ggplot}
 \usage{
 ggkm(sfit, sfit2 = NULL, table = TRUE, returns = FALSE, marks = TRUE,
-  cols = rainbow(100), shading.colors = c("blue2", "red2", "deepskyblue",
-  "indianred3"), main = "Kaplan-Meier Plot", xlabs = "Time",
+  CI = TRUE, cols = rainbow(100), shading.colors = c("blue2", "red2",
+  "deepskyblue", "indianred3"), main = "Kaplan-Meier Plot", xlabs = "Time",
   ylabs = "Survival Probability", xlims = c(0, max(sfit$time)),
   ylims = c(0, 1), ystratalabs = NULL, ystrataname = NULL, timeby = 5,
-  pval = TRUE, HR = TRUE, use.firth = 1, CI = TRUE, subs = NULL,
-  legend = FALSE, ...)
+  pval = TRUE, HR = TRUE, use.firth = 1, subs = NULL, legend = FALSE,
+  ...)
+}
+\arguments{
+\item{sfit}{an object of class \code{survfit} containing one or more survival curves}
+
+\item{sfit2}{an (optional) second object of class \code{survfit} to compare with \code{sfit}}
+
+\item{table}{logical; if \code{TRUE} (default), the numbers at risk at each time of death is
+shown as a table underneath the plot}
+
+\item{marks}{logical; if \code{TRUE} (default), censoring marks are shown on survival curves}
+
+\item{CI}{logical; if \code{TRUE} (default), confidence bands are drawn for survival curves}
+
+\item{main}{plot title}
+
+\item{xlabs}{horizontal axis label}
+
+\item{ylabs}{vertical axis label}
+
+\item{xlims}{horizontal limits for plot}
+
+\item{ylims}{vertical limits for plot}
+
+\item{ystratalabs}{labels for the strata being compared in \code{survfit}}
+
+\item{ystrataname}{name of the strata}
+
+\item{timeby}{length of time between consecutive time points spanning the entire range of follow-up. Defaults to 5.}
+
+\item{pval}{logical; if \code{TRUE} (default), the logrank test p-value is shown on the plot}
+
+\item{HR}{logical; if \code{TRUE} (default), the estiated hazard ratio and its 95\% confidence interval will be shown}
+
+\item{legend}{logical; if \code{TRUE}, the legend is overlaid on the graph (instead of on the side).}
 }
 \description{
-ggkm
+Produce nicely annotated KM plots using ggplot.
 }
 
