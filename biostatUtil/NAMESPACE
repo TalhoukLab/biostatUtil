@@ -2,7 +2,7 @@
 
 export(Xunivcoxph)
 export(addTableNumber)
-export(addtoDate)
+export(addToDate)
 export(assessSurvTime)
 export(bootMean)
 export(cleanDate)

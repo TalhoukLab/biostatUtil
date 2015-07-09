@@ -13,16 +13,18 @@
 #' @param units the unit of time for which to take the difference. Defaults to "days".
 #' @param existing.missing.codes missing dates
 #' @param return.missing.code what to return if there is a missing input
+#' @param ... additional arguments to \code{formatDate}
 #' @return The new date after adding \code{delta} to \code{org.date}.
 #' @author Samuel Leung
 #' @export
 #' @examples
-#' addtoDate("2014/07/08", 10, date.format = "YYYY.MM.DD")
-#' addtoDate("2014/07/08", 10, date.format = "YYYY.MM.DD", units = "months")
-#' addtoDate("2014/07/08", -10, date.format = "YYYY.MM.DD", units = "years")
-addtoDate <- function(org.date, delta, date.format = "MM.DD.YYYY",
+#' addToDate("2014/07/08", 10, date.format = "YYYY.MM.DD")
+#' addToDate("2014-07-08", 10, date.format = "YYYY.MM.DD", sep = "-")
+#' addToDate("2014/07/08", 10, date.format = "YYYY.MM.DD", units = "months")
+#' addToDate("2014/07/08", -10, date.format = "YYYY.MM.DD", units = "years")
+addToDate <- function(org.date, delta, date.format = "MM.DD.YYYY",
                       units = "days", existing.missing.codes = NA,
-                      return.missing.code = NA) {
+                      return.missing.code = NA, ...) {
   if (is.na(org.date) | is.na(delta)) 
     return(NA)
   if (length(unique(existing.missing.codes
@@ -41,7 +43,7 @@ addtoDate <- function(org.date, delta, date.format = "MM.DD.YYYY",
   return(format(as.Date((as.Date(
     cleanDate(org.date, date.format, date.format,
               existing.missing.codes = existing.missing.codes,
-              return.missing.code = return.missing.code),
+              return.missing.code = return.missing.code, ...),
     format = getFormat(org.date, date.format), origin = DATE.ORIGIN) + delta.in.days),
     origin = DATE.ORIGIN), format = getFormat(org.date, date.format)))
 }
