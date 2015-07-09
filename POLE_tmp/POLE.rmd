@@ -22,7 +22,6 @@ RUN.IN.MARKDOWN <- TRUE  # a flag to indicate that the codes are called from thi
 LIB.DIR <- "R_scripts/"
 SETUP_KNITR.R <- paste0(LIB.DIR, "SetUp_knitr.R")
 SETUP_DB.R <- "SetUp_db.R"
-ED.CSV <- "data/endometrial_n518_2015-05-21.csv"
 DATE.FORMAT <- "%m/%d/%Y"  # this should be R's default date format
 CASE.SELECTION.FLOW.CHART <- "images/remark.png"  # CANNOT TAKE SPACE IN FILE PATH!!!!
 DO.CITATIONS <- FALSE
@@ -31,7 +30,6 @@ options(encoding = "UTF-8", scipen = 999)  # disable scientific notation e.g. in
 ```
 
 ```{r loadnMunge,message=FALSE,echo=FALSE,results='hide',warning=FALSE}
-library(dplyr)
 library(Gmisc)
 library(survival)
 library(knitcitations)
