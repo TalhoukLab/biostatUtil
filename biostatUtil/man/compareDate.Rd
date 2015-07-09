@@ -36,6 +36,7 @@ Calls \code{diffDate} and returns integer values specifying which date is earlie
 compareDate("01/22/1949", "04/13/1950", date.format = "MM.DD.YYYY")
 compareDate("04/13/1950", "04/13/1950", date.format = "MM.DD.YYYY")
 compareDate("04/13/1959", "04/13/1950", date.format = "MM.DD.YYYY")
+compareDate("01-22-1949", "04-13-1950", date.format = "MM.DD.YYYY", sep = "-")
 }
 \author{
 Samuel Leung, Derek Chiu

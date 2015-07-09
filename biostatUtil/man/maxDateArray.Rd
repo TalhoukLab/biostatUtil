@@ -5,18 +5,33 @@
 \title{Maximum of date array}
 \usage{
 maxDateArray(t.arr, date.format = "MM.DD.YYYY", existing.missing.codes = NA,
-  return.missing.code = NA)
+  return.missing.code = NA, ...)
 }
 \arguments{
 \item{t.arr}{array of date strings}
 
-\item{date.format}{how to format the resulting date}
+\item{date.format}{format of the array of dates}
 
 \item{existing.missing.codes}{missing dates}
 
 \item{return.missing.code}{what to return if there is a missing input}
+
+\item{...}{additional arguments to \code{formatDate}}
 }
 \description{
 Finds the maximum (latest) date in an array of date strings.
+}
+\examples{
+many.dates <- c("03/21/1992", "04/21/2013", "10/10/2015")
+maxDateArray(many.dates)
+
+many.dates <- c("2009-03-01", "2010-01-12", "2015-01-11")
+maxDateArray(many.dates, sep = "-")
+
+ties.dates <- c("2009-03-01", "2010-01-12", "2010-01-12")
+maxDateArray(ties.dates, sep = "-")
+}
+\author{
+Samuel Leung, Derek Chiu
 }
 
