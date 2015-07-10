@@ -6,6 +6,12 @@
 \usage{
 getPval(x)
 }
+\arguments{
+\item{x}{a vector or matrix}
+}
+\value{
+the Chi-squared p-value
+}
 \description{
 Get the p-value
 }

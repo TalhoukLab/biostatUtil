@@ -6,6 +6,11 @@
 \usage{
 printCoxMod(cox, Capt)
 }
+\arguments{
+\item{cox}{an object of class \code{coxph}}
+
+\item{Capt}{a caption}
+}
 \description{
 Prints a Cox model output in a nice HTML table
 }

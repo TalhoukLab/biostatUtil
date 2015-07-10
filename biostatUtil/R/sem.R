@@ -1,4 +1,9 @@
 #' Standard error of the mean
+#' 
+#' @param x input vector
+#' @param missing.value values that are missing
+#' @param return.missing.value the value to return where there are missing values
+#' @return The standard error of the mean of \code{x}
 #' @author Samuel Leung
 #' @references http://en.wikipedia.org/wiki/Standard_error
 #' @export

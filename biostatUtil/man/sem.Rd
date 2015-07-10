@@ -6,6 +6,16 @@
 \usage{
 sem(x, missing.value = NA, return.missing.value = NA)
 }
+\arguments{
+\item{x}{input vector}
+
+\item{missing.value}{values that are missing}
+
+\item{return.missing.value}{the value to return where there are missing values}
+}
+\value{
+The standard error of the mean of \code{x}
+}
 \description{
 Standard error of the mean
 }

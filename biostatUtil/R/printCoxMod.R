@@ -1,6 +1,8 @@
 #' Print Cox model output
 #' 
 #' Prints a Cox model output in a nice HTML table
+#' @param cox an object of class \code{coxph}
+#' @param Capt a caption
 #' @author Aline Talhouk
 #' @export
 printCoxMod <- function(cox, Capt) {
