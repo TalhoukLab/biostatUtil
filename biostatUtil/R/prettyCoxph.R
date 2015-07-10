@@ -27,6 +27,7 @@
 #' \item{used.firth}{logical; if \code{TRUE}, Firth's correction was applied
 #' using \code{coxphf}}
 #' @author Samuel Leung, Derek Chiu
+#' @import survival
 #' @export
 prettyCoxph <- function(input.formula, input.d, use.firth = 1,
                         check.ph = FALSE,

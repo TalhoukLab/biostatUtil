@@ -6,7 +6,7 @@
 \usage{
 doBoxplotAmongSubtypes(input.d, data.description, biomarker.var.name,
   biomarker.name, subtype.var.name, subtype.name, pch = 4, jitter = 0.1,
-  digits = 2, ...)
+  digits = 2, boot.mean, ...)
 }
 \description{
 Do a boxplot among subtypes

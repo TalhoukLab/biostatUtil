@@ -19,6 +19,7 @@
 #' @param pval logical; if \code{TRUE} (default), the logrank test p-value is shown on the plot
 #' @param HR logical; if \code{TRUE} (default), the estiated hazard ratio and its 95\% confidence interval will be shown
 #' @param legend logical; if \code{TRUE}, the legend is overlaid on the graph (instead of on the side).
+#' @import ggplot2
 # use.firth = 1 - the percentage of censored cases before using the Firth method for Cox regression
 #               - setting use.firth to 1 (default) means NEVER use Firth
 #               - setting use.firth to -1 means ALWAYS use Firth 
@@ -35,8 +36,8 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = FALSE,
                  timeby = 5, pval = TRUE, HR = TRUE,
                  use.firth = 1, subs = NULL, legend = FALSE, ...) {
   line.y.increment <- 0.05 # for annotate(), to indicate the much y should be incremented for each line
-  require(ggplot2)
-  # sorting the use of subsetting ----
+
+    # sorting the use of subsetting ----
   times <- seq(0, max(sfit$time), by = timeby)
   if (is.null(subs)) {
     subs1 <- 1:length(levels(summary(sfit)$strata))

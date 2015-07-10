@@ -3,7 +3,7 @@
 doBoxplotAmongSubtypes <- function(input.d, data.description,
                                    biomarker.var.name, biomarker.name,
                                    subtype.var.name, subtype.name, pch = 4,
-                                   jitter = 0.1, digits = 2, ...) {
+                                   jitter = 0.1, digits = 2, boot.mean, ...) {
   temp.d <- input.d[
     (!is.na(input.d[, biomarker.var.name])) & 
       (!is.na(input.d[, subtype.var.name])), ]

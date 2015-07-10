@@ -15,7 +15,7 @@ Depends:
     R (>= 3.2.0), ggplot2
 Imports:
     boot, psy, gdata, Hmisc, coxphf, pander, htmlTable, gridExtra, plyr,
-    survival, knitr
+    knitr, survival
 Suggests:
     logistf, meta
 License: CC0
