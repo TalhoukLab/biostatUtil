@@ -10,7 +10,7 @@
 #' @return A table with column percentages added.
 #' @author Aline Talhouk, Derek Chiu
 #' @export
-colPercent <- function(t, pretty.text = FALSE, keep = FALSE, digits = 4) {
+colPercent <- function(t, pretty.text = FALSE, keep = TRUE, digits = 4) {
   pcts <- apply(t, 2, function(x) x / sum(x))
   if (pretty.text) {
     pcts <- apply(pcts * 100, c(1, 2),

@@ -17,9 +17,9 @@ cleanDate(x, original.format, preferred.format, existing.missing.codes = "",
 
 \item{existing.missing.codes}{missing dates}
 
-\item{...}{additional arguments to \code{\link{formatDate}}}
+\item{return.missing.code}{what to return if there is a missing input}
 
-\item{return.missing.codes}{what to return if there is a missing input}
+\item{...}{additional arguments to \code{\link{formatDate}}}
 }
 \value{
 A date string cleaned and formatted from the original (unformatted)

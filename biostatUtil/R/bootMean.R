@@ -28,7 +28,7 @@
 #' set.seed(344)
 #' s <- ifelse(rexp(100, 0.5) < 1, NA, rexp(100, 0.5))
 #' bootMean(s)  # doesn't work
-#' bootMean(s, na.rm = T)
+#' bootMean(s, na.rm = TRUE)
 bootMean <- function(x, num.boot = 1000, conf.level = 0.95, random.seed = 12, ...){
   set.seed(random.seed)
   obs.mean <- mean(x, ...)

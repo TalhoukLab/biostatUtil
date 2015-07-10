@@ -13,7 +13,7 @@
 #' @export
 #' @examples 
 #' simpleCap("clear cell")
-#' simplecap("high grade serous carcinoma")
+#' simpleCap("high grade serous carcinoma")
 #' simpleCap("ovarian cancer", first.only = TRUE)
 simpleCap <- function(x, first.only = FALSE) {
   if (!first.only) {

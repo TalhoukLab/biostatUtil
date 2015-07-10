@@ -23,7 +23,7 @@ To capitalize only the first word, use \code{first.only = TRUE}.
 }
 \examples{
 simpleCap("clear cell")
-simplecap("high grade serous carcinoma")
+simpleCap("high grade serous carcinoma")
 simpleCap("ovarian cancer", first.only = TRUE)
 }
 \author{

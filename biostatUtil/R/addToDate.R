@@ -29,7 +29,8 @@ addToDate <- function(org.date, delta, date.format = "MM.DD.YYYY",
     return(NA)
   if (length(unique(existing.missing.codes
                     [!is.na(existing.missing.codes)])) > 0 &
-      (org.date %in% existing.missing.codes | delta %in% existing.missing.codes))
+      (org.date %in% existing.missing.codes |
+       delta %in% existing.missing.codes))
     return(return.missing.code)
   delta <- as.numeric(delta)
   delta.in.days <- delta
@@ -40,10 +41,11 @@ addToDate <- function(org.date, delta, date.format = "MM.DD.YYYY",
   } else if (units == "years") {
     delta.in.days <- delta * NUM.DAYS.IN.YEAR
   }
-  return(format(as.Date((as.Date(
+  return(format(as.Date(as.Date(
     cleanDate(org.date, date.format, date.format,
               existing.missing.codes = existing.missing.codes,
               return.missing.code = return.missing.code, ...),
-    format = getFormat(org.date, date.format), origin = DATE.ORIGIN) + delta.in.days),
-    origin = DATE.ORIGIN), format = getFormat(org.date, date.format)))
+    format = getFormat(org.date, date.format), origin = DATE.ORIGIN) +
+      delta.in.days, origin = DATE.ORIGIN),
+    format = getFormat(org.date, date.format)))
 }

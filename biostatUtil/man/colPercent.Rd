@@ -4,7 +4,7 @@
 \alias{colPercent}
 \title{Column percentages}
 \usage{
-colPercent(t, pretty.text = FALSE, keep = FALSE, digits = 4)
+colPercent(t, pretty.text = FALSE, keep = TRUE, digits = 4)
 }
 \arguments{
 \item{t}{a matrix}

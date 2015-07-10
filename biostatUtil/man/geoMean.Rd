@@ -27,7 +27,7 @@ y <- rexp(100, rate = 0.3)
 y[3] <- NA
 geoMean(x)
 geoMean(y)
-geoMean(y, na.rm = T)
+geoMean(y, na.rm = TRUE)
 }
 \author{
 Samuel Leung, Derek Chiu

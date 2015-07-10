@@ -24,7 +24,7 @@
 #'                 sdFromCI(0.18, 0.01, 3.11)$sd,
 #'                 sdFromCI(0.12, 0.01, 2.11)$sd,
 #'                 sdFromCI(0.37, 0.09, 1.54)$sd)
-#' metagen(effects, se_effects, studlab = studlab, sm = "HR", comb.fixed = T)
+#' metagen(effects, se_effects, studlab = studlab, sm = "HR", comb.fixed = TRUE)
 sdFromCI <- function(HR, lower.limit, upper.limit, alpha = 0.05) {
   sdlnHR <- sqrt(((log(upper.limit) - log(lower.limit)) /
                     (2 * qnorm(1 - alpha / 2)))^2)

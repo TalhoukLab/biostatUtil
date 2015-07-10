@@ -1,36 +1,52 @@
 #' Generate cohort characteristics
-#' @param input.d: The dataframe containing the data
-#' @param marker.name: The variable that you want to split into different columns
-#' @param var.names: The variables that you want the statistics for
-#' @param is.var.continuous: Vector of length equal to the length of var.names with 1 indicating a continuous variable and 0 otherwise (this should be inferred in the function)
-#' @param var.descriptions: Vector of strings to describe the variables as they are to appear in the table
-#' @param marker.value.labels.tolower: Indicator as to whether to put marker value labels to lower case
-#' @param show.missing: an indicator to whether to show missing values
-#' @param show.missing.continuous: if set to FALSE and show.missing==FALSE, will not show the number of missing cases for continuous variables,  otherwise, it shows the number of missing for continuous variables even if show.missing==FALSE.
-#' @param do.droplevels: drop categories of unobserved levels set to TRUE
-#' @param show.percent:  defaults to "both" which shows both rows and columns other possible values: "column", "row".
-#' @param stat.tests
-#' @param stat.test.column.header: The name to show on the header defaults to "association/correlation test"
-#' @param round.digits.p.value: the number of digits to round the P values
-#' @param num.boot.for.ci: the number of bootstrap samples for any bootstrap method that may be used
-#' @param missing.codes.highlight: default to NULL this indicates whether we wanted the missing values broken down down or lumped together.
+#' @param input.d The dataframe containing the data
+#' @param marker.name The variable that you want to split into different columns
+#' @param marker.description The description for the variable(s) to split
+#' @param var.names The variables that you want the statistics for
+#' @param is.var.continuous Vector of length equal to the length of var.names with 1 indicating a continuous variable and 0 otherwise (this should be inferred in the function)
+#' @param var.descriptions Vector of strings to describe the variables as they are to appear in the table
+#' @param marker.value.labels.tolower Indicator as to whether to put marker value labels to lower case
+#' @param show.missing an indicator to whether to show missing values
+#' @param show.missing.continuous if set to FALSE and show.missing==FALSE, will not show the number of missing cases for continuous variables,  otherwise, it shows the number of missing for continuous variables even if show.missing==FALSE.
+#' @param do.droplevels drop categories of unobserved levels set to TRUE
+#' @param show.percent defaults to "both" which shows both rows and columns other possible values: "column", "row".
+#' @param stat.tests statistical test to perform
+#' @param stat.test.column.header The name to show on the header defaults to "association/correlation test"
+#' @param round.digits.p.value The number of digits to round the P values
+#' @param num.boot.for.ci the number of bootstrap samples for any bootstrap method that may be used
+#' @param missing.codes.highlight default to NULL this indicates whether we wanted the missing values broken down down or lumped together.
 #' @param missing.codes a vector to indicate how missing values are coded, default is c("N/A","","Unk")
 #' @param decimal Set to 0
-#' @param caption is the caption to use for the Table
-
+#' @param caption caption to use for the Table
+#' @param html.table.border the border type to use for html tables
+#' @param banded.rows If \code{TRUE}, rows have alternating shading colour
+#' @param css.class.name.odd Used to set the row colour for odd rows
+#' @param css.class.name.even Used to set the row colour for even rows
+#' @return A table with statistics reported for multiple variables, such as
+#' mean, median, and range for continuous variables and proportions and 
+#' percentages for categorical variables. Relevant association and correlation
+#' tests are performed as well.
+#' @author Aline Talhouk
 #' @export
-
-doCohortCharacteristics <- function(input.d, marker.name, marker.description, 
-                                    var.names, is.var.continuous, var.descriptions, 
-                                    marker.value.labels.tolower = TRUE, show.missing = TRUE,
-                                    show.missing.continuous = TRUE, do.droplevels = TRUE, 
-                                    show.percent = "both", stat.tests = NULL, 
-                                    stat.test.column.header = "association/correlation test", 
-                                    round.digits.p.value = 4, num.boot.for.ci = 1000, 
-                                    missing.codes.highlight=NULL, missing.codes=c("N/A","","Unk"),
-                                    decimal=0, caption=NA, html.table.border=0,
-                                    banded.rows=FALSE, css.class.name.odd="odd", 
-                                    css.class.name.even="even") {
+doCohortCharacteristics <- function(input.d, marker.name, marker.description,
+                                    var.names, is.var.continuous, 
+                                    var.descriptions,
+                                    marker.value.labels.tolower = TRUE,
+                                    show.missing = TRUE,
+                                    show.missing.continuous = TRUE,
+                                    do.droplevels = TRUE, 
+                                    show.percent = "both", stat.tests = NULL,
+                                    stat.test.column.header = 
+                                      "association/correlation test", 
+                                    round.digits.p.value = 4,
+                                    num.boot.for.ci = 1000, 
+                                    missing.codes.highlight = NULL,
+                                    missing.codes = c("N/A", "", "Unk"),
+                                    decimal = 0, caption = NA,
+                                    html.table.border = 0,
+                                    banded.rows = FALSE,
+                                    css.class.name.odd = "odd", 
+                                    css.class.name.even = "even") {
 kLocalConstantRowColPercentBeginFlag <- "kLocalConstantRowColPercentBeginFlag" 
 kLocalConstantRowColPercentEndFlag <- "kLocalConstantRowColPercentEndFlag" 
 kLocalConstantRowColPercentSepFlag <- "kLocalConstantRowColPercentSepFlag" 

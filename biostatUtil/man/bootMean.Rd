@@ -42,7 +42,7 @@ bootMean(rnorm(100, 4, 3), conf.level = 0.90)
 set.seed(344)
 s <- ifelse(rexp(100, 0.5) < 1, NA, rexp(100, 0.5))
 bootMean(s)  # doesn't work
-bootMean(s, na.rm = T)
+bootMean(s, na.rm = TRUE)
 }
 \author{
 Aline Talhouk, Derek Chiu

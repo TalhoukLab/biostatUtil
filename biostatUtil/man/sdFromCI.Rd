@@ -37,7 +37,7 @@ se_effects <- c(sdFromCI(0.43, 0.13, 1.37)$sd,
                 sdFromCI(0.18, 0.01, 3.11)$sd,
                 sdFromCI(0.12, 0.01, 2.11)$sd,
                 sdFromCI(0.37, 0.09, 1.54)$sd)
-metagen(effects, se_effects, studlab = studlab, sm = "HR", comb.fixed = T)
+metagen(effects, se_effects, studlab = studlab, sm = "HR", comb.fixed = TRUE)
 }
 \author{
 Aline Talhouk, Derek Chiu

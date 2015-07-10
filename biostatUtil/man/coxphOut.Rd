@@ -4,13 +4,15 @@
 \alias{coxphOut}
 \title{Nice output from Cox regression object}
 \usage{
-coxphOut(object, coefnames = NULL, level = 0.95, digits = 2)
+coxphOut(object, coefnames = NULL, conf.level = 0.95, digits = 2)
 }
 \arguments{
 \item{object}{a model fit object returned from \code{coxph} or \code{coxphf}}
 
 \item{coefnames}{a vector of labels for the coefficient names returned by the fit.
 \code{NULL} by default, uses original coefficient names.}
+
+\item{conf.level}{confidence level for hazard ratio. Defaults to 95\%.}
 
 \item{digits}{number of digits to round to}
 }

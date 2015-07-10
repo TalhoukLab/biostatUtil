@@ -17,7 +17,7 @@
 #' y[3] <- NA
 #' geoMean(x)
 #' geoMean(y)
-#' geoMean(y, na.rm = T)
+#' geoMean(y, na.rm = TRUE)
 geoMean <- function(x, na.rm = FALSE) {
   if (na.rm) {
     x <- x[!is.na(x)]

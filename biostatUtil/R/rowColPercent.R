@@ -18,9 +18,10 @@
 #' rowColPercent(mat)
 #' rowColPercent(mat, pretty.text = TRUE)
 rowColPercent <- function(t, ...) {
-  row.p <- rowPercent(t, ...)
-  col.p <- colPercent(t, ...)
+  row.p <- rowPercent(t, keep = FALSE, ...)
+  col.p <- colPercent(t, keep = FALSE, ...)
   result <- as.matrix(gdata::interleave(t, row.p, col.p))
+  rownames(result)[1:nrow(result) %% 3 == 1] <- c(1:nrow(t))
   rownames(result)[1:nrow(result) %% 3 == 2] <- "Row %"
   rownames(result)[1:nrow(result) %% 3 == 0] <- "Col %"
   return(result)

@@ -7,7 +7,7 @@
 #' @param original.format format of input \code{x}
 #' @param preferred.format format to change \code{x} to
 #' @param existing.missing.codes missing dates
-#' @param return.missing.codes what to return if there is a missing input
+#' @param return.missing.code what to return if there is a missing input
 #' @param ... additional arguments to \code{\link{formatDate}}
 #' @return A date string cleaned and formatted from the original (unformatted)
 #' date
