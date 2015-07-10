@@ -28,7 +28,7 @@ coxphOut <- function (object, coefnames = NULL, conf.level = 0.95, digits = 2) {
   cox <- object
   Coef <- cox$coef
   se <- sqrt(diag(cox$var))
-  CI <- exp(confint(cox, level = level))
+  CI <- exp(confint(cox, level = conf.level))
   n <- cox$n
   events <- ifelse("coxphf" %in% class(cox),
                    sum(cox$y[, "status"]), cox$nevent)
