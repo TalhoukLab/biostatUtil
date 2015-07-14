@@ -18,7 +18,8 @@ doCoxphMultivariable <- function(
   html.table.border=0,
   banded.rows=FALSE,
   css.class.name.odd="odd",
-  css.class.name.even="even",...) {
+  css.class.name.even="even",
+  ...) {
   
   col.th.style <- COL.TH.STYLE
   row.th.style <- ROW.TH.STYLE
@@ -151,6 +152,10 @@ doCoxphMultivariable <- function(
     }
   }
   result.table.html <- paste0(result.table.html, "</table>")
+  options("table_counter" = options()$table_counter - 1)
+  result.table <- pander::pandoc.table.return(
+    result.table, caption = paste0("*", addTableNumber(caption), "*"), split.table = 300)
+  
   return(list("result.table" = result.table,
               "result.table.html" = result.table.html,
               "cox.stats" = cox.stats.output))
