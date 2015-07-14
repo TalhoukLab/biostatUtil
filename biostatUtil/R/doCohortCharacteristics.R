@@ -22,6 +22,7 @@
 #' @param banded.rows If \code{TRUE}, rows have alternating shading colour
 #' @param css.class.name.odd Used to set the row colour for odd rows
 #' @param css.class.name.even Used to set the row colour for even rows
+#' @param ... additional arguments to \code{pander}
 #' @return A table with statistics reported for multiple variables, such as
 #' mean, median, and range for continuous variables and proportions and 
 #' percentages for categorical variables. Relevant association and correlation
@@ -46,7 +47,8 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
                                     html.table.border = 0,
                                     banded.rows = FALSE,
                                     css.class.name.odd = "odd", 
-                                    css.class.name.even = "even") {
+                                    css.class.name.even = "even",
+                                    ...) {
 kLocalConstantRowColPercentBeginFlag <- "kLocalConstantRowColPercentBeginFlag" 
 kLocalConstantRowColPercentEndFlag <- "kLocalConstantRowColPercentEndFlag" 
 kLocalConstantRowColPercentSepFlag <- "kLocalConstantRowColPercentSepFlag" 
@@ -465,24 +467,32 @@ if (show.missing | is.var.continuous[i]&show.missing.continuous) {
   result.table.html <- paste(result.table.html,"</table>",sep="")
   ### end of generate html table ###
   ##################################  
-  
+  options("table_counter" = options()$table_counter - 1)
   ##################################
   ### generate table for pander  ###
   result.table.bamboo <- result.table
   for (i in 1:nrow(result.table.bamboo)) {
     for (j in 1:ncol(result.table.bamboo)) {
-      result.table.bamboo[i,j] <- gsub(kLocalConstantRowColPercentBeginFlag,"(*",gsub(kLocalConstantRowColPercentEndFlag,"*)",gsub(kLocalConstantRowColPercentSepFlag,"*, *",result.table.bamboo[i,j])))
-	}
+      result.table.bamboo[i, j] <- gsub(kLocalConstantRowColPercentBeginFlag, "(*",
+                                        gsub(kLocalConstantRowColPercentEndFlag, "*)",
+                                             gsub(kLocalConstantRowColPercentSepFlag,
+                                                  "*, *", result.table.bamboo[i, j])))
+    }
   }
   for (i in 1:nrow(result.table)) {
     var.header.row <- FALSE
-    if ( i==1 | sum(result.table[i,]=="",na.rm=TRUE)>1) {
+    if (i == 1 | sum(result.table[i, ] == "", na.rm = TRUE) > 1) {
       # this must be the start of a first category since row contains >1 empty cells (there will be 1 empty cell for any var with no stats test)
       var.header.row <- TRUE
-      var.count <- var.count+1
-      rownames(result.table.bamboo)[i] <- paste("**",rownames(result.table)[i],"**",sep="") # make it bold
+      var.count <- var.count + 1
+      rownames(result.table.bamboo)[i] <- paste0("**", rownames(result.table)[i], "**") # make it bold
     }
   }
+  result.table.bamboo <- pander::pandoc.table.return(result.table.bamboo, ...,
+                                             caption = paste0("*", addTableNumber(caption), "*"))
   
-  return(list("result.table"=result.table, "stat.tests.results"=stat.tests.results, "result.table.html"=result.table.html, "result.table.bamboo"=result.table.bamboo))
+  return(list("result.table" = result.table,
+              "stat.tests.results" = stat.tests.results,
+              "result.table.html" = result.table.html,
+              "result.table.bamboo" =  result.table.bamboo))
 }

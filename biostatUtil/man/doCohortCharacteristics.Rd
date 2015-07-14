@@ -12,7 +12,7 @@ doCohortCharacteristics(input.d, marker.name, marker.description, var.names,
   round.digits.p.value = 4, num.boot.for.ci = 1000,
   missing.codes.highlight = NULL, missing.codes = c("N/A", "", "Unk"),
   decimal = 0, caption = NA, html.table.border = 0, banded.rows = FALSE,
-  css.class.name.odd = "odd", css.class.name.even = "even")
+  css.class.name.odd = "odd", css.class.name.even = "even", ...)
 }
 \arguments{
 \item{input.d}{The dataframe containing the data}
@@ -60,6 +60,8 @@ doCohortCharacteristics(input.d, marker.name, marker.description, var.names,
 \item{css.class.name.odd}{Used to set the row colour for odd rows}
 
 \item{css.class.name.even}{Used to set the row colour for even rows}
+
+\item{...}{additional arguments to \code{pander}}
 }
 \value{
 A table with statistics reported for multiple variables, such as
