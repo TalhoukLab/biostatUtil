@@ -18,7 +18,8 @@ doCoxphGeneric <- function(
   html.table.border = 0,
   banded.rows = FALSE,
   css.class.name.odd = "odd",
-  css.class.name.even = "even") {
+  css.class.name.even = "even",
+  ...) {
   
   col.th.style <- COL.TH.STYLE
   row.th.style <- ROW.TH.STYLE
@@ -91,34 +92,60 @@ doCoxphGeneric <- function(
       )
     }
   }
-  result.table.col.names <- c("# of events / n","Hazard Ratio (95% CI)",paste(ifelse(stat.test=="logtest","LRT ",""),"P-value",sep=""))
+  result.table.col.names <- c("# of events / n", "Hazard Ratio (95% CI)",
+                              paste0(ifelse(stat.test == "logtest", "LRT ", ""),
+                                    "P-value"))
   colnames(result.table) <- result.table.col.names
   result.table.row.names <- c()
   for (i in 1:length(var.names)) {
-    result.table.row.names <- c(result.table.row.names,paste(var.name,paste("-",surv.descriptions,sep=""),sep=""))
+    result.table.row.names <- c(result.table.row.names, paste0(var.name, paste0("-", surv.descriptions)))
   }
   rownames(result.table) <- result.table.row.names
   
   # generate html table ...
-  result.table.html <- paste("<table border=",html.table.border,">",ifelse(is.na(caption),"",paste("<caption style='",TABLE.CAPTION.STYLE,"'>",addTableNumber(caption),"</caption>",sep="")),sep="")
-  result.table.html <- paste(result.table.html,"<tr><th style='",col.th.style,"' colspan=2></th><th style='",col.th.style,"'>",paste(result.table.col.names,collapse=paste("</th><th style='",col.th.style,"'>",sep="")),"</th></tr>",sep="")
+  result.table.html <- paste0("<table border=", html.table.border, ">",
+                             ifelse(is.na(caption), "",
+                                    paste0("<caption style='",
+                                           TABLE.CAPTION.STYLE, "'>",
+                                           addTableNumber(caption),
+                                           "</caption>")))
+  result.table.html <- paste0(result.table.html, "<tr><th style='",
+                              col.th.style, "' colspan=2></th><th style='",
+                              col.th.style, "'>",
+                              paste(result.table.col.names,
+                                    collapse = paste0("</th><th style='",
+                                                      col.th.style, "'>")),
+                              "</th></tr>")
   # print values
   i <- 1
   num.row.per.cat <- length(var.names.surv.time)
-  while(i<=nrow(result.table)) {
+  while (i <= nrow(result.table) ) {
     is.first.row <- TRUE
-    tr.class <- ifelse(banded.rows,paste(" class='",ifelse((floor(i/num.surv.endpoints)+1)%%2==0,css.class.name.even,css.class.name.odd),"'",sep=""),"")
-    result.table.html <- paste(result.table.html,"<tr",tr.class,"><th style='",row.th.style,"' rowspan=",num.row.per.cat,">",var.descriptions[floor((i-1)/num.surv.endpoints)+1],"</th>",sep="")
+    tr.class <- ifelse(banded.rows,
+                       paste0(" class='",
+                             ifelse((floor(i / num.surv.endpoints) + 1) %%
+                                      2 == 0, css.class.name.even,
+                                    css.class.name.odd), "'"), "")
+    result.table.html <- paste0(result.table.html, "<tr", tr.class,
+                                "><th style='", row.th.style, "' rowspan=",
+                                num.row.per.cat, ">",
+                                var.descriptions[floor((i - 1) / num.surv.endpoints) + 1], "</th>")
     for (surv.description in surv.descriptions) {
-      result.table.html <- paste(
+      result.table.html <- paste0(
         result.table.html,
-        ifelse(is.first.row,"",paste("<tr",tr.class,">",sep="")),
-        "<th style='",row.th.style,"'>",surv.description,"</th><td>",paste(result.table[i,],collapse="</td><td>"),"</td></tr>",sep=""
-      )
+        ifelse(is.first.row, "", paste0("<tr", tr.class, ">")),
+        "<th style='", row.th.style, "'>", surv.description, "</th><td>",
+        paste(result.table[i, ], collapse = "</td><td>"), "</td></tr>")
+      
       is.first.row <- FALSE # if run any time after the first row, must not be the first row any more
-      i<-i+1
+      i <- i + 1
     }
   }
-  result.table.html <- paste(result.table.html,"</table>",sep="")
-  return(list("result.table"=result.table, "result.table.html"=result.table.html))
+  result.table.html <- paste0(result.table.html, "</table>")
+  options("table_counter" = options()$table_counter - 1)
+  result.table <- pander::pandoc.table.return(
+    result.table, caption = paste0("*", addTableNumber(caption), "*"), ...)
+  
+  return(list("result.table" = result.table,
+              "result.table.html" = result.table.html))
 }
