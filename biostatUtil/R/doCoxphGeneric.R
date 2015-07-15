@@ -170,12 +170,12 @@ doCoxphGeneric <- function(
         rep("",result.table.ncol),
         result.table.bamboo[result.table.bamboo.base.index:nrow(result.table.bamboo),])
     }
-    rownames(result.table.bamboo)[result.table.bamboo.base.index] <- var.descriptions[var.count]
+    rownames(result.table.bamboo)[result.table.bamboo.base.index] <- paste("**",var.descriptions[var.count],"**",sep="")
     rownames(result.table.bamboo)[result.table.bamboo.base.index+c(1:3)] <- surv.descriptions
   }
   options("table_counter" = options()$table_counter - 1)
   result.table.bamboo <- pander::pandoc.table.return(
-    result.table.bamboo, caption = paste0("*", addTableNumber(caption), "*"), split.table=split.table, ...)
+    result.table.bamboo, caption = paste0("*", addTableNumber(caption), "*"), emphasize.rownames = FALSE, split.table=split.table, ...)
   result.table.bamboo <- gsub(kLocalConstantHrSepFlag,"; ",result.table.bamboo)
   ### end of result.table.bamboo ###
 
