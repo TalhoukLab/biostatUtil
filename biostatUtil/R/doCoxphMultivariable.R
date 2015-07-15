@@ -174,6 +174,9 @@ doCoxphMultivariable <- function(
     rownames(result.table.bamboo)[result.table.bamboo.base.index] <- paste("**",surv.descriptions[i],"**",sep="")
     rownames(result.table.bamboo)[result.table.bamboo.base.index+c(1:num.var)] <- var.descriptions
   }
+  ## subscript syntax for pandoc
+  result.table.bamboo <- gsub(result.table.bamboo, pattern = "<sup>|</sup>", replacement = "^")
+  
   options("table_counter" = options()$table_counter - 1)
   result.table.bamboo <- pander::pandoc.table.return(
       result.table.bamboo, caption = paste0("*", addTableNumber(caption), "*"), emphasize.rownames = FALSE, split.table=split.table, ...)
