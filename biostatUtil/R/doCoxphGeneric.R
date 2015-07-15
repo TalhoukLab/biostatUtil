@@ -158,10 +158,10 @@ doCoxphGeneric <- function(
   
   ### generate word-friendly table via pander i.e. result.table.bamboo ... ###
   result.table.bamboo <- result.table
+  result.table.ncol <- ncol(result.table)
   # want to add empty rows for var description
   for (var.count in 1:length(var.names)) {  
     result.table.bamboo.base.index <- 1 + (var.count-1)*4
-    result.table.ncol <- ncol(result.table)
     if (var.count==1) {
       result.table.bamboo <- rbind(rep("",result.table.ncol),result.table.bamboo)
     } else {

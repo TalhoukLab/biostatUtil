@@ -18,8 +18,11 @@ doCoxphMultivariable <- function(
   html.table.border=0,
   banded.rows=FALSE,
   css.class.name.odd="odd",
-  css.class.name.even="even",...) {
-  
+  css.class.name.even="even",
+  split.table=300, # set default for pander
+  ...) {
+  kLocalConstantHrSepFlag <- "kLocalConstantHrSepFlag" # separates the hazard ratio estimates   
+
   col.th.style <- COL.TH.STYLE
   row.th.style <- ROW.TH.STYLE
   row.td.style.for.multi.cox <- ROW.TD.STYLE.FOR.MULTI.COX
@@ -101,7 +104,7 @@ doCoxphMultivariable <- function(
             sprintf("%.2f",round(as.numeric(cox.stats$output[cox.stats.output.indexes,3]),2)),")",
             ifelse(cox.stats$used.firth,firth.caption,""),
             sep=""
-          ),collapse="<br>"),
+          ),collapse=kLocalConstantHrSepFlag),
           sprintf(paste("%.",round.digits.p.value,"f",sep=""),round(as.numeric(p.value),digits=round.digits.p.value))) # waldtest for Wald test, logtest for likelihood ratio test
       )
       
@@ -117,7 +120,7 @@ doCoxphMultivariable <- function(
   }
   rownames(result.table) <- result.table.row.names
   
-  # generate html table ...
+  ### generate html table ... ###
   result.table.html <- paste("<table border=",html.table.border,">",ifelse(is.na(caption),"",paste("<caption style='",TABLE.CAPTION.STYLE,"'>",addTableNumber(caption),"</caption>",sep="")),sep="")
   result.table.html <- paste(result.table.html,"<tr><th style='",col.th.style,"' colspan=2></th><th style='",col.th.style,"'>",paste(result.table.col.names,collapse=paste("</th><th style='",col.th.style,"'>",sep="")),"</th></tr>",sep="")
   # print values
@@ -143,7 +146,7 @@ doCoxphMultivariable <- function(
           ),
           ""
         ),
-        "</td><td style='",row.td.style.for.multi.cox,"'>",paste(result.table[i,2:3],collapse=paste("</td><td style='",row.td.style.for.multi.cox,"'>"),sep=""),"</td></tr>",
+        "</td><td style='",row.td.style.for.multi.cox,"'>",paste(gsub(kLocalConstantHrSepFlag,"<br>",result.table[i,2:3]),collapse=paste("</td><td style='",row.td.style.for.multi.cox,"'>"),sep=""),"</td></tr>",
         sep=""
       )
       is.first.row <- FALSE # if run any time after the first row, must not be the first row any more
@@ -151,7 +154,38 @@ doCoxphMultivariable <- function(
     }
   }
   result.table.html <- paste0(result.table.html, "</table>")
+  ### end of generate html table ###
+
+  ### generate word-friendly table via pander i.e. result.table.bamboo ... ###
+  result.table.bamboo <- result.table
+  result.table.ncol <- ncol(result.table)
+  num.surv <- length(surv.descriptions) # number of survival end points
+  num.var <- length(var.descriptions) # number of variables
+  for (i in 1:num.surv) {
+    result.table.bamboo.base.index <- 1 + (i-1)*(num.var+1)
+    if (i==1) {
+      result.table.bamboo <- rbind(rep("",result.table.ncol),result.table.bamboo)
+    } else {
+      result.table.bamboo <- rbind(
+          result.table.bamboo[1:(result.table.bamboo.base.index-1),],
+          rep("",result.table.ncol),
+          result.table.bamboo[result.table.bamboo.base.index:nrow(result.table.bamboo),])
+    }
+    rownames(result.table.bamboo)[result.table.bamboo.base.index] <- paste("**",surv.descriptions[i],"**",sep="")
+    rownames(result.table.bamboo)[result.table.bamboo.base.index+c(1:num.var)] <- var.descriptions
+  }
+  options("table_counter" = options()$table_counter - 1)
+  result.table.bamboo <- pander::pandoc.table.return(
+      result.table.bamboo, caption = paste0("*", addTableNumber(caption), "*"), emphasize.rownames = FALSE, split.table=split.table, ...)
+  result.table.bamboo <- gsub(kLocalConstantHrSepFlag,"; ",result.table.bamboo)
+  ### end of result.table.bamboo ###  
+
+  ### clean result.table ###
+  result.table <- gsub(kLocalConstantHrSepFlag,", ",result.table)
+  ### end of clean result.table ###
+  
   return(list("result.table" = result.table,
               "result.table.html" = result.table.html,
+              "result.table.bamboo" = result.table.bamboo,
               "cox.stats" = cox.stats.output))
 }
