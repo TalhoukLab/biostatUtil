@@ -497,16 +497,16 @@ if (show.missing | is.var.continuous[i]&show.missing.continuous) {
       if (i>1) {
         if (do.stats) {
           result.table.bamboo[i,num.col.in.result.table.bamboo] <- 
-            gsub(kLocalConstantNewLineFlag,", ",
-            gsub(kLocalConstantStatTestBeginFlag,": ",stat.tests.results[var.count]))
+              gsub(kLocalConstantNewLineFlag,", ",
+                  gsub(kLocalConstantStatTestBeginFlag,": ",stat.tests.results[var.count]))
         }
         var.count <- var.count+1
       }
     }
   }
-  result.table.bamboo <- pander::pandoc.table.return(result.table.bamboo, ...,
-                                             caption = paste0("*", addTableNumber(caption), "*"))
-  
+  result.table.bamboo <- pander::pandoc.table.return(result.table.bamboo, emphasize.rownames = FALSE, ...,
+                                             caption = paste0("*", addTableNumber(caption), "*"))                                     
+                                           
   ##############################################################################
   ### remove the indicator flags e.g. kLocalConstantRowColPercentEndFlag     ###
   ### from result.table so that it can be viewed in R by others without so   ###
