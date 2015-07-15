@@ -36,11 +36,11 @@ plotKMDetail <- function(input.data, surv.formula, main.text, xlab.text,
       file.name.extension <- tolower(substr(file.name,
                                             file.name.len - 2, file.name.len))
       if (file.name.extension == "pdf") {
-        cairo_pdf(file = file.name, width = file.width, height = file.height)  # good for unicode character in e.g. line.name
+        cairo_pdf(filename = file.name, width = file.width, height = file.height)  # good for unicode character in e.g. line.name
       } else if (file.name.extension %in% c("wmf", "emf", "wmz", "emz")) {
-        win.metafile(file = file.name, width = file.width, height = file.height)	
+        win.metafile(filename = file.name, width = file.width, height = file.height)	
       } else if (file.name.extension %in% c("tif")) {  # does not with with tiff since only check last three character!!!
-        tiff(file = file.name, width = file.width * 100, height = file.height * 100)
+        tiff(filename = file.name, width = file.width * 100, height = file.height * 100)
       } else {
         # unknown extension ... do nothing
         file.name <- "no.file"
