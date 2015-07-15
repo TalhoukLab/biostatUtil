@@ -12,7 +12,7 @@ doCoxphMultivariable(input.d, var.names, var.descriptions,
   "Unk"), use.firth = 1, firth.caption = FIRTH.CAPTION,
   stat.test = "waldtest", round.digits.p.value = 4, caption = NA,
   html.table.border = 0, banded.rows = FALSE, css.class.name.odd = "odd",
-  css.class.name.even = "even", ...)
+  css.class.name.even = "even", split.table = 300, ...)
 }
 \description{
 coxph model multivariable

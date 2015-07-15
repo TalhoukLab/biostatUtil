@@ -103,6 +103,6 @@ setupKnitr <- function(fw = 8, fh = 6) {
   
   # Adding the figure number is a little tricky when the format is roman
   getNextFigureNo <- function() as.character(as.roman(as.numeric(options("figure_counter"))))
-  panderOptions('table.style', 'rmarkdown')
+  pander::panderOptions('table.style', 'rmarkdown')
   
 }
