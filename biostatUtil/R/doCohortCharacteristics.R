@@ -16,7 +16,7 @@
 #' @param num.boot.for.ci the number of bootstrap samples for any bootstrap method that may be used
 #' @param missing.codes.highlight default to NULL this indicates whether we wanted the missing values broken down down or lumped together.
 #' @param missing.codes a vector to indicate how missing values are coded, default is c("N/A","","Unk")
-#' @param decimal Set to 0
+#' @param decimal number of decimal places to show for aggregate numbers such as proportions or averages; default to 0 
 #' @param caption caption to use for the Table
 #' @param html.table.border the border type to use for html tables
 #' @param banded.rows If \code{TRUE}, rows have alternating shading colour
@@ -92,7 +92,7 @@ if (marker.value.labels.tolower) {
 result.table.row.names <- total.label
 result.table <- c(paste(nrow(input.d)," (100%)", sep = ""),
     sapply(marker.categories, function(x){
-      return(paste(sum(input.d.no.missing[, marker.name] == x), " (", round(sum(input.d.no.missing[, marker.name] == x) / nrow(input.d.no.missing) * 100, decimal), "%)", sep = ""))
+      return(paste(sum(input.d.no.missing[, marker.name] == x), " (", format(round(sum(input.d.no.missing[, marker.name] == x) / nrow(input.d.no.missing) * 100, decimal),nsmall=decimal), "%)", sep = ""))
       })
   )
 
@@ -178,8 +178,8 @@ switch (stat.tests[i],
  
 # Assemble Continuous Results     
 result.table <- rbind(result.table, # Add the mean
-                  c(paste(round(mean(input.d.no.missing.var.only[, var.name]), decimal),
-                          round(sem( input.d.no.missing.var.only[, var.name]), decimal),
+                  c(paste(format(round(mean(input.d.no.missing.var.only[, var.name]), decimal),nsmall=decimal),
+                          format(round(sem( input.d.no.missing.var.only[, var.name]), decimal),nsmall=decimal),
                               sep=" &#177; "), sapply(marker.categories,function(x){
                               temp.d <- input.d.no.missing.var[input.d.no.missing.var[,marker.name] == x,
                                                                var.name]
@@ -187,49 +187,49 @@ result.table <- rbind(result.table, # Add the mean
                                   return(MISSING.EXPLICIT)
                                 } else {
                                   return(paste(
-                                    round(mean(temp.d), decimal),
-                                    round(sem( temp.d), decimal),											
+                                    format(round(mean(temp.d), decimal),nsmall=decimal),
+                                    format(round(sem( temp.d), decimal),nsmall=decimal),											
                                     sep=" &#177; "
                                   ))		
                                 }
                               })
                             ),
                     c( # Add the median
-                      round(median(input.d.no.missing.var.only[,var.name]), decimal), 
+                      format(round(median(input.d.no.missing.var.only[,var.name]), decimal),nsmall=decimal), 
                         sapply(marker.categories, function(x){
                         temp.d <- input.d.no.missing.var[input.d.no.missing.var[, marker.name] == x, 
                                                          var.name]
                                 if (length(temp.d) == 0){
                                   return(MISSING.EXPLICIT)
                                 } else {
-                                  return(round(median(temp.d), decimal))
+                                  return(format(round(median(temp.d), decimal),nsmall=decimal))
                                 }
                               })
                             ),
                     c( # Add inter quartile range
-                    paste(round(quantile(input.d.no.missing.var.only[, var.name], c(0.25,0.75)),
-                                decimal), collapse = " to "), 
+                    paste(format(round(quantile(input.d.no.missing.var.only[, var.name], c(0.25,0.75)),
+                                decimal),nsmall=decimal), collapse = " to "), 
                       sapply(marker.categories,function(x){
                         temp.d <- input.d.no.missing.var[input.d.no.missing.var[, marker.name] == x,
                                                          var.name]
                                 if (length(temp.d) == 0){
                                   return(MISSING.EXPLICIT)
                                 } else {
-                                  return(paste(round(quantile(temp.d,c(0.25,0.75)), decimal),
+                                  return(paste(format(round(quantile(temp.d,c(0.25,0.75)), decimal),nsmall=decimal),
                                                collapse = " to "))		
                                 }
                               })
                     ),
                     c( # Add range
-                      paste(round(range(input.d.no.missing.var.only[, var.name]),
-                                  decimal), collapse = " to "), 
+                      paste(format(round(range(input.d.no.missing.var.only[, var.name]),
+                                  decimal),nsmall=decimal), collapse = " to "), 
                       sapply(marker.categories,function(x){
                         temp.d <- input.d.no.missing.var[input.d.no.missing.var[, marker.name] == x,
                                                          var.name]
                         if (length(temp.d) == 0){
                           return(MISSING.EXPLICIT)
                         } else {
-                          return(paste(round(range(temp.d), decimal),
+                          return(paste(format(round(range(temp.d), decimal),nsmall=decimal),
                                        collapse = " to "))		
                         }
                       }))
@@ -297,17 +297,17 @@ if (!is.factor(input.d.no.missing.var[, var.name]) | !is.factor(input.d.no.missi
       
 for (var.category in var.categories) {
         total.value <- paste(sum(input.d.no.missing.var.only[, var.name] == var.category), " (",
-          round(sum(input.d.no.missing.var.only[, var.name] == var.category) / 
-                  nrow(input.d.no.missing.var.only) * 100, decimal), "%)",sep = "")
+          format(round(sum(input.d.no.missing.var.only[, var.name] == var.category) / 
+                  nrow(input.d.no.missing.var.only) * 100, decimal),nsmall=decimal), "%)",sep = "")
         result.table <- rbind(result.table,
     switch(show.percent,
     row={c(total.value, sapply(marker.categories, function(x){
     return(paste(sum(input.d.no.missing.var[, var.name] == var.category & 
                        input.d.no.missing.var[,marker.name] == x), " (",
                  ifelse(sum(input.d.no.missing.var[, var.name] == var.category) > 0,
-                        round(sum(input.d.no.missing.var[, var.name] == var.category & 
+                        format(round(sum(input.d.no.missing.var[, var.name] == var.category & 
                           input.d.no.missing.var[, marker.name] == x) / 
-                            sum(input.d.no.missing.var[, var.name] == x) * 100, decimal),
+                            sum(input.d.no.missing.var[, var.name] == x) * 100, decimal),nsmall=decimal),
                             0), 
                  "%)", sep = ""))
       })
@@ -316,9 +316,9 @@ for (var.category in var.categories) {
       return(paste(sum(input.d.no.missing.var[, var.name] == var.category & 
                          input.d.no.missing.var[, marker.name] == x), " (",
                    ifelse(sum(input.d.no.missing.var[, marker.name] == x) > 0,
-                          round(sum(input.d.no.missing.var[, var.name] == var.category & 
+                          format(round(sum(input.d.no.missing.var[, var.name] == var.category & 
                           input.d.no.missing.var[, marker.name] == x) / 
-                          sum(input.d.no.missing.var[, marker.name] == x) * 100, decimal), 0),
+                          sum(input.d.no.missing.var[, marker.name] == x) * 100, decimal),nsmall=decimal), 0),
                 "%)", sep = ""))
     })
     )},
@@ -327,14 +327,14 @@ for (var.category in var.categories) {
                          input.d.no.missing.var[,marker.name] == x),
                          kLocalConstantRowColPercentBeginFlag,
                     ifelse(sum(input.d.no.missing.var[, var.name] == var.category) > 0,
-                         round(sum(input.d.no.missing.var[, var.name] == var.category & 
+                         format(round(sum(input.d.no.missing.var[, var.name] == var.category & 
                          input.d.no.missing.var[, marker.name] == x) / 
-                         sum(input.d.no.missing.var[,var.name] == var.category) * 100, decimal), 0),
+                         sum(input.d.no.missing.var[,var.name] == var.category) * 100, decimal),nsmall=decimal), 0),
                          "%",kLocalConstantRowColPercentSepFlag,
                     ifelse(sum(input.d.no.missing.var[, marker.name] == x) > 0,
-                         round(sum(input.d.no.missing.var[, var.name] == var.category & 
+                         format(round(sum(input.d.no.missing.var[, var.name] == var.category & 
                          input.d.no.missing.var[, marker.name] == x) / 
-                         sum(input.d.no.missing.var[, marker.name] == x) * 100, decimal), 0),
+                         sum(input.d.no.missing.var[, marker.name] == x) * 100, decimal),nsmall=decimal), 0),
                           "%",kLocalConstantRowColPercentEndFlag, sep = ""))
           })
       )}
