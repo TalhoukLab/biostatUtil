@@ -52,6 +52,8 @@ kLocalConstantRowColPercentEndFlag <- "kLocalConstantRowColPercentEndFlag"
 kLocalConstantRowColPercentSepFlag <- "kLocalConstantRowColPercentSepFlag" 
 kLocalConstantItalicBeginFlag <- "kLocalConstantItalicBeginFlag"
 kLocalConstantItalicEndFlag <- "kLocalConstantItalicEndFlag"
+kLocalConstantStatTestBeginFlag <- "kLocalConstantStatTestBeginFlag"
+kLocalConstantNewLineFlag <- "kLocalConstantNewLineFlag"
 col.th.style <- "border-bottom: 1px solid grey; border-top: 4px double grey; text-align: center; padding-right:10px; padding-right:10px;"
 row.th.style <- "text-align: left; padding-right:10px; padding-right:10px;"
   
@@ -148,20 +150,20 @@ switch (stat.tests[i],
  spearman={spearman.result <- cor.test(input.d.no.missing.var[, var.name], 
                           as.numeric(input.d.no.missing.var[, marker.name]),
                           method="spearman")
-          stat.test.result <- paste( "Spearman correlation<br>",
+          stat.test.result <- paste( "Spearman correlation",kLocalConstantStatTestBeginFlag,
                     "rho = ", round(spearman.result$estimate,2),
-                    "<br>P = ", sprintf(paste("%.", round.digits.p.value, "f",
+                    kLocalConstantNewLineFlag,"P = ", sprintf(paste("%.", round.digits.p.value, "f",
                     sep=""), round(spearman.result$p.value, digits = round.digits.p.value)), sep = "")
           },
  kruskal={kruskal.result <- kruskal.test(input.d.no.missing.var[, var.name] ~ 
                                            as.numeric(input.d.no.missing.var[, marker.name]))
-          stat.test.result <- paste("Kruskal-Wallis rank sum test<br>", "<br>P = ", 
+          stat.test.result <- paste("Kruskal-Wallis rank sum test",kLocalConstantStatTestBeginFlag, kLocalConstantNewLineFlag,"P = ", 
                     sprintf(paste("%.", round.digits.p.value, "f", sep = ""), 
                             round(kruskal.result$p.value, digits = round.digits.p.value)), sep = "")
           },
  wilcox={wilcox.result <- wilcox.test(input.d.no.missing.var[, var.name] ~ 
                                         as.numeric(input.d.no.missing.var[, marker.name]))
-          stat.test.result <- paste("Wilcoxon rank sum test<br>", "P = ",
+          stat.test.result <- paste("Wilcoxon rank sum test",kLocalConstantStatTestBeginFlag, "P = ",
                     sprintf(paste("%.",round.digits.p.value, "f",sep = ""),
                             round(wilcox.result$p.value,digits = round.digits.p.value)),sep = ""
                   )
@@ -242,20 +244,20 @@ stat.test.result <- NA
 if (do.stats) {switch (stat.tests[i],
       kendall = {kendall.result <- cor.test(as.numeric(input.d.no.missing.var[, var.name]),
                                   as.numeric(input.d.no.missing.var[, marker.name]), method = "kendall")
-                stat.test.result <- paste("Kendall correlation<br>",
+                stat.test.result <- paste("Kendall correlation",kLocalConstantStatTestBeginFlag,
                                   "tau = ", round(kendall.result$estimate, 2),
-                                  "<br>P = ", sprintf(paste("%.", round.digits.p.value, "f", sep = ""),
+                                  kLocalConstantNewLineFlag,"P = ", sprintf(paste("%.", round.digits.p.value, "f", sep = ""),
                                  round(kendall.result$p.value, digits = round.digits.p.value)), sep= "" )
                 },
       chisq = {chisq.result <- chisq.test(table(input.d.no.missing.var[, var.name],
                     input.d.no.missing.var[, marker.name]))
-              stat.test.result <- paste("Chi-square test<br>",
+              stat.test.result <- paste("Chi-square test",kLocalConstantStatTestBeginFlag,
                                   "P = ", sprintf(paste("%.", round.digits.p.value, "f", sep = ""),
                             round(chisq.result$p.value, digits = round.digits.p.value)), sep = "")
                 },
       fisher = {fisher.result <- fisher.test(table(input.d.no.missing.var[, var.name],
                     input.d.no.missing.var[, marker.name]), workspace = 2e6)
-                  stat.test.result <- paste("Fisher's exact test<br>", "P = ", 
+                  stat.test.result <- paste("Fisher's exact test",kLocalConstantStatTestBeginFlag, "P = ", 
                             sprintf(paste("%.", round.digits.p.value, "f", sep = ""),
                             round(fisher.result$p.value,digits=round.digits.p.value)), sep = "")
                 },
@@ -453,7 +455,7 @@ if (show.missing | is.var.continuous[i]&show.missing.continuous) {
                      length(names(table(           input.d.no.missing.var.only[!is.na(input.d.no.missing.var.only[,var.name]) & !input.d.no.missing.var.only[,var.name]%in%c(missing.codes,missing.codes.highlight[[var.name]]),var.name] )))
                    ))
                  ),
-                 ">",stat.tests.results[var.count],"</td>",
+                 ">",gsub(kLocalConstantNewLineFlag,"<br>",gsub(kLocalConstantStatTestBeginFlag,"<br>",stat.tests.results[var.count])),"</td>",
                  sep=""
                )
         ),
@@ -474,14 +476,46 @@ if (show.missing | is.var.continuous[i]&show.missing.continuous) {
       result.table.bamboo[i,j] <- gsub(kLocalConstantRowColPercentBeginFlag,"(*",gsub(kLocalConstantRowColPercentEndFlag,"*)",gsub(kLocalConstantRowColPercentSepFlag,"*, *",result.table.bamboo[i,j])))
 	}
   }
+  num.col.in.result.table.bamboo <- ncol(result.table.bamboo)
+  if (do.stats) { # add stat column
+    result.table.bamboo <- cbind(result.table.bamboo,"")
+    num.col.in.result.table.bamboo <- num.col.in.result.table.bamboo + 1
+    colnames(result.table.bamboo)[num.col.in.result.table.bamboo] <- stat.test.column.header 
+  }
+  var.count <- 1
   for (i in 1:nrow(result.table)) {
     var.header.row <- FALSE
     if ( i==1 | sum(result.table[i,]=="",na.rm=TRUE)>1) {
       # this must be the start of a first category since row contains >1 empty cells (there will be 1 empty cell for any var with no stats test)
       var.header.row <- TRUE
-      var.count <- var.count+1
       rownames(result.table.bamboo)[i] <- paste("**",rownames(result.table)[i],"**",sep="") # make it bold
+      if (i>1) {
+        if (do.stats) {
+          result.table.bamboo[i,num.col.in.result.table.bamboo] <- 
+            gsub(kLocalConstantNewLineFlag,", ",
+            gsub(kLocalConstantStatTestBeginFlag,": ",stat.tests.results[var.count]))
+        }
+        var.count <- var.count+1
+      }
     }
+  }
+  
+  ##############################################################################
+  ### remove the indicator flags e.g. kLocalConstantRowColPercentEndFlag     ###
+  ### from result.table so that it can be viewed in R by others without so   ###
+  ### many clutter.                                                          ###
+  ##############################################################################
+  for (i in 1:nrow(result.table)) {
+    for (j in 1:ncol(result.table)) {
+      result.table[i,j] <- gsub(
+        kLocalConstantRowColPercentBeginFlag,"(",
+        gsub(kLocalConstantRowColPercentEndFlag,")",
+        gsub(kLocalConstantRowColPercentSepFlag,", ",            
+            result.table[i,j])))
+    }
+  }
+  for (i in 1:length(stat.tests.results)) {
+    stat.tests.results[i] <- gsub(kLocalConstantNewLineFlag,", ",gsub(kLocalConstantStatTestBeginFlag,": ",stat.tests.results[i]))
   }
   
   return(list("result.table"=result.table, "stat.tests.results"=stat.tests.results, "result.table.html"=result.table.html, "result.table.bamboo"=result.table.bamboo))
