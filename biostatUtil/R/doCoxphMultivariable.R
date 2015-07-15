@@ -181,6 +181,9 @@ doCoxphMultivariable <- function(
   result.table.bamboo <- pander::pandoc.table.return(
       result.table.bamboo, caption = paste0("*", addTableNumber(caption), "*"), emphasize.rownames = FALSE, split.table=split.table, ...)
   result.table.bamboo <- gsub(kLocalConstantHrSepFlag,"; ",result.table.bamboo)
+  
+  ## line break syntax for pandoc
+  result.table.bamboo <- gsub(x = result.table.bamboo, pattern = "<br>", replacement = "\\\\\n")
   ### end of result.table.bamboo ###  
 
   ### clean result.table ###
