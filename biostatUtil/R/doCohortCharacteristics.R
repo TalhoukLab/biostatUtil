@@ -48,6 +48,7 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
                                     banded.rows = FALSE,
                                     css.class.name.odd = "odd", 
                                     css.class.name.even = "even",
+                                    split.table=200, # set default for pander
                                     ...) {
 kLocalConstantRowColPercentBeginFlag <- "kLocalConstantRowColPercentBeginFlag" 
 kLocalConstantRowColPercentEndFlag <- "kLocalConstantRowColPercentEndFlag" 
@@ -504,7 +505,7 @@ if (show.missing | is.var.continuous[i]&show.missing.continuous) {
       }
     }
   }
-  result.table.bamboo <- pander::pandoc.table.return(result.table.bamboo, emphasize.rownames = FALSE, ...,
+  result.table.bamboo <- pander::pandoc.table.return(result.table.bamboo, emphasize.rownames = FALSE, split.table=split.table, ...,
                                              caption = paste0("*", addTableNumber(caption), "*"))                                     
                                            
   ##############################################################################
