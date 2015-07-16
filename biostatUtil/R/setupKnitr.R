@@ -1,21 +1,22 @@
 #' Setup knitr
+#' 
+#' @param fw figure width (default = 8)
+#' @param fh figure height (default = 6)
 #' @export
 setupKnitr <- function(fw = 8, fh = 6) {
   # Don't set knitr options outside knitr
   if ("package:knitr" %in% search()){
-    # Set some basic options. You usually do not
-    # want your code, messages, warnings etc
-    # to show in your actual manuscript
-    opts_chunk$set(warning=FALSE,message=FALSE,echo=FALSE, dpi=96, fig.width=fw, fig.height=fh, dev="png", dev.args=list(type="cairo"),  error=FALSE, cache=FALSE)
-    # Change to dev="postscript" if you want the EPS-files
-    # for submitting. Also remove the dev.args() as the postscript
-    # doesn't accept the type="cairo" argument.
+    # Set some basic options. You usually do not want your code, messages, warnings etc. to show in your actual manuscript
+    opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE, dpi = 96,
+                   fig.width = fw, fig.height = fh, dev = "png",
+                   dev.args = list(type = "cairo"), error = FALSE, cache = FALSE)
+    # Change to dev = "postscript" if you want the EPS-files for submitting.
+    # Also remove the dev.args() as the postscript doesn't accept the type = "cairo" argument.
     
     # Evaluate the figure caption after the plot
-    opts_knit$set(eval.after='fig.cap')
+    opts_knit$set(eval.after = 'fig.cap')
     
-    # Avoid including base64_images - this only
-    # works with the .RProfile setup
+    # Avoid including base64_images - this only works with the .RProfile setup
     options(base64_images = "none")
     
     # Add a figure counter function
@@ -27,27 +28,26 @@ setupKnitr <- function(fw = 8, fh = 6) {
       fig.cap <- knitr:::.img.cap(options)
       
       # Style and additional options that should be included in the img tag
-      style=c("display: block",
-              sprintf("margin: %s;",
-                      switch(options$fig.align,
-                             left = 'auto auto auto 0',
-                             center = 'auto',
-                             right = 'auto 0 auto auto')))
-      # Certain arguments may not belong in style,
-      # for instance the width and height are usually
-      # outside if the do not have a unit specified
-      addon_args = ""
+      style <- c("display: block", sprintf("margin: %s;",
+                                          switch(options$fig.align,
+                                                 left = 'auto auto auto 0',
+                                                 center = 'auto',
+                                                 right = 'auto 0 auto auto')))
+      # Certain arguments may not belong in style, for instance the width and
+      # height are usually outside if they do not have a unit specified
+      addon_args <- ""
       
       # This is perhaps a little overly complicated prepared
       # with the loop but it allows for a more out.parameters if necessary
-      if (any(grepl("^out.(height|width)", names(options)))){
+      if (any(grepl("^out.(height|width)", names(options)))) {
         on <- names(options)[grep("^out.(height|width)", names(options))]
         for(out_name in on){
           dimName <- substr(out_name, 5, nchar(out_name))
           if (grepl("[0-9]+(em|px|%|pt|pc|in|cm|mm)", out_name))
-            style=append(style, paste0(dimName, ": ", options[[out_name]]))
+            style <- append(style, paste0(dimName, ": ", options[[out_name]]))
           else if (length(options$out.width) > 0)
-            addon_args = paste0(addon_args, dimName, "='", options[[out_name]], "'")
+            addon_args <- paste0(addon_args, dimName, "='",
+                                 options[[out_name]], "'")
         }
       }
       
@@ -72,37 +72,23 @@ setupKnitr <- function(fw = 8, fh = 6) {
       }
       
       # Put it all together
-      paste0("<figure><img src='", fig_fn, "'",
-             " ", addon_args,
-             paste0(" style='", paste(style, collapse="; "), "'"),
-             ">",
+      paste0("<figure><img src='", fig_fn, "'", " ", addon_args,
+             paste0(" style='", paste(style, collapse = "; "), "'"), ">",
              "<figcaption>", fig_number_txt, fig.cap, "</figcaption></figure>")
     })
-    
   }
+  
   knitr::opts_chunk$set(
-    message=FALSE,
-    warning=FALSE,
-    echo=FALSE,
-    dpi=96,
-    fig.width=fw, fig.height=fh, # Default figure widths
-    dev="png", dev.args=list(type="cairo"), # The png device
-    # Change to dev="postscript" if you want the EPS-files
-    # for submitting. Also remove the dev.args() as the postscript
-    # doesn't accept the type="cairo" argument.
-    error=FALSE
-  )
+    message = FALSE, warning = FALSE,
+    echo = FALSE, dpi = 96, fig.width = fw, fig.height = fh,
+    dev = "png", dev.args = list(type = "cairo"), error = FALSE)
   
-  # Use the table counter that the htmlTable() provides
-  options(table_counter = TRUE)
-  
-  # Use the figure counter that we declare below
-  options(figure_counter = TRUE)
-  # Use roman letters (I, II, III, etc) for figures
-  options(figure_counter_roman = TRUE)
+  options(table_counter = TRUE)  # Use the table counter that the htmlTable() provides
+  options(figure_counter = TRUE)  # Use the figure counter that we declare below
+  options(figure_counter_roman = TRUE)  # Use roman letters (I, II, III, etc) for figures
   
   # Adding the figure number is a little tricky when the format is roman
-  getNextFigureNo <- function() as.character(as.roman(as.numeric(options("figure_counter"))))
+  getNextFigureNo <- function() as.character(as.roman(
+    as.numeric(options("figure_counter"))))
   pander::panderOptions('table.style', 'rmarkdown')
-  
 }

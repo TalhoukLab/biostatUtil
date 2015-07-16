@@ -6,6 +6,11 @@
 \usage{
 setupKnitr(fw = 8, fh = 6)
 }
+\arguments{
+\item{fw}{figure width (default = 8)}
+
+\item{fh}{figure height (default = 6)}
+}
 \description{
 Setup knitr
 }
