@@ -38,7 +38,7 @@ plotKMDetail <- function(input.data, surv.formula, main.text, xlab.text,
       if (file.name.extension == "pdf") {
         cairo_pdf(filename = file.name, width = file.width, height = file.height)  # good for unicode character in e.g. line.name
       } else if (file.name.extension %in% c("wmf", "emf", "wmz", "emz")) {
-        win.metafile(filename = file.name, width = file.width, height = file.height)	
+        png(filename = file.name, width = file.width, height = file.height)	
       } else if (file.name.extension %in% c("tif")) {  # does not with with tiff since only check last three character!!!
         tiff(filename = file.name, width = file.width * 100, height = file.height * 100)
       } else {
