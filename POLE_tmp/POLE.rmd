@@ -19,8 +19,6 @@ r_ver <- paste(info$R.version$major, info$R.version$minor, sep = ".")
 
 ```{r input_constants, message=FALSE,echo=FALSE,warning=FALSE,results='hide'}
 RUN.IN.MARKDOWN <- TRUE  # a flag to indicate that the codes are called from this markdown file
-LIB.DIR <- "R_scripts/"
-SETUP_KNITR.R <- paste0(LIB.DIR, "SetUp_knitr.R")
 SETUP_DB.R <- "SetUp_db.R"
 DATE.FORMAT <- "%m/%d/%Y"  # this should be R's default date format
 CASE.SELECTION.FLOW.CHART <- "images/remark.png"  # CANNOT TAKE SPACE IN FILE PATH!!!!
@@ -35,8 +33,8 @@ library(survival)
 library(knitcitations)
 library(powerSurvEpi)
 library(biostatUtil)
-source(SETUP_KNITR.R)
 source(SETUP_DB.R) # setup database ... e.g. censoring, remove cases
+setupKnitr()
 ```
 
 #### Item 1. State the marker examined, the study objectives, and any pre-specified hypotheses.
@@ -404,7 +402,7 @@ Model 1 is nested within model 2 which in turn is nested within model 3. In orde
 *Please note: Cox regression with Firth's penalized likelihood was used*
 
 ```{r results='asis'}
-source("remark16b.R")
+# source("remark16b.R")
 
 
 dat0=data.frame(Rx=emdb$any.init.treatment,POLE=emdb$POLE.mut.germline.as.missing,
@@ -416,7 +414,7 @@ dat1=dat0[complete.cases(dat0),]
 
 taos=testInter(dat1,event="OS")
 printInterModels(taos[[1]],taos[[2]],taos[[3]],"Overall Survival. ")
-pander(ftable(xtabs(~POLE+Rx+OS.sts,data=dat1)),style='rmarkdown')
+pander::pander(ftable(xtabs(~POLE+Rx+OS.sts,data=dat1)),style='rmarkdown')
 ```
 
 
@@ -438,7 +436,7 @@ dat1=dat0[complete.cases(dat0),]
 tao=testInter(dat1,event="DSS",use.firth=TRUE)
 printInterModels(tao[[1]],tao[[2]],tao[[3]],"Disease Specific Survival. ")
 
-pander(ftable(xtabs(~POLE+Rx+DSS.sts,data=dat1)),style='rmarkdown')
+pander::pander(ftable(xtabs(~POLE+Rx+DSS.sts,data=dat1)),style='rmarkdown')
 ```
 
 For disease specific survival, we are not able to properly assess the interaction effect, because the mutated, no treatment group has no events. However a similar trend as seen in the time to death analysis hold. The confounding effect of treatment is significant (LRT P-Value: `r round(taos$lrt1.p,4)`).
@@ -456,7 +454,7 @@ dat1=dat0[complete.cases(dat0),]
 tao=testInter(dat1,event="RFS",use.firth=TRUE)
 printInterModels(tao[[1]],tao[[2]],tao[[3]],"Relapse Free Survival. ")
 
-pander(ftable(xtabs(~POLE+Rx+RFS.sts,data=dat1)),style='rmarkdown')
+pander::pander(ftable(xtabs(~POLE+Rx+RFS.sts,data=dat1)),style='rmarkdown')
 
 
 ```
