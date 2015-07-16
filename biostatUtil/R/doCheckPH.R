@@ -1,8 +1,8 @@
 #' Do check PH function
 #' @export
-doCheckPH <- function(var.name, var.description) {
+doCheckPH <- function(data, var.name, var.description) {
   
-  temp.d <- emdb[!sapply(emdb[, var.name], as.character) %in%
+  temp.d <- data[!sapply(data[, var.name], as.character) %in%
                    ALL.MISSING.CODES, ]
   temp.d[, var.name] <- as.numeric(temp.d[, var.name])
   

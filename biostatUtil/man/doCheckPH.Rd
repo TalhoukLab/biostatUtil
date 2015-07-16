@@ -4,7 +4,7 @@
 \alias{doCheckPH}
 \title{Do check PH function}
 \usage{
-doCheckPH(var.name, var.description)
+doCheckPH(data, var.name, var.description)
 }
 \description{
 Do check PH function

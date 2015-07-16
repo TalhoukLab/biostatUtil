@@ -514,7 +514,7 @@ In the basic form of the Cox regression model, the coefficients corresponded to 
 
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=9, fig.height=3}
 par(mfrow=c(1,3))
-doCheckPH("POLE.mut.germline.as.missing","POLE mutation")
+doCheckPH(emdb, "POLE.mut.germline.as.missing","POLE mutation")
 ```
 
 Visual examination of the Schoenfeld residual plots indicate no evidence of POLE mutation status violating the proportional hazard assumption. 
