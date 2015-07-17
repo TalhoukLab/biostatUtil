@@ -47,7 +47,7 @@ CompareDb <- function(db.old, db.new, id.var) {
     cat("\n")
   }
   if (length(rows.added)>0) {
-    cat("variables added:",paste(rows.added,collapse=", "),"\n")
+    cat("rows added:",paste(rows.added,collapse=", "),"\n")
     cat("\n")
   }
   # for each variable, for each cases (not newly added cases), show changes
