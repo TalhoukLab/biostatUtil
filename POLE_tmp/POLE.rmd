@@ -500,12 +500,6 @@ printCoxMod(mod,"Multivariable Model excluding Stage")
 source("remark18.R")
 ```
 
-```{r}
-#library(rms)
-#myfit = survfit(Surv(time, status) ~ catvar)
-#whatsurvplot(myfit, loglog=T)
-```
-
 `r item18.dx.year.correlation.table$result.table.html`
 
 In the basic form of the Cox regression model, the coefficients corresponded to the logarithm of the harzard ratio and were constant in time.  This assumption was graphically evaluated by means of smoothed Schoenfeld residual plots and tested as suggested by `r if(DO.CITATIONS){citep("10.1007/978-1-4757-3294-8")}`.
@@ -513,19 +507,15 @@ In the basic form of the Cox regression model, the coefficients corresponded to 
 #### Schoenfeld residual plots ####
 
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=9, fig.height=3}
-par(mfrow=c(1,3))
-doCheckPH(emdb, "POLE.mut.germline.as.missing","POLE mutation")
+par(mfrow = c(1, 3))
+doCheckPH(emdb, "POLE.mut.germline.as.missing", "POLE mutation")
 ```
 
 Visual examination of the Schoenfeld residual plots indicate no evidence of POLE mutation status violating the proportional hazard assumption. 
 
 ## References
 ```{r message=FALSE,echo=FALSE,results='asis'}
-if(DO.CITATIONS){
+if (DO.CITATIONS) {
   bibliography()
 }
 ```
-
-
-
-

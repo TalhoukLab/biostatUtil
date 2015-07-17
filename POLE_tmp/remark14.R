@@ -68,16 +68,6 @@ logit.full.ex.bmi.reduced <- step(logit.full.ex.bmi,test="LRT")
 logit.full.firth.reduced        <- backward(logit.full.firth)
 logit.full.ex.bmi.firth.reduced <- backward(logit.full.ex.bmi.firth)
 
-# helper function to print logistf
-print.logistf.fit <- function(logistf.fit, digits = 3) {
-	return(cbind(
-		"coef" = logistf.fit$coefficients,
-		"exp(coef)" = exp(logistf.fit$coefficients),
-		"lower .95" = exp(logistf.fit$ci.lower),
-		"upper .95" = exp(logistf.fit$ci.upper),
-		"p" = logistf.fit$prob))
-  }
-
 # try backward manually using extractAIC() !!!
 backward.by.aic <- function(logistf.fit) {
 	temp.d <- logistf.fit$data
