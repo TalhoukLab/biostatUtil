@@ -28,6 +28,8 @@ MISSING.BIOMARKER...NOT.FOUND.IN.DATA.FILE <- "" # data point not mentioned in d
 ALL.MISSING.CODES <- unique(c(MISSING.EXPLICIT, MISSING...NOT.FOUND.IN.DATA.FILE, MISSING.UNK, MISSING.BIOMARKER.EXPLICIT, MISSING.BIOMARKER...NOT.FOUND.IN.DATA.FILE))
 
 # Labels
+FIRTH.CAPTION <- "<sup>F</sup>" # text to indicate values are Firth corrected
+
 BCSS.TITLE <- "Breast cancer specific survival"
 BCSS.XLAB  <- "Total follow-up (years)"
 BCSS.YLAB  <- "Cumulative breast cancer specific survival (BCSS)"

@@ -159,6 +159,7 @@ doCoxphGeneric <- function(
   ### generate word-friendly table via pander i.e. result.table.bamboo ... ###
   result.table.bamboo <- result.table
   result.table.ncol <- ncol(result.table)
+  result.table.bamboo.base.indexes <- c() # base indexes for each variable in result.table.bamboo
   # want to add empty rows for var description
   for (var.count in 1:length(var.names)) {  
     result.table.bamboo.base.index <- 1 + (var.count-1)*4
@@ -172,7 +173,49 @@ doCoxphGeneric <- function(
     }
     rownames(result.table.bamboo)[result.table.bamboo.base.index] <- paste("**",var.descriptions[var.count],"**",sep="")
     rownames(result.table.bamboo)[result.table.bamboo.base.index+c(1:3)] <- surv.descriptions
+    result.table.bamboo.base.indexes <- c(result.table.bamboo.base.indexes,result.table.bamboo.base.index)
   }
+  # want to add a column to describe different factor level for categorical 
+  # variables with >2 factors
+  if (length(grep(kLocalConstantHrSepFlag,result.table))>0) {
+    result.table.bamboo <- cbind(result.table.bamboo[,1],"",result.table.bamboo[,2:3])
+    hr.col.index <- 3 # column with the hazard ratios
+    result.table.bamboo.index <- 1
+    for (var.count in 1:length(var.names)) {  
+      if (!is.na(var.ref.groups[var.count])) {
+        ref.group <- var.ref.groups[var.count]
+        other.groups <- names(table(input.d[,var.names[var.count]]))
+        other.groups <- other.groups[other.groups!=ref.group]
+        num.other.groups <- length(other.groups)
+        result.table.bamboo.base.index <- result.table.bamboo.base.indexes[var.count]
+        for (i in 1:num.surv.endpoints) { # for each survival end points e.g. os, dss, rfs
+          curr.base.index <- result.table.bamboo.base.index + (i-1)*num.other.groups + 1
+          for (j in 1:(num.other.groups-1)) {
+            if (curr.base.index<nrow(result.table.bamboo)) {
+              result.table.bamboo <- rbind(
+                result.table.bamboo[1:curr.base.index,],
+                rep("",ncol(result.table.bamboo)),
+                result.table.bamboo[(curr.base.index+1):nrow(result.table.bamboo),])
+            } else {
+              result.table.bamboo <- rbind(
+                  result.table.bamboo[1:curr.base.index,],
+                  rep("",ncol(result.table.bamboo))
+              )
+            }
+          }
+          result.table.bamboo[curr.base.index:(curr.base.index+num.other.groups-1),hr.col.index] <- 
+            strsplit(result.table.bamboo[curr.base.index,hr.col.index],kLocalConstantHrSepFlag)[[1]]
+          result.table.bamboo[curr.base.index:(curr.base.index+num.other.groups-1),hr.col.index-1] <- other.groups
+        }	
+      
+        # need to update result.table.bamboo.base.indexes since we've added rows!!!
+        if (var.count<length(var.names)) {
+          result.table.bamboo.base.indexes[(var.count+1):length(var.names)] <- result.table.bamboo.base.indexes[(var.count+1):length(var.names)] + (num.other.groups-1)*num.surv.endpoints
+        }
+      }
+    }
+  }
+  
   ## subscript syntax for pandoc
   result.table.bamboo <- gsub(x = result.table.bamboo, pattern = "<sup>|</sup>", replacement = "^")
   
