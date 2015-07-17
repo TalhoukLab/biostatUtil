@@ -7,21 +7,21 @@ setupKnitr <- function(fw = 8, fh = 6) {
   # Don't set knitr options outside knitr
   if ("package:knitr" %in% search()){
     # Set some basic options. You usually do not want your code, messages, warnings etc. to show in your actual manuscript
-    opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE, dpi = 96,
+    knitr::opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE, dpi = 96,
                    fig.width = fw, fig.height = fh, dev = "png",
                    dev.args = list(type = "cairo"), error = FALSE, cache = FALSE)
     # Change to dev = "postscript" if you want the EPS-files for submitting.
     # Also remove the dev.args() as the postscript doesn't accept the type = "cairo" argument.
     
     # Evaluate the figure caption after the plot
-    opts_knit$set(eval.after = 'fig.cap')
+    knitr::opts_knit$set(eval.after = 'fig.cap')
     
     # Avoid including base64_images - this only works with the .RProfile setup
     options(base64_images = "none")
     
     # Add a figure counter function
-    knit_hooks$set(plot = function(x, options) {
-      fig_fn = paste0(opts_knit$get("base.url"),
+    knitr::knit_hooks$set(plot = function(x, options) {
+      fig_fn = paste0(knitr::opts_knit$get("base.url"),
                       paste(x, collapse = "."))
       
       # Some stuff from the default definition
