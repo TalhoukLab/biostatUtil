@@ -180,7 +180,6 @@ doCoxphGeneric <- function(
   if (sum(is.na(var.ref.groups))!=length(var.ref.groups)) {
     result.table.bamboo <- cbind(result.table.bamboo[,1],"",result.table.bamboo[,2:3])
     hr.col.index <- 3 # column with the hazard ratios
-    result.table.bamboo.index <- 1
     for (var.count in 1:length(var.names)) {  
       if (!is.na(var.ref.groups[var.count])) {
         ref.group <- var.ref.groups[var.count]
