@@ -176,8 +176,8 @@ doCoxphGeneric <- function(
     result.table.bamboo.base.indexes <- c(result.table.bamboo.base.indexes,result.table.bamboo.base.index)
   }
   # want to add a column to describe different factor level for categorical 
-  # variables with >2 factors
-  if (length(grep(kLocalConstantHrSepFlag,result.table))>0) {
+  # whenever reference group is specified
+  if (sum(is.na(var.ref.groups))!=length(var.ref.groups)) {
     result.table.bamboo <- cbind(result.table.bamboo[,1],"",result.table.bamboo[,2:3])
     hr.col.index <- 3 # column with the hazard ratios
     result.table.bamboo.index <- 1
@@ -190,17 +190,19 @@ doCoxphGeneric <- function(
         result.table.bamboo.base.index <- result.table.bamboo.base.indexes[var.count]
         for (i in 1:num.surv.endpoints) { # for each survival end points e.g. os, dss, rfs
           curr.base.index <- result.table.bamboo.base.index + (i-1)*num.other.groups + 1
-          for (j in 1:(num.other.groups-1)) {
-            if (curr.base.index<nrow(result.table.bamboo)) {
-              result.table.bamboo <- rbind(
-                result.table.bamboo[1:curr.base.index,],
-                rep("",ncol(result.table.bamboo)),
-                result.table.bamboo[(curr.base.index+1):nrow(result.table.bamboo),])
-            } else {
-              result.table.bamboo <- rbind(
+          if (num.other.groups>1) {
+            for (j in 1:(num.other.groups-1)) {
+              if (curr.base.index<nrow(result.table.bamboo)) {
+                result.table.bamboo <- rbind(
+                  result.table.bamboo[1:curr.base.index,],
+                  rep("",ncol(result.table.bamboo)),
+                  result.table.bamboo[(curr.base.index+1):nrow(result.table.bamboo),])
+              } else {
+                result.table.bamboo <- rbind(
                   result.table.bamboo[1:curr.base.index,],
                   rep("",ncol(result.table.bamboo))
-              )
+                )
+              }
             }
           }
           result.table.bamboo[curr.base.index:(curr.base.index+num.other.groups-1),hr.col.index] <- 
