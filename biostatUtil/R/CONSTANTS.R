@@ -28,6 +28,7 @@ MISSING.BIOMARKER...NOT.FOUND.IN.DATA.FILE <- "" # data point not mentioned in d
 ALL.MISSING.CODES <- unique(c(MISSING.EXPLICIT, MISSING...NOT.FOUND.IN.DATA.FILE, MISSING.UNK, MISSING.BIOMARKER.EXPLICIT, MISSING.BIOMARKER...NOT.FOUND.IN.DATA.FILE))
 
 # Labels
+FIRTH.THRESHOLD <- 0.8 # percent of censor cases to use Firth correction in Cox model
 FIRTH.CAPTION <- "<sup>F</sup>" # text to indicate values are Firth corrected
 
 BCSS.TITLE <- "Breast cancer specific survival"

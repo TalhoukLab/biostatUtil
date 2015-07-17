@@ -360,28 +360,28 @@ The interaction graph gives an idea of the trend and size of the effect.
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
 # width/height = 13/5
 #par(mfrow=c(1,2))
-doKMPlotsPOLE("os",use.aline.plot=USE.ALINE.KM.PLOT)
+doKMPlotsPOLE(emdb, "os", use.aline.plot = USE.ALINE.KM.PLOT)
 ```
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
-doKMPlotsPOLEInitTrt("os",use.aline.plot=USE.ALINE.KM.PLOT)
+doKMPlotsPOLEInitTrt(emdb, "os", use.aline.plot = USE.ALINE.KM.PLOT)
 ```
 
 **KM plots - disease specific survival**
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
 #par(mfrow=c(1,2))
-doKMPlotsPOLE("dss",use.aline.plot=USE.ALINE.KM.PLOT)
+doKMPlotsPOLE(emdb, "dss", use.aline.plot = USE.ALINE.KM.PLOT)
 ```
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
-doKMPlotsPOLEInitTrt("dss",use.aline.plot=USE.ALINE.KM.PLOT)
+doKMPlotsPOLEInitTrt(emdb, "dss", use.aline.plot = USE.ALINE.KM.PLOT)
 ```
 
 **KM plots - relapse free survival**
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
 #par(mfrow=c(1,2))
-doKMPlotsPOLE("rfs",use.aline.plot=USE.ALINE.KM.PLOT)
+doKMPlotsPOLE(emdb, "rfs", use.aline.plot = USE.ALINE.KM.PLOT)
 ```
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
-doKMPlotsPOLEInitTrt("rfs",use.aline.plot=USE.ALINE.KM.PLOT)
+doKMPlotsPOLEInitTrt(emdb, "rfs", use.aline.plot = USE.ALINE.KM.PLOT)
 ```
 
 #### Item 16. For key multivariable analyses, report estimated effects (e.g. hazard ratio) with confidence intervals for the marker and, at least for the final model, all other variables in the model.

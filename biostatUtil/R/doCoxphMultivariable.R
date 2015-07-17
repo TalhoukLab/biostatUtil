@@ -89,8 +89,7 @@ doCoxphMultivariable <- function(
                p.value <- anova(cox.stats$fit,cox.exclude.var)[[4]][2] # always the second one, since its comparing only two nested model
              },
              waldtest={
-               # use anova(cph())
-               p.value <- anova(cph(as.formula(paste("Surv(",var.names.surv.time[j], ", ",var.names.surv.status[j], "=='",event.codes.surv[j], "'  ) ~",paste(var.names,collapse="+"),sep="")),temp.d))[i,"P"]
+               p.value <- anova(rms::cph(as.formula(paste("Surv(",var.names.surv.time[j], ", ",var.names.surv.status[j], "=='",event.codes.surv[j], "'  ) ~",paste(var.names,collapse="+"),sep="")),temp.d))[i,"P"]
              }
       )	
       
