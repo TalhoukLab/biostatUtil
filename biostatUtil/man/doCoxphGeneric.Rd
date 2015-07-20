@@ -5,8 +5,9 @@
 \title{coxph model generic}
 \usage{
 doCoxphGeneric(input.d, var.names, var.descriptions, show.var.detail = FALSE,
-  var.ref.groups = NULL, var.names.surv.time = c("os.yrs", "dss.yrs",
-  "rfs.yrs"), var.names.surv.status = c("os.sts", "dss.sts", "rfs.sts"),
+  show.group.name.for.bin.var = FALSE, var.ref.groups = NULL,
+  var.names.surv.time = c("os.yrs", "dss.yrs", "rfs.yrs"),
+  var.names.surv.status = c("os.sts", "dss.sts", "rfs.sts"),
   event.codes.surv = c("os.event", "dss.event", "rfs.event"),
   surv.descriptions = c("OS", "DSS", "RFS"), missing.codes = c("N/A", "",
   "Unk"), use.firth = 1, firth.caption = FIRTH.CAPTION,
