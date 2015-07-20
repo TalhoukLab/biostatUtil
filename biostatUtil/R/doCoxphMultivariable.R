@@ -4,6 +4,8 @@ doCoxphMultivariable <- function(
   input.d, 
   var.names, 
   var.descriptions,
+  show.var.detail=FALSE, # whether to show automatically generated details (i.e. categories and reference group) of variable - NOT DONE YET!!!!
+  show.group.name.for.bin.var=FALSE, # show the non-reference group name beside the hazard ratio for dichotomized variable  
   var.ref.groups=NULL, # a list of reference group, if NULL, assume ALL variables are binary/continuous, if individual item in array is NA, assume that particular marker is binary or continuous ... i.e. treat it as a numeric variable
   var.names.surv.time   = c("os.yrs",  "dss.yrs",  "rfs.yrs"  ), # variable names of survival time
   var.names.surv.status = c("os.sts",  "dss.sts",  "rfs.sts"  ), # variable names of survival status
@@ -181,7 +183,9 @@ doCoxphMultivariable <- function(
   # want to add a column to describe different factor level for categorical 
   # whenever reference group is specified
   if (sum(is.na(var.ref.groups))!=length(var.ref.groups)) {
+    first.col.name <- colnames(result.table.bamboo)[1]
     result.table.bamboo <- cbind(result.table.bamboo[,1],"",result.table.bamboo[,2:3])
+    colnames(result.table.bamboo)[1] <- first.col.name
     hr.col.index <- 3 # column with the hazard ratios
     for (i in 1:num.surv) {
       result.table.bamboo.base.index <- result.table.bamboo.base.indexes[i]
@@ -197,10 +201,12 @@ doCoxphMultivariable <- function(
           if (num.other.groups>1) {
             for (j in 1:(num.other.groups-1)) {
               if (curr.base.index<nrow(result.table.bamboo)) {
+                last.row.name <- rownames(result.table.bamboo)[nrow(result.table.bamboo)]
                 result.table.bamboo <- rbind(
                     result.table.bamboo[1:curr.base.index,],
                     rep("",ncol(result.table.bamboo)),
                     result.table.bamboo[(curr.base.index+1):nrow(result.table.bamboo),])
+                rownames(result.table.bamboo)[nrow(result.table.bamboo)] <- last.row.name
               } else {
                 result.table.bamboo <- rbind(
                     result.table.bamboo[1:curr.base.index,],
@@ -210,9 +216,11 @@ doCoxphMultivariable <- function(
               rows.added <- rows.added + 1
             }
           }
-          result.table.bamboo[curr.base.index:(curr.base.index+num.other.groups-1),hr.col.index] <- 
+          if (num.other.groups>1 | show.group.name.for.bin.var) {
+            result.table.bamboo[curr.base.index:(curr.base.index+num.other.groups-1),hr.col.index] <- 
               strsplit(result.table.bamboo[curr.base.index,hr.col.index],kLocalConstantHrSepFlag)[[1]]
-          result.table.bamboo[curr.base.index:(curr.base.index+num.other.groups-1),hr.col.index-1] <- other.groups
+            result.table.bamboo[curr.base.index:(curr.base.index+num.other.groups-1),hr.col.index-1] <- other.groups
+          }
         }
       }
       
