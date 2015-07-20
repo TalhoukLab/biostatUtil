@@ -54,6 +54,12 @@ doCoxphGeneric <- function(
     temp.d <- input.d[!is.na(input.d[, var.name]), ] # remove any cases with NA's for marker
     temp.d <- temp.d[!sapply(temp.d[, var.name], as.character)
                      %in% missing.codes, ]
+    # automatically set ref.group to lowest group if not specified
+    if (is.factor(temp.d[,var.name])) {
+      if (is.na(var.ref.groups[i])) {
+        var.ref.groups[i] <- names(table(temp.d[,var.name]))[1]
+      }
+    }
     if (is.na(var.ref.groups[i])) {
       temp.d[,var.name] <- as.numeric(temp.d[, var.name]) # numeric
       var.levels <- c(0, 1) # dummy levels ... used to build result.table

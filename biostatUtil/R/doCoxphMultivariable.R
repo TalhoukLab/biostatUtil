@@ -55,6 +55,12 @@ doCoxphMultivariable <- function(
     var.name <- var.names[i]
     input.d <- input.d[!sapply(input.d[,var.name],as.character) %in% missing.codes,]
     input.d <- input.d[!is.na(input.d[,var.name]),]
+    # automatically set ref.group to lowest group if not specified
+    if (is.factor(input.d[,var.name])) {
+      if (is.na(var.ref.groups[i])) {
+        var.ref.groups[i] <- names(table(input.d[,var.name]))[1]
+      }
+    }
     if (is.na(var.ref.groups[i])) {
       input.d[,var.name] <- as.numeric(input.d[,var.name]) # numeric
       var.levels <- c(0,1) # dummy levels ... used to build result.table
