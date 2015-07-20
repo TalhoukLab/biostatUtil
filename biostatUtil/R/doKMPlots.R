@@ -5,6 +5,7 @@ doKMPlots <- function(input.d, var.name, var.description, line.color = NULL,
                       single.test.type = "logrank", surv.type = "os",  # end point: os, dss, rfs
                       use.firth = FIRTH.THRESHOLD, use.aline.plot = FALSE,  # use Aline's plot function
                       ...) {
+  pos <- 1
   if (is.factor(input.d[, var.name])) {
     input.d[, var.name] <- droplevels(input.d[, var.name])
   }
@@ -20,8 +21,8 @@ doKMPlots <- function(input.d, var.name, var.description, line.color = NULL,
     formula.obj <- as.formula(paste("Surv(os.yrs,os.sts=='os.event') ~", var.name))
     sfit <- survival::survfit(formula.obj, data = temp.d)
     # set local variable in environment searchable by local function calls
-    assign("formula.obj", formula.obj, pos = 1) 
-    assign("temp.d", temp.d, pos = 1) 
+    assign("formula.obj", formula.obj, envir = as.environment(pos)) 
+    assign("temp.d", temp.d, envir = as.environment(pos)) 
     
     if (!use.aline.plot) {
       plotKM(temp.d,
@@ -69,8 +70,8 @@ doKMPlots <- function(input.d, var.name, var.description, line.color = NULL,
                                     var.name))
     sfit <- survival::survfit(formula.obj, data = temp.d)
     # set local variable in environment searchable by local function calls
-    assign("formula.obj", formula.obj, pos = 1) 
-    assign("temp.d", temp.d, pos = 1) 
+    assign("formula.obj", formula.obj, envir = as.environment(pos)) 
+    assign("temp.d", temp.d, envir = as.environment(pos)) 
     
     if (!use.aline.plot) {
       dss.stats <- plotKM(temp.d,
@@ -118,8 +119,8 @@ doKMPlots <- function(input.d, var.name, var.description, line.color = NULL,
                                     var.name))
     sfit <- survival::survfit(formula.obj, data = temp.d)
     # set local variable in environment searchable by local function calls
-    assign("formula.obj", formula.obj, pos = 1) 
-    assign("temp.d", temp.d, pos = 1) 
+    assign("formula.obj", formula.obj, envir = as.environment(pos)) 
+    assign("temp.d", temp.d, envir = as.environment(pos)) 
      
     if (!use.aline.plot) {
       rfs.stats <- plotKM(temp.d,
