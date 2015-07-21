@@ -15,19 +15,6 @@ library(powerSurvEpi)
 library(logistf) # Firth correction for logistic regression
 library(MASS) # for stepAIC()
 curr.dir <- getwd()
-setwd(paste(LIB.DIR,"misc/",sep=""))
-# source("nice_frequencies.R")
-# source("trim_white_space.R")
-# source("misc_helpers.R")
-# source("min_w_missing.R")
-# source("max_w_missing.R")
-# source("mean_w_missing.R")
-# source("date_functions.R")
-setwd(curr.dir) # change directory back to current directory !!!
-setwd(paste(LIB.DIR,"survival/",sep=""))
-# source("plot_km.R")
-# source("ggkm.R")
-# source("pretty_cox.R")
 setwd(curr.dir) # change directory back to current directory !!!
 
 ### constants ###
