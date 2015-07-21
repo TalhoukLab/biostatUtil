@@ -57,6 +57,7 @@ doCoxphMultivariable <- function(
     input.d <- input.d[!is.na(input.d[,var.name]),]
     # automatically set ref.group to lowest group if not specified
     if (is.factor(input.d[,var.name])) {
+      input.d[, var.name] <- droplevels(input.d[, var.name])
       if (is.na(var.ref.groups[i])) {
         var.ref.groups[i] <- names(table(input.d[,var.name]))[1]
       }
@@ -200,7 +201,7 @@ doCoxphMultivariable <- function(
         if (!is.na(var.ref.groups[var.count])) {
           ref.group <- var.ref.groups[var.count]
           other.groups <- names(table(input.d[,var.names[var.count]]))
-          other.groups <- other.groups[other.groups!=ref.group]
+          other.groups <- other.groups[other.groups!=ref.group&!(other.groups%in%missing.codes)]
           num.other.groups <- length(other.groups)
           
           curr.base.index <- result.table.bamboo.base.index + (var.count-1) + rows.added + 1
