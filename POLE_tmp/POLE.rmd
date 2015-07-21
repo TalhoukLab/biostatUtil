@@ -109,7 +109,7 @@ Targeted primers were designed to cover the POLE exonuclease domains exons 9-14,
 
 #### Item 6. State the method of case selection, including whether prospective or retrospective and whether stratification or matching (for example, by stage of disease or age) was used. Specify the time period from which cases were taken, the end of the follow-up period, and the median follow-up time. 
 ```{r}
-source("remark6.R")
+source("remarks/remark6.R")
 ```
 
 a)  Case Selection
@@ -166,7 +166,7 @@ The definition of an event depends on the outcome of interest:
 #### Item 8: List all candidate variables initially examined or considered for inclusion in models.
 
 ```{r}
-#source("remark8.R")
+#source("remarks/remark8.R")
 ```
 
 
@@ -196,7 +196,7 @@ All assays are done on samples collected at or before time of surgery. Similarly
 
 #### Item 9:  Give rationale for sample size; if the study was designed to detect a specified effect size, give the target power and effect size.
 ```{r}
-source("remark9.R")
+source("remarks/remark9.R")
 ```
 This cohort (n=`r nrow(emdb)`) was obtained retrospectively by searching for all patients with adequate specimen availability in our tumour bank or obtained from archives. We did not attempt to select specific patients or to stratify by any clinicopathological parameter. While this is considered a sample of convenience, it appears to be representative of an endometrial cancer population. 
 
@@ -298,14 +298,14 @@ In this paper, we are not model building, but rather trying to estimate the impr
 
 POLE mutation status was analyzed as a binary variable i.e. wild type vs. mutation.  There is one case with POLE germline mutation observed.  This case was excluded from the analysis.
 ```{r}
-source("remark11.R")
+source("remarks/remark11.R")
 ```
 
 `r item11.pole.mutation.amino.acid.changes`
 
 #### Item 12. Describe the flow of patients through the study, including the number of patients included in each stage of the analysis and reasons for dropout.
 ```{r}
-source("remark12.R")
+source("remarks/remark12.R")
 ```
 
 ![title](`r CASE.SELECTION.FLOW.CHART`)
@@ -315,7 +315,7 @@ source("remark12.R")
 #### Item 13. Report distributions of basic demographic characteristics, standard prognostic variables, and tumor marker, including numbers of missing values.
 
 ```{r}
-source("remark13.R")
+source("remarks/remark13.R")
 ```
 `r item13.cohort.characteristics$result.table.html`
 `r item13.cohort.characteristics.no.tx$result.table.html`
@@ -324,13 +324,13 @@ source("remark13.R")
 
 #### Item 14. Show the relation of the marker to standard prognostic variables.
 ```{r message=FALSE,echo=FALSE,results='hide'}
-source("remark14.R")
+source("remarks/remark14.R")
 ```
 `r item14.correlation.table$result.table.html`
 
 #### Item 15. Present univariable analyses showing the relation between the marker and outcome, with the estimated effect.  Preferrably provide similar analyses for all other variables being analyzed.
 ```{r fig.keep='none'}
-source("remark15.R")
+source("remarks/remark15.R")
 ```
 <!-- 
 **listing of cases censored before 2 years**
@@ -402,7 +402,7 @@ Model 1 is nested within model 2 which in turn is nested within model 3. In orde
 *Please note: Cox regression with Firth's penalized likelihood was used*
 
 ```{r results='asis'}
-# source("remark16b.R")
+# source("remarks/remark16b.R")
 
 
 dat0=data.frame(Rx=emdb$any.init.treatment,POLE=emdb$POLE.mut.germline.as.missing,
@@ -465,7 +465,7 @@ For relapse-free survival, we are not able to properly assess the interaction ef
 
 #### Item 17: Among reported results, provide estimated effects with confidence intervals from an analysis in which the marker and standard prognostic variables are included, regardless of their statistical significance.
 ```{r}
-source("remark17.R")
+source("remarks/remark17.R")
 ```
 
 **Multivariable Model with All Prognostic Factors**
@@ -497,7 +497,7 @@ printCoxMod(mod,"Multivariable Model excluding Stage")
 
 #### Item 18. Report results of any further investigations, such as checking assumptions, sensitivity analyses, and internval validation.
 ```{r}
-source("remark18.R")
+source("remarks/remark18.R")
 ```
 
 `r item18.dx.year.correlation.table$result.table.html`
