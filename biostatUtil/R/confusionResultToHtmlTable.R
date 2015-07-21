@@ -8,7 +8,6 @@
 #' @param num.boot.for.ci number of bootstrap confidence intervals.
 #' If \code{num.boot.for.ci = NA}, do not show CI.
 #' @param seed random seed for bootstrap resampling
-#' @param seed
 #' @author Samuel Leung
 #' @export
 confusionResultToHtmlTable <- function(prediction, reference, ref.description,

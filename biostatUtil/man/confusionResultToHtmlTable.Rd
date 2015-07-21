@@ -20,8 +20,6 @@ confusionResultToHtmlTable(prediction, reference, ref.description,
 If \code{num.boot.for.ci = NA}, do not show CI.}
 
 \item{seed}{random seed for bootstrap resampling}
-
-\item{seed}{}
 }
 \description{
 Prints results from \code{confusionMatrix} into a nice HTML table format.
