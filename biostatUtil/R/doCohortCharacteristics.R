@@ -7,10 +7,12 @@
 #' @param var.descriptions Vector of strings to describe the variables as they are to appear in the table
 #' @param marker.value.labels.tolower Indicator as to whether to put marker value labels to lower case
 #' @param show.missing an indicator to whether to show missing values
-#' @param show.missing.continuous if set to FALSE and show.missing==FALSE, will not show the number of missing cases for continuous variables,  otherwise, it shows the number of missing for continuous variables even if show.missing==FALSE.
+#' @param show.missing.continuous if set to \code{FALSE} and \code{show.missing == FALSE},
+#' will not show the number of missing cases for continuous variables. Otherwise, it shows the number of missing for continuous variables even if show.missing==FALSE.
 #' @param do.droplevels drop categories of unobserved levels set to TRUE
 #' @param show.percent defaults to "both" which shows both rows and columns other possible values: "column", "row".
-#' @param stat.tests statistical test to perform
+#' @param stat.tests statistical test to perform. NULL indicates do not do test for all variables, NA indicates do not do test for specified variable.
+#' Tests: chisq, fisher, ttest, wilcox, kendall, spearman, pearson, kruskal, confusionMarkerAsRef, confusionVarAsRef
 #' @param stat.test.column.header The name to show on the header defaults to "association/correlation test"
 #' @param round.digits.p.value The number of digits to round the P values
 #' @param num.boot.for.ci the number of bootstrap samples for any bootstrap method that may be used
@@ -22,6 +24,7 @@
 #' @param banded.rows If \code{TRUE}, rows have alternating shading colour
 #' @param css.class.name.odd Used to set the row colour for odd rows
 #' @param css.class.name.even Used to set the row colour for even rows
+#' @param split.table number of chars per row before table is split.
 #' @param ... additional arguments to \code{pander}
 #' @return A table with statistics reported for multiple variables, such as
 #' mean, median, and range for continuous variables and proportions and 
@@ -48,7 +51,7 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
                                     banded.rows = FALSE,
                                     css.class.name.odd = "odd", 
                                     css.class.name.even = "even",
-                                    split.table=200, # set default for pander
+                                    split.table = 200, # set default for pander
                                     ...) {
 kLocalConstantRowColPercentBeginFlag <- "kLocalConstantRowColPercentBeginFlag" 
 kLocalConstantRowColPercentEndFlag <- "kLocalConstantRowColPercentEndFlag" 
