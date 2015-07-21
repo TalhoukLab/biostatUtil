@@ -4,7 +4,7 @@
 \alias{bootMean}
 \title{Mean and bootstrap confidence interval}
 \usage{
-bootMean(x, num.boot = 1000, conf.level = 0.95, random.seed = 12, ...)
+bootMean(x, num.boot = 1000, conf.level = 0.95, seed = 12, ...)
 }
 \arguments{
 \item{x}{a vector (or matrix)}
@@ -13,7 +13,7 @@ bootMean(x, num.boot = 1000, conf.level = 0.95, random.seed = 12, ...)
 
 \item{conf.level}{confidence level.}
 
-\item{random.seed}{random seed for resampling}
+\item{seed}{random seed for resampling}
 
 \item{...}{additional arguments to \code{mean}}
 }
