@@ -34,8 +34,10 @@ prettyCoxph <- function(input.formula, input.d, use.firth = 1,
                         ph.test.plot.filename = "no.file", ...) {
   
   # set local variable in environment searchable by local function calls
-  assign(".my.formula", input.formula, pos = 1) 
-  assign(".my.data", input.d, pos = 1)
+  pos <- 1
+  .my.data <- NULL
+  assign(".my.formula", input.formula, envir = as.environment(pos)) 
+  assign(".my.data", input.d, envir = as.environment(pos))
   
   # figure out if percentage of censored cases large enough to use Firth
   ok.to.use.firth <- ifelse(use.firth == -1, TRUE, FALSE)

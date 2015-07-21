@@ -2,11 +2,24 @@
 % Please edit documentation in R/doCheckPH.R
 \name{doCheckPH}
 \alias{doCheckPH}
-\title{Do check PH function}
+\title{Check Cox proportional hazards assumption}
 \usage{
 doCheckPH(data, var.name, var.description)
 }
+\arguments{
+\item{data}{the data object}
+
+\item{var.name}{column name of variable to test in \code{data}}
+
+\item{var.description}{label to use for \code{var.name} in plots}
+}
+\value{
+Schoenfeld residual plots for each survival outcome
+}
 \description{
-Do check PH function
+Use Schoenfeld residuals to test the Cox proportional hazards assumption.
+}
+\author{
+Samuel Leung
 }
 

@@ -25,7 +25,7 @@ setupKnitr <- function(fw = 8, fh = 6) {
                       paste(x, collapse = "."))
       
       # Some stuff from the default definition
-      fig.cap <- knitr:::.img.cap(options)
+      fig.cap <- ""
       
       # Style and additional options that should be included in the img tag
       style <- c("display: block", sprintf("margin: %s;",

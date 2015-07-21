@@ -7,7 +7,24 @@
 confusionResultToHtmlTable(prediction, reference, ref.description,
   round.digits.p.value, num.boot.for.ci = NA, seed = 12)
 }
+\arguments{
+\item{prediction}{vector of predicted classes}
+
+\item{reference}{vector of reference classes}
+
+\item{ref.description}{description of classes}
+
+\item{round.digits.p.value}{number of digits to round p values}
+
+\item{num.boot.for.ci}{number of bootstrap confidence intervals.
+If \code{num.boot.for.ci = NA}, do not show CI.}
+
+\item{seed}{random seed for bootstrap resampling}
+}
 \description{
-Confusion matrix results in HTML
+Prints results from \code{confusionMatrix} into a nice HTML table format.
+}
+\author{
+Samuel Leung
 }
 
