@@ -1,4 +1,3 @@
-
 library(clv)
 library(dplyr)
 library(magrittr)
@@ -30,4 +29,8 @@ DBI <- dat %>%
 DI <- dat %>%
   apply(all.clust, 2, cls.scatt.data, data = .) %>%
   sapply(., clv.Dunn, intracls = "average", intercls = "average") %>%
+  sort(decreasing = T)
+
+# Silhouette Average Width (higher the better)
+SAW <- apply(all.clust, 2, function(x) summary(silhouette(x, dist(dat)))$avg.width) %>% 
   sort(decreasing = T)
