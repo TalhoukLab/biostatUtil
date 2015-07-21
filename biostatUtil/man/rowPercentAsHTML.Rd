@@ -9,7 +9,37 @@ rowPercentAsHTML(t, show.count = FALSE, digits = 4, column.names = NULL,
   banded.rows = FALSE, css.class.name.odd = "odd",
   css.class.name.even = "even", ...)
 }
+\arguments{
+\item{t}{a matrix}
+
+\item{show.count}{logical. If \code{TRUE}, the table counts will be shown.}
+
+\item{digits}{number of digits to round to}
+
+\item{column.names}{(optional) vector of column names in table}
+
+\item{html.table.border}{border type for the table. Defaults to 0 in HTML
+syntax.}
+
+\item{caption}{caption for the table}
+
+\item{transpose}{logical. If \code{TRUE}, a single row is shown
+as a single column. Useful if there are many columns in a single row.}
+
+\item{banded.rows}{logical. If \code{TRUE}, alternating rows will have
+different shaded colours.}
+
+\item{css.class.name.odd}{how to format the odd numbered rows in CSS}
+
+\item{css.class.name.even}{how to format the even numbered rows in CSS}
+}
+\value{
+The HTML code used to generate a table that shows row percentages.
+}
 \description{
 Row percentages in HTML
+}
+\author{
+Samuel Leung
 }
 

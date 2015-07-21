@@ -8,9 +8,10 @@
 #' @param t a matrix
 #' @param pretty.text logical. If \code{TRUE}, will format the table into nice
 #' display
-#' @param keep logical If \code{TRUE}, the original table will be kept
+#' @param keep logical. If \code{TRUE}, the original table counts will be kept
+#' along with row percentages.
 #' @param digits number of digits to round to
-#' @return A table with row-wise percentages added. That is, for every row,
+#' @return A table with row-wise percentages added. For every row,
 #' the percentages sum to 1.
 #' @author Aline Talhouk, Derek Chiu
 #' @export
