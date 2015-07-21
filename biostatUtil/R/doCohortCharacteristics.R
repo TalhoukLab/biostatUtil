@@ -1,5 +1,5 @@
 #' Generate cohort characteristics
-#' @param input.d The dataframe containing the data
+#' @param input.d The \code{data.frame} containing the data
 #' @param marker.name The variable that you want to split into different columns
 #' @param marker.description The description for the variable(s) to split
 #' @param var.names The variables that you want the statistics for

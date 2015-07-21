@@ -9,7 +9,38 @@ doKMPlots(input.d, var.name, var.description, line.color = NULL,
   single.test.type = "logrank", surv.type = "os",
   use.firth = FIRTH.THRESHOLD, use.aline.plot = FALSE, ...)
 }
+\arguments{
+\item{input.d}{\code{data.frame} containing data}
+
+\item{var.name}{name of variable to make Kaplan-Meier plots on}
+
+\item{var.description}{description for \code{var.name}}
+
+\item{line.color}{colors for survival curves}
+
+\item{line.pattern}{line type for survival curves}
+
+\item{km.plot.ref.group}{specify KM plot reference group; "single" means a lump
+log-rank statistic}
+
+\item{single.test.type}{test to use for survival curves. Defaults to "logrank".}
+
+\item{surv.type}{survival outcome. Either "os", "dss", or "rfs".}
+
+\item{use.firth}{Whether to use Firth's correction for plotting the curves}
+
+\item{use.aline.plot}{if \code{TRUE}, will use Aline's plot function}
+
+\item{...}{additional arguments to other functions and methods}
+}
+\value{
+A Kaplan-Meier plot for the specified survival outcome split on the desired
+variable.
+}
 \description{
 Make Kaplan-Meier plots
+}
+\author{
+Samuel Leung
 }
 

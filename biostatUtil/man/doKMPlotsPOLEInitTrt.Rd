@@ -6,7 +6,22 @@
 \usage{
 doKMPlotsPOLEInitTrt(data, surv.type, use.aline.plot = FALSE, ...)
 }
+\arguments{
+\item{data}{input data for \code{doKMPlots}.}
+
+\item{surv.type}{survival outcome. Either "os", "dss", or "rfs".}
+
+\item{use.aline.plot}{If \code{TRUE}, use aline's plot function}
+
+\item{...}{additional arguments to \code{doKMPlots}}
+}
+\value{
+Kaplan-Meier plots plotted for POLE mutations
+}
 \description{
 Make Kaplan-Meier plots with initial treatment
+}
+\author{
+Samuel Leung
 }
 

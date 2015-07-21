@@ -1,4 +1,11 @@
 #' Make Kaplan-Meier plots with initial treatment
+#' 
+#' @param data input data for \code{doKMPlots}.
+#' @param surv.type survival outcome. Either "os", "dss", or "rfs".
+#' @param use.aline.plot If \code{TRUE}, use aline's plot function
+#' @param ... additional arguments to \code{doKMPlots}
+#' @return Kaplan-Meier plots plotted for POLE mutations
+#' @author Samuel Leung
 #' @export
 doKMPlotsPOLEInitTrt <- function(data, surv.type,
                                  use.aline.plot = FALSE, ...) {

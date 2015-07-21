@@ -16,7 +16,7 @@ doCohortCharacteristics(input.d, marker.name, marker.description, var.names,
   split.table = 200, ...)
 }
 \arguments{
-\item{input.d}{The dataframe containing the data}
+\item{input.d}{The \code{data.frame} containing the data}
 
 \item{marker.name}{The variable that you want to split into different columns}
 
