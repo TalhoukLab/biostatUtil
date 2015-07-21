@@ -1,5 +1,14 @@
 #' coxph model continuous
 #' @export
+####################################################################
+# helper function to do coxph of all markers (univariable) with all endpoints
+#
+# please note the following ASSUMPTIONS:
+# - assume marker is either binary or continuous i.e. no categorical!!!
+# - assume missing survival time/status variable are coded as NA i.e. will only be checked by is.na()
+# - assume survival time/status variable name specified in the following order: os, dss, rfs
+# - assume coding of survival status is binary only i.e. cannot take survival status of > 2 categories.
+#
 doCoxphContinuous <- function(
   input.d, 
   var.names, 
