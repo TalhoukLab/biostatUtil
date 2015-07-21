@@ -22,6 +22,8 @@ survival object as returned by the \code{Surv} function.}
 \item{ph.test.plot.filename}{filename of residual plot. If set to
 \code{no.file} (default), plots to console. If \code{NA}, no plot will be
 generated.}
+
+\item{...}{additional arguments to \code{coxph} or \code{coxphf}}
 }
 \value{
 A list with elements

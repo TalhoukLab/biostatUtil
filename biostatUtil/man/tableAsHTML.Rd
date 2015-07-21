@@ -4,11 +4,33 @@
 \alias{tableAsHTML}
 \title{Change table to HTML format}
 \usage{
-tableAsHTML(t, row.names = NULL, column.names = NULL, caption = NA,
+tableAsHTML(t, row.names = NULL, column.names = NULL,
   html.table.border = 0, banded.rows = FALSE, css.class.name.odd = "odd",
-  css.class.name.even = "even")
+  css.class.name.even = "even", caption = NA)
+}
+\arguments{
+\item{t}{a matrix}
+
+\item{row.names}{(optional) vector of row names in table}
+
+\item{column.names}{(optional) vector of column names in table}
+
+\item{html.table.border}{border type for the table. Defaults to 0 in HTML
+syntax.}
+
+\item{banded.rows}{logical. If \code{TRUE}, alternating rows will have
+different shaded colours.}
+
+\item{css.class.name.odd}{how to format the odd numbered rows in CSS}
+
+\item{css.class.name.even}{how to format the even numbered rows in CSS}
+
+\item{caption}{caption for the table}
 }
 \description{
 Generate HTML code for a table output. Assumes table as more than one row.
+}
+\author{
+Samuel Leung
 }
 

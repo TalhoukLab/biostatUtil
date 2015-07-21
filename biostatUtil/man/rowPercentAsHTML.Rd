@@ -2,12 +2,11 @@
 % Please edit documentation in R/rowPercentAsHTML.R
 \name{rowPercentAsHTML}
 \alias{rowPercentAsHTML}
-\title{Row percentages in HTML}
+\title{Row percentages in HTML format}
 \usage{
 rowPercentAsHTML(t, show.count = FALSE, digits = 4, column.names = NULL,
-  html.table.border = 0, caption = NA, transpose = FALSE,
-  banded.rows = FALSE, css.class.name.odd = "odd",
-  css.class.name.even = "even", ...)
+  html.table.border = 0, banded.rows = FALSE, css.class.name.odd = "odd",
+  css.class.name.even = "even", caption = NA, transpose = FALSE, ...)
 }
 \arguments{
 \item{t}{a matrix}
@@ -21,23 +20,25 @@ rowPercentAsHTML(t, show.count = FALSE, digits = 4, column.names = NULL,
 \item{html.table.border}{border type for the table. Defaults to 0 in HTML
 syntax.}
 
-\item{caption}{caption for the table}
-
-\item{transpose}{logical. If \code{TRUE}, a single row is shown
-as a single column. Useful if there are many columns in a single row.}
-
 \item{banded.rows}{logical. If \code{TRUE}, alternating rows will have
 different shaded colours.}
 
 \item{css.class.name.odd}{how to format the odd numbered rows in CSS}
 
 \item{css.class.name.even}{how to format the even numbered rows in CSS}
+
+\item{caption}{caption for the table}
+
+\item{transpose}{logical. If \code{TRUE}, a single row is shown
+as a single column. Useful if there are many columns in a single row.}
+
+\item{...}{additional arguments to \code{rowPercent}}
 }
 \value{
 The HTML code used to generate a table that shows row percentages.
 }
 \description{
-Row percentages in HTML
+Row percentages in HTML format
 }
 \author{
 Samuel Leung

@@ -1,8 +1,11 @@
 #' Summary table in HTML format
+#' 
+#' Generate summary table as an HTML table
+#' 
+#' @param d assume \code{d} is an array of numbers
+#' @return summary table with annotated HTMl code
+#' @author Samuel Leung
 #' @export
-##############################################################
-# generate summary table as html table 
-# assume d is an array of numbers
 summaryAsHTML <- function(d) {
   col.th.style <- COL.TH.STYLE
   s.table <- summary(d)

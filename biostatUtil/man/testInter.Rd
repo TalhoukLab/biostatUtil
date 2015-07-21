@@ -2,12 +2,28 @@
 % Please edit documentation in R/testInter.R
 \name{testInter}
 \alias{testInter}
-\title{testInter function}
+\title{Testing for interaction in survival models}
 \usage{
 testInter(dmat, event, labs = c("POLE wt", "Rx", "POLE wt * Rx"),
   use.firth = FALSE)
 }
+\arguments{
+\item{dmat}{data matrix}
+
+\item{event}{survival outcome. Must be one of "OS", "DSS", or "RFS".}
+
+\item{labs}{labels for each of the 3 models to test}
+
+\item{use.firth}{if \code{TRUE}, will use Firth's corrected Cox regression
+model.}
+}
+\value{
+A summary output for each model showing test for interaction
+}
 \description{
-testInter function
+Testing for interaction in survival models
+}
+\author{
+Aline Talhouk
 }
 

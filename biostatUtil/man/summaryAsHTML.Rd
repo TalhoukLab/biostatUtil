@@ -6,7 +6,16 @@
 \usage{
 summaryAsHTML(d)
 }
+\arguments{
+\item{d}{assume \code{d} is an array of numbers}
+}
+\value{
+summary table with annotated HTMl code
+}
 \description{
-Summary table in HTML format
+Generate summary table as an HTML table
+}
+\author{
+Samuel Leung
 }
 

@@ -1,8 +1,19 @@
-#' Row and Column percentages in HTML format
+#' Row and column percentages in HTML format
+#' @param t a matrix
+#' @param show.count logical. If \code{TRUE}, the table counts will be shown.
+#' @param row.names (optional) vector of row names in table
+#' @param column.names (optional) vector of column names in table
+#' @param html.table.border border type for the table. Defaults to 0 in HTML
+#' syntax.
+#' @param banded.rows logical. If \code{TRUE}, alternating rows will have
+#' different shaded colours.
+#' @param css.class.name.odd how to format the odd numbered rows in CSS
+#' @param css.class.name.even how to format the even numbered rows in CSS
+#' @param ... additional arguments to \code{rowColPercent}
+#' @return The HTML code used to generate a table that shows row percentages.
+#' @author Samuel Leung
 #' @export
-####################################################
-# same as row.col.percent but show table in html
-rowColPercentAsHTML <- function(t,show.count = FALSE, row.names = NULL,
+rowColPercentAsHTML <- function(t, show.count = FALSE, row.names = NULL,
   column.names = NULL, html.table.border = 0, banded.rows = FALSE,
   css.class.name.odd = "odd", css.class.name.even = "even", ...) {
   
