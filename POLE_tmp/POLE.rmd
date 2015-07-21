@@ -109,7 +109,7 @@ Targeted primers were designed to cover the POLE exonuclease domains exons 9-14,
 
 #### Item 6. State the method of case selection, including whether prospective or retrospective and whether stratification or matching (for example, by stage of disease or age) was used. Specify the time period from which cases were taken, the end of the follow-up period, and the median follow-up time. 
 ```{r}
-source("remarks/remark6.R")
+source("remarks/remark06.R")
 ```
 
 a)  Case Selection
@@ -166,7 +166,7 @@ The definition of an event depends on the outcome of interest:
 #### Item 8: List all candidate variables initially examined or considered for inclusion in models.
 
 ```{r}
-#source("remarks/remark8.R")
+#source("remarks/remark08.R")
 ```
 
 
@@ -196,7 +196,7 @@ All assays are done on samples collected at or before time of surgery. Similarly
 
 #### Item 9:  Give rationale for sample size; if the study was designed to detect a specified effect size, give the target power and effect size.
 ```{r}
-source("remarks/remark9.R")
+source("remarks/remark09.R")
 ```
 This cohort (n=`r nrow(emdb)`) was obtained retrospectively by searching for all patients with adequate specimen availability in our tumour bank or obtained from archives. We did not attempt to select specific patients or to stratify by any clinicopathological parameter. While this is considered a sample of convenience, it appears to be representative of an endometrial cancer population. 
 
