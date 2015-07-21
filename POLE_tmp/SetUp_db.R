@@ -63,8 +63,9 @@ FIRTH.THRESHOLD <- 0.8 # percent of censor cases to use Firth correction in Cox 
 FIRTH.CAPTION <- "<sup>(F)</sup>" # html text to be placed beside the p-value to indicate that the Cox model used Firth
 
 NUM.DIGITS.TO.SHOW <- 1 # number of significant digits to show 
-
+DATE.FORMAT <- "%m/%d/%Y"
 USE.ALINE.KM.PLOT <- TRUE
+ED.CSV <- "data/endometrial_n518_2015-05-21.csv"
 
 ### end of constants ###
 
