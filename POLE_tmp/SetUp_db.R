@@ -1,21 +1,13 @@
 # Database set e.g. do censoring, exclude cases ... etc
 # 
-# also get library files
-#
 # Author: samuelc
 ###############################################################################
 
-# get library files
-library(knitr)
-if (!exists("LIB.DIR")) { # LIB.DIR is defined in markdown file
-	LIB.DIR <- "R_scripts/" 
-}
+# load packages
 library(knitr)
 library(powerSurvEpi)
 library(logistf) # Firth correction for logistic regression
 library(MASS) # for stepAIC()
-curr.dir <- getwd()
-setwd(curr.dir) # change directory back to current directory !!!
 
 ### constants ###
 MISSING.EXPLICIT <- "N/A" # missing value code for values that are explicitily indicated as missing from data source e.g. "X" in grade
@@ -411,38 +403,3 @@ emdb$MMR.Status <- factor(emdb$MMR.Status,levels=c(MISSING.BIOMARKER...NOT.FOUND
 # i.e. any MLH1, MSH2, MSH6, PMS2
 emdb$MMR.IHC <- factor(emdb$MMR.IHC,levels=c(MISSING.BIOMARKER...NOT.FOUND.IN.DATA.FILE,MISSING.BIOMARKER.EXPLICIT,VALUE.CODING.MMR.INTACT,VALUE.CODING.MMR.ABSENT))
 emdb$MMR.IHC_bXvS <- sapply(emdb$MMR.IHC %in% ALL.MISSING.CODES,function(x){return(ifelse(x,VALUE.CODING.MISSING,VALUE.CODING.AVAILABLE))}) 
-
-###############################
-### helper functions        ###
-#
-# calculate survival time summaries
-AssessSurvTime<-function(T1,T2,status){ 
-	require(survival)
-	# in case there are any is.na(status)
-	# T2 may be NA as well for rfs!!!
-	non.missing.cases <- !is.na(status) & !is.na(T2)
-	T1 <- T1[non.missing.cases]
-	T2 <- T2[non.missing.cases]
-	status <- status[non.missing.cases]
-	
-	Otime=T2-T1 # observation time
-	Stime=T2[status]-T1[status] # censoring time
-	Etime=max(T2)-T1 # time to end of study
-	SurvTime=T2-T1
-	KFT=SurvTime; KFT[status] = T2[status]-T1[status] # known function time
-	rev.status=rep(1,length(status));rev.status[status]=0
-	Ftime=survfit(Surv(as.numeric(SurvTime),rev.status)~1)
-	SumServ=read.table(textConnection(capture.output(Ftime)),skip=2,header=TRUE)
-	
-	MedianTime=list(
-			Otime=as.numeric(round(median(Otime, na.rm=T)/365.24,2)),
-			Stime=as.numeric(round(median(Stime, na.rm=T)/365.24,2)),
-			Etime=as.numeric(round(median(Etime, na.rm=T)/365.24,2)),
-			KFT=as.numeric(round(median(KFT, na.rm=T)/365.24,2)), 
-			RevKM=as.numeric(round(SumServ[,"median"]/365.24,2)))
-	return(MedianTime)
-}
-
-### end of helper functions ###
-###############################
-
