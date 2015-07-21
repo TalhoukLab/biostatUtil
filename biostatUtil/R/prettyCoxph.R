@@ -35,7 +35,7 @@ prettyCoxph <- function(input.formula, input.d, use.firth = 1,
   
   # set local variable in environment searchable by local function calls
   pos <- 1
-  .my.data <- NULL
+  .my.data <- input.d
   assign(".my.formula", input.formula, envir = as.environment(pos)) 
   assign(".my.data", input.d, envir = as.environment(pos))
   
