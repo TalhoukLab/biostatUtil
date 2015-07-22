@@ -6,7 +6,20 @@
 \usage{
 doCheckPHMulti(data, var.name, var.description)
 }
+\arguments{
+\item{data}{the data object}
+
+\item{var.name}{column name of variable to test in \code{data}}
+
+\item{var.description}{label to use for \code{var.name} in plots}
+}
+\value{
+Schoenfeld residual plots for each survival outcome
+}
 \description{
-Check the proportional hazards assumption in multivariable model
+Use Schoenfeld residuals to test the Cox proportional hazards assumption.
+}
+\author{
+Samuel Leung
 }
 

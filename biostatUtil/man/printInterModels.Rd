@@ -2,11 +2,26 @@
 % Please edit documentation in R/printInterModels.R
 \name{printInterModels}
 \alias{printInterModels}
-\title{Print inter models}
+\title{Print intereraction test results for different models}
 \usage{
 printInterModels(mod1, mod2, mod3, Capt)
 }
+\arguments{
+\item{mod1}{model 1}
+
+\item{mod2}{model 2}
+
+\item{mod3}{model 3}
+
+\item{Capt}{caption for the table}
+}
+\value{
+an HTML formated table showing different models tested for interactions
+}
 \description{
-Print inter models
+Print intereraction test results for different models
+}
+\author{
+Aline Talhouk
 }
 

@@ -14,6 +14,7 @@
 #' @param ph.test.plot.filename filename of residual plot. If set to
 #' \code{no.file} (default), plots to console. If \code{NA}, no plot will be
 #' generated.
+#' @param ... additional arguments to \code{coxph} or \code{coxphf}
 #' @return A list with elements
 #' \item{output}{A character matrix showing the hazard ratio, confidence bounds,
 #' and p-value for each coefficient. If \code{check.ph = TRUE}, the last column

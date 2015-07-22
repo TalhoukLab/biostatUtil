@@ -16,7 +16,7 @@ doCohortCharacteristics(input.d, marker.name, marker.description, var.names,
   split.table = 200, ...)
 }
 \arguments{
-\item{input.d}{The dataframe containing the data}
+\item{input.d}{The \code{data.frame} containing the data}
 
 \item{marker.name}{The variable that you want to split into different columns}
 
@@ -32,13 +32,15 @@ doCohortCharacteristics(input.d, marker.name, marker.description, var.names,
 
 \item{show.missing}{an indicator to whether to show missing values}
 
-\item{show.missing.continuous}{if set to FALSE and show.missing==FALSE, will not show the number of missing cases for continuous variables,  otherwise, it shows the number of missing for continuous variables even if show.missing==FALSE.}
+\item{show.missing.continuous}{if set to \code{FALSE} and \code{show.missing == FALSE},
+will not show the number of missing cases for continuous variables. Otherwise, it shows the number of missing for continuous variables even if show.missing==FALSE.}
 
 \item{do.droplevels}{drop categories of unobserved levels set to TRUE}
 
 \item{show.percent}{defaults to "both" which shows both rows and columns other possible values: "column", "row".}
 
-\item{stat.tests}{statistical test to perform}
+\item{stat.tests}{statistical test to perform. NULL indicates do not do test for all variables, NA indicates do not do test for specified variable.
+Tests: chisq, fisher, ttest, wilcox, kendall, spearman, pearson, kruskal, confusionMarkerAsRef, confusionVarAsRef}
 
 \item{stat.test.column.header}{The name to show on the header defaults to "association/correlation test"}
 
@@ -61,6 +63,8 @@ doCohortCharacteristics(input.d, marker.name, marker.description, var.names,
 \item{css.class.name.odd}{Used to set the row colour for odd rows}
 
 \item{css.class.name.even}{Used to set the row colour for even rows}
+
+\item{split.table}{number of chars per row before table is split.}
 
 \item{...}{additional arguments to \code{pander}}
 }

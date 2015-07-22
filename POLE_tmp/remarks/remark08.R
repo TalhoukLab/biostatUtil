@@ -8,7 +8,7 @@ if (!exists("RUN.IN.MARKDOWN")) {
 	# do set up if not fun in markdown
 	# this is for code development & testing ... so assume this will never get called from 
 	# Aline's computer
-	source('remark_setup.R')
+	source('SetUp_db.R')
 }
 
 item8.frequencies.table.pole <- single.row.percent.as.html(

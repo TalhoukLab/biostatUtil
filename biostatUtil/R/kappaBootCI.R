@@ -13,6 +13,13 @@
 #' @return bootstraped confidence interval for Cohen's kappa.
 #' @author Aline Talhouk, Derek Chiu
 #' @export
+#' @examples 
+#' a <- rbinom(n = 100, size = 1, prob = 0.3)
+#' b <- rbinom(n = 100, size = 1, prob = 0.7)
+#' kappaBootCI(a, b)
+#' 
+#' ## Use a different seed
+#' kappaBootCI(a, b, 5)
 kappaBootCI <- function(x, y, seed = 20, num.boot = 1000, conf.level = 0.95) {
   set.seed(seed)
   

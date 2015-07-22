@@ -1,4 +1,10 @@
-#' Print inter models
+#' Print intereraction test results for different models
+#' @param mod1 model 1
+#' @param mod2 model 2
+#' @param mod3 model 3
+#' @param Capt caption for the table
+#' @return an HTML formated table showing different models tested for interactions
+#' @author Aline Talhouk
 #' @export
 printInterModels <- function(mod1, mod2, mod3, Capt){
   vars <- rbind(mod1, mod2, mod3)

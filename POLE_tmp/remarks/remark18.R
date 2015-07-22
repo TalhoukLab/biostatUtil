@@ -9,7 +9,7 @@ if (!exists("RUN.IN.MARKDOWN")) {
 	# do set up if not fun in markdown
 	# this is for code development & testing ... so assume this will never get called from 
 	# Aline's computer
-	source('remark_setup.R')
+	source('SetUp_db.R')
 }
 
 # sensitivity analysis per meeting with Aline 2015-05-27

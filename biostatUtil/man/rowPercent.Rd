@@ -12,12 +12,13 @@ rowPercent(t, pretty.text = FALSE, keep = TRUE, digits = 4)
 \item{pretty.text}{logical. If \code{TRUE}, will format the table into nice
 display}
 
-\item{keep}{logical If \code{TRUE}, the original table will be kept}
+\item{keep}{logical. If \code{TRUE}, the original table counts will be kept
+along with row percentages.}
 
 \item{digits}{number of digits to round to}
 }
 \value{
-A table with row-wise percentages added. That is, for every row,
+A table with row-wise percentages added. For every row,
 the percentages sum to 1.
 }
 \description{

@@ -1,9 +1,25 @@
 #' Make Kaplan-Meier plots
+#' 
+#' @param input.d \code{data.frame} containing data
+#' @param var.name name of variable to make Kaplan-Meier plots on
+#' @param var.description description for \code{var.name}
+#' @param line.color colors for survival curves
+#' @param line.pattern line type for survival curves
+#' @param km.plot.ref.group specify KM plot reference group; "single" means a lump
+#' log-rank statistic
+#' @param single.test.type test to use for survival curves. Defaults to "logrank".
+#' @param surv.type survival outcome. Either "os", "dss", or "rfs".
+#' @param use.firth Whether to use Firth's correction for plotting the curves
+#' @param use.aline.plot if \code{TRUE}, will use Aline's plot function
+#' @param ... additional arguments to other functions and methods
+#' @return A Kaplan-Meier plot for the specified survival outcome split on the desired
+#' variable.
+#' @author Samuel Leung
 #' @export
 doKMPlots <- function(input.d, var.name, var.description, line.color = NULL,
-                      line.pattern = NULL, km.plot.ref.group = "single",  # specify KM plot reference group, "single" means a lump log-rank statistic 
-                      single.test.type = "logrank", surv.type = "os",  # end point: os, dss, rfs
-                      use.firth = FIRTH.THRESHOLD, use.aline.plot = FALSE,  # use Aline's plot function
+                      line.pattern = NULL, km.plot.ref.group = "single",
+                      single.test.type = "logrank", surv.type = "os",
+                      use.firth = FIRTH.THRESHOLD, use.aline.plot = FALSE,
                       ...) {
   pos <- 1
   if (is.factor(input.d[, var.name])) {
