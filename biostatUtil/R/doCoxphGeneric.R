@@ -30,7 +30,7 @@ doCoxphGeneric <- function(
   banded.rows = FALSE,
   css.class.name.odd = "odd",
   css.class.name.even = "even",
-  split.table=200, # set default for pander
+  split.table=300, # set default for pander
   ...) {
   kLocalConstantHrSepFlag <- "kLocalConstantHrSepFlag" # separates the hazard ratio estimates 
   col.th.style <- COL.TH.STYLE
@@ -61,8 +61,14 @@ doCoxphGeneric <- function(
   for (i in 1:length(var.names)) {
     var.name <- var.names[i]
     temp.d <- input.d[!is.na(input.d[, var.name]), ] # remove any cases with NA's for marker
-    temp.d <- temp.d[!sapply(temp.d[, var.name], as.character)
-                     %in% missing.codes, ]
+    temp.d <- temp.d[!(sapply(temp.d[, var.name], as.character)%in%missing.codes), ]
+    # automatically set ref.group to lowest group if not specified
+    if (is.factor(temp.d[,var.name])) {
+      temp.d[, var.name] <- droplevels(temp.d[, var.name])
+      if (is.na(var.ref.groups[i])) {
+        var.ref.groups[i] <- names(table(temp.d[,var.name]))[1]
+      }
+    }
     if (is.na(var.ref.groups[i])) {
       temp.d[,var.name] <- as.numeric(temp.d[, var.name]) # numeric
       var.levels <- c(0, 1) # dummy levels ... used to build result.table
@@ -90,7 +96,10 @@ doCoxphGeneric <- function(
           paste(paste0(
             sprintf("%.2f", round(as.numeric(cox.stats$output[, 1]), 2)), " (",
             sprintf("%.2f", round(as.numeric(cox.stats$output[, 2]), 2)), "-",
-            sprintf("%.2f", round(as.numeric(cox.stats$output[, 3]), 2)), ")",
+            sapply(as.numeric(cox.stats$output[, 3]),function(x){
+              # ugly code!!! if number if very large, display scientific notation
+              return(ifelse(x>1000,format(x,digits=3,scientific=TRUE),sprintf("%.2f",round(x,2)))) 
+            }), ")",
             ifelse(cox.stats$used.firth, firth.caption, "")), collapse = kLocalConstantHrSepFlag),
           sprintf(
             paste0("%.", round.digits.p.value, "f"),
@@ -196,7 +205,7 @@ doCoxphGeneric <- function(
       if (!is.na(var.ref.groups[var.count])) {
         ref.group <- var.ref.groups[var.count]
         other.groups <- names(table(input.d[,var.names[var.count]]))
-        other.groups <- other.groups[other.groups!=ref.group]
+        other.groups <- other.groups[other.groups!=ref.group & !(other.groups%in%missing.codes)]
         num.other.groups <- length(other.groups)
         result.table.bamboo.base.index <- result.table.bamboo.base.indexes[var.count]
         for (i in 1:num.surv.endpoints) { # for each survival end points e.g. os, dss, rfs
