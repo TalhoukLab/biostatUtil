@@ -39,3 +39,11 @@ SAW <- apply(all.clust, 2, function(x) summary(silhouette(x, dist(dat)))$avg.wid
 # C-Index (smaller the better)
 CI <- apply(all.clust, 2, index.G3, d = dist(dat)) %>% 
   sort
+
+# Baker and Hubert Index (larger the better)
+BH <- apply(all.clust, 2, index.G2, d = dist(dat)) %>% 
+  sort(decreasing = T)
+
+# Calinski-Harabasz Index (larger the better)
+CH <- apply(all.clust, 2, index.G1, x = dat) %>% 
+  sort(decreasing = T)
