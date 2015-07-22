@@ -19,7 +19,7 @@ doCoxphGeneric <- function(
   var.names.surv.time   = c("os.yrs",  "dss.yrs",  "rfs.yrs"  ), # variable names of survival time
   var.names.surv.status = c("os.sts",  "dss.sts",  "rfs.sts"  ), # variable names of survival status
   event.codes.surv      = c("os.event","dss.event","rfs.event"), # event coding of survival status variable
-  surv.descriptions     = c("OS",      "DSS",      "RFS"      ), # description of survival endpoint
+  surv.descriptions     = c("OS",      "DSS",      "PFS"      ), # description of survival endpoint
   missing.codes = c("N/A", "", "Unk"),
   use.firth = 1, # the percentage of censored cases before using the Firth method for Cox regression, 1 means NEVER use
   firth.caption = FIRTH.CAPTION, # a text in html table to indicate that Firth was used.
