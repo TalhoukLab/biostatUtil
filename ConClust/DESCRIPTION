@@ -9,6 +9,6 @@ Description: Helper functions used for performing consensus clustering
     and validating clustering results.
 Depends:
     R (>= 3.2.0)
-Imports: plyr, dplyr, magrittr, cluster, bioDist
+Imports: plyr, dplyr, magrittr, cluster, bioDist, NMF
 License: CC0
 LazyData: TRUE
