@@ -1,4 +1,5 @@
 library(clv)
+library(clusterSim)
 library(dplyr)
 library(magrittr)
 
@@ -34,3 +35,7 @@ DI <- dat %>%
 # Silhouette Average Width (higher the better)
 SAW <- apply(all.clust, 2, function(x) summary(silhouette(x, dist(dat)))$avg.width) %>% 
   sort(decreasing = T)
+
+# C-Index (smaller the better)
+CI <- apply(all.clust, 2, index.G3, d = dist(dat)) %>% 
+  sort
