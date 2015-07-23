@@ -6,9 +6,41 @@
 \usage{
 doBoxplotAmongSubtypes(input.d, data.description, biomarker.var.name,
   biomarker.name, subtype.var.name, subtype.name, pch = 4, jitter = 0.1,
-  digits = 2, boot.mean, ...)
+  digits = 2, ...)
+}
+\arguments{
+\item{input.d}{input data.frame}
+
+\item{data.description}{boxplot title description}
+
+\item{biomarker.var.name}{biomarker variable name in \code{input.d} to graph on}
+
+\item{biomarker.name}{boxplot y-axis label}
+
+\item{subtype.var.name}{subtype variable name in \code{input.d} to graph on}
+
+\item{subtype.name}{boxplot x-axis label}
+
+\item{pch}{stripchart plot style}
+
+\item{jitter}{amount of jitter in stripchart}
+
+\item{digits}{number of digits to round to}
+
+\item{...}{additional arguments to \code{boxplot}}
+}
+\value{
+a boxplot of biomarker values across different subtypes
 }
 \description{
-Do a boxplot among subtypes
+A stripchart (jitter plot) of a biomarker and some categorical subtype
+is superimposed on top of the boxplot
+}
+\note{
+Expects subtype variable to be a factor. Also expects biomarker
+and subtype variable missing values to be \code{NA}
+}
+\author{
+Samuel Leung
 }
 

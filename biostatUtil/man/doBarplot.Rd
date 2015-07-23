@@ -7,7 +7,30 @@
 doBarplot(input.d, data.description, biomarker.var.name, biomarker.name,
   biomarker.value.names, digits = 3)
 }
+\arguments{
+\item{input.d}{input data frame}
+
+\item{data.description}{barplot title description}
+
+\item{biomarker.var.name}{variable name in \code{input.d} to graph on}
+
+\item{biomarker.name}{barplot x-axis label}
+
+\item{biomarker.value.names}{names of biomarker values}
+
+\item{digits}{number of digits to round to}
+}
+\value{
+Barplot of biomarker frequencies
+}
 \description{
-Generates barplot
+Generates barplot on biomarker variables
+}
+\note{
+Function expects missing to be \code{NA}. Do not filter out missing data
+as this function reports missing data frequencies.
+}
+\author{
+Samuel Leung
 }
 
