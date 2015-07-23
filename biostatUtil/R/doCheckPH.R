@@ -42,5 +42,5 @@ doCheckPH <- function(data, var.name, var.description) {
                        check.ph = TRUE, ph.test.plot.filename = NA)
   dimnames(test$ph.test$y)[[2]] <- rep(var.description,
                                        length(dimnames(test$ph.test$y)[[2]]))
-  plot(test$ph.test, main = "RFS")
+  plot(test$ph.test, main = "PFS")
 }

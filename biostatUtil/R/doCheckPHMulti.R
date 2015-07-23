@@ -32,5 +32,5 @@ doCheckPHMulti <- function(data, var.name, var.description) {
                                        !is.na(data$rfs.yrs), ],
                       check.ph = TRUE, ph.test.plot.filename = NA)
   plot(test$ph.test, var = 1, ann = F)
-  title(main = "RFS", xlab = "Year", ylab = paste("Beta(t) for", var.description))
+  title(main = "PFS", xlab = "Year", ylab = paste("Beta(t) for", var.description))
 }
