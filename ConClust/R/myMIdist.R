@@ -7,7 +7,6 @@
 #' @return mutual information distance matrix
 #' @author Derek Chiu
 #' @import bioDist
-#' @export
 myMIdist = function(x) {
   MIdist(x)
 }

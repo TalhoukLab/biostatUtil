@@ -8,7 +8,6 @@
 #' @return clustering assignment from diana
 #' @author Derek Chiu
 #' @import cluster
-#' @export
 dianaHook = function(this_dist, k){
   tmp = diana(this_dist, diss = TRUE)
   assignment = cutree(tmp, k)
