@@ -9,7 +9,8 @@ ggkm(sfit, sfit2 = NULL, table = TRUE, returns = FALSE, marks = TRUE,
   "indianred3"), main = "Kaplan-Meier Plot", xlabs = "Time",
   ylabs = "Survival Probability", xlims = c(0, max(sfit$time)),
   ylims = c(0, 1), ystratalabs = NULL, ystrataname = NULL, timeby = 5,
-  pval = TRUE, HR = TRUE, use.firth = 1, subs = NULL, legend = FALSE)
+  pval = TRUE, HR = TRUE, use.firth = 1, subs = NULL, legend = FALSE,
+  ...)
 }
 \arguments{
 \item{sfit}{an object of class \code{survfit} containing one or more survival curves}
