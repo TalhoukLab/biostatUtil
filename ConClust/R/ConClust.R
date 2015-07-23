@@ -18,9 +18,9 @@
 #' algorithms (method). The matrices have a row for each sample, and a column for each
 #' subsample. Each entry represents a class membership.
 #' @author Derek Chiu, Aline Talhouk
+# ccc <- ConsensusCluster(TCGA.raw, pItem = 0.8, reps = 1000, k = 4, OF = "consensus_clustering/")
 #' @importFrom magrittr set_rownames
 #' @export
-#' # ccc <- ConsensusCluster(TCGA.raw, pItem = 0.8, reps = 1000, k = 4, OF = "consensus_clustering/")
 ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
                      seed = 123456, dir = NULL) {
   . <- NULL
