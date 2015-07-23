@@ -6,8 +6,10 @@
 #' @param sfit2 an (optional) second object of class \code{survfit} to compare with \code{sfit}
 #' @param table logical; if \code{TRUE} (default), the numbers at risk at each time of death is
 #' shown as a table underneath the plot
+#' @param returns logical; if \code{TRUE} the plot is returned
 #' @param marks logical; if \code{TRUE} (default), censoring marks are shown on survival curves
 #' @param CI logical; if \code{TRUE} (default), confidence bands are drawn for survival curves
+#' @param shading.colors vector of colours for each survival curve
 #' @param main plot title
 #' @param xlabs horizontal axis label
 #' @param ylabs vertical axis label
@@ -17,16 +19,15 @@
 #' @param ystrataname name of the strata
 #' @param timeby length of time between consecutive time points spanning the entire range of follow-up. Defaults to 5.
 #' @param pval logical; if \code{TRUE} (default), the logrank test p-value is shown on the plot
-#' @param HR logical; if \code{TRUE} (default), the estiated hazard ratio and its 95\% confidence interval will be shown
+#' @param HR logical; if \code{TRUE} (default), the estimated hazard ratio and its 95\% confidence interval will be shown
+#' @param use.firth Firth's method for Cox regression is used if the percentage of censored cases exceeds \code{use.firth}.
+#' Setting \code{use.firth = 1} (default) means Firth is never used, and \code{use.firth = -1} means Firth is always used.
+#' @param subs use of subsetting
 #' @param legend logical; if \code{TRUE}, the legend is overlaid on the graph (instead of on the side).
 #' @import ggplot2
-# use.firth = 1 - the percentage of censored cases before using the Firth method for Cox regression
-#               - setting use.firth to 1 (default) means NEVER use Firth
-#               - setting use.firth to -1 means ALWAYS use Firth 
-# specify threshold of event rate to use Firth correction; 1 means NEVER, -1 means ALWAYS
 #' @export
 ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = FALSE,
-                 marks = TRUE, CI = TRUE, cols = rainbow(100),
+                 marks = TRUE, CI = TRUE,
                  shading.colors = c("blue2", "red2",
                                     "deepskyblue", "indianred3"),
                  main = "Kaplan-Meier Plot",
@@ -34,7 +35,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = FALSE,
                  xlims = c(0, max(sfit$time)), ylims = c(0, 1),
                  ystratalabs = NULL, ystrataname = NULL,
                  timeby = 5, pval = TRUE, HR = TRUE,
-                 use.firth = 1, subs = NULL, legend = FALSE, ...) {
+                 use.firth = 1, subs = NULL, legend = FALSE) {
   line.y.increment <- 0.05 # for annotate(), to indicate the much y should be incremented for each line
   
   # to satisfy R CMD check where variables can't be found when input data passed from ggplot

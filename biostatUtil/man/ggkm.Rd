@@ -5,12 +5,11 @@
 \title{Kaplan-Meier Plots using ggplot}
 \usage{
 ggkm(sfit, sfit2 = NULL, table = TRUE, returns = FALSE, marks = TRUE,
-  CI = TRUE, cols = rainbow(100), shading.colors = c("blue2", "red2",
-  "deepskyblue", "indianred3"), main = "Kaplan-Meier Plot", xlabs = "Time",
+  CI = TRUE, shading.colors = c("blue2", "red2", "deepskyblue",
+  "indianred3"), main = "Kaplan-Meier Plot", xlabs = "Time",
   ylabs = "Survival Probability", xlims = c(0, max(sfit$time)),
   ylims = c(0, 1), ystratalabs = NULL, ystrataname = NULL, timeby = 5,
-  pval = TRUE, HR = TRUE, use.firth = 1, subs = NULL, legend = FALSE,
-  ...)
+  pval = TRUE, HR = TRUE, use.firth = 1, subs = NULL, legend = FALSE)
 }
 \arguments{
 \item{sfit}{an object of class \code{survfit} containing one or more survival curves}
@@ -20,9 +19,13 @@ ggkm(sfit, sfit2 = NULL, table = TRUE, returns = FALSE, marks = TRUE,
 \item{table}{logical; if \code{TRUE} (default), the numbers at risk at each time of death is
 shown as a table underneath the plot}
 
+\item{returns}{logical; if \code{TRUE} the plot is returned}
+
 \item{marks}{logical; if \code{TRUE} (default), censoring marks are shown on survival curves}
 
 \item{CI}{logical; if \code{TRUE} (default), confidence bands are drawn for survival curves}
+
+\item{shading.colors}{vector of colours for each survival curve}
 
 \item{main}{plot title}
 
@@ -42,7 +45,12 @@ shown as a table underneath the plot}
 
 \item{pval}{logical; if \code{TRUE} (default), the logrank test p-value is shown on the plot}
 
-\item{HR}{logical; if \code{TRUE} (default), the estiated hazard ratio and its 95\% confidence interval will be shown}
+\item{HR}{logical; if \code{TRUE} (default), the estimated hazard ratio and its 95\% confidence interval will be shown}
+
+\item{use.firth}{Firth's method for Cox regression is used if the percentage of censored cases exceeds \code{use.firth}.
+Setting \code{use.firth = 1} (default) means Firth is never used, and \code{use.firth = -1} means Firth is always used.}
+
+\item{subs}{use of subsetting}
 
 \item{legend}{logical; if \code{TRUE}, the legend is overlaid on the graph (instead of on the side).}
 }
