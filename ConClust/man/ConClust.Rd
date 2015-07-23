@@ -4,7 +4,8 @@
 \alias{ConClust}
 \title{Consensus clustering over samples and algorithms}
 \usage{
-ConClust(x, k, pItem = 0.8, reps = 1000, file = NULL)
+ConClust(x, k, pItem = 0.8, reps = 1000, method = NULL, seed = 123456,
+  dir = NULL)
 }
 \arguments{
 \item{x}{data matrix; genes are rows and samples are columns}
@@ -15,7 +16,13 @@ ConClust(x, k, pItem = 0.8, reps = 1000, file = NULL)
 
 \item{reps}{number of subsamples}
 
-\item{file}{directory where returned object will be saved (at each iteration).
+\item{method}{vector of clustering algorithms for performing consensus clustering. Must be
+any number of the following: "nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl",
+"kmSpear", "kmMI", "pamEucl", "pamSpear", "pamMI".}
+
+\item{seed}{random seed to use for NMF-based algorithms}
+
+\item{dir}{directory where returned object will be saved at each iteration (as an RDS object).
 No output file is saved if \code{file} is \code{NULL}.}
 }
 \value{
