@@ -34,13 +34,15 @@
 #' @param ... additional arguments to \code{pandoc.table.return}
 #' @return A list with the following elements
 #' @note Please note the following assumptions:
-#' \item{marker}{binary, continuous, or categorical}
-#' \item{missing data}{missing survival time/status variables are coded as \code{NA}
+#' \itemize{
+#' \item{marker: binary, continuous, or categorical}
+#' \item{missing data: missing survival time/status variables are coded as \code{NA}
 #' (i.e., will only be checked by \code{is.na})}
-#' \item{variable names}{survival time/status variable name specified in the following order:
+#' \item{variable names: survival time/status variable name specified in the following order:
 #' "os", "dss", "rfs"}
-#' \item{survival status}{coding of survival status is binary only
+#' \item{survival status: coding of survival status is binary only
 #' (i.e., cannot take survival status of> 2 categories)}
+#' }
 #' @author Samuel Leung, Derek Chiu
 #' @export
 doCoxphGeneric <- function(
