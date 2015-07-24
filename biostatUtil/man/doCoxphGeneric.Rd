@@ -2,7 +2,7 @@
 % Please edit documentation in R/doCoxphGeneric.R
 \name{doCoxphGeneric}
 \alias{doCoxphGeneric}
-\title{coxph model generic}
+\title{Fit a generic Cox regression model}
 \usage{
 doCoxphGeneric(input.d, var.names, var.descriptions, show.var.detail = FALSE,
   show.group.name.for.bin.var = FALSE, var.ref.groups = NULL,
@@ -15,7 +15,76 @@ doCoxphGeneric(input.d, var.names, var.descriptions, show.var.detail = FALSE,
   html.table.border = 0, banded.rows = FALSE, css.class.name.odd = "odd",
   css.class.name.even = "even", split.table = 300, ...)
 }
+\arguments{
+\item{input.d}{The \code{data.frame} containing the data}
+
+\item{var.names}{variables to include as univariable predictors}
+
+\item{var.descriptions}{vector of strings to describe the variables as they are to appear in the table}
+
+\item{show.var.detail}{logical. If \code{TRUE}, details such as categories and the reference group for
+categorical variables are shown.}
+
+\item{show.group.name.for.bin.var}{logical. If \code{TRUE}, the non-reference group name is shown beside
+the hazard ratio for dichotomized variables.}
+
+\item{var.ref.groups}{a vector of reference groups. If \code{NULL}, assume all variables are binary/continuous.
+If an item in the vector is \code{NA}, assume that particular marker is binary or continuous
+(i.e., treat it as a numeric variable)}
+
+\item{var.names.surv.time}{variable names of survival time}
+
+\item{var.names.surv.status}{variable names of survival status}
+
+\item{event.codes.surv}{event coding of survival status variable}
+
+\item{surv.descriptions}{names abbreviated survival endpoints in returned output}
+
+\item{missing.codes}{character strings of missing values used in \code{input.d}}
+
+\item{use.firth}{percentage of censored cases before using Firth's method for Cox regression.
+If \code{use.firth = 1} (default), Firth is never used and if \code{use.firth = -1} Firth is
+always used.}
+
+\item{firth.caption}{subscript in html table output indicating Firth was used}
+
+\item{stat.test}{the overall model test to perform on the Cox regression model. Can be any of
+"waldtest", "logtest", or "sctest". If Firth is used, only "logtest" can be performed.}
+
+\item{round.digits.p.value}{number of digits for p-value}
+
+\item{caption}{caption for returned object}
+
+\item{html.table.border}{the border type to use for html tables}
+
+\item{banded.rows}{logical. If \code{TRUE}, rows have alternating shading colour}
+
+\item{css.class.name.odd}{Used to set the row colour for odd rows}
+
+\item{css.class.name.even}{Used to set the row colour for even rows}
+
+\item{split.table}{number of characters per row before splitting the table. Applies to
+the pandoc table output.}
+
+\item{...}{additional arguments to \code{pandoc.table.return}}
+}
+\value{
+A list with the following elements
+}
 \description{
-coxph model generic
+Fits \code{coxph} for all univariable markers on all survival endpoints.
+}
+\note{
+Please note the following assumptions:
+\item{marker}{binary, continuous, or categorical}
+\item{missing data}{missing survival time/status variables are coded as \code{NA}
+(i.e., will only be checked by \code{is.na})}
+\item{variable names}{survival time/status variable name specified in the following order:
+"os", "dss", "rfs"}
+\item{survival status}{coding of survival status is binary only
+(i.e., cannot take survival status of> 2 categories)}
+}
+\author{
+Samuel Leung, Derek Chiu
 }
 

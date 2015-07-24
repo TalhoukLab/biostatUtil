@@ -1,37 +1,62 @@
-#' coxph model generic
+#' Fit a generic Cox regression model
+#' 
+#' Fits \code{coxph} for all univariable markers on all survival endpoints.
+#' 
+#' @param input.d The \code{data.frame} containing the data
+#' @param var.names variables to include as univariable predictors
+#' @param var.descriptions vector of strings to describe the variables as they are to appear in the table
+#' @param show.var.detail logical. If \code{TRUE}, details such as categories and the reference group for
+#' categorical variables are shown.
+#' @param show.group.name.for.bin.var logical. If \code{TRUE}, the non-reference group name is shown beside
+#' the hazard ratio for dichotomized variables.
+#' @param var.ref.groups a vector of reference groups. If \code{NULL}, assume all variables are binary/continuous.
+#' If an item in the vector is \code{NA}, assume that particular marker is binary or continuous
+#' (i.e., treat it as a numeric variable)
+#' @param var.names.surv.time variable names of survival time
+#' @param var.names.surv.status variable names of survival status
+#' @param event.codes.surv event coding of survival status variable
+#' @param surv.descriptions names abbreviated survival endpoints in returned output
+#' @param missing.codes character strings of missing values used in \code{input.d}
+#' @param use.firth percentage of censored cases before using Firth's method for Cox regression.
+#' If \code{use.firth = 1} (default), Firth is never used and if \code{use.firth = -1} Firth is
+#' always used.
+#' @param firth.caption subscript in html table output indicating Firth was used
+#' @param stat.test the overall model test to perform on the Cox regression model. Can be any of
+#' "waldtest", "logtest", or "sctest". If Firth is used, only "logtest" can be performed.
+#' @param round.digits.p.value number of digits for p-value
+#' @param caption caption for returned object
+#' @param html.table.border the border type to use for html tables
+#' @param banded.rows logical. If \code{TRUE}, rows have alternating shading colour
+#' @param css.class.name.odd Used to set the row colour for odd rows
+#' @param css.class.name.even Used to set the row colour for even rows
+#' @param split.table number of characters per row before splitting the table. Applies to
+#' the pandoc table output.
+#' @param ... additional arguments to \code{pandoc.table.return}
+#' @return A list with the following elements
+#' @note Please note the following assumptions:
+#' \item{marker}{binary, continuous, or categorical}
+#' \item{missing data}{missing survival time/status variables are coded as \code{NA}
+#' (i.e., will only be checked by \code{is.na})}
+#' \item{variable names}{survival time/status variable name specified in the following order:
+#' "os", "dss", "rfs"}
+#' \item{survival status}{coding of survival status is binary only
+#' (i.e., cannot take survival status of> 2 categories)}
+#' @author Samuel Leung, Derek Chiu
 #' @export
-# ###################################################################
-# helper function to do coxph of all markers (univariable) with all endpoints
-#
-# please note the following ASSUMPTIONS:
-# - assume marker can be binary, continuous or categorical
-# - assume missing survival time/status variable are coded as NA i.e. will only be checked by is.na()
-# - assume survival time/status variable name specified in the following order: os, dss, rfs
-# - assume coding of survival status is binary only i.e. cannot take survival status of > 2 categories.
-#
 doCoxphGeneric <- function(
-  input.d, 
-  var.names, 
-  var.descriptions,
-  show.var.detail=FALSE, # whether to show automatically generated details (i.e. categories and reference group) of variable - NOT DONE YET!!!!
-  show.group.name.for.bin.var=FALSE, # show the non-reference group name beside the hazard ratio for dichotomized variable
-  var.ref.groups = NULL, # a list of reference group, if NULL, assume ALL variables are binary/continuous, if individual item in array is NA, assume that particular marker is binary or continuous ... i.e. treat it as a numeric variable
-  var.names.surv.time   = c("os.yrs",  "dss.yrs",  "rfs.yrs"  ), # variable names of survival time
-  var.names.surv.status = c("os.sts",  "dss.sts",  "rfs.sts"  ), # variable names of survival status
-  event.codes.surv      = c("os.event","dss.event","rfs.event"), # event coding of survival status variable
-  surv.descriptions     = c("OS",      "DSS",      "PFS"      ), # description of survival endpoint
+  input.d, var.names, var.descriptions, show.var.detail = FALSE,
+  show.group.name.for.bin.var = FALSE, var.ref.groups = NULL,
+  var.names.surv.time = c("os.yrs", "dss.yrs", "rfs.yrs"), 
+  var.names.surv.status = c("os.sts", "dss.sts", "rfs.sts"),
+  event.codes.surv = c("os.event", "dss.event", "rfs.event"),
+  surv.descriptions = c("OS","DSS", "PFS"),
   missing.codes = c("N/A", "", "Unk"),
-  use.firth = 1, # the percentage of censored cases before using the Firth method for Cox regression, 1 means NEVER use
-  firth.caption = FIRTH.CAPTION, # a text in html table to indicate that Firth was used.
-  stat.test = "waldtest", # can be "logtest", "waldtest", "sctest" ... if use Firth, can only do Likelihood ratio test
-  round.digits.p.value = 4, # number of digits for p-value
-  caption = NA, # caption for table
-  html.table.border = 0,
-  banded.rows = FALSE,
-  css.class.name.odd = "odd",
-  css.class.name.even = "even",
-  split.table=300, # set default for pander
-  ...) {
+  use.firth = 1, firth.caption = FIRTH.CAPTION,
+  stat.test = "waldtest", round.digits.p.value = 4,
+  caption = NA, html.table.border = 0, banded.rows = FALSE,
+  css.class.name.odd = "odd", css.class.name.even = "even",
+  split.table = 300, ...) {
+  
   kLocalConstantHrSepFlag <- "kLocalConstantHrSepFlag" # separates the hazard ratio estimates 
   col.th.style <- COL.TH.STYLE
   row.th.style <- ROW.TH.STYLE
@@ -61,16 +86,17 @@ doCoxphGeneric <- function(
   for (i in 1:length(var.names)) {
     var.name <- var.names[i]
     temp.d <- input.d[!is.na(input.d[, var.name]), ] # remove any cases with NA's for marker
-    temp.d <- temp.d[!(sapply(temp.d[, var.name], as.character)%in%missing.codes), ]
+    temp.d <- temp.d[!(sapply(temp.d[, var.name], as.character) %in% 
+                         missing.codes), ]
     # automatically set ref.group to lowest group if not specified
-    if (is.factor(temp.d[,var.name])) {
+    if (is.factor(temp.d[, var.name])) {
       temp.d[, var.name] <- droplevels(temp.d[, var.name])
       if (is.na(var.ref.groups[i])) {
-        var.ref.groups[i] <- names(table(temp.d[,var.name]))[1]
+        var.ref.groups[i] <- names(table(temp.d[, var.name]))[1]
       }
     }
     if (is.na(var.ref.groups[i])) {
-      temp.d[,var.name] <- as.numeric(temp.d[, var.name]) # numeric
+      temp.d[,var.name] <- as.numeric(temp.d[, var.name])
       var.levels <- c(0, 1) # dummy levels ... used to build result.table
     } else {
       # assume ref group exist!!!
@@ -81,26 +107,29 @@ doCoxphGeneric <- function(
     }
     
     for (j in 1:num.surv.endpoints) {
-      surv.formula <- as.formula(paste0("Surv(", var.names.surv.time[j], ", ", var.names.surv.status[j], "=='", event.codes.surv[j], "'  ) ~", var.name))
+      surv.formula <- as.formula(paste0("Surv(", var.names.surv.time[j], ", ",
+                                        var.names.surv.status[j], "=='",
+                                        event.codes.surv[j], "'  ) ~",
+                                        var.name))
       temp.d.no.missing.survival <- temp.d[!is.na(
-        temp.d[,var.names.surv.status[j]]) &
-          !is.na(temp.d[,var.names.surv.time[j]]), ]
+        temp.d[, var.names.surv.status[j]]) &
+          !is.na(temp.d[, var.names.surv.time[j]]), ]
       cox.stats  <- prettyCoxph(surv.formula, 
-        input.d = temp.d.no.missing.survival,
-        use.firth = use.firth)
+        input.d = temp.d.no.missing.survival, use.firth = use.firth)
       result.table <- rbind(
         result.table,
         "DUMMY_ROW_NAME" = c(
-          # paste(cox.stats$nevent,cox.stats$n,sep="/"),
           paste(cox.stats$nevent, cox.stats$n, sep=" / "),
           paste(paste0(
             sprintf("%.2f", round(as.numeric(cox.stats$output[, 1]), 2)), " (",
             sprintf("%.2f", round(as.numeric(cox.stats$output[, 2]), 2)), "-",
             sapply(as.numeric(cox.stats$output[, 3]),function(x){
-              # ugly code!!! if number if very large, display scientific notation
-              return(ifelse(x>1000,format(x,digits=3,scientific=TRUE),sprintf("%.2f",round(x,2)))) 
+              # ugly code!!! if number is very large, display scientific notation
+              return(ifelse(x > 1000, format(x, digits = 3, scientific = TRUE),
+                            sprintf("%.2f", round(x, 2)))) 
             }), ")",
-            ifelse(cox.stats$used.firth, firth.caption, "")), collapse = kLocalConstantHrSepFlag),
+            ifelse(cox.stats$used.firth, firth.caption, "")),
+            collapse = kLocalConstantHrSepFlag),
           sprintf(
             paste0("%.", round.digits.p.value, "f"),
             round(
@@ -252,7 +281,8 @@ doCoxphGeneric <- function(
   
   options("table_counter" = options()$table_counter - 1)
   result.table.bamboo <- pander::pandoc.table.return(
-    result.table.bamboo, caption = paste0("*", addTableNumber(caption), "*"), emphasize.rownames = FALSE, split.table=split.table, ...)
+    result.table.bamboo, caption = paste0("*", addTableNumber(caption), "*"),
+    emphasize.rownames = FALSE, split.table = split.table, ...)
   result.table.bamboo <- gsub(kLocalConstantHrSepFlag,"; ",result.table.bamboo)
   
   ## line break syntax for pandoc
