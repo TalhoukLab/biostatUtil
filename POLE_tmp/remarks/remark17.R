@@ -110,9 +110,9 @@ WRITE.RESULTS.TO.FILE <- FALSE # it takes very long to do all the Firth models
 num.boot <- 1000 # number of bootstrap samples to try
 
 if (WRITE.RESULTS.TO.FILE) {
-	multi.formula.os  <- Surv(os.yrs,  os.sts =="os.event" ) ~ POLE.mut.consolidated.numeric + age.at.surgery + stage_b1v234 + Histological.Subtype_non_endo + LVSI + any.positive.nodes + any.init.treatment
-	multi.formula.dss <- Surv(dss.yrs, dss.sts=="dss.event") ~ POLE.mut.consolidated.numeric + age.at.surgery + stage_b1v234 + Histological.Subtype_non_endo + LVSI + any.positive.nodes + any.init.treatment
-	multi.formula.rfs <- Surv(rfs.yrs, rfs.sts=="rfs.event") ~ POLE.mut.consolidated.numeric + age.at.surgery + stage_b1v234 + Histological.Subtype_non_endo + LVSI + any.positive.nodes + any.init.treatment
+	multi.formula.os  <- Surv(os.yrs,  os.sts =="os.event" ) ~ POLE.mut.consolidated.numeric + age.at.surgery + stage_b1v234 + Histological.Subtype_non_endo + LVSI + any.positive.nodes_tested + any.init.treatment
+	multi.formula.dss <- Surv(dss.yrs, dss.sts=="dss.event") ~ POLE.mut.consolidated.numeric + age.at.surgery + stage_b1v234 + Histological.Subtype_non_endo + LVSI + any.positive.nodes_tested + any.init.treatment
+	multi.formula.rfs <- Surv(rfs.yrs, rfs.sts=="rfs.event") ~ POLE.mut.consolidated.numeric + age.at.surgery + stage_b1v234 + Histological.Subtype_non_endo + LVSI + any.positive.nodes_tested + any.init.treatment
 
 
 	cox.d <- emdb[
@@ -120,7 +120,7 @@ if (WRITE.RESULTS.TO.FILE) {
 		!is.na(emdb$age.at.surgery) &
 		!emdb$stage_b1v234 %in% ALL.MISSING.CODES &
 		!emdb$LVSI %in% ALL.MISSING.CODES &
-		!emdb$any.positive.nodes %in% ALL.MISSING.CODES &
+		!emdb$any.positive.nodes_tested %in% ALL.MISSING.CODES &
 		!is.na(emdb$any.init.treatment),
 	]
 
@@ -128,13 +128,13 @@ if (WRITE.RESULTS.TO.FILE) {
 	cox.d$stage_b1v234 <- factor(cox.d$stage_b1v234,names(table(cox.d$stage_b1v234)))
 	cox.d$LVSI <- sapply(cox.d$LVSI,as.character)
 	cox.d$LVSI <- factor(cox.d$LVSI,names(table(cox.d$LVSI)))
-	cox.d$any.positive.nodes <- sapply(cox.d$any.positive.nodes,as.character)
-	cox.d$any.positive.nodes <- factor(cox.d$any.positive.nodes,names(table(cox.d$any.positive.nodes)))
+	cox.d$any.positive.nodes_tested <- sapply(cox.d$any.positive.nodes_tested,as.character)
+	cox.d$any.positive.nodes_tested <- factor(cox.d$any.positive.nodes_tested,names(table(cox.d$any.positive.nodes_tested)))
 
 	cox.d$stage_b1v234 <- as.numeric(cox.d$stage_b1v234)
 	cox.d$Histological.Subtype_non_endo <- as.numeric(cox.d$Histological.Subtype_non_endo)
 	cox.d$LVSI <- as.numeric(cox.d$LVSI)
-	cox.d$any.positive.nodes <- as.numeric(cox.d$any.positive.nodes)
+	cox.d$any.positive.nodes_tested <- as.numeric(cox.d$any.positive.nodes_tested)
 	cox.d$any.init.treatment <- as.numeric(cox.d$any.init.treatment)
 
 	cox.dss.d <- cox.d[!is.na(cox.d$dss.sts),]
