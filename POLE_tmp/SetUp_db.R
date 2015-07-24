@@ -395,6 +395,7 @@ emdb$any.positive.nodes <- factor(emdb$any.positive.nodes,levels=names(table(emd
 emdb$any.positive.nodes_bXvS <- sapply(emdb$any.positive.nodes %in% ALL.MISSING.CODES,function(x){return(ifelse(x,VALUE.CODING.MISSING,VALUE.CODING.AVAILABLE))}) 
 
 emdb$any.positive.nodes_NArm<-factor(gsub("N/A",NA,emdb$any.positive.nodes))
+emdb$any.positive.nodes_tested <- relevel(factor(emdb$any.positive.nodes, labels = c("Not Tested", "Negative", "Positive")), "Negative")
 
 # MMR (MSI assay + IHC)
 emdb$MMR.Status <- factor(emdb$MMR.Status,levels=c(MISSING.BIOMARKER...NOT.FOUND.IN.DATA.FILE,MISSING.BIOMARKER.EXPLICIT,VALUE.CODING.MMR.MSI.HIGH,VALUE.CODING.MMR.MSS)) # keep missing coding!!!
