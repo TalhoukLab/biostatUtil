@@ -54,6 +54,8 @@ Setting \code{use.firth = 1} (default) means Firth is never used, and \code{use.
 \item{subs}{use of subsetting}
 
 \item{legend}{logical; if \code{TRUE}, the legend is overlaid on the graph (instead of on the side).}
+
+\item{...}{additional arguments to other methods}
 }
 \description{
 Produce nicely annotated KM plots using ggplot.

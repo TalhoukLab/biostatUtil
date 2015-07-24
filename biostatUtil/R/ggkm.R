@@ -24,6 +24,7 @@
 #' Setting \code{use.firth = 1} (default) means Firth is never used, and \code{use.firth = -1} means Firth is always used.
 #' @param subs use of subsetting
 #' @param legend logical; if \code{TRUE}, the legend is overlaid on the graph (instead of on the side).
+#' @param ... additional arguments to other methods
 #' @import ggplot2
 #' @export
 ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = FALSE,
