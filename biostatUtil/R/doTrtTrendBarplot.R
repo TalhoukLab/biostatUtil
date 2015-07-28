@@ -1,4 +1,10 @@
 #' Treatment trend barplots
+#' 
+#' @param input.d input \code{data.frame}
+#' @param title title of barplot
+#' @param legend.space amount of space between legend and edge of plot
+#' @return a barplot showing the change of Treatment over time
+#' @author Samuel Leung
 #' @export
 doTrtTrendBarplot <- function(input.d, title, legend.space = 0.2) {
   legend.space <- round(legend.space * nrow(input.d))

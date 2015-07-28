@@ -1,16 +1,23 @@
 #' Do a jitterplot among subtypes
+#' 
+#' Generates stripchart (jitter plot) of a biomarker split on a categorical subtype.
+#' 
+#' Expects subtype variable to be a factor. Also, biomarker and subtype variables
+#' have missing cases as \code{NA}.
+#' 
+#' @param input.d input \code{data.frame}
+#' @param data.description title description
+#' @param biomarker.var.name variable name of biomarker to plot
+#' @param biomarker.name x-axis label for biomarker name
+#' @param subtype.var.name variable name of subtype to separate biomarker
+#' @param subtype.name y-axis label for subtype name
+#' @param pch jitterplot dot type. For example, 20 = small dot, 16 = big dot.
+#' @param jitter scalar indicating amount of jitter (spread of points)
+#' @param digits number of digits to round to
+#' @param cex.axis scalar indicating amount of scaling for axes
+#' @return A jitterplot shown across different subtypes
+#' @author Samuel Leung
 #' @export
-####################################################################
-# function to generate stripchart (jitter plot) of 
-# a biomarker x some categoriical subtype
-# i.e. similar to boxplot
-#
-# NOTE:
-# - expect subtype variable be factor
-# - expect biomarker and subtype variable missing to be NA
-#
-# example of pch ... 20=small dot, 16=bigger dot
-#
 doJitterplotAmongSubtypes <- function(input.d, data.description,
                                       biomarker.var.name, biomarker.name,
                                       subtype.var.name, subtype.name,

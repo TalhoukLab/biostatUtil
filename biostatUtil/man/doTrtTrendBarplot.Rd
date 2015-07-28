@@ -6,7 +6,20 @@
 \usage{
 doTrtTrendBarplot(input.d, title, legend.space = 0.2)
 }
+\arguments{
+\item{input.d}{input \code{data.frame}}
+
+\item{title}{title of barplot}
+
+\item{legend.space}{amount of space between legend and edge of plot}
+}
+\value{
+a barplot showing the change of Treatment over time
+}
 \description{
 Treatment trend barplots
+}
+\author{
+Samuel Leung
 }
 

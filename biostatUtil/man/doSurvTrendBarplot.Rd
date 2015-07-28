@@ -7,7 +7,32 @@
 doSurvTrendBarplot(input.d, title, surv.yrs, surv.sts, surv.event, event.desc,
   censor.desc, obs.yrs = 3, legend.space = 0.2)
 }
+\arguments{
+\item{input.d}{input \code{data.frame}}
+
+\item{title}{title of barplot}
+
+\item{surv.yrs}{vector of survival times in years}
+
+\item{surv.sts}{vector of survival statuses}
+
+\item{surv.event}{vector of survival events}
+
+\item{event.desc}{description of events}
+
+\item{censor.desc}{description of censoring}
+
+\item{obs.yrs}{number of years to observe survival trend.}
+
+\item{legend.space}{amount of space between legend and edge of plot}
+}
+\value{
+a barplot showing the change of survival outcome over time
+}
 \description{
 Survival trend barplot
+}
+\author{
+Samuel Leung
 }
 

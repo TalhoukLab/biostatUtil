@@ -2,31 +2,52 @@
 #' 
 #' KM plots with details of event counts.
 #' 
-#' @param legend.pos legend position keyword
-#' @param show.test show single or the reference group value (for pairwise comparisons)
+#' @param input.data input \code{data.frame}
+#' @param surv.formula survival formula to \code{Surv}
+#' @param main.text plot title
+#' @param xlab.text x-axis label
+#' @param ylab.text y-axis label
+#' @param line.name name of legend
+#' @param line.color line colour of survival curves
+#' @param line.pattern line pattern of survival curves
+#' @param line.width line width of survival curves
+#' @param show.test show single or the reference group value (for pairwise comparisons).
+#' If \code{"none"}, then no test is show.
 #' @param single.test.type test to show if specified \code{show.test = "single"}. Possible
 #' choices are \code{"logrank"} (default), \code{"wilcoxon"}, \code{"taroneware"}, or \code{"all"}.
 #' @param round.digits.p.value number of digits for p-value
+#' @param obs.survyrs show the observed survival years survival rate on KM plot
+#' @param ten.years.surv.95CI show ten year survival 95\% confidence interval
+#' @param event.count show the number of events at each time point
+#' @param legend.pos legend position keyword
+#' @param file.name name of file to save plot to
+#' @param file.width width of figure in saved file
+#' @param file.height height of figure in saved file
+#' @param grey.scale logical. If \code{TRUE}, the plot will be in grey scale.
+#' @param show.single.test.pos position to show single test; defaults to 0.5 if
+#' \code{legend.pos = "top"}. Otherwise 0.1
+#' @param ... additional arguments to \code{plot}
 #' @author Samuel Leung
 #' @references http://courses.nus.edu.sg/course/stacar/internet/st3242/handouts/notes2.pdf
 #' @seealso \code{\link{plotKM}}
 #' @export
 plotKMDetail <- function(input.data, surv.formula, main.text, xlab.text,
-                         ylab.text, line.name, ten.years.surv.95CI,
-                         event.count, line.color, obs.survyrs,
-                         line.pattern = NULL, line.width = NULL,
-                         legend.pos = "bottomleft", file.name = "no.file",
-                         file.width = 7, file.height = 7, show.test = "single",
-                         single.test.type = "logrank", round.digits.p.value,
+                         ylab.text, line.name, line.color, line.pattern = NULL,
+                         line.width = NULL, show.test = "single",
+                         single.test.type = "logrank",
+                         round.digits.p.value = 4,
+                         obs.survyrs, ten.years.surv.95CI, event.count,
+                         legend.pos = "bottomleft",
+                         file.name = "no.file",
+                         file.width = 7, file.height = 7, 
                          grey.scale = FALSE, show.single.test.pos, ...) {
   
   var.name <- deparse(surv.formula[[3]]) # this should be the biomarker name
   # the deparse() function is used to make sure var.name is a string
-  
-  #print(var.name)
-  log.rank.p.values    <- c() # p-values to be returned
-  wilcox.p.values      <- c() # p-values to be returned 		
-  tarone.ware.p.values <- c() # p-values to be returned
+
+  log.rank.p.values    <- c()
+  wilcox.p.values      <- c()		
+  tarone.ware.p.values <- c()
   
   fit <- survival::survfit(surv.formula, data = input.data)
   if (file.name != "no.file") {

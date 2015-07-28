@@ -2,6 +2,12 @@
 #' 
 #' Fits \code{coxph} for all univariable markers on all survival endpoints.
 #' 
+#' Please note the following assumptions. 1) Marker can be
+#' binary, continuous or categorical. 2) Missing survival time/status variables
+#' are coded as \code{NA} (i.e. will only be checked by \code{is.na()}).
+#' 3) Survival time/status variable name specified in the following order: "os", "dss", "rfs".
+#' 4) Coding of survival status is binary only (i.e. cannot take survival status of > 2 categories).
+#' 
 #' @param input.d The \code{data.frame} containing the data
 #' @param var.names variables to include as univariable predictors
 #' @param var.descriptions vector of strings to describe the variables as they are to appear in the table
@@ -33,17 +39,7 @@
 #' the pandoc table output.
 #' @param ... additional arguments to \code{pandoc.table.return}
 #' @return A list with the following elements
-#' @note Please note the following assumptions:
-#' \itemize{
-#' \item{marker: binary, continuous, or categorical}
-#' \item{missing data: missing survival time/status variables are coded as \code{NA}
-#' (i.e., will only be checked by \code{is.na})}
-#' \item{variable names: survival time/status variable name specified in the following order:
-#' "os", "dss", "rfs"}
-#' \item{survival status: coding of survival status is binary only
-#' (i.e., cannot take survival status of> 2 categories)}
-#' }
-#' @author Samuel Leung, Derek Chiu
+#' @author Samuel Leung, Aline Talhouk, Derek Chiu
 #' @export
 doCoxphGeneric <- function(
   input.d, var.names, var.descriptions, show.var.detail = FALSE,

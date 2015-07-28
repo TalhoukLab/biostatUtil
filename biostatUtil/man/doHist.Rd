@@ -8,7 +8,34 @@ doHist(input.d, data.description, biomarker.var.name, biomarker.name,
   show.title = TRUE, br = 100, digits = 3,
   interpretable.label = "scorable")
 }
+\arguments{
+\item{input.d}{input \code{data.frame}}
+
+\item{data.description}{title description}
+
+\item{biomarker.var.name}{variable name of biomarker to plot}
+
+\item{biomarker.name}{x-axis label for biomarker name}
+
+\item{show.title}{logical. If \code{TRUE} (default), the title is shown}
+
+\item{br}{breaks in histogram}
+
+\item{digits}{number of digits to round for median, Q1, Q3}
+
+\item{interpretable.label}{label for non-missing cases}
+}
+\value{
+A histogram with some annotated values.
+}
 \description{
-Do histogram with median
+Plot a histogram with the median, first quartile, and third quartile reported.
+}
+\details{
+Expects missing to be \code{NA}. Do not filter out missing biomarker data
+as this function reports missing data counts.
+}
+\author{
+Samuel Leung
 }
 

@@ -1,4 +1,16 @@
 #' Survival trend barplot
+#' 
+#' @param input.d input \code{data.frame}
+#' @param title title of barplot
+#' @param surv.yrs vector of survival times in years
+#' @param surv.sts vector of survival statuses
+#' @param surv.event vector of survival events
+#' @param event.desc description of events
+#' @param censor.desc description of censoring
+#' @param obs.yrs number of years to observe survival trend.
+#' @param legend.space amount of space between legend and edge of plot
+#' @return a barplot showing the change of survival outcome over time
+#' @author Samuel Leung
 #' @export
 doSurvTrendBarplot <- function(input.d, title, surv.yrs, surv.sts,
                                       surv.event, event.desc, censor.desc,

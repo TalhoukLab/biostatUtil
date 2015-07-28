@@ -8,7 +8,38 @@ doJitterplotAmongSubtypes(input.d, data.description, biomarker.var.name,
   biomarker.name, subtype.var.name, subtype.name, pch = ".", jitter = 0.05,
   digits = 3, cex.axis = 0.9)
 }
+\arguments{
+\item{input.d}{input \code{data.frame}}
+
+\item{data.description}{title description}
+
+\item{biomarker.var.name}{variable name of biomarker to plot}
+
+\item{biomarker.name}{x-axis label for biomarker name}
+
+\item{subtype.var.name}{variable name of subtype to separate biomarker}
+
+\item{subtype.name}{y-axis label for subtype name}
+
+\item{pch}{jitterplot dot type. For example, 20 = small dot, 16 = big dot.}
+
+\item{jitter}{scalar indicating amount of jitter (spread of points)}
+
+\item{digits}{number of digits to round to}
+
+\item{cex.axis}{scalar indicating amount of scaling for axes}
+}
+\value{
+A jitterplot shown across different subtypes
+}
 \description{
-Do a jitterplot among subtypes
+Generates stripchart (jitter plot) of a biomarker split on a categorical subtype.
+}
+\details{
+Expects subtype variable to be a factor. Also, biomarker and subtype variables
+have missing cases as \code{NA}.
+}
+\author{
+Samuel Leung
 }
 
