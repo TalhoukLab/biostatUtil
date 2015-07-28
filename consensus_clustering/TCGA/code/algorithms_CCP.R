@@ -1,5 +1,5 @@
 # Load
-source("consensus_clustering/functions/distance_functions.R")
+library(ConClust)
 library(ConsensusClusterPlus)
 library(dplyr)
 library(magrittr)
@@ -18,47 +18,44 @@ dat <- dat.raw %>%
 
 # Use consensus clustering
 
-# user  system elapsed 
-# 47.837  25.207  72.141 
-hc.euc <- ConsensusClusterPlus(dat, maxK = 4, reps = 1000, pItem = 0.8, seed = 123, verbose = T)
+# user  system elapsed
+# 47.837  25.207  72.141
+hcAEucl <- ConsensusClusterPlus(dat, maxK = 4, reps = 1000, pItem = 0.8, seed = 123, verbose = T)
 
-# user  system elapsed 
-# 405.932  28.070 432.125 
-hc.diana <- ConsensusClusterPlus(dat, maxK = 4, reps = 1000, pItem = 0.8, clusterAlg = "dianaHook", seed = 123, verbose = T)
+# user  system elapsed
+# 405.932  28.070 432.125
+hcDianaEucl <- ConsensusClusterPlus(dat, maxK = 4, reps = 1000, pItem = 0.8, clusterAlg = "dianaHook", seed = 123, verbose = T)
 
-# user  system elapsed 
-# 164.093  15.505 177.808 
-km.euc <- ConsensusClusterPlus(dat, maxK = 4, reps = 1000, pItem = 0.8, clusterAlg = "kmdist", distance = "euclidean",
+# user  system elapsed
+# 164.093  15.505 177.808
+kmEucl <- ConsensusClusterPlus(dat, maxK = 4, reps = 1000, pItem = 0.8, clusterAlg = "kmdist", distance = "euclidean",
                                seed = 123, verbose = T)
-# km.euc.tab <- km.euc[[4]]$consensusClass
 
-# user  system elapsed 
-# 165.402  14.873 178.425 
-km.spr <- ConsensusClusterPlus(dat, maxK = 4, reps = 1000, pItem = 0.8, clusterAlg = "kmdist", distance = "spearman",
+# user  system elapsed
+# 165.402  14.873 178.425
+kmSpear <- ConsensusClusterPlus(dat, maxK = 4, reps = 1000, pItem = 0.8, clusterAlg = "kmdist", distance = "spearman",
                                   seed = 123, verbose = T)
 
-# user  system elapsed 
-# 156.912  17.560 172.940 
-km.min <- ConsensusClusterPlus(dat, maxK = 4, reps = 1000, pItem = 0.8, clusterAlg = "kmdist", distance = "myMIdist",
+# user  system elapsed
+# 156.912  17.560 172.940
+kmMI <- ConsensusClusterPlus(dat, maxK = 4, reps = 1000, pItem = 0.8, clusterAlg = "kmdist", distance = "myMIdist",
                                   seed = 123, verbose = T)
 
-# user  system elapsed 
-# 115.549  24.418 138.091 
-pam.euc <- ConsensusClusterPlus(dat, maxK = 4, reps = 1000, pItem = 0.8, clusterAlg = "pam", distance = "euclidean",
+# user  system elapsed
+# 115.549  24.418 138.091
+pamEucl <- ConsensusClusterPlus(dat, maxK = 4, reps = 1000, pItem = 0.8, clusterAlg = "pam", distance = "euclidean",
                                    seed = 123, verbose = T)
 
-# user  system elapsed 
-# 136.183  23.754 158.044 
-pam.spr <- ConsensusClusterPlus(dat, maxK = 4, reps = 1000, pItem = 0.8, clusterAlg = "pam", distance = "spearman",
+# user  system elapsed
+# 136.183  23.754 158.044
+pamSpear <- ConsensusClusterPlus(dat, maxK = 4, reps = 1000, pItem = 0.8, clusterAlg = "pam", distance = "spearman",
                                    seed = 123, verbose = T)
 
-# user  system elapsed 
-# 122.436  23.794 144.373 
-pam.min <- ConsensusClusterPlus(dat, maxK = 4, reps = 1000, pItem = 0.8, clusterAlg = "pam", distance = "myMIdist",
+# user  system elapsed
+# 122.436  23.794 144.373
+pamMI <- ConsensusClusterPlus(dat, maxK = 4, reps = 1000, pItem = 0.8, clusterAlg = "pam", distance = "myMIdist",
                                    seed = 123, verbose = T)
 
 # Save results
-list(hc.euc, hc.diana, km.euc, km.spr, km.min, pam.euc, pam.spr, pam.min) %>%
-  set_names(c("hcAEucl", "hcDianaEucl","kmEucl", "kmSpear", "kmMI",
-              "pamEucl", "pamSpear", "pamMI")) %>%
-  saveRDS("consensus_clustering/TCGA/outputs/results_CCP.rds")
+saveRDS(list(hcAEucl, hcDianaEucl, kmEucl, kmSpear, kmMI, pamEucl, pamSpear, pamMI),
+        "consensus_clustering/TCGA/outputs/results_CCP.rds")
