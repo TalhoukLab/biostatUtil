@@ -68,7 +68,7 @@ doCoxphMultivariable <- function(
   
   num.surv.endpoints <- length(var.names.surv.time)
   
-  # qc ... make sure length of var.names.surv.time=var.names.surv.status=event.codes.surv=surv.descriptions
+  # qc: make sure length of var.names.surv.time=var.names.surv.status=event.codes.surv=surv.descriptions
   if (length(var.names.surv.time) != length(var.names.surv.status) | 
       length(var.names.surv.time) != length(event.codes.surv) |
       length(var.names.surv.time) != length(surv.descriptions)) {
@@ -108,11 +108,8 @@ doCoxphMultivariable <- function(
   for (j in 1:num.surv.endpoints) {
     temp.d <- input.d[!is.na(input.d[,var.names.surv.status[j]]) & !is.na(input.d[,var.names.surv.time[j]]),]
     full.model.formula <- as.formula(paste("Surv(",var.names.surv.time[j], ", ",var.names.surv.status[j], "=='",event.codes.surv[j], "'  ) ~",paste(var.names,collapse="+"),sep=""))
-    cox.stats  <- biostatUtil::prettyCoxph(
-      full.model.formula, 
-      input.d=temp.d,
-      use.firth=use.firth,...
-    )
+    cox.stats  <- prettyCoxph(full.model.formula, input.d = temp.d,
+                              use.firth = use.firth, ...)
     cox.stats.output.indexes <- c(0)
     for (i in 1:length(var.names)) {
       var.name <- var.names[i]
@@ -159,7 +156,7 @@ doCoxphMultivariable <- function(
   }
   rownames(result.table) <- result.table.row.names
   
-  ### generate html table ... ###
+  ### generate html table ###
   result.table.html <- paste("<table border=",html.table.border,">",ifelse(is.na(caption),"",paste("<caption style='",TABLE.CAPTION.STYLE,"'>",addTableNumber(caption),"</caption>",sep="")),sep="")
   result.table.html <- paste(result.table.html,"<tr><th style='",col.th.style,"' colspan=2></th><th style='",col.th.style,"'>",paste(result.table.col.names,collapse=paste("</th><th style='",col.th.style,"'>",sep="")),"</th></tr>",sep="")
   # print values
@@ -195,7 +192,7 @@ doCoxphMultivariable <- function(
   result.table.html <- paste0(result.table.html, "</table>")
   ### end of generate html table ###
 
-  ### generate word-friendly table via pander i.e. result.table.bamboo ... ###
+  ### generate word-friendly table via pander i.e. result.table.bamboo ###
   result.table.bamboo <- result.table
   result.table.ncol <- ncol(result.table)
   result.table.bamboo.base.indexes <- c() # base indexes for each survival end point in result.table.bamboo
@@ -273,7 +270,9 @@ doCoxphMultivariable <- function(
   
   options("table_counter" = options()$table_counter - 1)
   result.table.bamboo <- pander::pandoc.table.return(
-      result.table.bamboo, caption = paste0("*", addTableNumber(caption), "*"), emphasize.rownames = FALSE, split.table=split.table, ...)
+      result.table.bamboo, caption = paste0("*", addTableNumber(caption), "*"),
+      emphasize.rownames = FALSE, split.table = split.table,
+      style = "multiline", ...)
   result.table.bamboo <- gsub(kLocalConstantHrSepFlag,"; ",result.table.bamboo)
   
   ## line break syntax for pandoc
