@@ -271,8 +271,7 @@ doCoxphMultivariable <- function(
   options("table_counter" = options()$table_counter - 1)
   result.table.bamboo <- pander::pandoc.table.return(
       result.table.bamboo, caption = paste0("*", addTableNumber(caption), "*"),
-      emphasize.rownames = FALSE, split.table = split.table,
-      style = "multiline", ...)
+      emphasize.rownames = FALSE, split.table = split.table, ...)
   result.table.bamboo <- gsub(kLocalConstantHrSepFlag,"; ",result.table.bamboo)
   
   ## line break syntax for pandoc
