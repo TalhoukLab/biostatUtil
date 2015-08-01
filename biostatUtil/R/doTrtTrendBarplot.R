@@ -16,10 +16,11 @@ doTrtTrendBarplot <- function(input.d, title, legend.space = 0.2) {
   for (dx.year in dx.years) {
     select.cases <- temp.d$dx.year == dx.year
     n <- sum(!temp.d$init.treatment[select.cases] %in% ALL.MISSING.CODES)
-    num.chemo.only <- sum(temp.d$init.treatment[select.cases] ==   "chemo.only")	
-    num.rt.only    <- sum(temp.d$init.treatment[select.cases] ==   "rt.only")
-    num.chemo.rt   <- sum(temp.d$init.treatment[select.cases] ==   "both")
-    num.no.tx      <- sum(temp.d$init.treatment[select.cases] %in% c("no.treatment", "vag.brachy.only"))
+    num.chemo.only <- sum(temp.d$init.treatment[select.cases] ==   VALUE.CODING.INIT.TREATMENT.CHEMO.ONLY)	
+    num.rt.only    <- sum(temp.d$init.treatment[select.cases] ==   VALUE.CODING.INIT.TREATMENT.RT.ONLY)
+    num.chemo.rt   <- sum(temp.d$init.treatment[select.cases] ==   VALUE.CODING.INIT.TREATMENT.BOTH)
+    num.no.tx      <- sum(temp.d$init.treatment[select.cases] %in% c(VALUE.CODING.INIT.TREATMENT.NO, VALUE.CODING.INIT.TREATMENT.VAG.BRACHY.ONLY))
+
     treatment <- c(num.chemo.only, num.rt.only, num.chemo.rt, num.no.tx)
     if (use.prop) {
       treatment <- treatment / n * 100
