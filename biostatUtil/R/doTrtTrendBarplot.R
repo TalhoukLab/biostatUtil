@@ -41,7 +41,7 @@ doTrtTrendBarplot <- function(input.d, title, legend.space = 0.2) {
   if (sum(dx.years == 2001) > 0) {
     colnames(treatment.trend)[dx.years == 2001] <- ""
   }
-  rownames(treatment.trend) <- c("chemo only", "rt only", "both", "no treatment or vag brachy only")
+  rownames(treatment.trend) <- c("chemo only", "rt only", "both", "none")
   
   # add dummy bar for legend
   treatment.trend <- cbind(treatment.trend, rep("", nrow(treatment.trend)))
