@@ -17,7 +17,7 @@ doKMPlotsPOLE <- function(data, surv.type, use.aline.plot = FALSE, ...) {
   doKMPlots(
     data[!data$POLE.mut.germline.as.missing %in% ALL.MISSING.CODES &
            !data$init.treatment %in% ALL.MISSING.CODES &
-           data$init.treatment == "No treatment", ],
+           data$init.treatment == VALUE.CODING.INIT.TREATMENT.NO, ],
     "POLE.mut.germline.as.missing",
     "POLE mutation status - no adjuvant treatment",
     single.test.type = "logrank", surv.type = surv.type,
@@ -26,7 +26,7 @@ doKMPlotsPOLE <- function(data, surv.type, use.aline.plot = FALSE, ...) {
   doKMPlots(
     data[!data$POLE.mut.germline.as.missing %in% ALL.MISSING.CODES &
            !data$init.treatment %in% ALL.MISSING.CODES &
-           data$init.treatment != "No treatment", ],
+           data$init.treatment != VALUE.CODING.INIT.TREATMENT.NO, ],
     "POLE.mut.germline.as.missing",
     "POLE mutation status - any adjuvant treatment",
     single.test.type = "logrank", surv.type = surv.type,
