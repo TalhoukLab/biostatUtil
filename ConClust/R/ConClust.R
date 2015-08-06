@@ -11,6 +11,7 @@
 #' any number of the following: "nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl",
 #' "kmSpear", "kmMI", "pamEucl", "pamSpear", "pamMI".
 #' @param seed random seed to use for NMF-based algorithms
+#' @param seed.method seed to use to ensure each method operates on the same set of subsamples
 #' @param dir directory where returned object will be saved at each iteration (as an RDS object).
 #' No output file is saved if \code{file} is \code{NULL}.
 #' @return An array of dimension \code{nrow(x)} by \code{reps} by \code{length(methods)}
@@ -18,15 +19,12 @@
 #' algorithms (method). The matrices have a row for each sample, and a column for each
 #' subsample. Each entry represents a class membership.
 #' @author Derek Chiu, Aline Talhouk
-# ccc <- ConsensusCluster(TCGA.raw, pItem = 0.8, reps = 1000, k = 4, OF = "consensus_clustering/")
 #' @importFrom magrittr set_rownames
 #' @export
 ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
-                     seed = 123456, dir = NULL) {
+                     seed = 123456, seed.method = 1, dir = NULL) {
   . <- NULL
-  # Remove genes with low signal and scale for rest of methods
   x.rest <- x %>%
-    set_rownames(.$UNIQID) %>%
     select(which(sapply(., class) == "numeric")) %>%
     extract(apply(., 1, sd) > 1, ) %>%
     t %>%
@@ -34,14 +32,11 @@ ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
     t %>%
     as.data.frame
 
-  # Deal with negative entries
   x.nmf <- x.rest %>%
     rbind(-.) %>%
     apply(2, function(x) ifelse(x < 0, 0, x))
 
-  # Initialize empty arrays
   samples <- colnames(x.rest)
-  genes <- rownames(x.rest)
   n <- ncol(x.rest)
   n.new <- floor(n * pItem)
   nm <- length(method)
@@ -50,11 +45,13 @@ ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
   pb <- txtProgressBar(min = 0, max = reps, style = 3)
 
   for (j in 1:nm) {
+    set.seed(seed.method)
     for (i in 1:reps) {
       setTxtProgressBar(pb, i)
       ind.new <- sample(n, n.new, replace = F)
-      x.nmf.samp <- x.nmf[!(apply(x.nmf[, ind.new], 1,
-                                  function(x) all(x == 0))), ind.new]
+      if (any(c("nmfDiv", "nmfEucl") %in% method))
+        x.nmf.samp <- x.nmf[!(apply(x.nmf[, ind.new], 1,
+                                    function(x) all(x == 0))), ind.new]
 
       coclus[ind.new, i, j] <- switch(
         method[j],
