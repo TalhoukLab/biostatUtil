@@ -109,7 +109,7 @@ doCoxphMultivariable <- function(
     temp.d <- input.d[!is.na(input.d[,var.names.surv.status[j]]) & !is.na(input.d[,var.names.surv.time[j]]),]
     full.model.formula <- as.formula(paste("Surv(",var.names.surv.time[j], ", ",var.names.surv.status[j], "=='",event.codes.surv[j], "'  ) ~",paste(var.names,collapse="+"),sep=""))
     cox.stats  <- prettyCoxph(full.model.formula, input.d = temp.d,
-                              use.firth = use.firth, ...)
+                              use.firth = use.firth)
     cox.stats.output.indexes <- c(0)
     for (i in 1:length(var.names)) {
       var.name <- var.names[i]
