@@ -19,6 +19,13 @@ TABLE.CAPTION.STYLE <- "display: table-caption; text-align: left;"
 ROW.TD.STYLE.FOR.MULTI.COX <- "border-bottom: 1px solid grey; text-align: center; padding-right:10px; padding-right:10px;"
 ROW.TD.STYLE.FOR.MULTI.COX.ALIGN.TOP <- "border-bottom: 1px solid grey; text-align: center; vertical-align: text-top; padding-right:10px; padding-right:10px;"
 
+# Values
+VALUE.CODING.INIT.TREATMENT.NO <- "no.treatment"
+VALUE.CODING.INIT.TREATMENT.CHEMO.ONLY <- "chemo.only"
+VALUE.CODING.INIT.TREATMENT.RT.ONLY <- "rt.only"
+VALUE.CODING.INIT.TREATMENT.VAG.BRACHY.ONLY <- "vag.brachy.only"
+VALUE.CODING.INIT.TREATMENT.BOTH <- "both"
+
 # Missing codes
 MISSING.EXPLICIT <- "N/A" # missing value code for values that are explicitily indicated as missing from data source e.g. "X" in grade
 MISSING.UNK <- "Unk" # missing because values was not found (e.g. in data files) but the value must exist somewhere.
