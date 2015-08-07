@@ -12,7 +12,8 @@
 
 
 NanoStringQC <- function(raw, exp, detect = 80, sn = 150, plots = TRUE, ttl =" ", explore = TRUE){
-  genes = raw$Name; rownames (raw) = genes
+  genes = raw$Name
+  rownames(raw) = genes
   HKgenes = genes[raw$Code.Class == "Housekeeping"]
   PCgenes = genes[raw$Code.Class == "Positive"]
   NCgenes = genes[raw$Code.Class == "Negative"]
@@ -28,18 +29,18 @@ NanoStringQC <- function(raw, exp, detect = 80, sn = 150, plots = TRUE, ttl =" "
   }
 
   exp$linPC <- apply(raw[PCgenes, -(1:3)], 2, lin)
-  exp$linFlag <- exp$linPC < 0.9 | is.na(exp$linPC)
+  exp$linFlag <- factor(ifelse(exp$linPC < 0.95 | is.na(exp$linPC),"Failed","Passed"), levels = c("Failed","Passed"))
   exp$perFOV <- exp$fov.counted / exp$fov.count
-  exp$imagingFlag <- (exp$perFOV < 0.75)
+  exp$imagingFlag <- factor(ifelse(exp$perFOV < 0.75,"Failed","Passed"), levels = c("Failed","Passed"))
   exp$lod <- apply(raw[NCgenes, -(1:3)], 2, mean) + 2 * (apply(raw[NCgenes, -(1:3)], 2, sd))
   exp$llod <- apply(raw[NCgenes, -(1:3)], 2, mean) - 2 * (apply(raw[NCgenes, -(1:3)], 2, sd))
-  exp$lodFlag <- t(as.vector(raw["POS_E(0.5)", -(1:3)]) < exp$lod)
+  exp$lodFlag <- factor(ifelse(t(as.vector(raw["POS_E(0.5)", -(1:3)]) < exp$lod),"Failed","Passed"), levels = c("Failed","Passed"))
   exp$gd <- apply(raw[, -(1:3)] > exp$lod, 2, sum) # Number of genes above background
   exp$pergd <- (exp$gd / nrow(raw)) * 100
   exp$averageHK <- exp(apply(log(raw[HKgenes, -(1:3)], base = 2), 2, mean)) # Geometric Mean
   exp$sn <- exp$averageHK / exp$lod
   exp$sn[exp$lod < 0.001] <- 0 # This is so that it does not underflow
-  exp$bdFlag <- (exp$binding.density < 0.05 | exp$binding.density > 2.25)
+  exp$bdFlag <- factor(ifelse(exp$binding.density < 0.05 | exp$binding.density > 2.25,"Failed","Passed"), levels = c("Failed","Passed"))
 
   if (plots==TRUE) {
     par(mfrow = c(1,2))
@@ -54,7 +55,7 @@ NanoStringQC <- function(raw, exp, detect = 80, sn = 150, plots = TRUE, ttl =" "
     abline(v = sn,lwd = 3)
     title(ttl, outer = TRUE, line = -2)
   }
-  exp$normFlag <- (exp$sn < sn | exp$pergd < detect)
+  exp$normFlag <- factor(ifelse(exp$sn < sn | exp$pergd < detect,"Failed","Passed"), levels = c("Failed","Passed"))
   exp$QCFlag <- as.vector(exp$lodFlag == TRUE | exp$normFlag == TRUE | exp$imagingFlag == TRUE | exp$linFlag == TRUE)
   if (!explore)
     return(exp$QCFlag)
