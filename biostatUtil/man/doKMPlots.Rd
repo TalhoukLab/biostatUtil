@@ -47,6 +47,6 @@ variable.
 Make Kaplan-Meier plots
 }
 \author{
-Samuel Leung
+Samuel Leung, Derek Chiu
 }
 

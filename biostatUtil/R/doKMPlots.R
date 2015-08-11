@@ -17,7 +17,7 @@
 #' @param ... additional arguments to other functions and methods
 #' @return A Kaplan-Meier plot for the specified survival outcome split on the desired
 #' variable.
-#' @author Samuel Leung
+#' @author Samuel Leung, Derek Chiu
 #' @export
 doKMPlots <- function(input.d, time, status, var.name, var.description,
                       line.name = NULL, line.color = NULL, line.pattern = NULL,
