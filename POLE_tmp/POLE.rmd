@@ -358,30 +358,45 @@ Please note, there are `r sum(is.na(emdb$any.init.treatment))` cases with unknow
 The interaction graph gives an idea of the trend and size of the effect.
 
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
-# width/height = 13/5
-#par(mfrow=c(1,2))
-doKMPlotsPOLE(emdb, "os", use.aline.plot = USE.ALINE.KM.PLOT)
+doKMPlotsPOLE(emdb, time = "os.yrs", status = "os.sts == 'os.event'",
+              surv.type = "os", xlabs = "Total follow-up (years)",
+              ylabs = "Overall survival", use.aline.plot = USE.ALINE.KM.PLOT)
 ```
+
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
-doKMPlotsPOLEInitTrt(emdb, "os", use.aline.plot = USE.ALINE.KM.PLOT)
+doKMPlotsPOLEInitTrt(emdb, time = "os.yrs", status = "os.sts == 'os.event'",
+                     surv.type = "os", xlabs = "Total follow-up (years)",
+                     ylabs = "Overall survival", use.aline.plot = USE.ALINE.KM.PLOT)
 ```
 
 **KM plots - disease specific survival**
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
-#par(mfrow=c(1,2))
-doKMPlotsPOLE(emdb, "dss", use.aline.plot = USE.ALINE.KM.PLOT)
+doKMPlotsPOLE(emdb[!is.na(emdb$dss.sts), ],
+              time = "dss.yrs", status = "dss.sts == 'dss.event'",
+              surv.type = "dss", xlabs = "Total follow-up (years)",
+              ylabs = "Disease specific survival (DSS)", use.aline.plot = USE.ALINE.KM.PLOT)
 ```
+
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
-doKMPlotsPOLEInitTrt(emdb, "dss", use.aline.plot = USE.ALINE.KM.PLOT)
+doKMPlotsPOLEInitTrt(emdb[!is.na(emdb$dss.sts), ],
+              time = "dss.yrs", status = "dss.sts == 'dss.event'",
+              surv.type = "dss", xlabs = "Total follow-up (years)",
+              ylabs = "Disease specific survival (DSS)", use.aline.plot = USE.ALINE.KM.PLOT)
 ```
 
 **KM plots - relapse free survival**
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
-#par(mfrow=c(1,2))
-doKMPlotsPOLE(emdb, "rfs", use.aline.plot = USE.ALINE.KM.PLOT)
+doKMPlotsPOLE(emdb[!is.na(emdb$rfs.sts) & !is.na(emdb$rfs.yrs), ],
+              time = "rfs.yrs", status = "rfs.sts == 'rfs.event'",
+              surv.type = "pfs", xlabs = "Any relapse-free survival time",
+              ylabs = "Any relapse-free survival",  use.aline.plot = USE.ALINE.KM.PLOT)
 ```
+
 ```{r message=FALSE,echo=FALSE,results='hide',fig.keep='all', fig.width=8, fig.height=6}
-doKMPlotsPOLEInitTrt(emdb, "rfs", use.aline.plot = USE.ALINE.KM.PLOT)
+doKMPlotsPOLEInitTrt(emdb[!is.na(emdb$rfs.sts) & !is.na(emdb$rfs.yrs), ],
+              time = "rfs.yrs", status = "rfs.sts == 'rfs.event'",
+              surv.type = "pfs", xlabs = "Any relapse-free survival time",
+              ylabs = "Any relapse-free survival",  use.aline.plot = USE.ALINE.KM.PLOT)
 ```
 
 #### Item 16. For key multivariable analyses, report estimated effects (e.g. hazard ratio) with confidence intervals for the marker and, at least for the final model, all other variables in the model.

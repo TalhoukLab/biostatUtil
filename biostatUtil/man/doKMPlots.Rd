@@ -4,17 +4,23 @@
 \alias{doKMPlots}
 \title{Make Kaplan-Meier plots}
 \usage{
-doKMPlots(input.d, var.name, var.description, line.color = NULL,
-  line.pattern = NULL, km.plot.ref.group = "single",
+doKMPlots(input.d, time, status, var.name, var.description, line.name = NULL,
+  line.color = NULL, line.pattern = NULL, km.plot.ref.group = "single",
   single.test.type = "logrank", surv.type = "os",
   use.firth = FIRTH.THRESHOLD, use.aline.plot = FALSE, ...)
 }
 \arguments{
 \item{input.d}{\code{data.frame} containing data}
 
+\item{time}{follow up time}
+
+\item{status}{status indicator}
+
 \item{var.name}{name of variable to make Kaplan-Meier plots on}
 
 \item{var.description}{description for \code{var.name}}
+
+\item{line.name}{names for each survival curve}
 
 \item{line.color}{colors for survival curves}
 
@@ -25,7 +31,7 @@ log-rank statistic}
 
 \item{single.test.type}{test to use for survival curves. Defaults to "logrank".}
 
-\item{surv.type}{survival outcome. Either "os", "dss", or "rfs".}
+\item{surv.type}{survival outcome. Either "os", "dss", or "pfs".}
 
 \item{use.firth}{Whether to use Firth's correction for plotting the curves}
 
