@@ -28,7 +28,7 @@ NanoStringQC <- function(raw, exp, detect = 80, sn = 150, plots = TRUE, ttl =" "
     return(res)
   }
 
-  exp$linPC <- apply(raw[PCgenes, -(1:3)], 2, lin)
+  exp$linPC <- round(apply(raw[PCgenes, -(1:3)], 2, lin), 2)
   exp$linFlag <- factor(ifelse(exp$linPC < 0.95 | is.na(exp$linPC),"Failed","Passed"), levels = c("Failed","Passed"))
   exp$perFOV <- (exp$fov.counted / exp$fov.count) * 100
   exp$imagingFlag <- factor(ifelse(exp$perFOV < 75,"Failed","Passed"), levels = c("Failed","Passed"))
