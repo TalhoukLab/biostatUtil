@@ -18,12 +18,12 @@ NanoStringQC <- function(raw, exp, detect = 80, sn = 150, plots = TRUE, ttl =" "
   PCgenes = genes[raw$Code.Class == "Positive"]
   NCgenes = genes[raw$Code.Class == "Negative"]
   PCconc = sub("\\).*", "", sub(".*\\(", "", PCgenes))
-  PCconc = log(as.numeric(PCconc), base = 2)
+  PCconc = as.numeric(PCconc)
   lin = function(x){
     if (any(x == 0)){
       res = NA
     } else {
-      fit <- lm(log(x,base=2) ~ PCconc)
+      fit <- lm(x ~ PCconc)
       res = summary(fit)$r.squared }
     return(res)
   }
