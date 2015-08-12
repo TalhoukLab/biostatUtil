@@ -16,7 +16,7 @@
 addTableNumber <- function(caption, table.counter.str.default = "Table %s: ") {
   if (!is.na(caption)) {
     tc <- getOption("table_counter")
-    if (is.numeric(tc)) {
+    if (is.numeric(tc) & length(tc)>0) {
       tc <- tc + 1		
     } else {
       tc <- 1
