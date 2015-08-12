@@ -3,6 +3,7 @@
 #' @param Y a vector indicating the different batches
 #' @param permut, the number of permutations to compute a pvalue for DSC using a permutation test.
 #' @author Aline Talhouk
+#' @export
 
 DSC <- function(data, Y, permut=10) {
   scatmat <- scattermat(data, Y)

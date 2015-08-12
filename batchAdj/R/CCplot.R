@@ -2,19 +2,22 @@
 #' @param method1 is the measurements obtained in batch 1 or using method 1
 #' @param method2 is the measurements obtained in batch 2 or using method 2
 #' @param Ptype is the type of plot to be outputted c("scatter","MAplot")
-#' @param Metrics if return metrics is set to true(default is FALSE) returns Rc, Ca and R2
+#' @param metrics if return metrics is set to true(default is FALSE) returns Rc, Ca and R2
 #' @param xlabel is the label to be used for x axis
 #' @param ylabel is the label to be used for y axis
-#' @param ttitle the title for the main plot
+#' @param title the title for the main plot
 #' @param subtitle is the subtitle if requested
+#' @param xrange range of x axis
+#' @param yrange range of y axis
+#' @param MArange MA range
+#' @export
 
 
 CCplot <- function(method1, method2, Ptype = "none", metrics = FALSE,
-                   xlabel = "", ylabel = "", ttile = "", subtitle = "",
+                   xlabel = "", ylabel = "", title = "", subtitle = "",
                    xrange = NULL, yrange = NULL, MArange = c(-3.5, 5.5)){
-  require(epiR)
   ## Concordance correlation plot
-  tmp.ccc <- epi.ccc(method1, method2, ci = "z-transform",
+  tmp.ccc <- epiR::epi.ccc(method1, method2, ci = "z-transform",
                      conf.level = 0.95)
   cclab <- paste("Rc: ", round(tmp.ccc$rho.c[,1], digits = 2), " (",
                  round(tmp.ccc$rho.c[,2], digits = 2), " - ",

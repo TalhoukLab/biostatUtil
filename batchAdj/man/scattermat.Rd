@@ -7,11 +7,14 @@
 scattermat(data, Y)
 }
 \arguments{
+\item{data}{data matrix}
+
 \item{Y}{is a vector of classes}
-
-\item{B}{is the between class scatter matrix}
-
-\item{W}{is the withing class scatter matrix}
+}
+\value{
+A list with the following elements
+\item{B}{between class scatter matrix}
+\item{W}{within class scatter matrix}
 }
 \description{
 Function that computes the scatter matrix

@@ -1,9 +1,11 @@
 #' Function that computes the scatter matrix
-#' @param B is the between class scatter matrix
-#' @param W is the withing class scatter matrix
+#' @param data data matrix
 #' @param Y is a vector of classes
+#' @return A list with the following elements
+#' \item{B}{between class scatter matrix}
+#' \item{W}{within class scatter matrix}
 #' @author Aline Talhouk
-#'
+#' @export
 scattermat <- function(data, Y) {
   l <- dim(data)[2]        #CALCULATE SIZE OF DATA
   clases <- unique(Y)       #GET VECTOR OF CLASSES

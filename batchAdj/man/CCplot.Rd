@@ -5,7 +5,7 @@
 \title{Plotting function for Reliability}
 \usage{
 CCplot(method1, method2, Ptype = "none", metrics = FALSE, xlabel = "",
-  ylabel = "", ttile = "", subtitle = "", xrange = NULL,
+  ylabel = "", title = "", subtitle = "", xrange = NULL,
   yrange = NULL, MArange = c(-3.5, 5.5))
 }
 \arguments{
@@ -15,15 +15,21 @@ CCplot(method1, method2, Ptype = "none", metrics = FALSE, xlabel = "",
 
 \item{Ptype}{is the type of plot to be outputted c("scatter","MAplot")}
 
+\item{metrics}{if return metrics is set to true(default is FALSE) returns Rc, Ca and R2}
+
 \item{xlabel}{is the label to be used for x axis}
 
 \item{ylabel}{is the label to be used for y axis}
 
+\item{title}{the title for the main plot}
+
 \item{subtitle}{is the subtitle if requested}
 
-\item{Metrics}{if return metrics is set to true(default is FALSE) returns Rc, Ca and R2}
+\item{xrange}{range of x axis}
 
-\item{ttitle}{the title for the main plot}
+\item{yrange}{range of y axis}
+
+\item{MArange}{MA range}
 }
 \description{
 Plotting function for Reliability

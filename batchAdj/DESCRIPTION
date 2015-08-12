@@ -1,8 +1,9 @@
 Package: batchAdj
-Title: What the Package Does (one line, title case)
-Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph)
+Title: Batch Adjustment
+Version: 0.0.0.9001
+Authors@R: person("Aline", "Talhouk", email = "atalhouk@bccrc.ca", role = c("aut", "cre"))
+Description: Batch adjustment functions for the NanoString project.
 Depends: R (>= 3.2.0)
-License: What license is it under?
+Imports: MASS, ber, epiR
+License: GPL
 LazyData: true

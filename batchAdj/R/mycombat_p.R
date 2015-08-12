@@ -1,4 +1,11 @@
-mycombat_p=function (Y, b, prior.plots = F) {
+#' Custom combat_p
+#'
+#' Based on combat_p function from package \code{ber}
+#' @param Y To be filled.
+#' @param b To be filled.
+#' @param prior.plots To be filled.
+#' @export
+mycombat_p <- function (Y, b, prior.plots = F) {
   if (missing(Y)) {
     stop("Argument 'Y' missing, with no default\n")
   }
@@ -24,7 +31,6 @@ mycombat_p=function (Y, b, prior.plots = F) {
     stop("Array expression columns contain non-numeric values!\n")
   }
 
-  library(MASS)
   n <- nrow(Y)
   g <- ncol(Y)
   m1 <- nlevels(b)
@@ -33,7 +39,7 @@ mycombat_p=function (Y, b, prior.plots = F) {
   Xdes_batch <- model.matrix(~-1 + b, b)
   n_batches <- as.numeric(summary(b))
   mat_nbatches <- matrix(rep(n_batches, g), ncol = g)
-  B.hat <- ginv(Xdes) %*% Y
+  B.hat <- MASS::ginv(Xdes) %*% Y
   alpha.hat <- t(n.b/n) %*% B.hat[1:m1, ]
   mat_alpha.hat <- matrix(rep(alpha.hat, n), byrow = T, nrow = n)
   var.pooled <- matrix(rep(1/n, n), nrow = 1) %*% ((Y - Xdes %*%
