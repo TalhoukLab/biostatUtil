@@ -18,17 +18,17 @@ NanoStringQC <- function(raw, exp, detect = 80, sn = 150, plots = TRUE, ttl =" "
   PCgenes = genes[raw$Code.Class == "Positive"]
   NCgenes = genes[raw$Code.Class == "Negative"]
   PCconc = sub("\\).*", "", sub(".*\\(", "", PCgenes))
-  PCconc = log(as.numeric(PCconc), base = 2)
+  PCconc = as.numeric(PCconc)
   lin = function(x){
     if (any(x == 0)){
       res = NA
     } else {
-      fit <- lm(log(x,base=2) ~ PCconc)
+      fit <- lm(x ~ PCconc)
       res = summary(fit)$r.squared }
     return(res)
   }
 
-  exp$linPC <- apply(raw[PCgenes, -(1:3)], 2, lin)
+  exp$linPC <- round(apply(raw[PCgenes, -(1:3)], 2, lin), 2)
   exp$linFlag <- factor(ifelse(exp$linPC < 0.95 | is.na(exp$linPC),"Failed","Passed"), levels = c("Failed","Passed"))
   exp$perFOV <- (exp$fov.counted / exp$fov.count) * 100
   exp$imagingFlag <- factor(ifelse(exp$perFOV < 75,"Failed","Passed"), levels = c("Failed","Passed"))
