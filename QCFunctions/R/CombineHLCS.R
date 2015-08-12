@@ -5,14 +5,13 @@
 #' @param CS2 matrix of raw counts obtained from nCounter (rows are genes) with codeset 2. The first three columns must be labeled: c("Code.Class","Name","Accession") and contain that information.
 #' @param CS3 matrix of raw counts obtained from nCounter (rows are genes) with codeset 3. The first three columns must be labeled: c("Code.Class","Name","Accession") and contain that information. Defaults to Null for analysis of two codesets.
 #' @return matrix of combined data with the first three columns labeled as c("Code.Class","Name","Accession")
-#'
-
+#' @export
 CombineHLCS<-function(CS1,CS2,CS3 = NULL){
   CS1.c <- CS1[CS1$Accession %in% CS2$Accession, ]
   CS2.c <- CS2[CS2$Accession %in% CS1$Accession, ]
   CS1.c <- CS1.c[order(CS1.c$Accession), ]
   CS2.c <- CS2.c[order(CS2.c$Accession), ]
-  
+
   #Rename the genes
   CS1.c$Name[CS1.c$Name=="GJP2"] <- "GJB2"
   CS1.c$Name[CS1.c$Name=="LGAL1"] <- "LGALS1"
@@ -30,8 +29,8 @@ CombineHLCS<-function(CS1,CS2,CS3 = NULL){
   #Order the matrices by gene Name
   CS1.c <- CS1.c[order(CS1.c$Name), ]
   CS2.c <- CS2.c[order(CS2.c$Name), ]
-  
-if (!is.null(CS3)){  
+
+if (!is.null(CS3)){
   CS3.c <- CS3[CS3$Accession %in% CS2.c$Accession, ]
   CS3.c <- CS3.c[order(CS3.c$Accession), ]
   CS3.c <- CS3.c[order(CS3.c$Name), ]

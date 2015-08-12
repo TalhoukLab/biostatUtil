@@ -1,14 +1,16 @@
-require(stringr)
-#' Compare two data frames.  If input is matrix, will try to convert matrix 
+#' Compare data frames
+#'
+#' Compare two data frames. If input is matrix, will try to convert matrix
 #' into data fram (via as.data.frame) to compare.
-#' 
+#'
 #' @param db.old A data frame.
 #' @param db.new A data frame.
-#' @param id
-#' @param possible.na.strings.  A list of possible strings that may represent
-#' missing value.  If specified here, CompareDb will consider no change if for 
+#' @param id.var ID variable
+#' @param possible.na.strings  A list of possible strings that may represent
+#' missing value.  If specified here, CompareDb will consider no change if for
 #' example value change from NA to "N/A"
 #' @return Prints out a report on the difference between the db's to the console
+#' @export
 #' @examples
 #' a <- cbind("id"=c(1:5),"age"=c(50,60,20,87,41),"grade"=c(1,2,3,1,2))
 #' b <- cbind("id"=c(1:5),"age"=c(50,60,20,87,41),"grade"=c("1","2","3","1","2"))
@@ -18,7 +20,7 @@ require(stringr)
 #' f <- a; f[2,"age"] <- NA
 #' g <- a; g[2,"age"] <- "N/A"
 #' h <- a; h[2,"age"] <- "NA"
-#' 
+#'
 #' CompareDb(a,b,"id")
 #' CompareDb(a,c,"id")
 #' CompareDb(a,d,"id")
@@ -28,7 +30,6 @@ require(stringr)
 #' CompareDb(f,g,"id")
 #' CompareDb(f,g,"id",possible.na.strings=c())
 #' CompareDb(g,h,"id",possible.na.strings=c())
-
 CompareDb <- function(db.old, db.new, id.var, possible.na.strings = c("NA","na","N/A",NA)) {
   cat("### comparing changes in new dataset ...\n")
   cat("old dataset:\n")
@@ -77,23 +78,23 @@ CompareDb <- function(db.old, db.new, id.var, possible.na.strings = c("NA","na",
         paste(existing.var,": '",old.class,"' -> '",new.class,"'",sep="")
       )
     }
-    
+
     old <- db.old[existing.case.indexes.in.db.old, existing.var]; #old <- old[!is.na(old)]
     new <- db.new[existing.case.indexes.in.db.new, existing.var]; #new <- new[!is.na(new)]
-	
-	# manually changed some possible string that represents NA and changed them 
+
+	# manually changed some possible string that represents NA and changed them
 	# to [blank]
 	old[old %in% possible.na.strings] <- ""
 	new[new %in% possible.na.strings] <- ""
-	
+
     num.cases.changed <- sum(old!=new,na.rm=TRUE)
     # also need to tract how many cases changed from NA to non-NA
     num.cases.changed.na <- sum((is.na(old) & !is.na(new)) | (is.na(new) & !is.na(old)))
     num.cases.changed <- num.cases.changed + num.cases.changed.na
-    if ((num.cases.changed) != 0) {      
-      # need to check if variable is numeric, if so, it could be difference in 
-      # trailing zero's that caused the difference 
-      if (IsParsableToNumeric(old) & IsParsableToNumeric(new)) {
+    if ((num.cases.changed) != 0) {
+      # need to check if variable is numeric, if so, it could be difference in
+      # trailing zero's that caused the difference
+      if (isParsableToNumeric(old) & isParsableToNumeric(new)) {
 		  old <- as.character(sapply(as.numeric(old),function(x){
 		    return(ifelse(is.na(x),"",x))
           }))
@@ -110,7 +111,7 @@ CompareDb <- function(db.old, db.new, id.var, possible.na.strings = c("NA","na",
       }
     }
   }
-  
+
   if (length(class.changed.notices)>0) {
     cat("# showing variables with changed class ...\n")
     for (class.changed.notice in class.changed.notices) {
@@ -118,21 +119,21 @@ CompareDb <- function(db.old, db.new, id.var, possible.na.strings = c("NA","na",
     }
     cat("# end of variables with changed class\n\n")
   }
-  
+
   if (length(changed.vars)>0) {
     cat("# showing summary of variables with changed values ...\n")
     for (changed.var.notice in changed.vars.notices) {
       cat("   ",changed.var.notice,"\n")
     }
     cat("# end of summary of variables with changed values\n\n")
-    
+
     # showing details of changes ...
     cat("# showing details of changed variables values ...\n")
     for (changed.var in changed.vars) {
-      old <- db.old[existing.case.indexes.in.db.old, changed.var] 
+      old <- db.old[existing.case.indexes.in.db.old, changed.var]
       new <- db.new[existing.case.indexes.in.db.new, changed.var]
-	  
-	  # manually changed some possible string that represents NA and changed them 
+
+	  # manually changed some possible string that represents NA and changed them
 	  # to [blank]
 	  old[old %in% possible.na.strings] <- ""
 	  new[new %in% possible.na.strings] <- ""
@@ -169,17 +170,4 @@ CompareDb <- function(db.old, db.new, id.var, possible.na.strings = c("NA","na",
   cat("### end of comparing changes in new dataset.\n")
 }
 
-#############################################
-# return true if the x is parsable to numeric i.e. it is either already in 
-# numeric format or the string values represent number
-# - blanks are ignore
-#
-IsParsableToNumeric <- function(x) {
-  if (is.numeric(x)) {
-    return(TRUE)
-  }
-  # 1. remove all blanks
-  x <- sapply(x,str_trim)
-  x <- x[(!is.na(x)) & (x!="")]
-  return(sum(suppressWarnings(!is.na(as.numeric(x))))==length(x))
-}
+

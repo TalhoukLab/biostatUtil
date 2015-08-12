@@ -1,16 +1,15 @@
 #' QC for NanoString Data
 #'
 #' This function computes NanoString quality control parameters and flags
-#' @param raw: matrix of raw counts obtained from nCounter (rows are genes). The first three columns must be labeled: c("Code.Class","Name","Accession") and contain that information.
-#' @param exp:  matrix of annotations with rows in the same order as the columns of raw.
-#' @param detect: Percent threshold of genes over lod that we would like to detect (not decimal).
-#' @param sn: Signal to noise ratio of the housekeeping genes we are willing to tolerate
-#' @param plots: Binary, indicates whether plots to visualise the results are requested, defaults to TRUE
-#' @param ttl: a string to show the title on the plots
-#' @param explore: returns the plots only, defaults to TRUE
+#' @param raw matrix of raw counts obtained from nCounter (rows are genes). The first three columns must be labeled: c("Code.Class","Name","Accession") and contain that information.
+#' @param exp matrix of annotations with rows in the same order as the columns of raw.
+#' @param detect Percent threshold of genes over lod that we would like to detect (not decimal).
+#' @param sn Signal to noise ratio of the housekeeping genes we are willing to tolerate
+#' @param plots Binary, indicates whether plots to visualise the results are requested, defaults to TRUE
+#' @param ttl a string to show the title on the plots
+#' @param explore returns the plots only, defaults to TRUE
 #' @return matrix of annotations updated with normalization parameters
-
-
+#' @export
 NanoStringQC <- function(raw, exp, detect = 80, sn = 150, plots = TRUE, ttl =" ", explore = TRUE){
   genes = raw$Name
   rownames(raw) = genes
