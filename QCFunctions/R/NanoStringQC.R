@@ -55,7 +55,7 @@ NanoStringQC <- function(raw, exp, detect = 80, sn = 150, plots = TRUE, ttl =" "
     title(ttl, outer = TRUE, line = -2)
   }
   exp$normFlag <- factor(ifelse(exp$sn < sn | exp$pergd < detect,"Failed","Passed"), levels = c("Failed","Passed"))
-  exp$QCFlag <- as.vector(exp$lodFlag == TRUE | exp$normFlag == TRUE | exp$imagingFlag == TRUE | exp$linFlag == TRUE)
+  exp$QCFlag <- factor(ifelse(as.vector(exp$lodFlag == "Failed" | exp$normFlag == "Failed" | exp$imagingFlag == "Failed" | exp$linFlag == "Failed"),"Failed","Passed"))
   if (!explore)
     return(exp$QCFlag)
   else
