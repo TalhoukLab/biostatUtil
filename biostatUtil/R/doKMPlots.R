@@ -43,8 +43,8 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
   assign("temp.d", temp.d, envir = as.environment(pos)) 
   if (!use.aline.plot) {
     plotKM(temp.d, formula.obj,
-           paste0(var.description, " (", toupper(surv.type), ")"),
-           line.name, line.color, line.pattern = line.pattern,
+           line.name, line.color, line.pattern = line.pattern, 
+           main=paste0(var.description, " (", toupper(surv.type), ")"),
            show.test = km.plot.ref.group, single.test.type = single.test.type,
            obs.survyrs = 3, ...)
   } else {	
