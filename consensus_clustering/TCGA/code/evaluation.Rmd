@@ -1,0 +1,51 @@
+---
+title: "Evaluation of Clustering Algorithms"
+author: "Derek Chiu"
+date: "August 13, 2015"
+output: 
+  pdf_document: 
+    fig_caption: yes
+    number_sections: yes
+    toc: yes
+---
+
+```{r setup, echo=FALSE, cache=FALSE, include=TRUE, message=FALSE}
+library(ConClust)
+library(mclust)
+library(RColorBrewer)
+library(dplyr)
+library(knitr)
+opts_knit$set(root.dir = "../")
+opts_chunk$set(echo = FALSE)
+```
+
+```{r load}
+nmf.output <- readRDS("outputs/nmf_output_05-19-2015.rds")
+ccp.clust <- readRDS("outputs/results_CCP.rds")
+nmf.clust <- readRDS("outputs/classes_NMF.rds")
+```
+
+# Introduction
+Cluster analysis is the unsupervised learning method of assigning entities into different groups based on one or more of their attributes. The goal is to place similar objects together and separate dissimilar objects. For example, in genomics studies, we frequently try and cluster patient samples measured on a large number of molecular features. When we get a clustering assignment from an algorithm, we often want to evaluate its performance. Ideally, a good clustering algorithm is able to differentiate entities with no knowledge of the true class labels. In addition, we want the algorithm to arrive at a stable and optimal number of clusters. There are two main categories of clustering evaluation: **external evaluation** and **internal evaluation**.
+
+```{r all_clusters}
+all.clust <- ccp.clust %>%
+  sapply(., function(x) x[[4]]$consensusClass) %>%
+  cbind(., nmf.clust)
+meta.cm <- consensusMatrix(all.clust)
+
+BuPuFun <- colorRampPalette(brewer.pal(n = 9, "BuPu"))
+palBuPu <- BuPuFun(256)
+heatmap(meta.cm, labRow = NA, labCol = NA, col = palBuPu)
+```
+
+# External Evaluation
+External evaluation usually refers to the case when we compare our clustering assignments to true class labels, or have some gold standard to compare to. In applications, this might be the published clustering result. The downside of using external evaluation is that the reference classes may not be correctly clustered themselves, and we are treating these as the norm. None the less, we can explore a few metrics.
+
+## Adjusted Rand Index
+
+```{r ARI}
+sort(apply(all.clust, 2, adjustedRandIndex,
+           x = substring(rownames(all.clust), first = 18)))
+```
+
