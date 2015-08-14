@@ -36,6 +36,10 @@ log-rank statistic}
 
 \item{use.firth}{Whether to use Firth's correction for plotting the curves}
 
+\item{CI}{logical; if \code{TRUE}, will plot confidence bands}
+
+\item{HR}{logical; if \code{TRUE}, will show hazard ratios}
+
 \item{use.aline.plot}{if \code{TRUE}, will use Aline's plot function}
 
 \item{...}{additional arguments to other functions and methods}

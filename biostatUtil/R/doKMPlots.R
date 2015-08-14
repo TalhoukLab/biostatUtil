@@ -13,6 +13,8 @@
 #' @param single.test.type test to use for survival curves. Defaults to "logrank".
 #' @param surv.type survival outcome. Either "os", "dss", or "pfs".
 #' @param use.firth Whether to use Firth's correction for plotting the curves
+#' @param CI logical; if \code{TRUE}, will plot confidence bands
+#' @param HR logical; if \code{TRUE}, will show hazard ratios
 #' @param use.aline.plot if \code{TRUE}, will use Aline's plot function
 #' @param ... additional arguments to other functions and methods
 #' @return A Kaplan-Meier plot for the specified survival outcome split on the desired
@@ -44,7 +46,7 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
   if (!use.aline.plot) {
     plotKM(temp.d, formula.obj,
            line.name, line.color, line.pattern = line.pattern, 
-           main=paste0(var.description, " (", toupper(surv.type), ")"),
+           main.text = paste0(var.description, " (", toupper(surv.type), ")"),
            show.test = km.plot.ref.group, single.test.type = single.test.type,
            obs.survyrs = 3, ...)
   } else {	
