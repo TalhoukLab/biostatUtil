@@ -15,6 +15,8 @@
 #' @param use.firth Whether to use Firth's correction for plotting the curves
 #' @param CI logical; if \code{TRUE}, will plot confidence bands
 #' @param HR logical; if \code{TRUE}, will show hazard ratios
+#' @param show.risk logical; if \code{TRUE}, will show the number of people at risk
+#' at each time of death beneath the plot
 #' @param use.aline.plot if \code{TRUE}, will use Aline's plot function
 #' @param ... additional arguments to other functions and methods
 #' @return A Kaplan-Meier plot for the specified survival outcome split on the desired
@@ -26,7 +28,7 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
                       km.plot.ref.group = "single",
                       single.test.type = "logrank", surv.type = "os",
                       use.firth = FIRTH.THRESHOLD, CI = TRUE, HR = TRUE,
-                      use.aline.plot = FALSE, ...) {
+                      show.risk = TRUE, use.aline.plot = FALSE, ...) {
   pos <- 1
   if (is.null(line.name))
     line.name <- names(table(input.d[, var.name])) 
@@ -50,7 +52,7 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
            show.test = km.plot.ref.group, single.test.type = single.test.type,
            obs.survyrs = 3, ...)
   } else {	
-    ggkm(sfit, sfit2 = NULL, table = TRUE, returns = FALSE, marks = TRUE,
+    ggkm(sfit, sfit2 = NULL, table = show.risk, marks = TRUE,
          xlims = c(0, max(sfit$time)), ylims = c(0, 1),
          ystratalabs = line.name, ystrataname = NULL,
          main = paste0(var.description, " (", toupper(surv.type), ")"),

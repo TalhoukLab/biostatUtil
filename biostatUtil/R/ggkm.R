@@ -27,7 +27,7 @@
 #' @param ... additional arguments to other methods
 #' @import ggplot2
 #' @export
-ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = FALSE,
+ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                  marks = TRUE, CI = TRUE,
                  shading.colors = c("blue2", "red2",
                                     "deepskyblue", "indianred3"),
@@ -246,19 +246,13 @@ line.y.increment <- 0.05 # for annotate(), to indicate the much y should be incr
                                  ifelse(m < 10, 2.5, 3.5) - 0.28 * m),
                                "lines")) # ADJUST POSITION OF TABLE FOR AT RISK
     
-    # Plotting the graphs
-    gridExtra::grid.arrange(p, blank.pic, data.table, clip = FALSE, nrow = 3,
-                 ncol = 1, heights = grid::unit(c(2, .1, .25),
-                                          c("null", "null", "null")))
-    
-    if(returns) {
-      a <- gridExtra::arrangeGrob(p, blank.pic, data.table, clip = FALSE, nrow = 3,
-                       ncol = 1, heights = grid::unit(c(2, .1, .25),
-                                                c("null", "null", "null")))
-      return(a)
-    }
+    if (returns)
+      gridExtra::grid.arrange(p, blank.pic, data.table,
+                              clip = FALSE, nrow = 3, ncol = 1,
+                              heights = grid::unit(c(2, .1, .25),
+                                                   c("null", "null", "null")))
   } else {
     if (returns)
-      return(p)
+      p
   }
 }

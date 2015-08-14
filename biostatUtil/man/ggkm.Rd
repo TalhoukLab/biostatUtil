@@ -4,7 +4,7 @@
 \alias{ggkm}
 \title{Kaplan-Meier Plots using ggplot}
 \usage{
-ggkm(sfit, sfit2 = NULL, table = TRUE, returns = FALSE, marks = TRUE,
+ggkm(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
   CI = TRUE, shading.colors = c("blue2", "red2", "deepskyblue",
   "indianred3"), main = "Kaplan-Meier Plot", xlabs = "Time",
   ylabs = "Survival Probability", xlims = c(0, max(sfit$time)),
