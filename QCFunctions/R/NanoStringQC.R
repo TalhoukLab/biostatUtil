@@ -18,14 +18,10 @@ NanoStringQC <- function(raw, exp, detect = 80, sn = 150, plots = TRUE, ttl =" "
   NCgenes = genes[raw$Code.Class == "Negative"]
   PCconc = sub("\\).*", "", sub(".*\\(", "", PCgenes))
   PCconc = as.numeric(PCconc)
-  lin = function(x){
-    if (any(x == 0)){
-      res = NA
-    } else {
+  lin <- function(x){
       fit <- lm(x ~ PCconc)
-      res = summary(fit)$r.squared }
-    return(res)
-  }
+      res = summary(fit)$r.squared
+      }
 
   exp$linPC <- round(apply(raw[PCgenes, -(1:3)], 2, lin), 2)
   exp$linFlag <- factor(ifelse(exp$linPC < 0.95 | is.na(exp$linPC),"Failed","Passed"), levels = c("Failed","Passed"))
@@ -33,7 +29,7 @@ NanoStringQC <- function(raw, exp, detect = 80, sn = 150, plots = TRUE, ttl =" "
   exp$imagingFlag <- factor(ifelse(exp$perFOV < 75,"Failed","Passed"), levels = c("Failed","Passed"))
   exp$lod <- apply(raw[NCgenes, -(1:3)], 2, mean) + 2 * (apply(raw[NCgenes, -(1:3)], 2, sd))
   exp$llod <- apply(raw[NCgenes, -(1:3)], 2, mean) - 2 * (apply(raw[NCgenes, -(1:3)], 2, sd))
-  exp$lodFlag <- factor(ifelse(t(as.vector(raw["POS_E(0.5)", -(1:3)]) < exp$lod),"Failed","Passed"), levels = c("Failed","Passed"))
+  exp$spcFlag <- factor(ifelse(t(as.vector(raw["POS_E(0.5)", -(1:3)]) < exp$llod | apply(raw[NCgenes, -(1:3)], 2, mean)==0),"Failed","Passed"), levels = c("Failed","Passed"))
   exp$gd <- apply(raw[, -(1:3)] > exp$lod, 2, sum) # Number of genes above background
   exp$pergd <- (exp$gd / nrow(raw)) * 100
   exp$averageHK <- exp(apply(log(raw[HKgenes, -(1:3)], base = 2), 2, mean)) # Geometric Mean
@@ -55,7 +51,7 @@ NanoStringQC <- function(raw, exp, detect = 80, sn = 150, plots = TRUE, ttl =" "
     title(ttl, outer = TRUE, line = -2)
   }
   exp$normFlag <- factor(ifelse(exp$sn < sn | exp$pergd < detect,"Failed","Passed"), levels = c("Failed","Passed"))
-  exp$QCFlag <- factor(ifelse(as.vector(exp$lodFlag == "Failed" | exp$normFlag == "Failed" | exp$imagingFlag == "Failed" | exp$linFlag == "Failed"),"Failed","Passed"))
+  exp$QCFlag <- factor(ifelse(as.vector(exp$spcFlag == "Failed" | exp$normFlag == "Failed" | exp$imagingFlag == "Failed" | exp$linFlag == "Failed"),"Failed","Passed"))
   if (!explore)
     return(exp$QCFlag)
   else

@@ -28,8 +28,9 @@
 #' @author Samuel Leung
 #' @seealso \code{\link{plotKMDetail}}
 #' @export
-plotKM <- function(input.d, input.formula, main.text, xlab.text, ylab.text,
-                   line.name, line.color, line.pattern = NULL,
+plotKM <- function(input.d, input.formula, 
+                   line.name, line.color, line.pattern = NULL, 
+                   main.text="", xlab.text="", ylab.text="",
                    line.width = NULL, show.test = "single",
                    single.test.type = "logrank", round.digits.p.value = 4,
                    obs.survyrs = 10, legend.pos = "bottomleft",
