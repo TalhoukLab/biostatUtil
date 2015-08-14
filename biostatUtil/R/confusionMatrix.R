@@ -15,6 +15,7 @@
 #' @param num.boot number of times to bootstrap. Defaults to 1000.
 #' @param conf.level confidence level. Defaults to 95\%.
 #' @param digits number of digits to round summaries to
+#' @param verbose logical; if \code{TRUE}, outputs are printed to the screen
 #' @return A confusion matrix for the predicted and reference classes. Then
 #' the estimated statistics along with bootstrapped confidence intervals. A
 #' list with the following elements
@@ -46,11 +47,13 @@
 #' ### Round to 2 digits
 #' confusionMatrix(x, y, digits = 2)
 confusionMatrix <- function(x, y, seed = 20, num.boot = 1000,
-                            conf.level = 0.95, digits = 4) {
-  cat("Confusion Matrix", "\n")
+                            conf.level = 0.95, digits = 4,
+                            verbose = FALSE) {
   CM <- table(Prediction = x, Reference = y)
-  print(CM)
-  
+  if (verbose) {
+    cat("Confusion Matrix", "\n")
+    print(CM)
+  }
   # Compute marginal totals and correct predictions
   m1 <- CM[1, 1] + CM[2, 1]
   m2 <- CM[1, 2] + CM[2, 2]
@@ -83,11 +86,21 @@ confusionMatrix <- function(x, y, seed = 20, num.boot = 1000,
     paste(z[1], "(", z[2], "-", z[3], ")")
   }
   
-  cat(paste0("\n", "Accuracy: ", printCI(Accuracy), "\n", "Sensitivity: ",
-             printCI(Sensitivity), "\n", "Specificity: ", printCI(Specificity),
-             "\n", "PPV: ", printCI(PPV), "\n", "NPV: ", printCI(NPV), "\n",
-             "kappa: ", printCI(kappa), "\n", "\n"))
+  if (verbose)
+    cat(paste0("\n", "Accuracy: ", printCI(Accuracy), "\n", "Sensitivity: ",
+               printCI(Sensitivity), "\n", "Specificity: ",
+               printCI(Specificity), "\n", "PPV: ", printCI(PPV), "\n",
+               "NPV: ", printCI(NPV), "\n", "kappa: ", printCI(kappa), "\n",
+               "\n"))
+  
+  table <- matrix(c(Accuracy, Sensitivity, Specificity, PPV, NPV, kappa),
+                  ncol = 3, byrow = T,
+                  dimnames = list(c("Accuracy", "Sensitivity", "Specificity",
+                                    "PPV", "NPV", "kappa"),
+                                  c("Point Estimate", "Lower CI", "Upper CI")))
+  table <- pander::pandoc.table.return(table)
   
   return(list(Accuracy = Accuracy, Sensitivity = Sensitivity,
-              Specificity = Specificity, PPV = PPV, NPV = NPV, kappa = kappa))
+              Specificity = Specificity, PPV = PPV, NPV = NPV, kappa = kappa,
+              table = table))
 }
