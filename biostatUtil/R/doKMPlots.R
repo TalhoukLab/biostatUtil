@@ -50,7 +50,7 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
   } else {	
     ggkm(sfit, sfit2 = NULL, table = TRUE, returns = FALSE, marks = TRUE,
          xlims = c(0, max(sfit$time)), ylims = c(0, 1),
-         ystratalabs = line.name, ystrataname = NULL, timeby = 5,
+         ystratalabs = line.name, ystrataname = NULL,
          main = paste0(var.description, " (", toupper(surv.type), ")"),
          pval = TRUE, HR = HR, use.firth = use.firth, CI = CI, subs = NULL,
          legend = FALSE, ...)	
