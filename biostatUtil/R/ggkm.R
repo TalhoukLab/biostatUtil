@@ -37,7 +37,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = FALSE,
                  ystratalabs = NULL, ystrataname = NULL,
                  timeby = 5, pval = TRUE, HR = TRUE,
                  use.firth = 1, subs = NULL, legend = FALSE, ...) {
-  line.y.increment <- 0.05 # for annotate(), to indicate the much y should be incremented for each line
+line.y.increment <- 0.05 # for annotate(), to indicate the much y should be incremented for each line
   
   # to satisfy R CMD check where variables can't be found when input data passed from ggplot
   surv <- lower <- upper <- n.censor <- n.risk <- NULL

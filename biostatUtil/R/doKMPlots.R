@@ -23,7 +23,7 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
                       line.name = NULL, line.color = NULL, line.pattern = NULL,
                       km.plot.ref.group = "single",
                       single.test.type = "logrank", surv.type = "os",
-                      use.firth = FIRTH.THRESHOLD,
+                      use.firth = FIRTH.THRESHOLD, CI = TRUE, HR = TRUE,
                       use.aline.plot = FALSE, ...) {
   pos <- 1
   if (is.null(line.name))
@@ -50,9 +50,9 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
   } else {	
     ggkm(sfit, sfit2 = NULL, table = TRUE, returns = FALSE, marks = TRUE,
          xlims = c(0, max(sfit$time)), ylims = c(0, 1),
-         ystratalabs = line.name, ystrataname = NULL, timeby = 1,
+         ystratalabs = line.name, ystrataname = NULL, timeby = 5,
          main = paste0(var.description, " (", toupper(surv.type), ")"),
-         pval = TRUE, HR = TRUE, use.firth = use.firth, CI = TRUE, subs = NULL,
+         pval = TRUE, HR = HR, use.firth = use.firth, CI = CI, subs = NULL,
          legend = FALSE, ...)	
   }
 }
