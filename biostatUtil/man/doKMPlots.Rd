@@ -7,7 +7,8 @@
 doKMPlots(input.d, time, status, var.name, var.description, line.name = NULL,
   line.color = NULL, line.pattern = NULL, km.plot.ref.group = "single",
   single.test.type = "logrank", surv.type = "os",
-  use.firth = FIRTH.THRESHOLD, use.aline.plot = FALSE, ...)
+  use.firth = FIRTH.THRESHOLD, CI = TRUE, HR = TRUE,
+  use.aline.plot = FALSE, ...)
 }
 \arguments{
 \item{input.d}{\code{data.frame} containing data}

@@ -4,8 +4,8 @@
 \alias{plotKM}
 \title{Plot Kaplan-Meier curves}
 \usage{
-plotKM(input.d, input.formula, main.text, xlab.text, ylab.text, line.name,
-  line.color, line.pattern = NULL, line.width = NULL,
+plotKM(input.d, input.formula, line.name, line.color, line.pattern = NULL,
+  main.text = "", xlab.text = "", ylab.text = "", line.width = NULL,
   show.test = "single", single.test.type = "logrank",
   round.digits.p.value = 4, obs.survyrs = 10, legend.pos = "bottomleft",
   file.name = "no.file", file.width = 7, file.height = 7,
@@ -16,17 +16,17 @@ plotKM(input.d, input.formula, main.text, xlab.text, ylab.text, line.name,
 
 \item{input.formula}{survival formula to \code{Surv}}
 
-\item{main.text}{plot title}
-
-\item{xlab.text}{x-axis label}
-
-\item{ylab.text}{y-axis label}
-
 \item{line.name}{name of legend}
 
 \item{line.color}{line colour of survival curves}
 
 \item{line.pattern}{line pattern of survival curves}
+
+\item{main.text}{plot title}
+
+\item{xlab.text}{x-axis label}
+
+\item{ylab.text}{y-axis label}
 
 \item{line.width}{line width of survival curves}
 
