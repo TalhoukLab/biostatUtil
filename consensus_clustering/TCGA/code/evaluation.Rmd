@@ -1,7 +1,7 @@
 ---
 title: "Evaluation of Clustering Algorithms"
 author: "Derek Chiu"
-date: "August 13, 2015"
+date: "August 14, 2015"
 output: 
   pdf_document: 
     fig_caption: yes
@@ -12,8 +12,12 @@ output:
 ```{r setup, echo=FALSE, cache=FALSE, include=TRUE, message=FALSE}
 library(ConClust)
 library(mclust)
+library(infotheo)
+library(ggplot2)
 library(RColorBrewer)
+library(tidyr)
 library(dplyr)
+library(magrittr)
 library(knitr)
 opts_knit$set(root.dir = "../")
 opts_chunk$set(echo = FALSE)
@@ -31,9 +35,13 @@ Cluster analysis is the unsupervised learning method of assigning entities into 
 ```{r all_clusters}
 all.clust <- ccp.clust %>%
   sapply(., function(x) x[[4]]$consensusClass) %>%
-  cbind(., nmf.clust)
-meta.cm <- consensusMatrix(all.clust)
+  cbind(., nmf.clust) %>% 
+  set_colnames(c("Hierarchical (Euclidean)", "Hierarchical (Diana)",
+               "K-Means (Euclidean)", "K-Means (Spearman)", "K-Means (MI)",
+               "PAM (Euclidean)", "PAM (Spearman)", "PAM (MI)",
+               "NMF (Divergence)", "NMF (Euclidean)"))
 
+meta.cm <- consensusMatrix(all.clust)
 BuPuFun <- colorRampPalette(brewer.pal(n = 9, "BuPu"))
 palBuPu <- BuPuFun(256)
 heatmap(meta.cm, labRow = NA, labCol = NA, col = palBuPu)
@@ -44,8 +52,34 @@ External evaluation usually refers to the case when we compare our clustering as
 
 ## Adjusted Rand Index
 
-```{r ARI}
-sort(apply(all.clust, 2, adjustedRandIndex,
-           x = substring(rownames(all.clust), first = 18)))
+```{r ARI, results='asis'}
+ARI <- sort(apply(all.clust, 2, adjustedRandIndex,
+                  x = substring(rownames(all.clust), first = 18)),
+            decreasing = T) %>% 
+  data.frame(ARI = .) %>% 
+  mutate(Algorithms = rownames(.)) %>% 
+  select(Algorithms, ARI)
+pander::pandoc.table(ARI, split.table = 300, justify = "lc")
+```
+
+## Mutual Information
+
+```{r MI, results='asis'}
+MI <- sort(apply(all.clust, 2, mutinformation,
+                 Y = substring(rownames(all.clust), first = 18)),
+           decreasing = T) %>% 
+  data.frame(MI = .) %>% 
+  mutate(Algorithms = rownames(.)) %>% 
+  select(Algorithms, MI)
+pander::pandoc.table(MI, split.table = 300, justify = "lc")
+```
+
+## Proportion of Ambiguous Clusters
+
+```{r PAC}
+PAC.each <- ccp.clust %>%
+  sapply(., function(x) PAC(x[[4]]$consensusMatrix)) %>%
+  c(nmfDiv = PAC(nmf.div), nmfEucl = PAC(nmf.eucl)) %>%
+  sort
 ```
 
