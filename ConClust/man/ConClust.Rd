@@ -5,7 +5,7 @@
 \title{Consensus clustering over samples and algorithms}
 \usage{
 ConClust(x, k, pItem = 0.8, reps = 1000, method = NULL, seed = 123456,
-  seed.method = 1, dir = NULL)
+  seed.method = 1, dir = NULL, time.saved = TRUE)
 }
 \arguments{
 \item{x}{data matrix; genes are rows and samples are columns}
@@ -26,6 +26,9 @@ any number of the following: "nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmE
 
 \item{dir}{directory where returned object will be saved at each iteration (as an RDS object).
 No output file is saved if \code{file} is \code{NULL}.}
+
+\item{time.saved}{logical; if \code{TRUE} (default), the date saved is appended
+to the file name. Only applicable when \code{dir} is not \code{NULL}.}
 }
 \value{
 An array of dimension \code{nrow(x)} by \code{reps} by \code{length(methods)}

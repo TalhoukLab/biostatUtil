@@ -14,6 +14,8 @@
 #' @param seed.method seed to use to ensure each method operates on the same set of subsamples
 #' @param dir directory where returned object will be saved at each iteration (as an RDS object).
 #' No output file is saved if \code{file} is \code{NULL}.
+#' @param time.saved logical; if \code{TRUE} (default), the date saved is appended
+#' to the file name. Only applicable when \code{dir} is not \code{NULL}.
 #' @return An array of dimension \code{nrow(x)} by \code{reps} by \code{length(methods)}
 #' Each slice of the array is a matrix showing consensus clustering results for
 #' algorithms (method). The matrices have a row for each sample, and a column for each
@@ -22,7 +24,8 @@
 #' @importFrom magrittr set_rownames
 #' @export
 ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
-                     seed = 123456, seed.method = 1, dir = NULL) {
+                     seed = 123456, seed.method = 1, dir = NULL,
+                     time.saved = TRUE) {
   . <- NULL
   x.rest <- x %>%
     select(which(sapply(., class) == "numeric")) %>%
@@ -55,9 +58,9 @@ ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
 
       coclus[ind.new, i, j] <- switch(
         method[j],
-        nmfDiv = predict(NMF::nmf(
+        nmfDiv = NMF::predict(NMF::nmf(
           x.nmf.samp, rank = k, method = "brunet", seed = seed)),
-        nmfEucl = predict(NMF::nmf(
+        nmfEucl = NMF::predict(NMF::nmf(
           x.nmf.samp, rank = k, method = "lee", seed = seed)),
         hcAEucl = cutree(hclust(dist(t(x.rest[, ind.new])),
                                 method = "average"), k),
@@ -78,6 +81,9 @@ ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
     }
   }
   if (!is.null(dir))
-    saveRDS(coclus, paste0(dir, "ConClustOutput.rds"))
+    if (time.saved)
+      saveRDS(coclus, paste0(dir, "ConClustOutput_", Sys.Date(), ".rds"))
+    else
+      saveRDS(coclus, paste0(dir, "ConClustOutput.rds"))
   return(coclus)
 }

@@ -1,8 +1,8 @@
 Package: ConClust
 Type: Package
 Title: Consensus Clustering related functions
-Version: 0.0.0.9001
-Date: 2015-07-23
+Version: 0.0.0.9002
+Date: 2015-08-17
 Authors@R: c(
     person("Derek", "Chiu", , "dchiu@bccrc.ca", c("aut", "cre")))
 Description: Helper functions used for performing consensus clustering
