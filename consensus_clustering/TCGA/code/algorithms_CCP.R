@@ -1,14 +1,18 @@
-# Load
-library(ConClust)
-library(ConsensusClusterPlus)
+## This script obtains assignments into four clusters and consensus
+## matrices from non-NMF-based algorithms that used consensus clustering via
+## ConsensusClusterPlus (CCP)
+## Author: Derek Chiu
+
+# Load packages and data
 library(dplyr)
 library(magrittr)
+library(ConsensusClusterPlus)
+library(ConClust)
+library(tcgaHGSC)
+data(hgsc)
 
-# Import
-dat.raw <- read.csv("~/Documents/Project 1 - HGSC Subtype/Datasets/TCGA.csv")
-
-# Remove genes with low variability and scale
-dat <- dat.raw %>%
+# Remove genes with low variability and scale on the gene space
+dat <- hgsc %>%
   set_rownames(.$UNIQID) %>%
   select(which(sapply(., class) == "numeric")) %>%
   extract(apply(., 1, sd) > 1, ) %>%
@@ -16,46 +20,51 @@ dat <- dat.raw %>%
   scale %>%
   t
 
-# Use consensus clustering
+# Get consensus clusters
+k <- 4
+reps <- 1000
+pItem <- 0.8
 
-# user  system elapsed
-# 47.837  25.207  72.141
-hcAEucl <- ConsensusClusterPlus(dat, maxK = 4, reps = 1000, pItem = 0.8, seed = 123, verbose = T)
+# HC Euclidean (takes ~ 1.2 mins)
+hcAEucl <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
+                                seed = 123, verbose = T)
 
-# user  system elapsed
-# 405.932  28.070 432.125
-hcDianaEucl <- ConsensusClusterPlus(dat, maxK = 4, reps = 1000, pItem = 0.8, clusterAlg = "dianaHook", seed = 123, verbose = T)
+# HC Diana (takes ~ 7.2 mins)
+hcDianaEucl <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
+                                    clusterAlg = "dianaHook",
+                                    seed = 123, verbose = T)
 
-# user  system elapsed
-# 164.093  15.505 177.808
-kmEucl <- ConsensusClusterPlus(dat, maxK = 4, reps = 1000, pItem = 0.8, clusterAlg = "kmdist", distance = "euclidean",
+# K-Means Euclidean (takes ~ 3 mins)
+kmEucl <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
+                               clusterAlg = "kmdist", distance = "euclidean",
                                seed = 123, verbose = T)
 
-# user  system elapsed
-# 165.402  14.873 178.425
-kmSpear <- ConsensusClusterPlus(dat, maxK = 4, reps = 1000, pItem = 0.8, clusterAlg = "kmdist", distance = "spearman",
-                                  seed = 123, verbose = T)
+# K-means Spearman (takes ~ 3 mins)
+kmSpear <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
+                                clusterAlg = "kmdist", distance = "spearman",
+                                seed = 123, verbose = T)
 
-# user  system elapsed
-# 156.912  17.560 172.940
-kmMI <- ConsensusClusterPlus(dat, maxK = 4, reps = 1000, pItem = 0.8, clusterAlg = "kmdist", distance = "myMIdist",
-                                  seed = 123, verbose = T)
+# K-means Mutual Information (takes ~ 3 mins)
+kmMI <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
+                             clusterAlg = "kmdist", distance = "myMIdist",
+                             seed = 123, verbose = T)
 
-# user  system elapsed
-# 115.549  24.418 138.091
-pamEucl <- ConsensusClusterPlus(dat, maxK = 4, reps = 1000, pItem = 0.8, clusterAlg = "pam", distance = "euclidean",
-                                   seed = 123, verbose = T)
+# PAM Euclidean (takes ~ 2.5 mins)
+pamEucl <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
+                                clusterAlg = "pam", distance = "euclidean",
+                                seed = 123, verbose = T)
 
-# user  system elapsed
-# 136.183  23.754 158.044
-pamSpear <- ConsensusClusterPlus(dat, maxK = 4, reps = 1000, pItem = 0.8, clusterAlg = "pam", distance = "spearman",
-                                   seed = 123, verbose = T)
+# PAM Spearman (takes ~ 3 mins)
+pamSpear <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
+                                 clusterAlg = "pam", distance = "spearman",
+                                 seed = 123, verbose = T)
 
-# user  system elapsed
-# 122.436  23.794 144.373
-pamMI <- ConsensusClusterPlus(dat, maxK = 4, reps = 1000, pItem = 0.8, clusterAlg = "pam", distance = "myMIdist",
-                                   seed = 123, verbose = T)
+# PAM Mutual Information (takes ~ 2.5 mins)
+pamMI <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
+                              clusterAlg = "pam", distance = "myMIdist",
+                              seed = 123, verbose = T)
 
-# Save results
-saveRDS(list(hcAEucl, hcDianaEucl, kmEucl, kmSpear, kmMI, pamEucl, pamSpear, pamMI),
-        "consensus_clustering/TCGA/outputs/results_CCP.rds")
+# Save ConsensusClusterPlus (CCP) results
+saveRDS(list(hcAEucl, hcDianaEucl, kmEucl, kmSpear,
+             kmMI, pamEucl, pamSpear, pamMI),
+        "TCGA/outputs/results_CCP.rds", compress = "xz")

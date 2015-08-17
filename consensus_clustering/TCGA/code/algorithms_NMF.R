@@ -1,38 +1,32 @@
-source("consensus_clustering/ConsensusClusterNMF.R")
-source("consensus_clustering/functions/consensusMatrix.R")
+## This script obtains assignments into four clusters and consensus
+## matrices from NMF-based algorithms that used consensus clustering
+## Author: Derek Chiu
 
-# Get consensus clusters
-x <- read.csv("~/Documents/Project 1 - HGSC Subtype/Datasets/TCGA.csv")
-  # ConsensusCluster(x, pItem = 0.8, reps = 1000, k = 4, OF = "consensus_clustering/TCGA/outputs/")
-results.nmf <- readRDS("consensus_clustering/TCGA/outputs/nmf_output_05-19-2015.rds")
+# Load packages and data
+library(plyr)
+library(ConClust)
+library(tcgaHGSC)
+data(hgsc)
+k <- 4
 
-# Takes about ~ 3 mins to run each
-nmf.div <- consensusMatrix(results.nmf[, , 1])
-nmf.eucl <- consensusMatrix(results.nmf[, , 2])
+# Get consensus clusters (takes very long to run!)
+# ConClust(x = hgsc, k = k, pItem = 0.8, reps = 1000,
+#          method = c("nmfDiv", "nmfEucl"), dir = "TCGA/outputs/")
+results <- readRDS("TCGA/outputs/nmf_output_05-19-2015.rds")
 
-# Get nice colours
-library(RColorBrewer)
-BuPuFun <- colorRampPalette(brewer.pal(n = 9, "BuPu"))
-paletteSize <- 256
-palBuPu <- BuPuFun(paletteSize)
+# Consensus matrices (takes ~ 5 mins)
+con.mats <- alply(results, 3, consensusMatrix,
+                  .progress = "text", .dims = TRUE)
 
-# Heatmaps
-heatmap(nmf.div, labRow = NA, labCol = NA, col = palBuPu)
-heatmap(nmf.eucl, labRow = NA, labCol = NA, col = palBuPu)
+# Cluster memberships using HC
+classes <- llply(con.mats, function(x) {
+  cl <- as.factor(cutree(hclust(dist(x), method = "average"), k))
+  names(cl) <- hclust(dist(x), method = "average")$labels
+  return(cl)})
 
-# Hierarchical Clustering of consensus matrix
-div.clust <- hclust(dist(nmf.div), method = "average") %>%
-  cutree(4) %>%
-  as.factor %>%
-  set_names(hclust(dist(nmf.div), method = "average")$labels)
-
-eucl.clust <- hclust(dist(nmf.eucl), method = "average") %>%
-  cutree(4) %>%
-  as.factor %>%
-  set_names(hclust(dist(nmf.eucl), method = "average")$labels)
-
-# Save clusters
-cbind(div.clust, eucl.clust) %>%
-  set_names(c("nmfDiv", "nmfEucl")) %>%
-  saveRDS("consensus_clustering/TCGA/nmf_clust.rds")
-
+# Save NMF results
+saveRDS(list(nmfDiv = list(consensusMatrix = con.mats$nmfDiv,
+                           consensusClass = classes$nmfDiv),
+             nmfEucl = list(consensusMatrix = con.mats$nmfEucl,
+                            consensusClass= classes$nmfEucl)),
+        "TCGA/outputs/results_NMF.rds", compress = "xz")
