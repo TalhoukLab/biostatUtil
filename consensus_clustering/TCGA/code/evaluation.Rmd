@@ -1,21 +1,25 @@
 ---
 title: "Evaluation of Clustering Algorithms"
 author: "Derek Chiu"
-date: "August 14, 2015"
+date: "August 17, 2015"
 output: 
   pdf_document: 
-    fig_caption: yes
     number_sections: yes
     toc: yes
+    toc_depth: 3
 ---
 
 ```{r setup, echo=FALSE, cache=FALSE, include=TRUE, message=FALSE}
+library(tcgaHGSC)
 library(ConClust)
+library(clv)
+library(clusterSim)
 library(mclust)
 library(infotheo)
 library(ggplot2)
 library(RColorBrewer)
 library(tidyr)
+library(plyr)
 library(dplyr)
 library(magrittr)
 library(knitr)
@@ -24,38 +28,77 @@ opts_chunk$set(echo = FALSE)
 ```
 
 ```{r load}
-nmf.output <- readRDS("outputs/nmf_output_05-19-2015.rds")
-ccp.clust <- readRDS("outputs/results_CCP.rds")
-nmf.clust <- readRDS("outputs/classes_NMF.rds")
+results.CCP <- readRDS("outputs/results_CCP.rds")
+results.NMF <- readRDS("outputs/results_NMF.rds")
+data(hgsc)
+dat <- hgsc %>%
+  set_rownames(.$UNIQID) %>%
+  select(which(sapply(., class) == "numeric")) %>%
+  magrittr::extract(apply(., 1, sd) > 1, ) %>%
+  t %>%
+  scale
 ```
 
 # Introduction
 Cluster analysis is the unsupervised learning method of assigning entities into different groups based on one or more of their attributes. The goal is to place similar objects together and separate dissimilar objects. For example, in genomics studies, we frequently try and cluster patient samples measured on a large number of molecular features. When we get a clustering assignment from an algorithm, we often want to evaluate its performance. Ideally, a good clustering algorithm is able to differentiate entities with no knowledge of the true class labels. In addition, we want the algorithm to arrive at a stable and optimal number of clusters. There are two main categories of clustering evaluation: **external evaluation** and **internal evaluation**.
 
 ```{r all_clusters}
-all.clust <- ccp.clust %>%
+results.all <- results.CCP %>%
   sapply(., function(x) x[[4]]$consensusClass) %>%
-  cbind(., nmf.clust) %>% 
+  cbind(., results.NMF$nmfDiv$consensusClass,
+        results.NMF$nmfEucl$consensusClass) %>% 
   set_colnames(c("Hierarchical (Euclidean)", "Hierarchical (Diana)",
-               "K-Means (Euclidean)", "K-Means (Spearman)", "K-Means (MI)",
-               "PAM (Euclidean)", "PAM (Spearman)", "PAM (MI)",
-               "NMF (Divergence)", "NMF (Euclidean)"))
+                 "K-Means (Euclidean)", "K-Means (Spearman)", "K-Means (MI)",
+                 "PAM (Euclidean)", "PAM (Spearman)", "PAM (MI)",
+                 "NMF (Divergence)", "NMF (Euclidean)"))
 
-meta.cm <- consensusMatrix(all.clust)
+meta.cm <- consensusMatrix(results.all)
 BuPuFun <- colorRampPalette(brewer.pal(n = 9, "BuPu"))
 palBuPu <- BuPuFun(256)
 heatmap(meta.cm, labRow = NA, labCol = NA, col = palBuPu)
 ```
 
+The proportion of cases with at least 0.6 agreement is `r ((sum(meta.cm >= 0.6) - ncol(meta.cm)) / 2) / choose(ncol(meta.cm), 2)`.
+
+```{r conf_mat}
+final.compare <- hclust(dist(meta.cm), method = "average") %>%
+  cutree(4) %>%
+  as.factor %>%
+  set_names(hclust(dist(meta.cm), method = "average")$labels) %>%
+  set_names(substring(names(.), first = 18)) %>%
+  table(., names(.)) %>%
+  magrittr::extract(names(sort(apply(., 1, which.max))), ) %>%
+  set_rownames(colnames(.)) %>%
+  as.table
+
+names(dimnames(final.compare)) <- c("Predicted", "Reference")
+cm <- caret::confusionMatrix(final.compare)
+```
+
+The confusion matrix is shown below, as well as different metrics for each class.
+
+```{r conf_mat_output, results='asis'}
+pander::pandoc.table(cm$table, split.table = 300)
+pander::pandoc.table(cm$byClass, split.table = 300)
+```
+
 # External Evaluation
 External evaluation usually refers to the case when we compare our clustering assignments to true class labels, or have some gold standard to compare to. In applications, this might be the published clustering result. The downside of using external evaluation is that the reference classes may not be correctly clustered themselves, and we are treating these as the norm. None the less, we can explore a few metrics.
 
+## Kappa Statistic
+
+```{r kappa}
+kappa <- psych::wkappa(final.compare)
+```
+
+The unadjusted kappa statistic is `r kappa$kappa` and the weighted kappa statistic is `r kappa$weighted.kappa` for the final meta consensus cluster.
+ 
 ## Adjusted Rand Index
 
 ```{r ARI, results='asis'}
-ARI <- sort(apply(all.clust, 2, adjustedRandIndex,
-                  x = substring(rownames(all.clust), first = 18)),
-            decreasing = T) %>% 
+ARI <- apply(results.all, 2, adjustedRandIndex,
+             x = substring(rownames(results.all), first = 18)) %>% 
+  sort(decreasing = T) %>% 
   data.frame(ARI = .) %>% 
   mutate(Algorithms = rownames(.)) %>% 
   select(Algorithms, ARI)
@@ -65,21 +108,153 @@ pander::pandoc.table(ARI, split.table = 300, justify = "lc")
 ## Mutual Information
 
 ```{r MI, results='asis'}
-MI <- sort(apply(all.clust, 2, mutinformation,
-                 Y = substring(rownames(all.clust), first = 18)),
-           decreasing = T) %>% 
+MI <- apply(results.all, 2, mutinformation,
+            Y = substring(rownames(results.all), first = 18)) %>% 
+  sort(decreasing = T) %>% 
   data.frame(MI = .) %>% 
   mutate(Algorithms = rownames(.)) %>% 
   select(Algorithms, MI)
 pander::pandoc.table(MI, split.table = 300, justify = "lc")
 ```
 
-## Proportion of Ambiguous Clusters
+The mutual information for the meta consensus clustering is `r entropy::mi.plugin(final.compare)`.
 
-```{r PAC}
-PAC.each <- ccp.clust %>%
-  sapply(., function(x) PAC(x[[4]]$consensusMatrix)) %>%
-  c(nmfDiv = PAC(nmf.div), nmfEucl = PAC(nmf.eucl)) %>%
-  sort
+## Cumulative Distribution Function
+
+```{r CDF}
+CDF.each <- list(nmfDiv = results.NMF$nmfDiv$consensusMatrix,
+                 nmfEucl = results.NMF$nmfEucl$consensusMatrix) %>%
+  ldply(.fun = function(x) x[lower.tri(x)]) %>%
+  rbind(., ldply(results.CCP, function(x)
+    x[[4]]$consensusMatrix[lower.tri(x[[4]]$consensusMatrix)])) %>%
+  as.data.frame %>%
+  set_rownames(.$.id) %>%
+  select(-.id) %>%
+  t %>%
+  as.data.frame %>%
+  gather(key = Method, value = CDF, 1:ncol(.))
+
+ggplot(CDF.each, aes(x = CDF, colour = Method)) +
+  stat_ecdf() +
+  facet_wrap(~ Method) +
+  theme(legend.position = "none")
 ```
 
+## Proportion of Ambiguous Clusters
+
+```{r PAC, results='asis'}
+PAC <- results.CCP %>%
+  sapply(., function(x) PAC(x[[4]]$consensusMatrix)) %>%
+  c(nmfDiv = PAC(results.NMF$nmfDiv$consensusMatrix),
+    nmfEucl = PAC(results.NMF$nmfEucl$consensusMatrix)) %>%
+  set_names(c("Hierarchical (Euclidean)", "Hierarchical (Diana)",
+                 "K-Means (Euclidean)", "K-Means (Spearman)", "K-Means (MI)",
+                 "PAM (Euclidean)", "PAM (Spearman)", "PAM (MI)",
+                 "NMF (Divergence)", "NMF (Euclidean)")) %>% 
+  sort %>% 
+  data.frame(PAC = .) %>% 
+  mutate(Algorithms = rownames(.)) %>% 
+  select(Algorithms, PAC)
+pander::pandoc.table(PAC, split.table = 300, justify = "lc")
+```
+
+The PAC for the meta consensus matrix is `r PAC(meta.cm)`.
+
+# Internal Evaluation
+
+## Davies-Bouldin Index
+
+For DBI, the lower the better.
+
+```{r DBI, results='asis'}
+DBI <- dat %>%
+  apply(results.all, 2, cls.scatt.data, data = .) %>%
+  sapply(., clv.Davies.Bouldin, intracls = "average", intercls = "average") %>%
+  sort %>% 
+  data.frame(DBI = .) %>% 
+  dplyr::mutate(Algorithms = rownames(.)) %>% 
+  dplyr::select(Algorithms, DBI)
+pander::pandoc.table(DBI, split.table = 300, justify = "lc")
+```
+
+## Dunn Index
+
+For DI, the larger the better.
+
+```{r DI, results='asis'}
+DI <- dat %>%
+  apply(results.all, 2, cls.scatt.data, data = .) %>%
+  sapply(., clv.Dunn, intracls = "average", intercls = "average") %>%
+  sort(decreasing = T) %>% 
+  data.frame(DI = .) %>% 
+  dplyr::mutate(Algorithms = rownames(.)) %>% 
+  dplyr::select(Algorithms, DI)
+pander::pandoc.table(DI, split.table = 300, justify = "lc")
+```
+
+## Silhouette Average Width
+
+For SAW, the larger the better.
+
+```{r SAW, results='asis'}
+SAW <- apply(results.all, 2, function(x) summary(silhouette(x, dist(dat)))$avg.width) %>%
+  sort(decreasing = T) %>% 
+  data.frame(SAW = .) %>% 
+  dplyr::mutate(Algorithms = rownames(.)) %>% 
+  dplyr::select(Algorithms, SAW)
+pander::pandoc.table(SAW, split.table = 300, justify = "lc")
+```
+
+## C-Index
+
+For CI, the lower the better.
+
+```{r CI, results='asis'}
+CI <- apply(results.all, 2, index.G3, d = dist(dat)) %>%
+  sort %>% 
+  data.frame(CI = .) %>% 
+  dplyr::mutate(Algorithms = rownames(.)) %>% 
+  dplyr::select(Algorithms, CI)
+pander::pandoc.table(CI, split.table = 300, justify = "lc")
+```
+
+## Baker and Hubert Index
+
+For BHI, the larger the better.
+
+```{r BHI, results='asis'}
+BHI <- apply(results.all, 2, index.G2, d = dist(dat)) %>%
+  sort(decreasing = T) %>% 
+  data.frame(BHI = .) %>% 
+  dplyr::mutate(Algorithms = rownames(.)) %>% 
+  dplyr::select(Algorithms, BHI)
+pander::pandoc.table(BHI, split.table = 300, justify = "lc")
+```
+
+## Calinski-Harabasz Index
+
+For CHI, the larger the better.
+
+```{r CHI, results='asis'}
+CHI <- apply(results.all, 2, index.G1, x = dat) %>%
+  sort(decreasing = T) %>% 
+  data.frame(CHI = .) %>% 
+  dplyr::mutate(Algorithms = rownames(.)) %>% 
+  dplyr::select(Algorithms, CHI)
+pander::pandoc.table(CHI, split.table = 300, justify = "lc")
+```
+
+## Summary
+
+Here is a summary of all the indices for each algorithm, in unsorted order.
+
+```{r index_summary, results='asis'}
+index.summary <- Reduce(merge, list(DBI, DI, SAW, CI, BHI, CHI))
+pander::pandoc.table(index.summary, split.table = 300, justify = "lcccccc")
+```
+
+# Ranked Indices
+
+```{r ranked_indices}
+
+```
