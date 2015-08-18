@@ -21,13 +21,14 @@
 #' algorithms (method). The matrices have a row for each sample, and a column for each
 #' subsample. Each entry represents a class membership.
 #' @author Derek Chiu, Aline Talhouk
-#' @importFrom magrittr set_rownames
+#' @importFrom magrittr extract
 #' @export
 ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
                      seed = 123456, seed.method = 1, dir = NULL,
                      time.saved = TRUE) {
   . <- NULL
   x.rest <- x %>%
+    as.data.frame %>%
     select(which(sapply(., class) == "numeric")) %>%
     extract(apply(., 1, sd) > 1, ) %>%
     t %>%
