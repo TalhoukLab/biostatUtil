@@ -255,6 +255,17 @@ pander::pandoc.table(index.summary, split.table = 300, justify = "lcccccc")
 
 # Ranked Indices
 
-```{r ranked_indices}
+The table below shows the ranking of algorithms for performance on a clustering index, for each index. There is an additional column that shows the propoportion of indices where an algorithm was ranked **first or second**.
 
+```{r ranked_indices, results='asis'}
+ranked.indices <- data.frame(DBI = rank(index.summary$DBI),
+                             DI = rank(-index.summary$DI),
+                             SAW = rank(-index.summary$SAW),
+                             CI = rank(index.summary$CI),
+                             BHI = rank(-index.summary$BHI),
+                             CHI = rank(-index.summary$CHI)) %>% 
+  mutate(Top = apply(., 1, function(x) sum(x %in% c(1, 2)) / ncol(.))) %>%
+  set_rownames(index.summary$Algorithms)
+  
+pander::pandoc.table(ranked.indices, split.table = 300, justify = "lccccccc")
 ```
