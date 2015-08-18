@@ -2,9 +2,12 @@
 
 export(ConClust)
 export(PAC)
+export(agnesHook)
 export(connectivityMatrix)
 export(consensusMatrix)
+export(dianaHook)
 export(indicatorMatrix)
+export(myMIdist)
 import(bioDist)
 import(cluster)
 import(dplyr)
