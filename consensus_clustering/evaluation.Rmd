@@ -18,18 +18,19 @@ library(mclust)
 library(infotheo)
 library(ggplot2)
 library(RColorBrewer)
+library(pander)
 library(tidyr)
 library(plyr)
 library(dplyr)
 library(magrittr)
 library(knitr)
-opts_knit$set(root.dir = "../")
+panderOptions("table.split.table", 300)
 opts_chunk$set(echo = FALSE)
 ```
 
 ```{r load}
-results.CCP <- readRDS("outputs/results_CCP.rds")
-results.NMF <- readRDS("outputs/results_NMF.rds")
+results.CCP <- readRDS("TCGA/outputs/results_CCP.rds")
+results.NMF <- readRDS("TCGA/outputs/results_NMF.rds")
 data(hgsc)
 dat <- hgsc %>%
   set_rownames(.$UNIQID) %>%
@@ -80,8 +81,8 @@ cm <- caret::confusionMatrix(final.compare)
 The confusion matrix is shown below, as well as different metrics for each class.
 
 ```{r conf_mat_output, results='asis'}
-pander::pandoc.table(cm$table, split.table = 300)
-pander::pandoc.table(cm$byClass, split.table = 300)
+pander::pandoc.table(cm$table)
+pander::pandoc.table(cm$byClass)
 ```
 
 # External Evaluation
@@ -106,7 +107,7 @@ ARI <- apply(results.all, 2, adjustedRandIndex,
   data.frame(ARI = .) %>% 
   mutate(Algorithms = rownames(.)) %>% 
   select(Algorithms, ARI)
-pander::pandoc.table(ARI, split.table = 300, justify = "lc")
+pander::pandoc.table(ARI, justify = "lc")
 ```
 
 ## Mutual Information
@@ -120,7 +121,7 @@ MI <- apply(results.all, 2, mutinformation,
   data.frame(MI = .) %>% 
   mutate(Algorithms = rownames(.)) %>% 
   select(Algorithms, MI)
-pander::pandoc.table(MI, split.table = 300, justify = "lc")
+pander::pandoc.table(MI, justify = "lc")
 ```
 
 The mutual information for the meta consensus clustering is `r entropy::mi.plugin(final.compare)`.
@@ -160,7 +161,7 @@ PAC <- results.CCP %>%
   data.frame(PAC = .) %>% 
   mutate(Algorithms = rownames(.)) %>% 
   select(Algorithms, PAC)
-pander::pandoc.table(PAC, split.table = 300, justify = "lc")
+pander::pandoc.table(PAC, justify = "lc")
 ```
 
 The PAC for the meta consensus matrix is `r PAC(meta.cm)`.
@@ -179,7 +180,7 @@ DBI <- dat %>%
   data.frame(DBI = .) %>% 
   dplyr::mutate(Algorithms = rownames(.)) %>% 
   dplyr::select(Algorithms, DBI)
-pander::pandoc.table(DBI, split.table = 300, justify = "lc")
+pander::pandoc.table(DBI, justify = "lc")
 ```
 
 ## Dunn Index
@@ -194,7 +195,7 @@ DI <- dat %>%
   data.frame(DI = .) %>% 
   dplyr::mutate(Algorithms = rownames(.)) %>% 
   dplyr::select(Algorithms, DI)
-pander::pandoc.table(DI, split.table = 300, justify = "lc")
+pander::pandoc.table(DI, justify = "lc")
 ```
 
 ## Silhouette Average Width
@@ -207,7 +208,7 @@ SAW <- apply(results.all, 2, function(x) summary(silhouette(x, dist(dat)))$avg.w
   data.frame(SAW = .) %>% 
   dplyr::mutate(Algorithms = rownames(.)) %>% 
   dplyr::select(Algorithms, SAW)
-pander::pandoc.table(SAW, split.table = 300, justify = "lc")
+pander::pandoc.table(SAW, justify = "lc")
 ```
 
 ## Rousseeuw's Silhouette
@@ -220,7 +221,7 @@ RS <- apply(results.all, 2, index.S, d = dist(dat)) %>%
   data.frame(RS = .) %>% 
   dplyr::mutate(Algorithms = rownames(.)) %>% 
   dplyr::select(Algorithms, RS)
-pander::pandoc.table(RS, split.table = 300, justify = "lc")
+pander::pandoc.table(RS, justify = "lc")
 ```
 
 ## C-Index
@@ -233,7 +234,7 @@ CI <- apply(results.all, 2, index.G3, d = dist(dat)) %>%
   data.frame(CI = .) %>% 
   dplyr::mutate(Algorithms = rownames(.)) %>% 
   dplyr::select(Algorithms, CI)
-pander::pandoc.table(CI, split.table = 300, justify = "lc")
+pander::pandoc.table(CI, justify = "lc")
 ```
 
 ## Baker and Hubert Index
@@ -246,7 +247,7 @@ BHI <- apply(results.all, 2, index.G2, d = dist(dat)) %>%
   data.frame(BHI = .) %>% 
   dplyr::mutate(Algorithms = rownames(.)) %>% 
   dplyr::select(Algorithms, BHI)
-pander::pandoc.table(BHI, split.table = 300, justify = "lc")
+pander::pandoc.table(BHI, justify = "lc")
 ```
 
 ## Calinski-Harabasz Index
@@ -259,7 +260,7 @@ CHI <- apply(results.all, 2, index.G1, x = dat) %>%
   data.frame(CHI = .) %>% 
   dplyr::mutate(Algorithms = rownames(.)) %>% 
   dplyr::select(Algorithms, CHI)
-pander::pandoc.table(CHI, split.table = 300, justify = "lc")
+pander::pandoc.table(CHI, justify = "lc")
 ```
 
 ## Summary
@@ -268,7 +269,7 @@ Here is a summary of all the indices for each algorithm, in unsorted order.
 
 ```{r index_summary, results='asis'}
 index.summary <- Reduce(merge, list(ARI, MI, PAC, DBI, DI, SAW, RS, CI, BHI, CHI))
-pander::pandoc.table(index.summary, split.table = 300,
+pander::pandoc.table(index.summary,
                      justify = paste0("l",
                                       paste(rep("c", ncol(index.summary) - 1),
                                             collapse = "")))
@@ -295,7 +296,7 @@ ranked.indices <- data.frame(Algorithms = index.summary$Algorithms,
                                                 ncol(.[, -1]), 2), "%"))) %>%
   arrange(desc(Top))
   
-pander::pandoc.table(ranked.indices, split.table = 300,
+pander::pandoc.table(ranked.indices,
                      justify = paste0("l",
                                       paste(rep("c", ncol(ranked.indices) - 1),
                                             collapse = "")))
@@ -310,7 +311,7 @@ ranked.sums <- ranked.indices %>%
   select(Algorithms, Top, Sum, Weight) %>% 
   arrange(Sum)
 
-pander::pandoc.table(ranked.sums, split.table = 300,
+pander::pandoc.table(ranked.sums,
                      justify = paste0("l",
                                       paste(rep("c", ncol(ranked.sums) - 1),
                                             collapse = "")))
@@ -328,5 +329,10 @@ The following two-cluster dataset is our first simulation:
 sw <- shapes.worms()
 plot(sw$data, col = c(2:3)[sw$clusters], xlab = "x", ylab = "y",
      main = "Two clusters with atypical parabolic shapes (worms)")
+```
+
+```{r worms_cluster}
+worms.CCP <- readRDS("Worms/outputs/results_CCP.rds")
+worms.NMF <- readRDS("Worms/outputs/results_NMF.rds")
 ```
 
