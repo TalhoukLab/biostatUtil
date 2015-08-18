@@ -1,7 +1,7 @@
 ---
 title: "Evaluation of Clustering Algorithms"
 author: "Derek Chiu"
-date: "August 17, 2015"
+date: "August 18, 2015"
 output: 
   pdf_document: 
     number_sections: yes
@@ -37,6 +37,11 @@ dat <- hgsc %>%
   magrittr::extract(apply(., 1, sd) > 1, ) %>%
   t %>%
   scale
+
+ALG.NAMES <- c("HC (Euclidean)", "HC (Diana)",
+               "KM (Euclidean)", "KM (Spearman)", "KM (MI)",
+               "PAM (Euclidean)", "PAM (Spearman)", "PAM (MI)",
+               "NMF (Divergence)", "NMF (Euclidean)")
 ```
 
 # Introduction
@@ -47,10 +52,7 @@ results.all <- results.CCP %>%
   sapply(., function(x) x[[4]]$consensusClass) %>%
   cbind(., results.NMF$nmfDiv$consensusClass,
         results.NMF$nmfEucl$consensusClass) %>% 
-  set_colnames(c("Hierarchical (Euclidean)", "Hierarchical (Diana)",
-                 "K-Means (Euclidean)", "K-Means (Spearman)", "K-Means (MI)",
-                 "PAM (Euclidean)", "PAM (Spearman)", "PAM (MI)",
-                 "NMF (Divergence)", "NMF (Euclidean)"))
+  set_colnames(ALG.NAMES)
 
 meta.cm <- consensusMatrix(results.all)
 BuPuFun <- colorRampPalette(brewer.pal(n = 9, "BuPu"))
@@ -95,6 +97,8 @@ The unadjusted kappa statistic is `r kappa$kappa` and the weighted kappa statist
  
 ## Adjusted Rand Index
 
+The larger the better.
+
 ```{r ARI, results='asis'}
 ARI <- apply(results.all, 2, adjustedRandIndex,
              x = substring(rownames(results.all), first = 18)) %>% 
@@ -106,6 +110,8 @@ pander::pandoc.table(ARI, split.table = 300, justify = "lc")
 ```
 
 ## Mutual Information
+
+The larger the better.
 
 ```{r MI, results='asis'}
 MI <- apply(results.all, 2, mutinformation,
@@ -142,15 +148,14 @@ ggplot(CDF.each, aes(x = CDF, colour = Method)) +
 
 ## Proportion of Ambiguous Clusters
 
+The lower the better.
+
 ```{r PAC, results='asis'}
 PAC <- results.CCP %>%
   sapply(., function(x) PAC(x[[4]]$consensusMatrix)) %>%
   c(nmfDiv = PAC(results.NMF$nmfDiv$consensusMatrix),
     nmfEucl = PAC(results.NMF$nmfEucl$consensusMatrix)) %>%
-  set_names(c("Hierarchical (Euclidean)", "Hierarchical (Diana)",
-                 "K-Means (Euclidean)", "K-Means (Spearman)", "K-Means (MI)",
-                 "PAM (Euclidean)", "PAM (Spearman)", "PAM (MI)",
-                 "NMF (Divergence)", "NMF (Euclidean)")) %>% 
+  set_names(ALG.NAMES) %>% 
   sort %>% 
   data.frame(PAC = .) %>% 
   mutate(Algorithms = rownames(.)) %>% 
@@ -205,6 +210,19 @@ SAW <- apply(results.all, 2, function(x) summary(silhouette(x, dist(dat)))$avg.w
 pander::pandoc.table(SAW, split.table = 300, justify = "lc")
 ```
 
+## Rousseeuw's Silhouette
+
+For Rousseuw's Silhouette internal cluster quality index (RS), the larger the better.
+
+```{r RS, results='asis'}
+RS <- apply(results.all, 2, index.S, d = dist(dat)) %>%
+  sort(decreasing = T) %>% 
+  data.frame(RS = .) %>% 
+  dplyr::mutate(Algorithms = rownames(.)) %>% 
+  dplyr::select(Algorithms, RS)
+pander::pandoc.table(RS, split.table = 300, justify = "lc")
+```
+
 ## C-Index
 
 For CI, the lower the better.
@@ -249,8 +267,11 @@ pander::pandoc.table(CHI, split.table = 300, justify = "lc")
 Here is a summary of all the indices for each algorithm, in unsorted order.
 
 ```{r index_summary, results='asis'}
-index.summary <- Reduce(merge, list(DBI, DI, SAW, CI, BHI, CHI))
-pander::pandoc.table(index.summary, split.table = 300, justify = "lcccccc")
+index.summary <- Reduce(merge, list(ARI, MI, PAC, DBI, DI, SAW, RS, CI, BHI, CHI))
+pander::pandoc.table(index.summary, split.table = 300,
+                     justify = paste0("l",
+                                      paste(rep("c", ncol(index.summary) - 1),
+                                            collapse = "")))
 ```
 
 # Ranked Indices
@@ -258,14 +279,54 @@ pander::pandoc.table(index.summary, split.table = 300, justify = "lcccccc")
 The table below shows the ranking of algorithms for performance on a clustering index, for each index. There is an additional column that shows the propoportion of indices where an algorithm was ranked **first or second**.
 
 ```{r ranked_indices, results='asis'}
-ranked.indices <- data.frame(DBI = rank(index.summary$DBI),
+ranked.indices <- data.frame(Algorithms = index.summary$Algorithms,
+                             ARI = rank(-index.summary$ARI),
+                             MI = rank(-index.summary$MI),
+                             PAC = rank(index.summary$PAC),
+                             DBI = rank(index.summary$DBI),
                              DI = rank(-index.summary$DI),
                              SAW = rank(-index.summary$SAW),
+                             RS = rank(-index.summary$RS),
                              CI = rank(index.summary$CI),
                              BHI = rank(-index.summary$BHI),
                              CHI = rank(-index.summary$CHI)) %>% 
-  mutate(Top = apply(., 1, function(x) sum(x %in% c(1, 2)) / ncol(.))) %>%
-  set_rownames(index.summary$Algorithms)
+  mutate(Top = apply(.[, -1], 1,
+                     function(x) paste0(round(100 * sum(x %in% c(1, 2)) /
+                                                ncol(.[, -1]), 2), "%"))) %>%
+  arrange(desc(Top))
   
-pander::pandoc.table(ranked.indices, split.table = 300, justify = "lccccccc")
+pander::pandoc.table(ranked.indices, split.table = 300,
+                     justify = paste0("l",
+                                      paste(rep("c", ncol(ranked.indices) - 1),
+                                            collapse = "")))
 ```
+
+If we were to conduct a meta consensus clustering, a weight for each algorithm needs to be assigned. One such way of doing so is using the inverse rank sums. We can sum the ranks for each algorithm, and assign higher weight for consistently high ranked methods (1st or 2nd) and vice versa. This is shown below:
+
+```{r inverse_rank_sum, results='asis'}
+ranked.sums <- ranked.indices %>% 
+  mutate(Sum = apply(.[, -c(1, 12)], 1, sum),
+         Weight = paste0(round(100 * Sum^-1 / sum(Sum^-1), 2), "%")) %>% 
+  select(Algorithms, Top, Sum, Weight) %>% 
+  arrange(Sum)
+
+pander::pandoc.table(ranked.sums, split.table = 300,
+                     justify = paste0("l",
+                                      paste(rep("c", ncol(ranked.sums) - 1),
+                                            collapse = "")))
+```
+
+# Simulations
+
+To confirm the clustering results from using the TCGA dataset, we need to try out the algorithms on a few simulated datasets, designed to test the robustness of each method. The `clusterSim` package provides very good built-in examples to use.
+
+## Worms Dataset
+
+The following two-cluster dataset is our first simulation:
+
+```{r worms_plot}
+sw <- shapes.worms()
+plot(sw$data, col = c(2:3)[sw$clusters], xlab = "x", ylab = "y",
+     main = "Two clusters with atypical parabolic shapes (worms)")
+```
+
