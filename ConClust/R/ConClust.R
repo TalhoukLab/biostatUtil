@@ -43,6 +43,9 @@ ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
   samples <- colnames(x.rest)
   n <- ncol(x.rest)
   n.new <- floor(n * pItem)
+  if (is.null(method))
+    method <- c("nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl",
+                "kmSpear", "kmMI", "pamEucl", "pamSpear", "pamMI")
   nm <- length(method)
   coclus <- array(NA, c(n, reps, nm),
                   dimnames = list(samples, paste0("R", 1:reps), method))
@@ -77,7 +80,7 @@ ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
                       cluster.only = TRUE),
         pamSpear = pam(spearman.dist(t(x.rest[, ind.new])), k,
                        cluster.only = TRUE),
-        pamMI = pam(myMIdist(x.rest[, ind.new]), k,
+        pamMI = pam(myMIdist(t(x.rest[, ind.new])), k,
                     cluster.only = TRUE))
     }
   }
