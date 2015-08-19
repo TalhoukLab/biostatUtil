@@ -21,10 +21,10 @@ ROW.TD.STYLE.FOR.MULTI.COX.ALIGN.TOP <- "border-bottom: 1px solid grey; text-ali
 
 # Values
 VALUE.CODING.INIT.TREATMENT.NO <- "No treatment"
-VALUE.CODING.INIT.TREATMENT.CHEMO.ONLY <- "chemo.only"
-VALUE.CODING.INIT.TREATMENT.RT.ONLY <- "rt.only"
-VALUE.CODING.INIT.TREATMENT.VAG.BRACHY.ONLY <- "vag.brachy.only"
-VALUE.CODING.INIT.TREATMENT.BOTH <- "both"
+VALUE.CODING.INIT.TREATMENT.CHEMO.ONLY <- "Chemo only"
+VALUE.CODING.INIT.TREATMENT.RT.ONLY <- "Radiation only"
+VALUE.CODING.INIT.TREATMENT.VAG.BRACHY.ONLY <- "Vag Brachy only"
+VALUE.CODING.INIT.TREATMENT.BOTH <- "Both"
 
 # Missing codes
 MISSING.EXPLICIT <- "N/A" # missing value code for values that are explicitily indicated as missing from data source e.g. "X" in grade
