@@ -16,6 +16,7 @@ NanoStringQC <- function(raw, exp, detect = 80, sn = 150, plots = TRUE, ttl =" "
   HKgenes = genes[raw$Code.Class == "Housekeeping"]
   PCgenes = genes[raw$Code.Class == "Positive"]
   NCgenes = genes[raw$Code.Class == "Negative"]
+  Hybgenes = genes[raw$Code.Class != "Endogenous"]
   PCconc = sub("\\).*", "", sub(".*\\(", "", PCgenes))
   PCconc = as.numeric(PCconc)
   lin <- function(x){
@@ -30,8 +31,8 @@ NanoStringQC <- function(raw, exp, detect = 80, sn = 150, plots = TRUE, ttl =" "
   exp$lod <- apply(raw[NCgenes, -(1:3)], 2, mean) + 2 * (apply(raw[NCgenes, -(1:3)], 2, sd))
   exp$llod <- apply(raw[NCgenes, -(1:3)], 2, mean) - 2 * (apply(raw[NCgenes, -(1:3)], 2, sd))
   exp$spcFlag <- factor(ifelse(t(as.vector(raw["POS_E(0.5)", -(1:3)]) < exp$llod | apply(raw[NCgenes, -(1:3)], 2, mean)==0),"Failed","Passed"), levels = c("Failed","Passed"))
-  exp$gd <- apply(raw[, -(1:3)] > exp$lod, 2, sum) # Number of genes above background
-  exp$pergd <- (exp$gd / nrow(raw)) * 100
+  exp$gd <- apply(raw[!(rownames(raw) %in% Hybgenes), -(1:3)] > exp$lod, 2, sum) # Number of genes above background
+  exp$pergd <- (exp$gd / nrow(raw[!(rownames(raw) %in% Hybgenes), -(1:3)] )) * 100
   exp$averageHK <- exp(apply(log(raw[HKgenes, -(1:3)], base = 2), 2, mean)) # Geometric Mean
   exp$sn <- exp$averageHK / exp$lod
   exp$sn[exp$lod < 0.001] <- 0 # This is so that it does not underflow
@@ -50,8 +51,7 @@ NanoStringQC <- function(raw, exp, detect = 80, sn = 150, plots = TRUE, ttl =" "
     abline(v = sn,lwd = 3)
     title(ttl, outer = TRUE, line = -2)
   }
-  exp$normFlag <- factor(ifelse(exp$sn < sn | exp$pergd < detect,"Failed","Passed"), levels = c("Failed","Passed"))
-  exp$QCFlag <- factor(ifelse(as.vector(exp$spcFlag == "Failed" | exp$normFlag == "Failed" | exp$imagingFlag == "Failed" | exp$linFlag == "Failed"),"Failed","Passed"))
+exp$QCFlag <- factor(ifelse(as.vector(exp$spcFlag == "Failed" | exp$imagingFlag == "Failed" | exp$linFlag == "Failed"),"Failed","Passed"))
   if (!explore)
     return(exp$QCFlag)
   else
