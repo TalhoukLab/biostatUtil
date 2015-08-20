@@ -252,7 +252,5 @@ line.y.increment <- 0.05 # for annotate(), to indicate the much y should be incr
                               heights = grid::unit(c(2, .1, .25),
                                                    c("null", "null", "null")))
   } else {
-    if (returns)
-      p
-  }
+      return(p)}
 }
