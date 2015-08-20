@@ -398,3 +398,37 @@ pandoc.table(ranked.sums,
                                       paste(rep("c", ncol(ranked.sums) - 1),
                                             collapse = "")))
 ```
+
+Using hierarchical clustering with Wald's method on the meta-consensus matrix across the ten algorithms, we can obtain meta-consensus classes. The following table shows how the different methods compare, based on the number of matches to the true class labels.
+
+```{r worms_meta, results='asis'}
+weights <- with(ranked.sums, Sum^-1 / sum(Sum^-1))[match(colnames(worms.all), ranked.sums$Algorithms)]
+clust.1 <- apply(worms.all, 1, function(x) which(x == 1))
+clust.2 <- apply(worms.all, 1, function(x) which(x == 2))
+worms.final <- worms.all %>%
+  as.data.frame %>% 
+  mutate(weight.1 = sapply(clust.1, function(x) sum(weights[x])),
+         weight.2 = sapply(clust.2, function(x) sum(weights[x])),
+         Meta = ifelse(weight.1 > weight.2, 1, 2)) %>% 
+  select(-weight.1, -weight.2)
+
+meta.classes <- as.factor(cutree(hclust(dist(consensusMatrix(worms.all)), method = "ward.D"), 2))
+
+worms.matches <- worms.final %>% 
+  apply(., 2, function(x) sum(x == true.class)) %>% 
+  sort(decreasing = T) %>% 
+  data.frame(Matches = .)
+
+pandoc.table(worms.matches)
+```
+
+Let's visualize how the best algorithm, K-Means using euclidean distance, separates the clusters:
+
+```{r worms_best}
+plot(sw$data, col = c(2:3)[worms.final$`KM (Euclidean)`], xlab = "x", ylab = "y",
+     main = "K-Means (euclidean) clustering of two atypical parabolic shapes (worms)")
+```
+
+It appears that even the best algorithm cannot make a parabolic division in the feature space.
+
+## Rings Dataset

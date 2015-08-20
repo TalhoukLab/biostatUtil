@@ -18,15 +18,15 @@ results <- readRDS("Worms/outputs/ConClustOutput_2015-08-18.rds")
 con.mats <- alply(results, 3, consensusMatrix,
                   .progress = "text", .dims = TRUE)
 
-# Cluster memberships using HC
+# Cluster memberships using HC ... how about using ward.D?
 classes <- llply(con.mats, function(x) {
-  cl <- as.factor(cutree(hclust(dist(x), method = "average"), k))
-  names(cl) <- hclust(dist(x), method = "average")$labels
+  cl <- as.factor(cutree(hclust(dist(x), method = "ward.D"), k))
+  names(cl) <- hclust(dist(x), method = "ward.D")$labels
   return(cl)})
 
 # Save NMF results
 saveRDS(list(nmfDiv = list(consensusMatrix = con.mats$nmfDiv,
                            consensusClass = classes$nmfDiv),
              nmfEucl = list(consensusMatrix = con.mats$nmfEucl,
-                            consensusClass= classes$nmfEucl)),
+                            consensusClass = classes$nmfEucl)),
         "Worms/outputs/results_NMF.rds", compress = "xz")
