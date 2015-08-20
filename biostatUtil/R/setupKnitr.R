@@ -20,8 +20,8 @@ setupKnitr <- function(fw = 8, fh = 6) {
     # Avoid including base64_images - this only works with the .RProfile setup
     options(base64_images = "none")
   }
-}
-#     # Add a figure counter function
+# }
+    # Add a figure counter function
 #     knitr::knit_hooks$set(plot = function(x, options) {
 #       fig_fn = paste0(knitr::opts_knit$get("base.url"),
 #                       paste(x, collapse = "."))
@@ -78,20 +78,20 @@ setupKnitr <- function(fw = 8, fh = 6) {
 #              paste0(" style='", paste(style, collapse = "; "), "'"), ">",
 #              "<figcaption>", fig_number_txt, fig.cap, "</figcaption></figure>")
 #     })
-#   }
-#   
-#   knitr::opts_chunk$set(
-#     message = FALSE, warning = FALSE,
-#     echo = FALSE, dpi = 96, fig.width = fw, fig.height = fh,
-#     dev = "png", dev.args = list(type = "cairo"), error = FALSE)
-#   
-#   options(table_counter = TRUE)  # Use the table counter that the htmlTable() provides
-#   options(figure_counter = TRUE)  # Use the figure counter that we declare below
-#   options(figure_counter_roman = TRUE)  # Use roman letters (I, II, III, etc) for figures
-#   
-#   # Adding the figure number is a little tricky when the format is roman
-#   getNextFigureNo <- function() as.character(as.roman(
-#     as.numeric(options("figure_counter"))))
-#   pander::panderOptions('table.style', 'rmarkdown')
-#   
+  # }
+  
+  knitr::opts_chunk$set(
+    message = FALSE, warning = FALSE,
+    echo = FALSE, dpi = 96, fig.width = fw, fig.height = fh,
+    dev = "png", dev.args = list(type = "cairo"), error = FALSE)
+  
+  options(table_counter = TRUE)  # Use the table counter that the htmlTable() provides
+  options(figure_counter = TRUE)  # Use the figure counter that we declare below
+  options(figure_counter_roman = TRUE)  # Use roman letters (I, II, III, etc) for figures
+  
+  # Adding the figure number is a little tricky when the format is roman
+  getNextFigureNo <- function() as.character(as.roman(
+    as.numeric(options("figure_counter"))))
+  pander::panderOptions('table.style', 'rmarkdown')
+}
           

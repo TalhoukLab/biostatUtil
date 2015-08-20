@@ -326,13 +326,75 @@ To confirm the clustering results from using the TCGA dataset, we need to try ou
 The following two-cluster dataset is our first simulation:
 
 ```{r worms_plot}
+set.seed(1)
 sw <- shapes.worms()
-plot(sw$data, col = c(2:3)[sw$clusters], xlab = "x", ylab = "y",
+dat <- sw$data
+true.class <- sw$clusters
+plot(sw$data, col = c(2:3)[true.class], xlab = "x", ylab = "y",
      main = "Two clusters with atypical parabolic shapes (worms)")
 ```
 
-```{r worms_cluster}
+```{r worms_index}
+# combine results
 worms.CCP <- readRDS("Worms/outputs/results_CCP.rds")
 worms.NMF <- readRDS("Worms/outputs/results_NMF.rds")
+worms.all <- worms.CCP %>%
+  sapply(., function(x) x[[2]]$consensusClass) %>%
+  cbind(., worms.NMF$nmfDiv$consensusClass,
+        worms.NMF$nmfEucl$consensusClass) %>% 
+  set_colnames(ALG.NAMES)
+
+# indices
+ARI <- apply(worms.all, 2, adjustedRandIndex, x = true.class)
+MI <- apply(worms.all, 2, mutinformation, Y = true.class)
+PAC <- worms.CCP %>%
+  sapply(., function(x) PAC(x[[2]]$consensusMatrix)) %>%
+  c(nmfDiv = PAC(worms.NMF$nmfDiv$consensusMatrix),
+    nmfEucl = PAC(worms.NMF$nmfEucl$consensusMatrix)) %>% 
+  set_names(ALG.NAMES)
+DBI <- dat %>%
+  apply(worms.all, 2, cls.scatt.data, data = .) %>%
+  sapply(., clv.Davies.Bouldin, intracls = "average", intercls = "average")
+DI <- dat %>%
+  apply(worms.all, 2, cls.scatt.data, data = .) %>%
+  sapply(., clv.Dunn, intracls = "average", intercls = "average")
+SAW <- apply(worms.all, 2, function(x) summary(silhouette(x, dist(dat)))$avg.width)
+RS <- apply(worms.all, 2, index.S, d = dist(dat))
+CI <- apply(worms.all, 2, index.G3, d = dist(dat))
+BHI <- apply(worms.all, 2, index.G2, d = dist(dat))
+CHI <- apply(worms.all, 2, index.G1, x = dat)
 ```
 
+The ranked indices and weights tables are shown below:
+
+```{r worms_summary, results='asis'}
+ranked.indices <- data.frame(Algorithms = ALG.NAMES,
+                             ARI = rank(-ARI, ties.method = "min"),
+                             MI = rank(-MI, ties.method = "min"),
+                             PAC = rank(PAC, ties.method = "min"),
+                             DBI = rank(DBI, ties.method = "min"),
+                             DI = rank(-DI, ties.method = "min"),
+                             SAW = rank(-SAW, ties.method = "min"),
+                             RS = rank(-RS, ties.method = "min"),
+                             CI = rank(CI, ties.method = "min"),
+                             BHI = rank(-BHI, ties.method = "min"),
+                             CHI = rank(-CHI, ties.method = "min")) %>% 
+  mutate(Top = apply(.[, -1], 1,
+                     function(x) paste0(round(100 * sum(x %in% c(1, 2)) /
+                                                ncol(.[, -1]), 2), "%"))) %>%
+  arrange(desc(Top))
+pandoc.table(ranked.indices,
+                     justify = paste0("l",
+                                      paste(rep("c", ncol(ranked.indices) - 1),
+                                            collapse = "")))
+
+ranked.sums <- ranked.indices %>% 
+  mutate(Sum = apply(.[, -c(1, 12)], 1, sum),
+         Weight = paste0(round(100 * Sum^-1 / sum(Sum^-1), 2), "%")) %>% 
+  dplyr::select(Algorithms, Top, Sum, Weight) %>% 
+  arrange(Sum)
+pandoc.table(ranked.sums,
+                     justify = paste0("l",
+                                      paste(rep("c", ncol(ranked.sums) - 1),
+                                            collapse = "")))
+```
