@@ -37,6 +37,8 @@ NanoStringQC <- function(raw, exp, detect = 80, sn = 150, plots = TRUE, ttl =" "
   exp$sn <- exp$averageHK / exp$lod
   exp$sn[exp$lod < 0.001] <- 0 # This is so that it does not underflow
   exp$bdFlag <- factor(ifelse(exp$binding.density < 0.05 | exp$binding.density > 2.25,"Failed","Passed"), levels = c("Failed","Passed"))
+  exp$normFlag <- factor(ifelse(exp$sn < sn | exp$pergd < detect,"Failed","Passed"), levels = c("Failed","Passed"))
+  exp$QCFlag <- factor(ifelse(as.vector(exp$spcFlag == "Failed" | exp$normFlag == "Failed" | exp$imagingFlag == "Failed" | exp$linFlag == "Failed"),"Failed","Passed"))
 
   if (plots==TRUE) {
     par(mfrow = c(1,2))
@@ -51,7 +53,6 @@ NanoStringQC <- function(raw, exp, detect = 80, sn = 150, plots = TRUE, ttl =" "
     abline(v = sn,lwd = 3)
     title(ttl, outer = TRUE, line = -2)
   }
-exp$QCFlag <- factor(ifelse(as.vector(exp$spcFlag == "Failed" | exp$imagingFlag == "Failed" | exp$linFlag == "Failed"),"Failed","Passed"))
   if (!explore)
     return(exp$QCFlag)
   else
