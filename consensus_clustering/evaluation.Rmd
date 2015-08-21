@@ -10,6 +10,7 @@ output:
 ---
 
 ```{r setup, echo=FALSE, cache=FALSE, include=TRUE, message=FALSE}
+# packages
 library(tcgaHGSC)
 library(ConClust)
 library(clv)
@@ -24,8 +25,13 @@ library(plyr)
 library(dplyr)
 library(magrittr)
 library(knitr)
-panderOptions("table.split.table", 300)
-opts_chunk$set(echo = FALSE)
+panderOptions("table.split.table", 300)  # don't split any tables
+opts_chunk$set(echo = FALSE)  # hide all code from output
+# names of clustering algorithms
+ALG.NAMES <- c("HC (Euclidean)", "HC (Diana)",
+               "KM (Euclidean)", "KM (Spearman)", "KM (MI)",
+               "PAM (Euclidean)", "PAM (Spearman)", "PAM (MI)",
+               "NMF (Divergence)", "NMF (Euclidean)")
 ```
 
 ```{r load}
@@ -38,11 +44,6 @@ dat <- hgsc %>%
   magrittr::extract(apply(., 1, sd) > 1, ) %>%
   t %>%
   scale
-
-ALG.NAMES <- c("HC (Euclidean)", "HC (Diana)",
-               "KM (Euclidean)", "KM (Spearman)", "KM (MI)",
-               "PAM (Euclidean)", "PAM (Spearman)", "PAM (MI)",
-               "NMF (Divergence)", "NMF (Euclidean)")
 ```
 
 # Introduction
@@ -330,7 +331,7 @@ set.seed(1)
 sw <- shapes.worms()
 dat <- sw$data
 true.class <- sw$clusters
-plot(sw$data, col = c(2:3)[true.class], xlab = "x", ylab = "y",
+plot(dat, col = c(2:3)[true.class], xlab = "x", ylab = "y",
      main = "Two clusters with atypical parabolic shapes (worms)")
 ```
 
@@ -432,3 +433,107 @@ plot(sw$data, col = c(2:3)[worms.final$`KM (Euclidean)`], xlab = "x", ylab = "y"
 It appears that even the best algorithm cannot make a parabolic division in the feature space.
 
 ## Rings Dataset
+
+The following three-cluster dataset is our second simulation:
+
+```{r rings_plot}
+set.seed(1)
+sc3 <- shapes.circles3()
+dat <- sc3$data
+true.class <- sc3$clusters
+plot(dat, col = c(2:4)[true.class], xlab = "x", ylab = "y",
+     main = "Three clusters with atypical ring shapes (circles)")
+```
+
+```{r rings_index}
+# combine results
+rings.CCP <- readRDS("Rings/outputs/results_CCP.rds")
+rings.NMF <- readRDS("Rings/outputs/results_NMF.rds")
+rings.all <- rings.CCP %>%
+  sapply(., function(x) x[[2]]$consensusClass) %>%
+  cbind(., rings.NMF$nmfDiv$consensusClass,
+        rings.NMF$nmfEucl$consensusClass) %>% 
+  set_colnames(ALG.NAMES[-8])
+
+# indices
+PAC <- rings.CCP %>%
+  sapply(., function(x) PAC(x[[2]]$consensusMatrix)) %>%
+  c(nmfDiv = PAC(rings.NMF$nmfDiv$consensusMatrix),
+    nmfEucl = PAC(rings.NMF$nmfEucl$consensusMatrix)) %>% 
+  set_names(ALG.NAMES[-8])
+DBI <- dat %>%
+  apply(rings.all, 2, cls.scatt.data, data = .) %>%
+  sapply(., clv.Davies.Bouldin, intracls = "average", intercls = "average")
+DI <- dat %>%
+  apply(rings.all, 2, cls.scatt.data, data = .) %>%
+  sapply(., clv.Dunn, intracls = "average", intercls = "average")
+SAW <- apply(rings.all, 2, function(x) summary(silhouette(x, dist(dat)))$avg.width)
+RS <- apply(rings.all, 2, index.S, d = dist(dat))
+CI <- apply(rings.all, 2, index.G3, d = dist(dat))
+BHI <- apply(rings.all, 2, index.G2, d = dist(dat))
+CHI <- apply(rings.all, 2, index.G1, x = dat)
+```
+
+```{r rings_summary, results='asis'}
+ranked.indices <- data.frame(Algorithms = ALG.NAMES[-8],
+                             PAC = rank(PAC, ties.method = "min"),
+                             DBI = rank(DBI, ties.method = "min"),
+                             DI = rank(-DI, ties.method = "min"),
+                             SAW = rank(-SAW, ties.method = "min"),
+                             RS = rank(-RS, ties.method = "min"),
+                             CI = rank(CI, ties.method = "min"),
+                             BHI = rank(-BHI, ties.method = "min"),
+                             CHI = rank(-CHI, ties.method = "min")) %>% 
+  mutate(Top = apply(.[, -1], 1,
+                     function(x) paste0(round(100 * sum(x %in% c(1, 2)) /
+                                                ncol(.[, -1]), 2), "%"))) %>%
+  arrange(desc(Top))
+pandoc.table(ranked.indices,
+                     justify = paste0("l",
+                                      paste(rep("c", ncol(ranked.indices) - 1),
+                                            collapse = "")))
+
+ranked.sums <- ranked.indices %>% 
+  mutate(Sum = apply(.[, -c(1, 10)], 1, sum),
+         Weight = paste0(round(100 * Sum^-1 / sum(Sum^-1), 2), "%")) %>% 
+  dplyr::select(Algorithms, Top, Sum, Weight) %>% 
+  arrange(Sum)
+pandoc.table(ranked.sums,
+                     justify = paste0("l",
+                                      paste(rep("c", ncol(ranked.sums) - 1),
+                                            collapse = "")))
+```
+
+```{r rings_meta, results='asis'}
+# weights <- with(ranked.sums, Sum^-1 / sum(Sum^-1))[match(colnames(rings.all), ranked.sums$Algorithms)]
+# clust.1 <- apply(rings.all, 1, function(x) which(x == 1))
+# clust.2 <- apply(rings.all, 1, function(x) which(x == 2))
+# clust.3 <- apply(rings.all, 1, function(x) which(x == 3))
+# rings.final <- rings.all %>%
+#   as.data.frame %>% 
+#   mutate(weight.1 = sapply(clust.1, function(x) sum(weights[x])),
+#          weight.2 = sapply(clust.2, function(x) sum(weights[x])),
+#          weight.3 = sapply(clust.3, function(x) sum(weights[x])),
+#          Meta = ifelse(weight.1 > weight.2 & weight.1 > weight.3, 1,
+#                        ifelse(weight.2 > weight.1 & weight.2 > weight.3, 2, 3))) %>% 
+#   select(-weight.1, -weight.2, -weight.3)
+
+# meta.classes <- as.factor(cutree(hclust(dist(consensusMatrix(rings.all)), method = "ward.D"), 2))
+rings.final <- rings.all %>% 
+  as.data.frame %>% 
+  mutate(Meta = as.factor(cutree(hclust(dist(consensusMatrix(rings.all)), method = "ward.D"), 3)))
+
+rings.matches <- rings.final %>% 
+  apply(., 2, function(x) sum(x == true.class)) %>% 
+  sort(decreasing = T) %>% 
+  data.frame(Matches = .)
+
+pandoc.table(rings.matches)
+```
+
+```{r rings_best}
+plot(dat, col = c(2:4)[rings.final$`PAM (Euclidean)`], xlab = "x", ylab = "y",
+     main = "PAM (euclidean) clustering of three circles (rings)")
+```
+
+Again, we are only able to make linear separations.
