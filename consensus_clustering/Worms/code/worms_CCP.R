@@ -1,7 +1,8 @@
-## This script obtains assignments into four clusters and consensus
+## This script obtains assignments into two clusters and consensus
 ## matrices from non-NMF-based algorithms that used consensus clustering via
 ## ConsensusClusterPlus (CCP)
 ## Author: Derek Chiu
+## Dataset: clusterSim::shapes.worms()
 
 # Load packages
 library(dplyr)

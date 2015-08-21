@@ -1,10 +1,12 @@
-## This script obtains assignments into four clusters and consensus
+## This script obtains assignments into two clusters and consensus
 ## matrices from NMF-based algorithms that used consensus clustering
 ## Author: Derek Chiu
+## Dataset: clusterSim::shapes.worms()
 
 # Load packages and data
 library(plyr)
 library(ConClust)
+library(clusterSim)
 set.seed(1)
 sw <- shapes.worms()
 k <- 2
