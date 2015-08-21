@@ -3,6 +3,10 @@
 #' Generates multiple runs for consensus clustering among replicated subsamples
 #' of a dataset as well as across different clustering algorithms.
 #'
+#' The \code{min.sd} argument is used to filter the feature space for only highly variable
+#' features. Only features with a standard deviation across all samples greater than
+#' \code{min.sd} will be used.
+#'
 #' @param x data matrix; genes are rows and samples are columns
 #' @param k number of clusters requested
 #' @param pItem proportion of items to be used in subsampling within an algorithm
@@ -12,6 +16,7 @@
 #' "kmSpear", "kmMI", "pamEucl", "pamSpear", "pamMI".
 #' @param seed random seed to use for NMF-based algorithms
 #' @param seed.method seed to use to ensure each method operates on the same set of subsamples
+#' @param min.sd minimum standard deviation threshold. See details.
 #' @param dir directory where returned object will be saved at each iteration (as an RDS object).
 #' No output file is saved if \code{file} is \code{NULL}.
 #' @param time.saved logical; if \code{TRUE} (default), the date saved is appended
@@ -24,13 +29,13 @@
 #' @importFrom magrittr extract
 #' @export
 ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
-                     seed = 123456, seed.method = 1, dir = NULL,
+                     seed = 123456, seed.method = 1, min.sd = 1, dir = NULL,
                      time.saved = TRUE) {
   . <- NULL
   x.rest <- x %>%
     as.data.frame %>%
     select(which(sapply(., class) == "numeric")) %>%
-    extract(apply(., 1, sd) > 1, ) %>%
+    extract(apply(., 1, sd) > min.sd, ) %>%
     t %>%
     scale %>%
     t %>%

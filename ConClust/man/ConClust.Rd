@@ -5,7 +5,7 @@
 \title{Consensus clustering over samples and algorithms}
 \usage{
 ConClust(x, k, pItem = 0.8, reps = 1000, method = NULL, seed = 123456,
-  seed.method = 1, dir = NULL, time.saved = TRUE)
+  seed.method = 1, min.sd = 1, dir = NULL, time.saved = TRUE)
 }
 \arguments{
 \item{x}{data matrix; genes are rows and samples are columns}
@@ -24,6 +24,8 @@ any number of the following: "nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmE
 
 \item{seed.method}{seed to use to ensure each method operates on the same set of subsamples}
 
+\item{min.sd}{minimum standard deviation threshold. See details.}
+
 \item{dir}{directory where returned object will be saved at each iteration (as an RDS object).
 No output file is saved if \code{file} is \code{NULL}.}
 
@@ -39,6 +41,11 @@ subsample. Each entry represents a class membership.
 \description{
 Generates multiple runs for consensus clustering among replicated subsamples
 of a dataset as well as across different clustering algorithms.
+}
+\details{
+The \code{min.sd} argument is used to filter the feature space for only highly variable
+features. Only features with a standard deviation across all samples greater than
+\code{min.sd} will be used.
 }
 \author{
 Derek Chiu, Aline Talhouk
