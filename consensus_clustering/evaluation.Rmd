@@ -1,13 +1,17 @@
 ---
-title: "Evaluation of Clustering Algorithms"
+title: "Performance Evaluation of Consensus Clustering Algorithms"
+subtitle: "STAT 598 Progress Report"
 author: "Derek Chiu"
-date: "August 18, 2015"
+date: "August 24, 2015"
 output: 
   pdf_document: 
     number_sections: yes
     toc: yes
     toc_depth: 3
 ---
+
+# Preface
+This progress report fulfills the UBC Science Co-op requirement to submit a work term report at the end of every four month period. BC Cancer Agency (BCCA) is a not-for-profit organization that aims to provide care for cancer patients and conduct innovative cancer research. Our department, OvCaRe, is the Ovarian Cancer Research team tasked with studying ovarian cancers of many types. The objective of the project I am working on is to discover a viable classifer for ovarian high-grade serous carcinoma (HGSC). My role is to help devise a clustering algorithm that can statistically partition subtypes of HGSC without knowledge of the pathological properties of each sample. The progress report will evaluate the method we are using, consensus clustering, on a publicly available data set as well as simulated data sets. The final technical report will contain results of our method applied on HGSC data from our own cohort.
 
 ```{r setup, echo=FALSE, cache=FALSE, include=TRUE, message=FALSE}
 # packages
@@ -47,7 +51,42 @@ dat <- hgsc %>%
 ```
 
 # Introduction
-Cluster analysis is the unsupervised learning method of assigning entities into different groups based on one or more of their attributes. The goal is to place similar objects together and separate dissimilar objects. For example, in genomics studies, we frequently try and cluster patient samples measured on a large number of molecular features. When we get a clustering assignment from an algorithm, we often want to evaluate its performance. Ideally, a good clustering algorithm is able to differentiate entities with no knowledge of the true class labels. In addition, we want the algorithm to arrive at a stable and optimal number of clusters. There are two main categories of clustering evaluation: **external evaluation** and **internal evaluation**.
+Unsupervised learning is the process of inferring something about a data structure without knowing its true class labels. Cluster analysis is an unsupervised learning method of assigning entities into different groups based on one or more of their attributes. It is unsupervised because we do not know the true partitions of the entities. The objective is to place similar objects together in the same cluster and separate dissimilar objects into different clusters. For example, in genomics studies, we frequently try and cluster patient samples measured on a large number of molecular features. When we get a clustering assignment from an algorithm, we often want to evaluate its performance. Ideally, a good clustering algorithm is able to differentiate entities without knowledge of the true class labels. In addition, we want the algorithm to arrive at a stable and optimal number of clusters. The choice of the number of clusters is not trivial in some cases.
+
+# Methods
+
+## Clustering Algorithms
+There are many clustering algorithms, each approaching the clustering problem in a different way. It is most important to note the advantages and limitations of each algorithm. There are some definitions to take note of:
+
+- **Compactness**: how close the objects are in each cluster
+- **Connectivity**: how connected the objects are in the feature space
+
+### Hierarchical Clustering
+This clustering algorithm is very popular because of its intuitive representation using dendrograms (trees). Based on a distance matrix, the objects/features are clustered based on a linkage type. More similar objects are joined near the bottom of a dendrogram whereas less similar objects are joined at a higher tree height. A linkage criterion determines the distances amongst a set of objects/features using the pairwise distances. For example, an average linkage would use the average pairwise distances. In this way, a dendrogram with all objects/features can be made by recursively linking larger and larger sets of observations together. 
+
+CITATION: it turns out that single linkage works very well for data sets exhibiting connectivitiy but not compactness. An example of this would be a tree rings. Clusters are circles, and objects that are far away are in the same cluster compared to objects that are close. On the other hand, average linkage works well for data sets exhibiting compactness.
+
+### k-Means Clustering
+First, k means are randomly initialized in the multi-dimensional object/feature space that we wish to cluster. Assigning each object/feature to its closest mean forms the clusters. The k means are re-calculated based on the centroids (center points) within each cluster. This process is repeated until the centroids converge.
+
+There are two caveats to note when using k-means. First, the cluster assignments are unstable because they depend on the random initialization of the means. We would preferably want to repeat this process many times to see whether the clusters change drastically. Secondly, the choice of k is not arbitrary. Cross-validation using an appropriate loss function is a popular method for choosing k.
+
+### k-Medoids Clustering
+Very similar to k-means except that we initialize a set of random data points as medoids instead of random means that are generally not real data points. The most common version of k-medoids is PAM.
+
+### Nonnegative Matrix Factorization
+Given a non-negative data matrix A, we can factor it into two matrices W and H, which are also non negative. W and H have important properties. Suppose A has genes as rows and samples as columns. If we are interested in clustering samples, then H has a reduced gene space of meta genes that fully explain the samples. Samples are clustered based on the metagene they are most associated with. If we are interested in clustering genes, then W has a reduced sample space of metasamples that fully explain the genes. Genes are clustered based on the metasample they are most associated with. 
+
+In gene expression data, it is common to standardize the genes. Doing so would disrupt the nonnegativity of A required for NMF. A simple remedy can solve this problem. We append the matrix –A to the bottom of A, preserving the same number of columns, and set all the negative entries to 0. The computational complexity has been doubled as a result. NMF takes a long time to run, but offers the most stable clustering assignments.
+
+## Consensus Clustering
+Consensus clustering is as much an algorithm itself as it is a way of combining realizations of other clustering algorithms. For this, it deserves its own section. Algorithms like k-means and PAM are unstable, as the clustering assignments depend on the initialization of centroids and medoids, respectively. Consensus clustering compares results from repeated runs of a clustering algorithm. Typically, these runs use different subsamples of the data to model sampling variability. A final clustering assignment is determined based on agreement across replicates.
+
+A consensus matrix is a significant aspect of consensus clustering. All entries range from 0 to 1, and represent the proportion of replicates in which two objects/features were clustered together. A perfect clustering would consist of a consensus matrix with only 0s and 1s. More importantly, we can perform hierarchical clustering on a consensus matrix, resulting in a heat map with a diagonal block structure.
+
+Repeating this process for different values of k (number of clusters) and looking at the corresponding heatmaps, we can see which value of k provides the most stable clustering assignment. Certainly, using a performance measure such as PAC would be a more formal method of assessment that doesn't rely on potentially subjective visualizations.
+
+Consensus clustering attempts to stabilize results from randomness introduced by subsampling and the clustering algorithm. A natural extension is sometimes called meta consensus clustering, where we want to compare results across different algorithms. For instance, we may combine the consensus clustering assignments from 10 different algorithms and come up with a final clustering.
 
 ```{r all_clusters}
 results.all <- results.CCP %>%
@@ -127,6 +166,8 @@ pander::pandoc.table(MI, justify = "lc")
 
 The mutual information for the meta consensus clustering is `r entropy::mi.plugin(final.compare)`.
 
+# Internal Evaluation
+
 ## Cumulative Distribution Function
 
 ```{r CDF}
@@ -166,8 +207,6 @@ pander::pandoc.table(PAC, justify = "lc")
 ```
 
 The PAC for the meta consensus matrix is `r PAC(meta.cm)`.
-
-# Internal Evaluation
 
 ## Davies-Bouldin Index
 
@@ -537,3 +576,6 @@ plot(dat, col = c(2:4)[rings.final$`PAM (Euclidean)`], xlab = "x", ylab = "y",
 ```
 
 Again, we are only able to make linear separations.
+
+# References
+
