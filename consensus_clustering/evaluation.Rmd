@@ -2,7 +2,7 @@
 title: "Performance Evaluation of Consensus Clustering Algorithms"
 subtitle: "STAT 598 Progress Report"
 author: "Derek Chiu"
-date: "August 24, 2015"
+date: "August 25, 2015"
 output: 
   pdf_document: 
     number_sections: yes
@@ -19,8 +19,9 @@ library(tcgaHGSC)
 library(ConClust)
 library(clv)
 library(clusterSim)
+library(NMF)
 library(mclust)
-library(infotheo)
+library(clue)
 library(ggplot2)
 library(RColorBrewer)
 library(pander)
@@ -121,12 +122,27 @@ cm <- caret::confusionMatrix(final.compare)
 The confusion matrix is shown below, as well as different metrics for each class.
 
 ```{r conf_mat_output, results='asis'}
-pander::pandoc.table(cm$table)
-pander::pandoc.table(cm$byClass)
+pandoc.table(cm$table)
+pandoc.table(cm$byClass)
 ```
 
 # External Evaluation
 External evaluation usually refers to the case when we compare our clustering assignments to true class labels, or have some gold standard to compare to. In applications, this might be the published clustering result. The downside of using external evaluation is that the reference classes may not be correctly clustered themselves, and we are treating these as the norm. None the less, we can explore a few metrics.
+
+## Purity and Entropy
+
+The larger the purity, the better the clustering accuracy.
+```{r purity}
+true.class <- as.factor(substring(rownames(results.all), first = 18))
+Purity <- apply(results.all, 2, function(x) purity(as.factor(x), true.class))
+sort(Purity, decreasing = T)
+```
+
+The smaller the entropy, the better the clustering result.
+```{r entropy}
+Entropy <- apply(results.all, 2, function(x) entropy(as.factor(x), true.class))
+sort(Entropy)
+```
 
 ## Kappa Statistic
 
@@ -141,34 +157,17 @@ The unadjusted kappa statistic is `r kappa$kappa` and the weighted kappa statist
 The larger the better.
 
 ```{r ARI, results='asis'}
-ARI <- apply(results.all, 2, adjustedRandIndex,
-             x = substring(rownames(results.all), first = 18)) %>% 
+ARI <- apply(results.all, 2, adjustedRandIndex, x = true.class) %>% 
   sort(decreasing = T) %>% 
   data.frame(ARI = .) %>% 
   mutate(Algorithms = rownames(.)) %>% 
   select(Algorithms, ARI)
-pander::pandoc.table(ARI, justify = "lc")
+pandoc.table(ARI, justify = "lc")
 ```
-
-## Mutual Information
-
-The larger the better.
-
-```{r MI, results='asis'}
-MI <- apply(results.all, 2, mutinformation,
-            Y = substring(rownames(results.all), first = 18)) %>% 
-  sort(decreasing = T) %>% 
-  data.frame(MI = .) %>% 
-  mutate(Algorithms = rownames(.)) %>% 
-  select(Algorithms, MI)
-pander::pandoc.table(MI, justify = "lc")
-```
-
-The mutual information for the meta consensus clustering is `r entropy::mi.plugin(final.compare)`.
 
 # Internal Evaluation
 
-## Cumulative Distribution Function
+## Proportion of Ambiguously Clustered Pairs (PAC)
 
 ```{r CDF}
 CDF.each <- list(nmfDiv = results.NMF$nmfDiv$consensusMatrix,
@@ -189,8 +188,6 @@ ggplot(CDF.each, aes(x = CDF, colour = Method)) +
   theme(legend.position = "none")
 ```
 
-## Proportion of Ambiguous Clusters
-
 The lower the better.
 
 ```{r PAC, results='asis'}
@@ -203,7 +200,7 @@ PAC <- results.CCP %>%
   data.frame(PAC = .) %>% 
   mutate(Algorithms = rownames(.)) %>% 
   select(Algorithms, PAC)
-pander::pandoc.table(PAC, justify = "lc")
+pandoc.table(PAC, justify = "lc")
 ```
 
 The PAC for the meta consensus matrix is `r PAC(meta.cm)`.
@@ -220,7 +217,7 @@ DBI <- dat %>%
   data.frame(DBI = .) %>% 
   dplyr::mutate(Algorithms = rownames(.)) %>% 
   dplyr::select(Algorithms, DBI)
-pander::pandoc.table(DBI, justify = "lc")
+pandoc.table(DBI, justify = "lc")
 ```
 
 ## Dunn Index
@@ -235,20 +232,7 @@ DI <- dat %>%
   data.frame(DI = .) %>% 
   dplyr::mutate(Algorithms = rownames(.)) %>% 
   dplyr::select(Algorithms, DI)
-pander::pandoc.table(DI, justify = "lc")
-```
-
-## Silhouette Average Width
-
-For SAW, the larger the better.
-
-```{r SAW, results='asis'}
-SAW <- apply(results.all, 2, function(x) summary(silhouette(x, dist(dat)))$avg.width) %>%
-  sort(decreasing = T) %>% 
-  data.frame(SAW = .) %>% 
-  dplyr::mutate(Algorithms = rownames(.)) %>% 
-  dplyr::select(Algorithms, SAW)
-pander::pandoc.table(SAW, justify = "lc")
+pandoc.table(DI, justify = "lc")
 ```
 
 ## Rousseeuw's Silhouette
@@ -261,7 +245,20 @@ RS <- apply(results.all, 2, index.S, d = dist(dat)) %>%
   data.frame(RS = .) %>% 
   dplyr::mutate(Algorithms = rownames(.)) %>% 
   dplyr::select(Algorithms, RS)
-pander::pandoc.table(RS, justify = "lc")
+pandoc.table(RS, justify = "lc")
+```
+
+## Silhouette Average Width
+
+For SAW, the larger the better.
+
+```{r SAW, results='asis'}
+SAW <- apply(results.all, 2, function(x) summary(silhouette(x, dist(dat)))$avg.width) %>%
+  sort(decreasing = T) %>% 
+  data.frame(SAW = .) %>% 
+  dplyr::mutate(Algorithms = rownames(.)) %>% 
+  dplyr::select(Algorithms, SAW)
+pandoc.table(SAW, justify = "lc")
 ```
 
 ## C-Index
@@ -274,10 +271,10 @@ CI <- apply(results.all, 2, index.G3, d = dist(dat)) %>%
   data.frame(CI = .) %>% 
   dplyr::mutate(Algorithms = rownames(.)) %>% 
   dplyr::select(Algorithms, CI)
-pander::pandoc.table(CI, justify = "lc")
+pandoc.table(CI, justify = "lc")
 ```
 
-## Baker and Hubert Index
+## Gamma Index
 
 For BHI, the larger the better.
 
@@ -287,10 +284,10 @@ BHI <- apply(results.all, 2, index.G2, d = dist(dat)) %>%
   data.frame(BHI = .) %>% 
   dplyr::mutate(Algorithms = rownames(.)) %>% 
   dplyr::select(Algorithms, BHI)
-pander::pandoc.table(BHI, justify = "lc")
+pandoc.table(BHI, justify = "lc")
 ```
 
-## Calinski-Harabasz Index
+## CH Index
 
 For CHI, the larger the better.
 
@@ -300,7 +297,7 @@ CHI <- apply(results.all, 2, index.G1, x = dat) %>%
   data.frame(CHI = .) %>% 
   dplyr::mutate(Algorithms = rownames(.)) %>% 
   dplyr::select(Algorithms, CHI)
-pander::pandoc.table(CHI, justify = "lc")
+pandoc.table(CHI, justify = "lc")
 ```
 
 ## Summary
@@ -308,11 +305,11 @@ pander::pandoc.table(CHI, justify = "lc")
 Here is a summary of all the indices for each algorithm, in unsorted order.
 
 ```{r index_summary, results='asis'}
-index.summary <- Reduce(merge, list(ARI, MI, PAC, DBI, DI, SAW, RS, CI, BHI, CHI))
-pander::pandoc.table(index.summary,
-                     justify = paste0("l",
-                                      paste(rep("c", ncol(index.summary) - 1),
-                                            collapse = "")))
+index.summary <- Reduce(merge, list(PAC, DBI, DI, SAW, RS, CI, BHI, CHI))
+pandoc.table(index.summary,
+             justify = paste0("l",
+                              paste(rep("c", ncol(index.summary) - 1),
+                                    collapse = "")))
 ```
 
 # Ranked Indices
@@ -321,8 +318,6 @@ The table below shows the ranking of algorithms for performance on a clustering 
 
 ```{r ranked_indices, results='asis'}
 ranked.indices <- data.frame(Algorithms = index.summary$Algorithms,
-                             ARI = rank(-index.summary$ARI),
-                             MI = rank(-index.summary$MI),
                              PAC = rank(index.summary$PAC),
                              DBI = rank(index.summary$DBI),
                              DI = rank(-index.summary$DI),
@@ -336,25 +331,25 @@ ranked.indices <- data.frame(Algorithms = index.summary$Algorithms,
                                                 ncol(.[, -1]), 2), "%"))) %>%
   arrange(desc(Top))
   
-pander::pandoc.table(ranked.indices,
-                     justify = paste0("l",
-                                      paste(rep("c", ncol(ranked.indices) - 1),
-                                            collapse = "")))
+pandoc.table(ranked.indices,
+             justify = paste0("l",
+                              paste(rep("c", ncol(ranked.indices) - 1),
+                                    collapse = "")))
 ```
 
 If we were to conduct a meta consensus clustering, a weight for each algorithm needs to be assigned. One such way of doing so is using the inverse rank sums. We can sum the ranks for each algorithm, and assign higher weight for consistently high ranked methods (1st or 2nd) and vice versa. This is shown below:
 
 ```{r inverse_rank_sum, results='asis'}
 ranked.sums <- ranked.indices %>% 
-  mutate(Sum = apply(.[, -c(1, 12)], 1, sum),
+  mutate(Sum = apply(.[, -c(1, 10)], 1, sum),
          Weight = paste0(round(100 * Sum^-1 / sum(Sum^-1), 2), "%")) %>% 
   select(Algorithms, Top, Sum, Weight) %>% 
   arrange(Sum)
 
-pander::pandoc.table(ranked.sums,
-                     justify = paste0("l",
-                                      paste(rep("c", ncol(ranked.sums) - 1),
-                                            collapse = "")))
+pandoc.table(ranked.sums,
+             justify = paste0("l",
+                              paste(rep("c", ncol(ranked.sums) - 1),
+                                    collapse = "")))
 ```
 
 # Simulations
@@ -385,8 +380,6 @@ worms.all <- worms.CCP %>%
   set_colnames(ALG.NAMES)
 
 # indices
-ARI <- apply(worms.all, 2, adjustedRandIndex, x = true.class)
-MI <- apply(worms.all, 2, mutinformation, Y = true.class)
 PAC <- worms.CCP %>%
   sapply(., function(x) PAC(x[[2]]$consensusMatrix)) %>%
   c(nmfDiv = PAC(worms.NMF$nmfDiv$consensusMatrix),
@@ -409,8 +402,6 @@ The ranked indices and weights tables are shown below:
 
 ```{r worms_summary, results='asis'}
 ranked.indices <- data.frame(Algorithms = ALG.NAMES,
-                             ARI = rank(-ARI, ties.method = "min"),
-                             MI = rank(-MI, ties.method = "min"),
                              PAC = rank(PAC, ties.method = "min"),
                              DBI = rank(DBI, ties.method = "min"),
                              DI = rank(-DI, ties.method = "min"),
@@ -429,7 +420,7 @@ pandoc.table(ranked.indices,
                                             collapse = "")))
 
 ranked.sums <- ranked.indices %>% 
-  mutate(Sum = apply(.[, -c(1, 12)], 1, sum),
+  mutate(Sum = apply(.[, -c(1, 10)], 1, sum),
          Weight = paste0(round(100 * Sum^-1 / sum(Sum^-1), 2), "%")) %>% 
   dplyr::select(Algorithms, Top, Sum, Weight) %>% 
   arrange(Sum)
@@ -578,4 +569,26 @@ plot(dat, col = c(2:4)[rings.final$`PAM (Euclidean)`], xlab = "x", ylab = "y",
 Again, we are only able to make linear separations.
 
 # References
+
+Monti, S., Tamayo, P., Mesirov, J., & Golub, T. (2003). "Consensus clustering: a resampling-based method for class discovery and visualization of gene expression microarray data." *Machine learning*, 52 (1-2), 91-118.
+
+Rand, W. M. (1971). "Objective criteria for the evaluation of clustering methods." *Journal of the American Statistical Association*, 66 (336), 846-850.
+
+Hubert, L., & Arabie, P. (1985). "Comparing partitions." *Journal of Classification*, 2 (1), 193-218.
+
+Vinh, N. X., Epps, J., & Bailey, J. (2009, June). "Information theoretic measures for clusterings comparison: is a correction for chance necessary?." *In Proceedings of the 26th Annual International Conference on Machine Learning* (pp. 1073-1080). ACM.
+
+Senbabaoglu, Y., Michailidis, G., & Li, J. Z. (2014). "Critical limitations of consensus clustering in class discovery." *Scientific reports*, 4.
+
+Davies, David L.; Bouldin, Donald W. (1979). "A Cluster Separation Measure." *IEEE Transactions on Pattern Analysis and Machine Intelligence*. PAMI-1 (2): 224–227.
+
+Dunn, J. C. (1973). "A Fuzzy Relative of the ISODATA Process and Its Use in Detecting Compact Well-Separated Clusters." *Journal of Cybernetics* 3 (3): 32–57.
+
+Rousseeuw, P. J. (1987). "Silhouettes: a graphical aid to the interpretation and validation of cluster analysis." *Journal of Computational and Applied Mathematics*, 20, 53-65.
+
+Hubert, L. J., & Levin, J. R. (1976). "A general statistical framework for assessing categorical clustering in free recall." *Psychological bulletin*, 83 (6), 1072-1080.
+
+Baker, F. B., & Hubert, L. J. (1975). "Measuring the power of hierarchical cluster analysis." *Journal of the American Statistical Association*, 70 (349), 31-38.
+
+Calinski, T., & Harabasz, J. (1974). "A dendrite method for cluster analysis." *Communications in Statistics-theory and Methods*, 3 (1), 1-27.
 
