@@ -131,20 +131,28 @@ External evaluation usually refers to the case when we compare our clustering as
 
 ## Purity and Entropy
 
-The larger the purity, the better the clustering accuracy.
+Purity is defined as the sum of the entities of maximal class in each cluster divided by the total number of entities. The equation is:
+\begin{center}
+$Purity = \dfrac{1}{n}\sum\limits_{r = 1}^{k}\max\limits_{i}(n_r^i)$
+\end{center}
+where $n$ is the total number of entities, $k$ is the number of clusters, $i$ is a particular class, and $n_r^i$ is the number of objects classified into class $i$ in cluster $r$. The larger the purity, the better the clustering accuracy.
 ```{r purity}
 true.class <- as.factor(substring(rownames(results.all), first = 18))
 Purity <- apply(results.all, 2, function(x) purity(as.factor(x), true.class))
 sort(Purity, decreasing = T)
 ```
 
-The smaller the entropy, the better the clustering result.
+Entropy measures the amount of uncertainty in each cluster. The equation is:
+\begin{center}
+$Entropy = -\dfrac{1}{n\log{q}}\sum\limits_{r = 1}^{k}\sum\limits_{i = 1}^{q}n_r^i\log{\dfrac{n_r^i}{n_r}}$
+\end{center}
+The smaller the entropy, the less uncertain we are of the cluster membership, and the better the clustering performance.
 ```{r entropy}
 Entropy <- apply(results.all, 2, function(x) entropy(as.factor(x), true.class))
 sort(Entropy)
 ```
 
-## Kappa Statistic
+## Kappa Statistics
 
 ```{r kappa}
 kappa <- psych::wkappa(final.compare)
@@ -571,6 +579,8 @@ Again, we are only able to make linear separations.
 # References
 
 Monti, S., Tamayo, P., Mesirov, J., & Golub, T. (2003). "Consensus clustering: a resampling-based method for class discovery and visualization of gene expression microarray data." *Machine learning*, 52 (1-2), 91-118.
+
+Conrad, J. G., Al-Kofahi, K., Zhao, Y., & Karypis, G. (2005, June). "Effective document clustering for large heterogeneous law firm collections." In *Proceedings of the 10th international conference on Artificial intelligence and law* (pp. 177-187). ACM.
 
 Rand, W. M. (1971). "Objective criteria for the evaluation of clustering methods." *Journal of the American Statistical Association*, 66 (336), 846-850.
 
