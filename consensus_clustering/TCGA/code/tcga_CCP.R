@@ -25,13 +25,19 @@ k <- 4
 reps <- 1000
 pItem <- 0.8
 
-# HC Euclidean (takes ~ 1.2 mins)
-hcAEucl <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
+# HC Average Linkage Pearson (takes ~ 1.2 mins)
+hcAPear <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
+                                distance = "pearson",
                                 seed = 123, verbose = T)
 
-# HC Diana (takes ~ 7.2 mins)
-hcDianaEucl <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
-                                    clusterAlg = "dianaHook",
+# HC Single Linkage Pearson (takes ~ 1.2 mins)
+hcSPear <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
+                                innerLinkage = "single", distance = "pearson",
+                                seed = 123, verbose = T)
+
+# HC Diana Pearson (takes ~ 7.2 mins)
+hcDianaPear <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
+                                    clusterAlg = "dianaHook", distance = "pearson",
                                     seed = 123, verbose = T)
 
 # K-Means Euclidean (takes ~ 3 mins)
@@ -65,6 +71,6 @@ pamMI <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
                               seed = 123, verbose = T)
 
 # Save ConsensusClusterPlus (CCP) results
-saveRDS(list(hcAEucl, hcDianaEucl, kmEucl, kmSpear,
+saveRDS(list(hcAPear, hcSPear, hcDianaPear, kmEucl, kmSpear,
              kmMI, pamEucl, pamSpear, pamMI),
         "TCGA/outputs/results_CCP.rds", compress = "xz")
