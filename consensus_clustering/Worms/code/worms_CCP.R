@@ -17,7 +17,7 @@ sw <- shapes.worms()
 dat <- sw %>%
   use_series(data) %>%
   t %>%
-  extract(apply(., 1, sd) > 1, ) %>%
+  magrittr::extract(apply(., 1, sd) > 1, ) %>%
   t %>%
   scale %>%
   t
@@ -27,14 +27,20 @@ k <- 3
 reps <- 1000
 pItem <- 0.8
 
-# HC Euclidean (~ 27 secs)
+# HC Average Linkage Euclidean (~ 27 secs)
 hcAEucl <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
+                                distance = "euclidean",
+                                seed = 123, verbose = T)
+
+# HC Single Linkage Euclidean (~ 27 secs)
+hcSEucl <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
+                                innerLinkage = "single", distance = "euclidean",
                                 seed = 123, verbose = T)
 
 # HC Diana (~ 3.7 mins)
 hcDianaEucl <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
-                                    clusterAlg = "dianaHook", seed = 123,
-                                    verbose = T)
+                                    clusterAlg = "dianaHook", distance = "euclidean",
+                                    seed = 123, verbose = T)
 
 # K-Means Euclidean (~ 1 min)
 kmEucl <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
@@ -67,6 +73,6 @@ pamMI <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
                               seed = 123, verbose = T)
 
 # Save ConsensusClusterPlus (CCP) results
-saveRDS(list(hcAEucl, hcDianaEucl, kmEucl, kmSpear,
+saveRDS(list(hcAEucl, hcSEucl, hcDianaEucl, kmEucl, kmSpear,
              kmMI, pamEucl, pamSpear, pamMI),
         "Worms/outputs/results_CCP.rds", compress = "xz")
