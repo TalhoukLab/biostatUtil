@@ -6,7 +6,6 @@
 
 # Load packages
 library(dplyr)
-library(magrittr)
 library(ConsensusClusterPlus)
 library(ConClust)
 library(clusterSim)
@@ -28,18 +27,18 @@ reps <- 1000
 pItem <- 0.8
 
 # HC Average Linkage Euclidean (~ 27 secs)
-hcAPear <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
-                                distance = "pearson",
+hcAEucl <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
+                                distance = "euclidean",
                                 seed = 123, verbose = T)
 
 # HC Single Linkage Euclidean (~ 27 secs)
-hcSPear <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
-                                innerLinkage = "single", distance = "pearson",
+hcSEucl <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
+                                innerLinkage = "single", distance = "euclidean",
                                 seed = 123, verbose = T)
 
-# HC Diana (~ 3.7 mins)
-hcDianaPear <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
-                                    clusterAlg = "dianaHook", distance = "pearson",
+# HC Diana Euclidean (~ 3.7 mins)
+hcDianaEucl<- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
+                                    clusterAlg = "dianaHook", distance = "euclidean",
                                     seed = 123, verbose = T)
 
 # K-Means Euclidean (~ 1 min)
@@ -73,6 +72,6 @@ pamMI <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
                               seed = 123, verbose = T)
 
 # Save ConsensusClusterPlus (CCP) results
-saveRDS(list(hcAPear, hcSPear, hcDianaPear, kmEucl, kmSpear,
+saveRDS(list(hcAEucl, hcSEucl, hcDianaEucl, kmEucl, kmSpear,
              kmMI, pamEucl, pamSpear, pamMI),
         "Worms/outputs/results_CCP.rds", compress = "xz")
