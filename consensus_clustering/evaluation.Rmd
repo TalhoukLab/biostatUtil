@@ -18,14 +18,15 @@ This progress report fulfills the UBC Science Co-op requirement to submit a work
 library(tcgaHGSC)
 library(ConClust)
 library(clv)
+library(clValid)
 library(clusterSim)
 library(NMF)
 library(mclust)
 library(clue)
+library(gplots)
 library(ggplot2)
 library(RColorBrewer)
 library(pander)
-library(tidyr)
 library(plyr)
 library(dplyr)
 library(magrittr)
@@ -33,10 +34,10 @@ library(knitr)
 panderOptions("table.split.table", 300)  # don't split any tables
 opts_chunk$set(echo = FALSE)  # hide all code from output
 # names of clustering algorithms
-ALG.NAMES <- c("HC (Euclidean)", "HC (Diana)",
-               "KM (Euclidean)", "KM (Spearman)", "KM (MI)",
-               "PAM (Euclidean)", "PAM (Spearman)", "PAM (MI)",
-               "NMF (Divergence)", "NMF (Euclidean)")
+ALG.NAMES <- c("HC (Avg Euc)", "HC (Sing Euc)", "HC (Diana)",
+               "KM (Euc)", "KM (Spear)", "KM (MI)",
+               "PAM (Euc)", "PAM (Spear)", "PAM (MI)",
+               "NMF (Div)", "NMF (Euc)")
 ```
 
 ```{r load}
@@ -57,38 +58,62 @@ Unsupervised learning is the process of inferring something about a data structu
 # Methods
 
 ## Clustering Algorithms
-There are many clustering algorithms, each approaching the clustering problem in a different way. It is most important to note the advantages and limitations of each algorithm. There are some definitions to take note of:
+There are many clustering algorithms, each approaching the clustering problem in a different way. It is most important to note the advantages and limitations of each algorithm. These are some definitions of clustering performance:
 
-- **Compactness**: how close the objects are in each cluster
+- **Compactness**: how close together clustered objects are to each other
+- **Separation**: how far apart objects in different clusters are
 - **Connectivity**: how connected the objects are in the feature space
 
 ### Hierarchical Clustering
-This clustering algorithm is very popular because of its intuitive representation using dendrograms (trees). Based on a distance matrix, the objects/features are clustered based on a linkage type. More similar objects are joined near the bottom of a dendrogram whereas less similar objects are joined at a higher tree height. A linkage criterion determines the distances amongst a set of objects/features using the pairwise distances. For example, an average linkage would use the average pairwise distances. In this way, a dendrogram with all objects/features can be made by recursively linking larger and larger sets of observations together. 
+This clustering algorithm is very popular because of its intuitive representation using dendrograms (trees). Based on a distance matrix, the objects/features are clustered based on a linkage type. More similar objects are joined near the bottom of a dendrogram whereas less similar objects are joined at a higher tree height. A linkage criterion determines the distances amongst a set of objects/features using the pairwise distances. For example, an average linkage would use the average pairwise distances. In this way, a dendrogram with all objects/features can be made by recursively linking increasingly larger sets of observations together. 
 
-CITATION: it turns out that single linkage works very well for data sets exhibiting connectivitiy but not compactness. An example of this would be a tree rings. Clusters are circles, and objects that are far away are in the same cluster compared to objects that are close. On the other hand, average linkage works well for data sets exhibiting compactness.
+Single linkage works very well for data sets exhibiting connectivity but not compactness. An example of this would be tree rings. The clusters are circles, and objects that are far away can be in the same cluster compared to objects that are close. On the other hand, average linkage works well for data sets exhibiting compactness. This works where the clusters are look like non-overlapping blobs.
 
-### k-Means Clustering
-First, k means are randomly initialized in the multi-dimensional object/feature space that we wish to cluster. Assigning each object/feature to its closest mean forms the clusters. The k means are re-calculated based on the centroids (center points) within each cluster. This process is repeated until the centroids converge.
+### K-Means and PAM
+First, k means are randomly initialized in the multi-dimensional object/feature space that we wish to cluster. Assigning each object/feature to its closest mean forms the clusters. The k means are re-calculated based on the centroids (center points) within each cluster. This process is iterated until the centroids converge.
 
-There are two caveats to note when using k-means. First, the cluster assignments are unstable because they depend on the random initialization of the means. We would preferably want to repeat this process many times to see whether the clusters change drastically. Secondly, the choice of k is not arbitrary. Cross-validation using an appropriate loss function is a popular method for choosing k.
+There are two caveats to note when using k-means. First, the cluster assignments are unstable because they depend on the random initialization of the centroids. We preferably want to repeat the algorithm many times to see whether the clusters are sensitive to the choice of initial centroid. Secondly, choosing k is not an arbitrary. Cross-validation using an appropriate loss function is a popular method for choosing k. Other methods use evaluation indices, some of which we will describe later in the report.
 
-### k-Medoids Clustering
-Very similar to k-means except that we initialize a set of random data points as medoids instead of random means that are generally not real data points. The most common version of k-medoids is PAM.
+Partitioning Around Medoids (PAM) is very similar to k-means except that we initialize k random data points as the medoids. This means after each iteration the new medoids will always be a real data points, whereas k-means allows the centroids to be anywhere in the feature space.
 
-### Nonnegative Matrix Factorization
-Given a non-negative data matrix A, we can factor it into two matrices W and H, which are also non negative. W and H have important properties. Suppose A has genes as rows and samples as columns. If we are interested in clustering samples, then H has a reduced gene space of meta genes that fully explain the samples. Samples are clustered based on the metagene they are most associated with. If we are interested in clustering genes, then W has a reduced sample space of metasamples that fully explain the genes. Genes are clustered based on the metasample they are most associated with. 
+### Nonnegative Matrix Factorization (NMF)
+Given a non-negative data matrix $A$, we can factor it into two matrices $W$ and $H$, which are also non negative. $W$ and $H$ have important properties. Suppose $A$ has genes as rows and samples as columns. If we are interested in clustering samples, then $H$ has a reduced gene space of metagenes that fully explain the samples. Samples are clustered based on the metagene they are most associated with. If we are interested in clustering genes, then $W$ has a reduced sample space of metasamples that fully explain the genes. Genes are clustered based on the metasample they are most associated with.
 
-In gene expression data, it is common to standardize the genes. Doing so would disrupt the nonnegativity of A required for NMF. A simple remedy can solve this problem. We append the matrix –A to the bottom of A, preserving the same number of columns, and set all the negative entries to 0. The computational complexity has been doubled as a result. NMF takes a long time to run, but offers the most stable clustering assignments.
+In gene expression data, it is common to standardize the genes. Doing so would likely disrupt the nonnegativity of A required for NMF. A simple remedy can solve this problem: append the matrix $-A$ to the bottom of $A$ (preserving the same number of columns), and set all negative entries to 0. The computational complexity has been doubled as a result. NMF takes a long time to run, but clustering assignments are highly stable.
 
 ## Consensus Clustering
-Consensus clustering is as much an algorithm itself as it is a way of combining realizations of other clustering algorithms. For this, it deserves its own section. Algorithms like k-means and PAM are unstable, as the clustering assignments depend on the initialization of centroids and medoids, respectively. Consensus clustering compares results from repeated runs of a clustering algorithm. Typically, these runs use different subsamples of the data to model sampling variability. A final clustering assignment is determined based on agreement across replicates.
+Consensus clustering is as much an algorithm itself as it is a way of combining realizations of other clustering algorithms. For this, we explain it in its own section. Algorithms like k-means and PAM are unstable, as the clustering assignments depend on the initialization of centroids and medoids, respectively. Consensus clustering combines results from repeated runs of a clustering algorithm. Typically, each run uses different random subsamples of the data to model sampling variability. A final clustering assignment is determined based on agreement across replicates.
 
-A consensus matrix is a significant aspect of consensus clustering. All entries range from 0 to 1, and represent the proportion of replicates in which two objects/features were clustered together. A perfect clustering would consist of a consensus matrix with only 0s and 1s. More importantly, we can perform hierarchical clustering on a consensus matrix, resulting in a heat map with a diagonal block structure.
+The consensus matrix is a significant aspect of consensus clustering. Consider a consensus matrix $C$. Entry $C_{ij}$ is the proportion of times that object $i$ and object $j$ were clustered together. The matrix is symmetric, and all entries range from 0 to 1. A perfect clustering would consist of a consensus matrix with only 0s (never clustered together) and 1s (always clustered together). The final step to obtaining the consensus clustering assignment is to perform hierarchical clustering on the consensus matrix.
 
-Repeating this process for different values of k (number of clusters) and looking at the corresponding heatmaps, we can see which value of k provides the most stable clustering assignment. Certainly, using a performance measure such as PAC would be a more formal method of assessment that doesn't rely on potentially subjective visualizations.
+Based on the hierarchical clustering, we can plot a heatmap of the consensus matrix. Repeating this for different values of k (number of clusters) and looking at the corresponding heatmaps, we can see which value of k provides the most stable clustering assignment. The goal is to have a well-defined diagonal block structure, one block per cluster. Using a performance measure such as PAC (which we will describe) would be a more formal method of assessment that doesn't rely on potentially subjective visualizations.
 
-Consensus clustering attempts to stabilize results from randomness introduced by subsampling and the clustering algorithm. A natural extension is sometimes called meta consensus clustering, where we want to compare results across different algorithms. For instance, we may combine the consensus clustering assignments from 10 different algorithms and come up with a final clustering.
+Consensus clustering attempts to stabilize results from randomness introduced by subsampling and the clustering algorithm. A natural extension is sometimes called meta consensus clustering, where we aggregate results across different algorithms. For instance, we may combine the consensus clustering assignments from 10 different algorithms to come up with a final clustering. The choice of which algorithms to use is not trivial.
 
+# Performance Evaluation: TCGA Dataset
+
+A published dataset from TCGA uses `r nrow(hgsc)` genes to cluster `r ncol(hgsc) - 1` HGSC samples into the four subtypes: C1, C2, C4, and C5. They used consensus clustering with NMF. In this report, we consider the following clustering algorithms to use in consensus clustering:
+
+* Hierarchical Clustering with Euclidean distance
+    - Average Linkage
+    - Single Linkage
+    - DIvisive ANAlysis (DIANA)
+* K-Means
+    - Euclidean distance
+    - Spearman distance
+    - Mutual Information distance
+* PAM
+    - Euclidean distance
+    - Spearman distance
+    - Mutual Information distance
+* NMF
+    - KL divergence
+    - Euclidean distance
+  
+The number of repetitions used for consensus clustering is 1000. Each replicate uses a subsample of the data with 80% of the total number of features.
+
+The figure below shows the meta consensus matrix across the `r length(ALG.NAMES)` algorithms, each of which used consensus clustering.
+ 
 ```{r all_clusters}
 results.all <- results.CCP %>%
   sapply(., function(x) x[[4]]$consensusClass) %>%
@@ -96,20 +121,26 @@ results.all <- results.CCP %>%
         results.NMF$nmfEucl$consensusClass) %>% 
   set_colnames(ALG.NAMES)
 
+# TCGA classes
+true.class <- as.factor(substring(rownames(results.all), first = 18))
+
+# Meta consensus matrix heatmap
 meta.cm <- consensusMatrix(results.all)
-BuPuFun <- colorRampPalette(brewer.pal(n = 9, "BuPu"))
-palBuPu <- BuPuFun(256)
-heatmap(meta.cm, labRow = NA, labCol = NA, col = palBuPu)
+palOrRd <- colorRampPalette(brewer.pal(n = 9, "OrRd"))(256)
+heatmap.2(meta.cm, labRow = NA, labCol = NA, col = palOrRd,
+          trace = "none", density.info = "none")
 ```
 
-The proportion of cases with at least 0.6 agreement is `r ((sum(meta.cm >= 0.6) - ncol(meta.cm)) / 2) / choose(ncol(meta.cm), 2)`.
+From the heatmap, we do not see a very high concordance across algorithms. For example, the proportion of cases with at least 0.6 agreement is only `r ((sum(meta.cm >= 0.6) - ncol(meta.cm)) / 2) / choose(ncol(meta.cm), 2)`. There is some evidence of a four-class data structure.
 
-```{r conf_mat}
+The confusion matrix is shown below for the meta consensus classes compared to TCGA's classification. Several metrics are shown for each class.
+
+```{r conf_mat, results='asis'}
 final.compare <- hclust(dist(meta.cm), method = "average") %>%
   cutree(4) %>%
   as.factor %>%
   set_names(hclust(dist(meta.cm), method = "average")$labels) %>%
-  set_names(substring(names(.), first = 18)) %>%
+  set_names(true.class) %>%
   table(., names(.)) %>%
   magrittr::extract(names(sort(apply(., 1, which.max))), ) %>%
   set_rownames(colnames(.)) %>%
@@ -117,29 +148,30 @@ final.compare <- hclust(dist(meta.cm), method = "average") %>%
 
 names(dimnames(final.compare)) <- c("Predicted", "Reference")
 cm <- caret::confusionMatrix(final.compare)
-```
 
-The confusion matrix is shown below, as well as different metrics for each class.
-
-```{r conf_mat_output, results='asis'}
 pandoc.table(cm$table)
 pandoc.table(cm$byClass)
 ```
 
-# External Evaluation
-External evaluation usually refers to the case when we compare our clustering assignments to true class labels, or have some gold standard to compare to. In applications, this might be the published clustering result. The downside of using external evaluation is that the reference classes may not be correctly clustered themselves, and we are treating these as the norm. None the less, we can explore a few metrics.
+## External Evaluation
+External evaluation refers to the case when we compare our clustering assignments to true class labels, or have some gold standard to compare to. In applications, this might be the published clustering result. The downside of using external evaluation is that the reference classes may not be correctly clustered themselves, and we are treating these as the norm. None the less, we can explore a few metrics.
 
-## Purity and Entropy
+We expect that our own NMF-based algorithms to perform well on these evaluation indices because the reference classes were clustered using NMF too.
+
+### Purity and Entropy
 
 Purity is defined as the sum of the entities of maximal class in each cluster divided by the total number of entities. The equation is:
 \begin{center}
 $Purity = \dfrac{1}{n}\sum\limits_{r = 1}^{k}\max\limits_{i}(n_r^i)$
 \end{center}
 where $n$ is the total number of entities, $k$ is the number of clusters, $i$ is a particular class, and $n_r^i$ is the number of objects classified into class $i$ in cluster $r$. The larger the purity, the better the clustering accuracy.
-```{r purity}
-true.class <- as.factor(substring(rownames(results.all), first = 18))
-Purity <- apply(results.all, 2, function(x) purity(as.factor(x), true.class))
-sort(Purity, decreasing = T)
+```{r purity, results='asis'}
+Purity <- apply(results.all, 2, function(x) purity(as.factor(x), true.class)) %>%
+  sort(decreasing = T) %>% 
+  data.frame(Purity = .) %>% 
+  mutate(Algorithms = rownames(.)) %>% 
+  select(Algorithms, Purity)
+pandoc.table(Purity, justify = "lc")
 ```
 
 Entropy measures the amount of uncertainty in each cluster. The equation is:
@@ -147,20 +179,65 @@ Entropy measures the amount of uncertainty in each cluster. The equation is:
 $Entropy = -\dfrac{1}{n\log{q}}\sum\limits_{r = 1}^{k}\sum\limits_{i = 1}^{q}n_r^i\log{\dfrac{n_r^i}{n_r}}$
 \end{center}
 The smaller the entropy, the less uncertain we are of the cluster membership, and the better the clustering performance.
-```{r entropy}
-Entropy <- apply(results.all, 2, function(x) entropy(as.factor(x), true.class))
-sort(Entropy)
+```{r entropy, results='asis'}
+Entropy <- apply(results.all, 2, function(x) entropy(as.factor(x), true.class)) %>% 
+  sort %>% 
+  data.frame(Entropy = .) %>% 
+  mutate(Algorithms = rownames(.)) %>% 
+  select(Algorithms, Entropy)
+pandoc.table(Entropy, justify = "lc")
 ```
 
-## Kappa Statistics
+### Kappa Statistics
 
-```{r kappa}
-kappa <- psych::wkappa(final.compare)
+Cohen's kappa statistic $\kappa$ measures the level of agreement between two raters. In our case, the raters are different clustering algorithms.
+\begin{center}
+$\kappa = \dfrac{p_o - p_e}{1 - p_e}$
+\end{center}
+
+The weighted $\kappa$ is as follows:
+\begin{center}
+$\kappa_w = 1 - \dfrac{\sum_{i=1}^k\sum_{j=1}^k w_{ij}x_{ij}}{\sum_{i=1}^k\sum_{j=1}^k w_{ij}m_{ij}}$
+\end{center}
+
+Fleiss gave the following interpretations for $\kappa$, albeit arbitrary and not numerically determined.
+```{r kappa_ratings, results='asis'}
+kappa_rating <- data.frame(Rating = c("Poor", "Fair", "Excellent"),
+                           Kappa = c("Less than 0.40", "Between 0.40 and 0.75", "Greater than 0.75"))
+pandoc.table(kappa_rating)
 ```
 
-The unadjusted kappa statistic is `r kappa$kappa` and the weighted kappa statistic is `r kappa$weighted.kappa` for the final meta consensus cluster.
- 
-## Adjusted Rand Index
+The results for the TCGA dataset are shown below:
+
+```{r kappa_results, results='asis'}
+kappas <- alply(results.all, 2, function(x)
+  table(x, true.class) %>% 
+    extract(names(sort(apply(., 1, which.max))), ) %>%
+    set_rownames(colnames(.)), .dims = T) %>% 
+  sapply(., psych::wkappa) %>% 
+  as.data.frame %>% 
+  mutate(Meta = psych::wkappa(final.compare)) %>% 
+  t %>% 
+  apply(., 2, unlist) %>% 
+  as.data.frame %>%
+  set_colnames(c("kappa", "weighted.kappa")) %>% 
+  mutate(Algorithm = rownames(.),
+         Rating = ifelse(weighted.kappa < 0.4, "Poor",
+                         ifelse(weighted.kappa > 0.75, "Excellent",
+                                "Fair"))) %>%
+  arrange(desc(weighted.kappa)) %>% 
+  select(Algorithm, kappa, weighted.kappa, Rating)
+
+pandoc.table(kappas)
+```
+
+### Adjusted Rand Index
+
+The equation for the adjusted Rand index is shown below:
+
+\begin{center}
+$ARI = \dfrac{\sum_{ij}\binom{n_{ij}}{2} - [\sum_i\binom{a_i}{2}\sum_j\binom{b_j}{2}] / \binom{n}{2}}{\frac{1}{2}[\sum_i\binom{a_i}{2} + \sum_j\binom{b_j}{2}] - [\sum_i\binom{a_i}{2}\sum_j\binom{b_j}{2}] / \binom{n}{2}}$
+\end{center}
 
 The larger the better.
 
@@ -173,28 +250,11 @@ ARI <- apply(results.all, 2, adjustedRandIndex, x = true.class) %>%
 pandoc.table(ARI, justify = "lc")
 ```
 
-# Internal Evaluation
+## Internal Evaluation
 
-## Proportion of Ambiguously Clustered Pairs (PAC)
+### Proportion of Ambiguously Clustered Pairs (PAC)
 
-```{r CDF}
-CDF.each <- list(nmfDiv = results.NMF$nmfDiv$consensusMatrix,
-                 nmfEucl = results.NMF$nmfEucl$consensusMatrix) %>%
-  ldply(.fun = function(x) x[lower.tri(x)]) %>%
-  rbind(., ldply(results.CCP, function(x)
-    x[[4]]$consensusMatrix[lower.tri(x[[4]]$consensusMatrix)])) %>%
-  as.data.frame %>%
-  set_rownames(.$.id) %>%
-  select(-.id) %>%
-  t %>%
-  as.data.frame %>%
-  gather(key = Method, value = CDF, 1:ncol(.))
 
-ggplot(CDF.each, aes(x = CDF, colour = Method)) +
-  stat_ecdf() +
-  facet_wrap(~ Method) +
-  theme(legend.position = "none")
-```
 
 The lower the better.
 
@@ -213,7 +273,7 @@ pandoc.table(PAC, justify = "lc")
 
 The PAC for the meta consensus matrix is `r PAC(meta.cm)`.
 
-## Davies-Bouldin Index
+### Davies-Bouldin Index
 
 For DBI, the lower the better.
 
@@ -228,14 +288,12 @@ DBI <- dat %>%
 pandoc.table(DBI, justify = "lc")
 ```
 
-## Dunn Index
+### Dunn Index
 
 For DI, the larger the better.
 
 ```{r DI, results='asis'}
-DI <- dat %>%
-  apply(results.all, 2, cls.scatt.data, data = .) %>%
-  sapply(., clv.Dunn, intracls = "average", intercls = "average") %>%
+DI <- apply(results.all, 2, dunn, distance = dist(dat)) %>% 
   sort(decreasing = T) %>% 
   data.frame(DI = .) %>% 
   dplyr::mutate(Algorithms = rownames(.)) %>% 
@@ -243,7 +301,7 @@ DI <- dat %>%
 pandoc.table(DI, justify = "lc")
 ```
 
-## Rousseeuw's Silhouette
+### Rousseeuw's Silhouette
 
 For Rousseuw's Silhouette internal cluster quality index (RS), the larger the better.
 
@@ -256,20 +314,7 @@ RS <- apply(results.all, 2, index.S, d = dist(dat)) %>%
 pandoc.table(RS, justify = "lc")
 ```
 
-## Silhouette Average Width
-
-For SAW, the larger the better.
-
-```{r SAW, results='asis'}
-SAW <- apply(results.all, 2, function(x) summary(silhouette(x, dist(dat)))$avg.width) %>%
-  sort(decreasing = T) %>% 
-  data.frame(SAW = .) %>% 
-  dplyr::mutate(Algorithms = rownames(.)) %>% 
-  dplyr::select(Algorithms, SAW)
-pandoc.table(SAW, justify = "lc")
-```
-
-## C-Index
+### C-Index
 
 For CI, the lower the better.
 
@@ -282,20 +327,20 @@ CI <- apply(results.all, 2, index.G3, d = dist(dat)) %>%
 pandoc.table(CI, justify = "lc")
 ```
 
-## Gamma Index
+### Gamma Index
 
-For BHI, the larger the better.
+For GI, the larger the better.
 
-```{r BHI, results='asis'}
-BHI <- apply(results.all, 2, index.G2, d = dist(dat)) %>%
+```{r GI, results='asis'}
+GI <- apply(results.all, 2, index.G2, d = dist(dat)) %>%
   sort(decreasing = T) %>% 
-  data.frame(BHI = .) %>% 
+  data.frame(GI = .) %>% 
   dplyr::mutate(Algorithms = rownames(.)) %>% 
-  dplyr::select(Algorithms, BHI)
-pandoc.table(BHI, justify = "lc")
+  dplyr::select(Algorithms, GI)
+pandoc.table(GI, justify = "lc")
 ```
 
-## CH Index
+### CH Index
 
 For CHI, the larger the better.
 
@@ -308,19 +353,32 @@ CHI <- apply(results.all, 2, index.G1, x = dat) %>%
 pandoc.table(CHI, justify = "lc")
 ```
 
-## Summary
+### Connectivity
+
+For connectivity, the smaller the better.
+
+```{r Connectivity, results='asis'}
+Conn <- apply(results.all, 2, clValid::connectivity, distance = dist(dat)) %>% 
+  sort %>% 
+  data.frame(Conn = .) %>% 
+  dplyr::mutate(Algorithms = rownames(.)) %>% 
+  dplyr::select(Algorithms, Conn)
+pandoc.table(Conn, justify = "lc")
+```
+
+### Summary
 
 Here is a summary of all the indices for each algorithm, in unsorted order.
 
 ```{r index_summary, results='asis'}
-index.summary <- Reduce(merge, list(PAC, DBI, DI, SAW, RS, CI, BHI, CHI))
+index.summary <- Reduce(merge, list(PAC, DBI, DI, RS, CI, GI, CHI, Conn))
 pandoc.table(index.summary,
              justify = paste0("l",
                               paste(rep("c", ncol(index.summary) - 1),
                                     collapse = "")))
 ```
 
-# Ranked Indices
+## Ranked Indices
 
 The table below shows the ranking of algorithms for performance on a clustering index, for each index. There is an additional column that shows the propoportion of indices where an algorithm was ranked **first or second**.
 
@@ -329,11 +387,11 @@ ranked.indices <- data.frame(Algorithms = index.summary$Algorithms,
                              PAC = rank(index.summary$PAC),
                              DBI = rank(index.summary$DBI),
                              DI = rank(-index.summary$DI),
-                             SAW = rank(-index.summary$SAW),
                              RS = rank(-index.summary$RS),
                              CI = rank(index.summary$CI),
-                             BHI = rank(-index.summary$BHI),
-                             CHI = rank(-index.summary$CHI)) %>% 
+                             GI = rank(-index.summary$GI),
+                             CHI = rank(-index.summary$CHI),
+                             Conn = rank(index.summary$Conn)) %>% 
   mutate(Top = apply(.[, -1], 1,
                      function(x) paste0(round(100 * sum(x %in% c(1, 2)) /
                                                 ncol(.[, -1]), 2), "%"))) %>%
@@ -389,21 +447,19 @@ worms.all <- worms.CCP %>%
 
 # indices
 PAC <- worms.CCP %>%
-  sapply(., function(x) PAC(x[[2]]$consensusMatrix)) %>%
-  c(nmfDiv = PAC(worms.NMF$nmfDiv$consensusMatrix),
-    nmfEucl = PAC(worms.NMF$nmfEucl$consensusMatrix)) %>% 
+  sapply(., function(x) PAC(x[[2]]$consensusMatrix, 0.05, 0.95)) %>%
+  c(nmfDiv = PAC(worms.NMF$nmfDiv$consensusMatrix, 0.05, 0.95),
+    nmfEucl = PAC(worms.NMF$nmfEucl$consensusMatrix, 0.05, 0.95)) %>% 
   set_names(ALG.NAMES)
 DBI <- dat %>%
   apply(worms.all, 2, cls.scatt.data, data = .) %>%
   sapply(., clv.Davies.Bouldin, intracls = "average", intercls = "average")
-DI <- dat %>%
-  apply(worms.all, 2, cls.scatt.data, data = .) %>%
-  sapply(., clv.Dunn, intracls = "average", intercls = "average")
-SAW <- apply(worms.all, 2, function(x) summary(silhouette(x, dist(dat)))$avg.width)
+DI <- apply(worms.all, 2, dunn, distance = dist(dat))
 RS <- apply(worms.all, 2, index.S, d = dist(dat))
 CI <- apply(worms.all, 2, index.G3, d = dist(dat))
-BHI <- apply(worms.all, 2, index.G2, d = dist(dat))
+GI <- apply(worms.all, 2, index.G2, d = dist(dat))
 CHI <- apply(worms.all, 2, index.G1, x = dat)
+Conn <- apply(worms.all, 2, clValid::connectivity, distance = dist(dat))
 ```
 
 The ranked indices and weights tables are shown below:
@@ -413,11 +469,11 @@ ranked.indices <- data.frame(Algorithms = ALG.NAMES,
                              PAC = rank(PAC, ties.method = "min"),
                              DBI = rank(DBI, ties.method = "min"),
                              DI = rank(-DI, ties.method = "min"),
-                             SAW = rank(-SAW, ties.method = "min"),
                              RS = rank(-RS, ties.method = "min"),
                              CI = rank(CI, ties.method = "min"),
-                             BHI = rank(-BHI, ties.method = "min"),
-                             CHI = rank(-CHI, ties.method = "min")) %>% 
+                             GI = rank(-GI, ties.method = "min"),
+                             CHI = rank(-CHI, ties.method = "min"),
+                             Conn = rank(Conn, ties.method = "min")) %>% 
   mutate(Top = apply(.[, -1], 1,
                      function(x) paste0(round(100 * sum(x %in% c(1, 2)) /
                                                 ncol(.[, -1]), 2), "%"))) %>%
@@ -430,7 +486,7 @@ pandoc.table(ranked.indices,
 ranked.sums <- ranked.indices %>% 
   mutate(Sum = apply(.[, -c(1, 10)], 1, sum),
          Weight = paste0(round(100 * Sum^-1 / sum(Sum^-1), 2), "%")) %>% 
-  dplyr::select(Algorithms, Top, Sum, Weight) %>% 
+  select(Algorithms, Top, Sum, Weight) %>% 
   arrange(Sum)
 pandoc.table(ranked.sums,
                      justify = paste0("l",
@@ -461,14 +517,14 @@ worms.matches <- worms.final %>%
 pandoc.table(worms.matches)
 ```
 
-Let's visualize how the best algorithm, K-Means using euclidean distance, separates the clusters:
+Let's visualize how the best algorithm, hierarchical clustering using single linkage and Euclidean distance, separates the clusters:
 
 ```{r worms_best}
-plot(sw$data, col = c(2:3)[worms.final$`KM (Euclidean)`], xlab = "x", ylab = "y",
+plot(sw$data, col = c(2:3)[worms.final$`HC (Sing Euc)`], xlab = "x", ylab = "y",
      main = "K-Means (euclidean) clustering of two atypical parabolic shapes (worms)")
 ```
 
-It appears that even the best algorithm cannot make a parabolic division in the feature space.
+It appears that the best algorithm can separate the clusters, yet the indices do not favour such a partition and it appears that the algorithm is performing poorly.
 
 ## Rings Dataset
 
@@ -488,28 +544,26 @@ plot(dat, col = c(2:4)[true.class], xlab = "x", ylab = "y",
 rings.CCP <- readRDS("Rings/outputs/results_CCP.rds")
 rings.NMF <- readRDS("Rings/outputs/results_NMF.rds")
 rings.all <- rings.CCP %>%
-  sapply(., function(x) x[[2]]$consensusClass) %>%
+  sapply(., function(x) x[[3]]$consensusClass) %>%
   cbind(., rings.NMF$nmfDiv$consensusClass,
         rings.NMF$nmfEucl$consensusClass) %>% 
   set_colnames(ALG.NAMES[-8])
 
 # indices
 PAC <- rings.CCP %>%
-  sapply(., function(x) PAC(x[[2]]$consensusMatrix)) %>%
+  sapply(., function(x) PAC(x[[3]]$consensusMatrix)) %>%
   c(nmfDiv = PAC(rings.NMF$nmfDiv$consensusMatrix),
     nmfEucl = PAC(rings.NMF$nmfEucl$consensusMatrix)) %>% 
   set_names(ALG.NAMES[-8])
 DBI <- dat %>%
   apply(rings.all, 2, cls.scatt.data, data = .) %>%
   sapply(., clv.Davies.Bouldin, intracls = "average", intercls = "average")
-DI <- dat %>%
-  apply(rings.all, 2, cls.scatt.data, data = .) %>%
-  sapply(., clv.Dunn, intracls = "average", intercls = "average")
-SAW <- apply(rings.all, 2, function(x) summary(silhouette(x, dist(dat)))$avg.width)
+DI <- apply(rings.all, 2, dunn, distance = dist(dat))
 RS <- apply(rings.all, 2, index.S, d = dist(dat))
 CI <- apply(rings.all, 2, index.G3, d = dist(dat))
-BHI <- apply(rings.all, 2, index.G2, d = dist(dat))
+GI <- apply(rings.all, 2, index.G2, d = dist(dat))
 CHI <- apply(rings.all, 2, index.G1, x = dat)
+Conn <- apply(rings.all, 2, clValid::connectivity, distance = dist(dat))
 ```
 
 ```{r rings_summary, results='asis'}
@@ -517,11 +571,11 @@ ranked.indices <- data.frame(Algorithms = ALG.NAMES[-8],
                              PAC = rank(PAC, ties.method = "min"),
                              DBI = rank(DBI, ties.method = "min"),
                              DI = rank(-DI, ties.method = "min"),
-                             SAW = rank(-SAW, ties.method = "min"),
                              RS = rank(-RS, ties.method = "min"),
                              CI = rank(CI, ties.method = "min"),
-                             BHI = rank(-BHI, ties.method = "min"),
-                             CHI = rank(-CHI, ties.method = "min")) %>% 
+                             GI = rank(-GI, ties.method = "min"),
+                             CHI = rank(-CHI, ties.method = "min"),
+                             Conn = rank(Conn, ties.method = "min")) %>% 
   mutate(Top = apply(.[, -1], 1,
                      function(x) paste0(round(100 * sum(x %in% c(1, 2)) /
                                                 ncol(.[, -1]), 2), "%"))) %>%
@@ -534,7 +588,7 @@ pandoc.table(ranked.indices,
 ranked.sums <- ranked.indices %>% 
   mutate(Sum = apply(.[, -c(1, 10)], 1, sum),
          Weight = paste0(round(100 * Sum^-1 / sum(Sum^-1), 2), "%")) %>% 
-  dplyr::select(Algorithms, Top, Sum, Weight) %>% 
+  select(Algorithms, Top, Sum, Weight) %>% 
   arrange(Sum)
 pandoc.table(ranked.sums,
                      justify = paste0("l",
@@ -570,7 +624,7 @@ pandoc.table(rings.matches)
 ```
 
 ```{r rings_best}
-plot(dat, col = c(2:4)[rings.final$`PAM (Euclidean)`], xlab = "x", ylab = "y",
+plot(dat, col = c(2:4)[rings.final$`HC (Sing Euc)`], xlab = "x", ylab = "y",
      main = "PAM (euclidean) clustering of three circles (rings)")
 ```
 
@@ -578,9 +632,19 @@ Again, we are only able to make linear separations.
 
 # References
 
+Brunet, J. P., Tamayo, P., Golub, T. R., & Mesirov, J. P. (2004). "Metagenes and molecular pattern discovery using matrix factorization." *Proceedings of the national academy of sciences*, 101 (12), 4164-4169.
+
 Monti, S., Tamayo, P., Mesirov, J., & Golub, T. (2003). "Consensus clustering: a resampling-based method for class discovery and visualization of gene expression microarray data." *Machine learning*, 52 (1-2), 91-118.
 
+Cancer Genome Atlas Research Network. (2011). "Integrated genomic analyses of ovarian carcinoma." *Nature*, 474 (7353), 609-615.
+
 Conrad, J. G., Al-Kofahi, K., Zhao, Y., & Karypis, G. (2005, June). "Effective document clustering for large heterogeneous law firm collections." In *Proceedings of the 10th international conference on Artificial intelligence and law* (pp. 177-187). ACM.
+
+Fleiss, J.L. (1981). *Statistical methods for rates and proportions* (2nd ed.). New York: John Wiley.
+
+Cohen, J. (1960). "A coefficient of agreement for nominal scales." *Educational and psychological measurement*, 20 (1), 37-46.
+
+Cohen, J. (1968). "Weighted kappa: Nominal scale agreement provision for scaled disagreement or partial credit." *Psychological bulletin*, 70 (4), 213.
 
 Rand, W. M. (1971). "Objective criteria for the evaluation of clustering methods." *Journal of the American Statistical Association*, 66 (336), 846-850.
 
