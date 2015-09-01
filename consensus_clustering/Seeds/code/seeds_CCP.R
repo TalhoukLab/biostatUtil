@@ -1,20 +1,17 @@
-## This script obtains assignments into two clusters and consensus
+## This script obtains assignments into three clusters and consensus
 ## matrices from non-NMF-based algorithms that used consensus clustering via
 ## ConsensusClusterPlus (CCP)
 ## Author: Derek Chiu
-## Dataset: clusterSim::shapes.worms()
+## Dataset: UCI - seeds
 
 # Load packages and data
-library(dplyr)
 library(ConsensusClusterPlus)
 library(ConClust)
-library(clusterSim)
-set.seed(1)
-sw <- shapes.worms()
+seeds <- readRDS("Seeds/seeds.rds")
 
 # Remove features with low variability and scale
-dat <- sw %>%
-  use_series(data) %>%
+dat <- seeds %>%
+  dplyr::select(which(sapply(., class) == "numeric")) %>%
   t %>%
   magrittr::extract(apply(., 1, sd) > 1, ) %>%
   t %>%
@@ -26,47 +23,47 @@ k <- 3
 reps <- 1000
 pItem <- 0.8
 
-# HC Average Linkage Euclidean (~ 27 secs)
+# HC Average Linkage Euclidean (takes ~ 10 sec)
 hcAEucl <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
                                 distance = "euclidean",
                                 seed = 123, verbose = T)
 
-# HC Single Linkage Euclidean (~ 27 secs)
+# HC Single Linkage Euclidean (takes ~ 10 sec)
 hcSEucl <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
                                 innerLinkage = "single", distance = "euclidean",
                                 seed = 123, verbose = T)
 
-# HC Diana Euclidean (~ 3.7 mins)
-hcDianaEucl<- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
+# HC Diana Euclidean (takes ~ 30 sec)
+hcDianaEucl <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
                                     clusterAlg = "dianaHook", distance = "euclidean",
                                     seed = 123, verbose = T)
 
-# K-Means Euclidean (~ 1 min)
+# K-Means Euclidean (takes ~ 19 sec)
 kmEucl <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
                                clusterAlg = "kmdist", distance = "euclidean",
                                seed = 123, verbose = T)
 
-# K-means Spearman (~ 1 min)
+# K-means Spearman (takes ~ 30 sec)
 kmSpear <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
                                 clusterAlg = "kmdist", distance = "spearman",
                                 seed = 123, verbose = T)
 
-# K-means Mutual Information (~ 2 min)
+# K-means Mutual Information (takes ~ 45 sec)
 kmMI <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
                              clusterAlg = "kmdist", distance = "myMIdist",
                              seed = 123, verbose = T)
 
-# PAM Euclidean (~ 1 min)
+# PAM Euclidean (takes ~ 17 sec)
 pamEucl <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
                                 clusterAlg = "pam", distance = "euclidean",
                                 seed = 123, verbose = T)
 
-# PAM Spearman (~ 44 secs)
+# PAM Spearman (takes ~ 15 sec)
 pamSpear <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
                                  clusterAlg = "pam", distance = "spearman",
                                  seed = 123, verbose = T)
 
-# PAM Mutual Information (~ 1.5 mins)
+# PAM Mutual Information (takes ~ 29 sec)
 pamMI <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
                               clusterAlg = "pam", distance = "myMIdist",
                               seed = 123, verbose = T)
@@ -74,4 +71,4 @@ pamMI <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
 # Save ConsensusClusterPlus (CCP) results
 saveRDS(list(hcAEucl, hcSEucl, hcDianaEucl, kmEucl, kmSpear,
              kmMI, pamEucl, pamSpear, pamMI),
-        "Worms/outputs/results_CCP.rds", compress = "xz")
+        "Seeds/outputs/results_CCP.rds", compress = "xz")
