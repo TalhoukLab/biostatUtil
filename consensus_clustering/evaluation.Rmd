@@ -2,7 +2,7 @@
 title: "Performance Evaluation of Consensus Clustering Algorithms"
 subtitle: "STAT 598 Progress Report"
 author: "Derek Chiu"
-date: "August 25, 2015"
+date: "September 1, 2015"
 output: 
   pdf_document: 
     number_sections: yes
@@ -11,7 +11,7 @@ output:
 ---
 
 # Preface
-This progress report fulfills the UBC Science Co-op requirement to submit a work term report at the end of every four month period. BC Cancer Agency (BCCA) is a not-for-profit organization that aims to provide care for cancer patients and conduct innovative cancer research. Our department, OvCaRe, is the Ovarian Cancer Research team tasked with studying ovarian cancers of many types. The objective of the project I am working on is to discover a viable classifer for ovarian high-grade serous carcinoma (HGSC). My role is to help devise a clustering algorithm that can statistically partition subtypes of HGSC without knowledge of the pathological properties of each sample. The progress report will evaluate the method we are using, consensus clustering, on a publicly available data set as well as simulated data sets. The final technical report will contain results of our method applied on HGSC data from our own cohort.
+This progress report fulfills the UBC Science Co-op requirement to submit a work term report at the end of every four month period. BC Cancer Agency (BCCA) is a not-for-profit organization that aims to provide care for cancer patients and conduct innovative cancer research. Our department, OvCaRe, is the Ovarian Cancer Research team tasked with studying ovarian cancers of many types. The objective of the project I am working on is to discover a viable classifier for ovarian high-grade serous carcinoma (HGSC). My role is to help devise a clustering algorithm that can partition tumour samples of HGSC into different subtypes without knowledge of the underlying pathological properties of each sample. Instead, only gene expression data will be used in the prediction. The progress report will evaluate the method we are using, consensus clustering, on a publicly available data set as well as some simulated data sets. The final technical report will contain results of our method applied on HGSC data from our own cohort.
 
 ```{r setup, echo=FALSE, cache=FALSE, include=TRUE, message=FALSE}
 # packages
@@ -40,6 +40,48 @@ ALG.NAMES <- c("HC (Avg Euc)", "HC (Sing Euc)", "HC (Diana)",
                "NMF (Div)", "NMF (Euc)")
 ```
 
+# Introduction
+Unsupervised learning is the process of inferring something about a data structure without knowing its true class labels. Cluster analysis is an unsupervised learning method of assigning entities into different groups based on one or more of their attributes. It is unsupervised because we do not know the true partitions of the entities. The goal is to place similar objects together in the same cluster and separate dissimilar objects into different clusters. For example, in genomics studies, we frequently try and cluster patient samples measured on a large number of molecular features.
+
+When we obtain a clustering assignment from an algorithm, we often want to evaluate its performance and validity. Ideally, a good clustering algorithm is able to differentiate entities without knowledge of the true class labels. In addition, we want the algorithm to arrive at a stable clustering result. Some algorithms are sensitive to initial conditions and we do not want the assignments to be dependent on those. Finally, the choice of the number of clusters is not trivial in unsupervised explorations. This will not be a problem in simulations because we do know the true class labels. However, it is important to keep in mind that for real data the number of clusters should be determined using the data structure.
+
+# Methods
+
+## Clustering Algorithms
+There are many clustering algorithms, each approaching the problem in a different way. It is important to note the advantages and limitations of each algorithm. These are some definitions of clustering performance^18^:
+
+- **Compactness**: how close together or tight objects are to each other within a cluster
+- **Separation**: how far apart objects are in different clusters
+- **Connectivity**: how connected the objects are to their closest neighbours
+
+### Hierarchical Clustering
+Hierarchical clustering (HC) is popular because of its intuitive representation using dendrograms (trees). More similar objects are joined near the bottom of a dendrogram whereas less similar objects are joined at a higher tree height. First a distance metric is used to compute a distance matrix. Then objects/features are clustered based on a linkage type. The linkage criterion determines the distances among a set of objects/features using the pairwise distances. For example, an average linkage would use the average pairwise distances. On the other hand, single linkage uses the minimum pairwise distance. A dendrogram with all objects/features can be made by recursively linking increasingly larger subsets of observations together. 
+
+Single linkage works well for data sets exhibiting connectivity but not compactness. This is because single linkage looks for minimum pairwise distances, which would cluster together neighbouring points. An example of this would be tree rings. The clusters are circles, and objects that are far away can be in the same cluster compared to objects that are actually closer. On the other hand, average linkage works well for data sets exhibiting compactness. This works where the clusters look like non-overlapping blobs.
+
+### K-Means and PAM
+First, k means (centroids) are randomly initialized in the multidimensional object/feature space that we wish to cluster. The clusters are formed by assigning each object/feature to its closest centroid. The centroids are recalculated based on the cluster memberships and the  subsequently updated. This procedure is iterated until the centroids converge.
+
+There are two caveats to note when using k-means. First, sometimes the cluster assignments are unstable because they depend on the random initialization of the centroids. We preferably want to repeat the algorithm many times to see whether the clusters are sensitive to the choice of initial centroid. Secondly, choosing k is not arbitrary. Cross-validation using an appropriate loss function is a popular method for choosing k. Other methods use evaluation indices, some of which we will describe later in the report.
+
+Partitioning Around Medoids (PAM) is very similar to k-means except that we randomly initialize k random data points (medoids). Medoids must be actual data points whereas centroids can be any point in the feature space.
+
+### Nonnegative Matrix Factorization (NMF)
+Given a non-negative data matrix $A$, we can factor it into two matrices $W$ and $H$, which are also non negative. $W$ and $H$ have important properties. Suppose $A$ has genes as rows and samples as columns. If we are interested in clustering samples, then $H$ has a reduced gene space of metagenes that fully explain the samples. Samples are clustered based on the metagene they are most associated with. If we are interested in clustering genes, then $W$ has a reduced sample space of metasamples that fully explain the genes. Genes are clustered based on the metasample they are most associated with.
+
+In gene expression data, it is common to standardize the genes. Doing so would likely disrupt the nonnegativity of $A$ required for NMF. A simple remedy can solve this problem: append the matrix $-A$ to the bottom of $A$ (preserving the same number of columns), and set all negative entries to 0. The computational complexity will have been doubled as a result. NMF takes a long time to run, but studies have shown clustering assignments can be highly stable^1^.
+
+## Consensus Clustering
+Monti et al.^2^ describe consensus clustering as an algorithm but also as a method of combining realizations of other clustering algorithms. Algorithms like k-means and PAM are unstable, as the clustering assignments depend on the initialization of centroids and medoids, respectively. Consensus clustering combines results from repeated runs of a clustering algorithm. Typically, each run uses different random subsamples of the data to model sampling variability. A final clustering assignment is determined based on agreement across replicates.
+
+The consensus matrix is a significant aspect of consensus clustering. Consider a consensus matrix $C$. Entry $C_{ij}$ is the proportion of runs that object $i$ and object $j$ were clustered together, out of all runs in which $i$ and $j$ were both selected in subsamples, where $1\leq i,j\leq N$, $N$ = number of objects. $C$ is symmetric because $C_{ij} = C_{ji}$ (i.e. no order exists). All entries range from 0 to 1 since $C_{ij}$ are proportions. A perfect clustering would consist of a consensus matrix with only 0 (objects never clustered together) or 1 (objects always clustered together). The final step to obtaining the consensus clustering assignment is to use hierarchical clustering on the consensus matrix.
+
+Based on the hierarchical clustering, we can plot a heatmap of the consensus matrix. Repeating this for different values of k (number of clusters) and looking at the corresponding heatmaps, we can determine which value of k provides the most stable clustering assignment. The goal is to have a well-defined diagonal block structure in the heatmap, one block per cluster. Using a performance measure such as PAC (which we will describe) would be a more formal method of assessment that doesn't rely on potentially subjective visualizations.
+
+Consensus clustering attempts to adjust for the randomness introduced by subsampling and the clustering algorithm itself. An extension is sometimes called meta-consensus clustering, where we aggregate results across different algorithms in addition to aggregating across subsamples within an algorithm. For instance, we may combine the consensus clustering assignments from 10 different algorithms to come up with a final clustering. The choice of which algorithms to use is not trivial. We hope to prove that using meta-consensus clustering is superior to using consensus clustering of one algorithm.
+
+# Performance Evaluation: TCGA Dataset
+
 ```{r load}
 results.CCP <- readRDS("TCGA/outputs/results_CCP.rds")
 results.NMF <- readRDS("TCGA/outputs/results_NMF.rds")
@@ -52,47 +94,7 @@ dat <- hgsc %>%
   scale
 ```
 
-# Introduction
-Unsupervised learning is the process of inferring something about a data structure without knowing its true class labels. Cluster analysis is an unsupervised learning method of assigning entities into different groups based on one or more of their attributes. It is unsupervised because we do not know the true partitions of the entities. The objective is to place similar objects together in the same cluster and separate dissimilar objects into different clusters. For example, in genomics studies, we frequently try and cluster patient samples measured on a large number of molecular features. When we get a clustering assignment from an algorithm, we often want to evaluate its performance. Ideally, a good clustering algorithm is able to differentiate entities without knowledge of the true class labels. In addition, we want the algorithm to arrive at a stable and optimal number of clusters. The choice of the number of clusters is not trivial in some cases.
-
-# Methods
-
-## Clustering Algorithms
-There are many clustering algorithms, each approaching the clustering problem in a different way. It is most important to note the advantages and limitations of each algorithm. These are some definitions of clustering performance:
-
-- **Compactness**: how close together clustered objects are to each other
-- **Separation**: how far apart objects in different clusters are
-- **Connectivity**: how connected the objects are in the feature space
-
-### Hierarchical Clustering
-This clustering algorithm is very popular because of its intuitive representation using dendrograms (trees). Based on a distance matrix, the objects/features are clustered based on a linkage type. More similar objects are joined near the bottom of a dendrogram whereas less similar objects are joined at a higher tree height. A linkage criterion determines the distances amongst a set of objects/features using the pairwise distances. For example, an average linkage would use the average pairwise distances. In this way, a dendrogram with all objects/features can be made by recursively linking increasingly larger sets of observations together. 
-
-Single linkage works very well for data sets exhibiting connectivity but not compactness. An example of this would be tree rings. The clusters are circles, and objects that are far away can be in the same cluster compared to objects that are close. On the other hand, average linkage works well for data sets exhibiting compactness. This works where the clusters are look like non-overlapping blobs.
-
-### K-Means and PAM
-First, k means are randomly initialized in the multi-dimensional object/feature space that we wish to cluster. Assigning each object/feature to its closest mean forms the clusters. The k means are re-calculated based on the centroids (center points) within each cluster. This process is iterated until the centroids converge.
-
-There are two caveats to note when using k-means. First, the cluster assignments are unstable because they depend on the random initialization of the centroids. We preferably want to repeat the algorithm many times to see whether the clusters are sensitive to the choice of initial centroid. Secondly, choosing k is not an arbitrary. Cross-validation using an appropriate loss function is a popular method for choosing k. Other methods use evaluation indices, some of which we will describe later in the report.
-
-Partitioning Around Medoids (PAM) is very similar to k-means except that we initialize k random data points as the medoids. This means after each iteration the new medoids will always be a real data points, whereas k-means allows the centroids to be anywhere in the feature space.
-
-### Nonnegative Matrix Factorization (NMF)
-Given a non-negative data matrix $A$, we can factor it into two matrices $W$ and $H$, which are also non negative. $W$ and $H$ have important properties. Suppose $A$ has genes as rows and samples as columns. If we are interested in clustering samples, then $H$ has a reduced gene space of metagenes that fully explain the samples. Samples are clustered based on the metagene they are most associated with. If we are interested in clustering genes, then $W$ has a reduced sample space of metasamples that fully explain the genes. Genes are clustered based on the metasample they are most associated with.
-
-In gene expression data, it is common to standardize the genes. Doing so would likely disrupt the nonnegativity of A required for NMF. A simple remedy can solve this problem: append the matrix $-A$ to the bottom of $A$ (preserving the same number of columns), and set all negative entries to 0. The computational complexity has been doubled as a result. NMF takes a long time to run, but clustering assignments are highly stable.
-
-## Consensus Clustering
-Consensus clustering is as much an algorithm itself as it is a way of combining realizations of other clustering algorithms. For this, we explain it in its own section. Algorithms like k-means and PAM are unstable, as the clustering assignments depend on the initialization of centroids and medoids, respectively. Consensus clustering combines results from repeated runs of a clustering algorithm. Typically, each run uses different random subsamples of the data to model sampling variability. A final clustering assignment is determined based on agreement across replicates.
-
-The consensus matrix is a significant aspect of consensus clustering. Consider a consensus matrix $C$. Entry $C_{ij}$ is the proportion of times that object $i$ and object $j$ were clustered together. The matrix is symmetric, and all entries range from 0 to 1. A perfect clustering would consist of a consensus matrix with only 0s (never clustered together) and 1s (always clustered together). The final step to obtaining the consensus clustering assignment is to perform hierarchical clustering on the consensus matrix.
-
-Based on the hierarchical clustering, we can plot a heatmap of the consensus matrix. Repeating this for different values of k (number of clusters) and looking at the corresponding heatmaps, we can see which value of k provides the most stable clustering assignment. The goal is to have a well-defined diagonal block structure, one block per cluster. Using a performance measure such as PAC (which we will describe) would be a more formal method of assessment that doesn't rely on potentially subjective visualizations.
-
-Consensus clustering attempts to stabilize results from randomness introduced by subsampling and the clustering algorithm. A natural extension is sometimes called meta consensus clustering, where we aggregate results across different algorithms. For instance, we may combine the consensus clustering assignments from 10 different algorithms to come up with a final clustering. The choice of which algorithms to use is not trivial.
-
-# Performance Evaluation: TCGA Dataset
-
-A published dataset from TCGA uses `r nrow(hgsc)` genes to cluster `r ncol(hgsc) - 1` HGSC samples into the four subtypes: C1, C2, C4, and C5. They used consensus clustering with NMF. In this report, we consider the following clustering algorithms to use in consensus clustering:
+A published dataset from TCGA^3^ uses `r nrow(hgsc)` genes to cluster `r ncol(hgsc) - 1` HGSC samples into the four subtypes: C1, C2, C4, and C5. TCGA used consensus clustering with NMF. In this report, we consider the following clustering algorithms to use in consensus clustering:
 
 * Hierarchical Clustering with Euclidean distance
     - Average Linkage
@@ -160,7 +162,7 @@ We expect that our own NMF-based algorithms to perform well on these evaluation 
 
 ### Purity and Entropy
 
-Purity is defined as the sum of the entities of maximal class in each cluster divided by the total number of entities. The equation is:
+Purity is defined as the sum of the entities of maximal class in each cluster divided by the total number of entities^4^. The equation is:
 \begin{center}
 $Purity = \dfrac{1}{n}\sum\limits_{r = 1}^{k}\max\limits_{i}(n_r^i)$
 \end{center}
@@ -174,7 +176,7 @@ Purity <- apply(results.all, 2, function(x) purity(as.factor(x), true.class)) %>
 pandoc.table(Purity, justify = "lc")
 ```
 
-Entropy measures the amount of uncertainty in each cluster. The equation is:
+Entropy measures the amount of uncertainty in each cluster^4^. The equation is:
 \begin{center}
 $Entropy = -\dfrac{1}{n\log{q}}\sum\limits_{r = 1}^{k}\sum\limits_{i = 1}^{q}n_r^i\log{\dfrac{n_r^i}{n_r}}$
 \end{center}
@@ -190,17 +192,17 @@ pandoc.table(Entropy, justify = "lc")
 
 ### Kappa Statistics
 
-Cohen's kappa statistic $\kappa$ measures the level of agreement between two raters. In our case, the raters are different clustering algorithms.
+Cohen's kappa statistic $\kappa$ measures the level of agreement between two raters^5^. In our case, the raters are different clustering algorithms.
 \begin{center}
 $\kappa = \dfrac{p_o - p_e}{1 - p_e}$
 \end{center}
 
-The weighted $\kappa$ is as follows:
+The weighted $\kappa$ statistic is as follows and takes into account the off-diagonal elements of the confusion matrix^6^:
 \begin{center}
 $\kappa_w = 1 - \dfrac{\sum_{i=1}^k\sum_{j=1}^k w_{ij}x_{ij}}{\sum_{i=1}^k\sum_{j=1}^k w_{ij}m_{ij}}$
 \end{center}
 
-Fleiss gave the following interpretations for $\kappa$, albeit arbitrary and not numerically determined.
+Fleiss gave the following interpretations for $\kappa$^7^. Albeit arbitrary and not numerically determined they still serve as a rough guideline.
 ```{r kappa_ratings, results='asis'}
 kappa_rating <- data.frame(Rating = c("Poor", "Fair", "Excellent"),
                            Kappa = c("Less than 0.40", "Between 0.40 and 0.75", "Greater than 0.75"))
@@ -233,13 +235,13 @@ pandoc.table(kappas)
 
 ### Adjusted Rand Index
 
-The equation for the adjusted Rand index is shown below:
+The Rand Index measures agreement between two classes by counting the number of pairs of objects that are clustered together in two clusterings^8^. Hubert & Araibe propose an adjusted version to account for random chance^9^. The equation for the adjusted Rand index (ARI) is shown below^8, 9, 10^:
 
 \begin{center}
 $ARI = \dfrac{\sum_{ij}\binom{n_{ij}}{2} - [\sum_i\binom{a_i}{2}\sum_j\binom{b_j}{2}] / \binom{n}{2}}{\frac{1}{2}[\sum_i\binom{a_i}{2} + \sum_j\binom{b_j}{2}] - [\sum_i\binom{a_i}{2}\sum_j\binom{b_j}{2}] / \binom{n}{2}}$
 \end{center}
 
-The larger the better.
+where $n_{ij}$'s are entries in the prediction vs. reference confusion matrix, $a_i$ and $b_j$ are row and column marginal totals respectively, and $N$ is the grand total. The ARI is 1 when the two clusterings are perfect, and 0 when there is no concordance.
 
 ```{r ARI, results='asis'}
 ARI <- apply(results.all, 2, adjustedRandIndex, x = true.class) %>% 
@@ -254,9 +256,9 @@ pandoc.table(ARI, justify = "lc")
 
 ### Proportion of Ambiguously Clustered Pairs (PAC)
 
+The notion of PAC is closely related to consensus clustering. Senbabaoglu et al. argue that PAC is a better measure of determining the optimal number of clusters from consensus matrices^11^, compared to other measures such as the Gap statistic, CLEST, etc. The idea is simple: the proportion of ambiguously clustered pairs is the number of entries in the consensus matrix that are not 0 or 1. Recall that the consensus matrix is symmetric, so we only consider the lower (or upper) triangular matrix. In most applications, the definition of ambiguity is less stringent, and any entry greater than $p$ or less than $1 - p$ contributes to PAC, where $p$ is a small proportion (e.g. 0.05).
 
-
-The lower the better.
+Although Senbabaoglu et al. initially used PAC to determine the optimal number of clusters, here we are using it to compare different clustering algorithms. None the less, we want the PAC to be as small as possible. A perfect score for PAC would be 0, meaning that all entries in the corresponding consensus matrix are either 0 or 1. The advantage of using this index is that it utilizes results from consensus clustering and thus not biased towards a particular distance metric. However, a major limitation is that PAC only uses stability evidence and doesn't assess accuracy. A clustering algorithm can be consistently wrong and do well for PAC, masking the apparent performance of said algorithm to make correct classifications.
 
 ```{r PAC, results='asis'}
 PAC <- results.CCP %>%
@@ -271,11 +273,11 @@ PAC <- results.CCP %>%
 pandoc.table(PAC, justify = "lc")
 ```
 
-The PAC for the meta consensus matrix is `r PAC(meta.cm)`.
+The PAC for the meta consensus matrix is `r PAC(meta.cm)`. Not surprisingly, it appears to be a weighted average of the individual algorithm PACs.
 
 ### Davies-Bouldin Index
 
-For DBI, the lower the better.
+The Davies-Bouldin Index (DBI) measures the ratio of the within cluster scatter to the between cluster separation^12^. Hence, we want to *minimize* DBI so that objects in the same cluster are not too scattered and objects in different clusters are well separated. The advantage of using DBI to compare algorithms is that it utilizes properties of the data structure, and not true class labels. However, like the PAC, it may not indicate we are making the correct partitions.
 
 ```{r DBI, results='asis'}
 DBI <- dat %>%
@@ -283,66 +285,75 @@ DBI <- dat %>%
   sapply(., clv.Davies.Bouldin, intracls = "average", intercls = "average") %>%
   sort %>% 
   data.frame(DBI = .) %>% 
-  dplyr::mutate(Algorithms = rownames(.)) %>% 
-  dplyr::select(Algorithms, DBI)
+  mutate(Algorithms = rownames(.)) %>% 
+  select(Algorithms, DBI)
 pandoc.table(DBI, justify = "lc")
 ```
 
 ### Dunn Index
 
-For DI, the larger the better.
+The Dunn Index (DI) is a ratio of the minimum intercluster distance to the maximum intracluster distance^13^. In this report, we use the following definitions for the cluster-specific distances:
+
+- Intercluster distance: distance between two farthest points in different clusters
+- Intracluster distance: distance between two closest points in the same cluster
+
+As a result, the higher the DI the better the clustering assignment. Similar to the DBI, the DI uses the data itself to determine clustering performance.
 
 ```{r DI, results='asis'}
 DI <- apply(results.all, 2, dunn, distance = dist(dat)) %>% 
   sort(decreasing = T) %>% 
   data.frame(DI = .) %>% 
-  dplyr::mutate(Algorithms = rownames(.)) %>% 
-  dplyr::select(Algorithms, DI)
+  mutate(Algorithms = rownames(.)) %>% 
+  select(Algorithms, DI)
 pandoc.table(DI, justify = "lc")
 ```
 
 ### Rousseeuw's Silhouette
 
-For Rousseuw's Silhouette internal cluster quality index (RS), the larger the better.
+Rousseuw's Silhouette internal cluster quality index (RS) measures how well each object is clustered by comparing its dissimilarity with other points in its own cluster to points in its neighbouring cluster^14^. The silhouette index ranges from -1 to 1. If the index is close to 1 then the object is clustered well and if it is close to -1 then the object would be better clustered in the neighbouring cluster.
+
+The average silhouette index measures how well *all* objects are clustered, and is the measure we use here to compare the different algorithms. Just like the individual silhouette indices, we want to maximize the RS as well.
 
 ```{r RS, results='asis'}
 RS <- apply(results.all, 2, index.S, d = dist(dat)) %>%
   sort(decreasing = T) %>% 
   data.frame(RS = .) %>% 
-  dplyr::mutate(Algorithms = rownames(.)) %>% 
-  dplyr::select(Algorithms, RS)
+  mutate(Algorithms = rownames(.)) %>% 
+  select(Algorithms, RS)
 pandoc.table(RS, justify = "lc")
 ```
 
 ### C-Index
 
-For CI, the lower the better.
+The C-Index (CI) as proposed by Hubert & Levin is a ratio of within-cluster dissimilarities^15^. For the CI, minimizing it indicates the optimal number of clusters. Here we use it to compare algorithms.
 
 ```{r CI, results='asis'}
 CI <- apply(results.all, 2, index.G3, d = dist(dat)) %>%
   sort %>% 
   data.frame(CI = .) %>% 
-  dplyr::mutate(Algorithms = rownames(.)) %>% 
-  dplyr::select(Algorithms, CI)
+  mutate(Algorithms = rownames(.)) %>% 
+  select(Algorithms, CI)
 pandoc.table(CI, justify = "lc")
 ```
 
 ### Gamma Index
 
-For GI, the larger the better.
+The Gamma Index described by Baker & Hubert is a ratio of the difference in the number of discordant comparisons to concordant comparisons, over all comparisons^16^. A high value for GI would thus indicate the clustering assignments have more concordance than discordance. Originally used to determine the optimal number of clusters, here we use it to compare algorithms.
 
 ```{r GI, results='asis'}
 GI <- apply(results.all, 2, index.G2, d = dist(dat)) %>%
   sort(decreasing = T) %>% 
   data.frame(GI = .) %>% 
-  dplyr::mutate(Algorithms = rownames(.)) %>% 
-  dplyr::select(Algorithms, GI)
+  mutate(Algorithms = rownames(.)) %>% 
+  select(Algorithms, GI)
 pandoc.table(GI, justify = "lc")
 ```
 
 ### CH Index
 
-For CHI, the larger the better.
+The Calinski-Harabasz pseudo F-statistic index (CHI) measures the ratio of the between-group dispersion matrix to the within-group dispersion matrix, each normalized by their respective degrees of freedom^17^. The CHI is called the pseudo F-statistic because the dfs are similar to the ANOVA F-statistic. A maximal CHI indicates the optimal number of clusters, yet here we use it to compare algorithms.
+
+An advantage of the CHI over other indices is that it does not depend on a distance metric (e.g. Euclidean) in its formulation. Algorithms that use Euclidean distances would be more favoured if that were not the case.
 
 ```{r CHI, results='asis'}
 CHI <- apply(results.all, 2, index.G1, x = dat) %>%
@@ -355,7 +366,7 @@ pandoc.table(CHI, justify = "lc")
 
 ### Connectivity
 
-For connectivity, the smaller the better.
+Connectivity measures how connected the clusters are based on its nearest neighbours^18^. The measure ranges from 0 to infinity and a small value indicates high connectivity.
 
 ```{r Connectivity, results='asis'}
 Conn <- apply(results.all, 2, clValid::connectivity, distance = dist(dat)) %>% 
@@ -380,7 +391,7 @@ pandoc.table(index.summary,
 
 ## Ranked Indices
 
-The table below shows the ranking of algorithms for performance on a clustering index, for each index. There is an additional column that shows the propoportion of indices where an algorithm was ranked **first or second**.
+The table below shows the ranking of algorithms for performance on a clustering index, for each index. There is an additional column that shows the proportion of indices where an algorithm was ranked **first or second**.
 
 ```{r ranked_indices, results='asis'}
 ranked.indices <- data.frame(Algorithms = index.summary$Algorithms,
@@ -625,44 +636,49 @@ pandoc.table(rings.matches)
 
 ```{r rings_best}
 plot(dat, col = c(2:4)[rings.final$`HC (Sing Euc)`], xlab = "x", ylab = "y",
-     main = "PAM (euclidean) clustering of three circles (rings)")
+     main = "HC (single linkage euclidean) clustering")
 ```
 
-Again, we are only able to make linear separations.
+Again, the hierarchical clustering using single linkage and euclidean distance perfectly separates the feature space into the three rings.
+
+## Seeds
+
 
 # References
 
-Brunet, J. P., Tamayo, P., Golub, T. R., & Mesirov, J. P. (2004). "Metagenes and molecular pattern discovery using matrix factorization." *Proceedings of the national academy of sciences*, 101 (12), 4164-4169.
+1. Brunet, J. P., Tamayo, P., Golub, T. R., & Mesirov, J. P. (2004). "Metagenes and molecular pattern discovery using matrix factorization." *Proceedings of the national academy of sciences*, 101 (12), 4164-4169.
 
-Monti, S., Tamayo, P., Mesirov, J., & Golub, T. (2003). "Consensus clustering: a resampling-based method for class discovery and visualization of gene expression microarray data." *Machine learning*, 52 (1-2), 91-118.
+2. Monti, S., Tamayo, P., Mesirov, J., & Golub, T. (2003). "Consensus clustering: a resampling-based method for class discovery and visualization of gene expression microarray data." *Machine learning*, 52 (1-2), 91-118.
 
-Cancer Genome Atlas Research Network. (2011). "Integrated genomic analyses of ovarian carcinoma." *Nature*, 474 (7353), 609-615.
+3. Cancer Genome Atlas Research Network. (2011). "Integrated genomic analyses of ovarian carcinoma." *Nature*, 474 (7353), 609-615.
 
-Conrad, J. G., Al-Kofahi, K., Zhao, Y., & Karypis, G. (2005, June). "Effective document clustering for large heterogeneous law firm collections." In *Proceedings of the 10th international conference on Artificial intelligence and law* (pp. 177-187). ACM.
+4. Conrad, J. G., Al-Kofahi, K., Zhao, Y., & Karypis, G. (2005, June). "Effective document clustering for large heterogeneous law firm collections." In *Proceedings of the 10th international conference on Artificial intelligence and law* (pp. 177-187). ACM.
 
-Fleiss, J.L. (1981). *Statistical methods for rates and proportions* (2nd ed.). New York: John Wiley.
+5. Cohen, J. (1960). "A coefficient of agreement for nominal scales." *Educational and psychological measurement*, 20 (1), 37-46.
 
-Cohen, J. (1960). "A coefficient of agreement for nominal scales." *Educational and psychological measurement*, 20 (1), 37-46.
+6. Cohen, J. (1968). "Weighted kappa: Nominal scale agreement provision for scaled disagreement or partial credit." *Psychological bulletin*, 70 (4), 213.
 
-Cohen, J. (1968). "Weighted kappa: Nominal scale agreement provision for scaled disagreement or partial credit." *Psychological bulletin*, 70 (4), 213.
+7. Fleiss, J.L. (1981). *Statistical methods for rates and proportions* (2nd ed.). New York: John Wiley.
 
-Rand, W. M. (1971). "Objective criteria for the evaluation of clustering methods." *Journal of the American Statistical Association*, 66 (336), 846-850.
+8. Rand, W. M. (1971). "Objective criteria for the evaluation of clustering methods." *Journal of the American Statistical Association*, 66 (336), 846-850.
 
-Hubert, L., & Arabie, P. (1985). "Comparing partitions." *Journal of Classification*, 2 (1), 193-218.
+9. Hubert, L., & Arabie, P. (1985). "Comparing partitions." *Journal of Classification*, 2 (1), 193-218.
 
-Vinh, N. X., Epps, J., & Bailey, J. (2009, June). "Information theoretic measures for clusterings comparison: is a correction for chance necessary?." *In Proceedings of the 26th Annual International Conference on Machine Learning* (pp. 1073-1080). ACM.
+10. Vinh, N. X., Epps, J., & Bailey, J. (2009, June). "Information theoretic measures for clusterings comparison: is a correction for chance necessary?." *In Proceedings of the 26th Annual International Conference on Machine Learning* (pp. 1073-1080). ACM.
 
-Senbabaoglu, Y., Michailidis, G., & Li, J. Z. (2014). "Critical limitations of consensus clustering in class discovery." *Scientific reports*, 4.
+11. Senbabaoglu, Y., Michailidis, G., & Li, J. Z. (2014). "Critical limitations of consensus clustering in class discovery." *Scientific reports*, 4.
 
-Davies, David L.; Bouldin, Donald W. (1979). "A Cluster Separation Measure." *IEEE Transactions on Pattern Analysis and Machine Intelligence*. PAMI-1 (2): 224–227.
+12. Davies, David L.; Bouldin, Donald W. (1979). "A Cluster Separation Measure." *IEEE Transactions on Pattern Analysis and Machine Intelligence*. PAMI-1 (2): 224–227.
 
-Dunn, J. C. (1973). "A Fuzzy Relative of the ISODATA Process and Its Use in Detecting Compact Well-Separated Clusters." *Journal of Cybernetics* 3 (3): 32–57.
+13. Dunn, J. C. (1973). "A Fuzzy Relative of the ISODATA Process and Its Use in Detecting Compact Well-Separated Clusters." *Journal of Cybernetics* 3 (3): 32–57.
 
-Rousseeuw, P. J. (1987). "Silhouettes: a graphical aid to the interpretation and validation of cluster analysis." *Journal of Computational and Applied Mathematics*, 20, 53-65.
+14. Rousseeuw, P. J. (1987). "Silhouettes: a graphical aid to the interpretation and validation of cluster analysis." *Journal of Computational and Applied Mathematics*, 20, 53-65.
 
-Hubert, L. J., & Levin, J. R. (1976). "A general statistical framework for assessing categorical clustering in free recall." *Psychological bulletin*, 83 (6), 1072-1080.
+15. Hubert, L. J., & Levin, J. R. (1976). "A general statistical framework for assessing categorical clustering in free recall." *Psychological bulletin*, 83 (6), 1072-1080.
 
-Baker, F. B., & Hubert, L. J. (1975). "Measuring the power of hierarchical cluster analysis." *Journal of the American Statistical Association*, 70 (349), 31-38.
+16. Baker, F. B., & Hubert, L. J. (1975). "Measuring the power of hierarchical cluster analysis." *Journal of the American Statistical Association*, 70 (349), 31-38.
 
-Calinski, T., & Harabasz, J. (1974). "A dendrite method for cluster analysis." *Communications in Statistics-theory and Methods*, 3 (1), 1-27.
+17. Calinski, T., & Harabasz, J. (1974). "A dendrite method for cluster analysis." *Communications in Statistics-theory and Methods*, 3 (1), 1-27.
+
+18. Handl, J., Knowles, J., & Kell, D. B. (2005). "Computational cluster validation in post-genomic data analysis." *Bioinformatics*, 21 (15), 3201-3212.
 
