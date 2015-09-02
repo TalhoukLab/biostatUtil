@@ -32,6 +32,7 @@ library(plyr)
 library(dplyr)
 library(magrittr)
 library(knitr)
+library(rgl)
 panderOptions("table.split.table", 300)  # don't split any tables
 opts_chunk$set(echo = FALSE)  # hide all code from output
 # names of clustering algorithms
@@ -548,7 +549,7 @@ CHI <- apply(worms.all, 2, index.G1, x = dat)
 Conn <- apply(worms.all, 2, clValid::connectivity, distance = dist(dat))
 ```
 
-The ranked indices and weights tables are shown below:
+The ranked indices and weights tables are shown below. The PAC uses bounds of 0.05 and 0.95:
 
 ```{r worms_summary, results='asis'}
 ranked.indices <- data.frame(Algorithms = ALG.NAMES,
@@ -718,6 +719,95 @@ Again, the hierarchical clustering using single linkage and euclidean distance p
 
 ## Seeds Dataset
 
+```{r seeds_load}
+seeds <- readRDS("Seeds/seeds.rds")
+
+# Remove features with low variability and scale
+dat <- seeds %>%
+  dplyr::select(which(sapply(., class) == "numeric")) %>%
+  t %>%
+  magrittr::extract(apply(., 1, sd) > 1, ) %>%
+  t %>%
+  scale
+
+true.class <- seeds$Class
+```
+
+```{r seeds_index}
+# combine results
+seeds.CCP <- readRDS("Seeds/outputs/results_CCP.rds")
+seeds.NMF <- readRDS("Seeds/outputs/results_NMF.rds")
+seeds.all <- seeds.CCP %>%
+  sapply(., function(x) x[[3]]$consensusClass) %>%
+  cbind(., seeds.NMF$nmfDiv$consensusClass,
+        seeds.NMF$nmfEucl$consensusClass) %>% 
+  set_colnames(ALG.NAMES)
+
+# indices
+PAC <- seeds.CCP %>%
+  sapply(., function(x) PAC(x[[3]]$consensusMatrix)) %>%
+  c(nmfDiv = PAC(seeds.NMF$nmfDiv$consensusMatrix),
+    nmfEucl = PAC(seeds.NMF$nmfEucl$consensusMatrix)) %>% 
+  set_names(ALG.NAMES)
+DBI <- dat %>%
+  apply(seeds.all, 2, cls.scatt.data, data = .) %>%
+  sapply(., clv.Davies.Bouldin, intracls = "average", intercls = "average")
+DI <- apply(seeds.all, 2, dunn, distance = dist(dat))
+RS <- apply(seeds.all, 2, index.S, d = dist(dat))
+CI <- apply(seeds.all, 2, index.G3, d = dist(dat))
+GI <- apply(seeds.all, 2, index.G2, d = dist(dat))
+CHI <- apply(seeds.all, 2, index.G1, x = dat)
+Conn <- apply(seeds.all, 2, clValid::connectivity, distance = dist(dat))
+```
+
+
+```{r seeds_summary, results='asis'}
+ranked.indices <- data.frame(Algorithms = ALG.NAMES,
+                             PAC = rank(PAC, ties.method = "min"),
+                             DBI = rank(DBI, ties.method = "min"),
+                             DI = rank(-DI, ties.method = "min"),
+                             RS = rank(-RS, ties.method = "min"),
+                             CI = rank(CI, ties.method = "min"),
+                             GI = rank(-GI, ties.method = "min"),
+                             CHI = rank(-CHI, ties.method = "min"),
+                             Conn = rank(Conn, ties.method = "min")) %>% 
+  mutate(Top = apply(.[, -1], 1,
+                     function(x) paste0(round(100 * sum(x %in% c(1, 2)) /
+                                                ncol(.[, -1]), 2), "%"))) %>%
+  arrange(desc(Top))
+pandoc.table(ranked.indices,
+                     justify = paste0("l",
+                                      paste(rep("c", ncol(ranked.indices) - 1),
+                                            collapse = "")))
+
+ranked.sums <- ranked.indices %>% 
+  mutate(Sum = apply(.[, -c(1, 10)], 1, sum),
+         Weight = paste0(round(100 * Sum^-1 / sum(Sum^-1), 2), "%")) %>% 
+  select(Algorithms, Top, Sum, Weight) %>% 
+  arrange(Sum)
+pandoc.table(ranked.sums,
+                     justify = paste0("l",
+                                      paste(rep("c", ncol(ranked.sums) - 1),
+                                            collapse = "")))
+```
+
+```{r seeds_meta}
+meta.cm <- consensusMatrix(seeds.all)
+final.compare <- hclust(dist(meta.cm), method = "average") %>%
+  cutree(3) %>%
+  as.factor %>%
+  set_names(true.class) %>%
+  table(Meta = ., UCI = names(.)) %>%
+  extract(names(sort(apply(., 1, which.max))), ) %>%
+  set_rownames(colnames(.)) %>%
+  as.table
+
+cm <- caret::confusionMatrix(final.compare)
+print(xtable(format(ftable(cm$table))), comment = F,
+      include.rownames = F, include.colnames = F,
+      sanitize.text.function = function(x) gsub('"', "", x))
+pandoc.table(cm$byClass, digits = 3)
+```
 
 # References
 
