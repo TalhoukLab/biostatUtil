@@ -26,6 +26,7 @@ library(clue)
 library(gplots)
 library(ggplot2)
 library(RColorBrewer)
+library(xtable)
 library(pander)
 library(plyr)
 library(dplyr)
@@ -34,7 +35,7 @@ library(knitr)
 panderOptions("table.split.table", 300)  # don't split any tables
 opts_chunk$set(echo = FALSE)  # hide all code from output
 # names of clustering algorithms
-ALG.NAMES <- c("HC (Avg Euc)", "HC (Sing Euc)", "HC (Diana)",
+ALG.NAMES <- c("HC (A. Euc)", "HC (S. Euc)", "HC (Diana)",
                "KM (Euc)", "KM (Spear)", "KM (MI)",
                "PAM (Euc)", "PAM (Spear)", "PAM (MI)",
                "NMF (Div)", "NMF (Euc)")
@@ -94,7 +95,7 @@ dat <- hgsc %>%
   scale
 ```
 
-A published dataset from TCGA^3^ uses `r nrow(hgsc)` genes to cluster `r ncol(hgsc) - 1` HGSC samples into the four subtypes: C1, C2, C4, and C5. TCGA used consensus clustering with NMF. In this report, we consider the following clustering algorithms to use in consensus clustering:
+A published dataset from TCGA^3^ uses `r nrow(hgsc)` genes to cluster `r ncol(hgsc) - 1` HGSC samples into the four subtypes: *mesenchymal*, *immunoreactive*, *differentiated*, and *proliferative*. TCGA used consensus clustering with NMF. In this report, we consider the following clustering algorithms to use in consensus clustering:
 
 * Hierarchical Clustering with Euclidean distance
     - Average Linkage
@@ -112,9 +113,9 @@ A published dataset from TCGA^3^ uses `r nrow(hgsc)` genes to cluster `r ncol(hg
     - KL divergence
     - Euclidean distance
   
-The number of repetitions used for consensus clustering is 1000. Each replicate uses a subsample of the data with 80% of the total number of features.
+The number of repetitions used for consensus clustering is 1000. Each subsample (replicate) of the data uses 80% of the total number of features.
 
-The figure below shows the meta consensus matrix across the `r length(ALG.NAMES)` algorithms, each of which used consensus clustering.
+The figure below shows the meta-consensus matrix across the `r length(ALG.NAMES)` algorithms, each of which used consensus clustering.
  
 ```{r all_clusters}
 results.all <- results.CCP %>%
@@ -133,7 +134,7 @@ heatmap.2(meta.cm, labRow = NA, labCol = NA, col = palOrRd,
           trace = "none", density.info = "none")
 ```
 
-From the heatmap, we do not see a very high concordance across algorithms. For example, the proportion of cases with at least 0.6 agreement is only `r ((sum(meta.cm >= 0.6) - ncol(meta.cm)) / 2) / choose(ncol(meta.cm), 2)`. There is some evidence of a four-class data structure.
+From the heatmap, we do not see a very high concordance across algorithms. For example, the proportion of cases with at least 0.6 agreement is only `r round(((sum(meta.cm >= 0.6) - ncol(meta.cm)) / 2) / choose(ncol(meta.cm), 2), 3)`. There is some evidence of a four-class data structure.
 
 The confusion matrix is shown below for the meta consensus classes compared to TCGA's classification. Several metrics are shown for each class.
 
@@ -141,24 +142,25 @@ The confusion matrix is shown below for the meta consensus classes compared to T
 final.compare <- hclust(dist(meta.cm), method = "average") %>%
   cutree(4) %>%
   as.factor %>%
-  set_names(hclust(dist(meta.cm), method = "average")$labels) %>%
   set_names(true.class) %>%
-  table(., names(.)) %>%
-  magrittr::extract(names(sort(apply(., 1, which.max))), ) %>%
+  table(Meta = ., TCGA = names(.)) %>%
+  extract(names(sort(apply(., 1, which.max))), ) %>%
   set_rownames(colnames(.)) %>%
   as.table
 
-names(dimnames(final.compare)) <- c("Predicted", "Reference")
 cm <- caret::confusionMatrix(final.compare)
-
-pandoc.table(cm$table)
-pandoc.table(cm$byClass)
+print(xtable(format(ftable(cm$table))), comment = F,
+      include.rownames = F, include.colnames = F,
+      sanitize.text.function = function(x) gsub('"', "", x))
+pandoc.table(cm$byClass, digits = 3)
 ```
 
-## External Evaluation
-External evaluation refers to the case when we compare our clustering assignments to true class labels, or have some gold standard to compare to. In applications, this might be the published clustering result. The downside of using external evaluation is that the reference classes may not be correctly clustered themselves, and we are treating these as the norm. None the less, we can explore a few metrics.
+We hope to use cluster evaluation indices to give more weight to better performing algorithms in the construction of the meta-consensus clusters. Here we outline two main types of evaluation measures: external evaluation indices and internal evaluation indices.
 
-We expect that our own NMF-based algorithms to perform well on these evaluation indices because the reference classes were clustered using NMF too.
+## External Evaluation
+External evaluation refers to the situation when we compare our clustering assignments to true class labels, gold standards, or reference labels. In the TCGA analysis, we use their published clustering result as reference labels. The downside of using external evaluation is that the reference classes may not be correctly clustered themselves, and we are treating these as the norm. None the less, we can explore a few metrics to see how our own clustering performance compares.
+
+We expect that our own NMF-based algorithms will perform well on these evaluation indices because the reference classes were clustered using NMF too.
 
 ### Purity and Entropy
 
@@ -180,6 +182,7 @@ Entropy measures the amount of uncertainty in each cluster^4^. The equation is:
 \begin{center}
 $Entropy = -\dfrac{1}{n\log{q}}\sum\limits_{r = 1}^{k}\sum\limits_{i = 1}^{q}n_r^i\log{\dfrac{n_r^i}{n_r}}$
 \end{center}
+where $n$, $k$, $i$, and $n_r^i$ are same as above, and $q$ is the number of classes.
 The smaller the entropy, the less uncertain we are of the cluster membership, and the better the clustering performance.
 ```{r entropy, results='asis'}
 Entropy <- apply(results.all, 2, function(x) entropy(as.factor(x), true.class)) %>% 
@@ -192,24 +195,26 @@ pandoc.table(Entropy, justify = "lc")
 
 ### Kappa Statistics
 
-Cohen's kappa statistic $\kappa$ measures the level of agreement between two raters^5^. In our case, the raters are different clustering algorithms.
+Cohen's kappa statistic $\kappa$ measures the level of agreement between two raters^5^. In our case, the raters are different clustering algorithms. The equation is shown below:
 \begin{center}
 $\kappa = \dfrac{p_o - p_e}{1 - p_e}$
 \end{center}
+where $p_o$ is the proportion of entities agreed upon and $p_e$ is the proportion of entities expected to agree by chance.
 
-The weighted $\kappa$ statistic is as follows and takes into account the off-diagonal elements of the confusion matrix^6^:
+The weighted $\kappa$ statistic is as follows and takes into account the off-diagonal elements of the confusion matrix between the two raters^6^. In other words, the disagreements between the raters are weighed in the calculation:
 \begin{center}
-$\kappa_w = 1 - \dfrac{\sum_{i=1}^k\sum_{j=1}^k w_{ij}x_{ij}}{\sum_{i=1}^k\sum_{j=1}^k w_{ij}m_{ij}}$
+$\kappa_w = 1 - \dfrac{\sum_{i=1}^k\sum_{j=1}^k w_{ij}o_{ij}}{\sum_{i=1}^k\sum_{j=1}^k w_{ij}e_{ij}}$
 \end{center}
+where $k$ is the number of classes, and $w_{ij}$, $o_{ij}$, and $e_{ij}$ are the weight, observed, and expected matrices respectively.
 
-Fleiss gave the following interpretations for $\kappa$^7^. Albeit arbitrary and not numerically determined they still serve as a rough guideline.
+Fleiss provided the following rating scheme for $\kappa$^7^. Albeit arbitrary and not numerically determined they still serve as a rough guideline.
 ```{r kappa_ratings, results='asis'}
 kappa_rating <- data.frame(Rating = c("Poor", "Fair", "Excellent"),
                            Kappa = c("Less than 0.40", "Between 0.40 and 0.75", "Greater than 0.75"))
 pandoc.table(kappa_rating)
 ```
 
-The results for the TCGA dataset are shown below:
+The results for the TCGA dataset are shown below. The ratings are based on the weighted $\kappa$:
 
 ```{r kappa_results, results='asis'}
 kappas <- alply(results.all, 2, function(x)
@@ -235,13 +240,13 @@ pandoc.table(kappas)
 
 ### Adjusted Rand Index
 
-The Rand Index measures agreement between two classes by counting the number of pairs of objects that are clustered together in two clusterings^8^. Hubert & Araibe propose an adjusted version to account for random chance^9^. The equation for the adjusted Rand index (ARI) is shown below^8, 9, 10^:
+The Rand Index measures agreement between two classes by counting the number of pairs of objects that are clustered together in two different clustering assignments^8^. Hubert & Araibe propose an adjusted version to account for random chance^9^. The equation for the adjusted Rand index (ARI) is shown below^8,9,10^:
 
 \begin{center}
 $ARI = \dfrac{\sum_{ij}\binom{n_{ij}}{2} - [\sum_i\binom{a_i}{2}\sum_j\binom{b_j}{2}] / \binom{n}{2}}{\frac{1}{2}[\sum_i\binom{a_i}{2} + \sum_j\binom{b_j}{2}] - [\sum_i\binom{a_i}{2}\sum_j\binom{b_j}{2}] / \binom{n}{2}}$
 \end{center}
 
-where $n_{ij}$'s are entries in the prediction vs. reference confusion matrix, $a_i$ and $b_j$ are row and column marginal totals respectively, and $N$ is the grand total. The ARI is 1 when the two clusterings are perfect, and 0 when there is no concordance.
+where $n_{ij}$'s are entries in the prediction vs. reference confusion matrix, $a_i$ and $b_j$ are row and column marginal totals respectively, and $n$ is the grand total. The ARI is 1 when the two clusterings are perfect, and 0 when there is no concordance.
 
 ```{r ARI, results='asis'}
 ARI <- apply(results.all, 2, adjustedRandIndex, x = true.class) %>% 
@@ -253,10 +258,11 @@ pandoc.table(ARI, justify = "lc")
 ```
 
 ## Internal Evaluation
+Interval evaluation assesses how well clustered objects are based on the data features they are measured on. Ideally, we want objects in the same cluster to be close together and objects in different clusters to be far from each other. Different definitions of distance define compactness and separation differently. Some evaluation indicies combine these distances into a unitless measure we can use to compare clustering results.
 
 ### Proportion of Ambiguously Clustered Pairs (PAC)
 
-The notion of PAC is closely related to consensus clustering. Senbabaoglu et al. argue that PAC is a better measure of determining the optimal number of clusters from consensus matrices^11^, compared to other measures such as the Gap statistic, CLEST, etc. The idea is simple: the proportion of ambiguously clustered pairs is the number of entries in the consensus matrix that are not 0 or 1. Recall that the consensus matrix is symmetric, so we only consider the lower (or upper) triangular matrix. In most applications, the definition of ambiguity is less stringent, and any entry greater than $p$ or less than $1 - p$ contributes to PAC, where $p$ is a small proportion (e.g. 0.05).
+The notion of PAC is closely related to consensus clustering. Senbabaoglu et al. argue that PAC is a better measure of determining the optimal number of clusters from consensus matrices, compared to other measures such as the Gap statistic, CLEST, etc^11^. The idea is simple: the proportion of ambiguously clustered pairs is the number of entries in the consensus matrix that are not 0 or 1. Recall that the consensus matrix is symmetric, so we only consider the lower (or upper) triangular matrix. In most applications, the definition of ambiguity is less stringent, and any entry greater than $p$ or less than $1 - p$ contributes to PAC, where $p$ is a small proportion (e.g. 0.05).
 
 Although Senbabaoglu et al. initially used PAC to determine the optimal number of clusters, here we are using it to compare different clustering algorithms. None the less, we want the PAC to be as small as possible. A perfect score for PAC would be 0, meaning that all entries in the corresponding consensus matrix are either 0 or 1. The advantage of using this index is that it utilizes results from consensus clustering and thus not biased towards a particular distance metric. However, a major limitation is that PAC only uses stability evidence and doesn't assess accuracy. A clustering algorithm can be consistently wrong and do well for PAC, masking the apparent performance of said algorithm to make correct classifications.
 
@@ -273,11 +279,29 @@ PAC <- results.CCP %>%
 pandoc.table(PAC, justify = "lc")
 ```
 
-The PAC for the meta consensus matrix is `r PAC(meta.cm)`. Not surprisingly, it appears to be a weighted average of the individual algorithm PACs.
+A related figure is the cumulative distribution function (CDF) for each consensus matrix. Each panel corresponds to one algorithm. Recall that only the lower triangular entries of each consensus matrix are graphed. The ideal CDF would look like a horizontal line between 0 and 1, and straight at 0 and 1, because this would correspond to PAC = 0.
+ 
+```{r CDF}
+CDF.each <- ldply(results.CCP, function(x)
+  x[[4]]$consensusMatrix[lower.tri(x[[4]]$consensusMatrix)]) %>% 
+  rbind(., ldply(list(results.NMF$nmfDiv$consensusMatrix,
+                      results.NMF$nmfEucl$consensusMatrix),
+                 function(x) x[lower.tri(x)])) %>%
+  t %>% 
+  as.data.frame %>%
+  set_names(ALG.NAMES) %>% 
+  tidyr::gather(key = Method, value = CDF, 1:ncol(.))
+
+ggplot(CDF.each, aes(x = CDF, colour = Method)) +
+  stat_ecdf() +
+  facet_wrap(~ Method) +
+  labs(y = "Prob", title = "Cumulative Distribution Function for each Consensus Matrix") +
+  theme(legend.position = "none")
+```
 
 ### Davies-Bouldin Index
 
-The Davies-Bouldin Index (DBI) measures the ratio of the within cluster scatter to the between cluster separation^12^. Hence, we want to *minimize* DBI so that objects in the same cluster are not too scattered and objects in different clusters are well separated. The advantage of using DBI to compare algorithms is that it utilizes properties of the data structure, and not true class labels. However, like the PAC, it may not indicate we are making the correct partitions.
+The Davies-Bouldin Index (DBI) measures the ratio of the within cluster scatter to the between cluster separation^12^. Hence, we want to *minimize* DBI such that objects in the same cluster are not too scattered and objects in different clusters are well separated. The advantage of using DBI to compare algorithms is that it utilizes properties of the data structure, and not true class labels. However, like the PAC, it may not indicate we are making the correct partitions.
 
 ```{r DBI, results='asis'}
 DBI <- dat %>%
@@ -391,6 +415,7 @@ pandoc.table(index.summary,
 
 ## Ranked Indices
 
+### All Indices
 The table below shows the ranking of algorithms for performance on a clustering index, for each index. There is an additional column that shows the proportion of indices where an algorithm was ranked **first or second**.
 
 ```{r ranked_indices, results='asis'}
@@ -414,7 +439,7 @@ pandoc.table(ranked.indices,
                                     collapse = "")))
 ```
 
-If we were to conduct a meta consensus clustering, a weight for each algorithm needs to be assigned. One such way of doing so is using the inverse rank sums. We can sum the ranks for each algorithm, and assign higher weight for consistently high ranked methods (1st or 2nd) and vice versa. This is shown below:
+If we were to conduct a weighted meta-consensus clustering, a weight for each algorithm needs to be assigned. One such way of doing so is using the inverse rank sums based on the indices. We can sum the ranks for each algorithm, and assign higher weight for consistently higher ranked methods (1st or 2nd). This is shown in the table below:
 
 ```{r inverse_rank_sum, results='asis'}
 ranked.sums <- ranked.indices %>% 
@@ -427,6 +452,56 @@ pandoc.table(ranked.sums,
              justify = paste0("l",
                               paste(rep("c", ncol(ranked.sums) - 1),
                                     collapse = "")))
+```
+
+### PAC and CHI only
+There is a major issue with the way we ranked the indices in the previous section. Upon closer inspection, the algorithm that uses hierarchical clustering with single linkage and Euclidean distance actually performs terrible in the clustering analysis. The table below shows the number of samples clustered into each of the four clusters:
+
+```{r hcSEucl_bad, results='asis'}
+pandoc.table(table(results.all[, 2]))
+```
+
+And yet, the algorithm performs very well for several indices. One suggestion is to consider only PAC and CHI, because they do not depend on a specific distance metric. Also, the weights will be based on the index scores themselves instead of relative ranks. One reason is that since we only have two indices, it doesn't make sense to use ranks and lose information. Secondly, we want to be more precise in how much weight to assign.
+
+```{r PAC_CHI_only, results='asis'}
+PAC.CHI.only <- index.summary %>% 
+  select(Algorithms, PAC, CHI) %>% 
+  mutate(Weight.PAC = (1 - PAC) / sum((1 - PAC)),
+         Weight.CHI = CHI / sum(CHI),
+         Weight = (Weight.PAC + Weight.CHI) / 2) %>% 
+  arrange(desc(Weight)) %>% 
+  select(-Weight.PAC, -Weight.CHI)
+
+pandoc.table(PAC.CHI.only, justify = "lccc")
+```
+
+Below we show the weighted meta-consensus matrix using the weights from the previous table:
+
+```{r weighted_meta_cm}
+weights <- PAC.CHI.only[order(match(PAC.CHI.only$Algorithms, colnames(results.all))), "Weight"]
+weighted.meta.cm <- consensusMatrix(results.all, weights)
+heatmap.2(weighted.meta.cm, labRow = NA, labCol = NA, col = palOrRd,
+          trace = "none", density.info = "none",
+          hclustfun = function(x) hclust(x, method = "average"))
+```
+
+And the corresponding confusion matrix with TCGA's clusters:
+
+```{r weighted_conf_mat, results='asis'}
+final.compare <- hclust(dist(weighted.meta.cm), method = "average") %>%
+  cutree(4) %>%
+  as.factor %>%
+  set_names(true.class) %>%
+  table(Meta = ., TCGA = names(.)) %>%
+  extract(names(sort(apply(., 1, which.max))), ) %>%
+  set_rownames(colnames(.)) %>%
+  as.table
+
+cm <- caret::confusionMatrix(final.compare)
+print(xtable(format(ftable(cm$table))), comment = F,
+      include.rownames = F, include.colnames = F,
+      sanitize.text.function = function(x) gsub('"', "", x))
+pandoc.table(cm$byClass, digits = 3)
 ```
 
 # Simulations
@@ -531,7 +606,7 @@ pandoc.table(worms.matches)
 Let's visualize how the best algorithm, hierarchical clustering using single linkage and Euclidean distance, separates the clusters:
 
 ```{r worms_best}
-plot(sw$data, col = c(2:3)[worms.final$`HC (Sing Euc)`], xlab = "x", ylab = "y",
+plot(sw$data, col = c(2:3)[worms.final$`HC (S. Euc)`], xlab = "x", ylab = "y",
      main = "K-Means (euclidean) clustering of two atypical parabolic shapes (worms)")
 ```
 
@@ -635,13 +710,13 @@ pandoc.table(rings.matches)
 ```
 
 ```{r rings_best}
-plot(dat, col = c(2:4)[rings.final$`HC (Sing Euc)`], xlab = "x", ylab = "y",
+plot(dat, col = c(2:4)[rings.final$`HC (S. Euc)`], xlab = "x", ylab = "y",
      main = "HC (single linkage euclidean) clustering")
 ```
 
 Again, the hierarchical clustering using single linkage and euclidean distance perfectly separates the feature space into the three rings.
 
-## Seeds
+## Seeds Dataset
 
 
 # References
