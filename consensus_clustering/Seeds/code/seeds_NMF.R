@@ -20,8 +20,8 @@ con.mats <- alply(results, 3, consensusMatrix,
 
 # Cluster memberships using HC
 classes <- llply(con.mats, function(x) {
-  cl <- as.factor(cutree(hclust(dist(x), method = "ward.D"), k))
-  names(cl) <- hclust(dist(x), method = "ward.D")$labels
+  cl <- as.factor(cutree(hclust(dist(x), method = "average"), k))
+  names(cl) <- hclust(dist(x), method = "average")$labels
   return(cl)})
 
 # Save NMF results
