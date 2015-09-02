@@ -4,19 +4,24 @@
 \alias{consensusMatrix}
 \title{Consensus matrix}
 \usage{
-consensusMatrix(dat)
+consensusMatrix(dat, weights = NULL)
 }
 \arguments{
 \item{dat}{data matrix}
+
+\item{weights}{a vector of weights for each algorithm used in meta-consensus
+clustering. Must have \code{length(weights)} equal to \code{ncol(dat)}.}
 }
 \value{
 a consensus matrix
 }
 \description{
-Returns the consensus matrix given a data matrix
+Returns the (weighted) consensus matrix given a data matrix
 }
 \details{
-Input matrix has rows as samples, columns as replicates.
+Input matrix has rows as samples, columns as replicates. If a meta-consensus matrix
+is desired, where consensus classes of different clustering algorithms are aggregated,
+we can construct a weighted meta-consensus matrix using \code{weights}.
 }
 \author{
 Derek Chiu
