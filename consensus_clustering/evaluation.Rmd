@@ -2,7 +2,7 @@
 title: "Performance Evaluation of Consensus Clustering Algorithms"
 subtitle: "STAT 598 Progress Report"
 author: "Derek Chiu"
-date: "September 3, 2015"
+date: "September 4, 2015"
 output: 
   pdf_document: 
     number_sections: yes
@@ -100,23 +100,23 @@ dat <- hgsc %>%
 k <- 4
 ```
 
-A published dataset from TCGA^3^ uses `r nrow(hgsc)` genes to cluster `r ncol(hgsc) - 1` HGSC samples into the four subtypes: *mesenchymal*, *immunoreactive*, *differentiated*, and *proliferative*. TCGA used consensus clustering with NMF. In this report, we consider the following clustering algorithms to use in consensus clustering:
+A published dataset from TCGA^3^ uses `r nrow(hgsc)` genes to cluster `r ncol(hgsc) - 1` HGSC samples into the four subtypes: *mesenchymal*, *immunoreactive*, *differentiated*, and *proliferative*. TCGA used consensus clustering with NMF. In this report, we consider the following clustering algorithms to use in consensus clustering. Abbreviated names will be used in the report and are shown in bold.
 
 * Hierarchical Clustering with Euclidean distance
-    - Average Linkage
-    - Single Linkage
-    - DIvisive ANAlysis (DIANA)
+    - Average Linkage: **HC (A. Euc)**
+    - Single Linkage: **HC (S. Euc)**
+    - DIvisive ANAlysis: **HC (Diana)**
 * K-Means
-    - Euclidean distance
-    - Spearman distance
-    - Mutual Information distance
+    - Euclidean distance: **KM (Euc)**
+    - Spearman distance: **KM (Spear)**
+    - Mutual Information distance: **KM (MI)**
 * PAM
-    - Euclidean distance
-    - Spearman distance
-    - Mutual Information distance
+    - Euclidean distance: **PAM (Euc)**
+    - Spearman distance: **PAM (Spear)**
+    - Mutual Information distance: **PAM (MI)**
 * NMF
-    - KL divergence
-    - Euclidean distance
+    - KL divergence: **NMF (Div)**
+    - Euclidean distance: **NMF (Euc)**
   
 The number of repetitions used for consensus clustering is 1000. Each subsample (replicate) of the data uses 80% of the total number of features.
 
@@ -514,7 +514,7 @@ pandoc.table(cm$byClass, digits = 3)
 ```
 
 ## Comparison of Accuracy
-We can now compare the **accuracy** of all `length(ALG.NAMES) + 2` clustering results: `length(ALG.NAMES)` individual clustering algorithms plus the unweighted and weighted meta-consensus clustering algorithms.
+We can now compare the **accuracy** of all `r length(ALG.NAMES) + 2` clustering results: `r length(ALG.NAMES)` individual clustering algorithms plus the unweighted and weighted meta-consensus clustering algorithms.
 
 Accuracy is defined as the number of correct clusterings out of the total number of clusterings. In our case, we consider the *truth* to be the reference clustering from TCGA.
 
@@ -549,6 +549,7 @@ set.seed(1)
 sw <- shapes.worms()
 dat <- sw$data
 true.class <- sw$clusters
+k <- 2
 plot(dat, col = c(2:3)[true.class], xlab = "x", ylab = "y",
      main = "Two clusters with atypical parabolic shapes (worms)")
 ```
@@ -558,14 +559,14 @@ plot(dat, col = c(2:3)[true.class], xlab = "x", ylab = "y",
 worms.CCP <- readRDS("Worms/outputs/results_CCP.rds")
 worms.NMF <- readRDS("Worms/outputs/results_NMF.rds")
 worms.all <- worms.CCP %>%
-  sapply(., function(x) x[[2]]$consensusClass) %>%
+  sapply(., function(x) x[[k]]$consensusClass) %>%
   cbind(., worms.NMF$nmfDiv$consensusClass,
         worms.NMF$nmfEucl$consensusClass) %>% 
   set_colnames(ALG.NAMES)
 
 # indices
 PAC <- worms.CCP %>%
-  sapply(., function(x) PAC(x[[2]]$consensusMatrix, 0.05, 0.95)) %>%
+  sapply(., function(x) PAC(x[[k]]$consensusMatrix, 0.05, 0.95)) %>%
   c(nmfDiv = PAC(worms.NMF$nmfDiv$consensusMatrix, 0.05, 0.95),
     nmfEucl = PAC(worms.NMF$nmfEucl$consensusMatrix, 0.05, 0.95)) %>% 
   set_names(ALG.NAMES)
@@ -648,70 +649,75 @@ It appears that the best algorithm can separate the clusters, yet the indices do
 
 The following three-cluster dataset is our second simulation:
 
-```{r rings_plot}
+```{r rings_load}
+# Load data, store true cluster labels and number of clusters
 set.seed(1)
 sc3 <- shapes.circles3()
 dat <- sc3$data
 true.class <- sc3$clusters
+k <- 3
+
+# scatterplot of true clusters
 plot(dat, col = c(2:4)[true.class], xlab = "x", ylab = "y",
      main = "Three clusters with atypical ring shapes (circles)")
 ```
 
-```{r rings_index}
+```{r rings_index, results='asis'}
 # combine results
 rings.CCP <- readRDS("Rings/outputs/results_CCP.rds")
 rings.NMF <- readRDS("Rings/outputs/results_NMF.rds")
 rings.all <- rings.CCP %>%
-  sapply(., function(x) x[[3]]$consensusClass) %>%
+  sapply(., function(x) x[[k]]$consensusClass) %>%
   cbind(., rings.NMF$nmfDiv$consensusClass,
         rings.NMF$nmfEucl$consensusClass) %>% 
-  set_colnames(ALG.NAMES[-8])
+  set_colnames(ALG.NAMES[-which(ALG.NAMES %in% "PAM (MI)")])
 
 # indices
-PAC <- rings.CCP %>%
-  sapply(., function(x) PAC(x[[3]]$consensusMatrix)) %>%
-  c(nmfDiv = PAC(rings.NMF$nmfDiv$consensusMatrix),
-    nmfEucl = PAC(rings.NMF$nmfEucl$consensusMatrix)) %>% 
-  set_names(ALG.NAMES[-8])
-DBI <- dat %>%
-  apply(rings.all, 2, cls.scatt.data, data = .) %>%
-  sapply(., clv.Davies.Bouldin, intracls = "average", intercls = "average")
-DI <- apply(rings.all, 2, dunn, distance = dist(dat))
-RS <- apply(rings.all, 2, index.S, d = dist(dat))
-CI <- apply(rings.all, 2, index.G3, d = dist(dat))
-GI <- apply(rings.all, 2, index.G2, d = dist(dat))
-CHI <- apply(rings.all, 2, index.G1, x = dat)
-Conn <- apply(rings.all, 2, clValid::connectivity, distance = dist(dat))
+indices <- data.frame(
+  Algorithms = ALG.NAMES[-which(ALG.NAMES %in% "PAM (MI)")],
+  PAC = rings.CCP %>%
+    sapply(., function(x) PAC(x[[k]]$consensusMatrix)) %>%
+    c(nmfDiv = PAC(rings.NMF$nmfDiv$consensusMatrix),
+      nmfEucl = PAC(rings.NMF$nmfEucl$consensusMatrix)) %>% 
+    set_names(ALG.NAMES[-which(ALG.NAMES %in% "PAM (MI)")]) %>% 
+    rank(ties.method = "min"),
+  DBI = dat %>%
+    apply(rings.all, 2, cls.scatt.data, data = .) %>%
+    sapply(., clv.Davies.Bouldin,
+           intracls = "average", intercls = "average") %>% 
+    rank(ties.method = "min"),
+  DI = rank(-apply(rings.all, 2, dunn, distance = dist(dat)),
+            ties.method = "min"),
+  RS = rank(-apply(rings.all, 2, index.S, d = dist(dat)),
+            ties.method = "min"),
+  CI = rank(apply(rings.all, 2, index.G3, d = dist(dat)),
+            ties.method = "min"),
+  GI = rank(-apply(rings.all, 2, index.G2, d = dist(dat)),
+            ties.method = "min"),
+  CHI = rank(-apply(rings.all, 2, index.G1, x = dat),
+             ties.method = "min"),
+  Conn = rank(apply(rings.all, 2, clValid::connectivity, distance = dist(dat)),
+              ties.method = "min")) %>% 
+  mutate(Top = apply(.[, -1], 1,
+                     function(x) paste0(round(100 * sum(x %in% c(1, 2)) /
+                                                ncol(.[, -1]), 2), "%"))) %>% 
+  arrange(desc(Top))
+
+pandoc.table(indices, justify = paste0("l", paste(rep("c", ncol(indices) - 1),
+                                                  collapse = "")))
 ```
 
 ```{r rings_summary, results='asis'}
-ranked.indices <- data.frame(Algorithms = ALG.NAMES[-8],
-                             PAC = rank(PAC, ties.method = "min"),
-                             DBI = rank(DBI, ties.method = "min"),
-                             DI = rank(-DI, ties.method = "min"),
-                             RS = rank(-RS, ties.method = "min"),
-                             CI = rank(CI, ties.method = "min"),
-                             GI = rank(-GI, ties.method = "min"),
-                             CHI = rank(-CHI, ties.method = "min"),
-                             Conn = rank(Conn, ties.method = "min")) %>% 
-  mutate(Top = apply(.[, -1], 1,
-                     function(x) paste0(round(100 * sum(x %in% c(1, 2)) /
-                                                ncol(.[, -1]), 2), "%"))) %>%
-  arrange(desc(Top))
-pandoc.table(ranked.indices,
-                     justify = paste0("l",
-                                      paste(rep("c", ncol(ranked.indices) - 1),
-                                            collapse = "")))
-
-ranked.sums <- ranked.indices %>% 
+ranked.sums <- indices %>% 
   mutate(Sum = apply(.[, -c(1, 10)], 1, sum),
          Weight = paste0(round(100 * Sum^-1 / sum(Sum^-1), 2), "%")) %>% 
   dplyr::select(Algorithms, Top, Sum, Weight) %>% 
   arrange(Sum)
+
 pandoc.table(ranked.sums,
-                     justify = paste0("l",
-                                      paste(rep("c", ncol(ranked.sums) - 1),
-                                            collapse = "")))
+             justify = paste0("l",
+                              paste(rep("c", ncol(ranked.sums) - 1),
+                                    collapse = "")))
 ```
 
 ```{r rings_meta, results='asis'}
@@ -726,17 +732,15 @@ pandoc.table(ranked.sums,
 #          weight.3 = sapply(clust.3, function(x) sum(weights[x])),
 #          Meta = ifelse(weight.1 > weight.2 & weight.1 > weight.3, 1,
 #                        ifelse(weight.2 > weight.1 & weight.2 > weight.3, 2, 3))) %>% 
-#   select(-weight.1, -weight.2, -weight.3)
-
-# meta.classes <- as.factor(cutree(hclust(dist(consensusMatrix(rings.all)), method = "ward.D"), 2))
+#   dplyr::select(-weight.1, -weight.2, -weight.3)
 rings.final <- rings.all %>% 
   as.data.frame %>% 
-  mutate(Meta = as.factor(cutree(hclust(dist(consensusMatrix(rings.all)), method = "ward.D"), 3)))
+  mutate(Meta = as.factor(cutree(hclust(dist(consensusMatrix(rings.all)), method = "average"), 3)))
 
 rings.matches <- rings.final %>% 
-  apply(., 2, function(x) sum(x == true.class)) %>% 
+  apply(., 2, function(x) sum(x == true.class) / length(x)) %>% 
   sort(decreasing = T) %>% 
-  data.frame(Matches = .)
+  data.frame(Accuracy = .)
 
 pandoc.table(rings.matches)
 ```
@@ -750,95 +754,141 @@ Again, the hierarchical clustering using single linkage and euclidean distance p
 
 ## Seeds Dataset
 
+The seeds dataset from [UCI](https://archive.ics.uci.edu/ml/datasets/seeds) has 3 classes of seeds with 70 observations each (n = 210). After removing features with low variability, we perform consensus clustering with only area, perimeter, and asymmetry coefficient remaining. Each feature is scaled to have mean of 0 and standard deviation of 1.
+
 ```{r seeds_load}
+# Load raw data, store true cluster labels and number of clusters
 seeds <- readRDS("Seeds/seeds.rds")
+true.class <- seeds$Class
+k <- 3
 
 # Remove features with low variability and scale
 dat <- seeds %>%
   dplyr::select(which(sapply(., class) == "numeric")) %>%
   t %>%
-  magrittr::extract(apply(., 1, sd) > 1, ) %>%
+  extract(apply(., 1, sd) > 1, ) %>%
   t %>%
   scale
-
-true.class <- seeds$Class
 ```
 
-```{r seeds_index}
+### Indices
+
+The table of ranked indices is shown below:
+
+```{r seeds_index, results='asis'}
 # combine results
 seeds.CCP <- readRDS("Seeds/outputs/results_CCP.rds")
 seeds.NMF <- readRDS("Seeds/outputs/results_NMF.rds")
 seeds.all <- seeds.CCP %>%
-  sapply(., function(x) x[[3]]$consensusClass) %>%
+  sapply(., function(x) x[[k]]$consensusClass) %>%
   cbind(., seeds.NMF$nmfDiv$consensusClass,
         seeds.NMF$nmfEucl$consensusClass) %>% 
   set_colnames(ALG.NAMES)
 
 # indices
-PAC <- seeds.CCP %>%
-  sapply(., function(x) PAC(x[[3]]$consensusMatrix)) %>%
-  c(nmfDiv = PAC(seeds.NMF$nmfDiv$consensusMatrix),
-    nmfEucl = PAC(seeds.NMF$nmfEucl$consensusMatrix)) %>% 
-  set_names(ALG.NAMES)
-DBI <- dat %>%
-  apply(seeds.all, 2, cls.scatt.data, data = .) %>%
-  sapply(., clv.Davies.Bouldin, intracls = "average", intercls = "average")
-DI <- apply(seeds.all, 2, dunn, distance = dist(dat))
-RS <- apply(seeds.all, 2, index.S, d = dist(dat))
-CI <- apply(seeds.all, 2, index.G3, d = dist(dat))
-GI <- apply(seeds.all, 2, index.G2, d = dist(dat))
-CHI <- apply(seeds.all, 2, index.G1, x = dat)
-Conn <- apply(seeds.all, 2, clValid::connectivity, distance = dist(dat))
+indices <- data.frame(
+  Algorithms = ALG.NAMES,
+  PAC = seeds.CCP %>%
+    sapply(., function(x) PAC(x[[k]]$consensusMatrix)) %>%
+    c(nmfDiv = PAC(seeds.NMF$nmfDiv$consensusMatrix),
+      nmfEucl = PAC(seeds.NMF$nmfEucl$consensusMatrix)) %>%
+    set_names(ALG.NAMES),
+  DBI = dat %>%
+    apply(seeds.all, 2, cls.scatt.data, data = .) %>%
+    sapply(., clv.Davies.Bouldin, intracls = "average", intercls = "average"),
+  DI = apply(seeds.all, 2, dunn, distance = dist(dat)),
+  RS  = apply(seeds.all, 2, index.S, d = dist(dat)),
+  CI = apply(seeds.all, 2, index.G3, d = dist(dat)),
+  GI = apply(seeds.all, 2, index.G2, d = dist(dat)),
+  CHI = apply(seeds.all, 2, index.G1, x = dat),
+  Conn = apply(seeds.all, 2, clValid::connectivity, distance = dist(dat)))
+
+# table of indices
+indices %>%
+  set_rownames(NULL) %>% 
+  pandoc.table(justify = paste0("l", paste(rep("c", ncol(.) - 1),
+                                           collapse = "")))
 ```
 
-```{r seeds_meta, results='asis'}
-meta.cm <- consensusMatrix(seeds.all)
-final.compare <- hclust(dist(meta.cm), method = "average") %>%
-  cutree(3) %>%
+### Meta-Consensus Clusters
+
+```{r seeds_meta_unweighted, results='asis'}
+# meta-consensus matrix
+meta.cm <- consensusMatrix(seeds.all) %>% 
+  dist %>% 
+  hclust(method = "average") %>%
+  cutree(k) %>%
   as.factor %>%
   set_names(true.class) %>%
   table(Meta = ., UCI = names(.)) %>%
   extract(names(sort(apply(., 1, which.max))), ) %>%
   set_rownames(colnames(.)) %>%
-  as.table
+  as.table %>% 
+  caret::confusionMatrix(.)
 
-cm <- caret::confusionMatrix(final.compare)
-print(xtable(format(ftable(cm$table))), comment = F,
+# confusion matrix
+print(xtable(format(ftable(meta.cm$table))), comment = F,
       include.rownames = F, include.colnames = F,
       sanitize.text.function = function(x) gsub('"', "", x))
-pandoc.table(cm$byClass, digits = 3)
+
+# confusion matrix statistics
+pandoc.table(meta.cm$byClass, digits = 3)
 ```
 
-```{r seeds_weighted, results='asis'}
-PAC.CHI.only <- data.frame(Algorithms = ALG.NAMES, PAC , CHI) %>% 
+```{r seeds_meta_weighted, results='asis'}
+# algorithms weighted by PAC and CHI
+weights.table <- data.frame(Algorithms = ALG.NAMES,
+                            PAC = indices$PAC,
+                            CHI = indices$CHI) %>%
     mutate(Weight.PAC = (1 - PAC) / sum((1 - PAC)),
            Weight.CHI = CHI / sum(CHI),
-           Weight = (Weight.PAC + Weight.CHI) / 2) %>% 
-    arrange(desc(Weight)) %>% 
-    dplyr::select(-Weight.PAC, -Weight.CHI)
+           Weight = (Weight.PAC + Weight.CHI) / 2)
 
-pandoc.table(PAC.CHI.only, justify = "lccc")
-
-weights <- PAC.CHI.only[order(match(PAC.CHI.only$Algorithms, colnames(seeds.all))), "Weight"]
-weighted.meta.cm <- consensusMatrix(seeds.all, weights)
-
-final.compare <- hclust(dist(weighted.meta.cm), method = "average") %>%
-  cutree(3) %>%
+# weighted meta-consensus matrix
+wt.meta.cm <- consensusMatrix(seeds.all, weights.table$Weight) %>%
+  dist %>% 
+  hclust(method = "average") %>%
+  cutree(k) %>%
   as.factor %>%
   set_names(true.class) %>%
   table(Meta = ., UCI = names(.)) %>%
   extract(names(sort(apply(., 1, which.max))), ) %>%
   set_rownames(colnames(.)) %>%
-  as.table
+  as.table %>%
+  caret::confusionMatrix(.)
 
-cm <- caret::confusionMatrix(final.compare)
-print(xtable(format(ftable(cm$table))), comment = F,
+# weights table
+weights.table %>% 
+  arrange(desc(Weight)) %>% 
+  dplyr::select(-Weight.PAC, -Weight.CHI) %>% 
+  pandoc.table(justify = "lccc")
+
+# confusion matrix
+print(xtable(format(ftable(wt.meta.cm$table))), comment = F,
       include.rownames = F, include.colnames = F,
       sanitize.text.function = function(x) gsub('"', "", x))
-pandoc.table(cm$byClass, digits = 3)
+
+# confusion matrix statistics
+pandoc.table(wt.meta.cm$byClass, digits = 3)
 ```
 
 It appears that the weighted meta-consensus classes have the highest accuracy. However, it is not much better than the second best algorithm, which puts into question whether it is worth the time to undergo substantial increases in computational complexity for marginal gains.
+
+```{r seeds_accuracy, results='asis'}
+Accuracy <- alply(seeds.all, 2, function(x)
+  table(Meta = x, UCI = true.class) %>% 
+    extract(names(sort(apply(., 1, which.max))), ) %>%
+    set_rownames(colnames(.)), .dims = T) %>% 
+  c(list(Meta = meta.cm$table,
+         Meta.Weighted = wt.meta.cm$table)) %>% 
+  sapply(., function(x) sum(diag(x)) / sum(x)) %>% 
+  data.frame(Accuracy = .) %>% 
+  mutate(Algorithm = rownames(.)) %>% 
+  dplyr::select(Algorithm, Accuracy) %>% 
+  arrange(desc(Accuracy))
+
+pandoc.table(Accuracy, justify = "lc")
+```
 
 # References
 
@@ -854,7 +904,7 @@ It appears that the weighted meta-consensus classes have the highest accuracy. H
 
 6. Cohen, J. (1968). "Weighted kappa: Nominal scale agreement provision for scaled disagreement or partial credit." *Psychological bulletin*, 70 (4), 213.
 
-7. Fleiss, J.L. (1981). *Statistical methods for rates and proportions* (2nd ed.). New York: John Wiley.
+7. Fleiss, J. L. (1981). *Statistical methods for rates and proportions* (2nd ed.). New York: John Wiley.
 
 8. Rand, W. M. (1971). "Objective criteria for the evaluation of clustering methods." *Journal of the American Statistical Association*, 66 (336), 846-850.
 
@@ -864,7 +914,7 @@ It appears that the weighted meta-consensus classes have the highest accuracy. H
 
 11. Senbabaoglu, Y., Michailidis, G., & Li, J. Z. (2014). "Critical limitations of consensus clustering in class discovery." *Scientific reports*, 4.
 
-12. Davies, David L.; Bouldin, Donald W. (1979). "A Cluster Separation Measure." *IEEE Transactions on Pattern Analysis and Machine Intelligence*. PAMI-1 (2): 224–227.
+12. Davies, D. L., & Bouldin, D. W. (1979). "A Cluster Separation Measure." *IEEE Transactions on Pattern Analysis and Machine Intelligence*. PAMI-1 (2): 224–227.
 
 13. Dunn, J. C. (1973). "A Fuzzy Relative of the ISODATA Process and Its Use in Detecting Compact Well-Separated Clusters." *Journal of Cybernetics* 3 (3): 32–57.
 
@@ -877,4 +927,3 @@ It appears that the weighted meta-consensus classes have the highest accuracy. H
 17. Calinski, T., & Harabasz, J. (1974). "A dendrite method for cluster analysis." *Communications in Statistics-theory and Methods*, 3 (1), 1-27.
 
 18. Handl, J., Knowles, J., & Kell, D. B. (2005). "Computational cluster validation in post-genomic data analysis." *Bioinformatics*, 21 (15), 3201-3212.
-
