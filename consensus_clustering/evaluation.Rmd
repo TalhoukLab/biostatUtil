@@ -662,6 +662,8 @@ plot(dat, col = c(2:4)[true.class], xlab = "x", ylab = "y",
      main = "Three clusters with atypical ring shapes (circles)")
 ```
 
+### Indices
+
 ```{r rings_index, results='asis'}
 # combine results
 rings.CCP <- readRDS("Rings/outputs/results_CCP.rds")
@@ -679,48 +681,46 @@ indices <- data.frame(
     sapply(., function(x) PAC(x[[k]]$consensusMatrix)) %>%
     c(nmfDiv = PAC(rings.NMF$nmfDiv$consensusMatrix),
       nmfEucl = PAC(rings.NMF$nmfEucl$consensusMatrix)) %>% 
-    set_names(ALG.NAMES[-which(ALG.NAMES %in% "PAM (MI)")]) %>% 
-    rank(ties.method = "min"),
+    set_names(ALG.NAMES[-which(ALG.NAMES %in% "PAM (MI)")]),
   DBI = dat %>%
     apply(rings.all, 2, cls.scatt.data, data = .) %>%
     sapply(., clv.Davies.Bouldin,
-           intracls = "average", intercls = "average") %>% 
-    rank(ties.method = "min"),
-  DI = rank(-apply(rings.all, 2, dunn, distance = dist(dat)),
-            ties.method = "min"),
-  RS = rank(-apply(rings.all, 2, index.S, d = dist(dat)),
-            ties.method = "min"),
-  CI = rank(apply(rings.all, 2, index.G3, d = dist(dat)),
-            ties.method = "min"),
-  GI = rank(-apply(rings.all, 2, index.G2, d = dist(dat)),
-            ties.method = "min"),
-  CHI = rank(-apply(rings.all, 2, index.G1, x = dat),
-             ties.method = "min"),
-  Conn = rank(apply(rings.all, 2, clValid::connectivity, distance = dist(dat)),
-              ties.method = "min")) %>% 
-  mutate(Top = apply(.[, -1], 1,
-                     function(x) paste0(round(100 * sum(x %in% c(1, 2)) /
-                                                ncol(.[, -1]), 2), "%"))) %>% 
-  arrange(desc(Top))
+           intracls = "average", intercls = "average"),
+  DI = apply(rings.all, 2, dunn, distance = dist(dat)),
+  RS = apply(rings.all, 2, index.S, d = dist(dat)),
+  CI = apply(rings.all, 2, index.G3, d = dist(dat)),
+  GI = apply(rings.all, 2, index.G2, d = dist(dat)),
+  CHI = apply(rings.all, 2, index.G1, x = dat),
+  Conn = apply(rings.all, 2, clValid::connectivity, distance = dist(dat))) %>% 
+  set_rownames(NULL)
 
 pandoc.table(indices, justify = paste0("l", paste(rep("c", ncol(indices) - 1),
                                                   collapse = "")))
 ```
 
-```{r rings_summary, results='asis'}
-ranked.sums <- indices %>% 
-  mutate(Sum = apply(.[, -c(1, 10)], 1, sum),
-         Weight = paste0(round(100 * Sum^-1 / sum(Sum^-1), 2), "%")) %>% 
-  dplyr::select(Algorithms, Top, Sum, Weight) %>% 
-  arrange(Sum)
+```{r rings_ranks, results='asis'}
+ranked.indices <- indices %>% 
+  mutate(PAC = rank(PAC, ties.method = "min"),
+         DBI = rank(DBI, ties.method = "min"),
+         DI = rank(-DI, ties.method = "min"),
+         RS = rank(-RS, ties.method = "min"),
+         CI = rank(CI, ties.method = "min"),
+         GI = rank(-GI, ties.method = "min"),
+         CHI = rank(-CHI, ties.method = "min"),
+         Conn = rank(Conn, ties.method = "min")) %>% 
+  mutate(Top = apply(.[, -1], 1,
+                     function(x) paste0(round(100 * sum(x %in% c(1, 2)) /
+                                                ncol(.[, -1]), 2), "%"))) %>%
+  arrange(desc(Top))
 
-pandoc.table(ranked.sums,
-             justify = paste0("l",
-                              paste(rep("c", ncol(ranked.sums) - 1),
-                                    collapse = "")))
+pandoc.table(ranked.indices,
+             justify = paste0("l", paste(rep("c", ncol(ranked.indices) - 1),
+                                         collapse = "")))
 ```
 
-```{r rings_meta, results='asis'}
+### Meta-Consensus Clusters
+
+```{r rings_meta_unweighted}
 # weights <- with(ranked.sums, Sum^-1 / sum(Sum^-1))[match(colnames(rings.all), ranked.sums$Algorithms)]
 # clust.1 <- apply(rings.all, 1, function(x) which(x == 1))
 # clust.2 <- apply(rings.all, 1, function(x) which(x == 2))
@@ -733,20 +733,60 @@ pandoc.table(ranked.sums,
 #          Meta = ifelse(weight.1 > weight.2 & weight.1 > weight.3, 1,
 #                        ifelse(weight.2 > weight.1 & weight.2 > weight.3, 2, 3))) %>% 
 #   dplyr::select(-weight.1, -weight.2, -weight.3)
-rings.final <- rings.all %>% 
-  as.data.frame %>% 
-  mutate(Meta = as.factor(cutree(hclust(dist(consensusMatrix(rings.all)), method = "average"), 3)))
+meta.cm <- consensusMatrix(rings.all) %>% 
+  dist %>% 
+  hclust(method = "average") %>%
+  cutree(k) %>%
+  as.factor %>%
+  set_names(true.class) %>%
+  table(Meta = ., Ref = names(.)) %>%
+  extract(names(sort(apply(., 1, which.max))), ) %>%
+  set_rownames(colnames(.)) %>%
+  as.table %>% 
+  caret::confusionMatrix(.)
+```
 
-rings.matches <- rings.final %>% 
-  apply(., 2, function(x) sum(x == true.class) / length(x)) %>% 
-  sort(decreasing = T) %>% 
-  data.frame(Accuracy = .)
+```{r rings_meta_weighted}
+# algorithms weighted by PAC and CHI
+weights.table <- data.frame(Algorithms = ALG.NAMES[-which(ALG.NAMES %in% "PAM (MI)")],
+                            PAC = indices$PAC,
+                            CHI = indices$CHI) %>%
+    mutate(Weight.PAC = (1 - PAC) / sum((1 - PAC)),
+           Weight.CHI = CHI / sum(CHI),
+           Weight = (Weight.PAC + Weight.CHI) / 2)
 
-pandoc.table(rings.matches)
+# confusion matrix of weighted meta.cm with true clusters
+wt.meta.cm <- consensusMatrix(rings.all, weights.table$Weight) %>%
+  dist %>% 
+  hclust(method = "average") %>%
+  cutree(k) %>%
+  as.factor %>%
+  set_names(true.class) %>%
+  table(Meta = ., Ref = names(.)) %>%
+  extract(names(sort(apply(., 1, which.max))), ) %>%
+  set_rownames(colnames(.)) %>%
+  as.table %>%
+  caret::confusionMatrix(.)
+```
+
+```{r rings_accuracy, results='asis'}
+Accuracy <- alply(rings.all, 2, function(x)
+  table(Meta = x, Ref = true.class) %>% 
+    extract(names(sort(apply(., 1, which.max))), ) %>%
+    set_rownames(colnames(.)), .dims = T) %>% 
+  c(list(Meta = meta.cm$table,
+         Meta.Weighted = wt.meta.cm$table)) %>% 
+  sapply(., function(x) sum(diag(x)) / sum(x)) %>% 
+  data.frame(Accuracy = .) %>% 
+  mutate(Algorithm = rownames(.)) %>% 
+  dplyr::select(Algorithm, Accuracy) %>% 
+  arrange(desc(Accuracy))
+
+pandoc.table(Accuracy, justify = "lc")
 ```
 
 ```{r rings_best}
-plot(dat, col = c(2:4)[rings.final$`HC (S. Euc)`], xlab = "x", ylab = "y",
+plot(dat, col = c(2:4)[rings.all$`HC (S. Euc)`], xlab = "x", ylab = "y",
      main = "HC (single linkage euclidean) clustering")
 ```
 
@@ -813,7 +853,7 @@ indices %>%
 ### Meta-Consensus Clusters
 
 ```{r seeds_meta_unweighted, results='asis'}
-# meta-consensus matrix
+# confusion matrix of meta.cm with true clusters
 meta.cm <- consensusMatrix(seeds.all) %>% 
   dist %>% 
   hclust(method = "average") %>%
@@ -844,7 +884,7 @@ weights.table <- data.frame(Algorithms = ALG.NAMES,
            Weight.CHI = CHI / sum(CHI),
            Weight = (Weight.PAC + Weight.CHI) / 2)
 
-# weighted meta-consensus matrix
+# confusion matrix of weighted meta.cm with true clusters
 wt.meta.cm <- consensusMatrix(seeds.all, weights.table$Weight) %>%
   dist %>% 
   hclust(method = "average") %>%
