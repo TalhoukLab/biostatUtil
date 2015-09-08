@@ -786,6 +786,7 @@ pandoc.table(Accuracy, justify = "lc")
 ```
 
 ```{r rings_best}
+rings.all <- as.data.frame(rings.all)
 plot(dat, col = c(2:4)[rings.all$`HC (S. Euc)`], xlab = "x", ylab = "y",
      main = "HC (single linkage euclidean) clustering")
 ```
