@@ -269,6 +269,8 @@ pandoc.table(ARI, justify = "lc")
 ## Internal Evaluation
 Interval evaluation assesses how well clustered objects are based on the data features they are measured on. Ideally, we want objects in the same cluster to be close together and objects in different clusters to be far from each other. Different definitions of distance define compactness and separation differently. Some evaluation indices combine these distances into a unitless measure we can use to compare clustering results.
 
+We will rank each algorithm on the indices using the minimum rank to break ties. For example, if two algorithms are tied for third, the next best algortihm is ranked fifth. This method is commonly used in sports.
+
 ### Proportion of Ambiguously Clustered Pairs (PAC)
 
 The notion of PAC is closely related to consensus clustering. Senbabaoglu et al. argue that PAC is a better measure of determining the optimal number of clusters from consensus matrices, compared to other measures such as the Gap statistic, CLEST, etc^11^. The idea is simple: the proportion of ambiguously clustered pairs is the number of entries in the consensus matrix that are not 0 or 1. Recall that the consensus matrix is symmetric, so we only consider the lower (or upper) triangular matrix. In most applications, the definition of ambiguity is less stringent, and any entry greater than $p$ or less than $1 - p$ contributes to PAC, where $p$ is a small proportion (e.g. 0.05).
@@ -795,8 +797,6 @@ Again, the hierarchical clustering using single linkage and euclidean distance p
 
 ## Seeds Dataset
 
-The seeds dataset from [UCI](https://archive.ics.uci.edu/ml/datasets/seeds) has 3 classes of seeds with 70 observations each (n = 210). After removing features with low variability, we perform consensus clustering with only area, perimeter, and asymmetry coefficient remaining. Each feature is scaled to have mean of 0 and standard deviation of 1.
-
 ```{r seeds_load}
 # Load raw data, store true cluster labels and number of clusters
 seeds <- readRDS("Seeds/seeds.rds")
@@ -812,9 +812,12 @@ dat <- seeds %>%
   scale
 ```
 
+The seeds dataset from [UCI](https://archive.ics.uci.edu/ml/datasets/seeds)
+has `r k` classes of seeds with `r unique(table(seeds$Class))` observations each (n = `r nrow(seeds)`). After removing features with low variability, we perform consensus clustering with only area, perimeter, and asymmetry coefficient as the attributes. Each feature is scaled to have mean of 0 and standard deviation of 1.
+
 ### Indices
 
-The table of ranked indices is shown below:
+The table below shows the indices for each algorithm in the seeds dataset.
 
 ```{r seeds_index, results='asis'}
 # combine results
@@ -851,9 +854,32 @@ indices %>%
                                            collapse = "")))
 ```
 
+And the table of ranked indices is shown below:
+
+```{r seeds_ranks, results='asis'}
+# rank the indices
+ranked.indices <- indices %>% 
+  mutate(PAC = rank(PAC, ties.method = "min"),
+         DBI = rank(DBI, ties.method = "min"),
+         DI = rank(-DI, ties.method = "min"),
+         RS = rank(-RS, ties.method = "min"),
+         CI = rank(CI, ties.method = "min"),
+         GI = rank(-GI, ties.method = "min"),
+         CHI = rank(-CHI, ties.method = "min"),
+         Conn = rank(Conn, ties.method = "min")) %>% 
+  mutate(Top = apply(.[, -1], 1,
+                     function(x) paste0(round(100 * sum(x %in% c(1, 2)) /
+                                                ncol(.[, -1]), 2), "%"))) %>%
+  arrange(desc(Top))
+
+pandoc.table(ranked.indices,
+             justify = paste0("l", paste(rep("c", ncol(ranked.indices) - 1),
+                                         collapse = "")))
+```
+
 ### Meta-Consensus Clusters
 
-```{r seeds_meta_unweighted, results='asis'}
+```{r seeds_meta_unweighted_confmat, results='asis'}
 # confusion matrix of meta.cm with true clusters
 meta.cm <- consensusMatrix(seeds.all) %>% 
   dist %>% 
@@ -871,12 +897,14 @@ meta.cm <- consensusMatrix(seeds.all) %>%
 print(xtable(format(ftable(meta.cm$table))), comment = F,
       include.rownames = F, include.colnames = F,
       sanitize.text.function = function(x) gsub('"', "", x))
+```
 
+```{r seeds_meta_unweighted_confstats, results='hide'}
 # confusion matrix statistics
 pandoc.table(meta.cm$byClass, digits = 3)
 ```
 
-```{r seeds_meta_weighted, results='asis'}
+```{r seeds_meta_weighted_confmat, results='asis'}
 # algorithms weighted by PAC and CHI
 weights.table <- data.frame(Algorithms = ALG.NAMES,
                             PAC = indices$PAC,
@@ -908,7 +936,9 @@ weights.table %>%
 print(xtable(format(ftable(wt.meta.cm$table))), comment = F,
       include.rownames = F, include.colnames = F,
       sanitize.text.function = function(x) gsub('"', "", x))
+```
 
+```{r seeds_meta_weighted_confstats, results='hide'}
 # confusion matrix statistics
 pandoc.table(wt.meta.cm$byClass, digits = 3)
 ```
