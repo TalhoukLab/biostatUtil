@@ -2,7 +2,7 @@
 title: "Performance Evaluation of Consensus Clustering Algorithms"
 subtitle: "STAT 598 Progress Report"
 author: "Derek Chiu"
-date: "September 4, 2015"
+date: "September 9, 2015"
 output: 
   pdf_document: 
     number_sections: yes
@@ -269,7 +269,7 @@ pandoc.table(ARI, justify = "lc")
 ## Internal Evaluation
 Interval evaluation assesses how well clustered objects are based on the data features they are measured on. Ideally, we want objects in the same cluster to be close together and objects in different clusters to be far from each other. Different definitions of distance define compactness and separation differently. Some evaluation indices combine these distances into a unitless measure we can use to compare clustering results.
 
-We will rank each algorithm on the indices using the minimum rank to break ties. For example, if two algorithms are tied for third, the next best algortihm is ranked fifth. This method is commonly used in sports.
+We will rank each algorithm on the indices using the minimum rank to break ties. For example, if two algorithms are tied for third, the next best algorithm is ranked fifth. This method is commonly used in sports.
 
 ### Proportion of Ambiguously Clustered Pairs (PAC)
 
@@ -628,7 +628,7 @@ worms.final <- worms.all %>%
          Meta = ifelse(weight.1 > weight.2, 1, 2)) %>% 
   dplyr::select(-weight.1, -weight.2)
 
-meta.classes <- as.factor(cutree(hclust(dist(consensusMatrix(worms.all)), method = "ward.D"), 2))
+meta.classes <- as.factor(cutree(hclust(dist(consensusMatrix(worms.all)), method = "average"), 2))
 
 worms.matches <- worms.final %>% 
   apply(., 2, function(x) sum(x == true.class)) %>% 
