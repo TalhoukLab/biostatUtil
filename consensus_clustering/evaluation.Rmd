@@ -140,7 +140,7 @@ heatmap.2(meta.cm, labRow = NA, labCol = NA, col = palOrRd,
           trace = "none", density.info = "none")
 ```
 
-From the heatmap, we do not see a very high concordance across algorithms. For example, the proportion of cases with at least 0.6 agreement is only `r round(((sum(meta.cm >= 0.6) - ncol(meta.cm)) / 2) / choose(ncol(meta.cm), 2), 3)`. There is some evidence of a four-class data structure.
+From the heatmap, we do not see a very high concordance across algorithms. For example, the proportion of cases with at least 0.6 agreement (orange colour) is only `r round(((sum(meta.cm >= 0.6) - ncol(meta.cm)) / 2) / choose(ncol(meta.cm), 2), 3)`. There is some evidence of a four-class data structure.
 
 The confusion matrix is shown below for the meta consensus classes compared to TCGA's classification. Several metrics are shown for each class.
 
@@ -164,12 +164,12 @@ print(xtable(format(ftable(cm$table))), comment = F,
 pandoc.table(cm$byClass, digits = 3)
 ```
 
-We hope to use cluster evaluation indices to give more weight to better performing algorithms in the construction of the meta-consensus clusters. Here we outline two main types of evaluation measures: external evaluation indices and internal evaluation indices.
+We hope to use cluster evaluation indices to give more weight to better-performing algorithms in the construction of the meta-consensus clusters. Here we outline two main types of evaluation measures: external evaluation indices and internal evaluation indices.
 
 ## External Evaluation
-External evaluation refers to the situation when we compare our clustering assignments to true class labels, gold standards, or reference labels. In the TCGA analysis, we use their published clustering result as reference labels. The downside of using external evaluation is that the reference classes may not be correctly clustered themselves, and we are treating these as the norm. None the less, we can explore a few metrics to see how our own clustering performance compares.
+External evaluation refers to the situation when we compare our clustering assignments to true class labels, gold standards, or reference labels. In the TCGA analysis, we use their published clustering result as reference labels. The downside of using external evaluation is that the reference classes may not be correctly clustered themselves, and we are treating these as the norm. None the less, we can explore a few metrics to see how our own clustering performance compares to that of TCGA.
 
-We expect that our own NMF-based algorithms will perform well on these evaluation indices because the reference classes were clustered using NMF too.
+We expect that our own NMF-based algorithms will perform well on these evaluation indices because the reference labels were clustered using NMF too.
 
 ### Purity and Entropy
 
@@ -202,21 +202,23 @@ Entropy <- apply(tcga.all, 2, function(x) entropy(as.factor(x), true.class)) %>%
 pandoc.table(Entropy, justify = "lc")
 ```
 
+Not surprisingly, we see that the two NMF-based algorithms score the highest on both purity and entropy.
+
 ### Kappa Statistics
 
-Cohen's kappa statistic $\kappa$ measures the level of agreement between two raters^5^. In our case, the raters are different clustering algorithms. The equation is shown below:
+Cohen's kappa statistic $\kappa$ measures the level of agreement between two raters.^5^ In our case, the raters are different clustering algorithms. The equation is shown below:
 \begin{center}
 $\kappa = \dfrac{p_o - p_e}{1 - p_e}$
 \end{center}
 where $p_o$ is the proportion of entities agreed upon and $p_e$ is the proportion of entities expected to agree by chance.
 
-The weighted $\kappa$ statistic is as follows and takes into account the off-diagonal elements of the confusion matrix between the two raters^6^. In other words, the disagreements between the raters are weighed in the calculation:
+The weighted $\kappa$ statistic is as follows and takes into account the off-diagonal elements of the confusion matrix between the two raters.^6^ In other words, the disagreements between the raters are weighed in this formulation:
 \begin{center}
 $\kappa_w = 1 - \dfrac{\sum_{i=1}^k\sum_{j=1}^k w_{ij}o_{ij}}{\sum_{i=1}^k\sum_{j=1}^k w_{ij}e_{ij}}$
 \end{center}
 where $k$ is the number of classes, and $w_{ij}$, $o_{ij}$, and $e_{ij}$ are the weight, observed, and expected matrices respectively.
 
-Fleiss provided the following rating scheme for $\kappa$^7^. Albeit arbitrary and not numerically determined they still serve as a rough guideline.
+Fleiss provided the following rating scheme for $\kappa$.^7^ Albeit arbitrary and not numerically determined it still serves as a rough guideline.
 ```{r kappa_ratings, results='asis'}
 kappa_rating <- data.frame(Rating = c("Poor", "Fair", "Excellent"),
                            Kappa = c("Less than 0.40", "Between 0.40 and 0.75", "Greater than 0.75"))
@@ -236,26 +238,27 @@ kappas <- alply(tcga.all, 2, function(x)
   t %>% 
   apply(., 2, unlist) %>% 
   as.data.frame %>%
-  set_colnames(c("kappa", "weighted.kappa")) %>% 
+  set_colnames(c("K", "wt.K")) %>% 
   mutate(Algorithm = rownames(.),
-         Rating = ifelse(weighted.kappa < 0.4, "Poor",
-                         ifelse(weighted.kappa > 0.75, "Excellent",
+         Rating = ifelse(wt.K < 0.4, "Poor",
+                         ifelse(wt.K > 0.75, "Excellent",
                                 "Fair"))) %>%
-  arrange(desc(weighted.kappa)) %>% 
-  dplyr::select(Algorithm, kappa, weighted.kappa, Rating)
+  arrange(desc(wt.K)) %>% 
+  dplyr::select(Algorithm, K, wt.K, Rating) %>% 
+  rename(Kappa = K, "Weighted Kappa" = wt.K)
 
 pandoc.table(kappas)
 ```
 
 ### Adjusted Rand Index
 
-The Rand Index measures agreement between two classes by counting the number of pairs of objects that are clustered together in two different clustering assignments^8^. Hubert & Araibe propose an adjusted version to account for random chance^9^. The equation for the adjusted Rand index (ARI) is shown below^8,9,10^:
+The Rand Index measures agreement between two classes by counting the number of pairs of objects that are clustered together in two different clustering assignments.^8^ Hubert & Araibe proposed an adjusted version to account for random chance.^9^ The equation for the adjusted Rand index (ARI) is shown below:^8,9,10^
 
 \begin{center}
 $ARI = \dfrac{\sum_{ij}\binom{n_{ij}}{2} - [\sum_i\binom{a_i}{2}\sum_j\binom{b_j}{2}] / \binom{n}{2}}{\frac{1}{2}[\sum_i\binom{a_i}{2} + \sum_j\binom{b_j}{2}] - [\sum_i\binom{a_i}{2}\sum_j\binom{b_j}{2}] / \binom{n}{2}}$
 \end{center}
 
-where $n_{ij}$'s are entries in the prediction vs. reference confusion matrix, $a_i$ and $b_j$ are row and column marginal totals respectively, and $n$ is the grand total. The ARI is 1 when the two clusterings are perfect, and 0 when there is no concordance.
+where $n_{ij}$'s are entries in the cluster assignment confusion matrix, $a_i$ and $b_j$ are row and column marginal totals respectively, and $n$ is the grand total. The ARI is 1 when the two clusterings are perfect, and 0 when there is no concordance.
 
 ```{r ARI, results='asis'}
 ARI <- apply(tcga.all, 2, adjustedRandIndex, x = true.class) %>% 
@@ -267,21 +270,23 @@ pandoc.table(ARI, justify = "lc")
 ```
 
 ## Internal Evaluation
-Interval evaluation assesses how well clustered objects are based on the data features they are measured on. Ideally, we want objects in the same cluster to be close together and objects in different clusters to be far from each other. Different definitions of distance define compactness and separation differently. Some evaluation indices combine these distances into a unitless measure we can use to compare clustering results.
+Interval evaluation assesses how well clustered objects are based on the features they are measured on in the data. Ideally, we want objects in the same cluster to be close together and objects in different clusters to be far from each other. Different definitions of distance define compactness and separation differently. Some evaluation indices combine these distances into a unitless measure that we can use to compare clustering results.
 
 We will rank each algorithm on the indices using the minimum rank to break ties. For example, if two algorithms are tied for third, the next best algorithm is ranked fifth. This method is commonly used in sports.
 
 ### Proportion of Ambiguously Clustered Pairs (PAC)
 
-The notion of PAC is closely related to consensus clustering. Senbabaoglu et al. argue that PAC is a better measure of determining the optimal number of clusters from consensus matrices, compared to other measures such as the Gap statistic, CLEST, etc^11^. The idea is simple: the proportion of ambiguously clustered pairs is the number of entries in the consensus matrix that are not 0 or 1. Recall that the consensus matrix is symmetric, so we only consider the lower (or upper) triangular matrix. In most applications, the definition of ambiguity is less stringent, and any entry greater than $p$ or less than $1 - p$ contributes to PAC, where $p$ is a small proportion (e.g. 0.05).
+The notion of PAC is closely related to consensus clustering. Senbabaoglu et al. argue that PAC is a better measure of determining the optimal number of clusters from consensus matrices, compared to other measures such as the Gap statistic, CLEST, etc.^11^ The idea is simple: the proportion of ambiguously clustered pairs is the number of entries in the consensus matrix that are not 0 or 1. Recall that the consensus matrix is symmetric, so we only need to consider the lower (or upper) triangular matrix. In most applications, the definition of ambiguity is less stringent, and any entry greater than $p$ or less than $1 - p$ contributes to PAC, where $p$ is a small proportion (e.g. 0.05).
 
 Although Senbabaoglu et al. initially used PAC to determine the optimal number of clusters, here we are using it to compare different clustering algorithms. None the less, we want the PAC to be as small as possible. A perfect score for PAC would be 0, meaning that all entries in the corresponding consensus matrix are either 0 or 1. The advantage of using this index is that it utilizes results from consensus clustering and thus not biased towards a particular distance metric. However, a major limitation is that PAC only uses stability evidence and doesn't assess accuracy. A clustering algorithm can be consistently wrong and do well for PAC, masking the apparent performance of said algorithm to make correct classifications.
 
+Here we use 0.05 and 0.95 as the bounds for PAC classification.
+
 ```{r PAC, results='asis'}
 PAC <- tcga.CCP %>%
-  sapply(., function(x) PAC(x[[k]]$consensusMatrix)) %>%
-  c(nmfDiv = PAC(tcga.NMF$nmfDiv$consensusMatrix),
-    nmfEucl = PAC(tcga.NMF$nmfEucl$consensusMatrix)) %>%
+  sapply(., function(x) PAC(x[[k]]$consensusMatrix, 0.05, 0.95)) %>%
+  c(nmfDiv = PAC(tcga.NMF$nmfDiv$consensusMatrix, 0.05, 0.95),
+    nmfEucl = PAC(tcga.NMF$nmfEucl$consensusMatrix, 0.05, 0.95)) %>%
   set_names(ALG.NAMES) %>% 
   sort %>% 
   data.frame(PAC = .) %>% 
@@ -332,7 +337,7 @@ The Dunn Index (DI) is a ratio of the minimum intercluster distance to the maxim
 - Intercluster distance: distance between two farthest points in different clusters
 - Intracluster distance: distance between two closest points in the same cluster
 
-As a result, the higher the DI the better the clustering assignment. Similar to the DBI, the DI uses the data itself to determine clustering performance.
+As a result, the higher the DI the better the clustering assignment. Similar to the DBI, the DI uses the data itself to determine clustering performance. Other definitions of the intercluster and intracluster distances exist.
 
 ```{r DI, results='asis'}
 DI <- apply(tcga.all, 2, dunn, distance = dist(dat)) %>% 
@@ -388,7 +393,7 @@ pandoc.table(GI, justify = "lc")
 
 The Calinski-Harabasz pseudo F-statistic index (CHI) measures the ratio of the between-group dispersion matrix to the within-group dispersion matrix, each normalized by their respective degrees of freedom^17^. The CHI is called the pseudo F-statistic because the dfs are similar to the ANOVA F-statistic. A maximal CHI indicates the optimal number of clusters, yet here we use it to compare algorithms.
 
-An advantage of the CHI over other indices is that it does not depend on a distance metric (e.g. Euclidean) in its formulation. Algorithms that use Euclidean distances would be more favoured if that were not the case.
+An advantage of the CHI over other indices is that it does not depend on a distance metric (e.g. Euclidean) in its formulation. Algorithms that use Euclidean distances would perform favorably for evaluation indices that use a Euclidean distance matrix as an input.
 
 ```{r CHI, results='asis'}
 CHI <- apply(tcga.all, 2, index.G1, x = dat) %>%
@@ -414,7 +419,7 @@ pandoc.table(Conn, justify = "lc")
 
 ### Summary
 
-Here is a summary of all the indices for each algorithm, in unsorted order.
+Here is a summary of all the evaluation indices for each algorithm, in no particular order.
 
 ```{r index_summary, results='asis'}
 index.summary <- Reduce(merge, list(PAC, DBI, DI, RS, CI, GI, CHI, Conn))
@@ -427,7 +432,7 @@ pandoc.table(index.summary,
 ## Weighted Assessment
 
 ### All Indices
-The table below shows the ranking of algorithms for performance on a clustering index, for each index. There is an additional column that shows the proportion of indices where an algorithm was ranked **first or second**.
+The table below shows the ranking of algorithms for clustering performance on each internal evaluation index. There is an additional column that shows the proportion of indices where an algorithm was ranked **first or second**.
 
 ```{r ranked_indices, results='asis'}
 ranked.indices <- data.frame(Algorithms = index.summary$Algorithms,
@@ -450,29 +455,28 @@ pandoc.table(ranked.indices,
                                     collapse = "")))
 ```
 
-If we were to conduct a weighted meta-consensus clustering, a weight for each algorithm needs to be assigned. One such way of doing so is using the inverse rank sums based on the indices. We can sum the ranks for each algorithm, and assign higher weight for consistently higher ranked methods (1st or 2nd). This is shown in the table below:
+If we were to conduct a weighted meta-consensus clustering, a weight for each algorithm needs to be assigned. One such way of doing so is using the inverse rank sums based on the indices. We can sum the ranks for each algorithm, and assign higher weight for consistently higher ranked methods (low sum of ranks). This is shown in the table below:
 
 ```{r inverse_rank_sum, results='asis'}
 ranked.sums <- ranked.indices %>% 
   mutate(Sum = apply(.[, -c(1, 10)], 1, sum),
-         Weight = paste0(round(100 * Sum^-1 / sum(Sum^-1), 2), "%")) %>% 
+         Weight = Sum^-1 / sum(Sum^-1)) %>% 
   dplyr::select(Algorithms, Top, Sum, Weight) %>% 
   arrange(Sum)
 
 pandoc.table(ranked.sums,
-             justify = paste0("l",
-                              paste(rep("c", ncol(ranked.sums) - 1),
-                                    collapse = "")))
+             justify = paste0("l", paste(rep("c", ncol(ranked.sums) - 1),
+                                         collapse = "")))
 ```
 
 ### PAC and CHI only
-There is a major issue with the way we ranked the indices in the previous section. Upon closer inspection, the algorithm that uses hierarchical clustering with single linkage and Euclidean distance actually performs terrible in the clustering analysis. The table below shows the number of samples clustered into each of the four clusters:
+There is a major issue with the way we ranked the indices in the previous section. Upon closer inspection, the algorithm that uses hierarchical clustering with single linkage and Euclidean distance actually performs terrible in the clustering analysis. The table below shows the number of samples clustered into each of the four clusters using HC (S. Euc):
 
 ```{r hcSEucl_bad, results='asis'}
 pandoc.table(table(tcga.all[, 2]))
 ```
 
-And yet, the algorithm performs very well for several indices. One suggestion is to consider only PAC and CHI, because they do not depend on a specific distance metric. Also, the weights will be based on the index scores themselves instead of relative ranks. One reason is that since we only have two indices, it doesn't make sense to use ranks and lose information. Secondly, we want to be more precise in how much weight to assign.
+Clearly, HC (S. Euc) fails miserably at the clustering task, and yet the algorithm performs very well for several indices. One suggestion is to consider only PAC and CHI, because they do not depend on a specific distance metric. We also opt to use the index scores themselves to determine weights instead of ranks. One reason is that since we only have two indices, we collapse too much information by using ranks. Secondly, we want to be more precise in how much weight to assign.
 
 ```{r PAC_CHI_only, results='asis'}
 PAC.CHI.only <- index.summary %>% 
@@ -488,7 +492,7 @@ pandoc.table(PAC.CHI.only, justify = "lccc")
 
 Below we show the weighted meta-consensus matrix using the weights from the previous table:
 
-```{r weighted_meta_cm}
+```{r tcga_weighted_meta_cm}
 weights <- PAC.CHI.only[order(match(PAC.CHI.only$Algorithms, colnames(tcga.all))), "Weight"]
 weighted.meta.cm <- consensusMatrix(tcga.all, weights)
 heatmap.2(weighted.meta.cm, labRow = NA, labCol = NA, col = palOrRd,
@@ -498,7 +502,7 @@ heatmap.2(weighted.meta.cm, labRow = NA, labCol = NA, col = palOrRd,
 
 And the corresponding confusion matrix with TCGA's clusters:
 
-```{r weighted_conf_mat, results='asis'}
+```{r tcga_weighted_conf_mat, results='asis'}
 weighted.final.compare <- hclust(dist(weighted.meta.cm), method = "average") %>%
   cutree(k) %>%
   as.factor %>%
@@ -512,13 +516,12 @@ cm <- caret::confusionMatrix(weighted.final.compare)
 print(xtable(format(ftable(cm$table))), comment = F,
       include.rownames = F, include.colnames = F,
       sanitize.text.function = function(x) gsub('"', "", x))
-pandoc.table(cm$byClass, digits = 3)
 ```
 
 ## Comparison of Accuracy
 We can now compare the **accuracy** of all `r length(ALG.NAMES) + 2` clustering results: `r length(ALG.NAMES)` individual clustering algorithms plus the unweighted and weighted meta-consensus clustering algorithms.
 
-Accuracy is defined as the number of correct clusterings out of the total number of clusterings. In our case, we consider the *truth* to be the reference clustering from TCGA.
+Accuracy is defined as the number of correct clusterings out of the total number of clusterings. In our case, we consider the *truth* to be the reference clustering from TCGA. It can be calculated from a confusion matrix by dividing the sum of the diagonal by the sum of all entries.
 
 ```{r tcga_accuracy, results='asis'}
 Accuracy <- alply(tcga.all, 2, function(x)
@@ -556,6 +559,8 @@ plot(dat, col = c(2:3)[true.class], xlab = "x", ylab = "y",
      main = "Two clusters with atypical parabolic shapes (worms)")
 ```
 
+### Indices
+
 ```{r worms_index}
 # combine results
 worms.CCP <- readRDS("Worms/outputs/results_CCP.rds")
@@ -567,34 +572,37 @@ worms.all <- worms.CCP %>%
   set_colnames(ALG.NAMES)
 
 # indices
-PAC <- worms.CCP %>%
-  sapply(., function(x) PAC(x[[k]]$consensusMatrix, 0.05, 0.95)) %>%
-  c(nmfDiv = PAC(worms.NMF$nmfDiv$consensusMatrix, 0.05, 0.95),
-    nmfEucl = PAC(worms.NMF$nmfEucl$consensusMatrix, 0.05, 0.95)) %>% 
-  set_names(ALG.NAMES)
-DBI <- dat %>%
-  apply(worms.all, 2, cls.scatt.data, data = .) %>%
-  sapply(., clv.Davies.Bouldin, intracls = "average", intercls = "average")
-DI <- apply(worms.all, 2, dunn, distance = dist(dat))
-RS <- apply(worms.all, 2, index.S, d = dist(dat))
-CI <- apply(worms.all, 2, index.G3, d = dist(dat))
-GI <- apply(worms.all, 2, index.G2, d = dist(dat))
-CHI <- apply(worms.all, 2, index.G1, x = dat)
-Conn <- apply(worms.all, 2, clValid::connectivity, distance = dist(dat))
+index.summary <- data.frame(
+  Algorithms = ALG.NAMES,
+  PAC = worms.CCP %>%
+    sapply(., function(x) PAC(x[[k]]$consensusMatrix, 0.05, 0.95)) %>%
+    c(nmfDiv = PAC(worms.NMF$nmfDiv$consensusMatrix, 0.05, 0.95),
+      nmfEucl = PAC(worms.NMF$nmfEucl$consensusMatrix, 0.05, 0.95)) %>% 
+    set_names(ALG.NAMES),
+  DBI = dat %>%
+    apply(worms.all, 2, cls.scatt.data, data = .) %>%
+    sapply(., clv.Davies.Bouldin, intracls = "average", intercls = "average"),
+  DI = apply(worms.all, 2, dunn, distance = dist(dat)),
+  RS = apply(worms.all, 2, index.S, d = dist(dat)),
+  CI = apply(worms.all, 2, index.G3, d = dist(dat)),
+  GI = apply(worms.all, 2, index.G2, d = dist(dat)),
+  CHI = apply(worms.all, 2, index.G1, x = dat),
+  Conn = apply(worms.all, 2, clValid::connectivity, distance = dist(dat))
+)
 ```
 
 The ranked indices and weights tables are shown below. The PAC uses bounds of 0.05 and 0.95:
 
 ```{r worms_summary, results='asis'}
-ranked.indices <- data.frame(Algorithms = ALG.NAMES,
-                             PAC = rank(PAC, ties.method = "min"),
-                             DBI = rank(DBI, ties.method = "min"),
-                             DI = rank(-DI, ties.method = "min"),
-                             RS = rank(-RS, ties.method = "min"),
-                             CI = rank(CI, ties.method = "min"),
-                             GI = rank(-GI, ties.method = "min"),
-                             CHI = rank(-CHI, ties.method = "min"),
-                             Conn = rank(Conn, ties.method = "min")) %>% 
+ranked.indices <- index.summary %>% 
+  mutate(PAC = rank(PAC, ties.method = "min"),
+         DBI = rank(DBI, ties.method = "min"),
+         DI = rank(-DI, ties.method = "min"),
+         RS = rank(-RS, ties.method = "min"),
+         CI = rank(CI, ties.method = "min"),
+         GI = rank(-GI, ties.method = "min"),
+         CHI = rank(-CHI, ties.method = "min"),
+         Conn = rank(Conn, ties.method = "min")) %>% 
   mutate(Top = apply(.[, -1], 1,
                      function(x) paste0(round(100 * sum(x %in% c(1, 2)) /
                                                 ncol(.[, -1]), 2), "%"))) %>%
@@ -604,48 +612,85 @@ pandoc.table(ranked.indices,
                                       paste(rep("c", ncol(ranked.indices) - 1),
                                             collapse = "")))
 
-ranked.sums <- ranked.indices %>% 
-  mutate(Sum = apply(.[, -c(1, 10)], 1, sum),
-         Weight = paste0(round(100 * Sum^-1 / sum(Sum^-1), 2), "%")) %>% 
-  dplyr::select(Algorithms, Top, Sum, Weight) %>% 
-  arrange(Sum)
-pandoc.table(ranked.sums,
-                     justify = paste0("l",
-                                      paste(rep("c", ncol(ranked.sums) - 1),
-                                            collapse = "")))
+PAC.CHI.only <- index.summary %>% 
+  dplyr::select(Algorithms, PAC, CHI) %>% 
+  mutate(Weight.PAC = (1 - PAC) / sum((1 - PAC)),
+         Weight.CHI = CHI / sum(CHI),
+         Weight = (Weight.PAC + Weight.CHI) / 2) %>% 
+  arrange(desc(Weight)) %>% 
+  dplyr::select(-Weight.PAC, -Weight.CHI)
+
+pandoc.table(PAC.CHI.only, justify = "lccc")
 ```
 
-Using hierarchical clustering with Wald's method on the meta-consensus matrix across the ten algorithms, we can obtain meta-consensus classes. The following table shows how the different methods compare, based on the number of matches to the true class labels.
+### Meta-Consensus Clusters
 
-```{r worms_meta, results='asis'}
-weights <- with(ranked.sums, Sum^-1 / sum(Sum^-1))[match(colnames(worms.all), ranked.sums$Algorithms)]
-clust.1 <- apply(worms.all, 1, function(x) which(x == 1))
-clust.2 <- apply(worms.all, 1, function(x) which(x == 2))
-worms.final <- worms.all %>%
-  as.data.frame %>% 
-  mutate(weight.1 = sapply(clust.1, function(x) sum(weights[x])),
-         weight.2 = sapply(clust.2, function(x) sum(weights[x])),
-         Meta = ifelse(weight.1 > weight.2, 1, 2)) %>% 
-  dplyr::select(-weight.1, -weight.2)
+Using hierarchical clustering with average linkage on the meta-consensus matrices across the `r ncol(worms.all)` algorithms, we can obtain meta-consensus classes. The following table shows the confusion matrix for the unweighted meta-consensus clusters compared to the source data from `clusterSim`.
 
-meta.classes <- as.factor(cutree(hclust(dist(consensusMatrix(worms.all)), method = "average"), 2))
+```{r worms_meta_unweighted, results='asis'}
+meta.cm <- consensusMatrix(worms.all)
+meta.cm.confmat <- hclust(dist(meta.cm), method = "average") %>%
+  cutree(k) %>%
+  as.factor %>%
+  set_names(true.class) %>%
+  table(Meta = ., clusterSim = names(.)) %>%
+  extract(names(sort(apply(., 1, which.max))), ) %>%
+  set_rownames(colnames(.)) %>%
+  as.table
 
-worms.matches <- worms.final %>% 
-  apply(., 2, function(x) sum(x == true.class)) %>% 
-  sort(decreasing = T) %>% 
-  data.frame(Matches = .)
-
-pandoc.table(worms.matches)
+cm <- caret::confusionMatrix(meta.cm.confmat)
+print(xtable(format(ftable(cm$table))), comment = F,
+      include.rownames = F, include.colnames = F,
+      sanitize.text.function = function(x) gsub('"', "", x))
 ```
 
-Let's visualize how the best algorithm, hierarchical clustering using single linkage and Euclidean distance, separates the clusters:
+This next time is the confusion matrix comparing the *weighted* meta-consensus clusters.
+
+```{r worms_meta_weighted, results='asis'}
+weights <- PAC.CHI.only[order(match(PAC.CHI.only$Algorithms, colnames(worms.all))), "Weight"]
+wt.meta.cm <- consensusMatrix(worms.all, weights)
+wt.meta.cm.confmat <- hclust(dist(wt.meta.cm), method = "average") %>%
+  cutree(k) %>%
+  as.factor %>%
+  set_names(true.class) %>%
+  table(Meta = ., clusterSim = names(.)) %>%
+  extract(names(sort(apply(., 1, which.max))), ) %>%
+  set_rownames(colnames(.)) %>%
+  as.table
+
+cm2 <- caret::confusionMatrix(wt.meta.cm.confmat)
+print(xtable(format(ftable(cm2$table))), comment = F,
+      include.rownames = F, include.colnames = F,
+      sanitize.text.function = function(x) gsub('"', "", x))
+```
+
+The accuracy comparison shows that the meta-consensus clusters have an average performance compared to the individual algorithms.
+
+```{r worms_accuracy, results='asis'}
+Accuracy <- alply(worms.all, 2, function(x)
+  table(Meta = x, clusterSim = true.class) %>% 
+    extract(names(sort(apply(., 1, which.max))), ) %>%
+    set_rownames(colnames(.)), .dims = T) %>% 
+  c(list(Meta = meta.cm.confmat,
+         Meta.Weighted = wt.meta.cm.confmat)) %>% 
+  sapply(., function(x) sum(diag(x)) / sum(x)) %>% 
+  data.frame(Accuracy = .) %>% 
+  mutate(Algorithm = rownames(.)) %>% 
+  dplyr::select(Algorithm, Accuracy) %>% 
+  arrange(desc(Accuracy))
+
+pandoc.table(Accuracy, justify = "lc")
+```
+
+Finally, let's visualize how the best algorithm, hierarchical clustering using single linkage and Euclidean distance, separates the clusters:
 
 ```{r worms_best}
-plot(sw$data, col = c(2:3)[worms.final$`HC (S. Euc)`], xlab = "x", ylab = "y",
+worms.plot <- data.frame(worms.all)
+plot(dat, col = c(2:3)[worms.plot$HC..S..Euc.], xlab = "x", ylab = "y",
      main = "K-Means (euclidean) clustering of two atypical parabolic shapes (worms)")
 ```
 
-It appears that the best algorithm can separate the clusters, yet the indices do not favour such a partition and it appears that the algorithm is performing poorly.
+It appears that the best algorithm can separate the clusters, yet the indices do not favour such a partition and it *appears* that the algorithm is performing poorly.
 
 ## Rings Dataset
 
