@@ -2,7 +2,7 @@
 title: "Performance Evaluation of Consensus Clustering Algorithms"
 subtitle: "STAT 598 Progress Report"
 author: "Derek Chiu"
-date: "September 9, 2015"
+date: "September 10, 2015"
 output: 
   pdf_document: 
     number_sections: yes
@@ -747,7 +747,9 @@ pandoc.table(indices, justify = paste0("l", paste(rep("c", ncol(indices) - 1),
                                                   collapse = "")))
 ```
 
-```{r rings_ranks, results='asis'}
+The weights are computed using PAC and CHI:
+
+```{r rings_summary, results='asis'}
 ranked.indices <- indices %>% 
   mutate(PAC = rank(PAC, ties.method = "min"),
          DBI = rank(DBI, ties.method = "min"),
@@ -765,6 +767,17 @@ ranked.indices <- indices %>%
 pandoc.table(ranked.indices,
              justify = paste0("l", paste(rep("c", ncol(ranked.indices) - 1),
                                          collapse = "")))
+
+# algorithms weighted by PAC and CHI
+weights.table <- data.frame(Algorithms = ALG.NAMES[-which(ALG.NAMES %in% "PAM (MI)")],
+                            PAC = indices$PAC,
+                            CHI = indices$CHI) %>%
+  mutate(Weight.PAC = (1 - PAC) / sum((1 - PAC)),
+         Weight.CHI = CHI / sum(CHI),
+         Weight = (Weight.PAC + Weight.CHI) / 2) %>% 
+  select(-Weight.PAC, -Weight.CHI) %>% 
+  arrange(desc(Weight))
+pandoc.table(weights.table, justify = "lccc")
 ```
 
 ### Meta-Consensus Clusters
@@ -795,15 +808,7 @@ meta.cm <- consensusMatrix(rings.all) %>%
   caret::confusionMatrix(.)
 ```
 
-```{r rings_meta_weighted}
-# algorithms weighted by PAC and CHI
-weights.table <- data.frame(Algorithms = ALG.NAMES[-which(ALG.NAMES %in% "PAM (MI)")],
-                            PAC = indices$PAC,
-                            CHI = indices$CHI) %>%
-    mutate(Weight.PAC = (1 - PAC) / sum((1 - PAC)),
-           Weight.CHI = CHI / sum(CHI),
-           Weight = (Weight.PAC + Weight.CHI) / 2)
-
+```{r rings_meta_weighted, results='asis'}
 # confusion matrix of weighted meta.cm with true clusters
 wt.meta.cm <- consensusMatrix(rings.all, weights.table$Weight) %>%
   dist %>% 
@@ -817,6 +822,8 @@ wt.meta.cm <- consensusMatrix(rings.all, weights.table$Weight) %>%
   as.table %>%
   caret::confusionMatrix(.)
 ```
+
+Finally, a comparison of the accuracy for each algorithm:
 
 ```{r rings_accuracy, results='asis'}
 Accuracy <- alply(rings.all, 2, function(x)
@@ -864,7 +871,7 @@ has `r k` classes of seeds with `r unique(table(seeds$Class))` observations each
 
 ### Indices
 
-The table below shows the indices for each algorithm in the seeds dataset.
+The table below shows the indices for each algorithm in the seeds dataset. Note that the PAC uses bounds of 0 and 1.
 
 ```{r seeds_index, results='asis'}
 # combine results
@@ -925,6 +932,7 @@ pandoc.table(ranked.indices,
 ```
 
 ### Meta-Consensus Clusters
+The confusion matrix below shows how the unweighted meta-consensus clusters compare to those of UCI.
 
 ```{r seeds_meta_unweighted_confmat, results='asis'}
 # confusion matrix of meta.cm with true clusters
@@ -950,6 +958,8 @@ print(xtable(format(ftable(meta.cm$table))), comment = F,
 # confusion matrix statistics
 pandoc.table(meta.cm$byClass, digits = 3)
 ```
+
+The weights below are calculated using PAC and CHI. Finally, the weighted meta-consensus clusters confusion matrix with UCI reference label is shown:
 
 ```{r seeds_meta_weighted_confmat, results='asis'}
 # algorithms weighted by PAC and CHI
@@ -990,7 +1000,7 @@ print(xtable(format(ftable(wt.meta.cm$table))), comment = F,
 pandoc.table(wt.meta.cm$byClass, digits = 3)
 ```
 
-It appears that the weighted meta-consensus classes have the highest accuracy. However, it is not much better than the second best algorithm, which puts into question whether it is worth the time to undergo substantial increases in computational complexity for marginal gains.
+It appears that the weighted meta-consensus classes have the highest accuracy. This is a comforting result. In real applications, we do not know which individual clustering algorithm would have the best performance. Using the weighted meta-consensus clustering algorithm allows us to avoid making subjective decisions, while also producing the best clustering assignment.
 
 ```{r seeds_accuracy, results='asis'}
 Accuracy <- alply(seeds.all, 2, function(x)
@@ -1007,6 +1017,8 @@ Accuracy <- alply(seeds.all, 2, function(x)
 
 pandoc.table(Accuracy, justify = "lc")
 ```
+
+More simulations will be performed to confirm the applicability of the meta-consensus clustering method. The datasets should have much more features, likely arising from gene expression data.
 
 # References
 
