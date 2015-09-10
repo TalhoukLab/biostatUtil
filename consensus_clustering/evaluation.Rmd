@@ -587,8 +587,8 @@ index.summary <- data.frame(
   CI = apply(worms.all, 2, index.G3, d = dist(dat)),
   GI = apply(worms.all, 2, index.G2, d = dist(dat)),
   CHI = apply(worms.all, 2, index.G1, x = dat),
-  Conn = apply(worms.all, 2, clValid::connectivity, distance = dist(dat))
-)
+  Conn = apply(worms.all, 2, clValid::connectivity, distance = dist(dat))) %>% 
+  set_rownames(NULL)
 ```
 
 The ranked indices and weights tables are shown below. The PAC uses bounds of 0.05 and 0.95:
@@ -694,7 +694,7 @@ It appears that the best algorithm can separate the clusters, yet the indices do
 
 ## Rings Dataset
 
-The following three-cluster dataset is our second simulation:
+The following three-cluster dataset is the second simulation we will conduct:
 
 ```{r rings_load}
 # Load data, store true cluster labels and number of clusters
@@ -710,6 +710,8 @@ plot(dat, col = c(2:4)[true.class], xlab = "x", ylab = "y",
 ```
 
 ### Indices
+
+The indices for each algorithm are shown below, in no particular order. Also, the ranks are shown.
 
 ```{r rings_index, results='asis'}
 # combine results
