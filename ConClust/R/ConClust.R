@@ -35,7 +35,8 @@ ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
   x.rest <- x %>%
     as.data.frame %>%
     select(which(sapply(., class) == "numeric")) %>%
-    extract(apply(., 1, sd) > min.sd, ) %>%
+    extract(apply(., 1, function(x) sd(x, na.rm = T)) > min.sd,
+            apply(., 2, function(x) !any(is.na(x)))) %>%
     t %>%
     scale %>%
     t %>%
