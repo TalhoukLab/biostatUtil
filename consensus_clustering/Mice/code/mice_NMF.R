@@ -1,6 +1,7 @@
 ## This script obtains assignments into four clusters and consensus
 ## matrices from NMF-based algorithms that used consensus clustering
 ## Author: Derek Chiu
+## Dataset: UCI - mice
 
 # Load packages and data
 library(plyr)
@@ -15,13 +16,13 @@ dat <- dat.raw %>%
   set_colnames(dat.raw$MouseID[dat.raw$class %in%
                                  c("c-CS-m", "c-CS-s", "c-SC-m", "c-SC-s")])
 
-# Get consensus clusters (takes ~ 2 hours)
+# Get consensus clusters (takes ~ 100 mins)
 # No restriction of feature space
 ConClust(x = dat, k = k, pItem = 0.8, reps = 1000, min.sd = 0,
          method = c("nmfDiv", "nmfEucl"), dir = "Mice/outputs/")
 results <- readRDS("Mice/outputs/ConClustOutput_2015-09-11.rds")
 
-# Consensus matrices (takes ~ 5 mins)
+# Consensus matrices (takes ~ 100 secs)
 con.mats <- alply(results, 3, consensusMatrix,
                   .progress = "text", .dims = TRUE)
 
