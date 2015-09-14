@@ -2,7 +2,7 @@
 title: "Performance Evaluation of Consensus Clustering Algorithms"
 subtitle: "STAT 598 Progress Report"
 author: "Derek Chiu"
-date: "September 10, 2015"
+date: "September 14, 2015"
 output: 
   pdf_document: 
     number_sections: yes
@@ -1059,7 +1059,8 @@ mice.all <- mice.CCP %>%
   set_colnames(ALG.NAMES)
 
 # mice classes
-true.class <- dat.raw$class[match(rownames(mice.all), dat.raw$MouseID)]
+true.class <- dat.raw$class[match(rownames(mice.all), dat.raw$MouseID)] %>% 
+  droplevels
 
 # indices
 indices <- data.frame(
@@ -1168,6 +1169,26 @@ print(xtable(format(ftable(wt.meta.cm$table))), comment = F,
       include.rownames = F, include.colnames = F,
       sanitize.text.function = function(x) gsub('"', "", x))
 ```
+
+The accuracy of each algorithm is shown below:
+
+```{r mice_accuracy, results='asis'}
+Accuracy <- alply(mice.all, 2, function(x)
+  table(Meta = x, Ref = true.class) %>% 
+    extract(names(sort(apply(., 1, which.max))), ) %>%
+    set_rownames(colnames(.)), .dims = T) %>% 
+  c(list(Meta = meta.cm$table,
+         Meta.Weighted = wt.meta.cm$table)) %>% 
+  sapply(., function(x) sum(diag(x)) / sum(x)) %>% 
+  data.frame(Accuracy = .) %>% 
+  mutate(Algorithm = rownames(.)) %>% 
+  dplyr::select(Algorithm, Accuracy) %>% 
+  arrange(desc(Accuracy))
+
+pandoc.table(Accuracy, justify = "lc")
+```
+
+The weighted meta-consensus clusters gave the highest accuracy, providing further evidence that the aggregation over algorithms is a feasible notion.
 
 # References
 
