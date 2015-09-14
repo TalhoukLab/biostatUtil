@@ -9,7 +9,7 @@ doCohortCharacteristics(input.d, marker.name, marker.description, var.names,
   show.missing = TRUE, show.missing.continuous = TRUE,
   do.droplevels = TRUE, show.percent = "both", stat.tests = NULL,
   stat.test.column.header = "association/correlation test",
-  round.digits.p.value = 4, num.boot.for.ci = 1000,
+  round.digits.p.value = 4, num.boot = 1000,
   missing.codes.highlight = NULL, missing.codes = c("N/A", "", "Unk"),
   decimal = 0, caption = NA, html.table.border = 0, banded.rows = FALSE,
   css.class.name.odd = "odd", css.class.name.even = "even",
@@ -46,7 +46,7 @@ Tests: chisq, fisher, ttest, wilcox, kendall, spearman, pearson, kruskal, confus
 
 \item{round.digits.p.value}{The number of digits to round the P values}
 
-\item{num.boot.for.ci}{the number of bootstrap samples for any bootstrap method that may be used}
+\item{num.boot}{the number of bootstrap samples for any bootstrap method that may be used}
 
 \item{missing.codes.highlight}{default to NULL this indicates whether we wanted the missing values broken down down or lumped together.}
 

@@ -15,7 +15,7 @@
 #' Tests: chisq, fisher, ttest, wilcox, kendall, spearman, pearson, kruskal, confusionMarkerAsRef, confusionVarAsRef
 #' @param stat.test.column.header The name to show on the header defaults to "association/correlation test"
 #' @param round.digits.p.value The number of digits to round the P values
-#' @param num.boot.for.ci the number of bootstrap samples for any bootstrap method that may be used
+#' @param num.boot the number of bootstrap samples for any bootstrap method that may be used
 #' @param missing.codes.highlight default to NULL this indicates whether we wanted the missing values broken down down or lumped together.
 #' @param missing.codes a vector to indicate how missing values are coded, default is c("N/A","","Unk")
 #' @param decimal number of decimal places to show for aggregate numbers such as proportions or averages; default to 0 
@@ -43,7 +43,7 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
                                     stat.test.column.header = 
                                       "association/correlation test", 
                                     round.digits.p.value = 4,
-                                    num.boot.for.ci = 1000, 
+                                    num.boot = 1000, 
                                     missing.codes.highlight = NULL,
                                     missing.codes = c("N/A", "", "Unk"),
                                     decimal = 0, caption = NA,
@@ -277,7 +277,7 @@ if (!is.factor(input.d.no.missing.var[,var.name]) | !is.factor(input.d.no.missin
     stat.test.result <- confusionResultToHtmlTable(as.numeric(input.d.no.missing.var[, var.name]),
                                                    as.numeric(input.d.no.missing.var[,marker.name]),
                                                    marker.description,round.digits.p.value,
-                                                   num.boot.for.ci=num.boot.for.ci)
+                                                   num.boot = num.boot)
             }
                             },
       confusionVarAsRef={ 
@@ -290,7 +290,7 @@ if (!is.factor(input.d.no.missing.var[, var.name]) | !is.factor(input.d.no.missi
     stat.test.result <- confusionResultToHtmlTable(as.numeric(input.d.no.missing.var[, marker.name]),
                                                    as.numeric(input.d.no.missing.var[, var.name]),
                                                    var.description, round.digits.p.value,
-                                                   num.boot.for.ci=num.boot.for.ci)
+                                                   num.boot = num.boot)
             }
                           }
 )
