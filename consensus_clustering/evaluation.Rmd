@@ -1046,11 +1046,13 @@ dat <- dat.raw %>%
 k <- 4
 ```
 
+The mice protein expression dataset from [UCI](http://archive.ics.uci.edu/ml/datasets/Mice+Protein+Expression) is the most appropriate simulation for the HGSC study. Previously we analyzed data with too few features. The original mice dataset contains expression level data on `r ncol(dat)` proteins measured for `r nrow(dat.raw)` mice. The mice are classified into `r nlevels(dat.raw$class)` groups based on genotype, behaviour and treatment. To reduce computational complexity, we only focus on `r nlevels(dat.raw$class) / 2` groups: *c-CS-s*, *c-CS-m*, *c-SC-s*, and *c-SC-m*. In addition, some samples were removed because they had an `NA` value in at least one protein. No features were removed on the basis of low variability (e.g. SD < 1) across samples in order to maintain high-dimensionality of the data structure. The final dataset used for the simulation has `r nrow(dat)` mice measured on `r ncol(dat)`. 
+
 ### Indices
 
 The table of evaluation indices is shown below:
 
-```{r mice_index}
+```{r mice_index, results='asis'}
 # Combine class labels from CCP and NMF
 mice.all <- mice.CCP %>%
   sapply(., function(x) x[[k]]$consensusClass) %>%
@@ -1134,7 +1136,7 @@ print(xtable(format(ftable(meta.cm$table))), comment = F,
       sanitize.text.function = function(x) gsub('"', "", x))
 ```
 
-The weights below are calculated using PAC and CHI. Finally, the weighted meta-consensus clusters confusion matrix with UCI reference label is shown:
+The weights below are calculated using PAC and CHI. Finally, the confusion matrix with the weighted meta-consensus clusters and UCI reference clusters is shown:
 
 ```{r mice_meta_weighted_confmat, results='asis'}
 # algorithms weighted by PAC and CHI
@@ -1170,7 +1172,7 @@ print(xtable(format(ftable(wt.meta.cm$table))), comment = F,
       sanitize.text.function = function(x) gsub('"', "", x))
 ```
 
-The accuracy of each algorithm is shown below:
+Finally, the accuracy of each algorithm compared to the true class labels:
 
 ```{r mice_accuracy, results='asis'}
 Accuracy <- alply(mice.all, 2, function(x)
