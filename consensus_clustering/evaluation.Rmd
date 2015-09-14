@@ -1046,7 +1046,7 @@ dat <- dat.raw %>%
 k <- 4
 ```
 
-The mice protein expression dataset from [UCI](http://archive.ics.uci.edu/ml/datasets/Mice+Protein+Expression) is the most appropriate simulation for the HGSC study. Previously we analyzed data with too few features. The original mice dataset contains expression level data on `r ncol(dat)` proteins measured for `r nrow(dat.raw)` mice. The mice are classified into `r nlevels(dat.raw$class)` groups based on genotype, behaviour and treatment. To reduce computational complexity, we only focus on `r nlevels(dat.raw$class) / 2` groups: *c-CS-s*, *c-CS-m*, *c-SC-s*, and *c-SC-m*. In addition, some samples were removed because they had an `NA` value in at least one protein. No features were removed on the basis of low variability (e.g. SD < 1) across samples in order to maintain high-dimensionality of the data structure. The final dataset used for the simulation has `r nrow(dat)` mice measured on `r ncol(dat)`. 
+The mice protein expression dataset from [UCI](http://archive.ics.uci.edu/ml/datasets/Mice+Protein+Expression) is the most appropriate simulation for the HGSC study. Previously we analyzed data with too few features. The original mice dataset contains expression level data on `r ncol(dat)` proteins measured for `r nrow(dat.raw)` mice. The mice are classified into `r nlevels(dat.raw$class)` groups based on genotype, behaviour and treatment. To reduce computational complexity, we only focus on `r nlevels(dat.raw$class) / 2` groups: *c-CS-s*, *c-CS-m*, *c-SC-s*, and *c-SC-m*. In addition, some samples were removed because they had an `NA` value in at least one protein. No features were removed on the basis of low variability (e.g. SD < 1) across samples in order to maintain high-dimensionality of the data structure. The final dataset used for the simulation has `r nrow(dat)` mice measured on `r ncol(dat)` proteins. 
 
 ### Indices
 
@@ -1190,7 +1190,7 @@ Accuracy <- alply(mice.all, 2, function(x)
 pandoc.table(Accuracy, justify = "lc")
 ```
 
-The weighted meta-consensus clusters gave the highest accuracy, providing further evidence that the aggregation over algorithms is a feasible notion.
+The weighted meta-consensus clusters gave the highest accuracy, providing further evidence that taking a consensus over algorithms is a feasible notion.
 
 # References
 
