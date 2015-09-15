@@ -2,7 +2,7 @@
 title: "Performance Evaluation of Consensus Clustering Algorithms"
 subtitle: "STAT 598 Progress Report"
 author: "Derek Chiu"
-date: "September 14, 2015"
+date: "September 15, 2015"
 output: 
   pdf_document: 
     number_sections: yes
@@ -1136,16 +1136,16 @@ print(xtable(format(ftable(meta.cm$table))), comment = F,
       sanitize.text.function = function(x) gsub('"', "", x))
 ```
 
-The weights below are calculated using PAC and CHI. Finally, the confusion matrix with the weighted meta-consensus clusters and UCI reference clusters is shown:
+The weights below are calculated using PAC and CHI. The confusion matrix with the weighted meta-consensus clusters and UCI reference clusters is shown:
 
 ```{r mice_meta_weighted_confmat, results='asis'}
 # algorithms weighted by PAC and CHI
 weights.table <- data.frame(Algorithms = ALG.NAMES,
                             PAC = indices$PAC,
                             CHI = indices$CHI) %>%
-    mutate(Weight.PAC = (1 - PAC) / sum((1 - PAC)),
-           Weight.CHI = CHI / sum(CHI),
-           Weight = (Weight.PAC + Weight.CHI) / 2)
+  mutate(Weight.PAC = (1 - PAC) / sum((1 - PAC)),
+         Weight.CHI = CHI / sum(CHI),
+         Weight = (Weight.PAC + Weight.CHI) / 2)
 
 # confusion matrix of weighted meta.cm with true clusters
 wt.meta.cm <- consensusMatrix(mice.all, weights.table$Weight) %>%
@@ -1191,6 +1191,26 @@ pandoc.table(Accuracy, justify = "lc")
 ```
 
 The weighted meta-consensus clusters gave the highest accuracy, providing further evidence that taking a consensus over algorithms is a feasible notion.
+
+The COMMUNAL method of combining multiple clustering algorithms employs a majority vote on each algoritihm's clustering assignments to arrive at a final set of *core* cluster assignments. Algorithms that assigned at least one cluster a size less than three are dropped from the core cluster computation. The first table below shows the breakdown of the number of samples that remain depending on the level of agreement we require. By default, the percent agreement is 50. The minimum cluster size is 3, and three algorithms did not meet this criteria, so we are left with eight algorithms. The second table shows the breakdown of the core cluster assignments.
+
+```{r mice_COMMUNAL, results='asis'}
+library(COMMUNAL)
+mat.key <- clusterKeys(mice.all, k = k)
+pandoc.table(examineCounts(mat.key))
+core <- returnCore(mat.key)
+pandoc.table(table(core))
+```
+
+```{r mice_COMMUNAL_accuracy, results='asis'}
+COMMUNAL.acc <- table(core, true.class) %>% 
+  extract(-1, )
+print(xtable(format(ftable(COMMUNAL.acc))), comment = F,
+      include.rownames = F, include.colnames = F,
+      sanitize.text.function = function(x) gsub('"', "", x))
+```
+
+The accuracy of the COMMUNAL core cluster assignment is `r sum(diag(COMMUNAL.acc)) / sum(table(core))`.
 
 # References
 
