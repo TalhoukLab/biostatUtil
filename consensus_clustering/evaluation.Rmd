@@ -32,7 +32,10 @@ library(plyr)
 library(dplyr)
 library(magrittr)
 library(knitr)
+library(stringr)
 library(rgl)
+library(COMMUNAL)
+library(pamr)
 panderOptions("table.split.table", 300)  # don't split any tables
 opts_chunk$set(echo = FALSE)  # hide all code from output
 # names of clustering algorithms
@@ -1195,7 +1198,6 @@ The weighted meta-consensus clusters gave the highest accuracy, providing furthe
 The COMMUNAL method of combining multiple clustering algorithms employs a majority vote on each algoritihm's clustering assignments to arrive at a final set of *core* cluster assignments. Algorithms that assigned at least one cluster a size less than three are dropped from the core cluster computation. The first table below shows the breakdown of the number of samples that remain depending on the level of agreement we require. By default, the percent agreement is 50. The minimum cluster size is 3, and three algorithms did not meet this criteria, so we are left with eight algorithms. The second table shows the breakdown of the core cluster assignments.
 
 ```{r mice_COMMUNAL, results='asis'}
-library(COMMUNAL)
 mat.key <- clusterKeys(mice.all, k = k)
 pandoc.table(examineCounts(mat.key))
 core <- returnCore(mat.key)
@@ -1211,6 +1213,31 @@ print(xtable(format(ftable(COMMUNAL.acc))), comment = F,
 ```
 
 The accuracy of the COMMUNAL core cluster assignment is `r sum(diag(COMMUNAL.acc)) / sum(table(core))`.
+
+## Khan Mircoarray Data
+
+```{r khan_load}
+# Randomly choose 16 EWS and 16 RMS samples
+set.seed(1)
+n.samp <- 16
+data(khan)
+dat <- khan %>% 
+  set_rownames(.$X) %>% 
+  select(-X, -X1) %>% 
+  set_colnames(paste0(names(.), "_", as.character(unlist(.[1, ])))) %>% 
+  extract(-1, ) %>% 
+  apply(., 2, function(x) as.numeric(as.character(x))) %>% 
+  as.data.frame %>% 
+  extract(, c(sample(grep("EWS", names(.)), n.samp),
+              sample(grep("RMS", names(.)), n.samp))) %>% 
+  extract(apply(., 1, sd) > 1, ) %>%
+  t %>%
+  scale %>% 
+  t %>% 
+  as.data.frame
+
+true.class <- str_sub(names(dat), start = -3)
+```
 
 # References
 
