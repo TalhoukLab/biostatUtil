@@ -88,8 +88,9 @@ ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
                        cluster.only = TRUE),
         pamMI = pam(myMIdist(t(x.rest[, ind.new])), k,
                     cluster.only = TRUE),
-        apEucl = setNames(dense_rank(apclusterK(negDistMat, dat, k)@idx),
-                          rownames(dat)))
+        apEucl = setNames(dense_rank(apclusterK(negDistMat,
+                                                t(x.rest[, ind.new]), k)@idx),
+                          rownames(t(x.rest))))
     }
   }
   if (!is.null(dir))
