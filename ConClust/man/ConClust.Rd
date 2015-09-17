@@ -18,7 +18,7 @@ ConClust(x, k, pItem = 0.8, reps = 1000, method = NULL, seed = 123456,
 
 \item{method}{vector of clustering algorithms for performing consensus clustering. Must be
 any number of the following: "nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl",
-"kmSpear", "kmMI", "pamEucl", "pamSpear", "pamMI".}
+"kmSpear", "kmMI", "pamEucl", "pamSpear", "pamMI", "apEucl".}
 
 \item{seed}{random seed to use for NMF-based algorithms}
 

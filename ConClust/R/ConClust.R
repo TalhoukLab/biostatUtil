@@ -13,7 +13,7 @@
 #' @param reps number of subsamples
 #' @param method vector of clustering algorithms for performing consensus clustering. Must be
 #' any number of the following: "nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl",
-#' "kmSpear", "kmMI", "pamEucl", "pamSpear", "pamMI".
+#' "kmSpear", "kmMI", "pamEucl", "pamSpear", "pamMI", "apEucl".
 #' @param seed random seed to use for NMF-based algorithms
 #' @param seed.method seed to use to ensure each method operates on the same set of subsamples
 #' @param min.sd minimum standard deviation threshold. See details.
