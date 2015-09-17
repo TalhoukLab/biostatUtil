@@ -51,7 +51,7 @@ ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
   n.new <- floor(n * pItem)
   if (is.null(method))
     method <- c("nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl",
-                "kmSpear", "kmMI", "pamEucl", "pamSpear", "pamMI")
+                "kmSpear", "kmMI", "pamEucl", "pamSpear", "pamMI", "apEucl")
   nm <- length(method)
   coclus <- array(NA, c(n, reps, nm),
                   dimnames = list(samples, paste0("R", 1:reps), method))
@@ -87,7 +87,9 @@ ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
         pamSpear = pam(spearman.dist(t(x.rest[, ind.new])), k,
                        cluster.only = TRUE),
         pamMI = pam(myMIdist(t(x.rest[, ind.new])), k,
-                    cluster.only = TRUE))
+                    cluster.only = TRUE),
+        apEucl = setNames(dense_rank(apclusterK(negDistMat, dat, k)@idx),
+                          rownames(dat)))
     }
   }
   if (!is.null(dir))
