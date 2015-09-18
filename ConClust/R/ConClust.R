@@ -13,7 +13,7 @@
 #' @param reps number of subsamples
 #' @param method vector of clustering algorithms for performing consensus clustering. Must be
 #' any number of the following: "nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl",
-#' "kmSpear", "kmMI", "pamEucl", "pamSpear", "pamMI", "apEucl".
+#' "kmSpear", "kmMI", "pamEucl", "pamSpear", "pamMI", "apEucl", "scRbf".
 #' @param seed random seed to use for NMF-based algorithms
 #' @param seed.method seed to use to ensure each method operates on the same set of subsamples
 #' @param min.sd minimum standard deviation threshold. See details.
@@ -27,6 +27,7 @@
 #' subsample. Each entry represents a class membership.
 #' @author Derek Chiu, Aline Talhouk
 #' @importFrom magrittr extract
+#' @import apcluster kernlab
 #' @export
 ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
                      seed = 123456, seed.method = 1, min.sd = 1, dir = NULL,
@@ -51,7 +52,8 @@ ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
   n.new <- floor(n * pItem)
   if (is.null(method))
     method <- c("nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl",
-                "kmSpear", "kmMI", "pamEucl", "pamSpear", "pamMI", "apEucl")
+                "kmSpear", "kmMI", "pamEucl", "pamSpear", "pamMI", "apEucl",
+                "scRbf")
   nm <- length(method)
   coclus <- array(NA, c(n, reps, nm),
                   dimnames = list(samples, paste0("R", 1:reps), method))
@@ -88,9 +90,13 @@ ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
                        cluster.only = TRUE),
         pamMI = pam(myMIdist(t(x.rest[, ind.new])), k,
                     cluster.only = TRUE),
-        apEucl = setNames(dense_rank(apclusterK(negDistMat,
-                                                t(x.rest[, ind.new]), k)@idx),
-                          rownames(t(x.rest))))
+        apEucl = setNames(dense_rank(suppressWarnings(
+          apclusterK(negDistMat, t(x.rest[, ind.new]), k,
+                     verbose = FALSE)@idx)),
+          rownames(t(x.rest[, ind.new]))),
+        scRbf = setNames(specc(t(x.rest[, ind.new]), k)@.Data,
+                         rownames(t(x.rest[, ind.new])))
+        )
     }
   }
   if (!is.null(dir))
