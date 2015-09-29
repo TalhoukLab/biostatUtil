@@ -4,12 +4,19 @@
 \alias{combineAlgs}
 \title{Combine the consensus results from all algorithms}
 \usage{
-combineAlgs(res.CC, res.CCP)
+combineAlgs(..., res.CCP, k, element, alg.names = NULL)
 }
 \arguments{
-\item{res.CC}{results from using ConClust}
+\item{...}{any number of objects outputted from \code{ConClust}}
 
-\item{res.CCP}{results from using ConClustPlus}
+\item{res.CCP}{an object outputted from \code{ConClustPlus}}
+
+\item{k}{desired number of clusters}
+
+\item{element}{the element to extract. This is either "matrix" or "class" for
+consensus matrix or consensus classes, respectively.}
+
+\item{alg.names}{optional. Supply a vector of names for the algorithms.}
 }
 \value{
 Either a list of all consensus matrices or a data frame
@@ -18,5 +25,8 @@ showing all the consensus classes
 \description{
 The function can output either the consensus matrices
 or consensus classes for all algorithms
+}
+\author{
+Derek Chiu
 }
 

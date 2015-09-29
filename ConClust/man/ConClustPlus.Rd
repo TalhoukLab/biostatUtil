@@ -33,4 +33,7 @@ Runs consensus clustering for multiple algorithms and saves the output
 set.seed(23)
 ConClustPlus(matrix(rnorm(100), nrow = 10), k = 3, reps = 10, pItem = 0.9)
 }
+\author{
+Derek Chiu
+}
 

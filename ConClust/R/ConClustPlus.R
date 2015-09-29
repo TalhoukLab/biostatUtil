@@ -11,6 +11,7 @@
 #' @param ... additional arguments to \code{ConsensusClusterPlus}
 #' @return A list of outputs from \code{ConsensusClusterPlus}; each element
 #' is for a different algorithm.
+#' @author Derek Chiu
 #' @import ConsensusClusterPlus
 #' @export
 #' @examples 
@@ -46,8 +47,10 @@ ConClustPlus <- function(dat, k = 3, reps = 1000, pItem = 0.8, dir = NULL,
   pamMI <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
                                 clusterAlg = "pam", distance = "myMIdist",
                                 seed = seed, ...)
-  results <- list(hcAEucl, hcSEucl, hcDianaEucl, kmEucl, kmSpear,
-                  kmMI, pamEucl, pamSpear, pamMI)
+  results <- list(hcAEucl = hcAEucl, hcSEucl = hcSEucl,
+                  hcDianaEucl = hcDianaEucl, kmEucl = kmEucl,
+                  kmSpear = kmSpear, kmMI = kmMI, pamEucl = pamEucl,
+                  pamSpear = pamSpear, pamMI = pamMI)
   if (!is.null(dir))
     saveRDS(results, paste0(dir, "results_CCP.rds"), compress = "xz")
   return(results)
