@@ -1,14 +1,15 @@
 Package: ConClust
 Type: Package
 Title: Consensus Clustering related functions
-Version: 0.0.0.9003
-Date: 2015-09-17
+Version: 0.0.0.9007
+Date: 2015-09-28
 Authors@R: c(
     person("Derek", "Chiu", , "dchiu@bccrc.ca", c("aut", "cre")))
 Description: Helper functions used for performing consensus clustering
     and validating clustering results.
 Depends:
     R (>= 3.2.0)
-Imports: plyr, dplyr, magrittr, cluster, bioDist, NMF, apcluster, kernlab
+Imports: plyr, dplyr, magrittr, cluster, bioDist, NMF, apcluster, kernlab, mclust,
+    infotheo, blockcluster, ConsensusClusterPlus
 License: CC0
 LazyData: TRUE

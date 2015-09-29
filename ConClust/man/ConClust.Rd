@@ -18,7 +18,8 @@ ConClust(x, k, pItem = 0.8, reps = 1000, method = NULL, seed = 123456,
 
 \item{method}{vector of clustering algorithms for performing consensus clustering. Must be
 any number of the following: "nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl",
-"kmSpear", "kmMI", "pamEucl", "pamSpear", "pamMI", "apEucl", "scRbf".}
+"kmSpear", "kmMI", "pamEucl", "pamSpear", "pamMI", "apEucl", "scRbf", "gmmBIC", "biclust".
+See details.}
 
 \item{seed}{random seed to use for NMF-based algorithms}
 
@@ -43,6 +44,25 @@ Generates multiple runs for consensus clustering among replicated subsamples
 of a dataset as well as across different clustering algorithms.
 }
 \details{
+The clustering algorithms provided in \code{ConClust} are:
+\itemize{
+\item{"nmfDiv": }{Nonnegative Matrix Factorization using Kullback-Leibler Divergence}
+\item{"nmfEucl": }{Nonnegative Matrix Factorization using Euclidean distance}
+\item{"hcAEucl": }{Hierarchical Clustering using Average linkage and Euclidean distance}
+\item{"hcSEucl": }{Hierarchical Clustering using Single linkage and Euclidean distance}
+\item{"hcDianaEucl": }{Divisive Hierarchical Clustering using Euclidean distance}
+\item{"kmEucl": }{K-Means using Euclidean distance}
+\item{"kmSpear": }{K-Means using Spearman distance}
+\item{"kmMI": }{K-Means using Mutual Information distance}
+\item{"pamEucl": }{Partition Around Mediods using Euclidean distance}
+\item{"pamSpear": }{Partition Around Mediods using Spearman distance}
+\item{"pamMI": }{Partition Around Mediods using Mutual Information distance}
+\item{"apEucl": }{Affinity Propagation using Euclidean distance}
+\item{"scRbf": }{Spectral Clustering using Radial-Basis kernel function}
+\item{"gmmBIC": }{Gaussian Mixture Model using Bayesian Information Criterion on EM algorithm}
+\item{"biclust"}{Biclustering using a latent block model}
+}
+
 The \code{min.sd} argument is used to filter the feature space for only highly variable
 features. Only features with a standard deviation across all samples greater than
 \code{min.sd} will be used.

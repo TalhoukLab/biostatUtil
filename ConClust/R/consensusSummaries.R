@@ -1,0 +1,29 @@
+#' Compute consensus matrices and classes from ConClust output
+#'
+#' Given an output from ConClust, returns a list of consensus matrices and classes
+#' for each algorithm.
+#'
+#' @param res output result from ConClust
+#' @param k desired number of clusters
+#' @param dir directory to save output
+#' @param fileName file name of the written object
+#' @return A list with summaries for each algorithm. Each algorithm has a list with
+#' two elements: consensusMatrix and consensusClass.
+#' @export
+consensusSummaries <- function(res, k, dir = NULL, fileName = "results_CC") {
+  con.mats <- plyr::alply(res, 3, consensusMatrix,
+                          .progress = "text", .dims = TRUE)
+  con.cls <- plyr::llply(con.mats, function(x) {
+    tree <- hclust(dist(x), method = "average")
+    cl <- as.factor(cutree(tree, k))
+    names(cl) <- tree$labels
+    return(cl)
+  })
+
+  z <- list(consensusMatrix = con.mats, consensusClass = con.cls)
+  zv <- unlist(unname(z), recursive = FALSE)
+  out <- split(setNames(zv, rep(names(z), lengths(z))), names(zv))
+  if (!is.null(dir))
+    saveRDS(out, paste0(dir, fileName, ".rds"), compress = "xz")
+  return(out)
+}

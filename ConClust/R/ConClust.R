@@ -3,6 +3,25 @@
 #' Generates multiple runs for consensus clustering among replicated subsamples
 #' of a dataset as well as across different clustering algorithms.
 #'
+#' The clustering algorithms provided in \code{ConClust} are:
+#' \itemize{
+#' \item{"nmfDiv": }{Nonnegative Matrix Factorization using Kullback-Leibler Divergence}
+#' \item{"nmfEucl": }{Nonnegative Matrix Factorization using Euclidean distance}
+#' \item{"hcAEucl": }{Hierarchical Clustering using Average linkage and Euclidean distance}
+#' \item{"hcSEucl": }{Hierarchical Clustering using Single linkage and Euclidean distance}
+#' \item{"hcDianaEucl": }{Divisive Hierarchical Clustering using Euclidean distance}
+#' \item{"kmEucl": }{K-Means using Euclidean distance}
+#' \item{"kmSpear": }{K-Means using Spearman distance}
+#' \item{"kmMI": }{K-Means using Mutual Information distance}
+#' \item{"pamEucl": }{Partition Around Mediods using Euclidean distance}
+#' \item{"pamSpear": }{Partition Around Mediods using Spearman distance}
+#' \item{"pamMI": }{Partition Around Mediods using Mutual Information distance}
+#' \item{"apEucl": }{Affinity Propagation using Euclidean distance}
+#' \item{"scRbf": }{Spectral Clustering using Radial-Basis kernel function}
+#' \item{"gmmBIC": }{Gaussian Mixture Model using Bayesian Information Criterion on EM algorithm}
+#' \item{"biclust"}{Biclustering using a latent block model}
+#' }
+#' 
 #' The \code{min.sd} argument is used to filter the feature space for only highly variable
 #' features. Only features with a standard deviation across all samples greater than
 #' \code{min.sd} will be used.
@@ -13,7 +32,8 @@
 #' @param reps number of subsamples
 #' @param method vector of clustering algorithms for performing consensus clustering. Must be
 #' any number of the following: "nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl",
-#' "kmSpear", "kmMI", "pamEucl", "pamSpear", "pamMI", "apEucl", "scRbf".
+#' "kmSpear", "kmMI", "pamEucl", "pamSpear", "pamMI", "apEucl", "scRbf", "gmmBIC", "biclust".
+#' See details.
 #' @param seed random seed to use for NMF-based algorithms
 #' @param seed.method seed to use to ensure each method operates on the same set of subsamples
 #' @param min.sd minimum standard deviation threshold. See details.
@@ -27,33 +47,24 @@
 #' subsample. Each entry represents a class membership.
 #' @author Derek Chiu, Aline Talhouk
 #' @importFrom magrittr extract
-#' @import apcluster kernlab
+#' @import apcluster kernlab mclust blockcluster
 #' @export
 ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
                      seed = 123456, seed.method = 1, min.sd = 1, dir = NULL,
                      time.saved = TRUE) {
   . <- NULL
-  x.rest <- x %>%
-    as.data.frame %>%
-    select(which(sapply(., class) == "numeric")) %>%
-    extract(apply(., 1, function(x) sd(x, na.rm = T)) > min.sd,
-            apply(., 2, function(x) !any(is.na(x)))) %>%
-    t %>%
-    scale %>%
-    t %>%
-    as.data.frame
-
+  x.rest <- dataPrep(x, min.sd = min.sd)
   x.nmf <- x.rest %>%
     rbind(-.) %>%
     apply(2, function(x) ifelse(x < 0, 0, x))
-
+  
   samples <- colnames(x.rest)
   n <- ncol(x.rest)
   n.new <- floor(n * pItem)
   if (is.null(method))
     method <- c("nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl",
                 "kmSpear", "kmMI", "pamEucl", "pamSpear", "pamMI", "apEucl",
-                "scRbf")
+                "scRbf", "gmmBIC", "biclust")
   nm <- length(method)
   coclus <- array(NA, c(n, reps, nm),
                   dimnames = list(samples, paste0("R", 1:reps), method))
@@ -76,6 +87,8 @@ ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
           x.nmf.samp, rank = k, method = "lee", seed = seed)),
         hcAEucl = cutree(hclust(dist(t(x.rest[, ind.new])),
                                 method = "average"), k),
+        hcSEucl = cutree(hclust(dist(t(x.rest[, ind.new])),
+                                method = "single"), k),
         hcDianaEucl = cutree(diana(euc(t(x.rest[, ind.new])),
                                    diss = TRUE), k),
         kmEucl = kmeans(euc(t(x.rest[, ind.new])),
@@ -94,8 +107,12 @@ ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
           apclusterK(negDistMat, t(x.rest[, ind.new]), k,
                      verbose = FALSE)@idx)),
           rownames(t(x.rest[, ind.new]))),
-        scRbf = setNames(specc(t(x.rest[, ind.new]), k)@.Data,
-                         rownames(t(x.rest[, ind.new])))
+        scRbf = setNames(specc(t(x.rest[, ind.new]), k,
+                               kernel = "rbfdot")@.Data,
+                         rownames(t(x.rest[, ind.new]))),
+        gmmBIC = Mclust(t(x.rest[, ind.new]), k)$classification,
+        biclust = cocluster(as.matrix(x.rest[, ind.new]), "continuous",
+                            nbcocluster = c(k, k))@colclass + 1
         )
     }
   }
