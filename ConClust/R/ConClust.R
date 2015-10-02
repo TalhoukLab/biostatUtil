@@ -19,7 +19,7 @@
 #' \item{"apEucl": }{Affinity Propagation using Euclidean distance}
 #' \item{"scRbf": }{Spectral Clustering using Radial-Basis kernel function}
 #' \item{"gmmBIC": }{Gaussian Mixture Model using Bayesian Information Criterion on EM algorithm}
-#' \item{"biclust"}{Biclustering using a latent block model}
+#' \item{"biclust": }{Biclustering using a latent block model}
 #' }
 #' 
 #' The \code{min.sd} argument is used to filter the feature space for only highly variable

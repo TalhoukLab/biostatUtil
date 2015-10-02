@@ -5,7 +5,7 @@
 \title{Run a series of ConsensusClusterPlus algorithms}
 \usage{
 ConClustPlus(dat, k = 3, reps = 1000, pItem = 0.8, dir = NULL,
-  seed = 123, ...)
+  seed = 123, min.sd = 1, ...)
 }
 \arguments{
 \item{dat}{data matrix; columns are samples and rows are genes/features}
@@ -19,6 +19,8 @@ ConClustPlus(dat, k = 3, reps = 1000, pItem = 0.8, dir = NULL,
 \item{dir}{directory to save results}
 
 \item{seed}{random seed to maintain reproducible results}
+
+\item{min.sd}{minimum standard deviation across each gene}
 
 \item{...}{additional arguments to \code{ConsensusClusterPlus}}
 }

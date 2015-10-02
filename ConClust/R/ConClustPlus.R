@@ -8,6 +8,7 @@
 #' @param pItem proportion of features to use in each subsample
 #' @param dir directory to save results
 #' @param seed random seed to maintain reproducible results
+#' @param min.sd minimum standard deviation across each gene
 #' @param ... additional arguments to \code{ConsensusClusterPlus}
 #' @return A list of outputs from \code{ConsensusClusterPlus}; each element
 #' is for a different algorithm.
@@ -18,8 +19,8 @@
 #' set.seed(23)
 #' ConClustPlus(matrix(rnorm(100), nrow = 10), k = 3, reps = 10, pItem = 0.9)
 ConClustPlus <- function(dat, k = 3, reps = 1000, pItem = 0.8, dir = NULL, 
-                         seed = 123, ...) {
-  dat <- dataPrep(dat)
+                         seed = 123, min.sd = 1, ...) {
+  dat <- dataPrep(dat, min.sd = min.sd)
   hcAEucl <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
                                   distance = "euclidean",
                                   seed = seed, ...)

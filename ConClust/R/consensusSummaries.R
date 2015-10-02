@@ -13,12 +13,7 @@
 consensusSummaries <- function(res, k, dir = NULL, fileName = "results_CC") {
   con.mats <- plyr::alply(res, 3, consensusMatrix,
                           .progress = "text", .dims = TRUE)
-  con.cls <- plyr::llply(con.mats, function(x) {
-    tree <- hclust(dist(x), method = "average")
-    cl <- as.factor(cutree(tree, k))
-    names(cl) <- tree$labels
-    return(cl)
-  })
+  con.cls <- plyr::llply(con.mats, consensusClass, k = k)
 
   z <- list(consensusMatrix = con.mats, consensusClass = con.cls)
   zv <- unlist(unname(z), recursive = FALSE)

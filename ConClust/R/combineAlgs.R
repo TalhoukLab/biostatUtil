@@ -23,10 +23,12 @@ combineAlgs <- function(..., res.CCP, k, element, alg.names = NULL) {
       return(x)
     })
     out <- unlist(list(out.CCP, out.CC), recursive = FALSE)
+    if (!is.null(alg.names))
+      names(out) <- alg.names
   } else if (element == "class") {
     out.CC <- sapply(obj, "[[", "consensusClass")
     out.CCP <- sapply(lapply(res.CCP, "[[", k), "[[", "consensusClass")
-    out <- data.frame(out.CCP, out.CC)
+    out <- as.matrix(data.frame(out.CCP, out.CC))
     if (!is.null(alg.names))
       colnames(out) <- alg.names
   } else {
