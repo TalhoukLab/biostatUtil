@@ -4,15 +4,31 @@
 \alias{HKnorm}
 \title{Normalization to Housekeeping Genes (Single-Patient sample)}
 \usage{
-HKnorm(raw.data)
+HKnorm(raw.data, corr = 1e-04)
 }
 \arguments{
-\item{raw.data}{matrix of raw counts obtained from nCounter (rows are genes). The first three columns must be labeled: c("Code.Class","Name","Accession") and contain that information.}
+\item{raw.data}{matrix of raw counts obtained from nCounter (rows are genes).
+The first three columns must be labeled: c("Code.Class", "Name", "Accession")
+and contain that information.}
+
+\item{corr}{small correction on normalization}
 }
 \value{
 matrix of log normalized data in the same format but without reference genes.
 }
 \description{
-This functions normalizes the gene expression of NanoString nCounter data to housekeeping genes. This is done by subtracting the average log housekeeping gene expression.
+This functions normalizes the gene expression of NanoString nCounter data to housekeeping genes.
+This is done by subtracting the average log housekeeping gene expression.
+}
+\examples{
+library(NanoStringNorm)
+data(NanoString)
+NanoString.mRNA[NanoString.mRNA$Name \%in\%
+c('Eef1a1','Gapdh','Hprt1','Ppia','Sdha'), 'Code.Class'] <- 'Housekeeping'
+
+HKnorm(NanoString.mRNA)
+}
+\author{
+Aline Talhouk
 }
 

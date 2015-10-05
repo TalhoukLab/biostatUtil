@@ -1,9 +1,13 @@
 Package: batchAdj
 Title: Batch Adjustment
-Version: 0.0.0.9001
-Authors@R: person("Aline", "Talhouk", email = "atalhouk@bccrc.ca", role = c("aut", "cre"))
+Version: 0.0.0.9002
+Date: 2015-10-05
+Authors@R: c(
+    person("Aline", "Talhouk", email = "atalhouk@bccrc.ca", role = c("aut", "cre")),
+    person("Derek", "Chiu", email = "dchiu@bccrc.ca", role = "aut"))
 Description: Batch adjustment functions for the NanoString project.
 Depends: R (>= 3.2.0)
-Imports: MASS, ber, epiR
+Imports: MASS, ber, epiR, assertthat
 License: GPL
 LazyData: true
+Suggests: NanoStringNorm

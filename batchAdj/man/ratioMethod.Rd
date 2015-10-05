@@ -2,22 +2,29 @@
 % Please edit documentation in R/ratioMethod.R
 \name{ratioMethod}
 \alias{ratioMethod}
-\title{Batch adjustment by taking the ratio of a reference sample}
+\title{Ratio method for batch adjustment}
 \usage{
 ratioMethod(Y2, R1, R2)
 }
 \arguments{
-\item{Y2}{is the data run in the second batch, samples are rows and genes are columns}
+\item{Y2}{data run in the second batch, samples are rows and genes are columns}
 
-\item{R1}{is the reference data run in the first batch}
+\item{R1}{reference data run in the first batch}
 
-\item{R2}{is the reference data run in the second batch}
+\item{R2}{reference data run in the second batch}
 }
 \value{
-Y2new is the Y2 data adjusted to batch 1
+The Y2 data adjusted to batch 1
 }
 \description{
 Batch adjustment by taking the ratio of a reference sample
+}
+\examples{
+set.seed(12)
+A <- matrix(rnorm(120), ncol = 10)
+B <- matrix(rnorm(80), ncol = 10)
+C <- matrix(rnorm(50), ncol = 10)
+ratioMethod(A, B, C)
 }
 \author{
 Aline Talhouk
