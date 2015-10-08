@@ -7,17 +7,29 @@
 BMC(X1, X2)
 }
 \arguments{
-\item{X1}{matrix of gene expression from batch 1 (excluding References). Rows are samples cols are genes.}
+\item{X1}{matrix of gene expression from batch 1 (excluding References). Rows are samples, columns are genes.}
 
-\item{X2}{matrix of gene expression from batch 2 (excluding References). Rows are samples cols are genes.}
+\item{X2}{matrix of gene expression from batch 2 (excluding References). Rows are samples, columns are genes.}
 }
 \value{
 a combined matrix of log normalized data in the same format but without reference genes.
 }
 \description{
-This functions adjust the gene expression level between to batches by removing the average expression of each gene across cases in each batch, and adding back the average log expression from batch 1
+This function adjusts the gene expression level between two batches by removing the average expression of
+each gene across cases in each batch, and adding back the average log expression from batch 1.
 }
 \note{
-the column names of X1 and X2 have to match.
+The column names of X1 and X2 have to match.
+}
+\examples{
+set.seed(12)
+nc <- 10
+A <- matrix(rnorm(120), ncol = nc)
+B <- matrix(rnorm(80), ncol = nc)
+colnames(A) <- colnames(B) <- letters[1:nc]
+BMC(A, B)
+}
+\author{
+Aline Talhouk
 }
 
