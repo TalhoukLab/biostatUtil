@@ -58,7 +58,7 @@ CCplot <- function(method1, method2, Ptype = NULL, metrics = FALSE,
     text(0.5, 0.81, cclab, adj = 0)
     par(usr = usr)	# restore original user coordinates
   }
-  if (metrics) {
+  if (metrics == TRUE) {
     return(c(Rc = round(tmp.ccc$rho.c[, 1], digits = 2),
              Ca = round(tmp.ccc$C.b, 2),
              R2 = round(cor(method1, method2), 2)))
