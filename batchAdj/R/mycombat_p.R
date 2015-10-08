@@ -1,11 +1,13 @@
 #' Custom combat_p
 #'
 #' Based on combat_p function from package \code{ber}
-#' @param Y To be filled.
-#' @param b To be filled.
-#' @param prior.plots To be filled.
+#' @param Y A data matrix
+#' @param b Vector indicating batches
+#' @param prior.plots If \code{TRUE}, prior plots to compare kernel density estimate and
+#' parametric estimate are produced.
+#' @author Marco Giordan, Aline Talhouk
 #' @export
-mycombat_p <- function (Y, b, prior.plots = F) {
+mycombat_p <- function(Y, b, prior.plots = F) {
   if (missing(Y)) {
     stop("Argument 'Y' missing, with no default\n")
   }

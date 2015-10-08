@@ -2,19 +2,43 @@
 % Please edit documentation in R/DSC.R
 \name{DSC}
 \alias{DSC}
-\title{Compute the Dispersion Separability Criterion (DSC) which indicates how similar two data sets are by considering the between data scatter matrix and the withing data scatter matrix}
+\title{Dispersion Separability Criterion (DSC)}
 \usage{
-DSC(data, Y, permut = 10)
+DSC(data, Y, permut = 10, digits.d = 3, digits.p = floor(log10(permut)) +
+  1)
 }
 \arguments{
-\item{data}{is a combined data set}
+\item{data}{a combined data set}
 
-\item{Y}{a vector indicating the different batches}
+\item{Y}{vector indicating the two different batches}
 
-\item{permut,}{the number of permutations to compute a pvalue for DSC using a permutation test.}
+\item{permut}{number of permutations to compute a pvalue for DSC using a permutation test.}
+
+\item{digits.d}{number of decimal places for DSC}
+
+\item{digits.p}{number of decimal places for p-value}
+}
+\value{
+A list with elements
+\item{DSC}{Dispersion Separability Criterion}
+\item{pval}{Permutation test p-value}
 }
 \description{
-Compute the Dispersion Separability Criterion (DSC) which indicates how similar two data sets are by considering the between data scatter matrix and the withing data scatter matrix
+Compute the DSC which indicates how similar two data sets are by considering
+the between data scatter matrix and the withing data scatter matrix.
+}
+\details{
+First, the different batches in \code{data} are combined into a single dataset. Under
+the null hypothesis, there is no difference between the two groups. We sample from the
+combined dataset, then compute the null (permuted) difference.
+The p-value in the permutation test is the fraction of how times the permuted
+difference is equal to or more extreme than the observed difference.
+}
+\examples{
+set.seed(4)
+dat <- matrix(rnorm(100), ncol = 10)
+batches <- sample(1:2, 10, replace = TRUE)
+DSC(dat, batches, permut = 1000)
 }
 \author{
 Aline Talhouk

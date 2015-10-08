@@ -2,14 +2,14 @@
 % Please edit documentation in R/scattermat.R
 \name{scattermat}
 \alias{scattermat}
-\title{Function that computes the scatter matrix}
+\title{Computes the between and within class scatter matrices}
 \usage{
 scattermat(data, Y)
 }
 \arguments{
 \item{data}{data matrix}
 
-\item{Y}{is a vector of classes}
+\item{Y}{vector of classes}
 }
 \value{
 A list with the following elements
@@ -17,7 +17,13 @@ A list with the following elements
 \item{W}{within class scatter matrix}
 }
 \description{
-Function that computes the scatter matrix
+Computes the between and within class scatter matrices
+}
+\examples{
+set.seed(4)
+dat <- matrix(rnorm(100), ncol = 10)
+batches <- sample(1:2, 10, replace = TRUE)
+scattermat(dat, batches)
 }
 \author{
 Aline Talhouk

@@ -4,20 +4,36 @@
 \alias{BER}
 \title{Batch Effect Removal}
 \usage{
-BER(X1, X2)
+BER(X1, X2, nSim = 1000)
 }
 \arguments{
-\item{X1}{matrix of gene expression from batch 1 (excluding References). Rows are samples cols are genes.}
+\item{X1}{matrix of gene expression from batch 1 (excluding References). Rows are samples, columns are genes.}
 
-\item{X2}{matrix of gene expression from batch 2 (excluding References). Rows are samples cols are genes.}
+\item{X2}{matrix of gene expression from batch 2 (excluding References). Rows are samples, columns are genes.}
+
+\item{nSim}{number of bootstrap samples (defaults to 1000).}
 }
 \value{
 matrix of log normalized data in the same format but without reference genes.
 }
 \description{
-This function adjusts the gene expression level between to batches using ber with bagging (1000 sims).
+This function adjusts the gene expression level between two batches using BER with bagging.
 }
 \note{
-the column names of X1 and X2 have to match.
+The column names of X1 and X2 have to match.
+}
+\examples{
+set.seed(12)
+nc <- 10
+A <- matrix(rnorm(120), ncol = nc)
+B <- matrix(rnorm(80), ncol = nc)
+colnames(A) <- colnames(B) <- letters[1:nc]
+BER(A, B)
+}
+\author{
+Aline Talhouk
+}
+\seealso{
+\code{\link{BMC}}, \code{\link{COMBAT}}, \code{\link{STD}}
 }
 

@@ -32,4 +32,7 @@ BMC(A, B)
 \author{
 Aline Talhouk
 }
+\seealso{
+\code{\link{BER}}, \code{\link{COMBAT}}, \code{\link{STD}}
+}
 

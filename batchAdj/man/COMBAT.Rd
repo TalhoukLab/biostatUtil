@@ -2,14 +2,14 @@
 % Please edit documentation in R/COMBAT.R
 \name{COMBAT}
 \alias{COMBAT}
-\title{Batch Effect Removal}
+\title{Batch Effect Removal using parametric COMBAT}
 \usage{
 COMBAT(X1, X2)
 }
 \arguments{
-\item{X1}{matrix of gene expression from batch 1 (excluding References). Rows are samples cols are genes.}
+\item{X1}{matrix of gene expression from batch 1 (excluding References). Rows are samples, columns are genes.}
 
-\item{X2}{matrix of gene expression from batch 2 (excluding References). Rows are samples cols are genes.}
+\item{X2}{matrix of gene expression from batch 2 (excluding References). Rows are samples, columns are genes.}
 }
 \value{
 matrix of log normalized data in the same format but without reference genes.
@@ -18,6 +18,20 @@ matrix of log normalized data in the same format but without reference genes.
 This function adjusts the gene expression level between to batches using a parametric COMBAT.
 }
 \note{
-the column names of X1 and X2 have to match.
+The column names of X1 and X2 have to match.
+}
+\examples{
+set.seed(12)
+nc <- 10
+A <- matrix(rnorm(120), ncol = nc)
+B <- matrix(rnorm(80), ncol = nc)
+colnames(A) <- colnames(B) <- letters[1:nc]
+COMBAT(A, B)
+}
+\author{
+Aline Talhouk
+}
+\seealso{
+\code{\link{BER}}, \code{\link{BMC}}, \code{\link{STD}}
 }
 

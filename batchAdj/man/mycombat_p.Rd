@@ -7,13 +7,17 @@
 mycombat_p(Y, b, prior.plots = F)
 }
 \arguments{
-\item{Y}{To be filled.}
+\item{Y}{A data matrix}
 
-\item{b}{To be filled.}
+\item{b}{Vector indicating batches}
 
-\item{prior.plots}{To be filled.}
+\item{prior.plots}{If \code{TRUE}, prior plots to compare kernel density estimate and
+parametric estimate are produced.}
 }
 \description{
 Based on combat_p function from package \code{ber}
+}
+\author{
+Marco Giordan, Aline Talhouk
 }
 

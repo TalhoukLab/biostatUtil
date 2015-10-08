@@ -2,28 +2,28 @@
 % Please edit documentation in R/CCplot.R
 \name{CCplot}
 \alias{CCplot}
-\title{Plotting function for Reliability}
+\title{Concordance Correlation Plot}
 \usage{
-CCplot(method1, method2, Ptype = "none", metrics = FALSE, xlabel = "",
+CCplot(method1, method2, Ptype = NULL, metrics = FALSE, xlabel = "",
   ylabel = "", title = "", subtitle = "", xrange = NULL,
   yrange = NULL, MArange = c(-3.5, 5.5))
 }
 \arguments{
-\item{method1}{is the measurements obtained in batch 1 or using method 1}
+\item{method1}{measurements obtained in batch 1 or using method 1}
 
-\item{method2}{is the measurements obtained in batch 2 or using method 2}
+\item{method2}{measurements obtained in batch 2 or using method 2}
 
-\item{Ptype}{is the type of plot to be outputted c("scatter","MAplot")}
+\item{Ptype}{type of plot to be outputted c("scatter", "MAplot")}
 
-\item{metrics}{if return metrics is set to true(default is FALSE) returns Rc, Ca and R2}
+\item{metrics}{if return metrics is set to \code{TRUE} (default is \code{FALSE}), returns Rc, Ca and R2}
 
-\item{xlabel}{is the label to be used for x axis}
+\item{xlabel}{label to be used for x axis}
 
-\item{ylabel}{is the label to be used for y axis}
+\item{ylabel}{label to be used for y axis}
 
-\item{title}{the title for the main plot}
+\item{title}{title for the main plot}
 
-\item{subtitle}{is the subtitle if requested}
+\item{subtitle}{subtitle if requested}
 
 \item{xrange}{range of x axis}
 
@@ -33,5 +33,8 @@ CCplot(method1, method2, Ptype = "none", metrics = FALSE, xlabel = "",
 }
 \description{
 Plotting function for Reliability
+}
+\author{
+Aline Talhouk
 }
 
