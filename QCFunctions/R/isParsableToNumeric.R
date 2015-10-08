@@ -7,10 +7,14 @@
 #' it is either already in numeric format or the string values represent numbers)
 #' @author Samuel Leung
 #' @export
+#' @examples
+#' isParsableToNumeric("example")
+#' isParsableToNumeric("123")
+#' isParsableToNumeric(123)
+#' isParsableToNumeric(NA)
 isParsableToNumeric <- function(x) {
-  if (is.numeric(x)) {
+  if (is.numeric(x))
     return(TRUE)
-  }
   x <- sapply(x, stringr::str_trim)
   x <- x[(!is.na(x)) & (x != "")]
   return(sum(suppressWarnings(!is.na(as.numeric(x)))) == length(x))

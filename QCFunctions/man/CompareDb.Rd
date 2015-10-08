@@ -8,41 +8,45 @@ CompareDb(db.old, db.new, id.var, possible.na.strings = c("NA", "na", "N/A",
   NA))
 }
 \arguments{
-\item{db.old}{A data frame.}
+\item{db.old}{Original data frame.}
 
-\item{db.new}{A data frame.}
+\item{db.new}{New data frame.}
 
 \item{id.var}{ID variable}
 
 \item{possible.na.strings}{A list of possible strings that may represent
-missing value.  If specified here, CompareDb will consider no change if for
-example value change from NA to "N/A"}
+missing values. If specified here, \code{CompareDb} will consider no change if, for
+example, a value changes from NA to "N/A"}
 }
 \value{
-Prints out a report on the difference between the db's to the console
+Prints out a report on the difference between \code{db.old} and \code{db.new}
+to the console
 }
 \description{
 Compare two data frames. If input is matrix, will try to convert matrix
 into data fram (via as.data.frame) to compare.
 }
 \examples{
-a <- cbind("id"=c(1:5),"age"=c(50,60,20,87,41),"grade"=c(1,2,3,1,2))
-b <- cbind("id"=c(1:5),"age"=c(50,60,20,87,41),"grade"=c("1","2","3","1","2"))
-c <- cbind("id"=c(1:5),"age"=c(50,60,20,87,40),"grade"=c(1,2,3,2,2))
-d <- as.data.frame(cbind(c,"nodestat"=c(0,1,1,0,0)))
-e <- as.data.frame(cbind(a,"LVI"=c(TRUE,FALSE,TRUE,TRUE,FALSE)))
-f <- a; f[2,"age"] <- NA
-g <- a; g[2,"age"] <- "N/A"
-h <- a; h[2,"age"] <- "NA"
+a <- cbind("id" = c(1:5), "age" = c(50, 60, 20, 87, 41), "grade" = c(1, 2, 3, 1, 2))
+b <- cbind("id" = c(1:5), "age" = c(50, 60, 20, 87, 41), "grade" = c("1", "2", "3", "1", "2"))
+c <- cbind("id" = c(1:5), "age" = c(50, 60, 20, 87, 40), "grade" = c(1 ,2, 3, 2, 2))
+d <- as.data.frame(cbind(c, "nodestat" = c(0, 1, 1, 0, 0)))
+e <- as.data.frame(cbind(a, "LVI" = c(TRUE, FALSE, TRUE, TRUE, FALSE)))
+f <- a; f[2, "age"] <- NA
+g <- a; g[2, "age"] <- "N/A"
+h <- a; h[2, "age"] <- "NA"
 
-CompareDb(a,b,"id")
-CompareDb(a,c,"id")
-CompareDb(a,d,"id")
-CompareDb(d,e,"id")
-CompareDb(a,f,"id")
-CompareDb(a,g,"id")
-CompareDb(f,g,"id")
-CompareDb(f,g,"id",possible.na.strings=c())
-CompareDb(g,h,"id",possible.na.strings=c())
+CompareDb(a, b, "id")
+CompareDb(a, c, "id")
+CompareDb(a, d, "id")
+CompareDb(d, e, "id")
+CompareDb(a, f, "id")
+CompareDb(a, g, "id")
+CompareDb(f, g, "id")
+CompareDb(f, g, "id", possible.na.strings = c())
+CompareDb(g, h, "id", possible.na.strings = c())
+}
+\author{
+Samuel Leung
 }
 

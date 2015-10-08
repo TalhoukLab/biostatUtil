@@ -7,16 +7,26 @@
 CombineHLCS(CS1, CS2, CS3 = NULL)
 }
 \arguments{
-\item{CS1}{matrix of raw counts obtained from nCounter (rows are genes) with codeset 1. The first three columns must be labeled: c("Code.Class","Name","Accession") and contain that information.}
+\item{CS1}{matrix of raw counts obtained from nCounter (rows are genes) with codeset 1. The first three columns must be labeled: c("Code.Class", "Name", "Accession") and contain that information.}
 
-\item{CS2}{matrix of raw counts obtained from nCounter (rows are genes) with codeset 2. The first three columns must be labeled: c("Code.Class","Name","Accession") and contain that information.}
+\item{CS2}{matrix of raw counts obtained from nCounter (rows are genes) with codeset 2. The first three columns must be labeled: c("Code.Class", "Name", "Accession") and contain that information.}
 
-\item{CS3}{matrix of raw counts obtained from nCounter (rows are genes) with codeset 3. The first three columns must be labeled: c("Code.Class","Name","Accession") and contain that information. Defaults to Null for analysis of two codesets.}
+\item{CS3}{matrix of raw counts obtained from nCounter (rows are genes) with codeset 3. The first three columns must be labeled: c("Code.Class", "Name", "Accession") and contain that information. Defaults to \code{NULL} for analysis of two codesets.}
 }
 \value{
-matrix of combined data with the first three columns labeled as c("Code.Class","Name","Accession")
+A matrix of combined data with the first three columns labeled as c("Code.Class", "Name", "Accession")
 }
 \description{
-This function matches the genes that are common to codeset 1 and codeset 2 (same accession number) and combines them after fixing nomenclature.
+Matches genes that are common to Codeset 1 and Codeset 2 (same accession number) and combines them after fixing nomenclature.
+Supports functionality for combining a third codeset.
+}
+\examples{
+library(otta)
+data(rawDUP3, rawDUP4, rawDUP5)
+ds1 <- rawDUP3; ds2 <- rawDUP4; ds3 <- rawDUP5
+CombineHLCS(ds1[, 1:3], ds2[, 1:3], ds3[, 1:3])
+}
+\author{
+Aline Talhouk
 }
 

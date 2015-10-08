@@ -7,14 +7,23 @@
 CombineOVCS(CS1, CS2)
 }
 \arguments{
-\item{CS1}{matrix of raw counts obtained from nCounter (rows are genes) with codeset 1. The first three columns must be labeled: c("Code.Class","Name","Accession") and contain that information.}
+\item{CS1}{matrix of raw counts obtained from nCounter (rows are genes) with codeset 1. The first three columns must be labeled: c("Code.Class", "Name", "Accession") and contain that information.}
 
-\item{CS2}{matrix of raw counts obtained from nCounter (rows are genes) with codeset 2. The first three columns must be labeled: c("Code.Class","Name","Accession") and contain that information.}
+\item{CS2}{matrix of raw counts obtained from nCounter (rows are genes) with codeset 2. The first three columns must be labeled: c("Code.Class", "Name", "Accession") and contain that information.}
 }
 \value{
-matrix of combined data with the first three columns labeled as c("Code.Class","Name","Accession")
+A matrix of combined data with the first three columns labeled as c("Code.Class", "Name", "Accession")
 }
 \description{
-This function matches the genes that are common to codeset 1 and codeset 2 (same accession number) and combines them after fixing nomenclature.
+This function matches the genes that are common to Codeset 1 and Codeset 2 (same accession number) and combines them after fixing nomenclature.
+}
+\examples{
+library(otta)
+data(rawOVCA2, rawPROT)
+cs1 <- rawOVCA2; cs2 <- rawPROT
+CombineOVCS(cs1[, 1:3], cs2[, 1:3])
+}
+\author{
+Aline Talhouk
 }
 

@@ -16,6 +16,12 @@ it is either already in numeric format or the string values represent numbers)
 \description{
 Checks whether a string can be parsed into a number. Blanks are ignored.
 }
+\examples{
+isParsableToNumeric("example")
+isParsableToNumeric("123")
+isParsableToNumeric(123)
+isParsableToNumeric(NA)
+}
 \author{
 Samuel Leung
 }
