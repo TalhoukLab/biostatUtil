@@ -4,7 +4,7 @@
 \alias{CCplot}
 \title{Concordance Correlation Plot}
 \usage{
-CCplot(method1, method2, Ptype = NULL, metrics = FALSE, xlabel = "",
+CCplot(method1, method2, Ptype = "None", metrics = FALSE, xlabel = "",
   ylabel = "", title = "", subtitle = "", xrange = NULL,
   yrange = NULL, MArange = c(-3.5, 5.5))
 }
