@@ -14,7 +14,7 @@
 #' @param MArange MA range
 #' @author Aline Talhouk
 #' @export
-CCplot <- function(method1, method2, Ptype = NULL, metrics = FALSE,
+CCplot <- function(method1, method2, Ptype = "None", metrics = FALSE,
                    xlabel = "", ylabel = "", title = "", subtitle = "",
                    xrange = NULL, yrange = NULL, MArange = c(-3.5, 5.5)) {
   tmp.ccc <- epiR::epi.ccc(method1, method2, ci = "z-transform",
