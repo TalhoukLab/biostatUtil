@@ -15,7 +15,7 @@
 #' ratioMethod(A, B, C)
 ratioMethod <- function(Y2, R1, R2) {
   assertthat::assert_that(check_data(Y2, R1, R2))
-  assertthat::assert_that(check_ncol(Y2, R1, R2))
+  assertthat::assert_that(check_ncol(R1, R2))
   m <- apply(R1, 2, mean) - apply(R2, 2, mean)
   Y2new <- t(apply(Y2, 1, function(x) x + m))
   return(Y2new)
