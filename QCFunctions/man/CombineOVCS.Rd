@@ -15,7 +15,7 @@ CombineOVCS(CS1, CS2)
 A matrix of combined data with the first three columns labeled as c("Code.Class", "Name", "Accession")
 }
 \description{
-This function matches the genes that are common to Codeset 1 and Codeset 2 (same accession number) and combines them after fixing nomenclature.
+Matches genes that are common to Codeset 1 and Codeset 2 (same accession number) and combines them after fixing nomenclature.
 }
 \examples{
 library(otta)

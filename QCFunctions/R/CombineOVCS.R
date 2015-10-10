@@ -1,6 +1,6 @@
 #' Combines Ovarian Codeset 1 and Codeset 2 Nanostring Data
 #'
-#' This function matches the genes that are common to Codeset 1 and Codeset 2 (same accession number) and combines them after fixing nomenclature.
+#' Matches genes that are common to Codeset 1 and Codeset 2 (same accession number) and combines them after fixing nomenclature.
 #' @param CS1 matrix of raw counts obtained from nCounter (rows are genes) with codeset 1. The first three columns must be labeled: c("Code.Class", "Name", "Accession") and contain that information.
 #' @param CS2 matrix of raw counts obtained from nCounter (rows are genes) with codeset 2. The first three columns must be labeled: c("Code.Class", "Name", "Accession") and contain that information.
 #' @return A matrix of combined data with the first three columns labeled as c("Code.Class", "Name", "Accession")
