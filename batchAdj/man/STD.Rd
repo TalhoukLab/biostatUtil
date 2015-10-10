@@ -33,6 +33,7 @@ STD(A, B)
 Aline Talhouk
 }
 \seealso{
-\code{\link{BER}}, \code{\link{BMC}}, \code{\link{COMBAT}}
+See \code{\link{BER}}, \code{\link{BMC}}, and \code{\link{COMBAT}} for
+other methods of batch effect removal.
 }
 

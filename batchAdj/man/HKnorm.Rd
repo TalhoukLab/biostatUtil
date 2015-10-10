@@ -17,7 +17,7 @@ and contain that information.}
 matrix of log normalized data in the same format but without reference genes.
 }
 \description{
-This functions normalizes the gene expression of NanoString nCounter data to housekeeping genes.
+Normalizes the gene expression of NanoString nCounter data to housekeeping genes.
 This is done by subtracting the average log housekeeping gene expression.
 }
 \examples{

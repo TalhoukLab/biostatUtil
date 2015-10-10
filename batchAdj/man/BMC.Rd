@@ -33,6 +33,7 @@ BMC(A, B)
 Aline Talhouk
 }
 \seealso{
-\code{\link{BER}}, \code{\link{COMBAT}}, \code{\link{STD}}
+See \code{\link{BER}}, \code{\link{COMBAT}}, and \code{\link{STD}} for
+other methods of batch effect removal.
 }
 

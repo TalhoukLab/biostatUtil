@@ -1,4 +1,4 @@
-#' Batch Effect Removal
+#' Batch Effect Removal with Bagging
 #'
 #' This function adjusts the gene expression level between two batches using BER with bagging.
 #' @param X1 matrix of gene expression from batch 1 (excluding References). Rows are samples, columns are genes.
@@ -7,7 +7,8 @@
 #' @return matrix of log normalized data in the same format but without reference genes.
 #' @note The column names of X1 and X2 have to match.
 #' @author Aline Talhouk
-#' @seealso \code{\link{BMC}}, \code{\link{COMBAT}}, \code{\link{STD}}
+#' @seealso See \code{\link{BMC}}, \code{\link{COMBAT}}, and \code{\link{STD}} for
+#' other methods of batch effect removal.
 #' @export
 #' @examples
 #' set.seed(12)

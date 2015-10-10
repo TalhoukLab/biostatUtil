@@ -1,6 +1,6 @@
 #' Concordance Correlation Plot
 #'
-#' Plotting function for Reliability
+#' Plotting function for reliability measure.
 #' @param method1 measurements obtained in batch 1 or using method 1
 #' @param method2 measurements obtained in batch 2 or using method 2
 #' @param Ptype type of plot to be outputted c("scatter", "MAplot")
@@ -14,9 +14,36 @@
 #' @param MArange MA range
 #' @author Aline Talhouk
 #' @export
+#' @examples
+#' # Simulate normally distributed data
+#' set.seed(12)
+#' a1 <- rnorm(20) + 2
+#' a2 <- a1 + rnorm(20, 0, 0.15)
+#' a3 <- a1 + rnorm(20, 0, 0.15) + 1.4
+#' a4 <- 1.5 * a1 + rnorm(20, 0, 0.15)
+#' a5 <- 1.3 * a1 + rnorm(20, 0, 0.15) + 1
+#' a6 <- a1 + rnorm(20, 0, 0.8)
+#' par(mfrow = c(3, 2), mar = c(5.1, 4.1, 1.5, 1.5))
+#'
+#' # Scatterplots
+#' CCplot(a1, a1, Ptype = "scatter", "X", "Y", "Perfect Agreement", subtitle = letters[1])
+#' CCplot(a1, a2, Ptype = "scatter", "X", "Y", "Very Good Agreement", subtitle = letters[2])
+#' CCplot(a1, a3, Ptype = "scatter", "X", "Y", "Location Shift", subtitle = letters[3])
+#' CCplot(a1, a4, Ptype = "scatter", "X", "Y", "Scale Shift", subtitle = letters[4])
+#' CCplot(a1, a5, Ptype = "scatter", "X", "Y", "Location and Scale Shift", subtitle = letters[5])
+#' CCplot(a1, a6, Ptype = "scatter", "X", "Y", "Measurement Error", subtitle = letters[6])
+#'
+#' # MAplots
+#' CCplot(a1, a1, Ptype = "MAplot", "X", "Y", "Perfect Agreement", subtitle = letters[1])
+#' CCplot(a1, a2, Ptype = "MAplot", "X", "Y", "Very Good Agreement", subtitle = letters[2])
+#' CCplot(a1, a3, Ptype = "MAplot", "X", "Y", "Location Shift", subtitle = letters[3])
+#' CCplot(a1, a4, Ptype = "MAplot", "X", "Y", "Scale Shift", subtitle = letters[4])
+#' CCplot(a1, a5, Ptype = "MAplot", "X", "Y", "Location and Scale Shift", subtitle = letters[5])
+#' CCplot(a1, a6, Ptype = "MAplot", "X", "Y", "Measurement Error", subtitle = letters[6])
 CCplot <- function(method1, method2, Ptype = "None", metrics = FALSE,
                    xlabel = "", ylabel = "", title = "", subtitle = "",
                    xrange = NULL, yrange = NULL, MArange = c(-3.5, 5.5)) {
+  assertthat::assert_that(length(method1) == length(method2))
   tmp.ccc <- epiR::epi.ccc(method1, method2, ci = "z-transform",
                            conf.level = 0.95)
   cclab <- paste0("Rc: ", round(tmp.ccc$rho.c[,1], digits = 2), " (",

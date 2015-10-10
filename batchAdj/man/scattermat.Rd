@@ -2,7 +2,7 @@
 % Please edit documentation in R/scattermat.R
 \name{scattermat}
 \alias{scattermat}
-\title{Computes the between and within class scatter matrices}
+\title{Scatter Matrices}
 \usage{
 scattermat(data, Y)
 }
@@ -17,7 +17,11 @@ A list with the following elements
 \item{W}{within class scatter matrix}
 }
 \description{
-Computes the between and within class scatter matrices
+Computes the Between and Within class scatter matrices.
+}
+\details{
+The vector \code{Y} can indicate distinct classes, groups, batches, etc. Between and
+within class scatter matrices are computed based on the indices of \code{Y}.
 }
 \examples{
 set.seed(4)

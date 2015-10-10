@@ -1,4 +1,4 @@
-#' Batch Effect Removal using parametric COMBAT
+#' Batch Effect Removal with parametric COMBAT
 #'
 #' This function adjusts the gene expression level between to batches using a parametric COMBAT.
 #' @param X1 matrix of gene expression from batch 1 (excluding References). Rows are samples, columns are genes.
@@ -6,7 +6,8 @@
 #' @return matrix of log normalized data in the same format but without reference genes.
 #' @note The column names of X1 and X2 have to match.
 #' @author Aline Talhouk
-#' @seealso \code{\link{BER}}, \code{\link{BMC}}, \code{\link{STD}}
+#' @seealso See \code{\link{BER}}, \code{\link{BMC}}, and \code{\link{STD}} for
+#' other methods of batch effect removal.
 #' @export
 #' @examples
 #' set.seed(12)

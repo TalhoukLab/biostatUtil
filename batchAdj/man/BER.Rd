@@ -2,7 +2,7 @@
 % Please edit documentation in R/BER.R
 \name{BER}
 \alias{BER}
-\title{Batch Effect Removal}
+\title{Batch Effect Removal with Bagging}
 \usage{
 BER(X1, X2, nSim = 1000)
 }
@@ -34,6 +34,7 @@ BER(A, B)
 Aline Talhouk
 }
 \seealso{
-\code{\link{BMC}}, \code{\link{COMBAT}}, \code{\link{STD}}
+See \code{\link{BMC}}, \code{\link{COMBAT}}, and \code{\link{STD}} for
+other methods of batch effect removal.
 }
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/COMBAT.R
 \name{COMBAT}
 \alias{COMBAT}
-\title{Batch Effect Removal using parametric COMBAT}
+\title{Batch Effect Removal with parametric COMBAT}
 \usage{
 COMBAT(X1, X2)
 }
@@ -32,6 +32,7 @@ COMBAT(A, B)
 Aline Talhouk
 }
 \seealso{
-\code{\link{BER}}, \code{\link{BMC}}, \code{\link{STD}}
+See \code{\link{BER}}, \code{\link{BMC}}, and \code{\link{STD}} for
+other methods of batch effect removal.
 }
 

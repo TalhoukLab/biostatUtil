@@ -1,4 +1,9 @@
-#' Computes the between and within class scatter matrices
+#' Scatter Matrices
+#'
+#' Computes the Between and Within class scatter matrices.
+#'
+#' The vector \code{Y} can indicate distinct classes, groups, batches, etc. Between and
+#' within class scatter matrices are computed based on the indices of \code{Y}.
 #' @param data data matrix
 #' @param Y vector of classes
 #' @return A list with the following elements
@@ -13,13 +18,12 @@
 #' scattermat(dat, batches)
 scattermat <- function(data, Y) {
   l <- ncol(data)
-  clases <- unique(Y)
-  nclass <- length(clases)
-  B <- matrix(0, nrow = l, ncol = l)
-  W <- matrix(0, nrow = l, ncol = l)
+  classes <- unique(Y)
+  nclass <- length(classes)
+  B <- W <- matrix(0, nrow = l, ncol = l)
   overallmean <- apply(data, 2, mean)
   for (i in 1:nclass) {
-    clasei <- which(Y == clases[i])
+    clasei <- which(Y == classes[i])
     xi <- data[clasei, ]
     mci <- apply(xi, 2, mean)  # MEAN PER CLASS
     x2i <- t(apply(xi, 1, function(x) x - mci))  # Xi-MeanXi

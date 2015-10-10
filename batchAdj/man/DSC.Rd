@@ -24,8 +24,8 @@ A list with elements
 \item{pval}{Permutation test p-value}
 }
 \description{
-Compute the DSC which indicates how similar two data sets are by considering
-the between data scatter matrix and the withing data scatter matrix.
+The DSC indicates how similar two data sets are by considering
+the between data scatter matrix and the within data scatter matrix.
 }
 \details{
 First, the different batches in \code{data} are combined into a single dataset. Under

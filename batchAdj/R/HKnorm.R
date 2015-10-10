@@ -1,6 +1,6 @@
 #' Normalization to Housekeeping Genes (Single-Patient sample)
 #'
-#' This functions normalizes the gene expression of NanoString nCounter data to housekeeping genes.
+#' Normalizes the gene expression of NanoString nCounter data to housekeeping genes.
 #' This is done by subtracting the average log housekeeping gene expression.
 #'
 #' @param raw.data matrix of raw counts obtained from nCounter (rows are genes).

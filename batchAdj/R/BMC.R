@@ -7,7 +7,8 @@
 #' @return a combined matrix of log normalized data in the same format but without reference genes.
 #' @note The column names of X1 and X2 have to match.
 #' @author Aline Talhouk
-#' @seealso \code{\link{BER}}, \code{\link{COMBAT}}, \code{\link{STD}}
+#' @seealso See \code{\link{BER}}, \code{\link{COMBAT}}, and \code{\link{STD}} for
+#' other methods of batch effect removal.
 #' @export
 #' @examples
 #' set.seed(12)

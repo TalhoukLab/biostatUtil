@@ -1,7 +1,7 @@
 #' Dispersion Separability Criterion (DSC)
 #'
-#' Compute the DSC which indicates how similar two data sets are by considering
-#' the between data scatter matrix and the withing data scatter matrix.
+#' The DSC indicates how similar two data sets are by considering
+#' the between data scatter matrix and the within data scatter matrix.
 #'
 #' First, the different batches in \code{data} are combined into a single dataset. Under
 #' the null hypothesis, there is no difference between the two groups. We sample from the

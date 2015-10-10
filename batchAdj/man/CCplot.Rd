@@ -32,7 +32,34 @@ CCplot(method1, method2, Ptype = "None", metrics = FALSE, xlabel = "",
 \item{MArange}{MA range}
 }
 \description{
-Plotting function for Reliability
+Plotting function for reliability measure.
+}
+\examples{
+# Simulate normally distributed data
+set.seed(12)
+a1 <- rnorm(20) + 2
+a2 <- a1 + rnorm(20, 0, 0.15)
+a3 <- a1 + rnorm(20, 0, 0.15) + 1.4
+a4 <- 1.5 * a1 + rnorm(20, 0, 0.15)
+a5 <- 1.3 * a1 + rnorm(20, 0, 0.15) + 1
+a6 <- a1 + rnorm(20, 0, 0.8)
+par(mfrow = c(3, 2), mar = c(5.1, 4.1, 1.5, 1.5))
+
+# Scatterplots
+CCplot(a1, a1, Ptype = "scatter", "X", "Y", "Perfect Agreement", subtitle = letters[1])
+CCplot(a1, a2, Ptype = "scatter", "X", "Y", "Very Good Agreement", subtitle = letters[2])
+CCplot(a1, a3, Ptype = "scatter", "X", "Y", "Location Shift", subtitle = letters[3])
+CCplot(a1, a4, Ptype = "scatter", "X", "Y", "Scale Shift", subtitle = letters[4])
+CCplot(a1, a5, Ptype = "scatter", "X", "Y", "Location and Scale Shift", subtitle = letters[5])
+CCplot(a1, a6, Ptype = "scatter", "X", "Y", "Measurement Error", subtitle = letters[6])
+
+# MAplots
+CCplot(a1, a1, Ptype = "MAplot", "X", "Y", "Perfect Agreement", subtitle = letters[1])
+CCplot(a1, a2, Ptype = "MAplot", "X", "Y", "Very Good Agreement", subtitle = letters[2])
+CCplot(a1, a3, Ptype = "MAplot", "X", "Y", "Location Shift", subtitle = letters[3])
+CCplot(a1, a4, Ptype = "MAplot", "X", "Y", "Scale Shift", subtitle = letters[4])
+CCplot(a1, a5, Ptype = "MAplot", "X", "Y", "Location and Scale Shift", subtitle = letters[5])
+CCplot(a1, a6, Ptype = "MAplot", "X", "Y", "Measurement Error", subtitle = letters[6])
 }
 \author{
 Aline Talhouk
