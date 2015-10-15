@@ -7,11 +7,12 @@
 CombineHLCS(CS1, CS2, CS3 = NULL)
 }
 \arguments{
-\item{CS1}{matrix of raw counts obtained from nCounter (rows are genes) with codeset 1. The first three columns must be labeled: c("Code.Class", "Name", "Accession") and contain that information.}
+\item{CS1}{matrix of raw counts obtained from nCounter (rows are genes) with codeset 1.}
 
-\item{CS2}{matrix of raw counts obtained from nCounter (rows are genes) with codeset 2. The first three columns must be labeled: c("Code.Class", "Name", "Accession") and contain that information.}
+\item{CS2}{matrix of raw counts obtained from nCounter (rows are genes) with codeset 2.}
 
-\item{CS3}{matrix of raw counts obtained from nCounter (rows are genes) with codeset 3. The first three columns must be labeled: c("Code.Class", "Name", "Accession") and contain that information. Defaults to \code{NULL} for analysis of two codesets.}
+\item{CS3}{matrix of raw counts obtained from nCounter (rows are genes) with codeset 3.
+Defaults to \code{NULL} for analysis of two codesets.}
 }
 \value{
 A matrix of combined data with the first three columns labeled as c("Code.Class", "Name", "Accession")
@@ -19,6 +20,10 @@ A matrix of combined data with the first three columns labeled as c("Code.Class"
 \description{
 Matches genes that are common to Codeset 1 and Codeset 2 (same accession number) and combines them after fixing nomenclature.
 Supports functionality for combining a third codeset.
+}
+\details{
+If \code{CS3} is not {NULL}, then \code{CombineHLCS} combines three codesets, given that the gene names match. The first three columns
+of \code{CS1}, \code{CS2}, and \code{CS3} must be labeled \code{c("Code.Class", "Name", "Accession")} and contain that information.
 }
 \examples{
 library(otta)
