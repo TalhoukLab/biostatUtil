@@ -2,25 +2,42 @@
 % Please edit documentation in R/BER.R
 \name{BER}
 \alias{BER}
-\title{Batch Effect Removal with Bagging}
+\alias{BMC}
+\alias{COMBAT}
+\alias{STD}
+\title{Batch Effect Removal}
 \usage{
 BER(X1, X2, nSim = 1000)
+
+BMC(X1, X2)
+
+COMBAT(X1, X2)
+
+STD(X1, X2)
 }
 \arguments{
 \item{X1}{matrix of gene expression from batch 1 (excluding References). Rows are samples, columns are genes.}
 
 \item{X2}{matrix of gene expression from batch 2 (excluding References). Rows are samples, columns are genes.}
 
-\item{nSim}{number of bootstrap samples (defaults to 1000).}
+\item{nSim}{number of bootstrap samples}
 }
 \value{
-matrix of log normalized data in the same format but without reference genes.
+A matrix of log normalized data in the same format but without reference genes.
 }
 \description{
-This function adjusts the gene expression level between two batches using BER with bagging.
+Adjusts the gene expression level between two batches using batch effect removal.
+}
+\details{
+\code{BER} uses bagging to remove batch effects. The default number of bootstrap samples is 1000. Batch Mean
+Centering is performed using \code{BMC}, which adjusts the gene expression level between two batches by
+removing the average expression of each gene across cases in each batch, and adding back the average log
+expression from batch 1. Parametric \code{COMBAT} is another batch effect removal method. Finally, batch
+standardization using \code{STD} removes the average expression of each gene across cases in each batch,
+and then scales by the standard deviation. The average log expression from batch 1 is added back.
 }
 \note{
-The column names of X1 and X2 have to match.
+The column names of \code{X1} and \code{X2} have to match.
 }
 \examples{
 set.seed(12)
@@ -29,12 +46,11 @@ A <- matrix(rnorm(120), ncol = nc)
 B <- matrix(rnorm(80), ncol = nc)
 colnames(A) <- colnames(B) <- letters[1:nc]
 BER(A, B)
+BMC(A, B)
+COMBAT(A, B)
+STD(A, B)
 }
 \author{
 Aline Talhouk
-}
-\seealso{
-See \code{\link{BMC}}, \code{\link{COMBAT}}, and \code{\link{STD}} for
-other methods of batch effect removal.
 }
 

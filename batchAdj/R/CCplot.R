@@ -4,14 +4,15 @@
 #' @param method1 measurements obtained in batch 1 or using method 1
 #' @param method2 measurements obtained in batch 2 or using method 2
 #' @param Ptype type of plot to be outputted c("scatter", "MAplot")
-#' @param metrics if return metrics is set to \code{TRUE} (default is \code{FALSE}), returns Rc, Ca and R2
-#' @param xlabel label to be used for x axis
-#' @param ylabel label to be used for y axis
+#' @param metrics if return metrics is set to \code{TRUE}, returns Rc, Ca and R2
+#' @param xlabel label for x axis
+#' @param ylabel label for y axis
 #' @param title title for the main plot
-#' @param subtitle subtitle if requested
+#' @param subtitle subtitle of plot
 #' @param xrange range of x axis
 #' @param yrange range of y axis
 #' @param MArange MA range
+#' @return Either a scatterplot or MA plot showing concordance correlation.
 #' @author Aline Talhouk
 #' @export
 #' @examples

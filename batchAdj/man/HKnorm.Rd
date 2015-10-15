@@ -14,7 +14,7 @@ and contain that information.}
 \item{corr}{small correction on normalization}
 }
 \value{
-matrix of log normalized data in the same format but without reference genes.
+A matrix of log normalized data in the same format but without reference genes.
 }
 \description{
 Normalizes the gene expression of NanoString nCounter data to housekeeping genes.

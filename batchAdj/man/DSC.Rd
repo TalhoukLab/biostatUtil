@@ -12,7 +12,7 @@ DSC(data, Y, permut = 10, digits.d = 3, digits.p = floor(log10(permut)) +
 
 \item{Y}{vector indicating the two different batches}
 
-\item{permut}{number of permutations to compute a pvalue for DSC using a permutation test.}
+\item{permut}{number of permutations to compute a pvalue for DSC using a permutation test}
 
 \item{digits.d}{number of decimal places for DSC}
 
@@ -31,7 +31,7 @@ the between data scatter matrix and the within data scatter matrix.
 First, the different batches in \code{data} are combined into a single dataset. Under
 the null hypothesis, there is no difference between the two groups. We sample from the
 combined dataset, then compute the null (permuted) difference.
-The p-value in the permutation test is the fraction of how times the permuted
+The p-value in the permutation test is the fraction of times the permuted
 difference is equal to or more extreme than the observed difference.
 }
 \examples{

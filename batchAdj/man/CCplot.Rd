@@ -15,21 +15,24 @@ CCplot(method1, method2, Ptype = "None", metrics = FALSE, xlabel = "",
 
 \item{Ptype}{type of plot to be outputted c("scatter", "MAplot")}
 
-\item{metrics}{if return metrics is set to \code{TRUE} (default is \code{FALSE}), returns Rc, Ca and R2}
+\item{metrics}{if return metrics is set to \code{TRUE}, returns Rc, Ca and R2}
 
-\item{xlabel}{label to be used for x axis}
+\item{xlabel}{label for x axis}
 
-\item{ylabel}{label to be used for y axis}
+\item{ylabel}{label for y axis}
 
 \item{title}{title for the main plot}
 
-\item{subtitle}{subtitle if requested}
+\item{subtitle}{subtitle of plot}
 
 \item{xrange}{range of x axis}
 
 \item{yrange}{range of y axis}
 
 \item{MArange}{MA range}
+}
+\value{
+Either a scatterplot or MA plot showing concordance correlation.
 }
 \description{
 Plotting function for reliability measure.

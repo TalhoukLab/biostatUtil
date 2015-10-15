@@ -1,7 +1,7 @@
 Package: batchAdj
 Title: Batch Adjustment
-Version: 0.0.0.9003
-Date: 2015-10-08
+Version: 0.0.0.9004
+Date: 2015-10-15
 Authors@R: c(
     person("Aline", "Talhouk", email = "atalhouk@bccrc.ca", role = c("aut", "cre")),
     person("Derek", "Chiu", email = "dchiu@bccrc.ca", role = "aut"))

@@ -7,7 +7,7 @@
 #' The first three columns must be labeled: c("Code.Class", "Name", "Accession")
 #' and contain that information.
 #' @param corr small correction on normalization
-#' @return matrix of log normalized data in the same format but without reference genes.
+#' @return A matrix of log normalized data in the same format but without reference genes.
 #' @author Aline Talhouk
 #' @export
 #' @examples
@@ -18,17 +18,14 @@
 #'
 #' HKnorm(NanoString.mRNA)
 HKnorm <- function(raw.data, corr = 0.0001) {
-  assertthat::assert_that(all(names(raw.data)[1:3] ==
-                                c("Code.Class", "Name", "Accession")))
+  assertthat::assert_that(
+    all(names(raw.data)[1:3] == c("Code.Class", "Name", "Accession")))
   rawdat <- raw.data[, -(1:3)] + corr
   rownames(rawdat) <- raw.data$Name
   hks <- raw.data$Code.Class == "Housekeeping"
   refs <- raw.data$Code.Class != "Endogenous"
-  HG <- rawdat[hks, ]
-  raw <- rawdat[!refs, ]
-
-  logHK <- apply(log2(HG), 2, mean)
-  logXpr <- log2(raw)
+  logHK <- apply(log2(rawdat[hks, ]), 2, mean)
+  logXpr <- log2(rawdat[!refs, ])
   norm <- t(apply(logXpr, 1, function(x) x - logHK))
   normdat <- cbind(raw.data[!refs, 1:3], norm)
   rownames(normdat) <- raw.data$Name[!refs]
