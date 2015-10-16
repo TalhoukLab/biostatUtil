@@ -1,13 +1,13 @@
 Package: QCFunctions
 Title: Quality Control functions
-Version: 0.0.0.9003
-Date: 2015-10-08
+Version: 0.0.0.9004
+Date: 2015-10-15
 Authors@R: c(
     person("Aline", "Talhouk", email = "atalhouk@bccrc.ca", role = c("aut", "cre")),
     person("Derek", "Chiu", email = "dchiu@bccrc.ca", role = "aut"))
 Description: Quality Control functions for NanoString project.
 Depends: R (>= 3.2.0)
-Imports: stringr, assertthat
+Imports: dplyr, magrittr, stringr, assertthat
 License: GPL
 LazyData: true
 Suggests: otta

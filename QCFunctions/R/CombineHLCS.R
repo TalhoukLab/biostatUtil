@@ -11,7 +11,7 @@
 #' @param CS3 matrix of raw counts obtained from nCounter (rows are genes) with codeset 3.
 #' Defaults to \code{NULL} for analysis of two codesets.
 #' @return A matrix of combined data with the first three columns labeled as c("Code.Class", "Name", "Accession")
-#' @author Aline Talhouk
+#' @author Aline Talhouk, Derek Chiu
 #' @import dplyr
 #' @export
 #' @examples

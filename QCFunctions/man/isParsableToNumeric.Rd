@@ -11,7 +11,8 @@ isParsableToNumeric(x)
 }
 \value{
 logical. Returns \code{TRUE} if \code{x} is parsable to a numeric (i.e.
-it is either already in numeric format or the string values represent numbers)
+\code{x} is either already in numeric format or is a number formatted
+as a character)
 }
 \description{
 Checks whether a string can be parsed into a number. Blanks are ignored.
