@@ -32,6 +32,6 @@ ds1 <- rawDUP3; ds2 <- rawDUP4; ds3 <- rawDUP5
 CombineHLCS(ds1[, 1:3], ds2[, 1:3], ds3[, 1:3])
 }
 \author{
-Aline Talhouk
+Aline Talhouk, Derek Chiu
 }
 

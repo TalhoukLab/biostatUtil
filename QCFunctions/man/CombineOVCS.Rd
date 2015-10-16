@@ -28,6 +28,6 @@ cs1 <- rawOVCA2; cs2 <- rawPROT
 CombineOVCS(cs1[, 1:3], cs2[, 1:3])
 }
 \author{
-Aline Talhouk
+Aline Talhouk, Derek Chiu
 }
 

@@ -8,7 +8,8 @@ NanoStringQC(raw, exp, detect = 80, sn = 150, plots = TRUE, ttl = " ",
   explore = TRUE)
 }
 \arguments{
-\item{raw}{matrix of raw counts obtained from nCounter (rows are genes). The first three columns must be labeled: c("Code.Class", "Name", "Accession") and contain that information.}
+\item{raw}{matrix of raw counts obtained from nCounter (rows are genes).
+The first three columns must be labeled: \code{c("Code.Class", "Name", "Accession")} and contain that information.}
 
 \item{exp}{matrix of annotations with rows in the same order as the columns of raw.}
 
@@ -16,7 +17,7 @@ NanoStringQC(raw, exp, detect = 80, sn = 150, plots = TRUE, ttl = " ",
 
 \item{sn}{Signal to noise ratio of the housekeeping genes we are willing to tolerate}
 
-\item{plots}{Binary, indicates whether plots to visualise the results are requested, defaults to \code{TRUE}}
+\item{plots}{logical; indicates whether plots to visualise the results are requested, defaults to \code{TRUE}}
 
 \item{ttl}{a string to show the title on the plots}
 
@@ -26,7 +27,7 @@ NanoStringQC(raw, exp, detect = 80, sn = 150, plots = TRUE, ttl = " ",
 matrix of annotations updated with normalization parameters
 }
 \description{
-This function computes NanoString quality control parameters and flags
+Computes NanoString quality control parameters and flags
 }
 \examples{
 # Load otta package for raw datasets and annotation matrix
