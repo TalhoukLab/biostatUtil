@@ -10,7 +10,7 @@
 #' @param CS2 matrix of raw counts obtained from nCounter (rows are genes) with codeset 2.
 #' @param CS3 matrix of raw counts obtained from nCounter (rows are genes) with codeset 3.
 #' Defaults to \code{NULL} for analysis of two codesets.
-#' @return A matrix of combined data with the first three columns labeled as c("Code.Class", "Name", "Accession")
+#' @return A matrix of combined data with the first three columns labeled as \code{c("Code.Class", "Name", "Accession")}.
 #' @author Aline Talhouk, Derek Chiu
 #' @import dplyr
 #' @export
@@ -19,6 +19,7 @@
 #' data(rawDUP3, rawDUP4, rawDUP5)
 #' ds1 <- rawDUP3; ds2 <- rawDUP4; ds3 <- rawDUP5
 #' CombineHLCS(ds1[, 1:3], ds2[, 1:3], ds3[, 1:3])
+#' CombineHLCS(ds1, ds2, ds3)
 CombineHLCS <- function(CS1, CS2, CS3 = NULL) {
   assertthat::assert_that(check_colnames(CS1, CS2))
   . <- Name <- Accession <- NULL

@@ -26,6 +26,7 @@ library(otta)
 data(rawOVCA2, rawPROT)
 cs1 <- rawOVCA2; cs2 <- rawPROT
 CombineOVCS(cs1[, 1:3], cs2[, 1:3])
+CombineOVCS(cs1, cs2)
 }
 \author{
 Aline Talhouk, Derek Chiu

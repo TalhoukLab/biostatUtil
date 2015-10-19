@@ -30,6 +30,7 @@ library(otta)
 data(rawDUP3, rawDUP4, rawDUP5)
 ds1 <- rawDUP3; ds2 <- rawDUP4; ds3 <- rawDUP5
 CombineHLCS(ds1[, 1:3], ds2[, 1:3], ds3[, 1:3])
+CombineHLCS(ds1, ds2, ds3)
 }
 \author{
 Aline Talhouk, Derek Chiu

@@ -7,7 +7,7 @@
 #'
 #' @param CS1 matrix of raw counts obtained from nCounter (rows are genes) with codeset 1.
 #' @param CS2 matrix of raw counts obtained from nCounter (rows are genes) with codeset 2.
-#' @return A matrix of combined data with the first three columns labeled as c("Code.Class", "Name", "Accession")
+#' @return A matrix of combined data with the first three columns labeled as \code{c("Code.Class", "Name", "Accession")}.
 #' @author Aline Talhouk, Derek Chiu
 #' @import dplyr
 #' @export
@@ -16,6 +16,7 @@
 #' data(rawOVCA2, rawPROT)
 #' cs1 <- rawOVCA2; cs2 <- rawPROT
 #' CombineOVCS(cs1[, 1:3], cs2[, 1:3])
+#' CombineOVCS(cs1, cs2)
 CombineOVCS <- function(CS1, CS2) {
   assertthat::assert_that(check_colnames(CS1, CS2))
   . <- Name <- Accession <- NULL
