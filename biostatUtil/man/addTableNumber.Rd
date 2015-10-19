@@ -2,7 +2,7 @@
 % Please edit documentation in R/addTableNumber.R
 \name{addTableNumber}
 \alias{addTableNumber}
-\title{Add table number to caption}
+\title{Add table number}
 \usage{
 addTableNumber(caption, table.counter.str.default = "Table \%s: ")
 }

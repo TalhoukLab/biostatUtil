@@ -29,7 +29,7 @@
 #' If \code{use.firth = 1} (default), Firth is never used and if \code{use.firth = -1} Firth is
 #' always used.
 #' @param firth.caption subscript in html table output indicating Firth was used
-#' @param stat.test (2015-08-12: only support LRT) TODO: add penalized LRT?
+# @param stat.test (2015-08-12: only support LRT) TODO: add penalized LRT?
 #' @param round.digits.p.value number of digits for p-value
 #' @param caption caption for returned object
 #' @param html.table.border the border type to use for html tables

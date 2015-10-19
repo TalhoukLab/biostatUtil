@@ -28,15 +28,22 @@
 #' \item{used.firth}{logical; if \code{TRUE}, Firth's correction was applied
 #' using \code{coxphf}}
 #' @author Samuel Leung, Derek Chiu
-#' @import survival
 #' @export
+#' @examples 
+#' # Base output
+#' library(survival)
+#' test1 <- list(time=c(4,3,1,1,2,2,3), 
+#' status=c(1,1,1,0,1,1,0), 
+#' x=c(0,2,1,1,1,0,0), 
+#' sex=c(0,0,0,0,1,1,1)) 
+#' coxph(Surv(time, status) ~ x + strata(sex), test1) 
+#' 
+#' # Pretty output
+#' prettyCoxph(Surv(time, status) ~ x + strata(sex), test1) 
 prettyCoxph <- function(input.formula, input.d, use.firth = 1,
                         check.ph = FALSE,
                         ph.test.plot.filename = "no.file", ...) {
-  
-  # set local variable in environment searchable by local function calls
   pos <- 1
-  .my.data <- input.d
   assign(".my.formula", input.formula, envir = as.environment(pos)) 
   assign(".my.data", input.d, envir = as.environment(pos))
   
@@ -47,95 +54,62 @@ prettyCoxph <- function(input.formula, input.d, use.firth = 1,
     for (var.name in all.vars(.my.formula)[-c(1, 2)]) {
       if (is.factor(.my.data[, var.name])) {
         # only need to check if its a factor
-        fit <- survival::survfit(as.formula(paste(deparse(.my.formula[[2]]),
-                                                  "~", var.name)),
+        fit <- survfit(as.formula(paste(deparse(.my.formula[[2]]),
+                                        "~", var.name)),
                                  data = .my.data)
         for (i in 1:nrow(fit)) {
           if((sum(fit[i]$n.censor) / fit[i]$n) > use.firth) {
             ok.to.use.firth <- TRUE
-            break # no need to check further
+            break
           }
         }
-        if (ok.to.use.firth) {
+        if (ok.to.use.firth)
           break
-        } # no need to check further
       }
     }
   } 
   
   if (ok.to.use.firth) {
     vars <- all.vars(.my.formula)
-    .my.data <- .my.data[apply(.my.data[, vars], 1, function(x) !any(is.na(x))), ]
+    .my.data <- .my.data[apply(.my.data[, vars], 1,
+                               function(x) !any(is.na(x))), ]
     fit.firth <- coxphf::coxphf(.my.formula, data = .my.data, ...)	
-    fit.firth$nevent <- sum(fit.firth$y[, "status"]) # coxphf fit object does not have nevent
+    fit.firth$nevent <- sum(fit.firth$y[, "status"])
   } else {
     fit.firth <- NA
   }
-  fit <- survival::coxph(.my.formula, data = .my.data, ...) # fit is coxph ALWAYS!!!
+  fit <- coxph(.my.formula, data = .my.data, ...)
   .my.formula <- fit$formula
   ph.check <- "NOT CALCULATED"
   
   if (check.ph) {
-    
     ph.test <- cox.zph(fit)
-    
-    ph.check <- matrix(ph.test$table[rownames(ph.test$table) != "GLOBAL", 3],
-                       nrow = length(names(fit$coefficients)), 
-                       ncol = 1,
-                       dimnames = c(list(names(fit$coefficients)), list(c('PH test')))
-    )		
-    
+    ph.check <- cbind("PH test" = ph.test$table[rownames(ph.test$table) != "GLOBAL", 3])
     if (!is.na(ph.test.plot.filename)) {
-      if (ph.test.plot.filename != "no.file") {
+      if (ph.test.plot.filename != "no.file")
         pdf(ph.test.plot.filename)
-      }
       plot(ph.test)
-      if (ph.test.plot.filename != "no.file") {
+      if (ph.test.plot.filename != "no.file")
         dev.off()
-      }
     }
   }
   
-  if (ok.to.use.firth) {
-    # coxphf fit object
-    result <- cbind(
-      matrix(cbind(exp(fit.firth$coefficients), fit.firth$ci.lower,fit.firth$ci.upper), 
-             nrow = length(names(fit.firth$coefficients)), 
-             ncol = 3, 
-             dimnames = c(list(names(fit.firth$coefficients)), list(c('exp(coef)', 'lower .95', 'upper .95')))
-      ),
-      matrix(fit.firth$prob,
-             nrow = length(names(fit.firth$coefficients)), 
-             ncol = 1,
-             dimnames = c(list(names(fit.firth$coefficients)), list(c('Pr(>|z|)')))
-      ),
-      ph.check
-    )	
-  } else {
-    # coxph fit object
-    result <- cbind(
-      matrix(summary(fit)$conf.int[, c('exp(coef)', 'lower .95', 'upper .95')],
-             nrow = length(names(fit$coefficients)), 
-             ncol = 3, 
-             dimnames = c(list(names(fit$coefficients)),
-                          list(c('exp(coef)', 'lower .95', 'upper .95')))),
-      matrix(summary(fit)$coefficients[, 'Pr(>|z|)'],
-             nrow = length(names(fit$coefficients)), 
-             ncol = 1,
-             dimnames = c(list(names(fit$coefficients)), list(c('Pr(>|z|)')))),
-      ph.check
-    )
-  }
-  result.colnames <- colnames(result)
-  #result.colnames[c(ncol(result)-1,ncol(result))] <- c('p-value','cox.zph p-value')
-  colnames(result) <- result.colnames
+  if (ok.to.use.firth)
+    result <- cbind(exp(fit.firth$coefficients), fit.firth$ci.lower,
+                    fit.firth$ci.upper, fit.firth$prob, ph.check)
+  else
+    result <- cbind(summary(fit)$conf.int[, c('exp(coef)', 'lower .95',
+                                              'upper .95')],
+                    "Pr(>|z|)" = summary(fit)$coefficients[, 'Pr(>|z|)'],
+                    ph.check)
   
-  if (check.ph) {
-    return.obj        <- list(result,   fit,   fit.firth, fit$n, fit$nevent, ph.test,  ok.to.use.firth)
-    names(return.obj) <- c(   "output", "fit", "fit.firth", "n",   "nevent",   "ph.test", "used.firth")
-  } else {
-    return.obj        <- list(result,   fit,   fit.firth, fit$n, fit$nevent, ok.to.use.firth)
-    names(return.obj) <- c(   "output", "fit", "fit.firth", "n",   "nevent"  ,"used.firth")
-  }
+  if (check.ph)
+    return.obj <- list(output = result, fit = fit, fit.firth = fit.firth,
+                       n = fit$n, nevent = fit$nevent, ph.test = ph.test,
+                       used.firth = ok.to.use.firth)
+  else
+    return.obj <- list(output = result, fit = fit, fit.firth = fit.firth,
+                       n = fit$n, nevent = fit$nevent,
+                       used.firth = ok.to.use.firth)
   return(return.obj)
 }

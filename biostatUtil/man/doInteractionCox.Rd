@@ -65,8 +65,6 @@ always used.}
 the pandoc table output.}
 
 \item{...}{additional arguments to \code{pandoc.table.return}}
-
-\item{stat.test}{(2015-08-12: only support LRT) TODO: add penalized LRT?}
 }
 \value{
 A list with the following elements

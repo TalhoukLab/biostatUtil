@@ -45,6 +45,18 @@ Formats the coxph (or coxphf) model outputs into a prettier display.
 \details{
 The original fit call is returned, along with other useful statistics.
 }
+\examples{
+# Base output
+library(survival)
+test1 <- list(time=c(4,3,1,1,2,2,3),
+status=c(1,1,1,0,1,1,0),
+x=c(0,2,1,1,1,0,0),
+sex=c(0,0,0,0,1,1,1))
+coxph(Surv(time, status) ~ x + strata(sex), test1)
+
+# Pretty output
+prettyCoxph(Surv(time, status) ~ x + strata(sex), test1)
+}
 \author{
 Samuel Leung, Derek Chiu
 }

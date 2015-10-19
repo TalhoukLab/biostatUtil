@@ -40,6 +40,7 @@
 #' @param ... additional arguments to \code{pandoc.table.return}
 #' @return A list with the following elements
 #' @author Samuel Leung, Aline Talhouk, Derek Chiu
+#' @import survival
 #' @export
 doCoxphMultivariable <- function(
   input.d, var.names, var.descriptions, show.var.detail = FALSE,

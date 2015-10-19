@@ -1,4 +1,4 @@
-#' Add table number to caption
+#' Add table number
 #' 
 #' Prepends a table counter label to a table caption.
 #' 
@@ -16,11 +16,10 @@
 addTableNumber <- function(caption, table.counter.str.default = "Table %s: ") {
   if (!is.na(caption)) {
     tc <- getOption("table_counter")
-    if (is.numeric(tc) & length(tc)>0) {
+    if (is.numeric(tc) & length(tc) > 0)
       tc <- tc + 1		
-    } else {
+    else
       tc <- 1
-    }
     options(table_counter = tc)
     caption_template <- getOption("table_counter_str",
                                   table.counter.str.default)
