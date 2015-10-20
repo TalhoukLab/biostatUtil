@@ -1,6 +1,6 @@
 #' Row percentages
 #' 
-#' Calculate row percentages.
+#' Calculate row percentages in a table.
 #' 
 #' Generates a table of row percentages given table \code{t}. Using
 #' \code{pretty.text = TRUE} will add the \% sign to the percentages.
@@ -21,41 +21,38 @@
 #' rowPercent(A, pretty.text = TRUE)
 #' rowPercent(A, pretty.text = TRUE, keep = TRUE)
 rowPercent <- function(t, pretty.text = FALSE, keep = TRUE, digits = 4) {
-  if(is.matrix(t)) {
+  if (is.matrix(t)) {
     pcts <- t / apply(t, 1, sum)
     if (pretty.text) {
       pcts <- apply(pcts * 100, c(1, 2),
                     function(x) ifelse(!is.nan(x),
                                        paste0(format(x, digits = digits), "%"),
                                        "-"))
-      if (keep) {
+      if (keep)
         return(rbind(t, row.percent = pcts))
-      } else {
+      else
         return(pcts)  
-      }
     } else {
-      if (keep) {
+      if (keep)
         return(rbind(t, row.percent = round(pcts, digits = digits)))
-      } else {
+      else
         return(round(pcts, digits = digits))
-      }
     }
   } else {
     pcts <- t / sum(t)
     if (pretty.text) {
-      pcts <- sapply(pcts * 100, function(x) {
-          paste0(format(x, digits = digits), "%")}, USE.NAMES = FALSE)
-      if (keep) {
+      pcts <- sapply(pcts * 100,
+                     function(x) paste0(format(x, digits = digits), "%"),
+                     USE.NAMES = FALSE)
+      if (keep)
         return(rbind(t, row.percent = pcts))
-      } else {
+      else
         return(pcts)  
-      }
     } else {
-      if (keep) {
+      if (keep)
         return(rbind(t, row.percent = round(pcts, digits = digits)))
-      } else {
+      else
         return(round(pcts, digits = digits))
-      }
     }
   }
 }

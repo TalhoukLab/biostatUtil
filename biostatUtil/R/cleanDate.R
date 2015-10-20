@@ -27,9 +27,8 @@ cleanDate <- function(x, original.format, preferred.format,
     return(x)
   date.comp <- strsplit(x, "/|-")[[1]]
   temp <- suppressWarnings(as.numeric(date.comp[1]))
-  if (is.na(temp)) {
+  if (is.na(temp))
     return(return.missing.code)
-  }
   if (temp > 1000000) {  # yyyymmdd or ddmmyyyy or mmddyyyy
     temp <- paste0(ifelse(temp < 10000000, "0", ""), temp)  # pad leading 0 for jan-sept; turn temp back to string
     if (original.format == "DD.MM.YYYY") {

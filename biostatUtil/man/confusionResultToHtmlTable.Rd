@@ -4,8 +4,8 @@
 \alias{confusionResultToHtmlTable}
 \title{Confusion matrix results in HTML}
 \usage{
-confusionResultToHtmlTable(prediction, reference, ref.description, digits = 4,
-  num.boot = NA, seed = 20)
+confusionResultToHtmlTable(prediction, reference, ref.description, seed = 20,
+  num.boot = NA, conf.level = 0.95, digits = 4)
 }
 \arguments{
 \item{prediction}{vector of predicted classes}
@@ -14,25 +14,29 @@ confusionResultToHtmlTable(prediction, reference, ref.description, digits = 4,
 
 \item{ref.description}{description of classes}
 
-\item{digits}{number of digits to round p values}
+\item{seed}{random seed for bootstrap resampling}
 
 \item{num.boot}{number of bootstrap confidence intervals.
 If \code{num.boot = NA}, do not show CI.}
 
-\item{seed}{random seed for bootstrap resampling}
+\item{conf.level}{confidence level. Defaults to 95\%.}
+
+\item{digits}{number of digits to round p-values to}
 }
 \description{
 Prints results from \code{confusionMatrix} into a nice HTML table format.
 }
 \examples{
-### 95\% CI from 1000 bootstraped samples
+# 95\% CI from 10 bootstraped samples
+library(htmlTable)
 set.seed(547)
 n <- 80
 x <- rbinom(n, size = 1, prob = 0.6)
 y <- rbinom(n, size = 1, prob = 0.4)
-confusionResultToHtmlTable(x, y, "")
+results <- confusionResultToHtmlTable(x, y, "Test", num.boot = 10)
+htmlTable(results)
 }
 \author{
-Samuel Leung
+Samuel Leung, Derek CHiu
 }
 

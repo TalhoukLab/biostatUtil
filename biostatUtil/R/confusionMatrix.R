@@ -15,6 +15,8 @@
 #' @param num.boot number of times to bootstrap. Defaults to 1000.
 #' @param conf.level confidence level. Defaults to 95\%.
 #' @param digits number of digits to round summaries to
+#' @param method method for obtaining confidence intervals for binomial
+#' probabilities. See \code{Hmisc::binconf} for details.
 #' @param verbose logical; if \code{TRUE}, outputs are printed to the screen
 #' @return A confusion matrix for the predicted and reference classes. Then
 #' the estimated statistics along with bootstrapped confidence intervals. A
@@ -48,7 +50,7 @@
 #' confusionMatrix(x, y, digits = 2)
 confusionMatrix <- function(x, y, seed = 20, num.boot = 1000,
                             conf.level = 0.95, digits = 4,
-                            verbose = FALSE) {
+                            method = "wilson", verbose = FALSE) {
   CM <- table(Prediction = x, Reference = y)
   if (verbose) {
     cat("Confusion Matrix", "\n")
@@ -61,27 +63,24 @@ confusionMatrix <- function(x, y, seed = 20, num.boot = 1000,
   n2 <- CM[2, 1] + CM[2, 2]
   PO <- CM[1, 1] + CM[2, 2]
   
-  # Calculate statistics and obtain confidence intervals
   Accuracy <- round(Hmisc::binconf(PO, m1 + m2, alpha = 1 - conf.level,
-                           method = "wilson"), digits)
+                           method = method), digits)
   Sensitivity <- round(Hmisc::binconf(CM[1, 1], m1, alpha = 1 - conf.level,
-                              method = "wilson"), digits)
+                              method = method), digits)
   Specificity <- round(Hmisc::binconf(CM[2, 2], m2, alpha = 1 - conf.level,
-                              method = "wilson"), digits)
+                              method = method), digits)
   PPV <- round(Hmisc::binconf(CM[1, 1], n1, alpha = 1 - conf.level,
-                      method = "wilson"), digits)
+                      method = method), digits)
   NPV <- round(Hmisc::binconf(CM[2, 2], n2, alpha = 1 - conf.level,
-                      method = "wilson"), digits)
+                      method = method), digits)
   kappa <- round(kappaBootCI(x, y, seed, num.boot, conf.level),
                 digits)
   
-  # Modify the printouts to have the right confidence interval quantiles
   colnames(Sensitivity)[2:3] <- colnames(Specificity)[2:3] <-
     colnames(PPV)[2:3] <- colnames(NPV)[2:3] <- 
     c(paste0((1 - conf.level) / 2 * 100, "%"),
       paste0((1 - (1 - conf.level) / 2) * 100, "%"))
   
-  # Print results
   printCI <- function(z) {
     paste(z[1], "(", z[2], "-", z[3], ")")
   }

@@ -25,7 +25,7 @@
 # example usage:
 # 
 # EXAMPLE 1. to get updated survival dates only for censor date of 2013-12-12 ...
-# > as.Date(DefineEventDate(d,"2013-12-12",format.dates.in.ed=TRUE, status.only=FALSE)$ev.Date, origin="1970-01-01")
+# > as.Date(defineEventDate(d,"2013-12-12",format.dates.in.ed=TRUE, status.only=FALSE)$ev.Date, origin="1970-01-01")
 defineEventDate <- function(ed, cutoff, event = "OS",
                             format.dates.in.ed = TRUE,
                             cutoff.date.format = "%Y-%m-%d",

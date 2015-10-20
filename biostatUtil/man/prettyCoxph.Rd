@@ -44,6 +44,8 @@ Formats the coxph (or coxphf) model outputs into a prettier display.
 }
 \details{
 The original fit call is returned, along with other useful statistics.
+If Firth is called, we first determine if the percentage of
+censored cases is large enough to use Firth.
 }
 \examples{
 # Base output

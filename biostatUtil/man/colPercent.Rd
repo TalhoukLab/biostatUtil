@@ -9,20 +9,30 @@ colPercent(t, pretty.text = FALSE, keep = TRUE, digits = 4)
 \arguments{
 \item{t}{a matrix}
 
-\item{pretty.text}{logical indicating whether to format the table}
+\item{pretty.text}{logical. If \code{TRUE}, will format the table into nice
+display}
 
-\item{keep}{logical indicating whether to keep the raw table values}
+\item{keep}{logical. If \code{TRUE}, the original table counts will be kept
+along with column percentages.}
 
 \item{digits}{number of digits to round to}
 }
 \value{
-A table with column percentages added.
+A table with column-wise percentages added. For every column,
+the percentages sum to 1.
 }
 \description{
-Generates a table of column percentages given a table.
+Calculate column percentages in a table.
 }
 \details{
-Details to be filled.
+Generates a table of row percentages given table \code{t}. Using
+\code{pretty.text = TRUE} will add the \% sign to the percentages.
+}
+\examples{
+A <- matrix(c(2, 3, 5, 10), nrow = 2)
+colPercent(A)
+colPercent(A, pretty.text = TRUE)
+colPercent(A, pretty.text = TRUE, keep = TRUE)
 }
 \author{
 Aline Talhouk, Derek Chiu

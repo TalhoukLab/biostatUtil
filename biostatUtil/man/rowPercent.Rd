@@ -22,7 +22,7 @@ A table with row-wise percentages added. For every row,
 the percentages sum to 1.
 }
 \description{
-Calculate row percentages.
+Calculate row percentages in a table.
 }
 \details{
 Generates a table of row percentages given table \code{t}. Using

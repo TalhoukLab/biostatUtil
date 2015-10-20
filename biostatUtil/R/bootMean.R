@@ -34,8 +34,8 @@ bootMean <- function(x, num.boot = 1000, conf.level = 0.95, seed = 12, ...) {
   obs.mean <- mean(x, ...)
   ci <- sort(sapply(1:num.boot, function(y) {
     boot.x <- sample(x, replace = TRUE)
-    return(mean(boot.x, ...))},
+    mean(boot.x, ...)},
     USE.NAMES = FALSE))[c(floor(num.boot * (1 - conf.level) / 2),
                           ceiling(num.boot * (1 - (1 - conf.level) / 2)))]
-  return(list("obs.mean" = obs.mean, "ci" = ci, "n" = length(x)))
+  return(list(obs.mean = obs.mean, ci = ci, n = length(x)))
 }

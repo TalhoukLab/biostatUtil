@@ -3,6 +3,8 @@
 #' Formats the coxph (or coxphf) model outputs into a prettier display.
 #' 
 #' The original fit call is returned, along with other useful statistics.
+#' If Firth is called, we first determine if the percentage of
+#' censored cases is large enough to use Firth.
 #' 
 #' @param input.formula a formula object, with the response on the left of a
 #' \code{~} operator, and the terms on the right. The response must be a
@@ -46,19 +48,14 @@ prettyCoxph <- function(input.formula, input.d, use.firth = 1,
   pos <- 1
   assign(".my.formula", input.formula, envir = as.environment(pos)) 
   assign(".my.data", input.d, envir = as.environment(pos))
-  
-  # figure out if percentage of censored cases large enough to use Firth
   ok.to.use.firth <- ifelse(use.firth == -1, TRUE, FALSE)
-  if (use.firth < 1 & use.firth > -1) { # no need to check if use.firth is 1 or -1
-    all.vars(.my.formula)[2]
+  if (use.firth < 1 & use.firth > -1) {
     for (var.name in all.vars(.my.formula)[-c(1, 2)]) {
       if (is.factor(.my.data[, var.name])) {
-        # only need to check if its a factor
         fit <- survfit(as.formula(paste(deparse(.my.formula[[2]]),
-                                        "~", var.name)),
-                                 data = .my.data)
+                                        "~", var.name)), data = .my.data)
         for (i in 1:nrow(fit)) {
-          if((sum(fit[i]$n.censor) / fit[i]$n) > use.firth) {
+          if (sum(fit[i]$n.censor) / fit[i]$n > use.firth) {
             ok.to.use.firth <- TRUE
             break
           }
@@ -67,30 +64,32 @@ prettyCoxph <- function(input.formula, input.d, use.firth = 1,
           break
       }
     }
-  } 
+  }
+  fit <- coxph(.my.formula, .my.data, ...)
+  .my.formula <- fit$formula
+  ph.check <- "NOT CALCULATED"
   
   if (ok.to.use.firth) {
-    vars <- all.vars(.my.formula)
-    .my.data <- .my.data[apply(.my.data[, vars], 1,
+    .my.data <- .my.data[apply(.my.data[, all.vars(.my.formula)], 1,
                                function(x) !any(is.na(x))), ]
-    fit.firth <- coxphf::coxphf(.my.formula, data = .my.data, ...)	
+    fit.firth <- coxphf::coxphf(.my.formula, .my.data, ...)	
     fit.firth$nevent <- sum(fit.firth$y[, "status"])
   } else {
     fit.firth <- NA
   }
-  fit <- coxph(.my.formula, data = .my.data, ...)
-  .my.formula <- fit$formula
-  ph.check <- "NOT CALCULATED"
   
   if (check.ph) {
     ph.test <- cox.zph(fit)
-    ph.check <- cbind("PH test" = ph.test$table[rownames(ph.test$table) != "GLOBAL", 3])
+    ph.check <- cbind("PH test" = ph.test$table[rownames(ph.test$table) !=
+                                                  "GLOBAL", "p"])
     if (!is.na(ph.test.plot.filename)) {
-      if (ph.test.plot.filename != "no.file")
+      if (ph.test.plot.filename != "no.file") {
         pdf(ph.test.plot.filename)
-      plot(ph.test)
-      if (ph.test.plot.filename != "no.file")
+        plot(ph.test)
         dev.off()
+      } else {
+        plot(ph.test)
+      }
     }
   }
   

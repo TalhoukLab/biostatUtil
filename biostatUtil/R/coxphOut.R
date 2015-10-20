@@ -24,21 +24,33 @@
 #' \item{Upper CI Limit}{Defaults to \code{97.5 \%}}
 #' @author Aline Talhouk, Derek Chiu
 #' @export
-coxphOut <- function (object, coefnames = NULL, conf.level = 0.95, digits = 2) {
+#' @examples
+#' test1 <- list(time=c(4,3,1,1,2,2,3), 
+#' status=c(1,1,1,0,1,1,0), 
+#' x=c(0,2,1,1,1,0,0), 
+#' sex=c(0,0,0,0,1,1,1)) 
+#' 
+#' # Stratified
+#' mod1 <- coxph(Surv(time, status) ~ x + strata(sex), test1) 
+#' coxphOut(mod1)
+#' 
+#' # Not stratified
+#' mod2 <- coxph(Surv(time, status) ~ x + sex, test1) 
+#' coxphOut(mod2, coefnames = c("x", "gender"))
+coxphOut <- function(object, coefnames = NULL, conf.level = 0.95,
+                     digits = 2) {
   cox <- object
-  Coef <- cox$coef
-  se <- sqrt(diag(cox$var))
-  CI <- exp(confint(cox, level = conf.level))
   n <- cox$n
   events <- ifelse("coxphf" %in% class(cox),
                    sum(cox$y[, "status"]), cox$nevent)
-  Z <- Coef / se
-  p <- 1 - pchisq(Z^2, 1)
-  tmp <- cbind(n, events, Coef, se, Z, p, HR = exp(Coef), CI)
-  if(is.null(coefnames))
-    coefnames = names(Coef)
-  dimnames(tmp) <- list(coefnames, c("n", "events" , "coef ", " se ",
-                                     " Z-Score ", " P-value ", " HR ",
-                                     colnames(CI)))
+  coef <- cox$coef
+  se <- sqrt(diag(cox$var))
+  z <- coef / se
+  p <- 1 - pchisq(z^2, 1)
+  HR <- exp(coef)
+  CI <- exp(confint(cox, level = conf.level))
+  tmp <- cbind(n, events, coef, se, "Z-Score" = z, "P-value" = p, HR, CI)
+  if (!is.null(coefnames))
+    rownames(tmp) <- coefnames
   return(round(tmp, digits))  
 }

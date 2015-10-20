@@ -5,7 +5,7 @@
 \title{Confusion matrix summaries}
 \usage{
 confusionMatrix(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
-  digits = 4, verbose = FALSE)
+  digits = 4, method = "wilson", verbose = FALSE)
 }
 \arguments{
 \item{x}{a vector of predicted classes}
@@ -19,6 +19,9 @@ confusionMatrix(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
 \item{conf.level}{confidence level. Defaults to 95\%.}
 
 \item{digits}{number of digits to round summaries to}
+
+\item{method}{method for obtaining confidence intervals for binomial
+probabilities. See \code{Hmisc::binconf} for details.}
 
 \item{verbose}{logical; if \code{TRUE}, outputs are printed to the screen}
 }
