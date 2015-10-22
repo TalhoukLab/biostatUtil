@@ -26,9 +26,8 @@ indexOf <- function(a, b, ignore.case = FALSE) {
   }
   b.len <- nchar(b)
   a.len <- nchar(a)
-  if (b.len > a.len) {
+  if (b.len > a.len)
     return(NA)
-  }
   a.arr <- strsplit(a, "")[[1]]
   indexes <- c()
   i <- 1
@@ -39,9 +38,8 @@ indexOf <- function(a, b, ignore.case = FALSE) {
     }
     i <- i + 1
   }
-  if (length(indexes) > 0) {
+  if (length(indexes) > 0)
     return(indexes)
-  } else {
+  else
     return(NA)
-  }
 }

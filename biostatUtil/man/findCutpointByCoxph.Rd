@@ -21,6 +21,9 @@ there is no variation in the variable of interest.
 Try to find a single cutpoint by maximizing the hazard ratio or
 minimizing the AIC.
 }
+\details{
+The formula must be univariable.
+}
 \section{Warning}{
 
 \code{surv.formula} cannot be multivariable. For

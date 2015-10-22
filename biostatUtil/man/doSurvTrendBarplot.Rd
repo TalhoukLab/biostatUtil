@@ -5,7 +5,7 @@
 \title{Survival trend barplot}
 \usage{
 doSurvTrendBarplot(input.d, title, surv.yrs, surv.sts, surv.event, event.desc,
-  censor.desc, obs.yrs = 3, legend.space = 0.2)
+  censor.desc, obs.yrs = 3, legend.space = 0.2, use.prop = TRUE)
 }
 \arguments{
 \item{input.d}{input \code{data.frame}}
@@ -22,9 +22,11 @@ doSurvTrendBarplot(input.d, title, surv.yrs, surv.sts, surv.event, event.desc,
 
 \item{censor.desc}{description of censoring}
 
-\item{obs.yrs}{number of years to observe survival trend.}
+\item{obs.yrs}{number of years to observe survival trend}
 
 \item{legend.space}{amount of space between legend and edge of plot}
+
+\item{use.prop}{logical; if \code{TRUE}, proportions are used}
 }
 \value{
 a barplot showing the change of survival outcome over time

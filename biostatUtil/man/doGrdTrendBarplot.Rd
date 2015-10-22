@@ -4,7 +4,7 @@
 \alias{doGrdTrendBarplot}
 \title{Grade trend barplot}
 \usage{
-doGrdTrendBarplot(input.d, title, legend.space = 0.2)
+doGrdTrendBarplot(input.d, title, legend.space = 0.2, use.prop = TRUE)
 }
 \arguments{
 \item{input.d}{input \code{data.frame}}
@@ -12,6 +12,8 @@ doGrdTrendBarplot(input.d, title, legend.space = 0.2)
 \item{title}{title of barplot}
 
 \item{legend.space}{amount of space between legend and edge of plot}
+
+\item{use.prop}{logical; if \code{TRUE}, proportions are used}
 }
 \value{
 a barplot showing the change of Grade over time

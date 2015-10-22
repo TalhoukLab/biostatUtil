@@ -1,34 +1,35 @@
-#' Generates barplot
+#' Barplot with counts
 #' 
-#' Generates barplot on biomarker variables
+#' Generates barplot on variables and shows counts per group.
 #' 
-#' @param input.d input data frame
-#' @param data.description barplot title description
-#' @param biomarker.var.name variable name in \code{input.d} to graph on
-#' @param biomarker.name barplot x-axis label
-#' @param biomarker.value.names names of biomarker values
+#' The number of data points in each group is reported.
+#' The number of scorable and missing data are also reported by number
+#' and percentage in the barplot title.
+#' 
+#' @param data data.frame with column names
+#' @param var string of variable in \code{data} to graph on
+#' @param xlab x-axis label
+#' @param ylab y-axis label
+#' @param title barplot title
 #' @param digits number of digits to round to
-#' @return Barplot of biomarker frequencies
-#' @author Samuel Leung
+#' @return Barplot of frequencies for each group
+#' @author Samuel Leung, Derek Chiu
 #' @note Function expects missing to be \code{NA}. Do not filter out missing data
 #' as this function reports missing data frequencies.
 #' @export
-doBarplot <- function(input.d, data.description, biomarker.var.name,
-                      biomarker.name, biomarker.value.names, digits = 3) {
-  biomarker <- input.d[, biomarker.var.name]
-  
-  biomarker.value.names.with.count <- apply(
-    cbind(biomarker.value.names, as.numeric(table(biomarker))), 1,
-    function(x) paste0(x[1], "\nn=", x[2]))
-  
-  barplot(table(biomarker), 
-          names.arg = biomarker.value.names.with.count,
-          ylab = "Frequency", xlab = biomarker.name,
-          main = paste0(data.description, "\n# scorable,missing: ",
-                        sum(!is.na(biomarker)), "(",
-                        format(sum(!is.na(biomarker)) / nrow(input.d) * 100,
-                               digits = digits), "%)", ",",
-                        sum(is.na(biomarker)), "(",
-                        format(sum(is.na(biomarker)) / nrow(input.d) * 100,
-                               digits = digits), "%)"))
+#' @examples 
+#' doBarplot(mtcars, "cyl", "title = Number of cylinders")
+#' doBarplot(mtcars, "cyl", "Cylinders", title = "Number of cylinders")
+doBarplot <- function(data, var, xlab = var, ylab = "Frequency", title = NULL,
+                      digits = 3) {
+  dat.var <- data[, var]
+  counts <- apply(cbind(names(table(dat.var)), as.numeric(table(dat.var))),
+                  1, function(x) paste0(x, collapse = "\nn="))
+  n.s <- sum(!is.na(dat.var))
+  n.m <- sum(is.na(dat.var))
+  barplot(table(dat.var), names.arg = counts, xlab = xlab, ylab = ylab,
+          main = paste0(title, "\n# scorable, missing: ", n.s, "(",
+                        format(n.s / nrow(data) * 100, digits = digits), "%)",
+                        ", ", n.m, "(",
+                        format(n.m / nrow(data) * 100, digits = digits), "%)"))
 }

@@ -14,12 +14,12 @@ defineEventDate(ed, cutoff, event = "OS", format.dates.in.ed = TRUE,
 
 \item{event}{event type; one of OS(default), DSS, or RFS}
 
-\item{format.dates.in.ed}{logical; if TRUE(default), dates will be
+\item{format.dates.in.ed}{logical; if \code{TRUE} (default), dates will be
 formatted in \code{ed}}
 
 \item{cutoff.date.format}{format of cutoff date}
 
-\item{status.only}{logical; if TRUE, only survival status will be returned}
+\item{status.only}{logical; if \code{TRUE}, only survival status will be returned}
 }
 \value{
 A list with elements
@@ -31,14 +31,22 @@ A list with elements
 Calculate event/status given censor date
 }
 \details{
-Details to be filled.
+Defines the event dates given a vector of cutoff dates. If the cutoff is a
+single value, it is repeated to equal the number of rows of \code{ed}.
 }
 \note{
 Since there may be some string, e.g. "Unk" in the return date
 \code{ev.Date}, R changed the date to string. Therefore, you need to do
 \code{as.numeric()} and \code{as.Date()} to change \code{ev.Date} from
 a string back to a \code{Date} object.
-Original version received from Aline 2014-09-26.
+}
+\examples{
+library(bccaEndometrial)
+data(ed)
+Year <- as.numeric(format(as.Date(ed$followup.start.date.mm.dd.yyyy, format = "\%m/\%d/\%Y"), "\%Y"))
+cutoffDate <- sapply(Year + 5, function(x) paste0("12/31/", x))
+defineEventDate(ed, cutoffDate, cutoff.date.format = "\%m/\%d/\%Y", event = "RFS")
+defineEventDate(ed, cutoffDate, cutoff.date.format = "\%m/\%d/\%Y", event = "DSS")
 }
 \author{
 Samuel Leung, Aline Talhouk

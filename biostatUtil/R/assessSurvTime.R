@@ -25,7 +25,6 @@ assessSurvTime <- function(T1, T2, status) {
   T1 <- T1[non.missing.cases]
   T2 <- T2[non.missing.cases]
   status <- status[non.missing.cases]
-  
   Otime <- T2 - T1
   Stime <- T2[status] - T1[status]
   Etime <- max(T2) - T1
@@ -34,8 +33,7 @@ assessSurvTime <- function(T1, T2, status) {
   KFT[status] <- T2[status] - T1[status]
   rev.status <- rep(1, length(status))
   rev.status[status] <- 0
-  Ftime <- survival::survfit(survival::Surv(as.numeric(SurvTime),
-                                            rev.status) ~ 1)
+  Ftime <- survfit(Surv(as.numeric(SurvTime), rev.status) ~ 1)
   SumServ <- read.table(textConnection(capture.output(Ftime)),
                         skip = 2, header = TRUE)
   MedianTime <- list(

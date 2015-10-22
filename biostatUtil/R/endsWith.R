@@ -21,9 +21,8 @@
 #' endsWith(123.4, 3.4)
 #' endsWith(45, 4)
 endsWith <- function(a, b) {
-  if (length(grep(b, a)) == 0) {
-    return(FALSE)  # not even substring ... must be false
-  } else {
+  if (length(grep(b, a)) == 0)
+    return(FALSE)
+  else
     return(substr(a, nchar(a) - nchar(b) + 1, nchar(a)) == b)
-  }
 }

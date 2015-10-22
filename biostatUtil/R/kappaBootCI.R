@@ -22,11 +22,9 @@
 #' kappaBootCI(a, b, 5)
 kappaBootCI <- function(x, y, seed = 20, num.boot = 1000, conf.level = 0.95) {
   set.seed(seed)
-  
   ckappa.boot <- function(data, x) {
     psy::ckappa(data[x, ])[[2]]
   }
-  
   res <- boot::boot(cbind(x, y), ckappa.boot, num.boot)
   bootCI <- boot::boot.ci(res, type = "bca", conf = conf.level)
   kappa <- c(PointEst = bootCI[[2]], bootCI[[4]][4:5])

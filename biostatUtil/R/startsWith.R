@@ -22,9 +22,8 @@
 #' startsWith(123.4, 123)
 #' startsWith(45, 5)
 startsWith <- function(a, b) {
-  if (length(grep(b, a)) == 0) {
-    return(FALSE)  # not even substring ... must be false
-  } else {
+  if (length(grep(b, a)) == 0)
+    return(FALSE)
+  else
     return(substr(a, 1, nchar(b)) == b)
-  }
 }

@@ -26,9 +26,9 @@
 #' ## Different separator
 #' diffDate("2003-03-21", "1992-01-27", date.format = "YYYY.MM.DD", sep = "-")
 diffDate <- function(d1, d2, date.format = "MM.DD.YYYY", units = "days",
-                             existing.missing.codes = NA,
-                             return.missing.code = NA, ...) {
-  if(is.na(d1) | is.na(d2))
+                     existing.missing.codes = NA, return.missing.code = NA,
+                     ...) {
+  if (is.na(d1) | is.na(d2))
     return(NA)
   if (length(unique(existing.missing.codes
                     [!is.na(existing.missing.codes)])) > 0 &
@@ -46,11 +46,10 @@ diffDate <- function(d1, d2, date.format = "MM.DD.YYYY", units = "days",
                          return.missing.code = return.missing.code, ...),
                format = getFormat(d2, date.format)),
       units = ifelse(units %in% c("months", "years"), "days", units)))
-  if (units == "months") {
+  if (units == "months")
     return(result / NUM.DAYS.IN.MONTH)
-  } else if (units == "years") {
+  else if (units == "years")
     return(result / NUM.DAYS.IN.YEAR)
-  } else {
+  else
     return(result)
-  }
 }

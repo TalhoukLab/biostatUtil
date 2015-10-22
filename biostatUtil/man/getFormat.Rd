@@ -4,7 +4,7 @@
 \alias{getFormat}
 \title{Get date format from character text}
 \usage{
-getFormat(date, char.format)
+getFormat(date, char.format, sep = "")
 }
 \arguments{
 \item{date}{character string of date}
@@ -12,6 +12,8 @@ getFormat(date, char.format)
 \item{char.format}{character text format of date. Either one of
 \code{"MM.DD.YYYY"}, \code{"MMMM.DD.YYYY"}, \code{"DD.MM.YYYY"},
 \code{"DD.MMM.YYYY"}, \code{"YYYY.MM.DD"}, or \code{"YYYY.MMM.DD"}.}
+
+\item{sep}{character string separating \code{date}}
 }
 \value{
 A character string representing the POSIX standard date format

@@ -26,6 +26,14 @@ VALUE.CODING.INIT.TREATMENT.RT.ONLY <- "Radiation only"
 VALUE.CODING.INIT.TREATMENT.VAG.BRACHY.ONLY <- "Vag Brachy only"
 VALUE.CODING.INIT.TREATMENT.BOTH <- "Both"
 
+# Events
+OS.EVENT  <- "os.event"
+OS.CENSOR <- "os.censor"
+DSS.EVENT  <- "dss.event"
+DSS.CENSOR <- "dss.censor"
+RFS.EVENT  <- "rfs.event"
+RFS.CENSOR <- "rfs.censor"
+
 # Missing codes
 MISSING.EXPLICIT <- "N/A" # missing value code for values that are explicitily indicated as missing from data source e.g. "X" in grade
 MISSING.UNK <- "Unk" # missing because values was not found (e.g. in data files) but the value must exist somewhere.

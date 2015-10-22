@@ -4,26 +4,28 @@
 \alias{doHist}
 \title{Do histogram with median}
 \usage{
-doHist(input.d, data.description, biomarker.var.name, biomarker.name,
-  show.title = TRUE, br = 100, digits = 3,
-  interpretable.label = "scorable")
+doHist(data, var, xlab = var, title = NULL, show.title = TRUE,
+  br = ceiling(sqrt(nrow(data))), digits = 3, score.lab = "scorable", ...)
 }
 \arguments{
-\item{input.d}{input \code{data.frame}}
+\item{data}{data.frame with column names}
 
-\item{data.description}{title description}
+\item{var}{string of variable in \code{data} to graph on}
 
-\item{biomarker.var.name}{variable name of biomarker to plot}
+\item{xlab}{x-axis label}
 
-\item{biomarker.name}{x-axis label for biomarker name}
+\item{title}{histogram title}
 
 \item{show.title}{logical. If \code{TRUE} (default), the title is shown}
 
-\item{br}{breaks in histogram}
+\item{br}{breaks in histogram. By default, the number of bins is taking as
+the ceiling of the square root of the number of rows in \code{data}}
 
 \item{digits}{number of digits to round for median, Q1, Q3}
 
-\item{interpretable.label}{label for non-missing cases}
+\item{score.lab}{label for non-missing cases}
+
+\item{...}{additional arguments to \code{hist}}
 }
 \value{
 A histogram with some annotated values.
@@ -32,10 +34,15 @@ A histogram with some annotated values.
 Plot a histogram with the median, first quartile, and third quartile reported.
 }
 \details{
-Expects missing to be \code{NA}. Do not filter out missing biomarker data
+Expects missing to be \code{NA}. Do not filter out missing data
 as this function reports missing data counts.
 }
+\examples{
+doHist(mtcars, "mpg")
+doHist(mtcars, "mpg", "MPG")
+doHist(mtcars, "mpg", title = "Distribution of MPG")
+}
 \author{
-Samuel Leung
+Samuel Leung, Derek Chiu
 }
 

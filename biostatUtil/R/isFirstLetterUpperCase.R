@@ -17,9 +17,8 @@
 #' isFirstLetterUpperCase("")
 isFirstLetterUpperCase <- function(x) {
   arr <- strsplit(x, "")[[1]]
-  if (length(arr) == 0) {
+  if (length(arr) == 0)
     return(TRUE)
-  } else {
+  else
     return(arr[1] == toupper(arr[1]))
-  }
 }

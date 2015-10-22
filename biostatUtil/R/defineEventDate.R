@@ -2,15 +2,16 @@
 #' 
 #' Calculate event/status given censor date
 #' 
-#' Details to be filled.
+#' Defines the event dates given a vector of cutoff dates. If the cutoff is a 
+#' single value, it is repeated to equal the number of rows of \code{ed}.
 #' 
 #' @param ed input data, typically a data.frame or matrix
 #' @param cutoff cutoff date
 #' @param event event type; one of OS(default), DSS, or RFS
-#' @param format.dates.in.ed logical; if TRUE(default), dates will be
+#' @param format.dates.in.ed logical; if \code{TRUE} (default), dates will be
 #' formatted in \code{ed}
 #' @param cutoff.date.format format of cutoff date
-#' @param status.only logical; if TRUE, only survival status will be returned
+#' @param status.only logical; if \code{TRUE}, only survival status will be returned
 #' @return A list with elements
 #' \item{ev.status}{A string indicating status: such as "os.censor" or "os.event}
 #' \item{ev.Date}{Date object}
@@ -19,51 +20,35 @@
 #' \code{ev.Date}, R changed the date to string. Therefore, you need to do 
 #' \code{as.numeric()} and \code{as.Date()} to change \code{ev.Date} from
 #' a string back to a \code{Date} object.
-#' Original version received from Aline 2014-09-26.
 #' @author Samuel Leung, Aline Talhouk
 #' @export 
-# example usage:
-# 
-# EXAMPLE 1. to get updated survival dates only for censor date of 2013-12-12 ...
-# > as.Date(defineEventDate(d,"2013-12-12",format.dates.in.ed=TRUE, status.only=FALSE)$ev.Date, origin="1970-01-01")
+#' @examples 
+#' library(bccaEndometrial)
+#' data(ed)
+#' Year <- as.numeric(format(as.Date(ed$followup.start.date.mm.dd.yyyy, format = "%m/%d/%Y"), "%Y"))
+#' cutoffDate <- sapply(Year + 5, function(x) paste0("12/31/", x))
+#' defineEventDate(ed, cutoffDate, cutoff.date.format = "%m/%d/%Y", event = "RFS")
+#' defineEventDate(ed, cutoffDate, cutoff.date.format = "%m/%d/%Y", event = "DSS")
 defineEventDate <- function(ed, cutoff, event = "OS",
                             format.dates.in.ed = TRUE,
                             cutoff.date.format = "%Y-%m-%d",
                             status.only = FALSE) {
-  # three possible events OS DSS and RFS
-  ev.status <- NULL
-  ev.Date <- NULL
-  MISSING.UNK <- NA  # "Unk"
-  
-  # Constants
-  OS.EVENT  <- "os.event"
-  OS.CENSOR <- "os.censor"
-  DSS.EVENT  <- "dss.event"
-  DSS.CENSOR <- "dss.censor"
-  RFS.EVENT  <- "rfs.event"
-  RFS.CENSOR <- "rfs.censor"
-  
-  MISSING.UNK <- NA #"Unk"
-  ALL.MISSING.CODES <- c("", "N/A", "Unk")
-  # WARNING: make sure these are ALL the possible missing codes!!!
-  
-  # if cutoff is a single value, make repeats of it, otherwise just leave it.
+  ev.status <- ev.Date <- NULL
+  MISSING.UNK <- NA
   cutoff.length <- length(cutoff)
-  if (cutoff.length == 1) {
+  if (cutoff.length == 1)
     cutoff <- rep(cutoff, nrow(ed))
-  } else if (cutoff.length != nrow(ed)) {
-    print("ERROR!!! cutoff passed to DefineEventDate is neither a single value or a vector of length=# or rows of the passed in data matrix.  Please double check")
-    return(NA)
-  }
-  
-  # format date ...
+  else if (cutoff.length != nrow(ed))
+    stop("Cutoff must be a single value or a vector of length
+         equal to number of rows of input data.")
+
   if (format.dates.in.ed) {
-    cutoff <- as.Date(cutoff,format = cutoff.date.format)
-    followup.start.date.mm.dd.yyyy <- as.Date(ed$followup.start.date.mm.dd.yyyy, format = cutoff.date.format) # missing value "" or "N/A" will return NA
-    Date.of.Death.mm.dd.yyyy <- as.Date(ed$Date.of.Death.mm.dd.yyyy, format = cutoff.date.format) # missing value "" or "N/A" will return NA
-    followup.max.date.mm.dd.yyyy <- as.Date(ed$followup.max.date.mm.dd.yyyy, format = cutoff.date.format)# missing value "" or "N/A" will return NA
-    followup.end.date.mm.dd.yyyy <- as.Date(ed$followup.end.date.mm.dd.yyyy, format = cutoff.date.format)# missing value "" or "N/A" will return NA
-    Date.of.First.Recorded.Recurrence.mm.dd.yyyy <- as.Date(ed$Date.of.First.Recorded.Recurrence.mm.dd.yyyy, format = cutoff.date.format)# missing value "" or "N/A" will return NA
+    cutoff <- as.Date(cutoff, format = cutoff.date.format)
+    followup.start.date.mm.dd.yyyy <- as.Date(ed$followup.start.date.mm.dd.yyyy, format = cutoff.date.format)
+    Date.of.Death.mm.dd.yyyy <- as.Date(ed$Date.of.Death.mm.dd.yyyy, format = cutoff.date.format)
+    followup.max.date.mm.dd.yyyy <- as.Date(ed$followup.max.date.mm.dd.yyyy, format = cutoff.date.format)
+    followup.end.date.mm.dd.yyyy <- as.Date(ed$followup.end.date.mm.dd.yyyy, format = cutoff.date.format)
+    Date.of.First.Recorded.Recurrence.mm.dd.yyyy <- as.Date(ed$Date.of.First.Recorded.Recurrence.mm.dd.yyyy, format = cutoff.date.format)
   } else {
     followup.start.date.mm.dd.yyyy <- ed$followup.start.date.mm.dd.yyyy
     Date.of.Death.mm.dd.yyyy <- ed$Date.of.Death.mm.dd.yyyy
@@ -71,9 +56,6 @@ defineEventDate <- function(ed, cutoff, event = "OS",
     followup.end.date.mm.dd.yyyy <- ed$followup.end.date.mm.dd.yyyy
     Date.of.First.Recorded.Recurrence.mm.dd.yyyy <- ed$Date.of.First.Recorded.Recurrence.mm.dd.yyyy
   }
-  
-  #if(any(followup.start.date.mm.dd.yyyy>cutoff, na.rm=TRUE)){print("Error with cutoff date")}
-  
   # reminder: watch out for scenario like the following:
   #           - Death on 2010-10-10
   #           - Last contact on 2009-10-10

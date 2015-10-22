@@ -24,6 +24,7 @@
 #' Setting \code{use.firth = 1} (default) means Firth is never used, and \code{use.firth = -1} means Firth is always used.
 #' @param subs use of subsetting
 #' @param legend logical; if \code{TRUE}, the legend is overlaid on the graph (instead of on the side).
+#' @param line.y.increment how much y should be incremented for each line
 #' @param ... additional arguments to other methods
 #' @import ggplot2
 #' @export
@@ -36,13 +37,13 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                  xlims = c(0, max(sfit$time)), ylims = c(0, 1),
                  ystratalabs = NULL, ystrataname = NULL,
                  timeby = 5, pval = TRUE, HR = TRUE,
-                 use.firth = 1, subs = NULL, legend = FALSE, ...) {
-line.y.increment <- 0.05 # for annotate(), to indicate the much y should be incremented for each line
+                 use.firth = 1, subs = NULL, legend = FALSE,
+                 line.y.increment = 0.05, ...) {
   
   # to satisfy R CMD check where variables can't be found when input data passed from ggplot
   surv <- lower <- upper <- n.censor <- n.risk <- NULL
   
-    # sorting the use of subsetting ----
+  # sorting the use of subsetting
   times <- seq(0, max(sfit$time), by = timeby)
   if (is.null(subs)) {
     subs1 <- 1:length(levels(summary(sfit)$strata))
@@ -50,18 +51,14 @@ line.y.increment <- 0.05 # for annotate(), to indicate the much y should be incr
     subs3 <- 1:length(summary(sfit, times = times, extend = TRUE)$strata)
   } else {
     for (i in 1:length(subs)) {
-      if (i == 1) {
+      if (i == 1)
         ssvar <- paste0("(?=.*\\b=", subs[i])
-      }
-      if (i == length(subs)) {
+      if (i == length(subs))
         ssvar <- paste0(ssvar, "\\b)(?=.*\\b=", subs[i], "\\b)")	
-      }
-      if (!i %in% c(1, length(subs))) {
+      if (!i %in% c(1, length(subs)))
         ssvar <- paste0(ssvar, "\\b)(?=.*\\b=", subs[i])	
-      }
-      if (i == 1 & i == length(subs)) {
+      if (i == 1 & i == length(subs))
         ssvar <- paste0("(?=.*\\b=", subs[i], "\\b)")
-      }
     }
     subs1 <- which(regexpr(ssvar, levels(summary(sfit)$strata),
                            perl = T) != -1)
@@ -91,8 +88,7 @@ line.y.increment <- 0.05 # for annotate(), to indicate the much y should be incr
     surv = sfit$surv[subs2],
     strata = factor(summary(sfit, censored = T)$strata[subs2]),
     upper = sfit$upper[subs2],
-    lower = sfit$lower[subs2]
-  )
+    lower = sfit$lower[subs2])
   levels(.df$strata) <- ystratalabs       # final changes to data for survival plot
   zeros <- data.frame(time = 0, surv = 1,
                       strata = factor(ystratalabs, levels=levels(.df$strata)),
@@ -102,39 +98,37 @@ line.y.increment <- 0.05 # for annotate(), to indicate the much y should be incr
   
   # specifying plot parameteres etc ----
   p <- ggplot(.df , aes(time, surv, color = strata, fill = strata)) +
-          geom_step(aes(color = strata), size = .7) + 
-          theme_bw() +
-          scale_colour_manual(values = shading.colors) +
-          scale_fill_manual(values = shading.colors) + 
-          theme(axis.title.x = element_text(vjust = 0.5)) + 
-          scale_x_continuous(xlabs, breaks = times, limits = xlims) + 
-          scale_y_continuous(ylabs, limits = ylims) + 
-          theme(panel.background = element_blank(),
-                panel.grid.minor = element_blank(),
-                panel.grid.major = element_blank()) + 
-          theme(plot.margin = grid::unit(c(0, 1, .5, ifelse(m < 10, 1.5, 2.5)), "lines")) + 
-          ggtitle(main)
+    geom_step(aes(color = strata), size = .7) + 
+    theme_bw() +
+    scale_colour_manual(values = shading.colors) +
+    scale_fill_manual(values = shading.colors) + 
+    theme(axis.title.x = element_text(vjust = 0.5)) + 
+    scale_x_continuous(xlabs, breaks = times, limits = xlims) + 
+    scale_y_continuous(ylabs, limits = ylims) + 
+    theme(panel.background = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.grid.major = element_blank()) +
+    theme(plot.margin = grid::unit(c(0, 1, .5,
+                                     ifelse(m < 10, 1.5, 2.5)), "lines")) +
+    ggtitle(main)
   
   # Legend----
-  if (legend == TRUE) {
+  if (legend == TRUE)
     p <- p + theme(legend.position = c(.8, .88)) +
       theme(legend.key = element_rect(colour = NA)) +
       theme(legend.title = element_blank())
-  } else {
+  else
     p <- p + theme(legend.position = "none")
-  }
   
   #Confidence Bands----  
-  if (CI == TRUE) {
+  if (CI == TRUE)
     p <- p + geom_ribbon(data = .df, aes(ymin = lower, ymax = upper),
                          alpha = 0.05, linetype = 0) 
-  }
   
   # Censor Marks----
-  if(marks == TRUE){
+  if (marks == TRUE)
     p <- p + geom_point(data = subset(.df, n.censor >= 1), 
                         aes(x = time, y = surv), shape = "/", size = 4)
-  }  
   
   ## Create a blank plot for place-holding
   blank.pic <- ggplot(.df, aes(time, surv)) + geom_blank() + theme_bw() +
@@ -145,12 +139,12 @@ line.y.increment <- 0.05 # for annotate(), to indicate the much y should be incr
   
   # p-value placement----
   if (is.null(sfit2)) {
-    if(pval) {
+    if (pval) {
       sdiff <- survdiff(eval(sfit$call$formula), data = eval(sfit$call$data))
       pval <- pchisq(sdiff$chisq,length(sdiff$n) - 1, lower.tail = FALSE)
       pvaltxt <- ifelse(pval < 0.001, "Log Rank p < 0.001",
                         paste("Log Rank p =", signif(pval, 3)))
-      if(HR) {
+      if (HR) {
         pretty.coxph.obj <- prettyCoxph(eval(sfit$call$formula),
                                         input.d = eval(sfit$call$data),
                                         use.firth = use.firth)
@@ -176,13 +170,13 @@ line.y.increment <- 0.05 # for annotate(), to indicate the much y should be incr
     }
     p <- p + annotate("text", x = 0.2 * max(sfit$time), hjust = 0, y = 0.01,
                       label = ifelse(pval, pvaltxt, ""), size = 3)
-  } else{
+  } else {
     if (pval) {
       sdiff <- survdiff(eval(sfit2$call$formula), data = eval(sfit2$call$data))
       pval <- pchisq(sdiff$chisq,length(sdiff$n) - 1, lower.tail = FALSE)
       pvaltxt <- ifelse(pval < 0.001, "Log Rank p < 0.001",
                         paste("Log Rank p =", signif(pval, 3)))
-      if(HR) {
+      if (HR) {
         pretty.coxph.obj <- prettyCoxph(eval(sfit2$call$formula),
                                         input.d = eval(sfit2$call$data),
                                         use.firth = use.firth)
@@ -211,7 +205,7 @@ line.y.increment <- 0.05 # for annotate(), to indicate the much y should be incr
   }
   
   # Create table graphic to include at-risk numbers----
-  if(table) {
+  if (table) {
     risk.data <- data.frame(
       strata = factor(summary(sfit,times = times,
                               extend = TRUE)$strata[subs3], ),

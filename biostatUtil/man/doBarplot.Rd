@@ -2,35 +2,44 @@
 % Please edit documentation in R/doBarplot.R
 \name{doBarplot}
 \alias{doBarplot}
-\title{Generates barplot}
+\title{Barplot with counts}
 \usage{
-doBarplot(input.d, data.description, biomarker.var.name, biomarker.name,
-  biomarker.value.names, digits = 3)
+doBarplot(data, var, xlab = var, ylab = "Frequency", title = NULL,
+  digits = 3)
 }
 \arguments{
-\item{input.d}{input data frame}
+\item{data}{data.frame with column names}
 
-\item{data.description}{barplot title description}
+\item{var}{string of variable in \code{data} to graph on}
 
-\item{biomarker.var.name}{variable name in \code{input.d} to graph on}
+\item{xlab}{x-axis label}
 
-\item{biomarker.name}{barplot x-axis label}
+\item{ylab}{y-axis label}
 
-\item{biomarker.value.names}{names of biomarker values}
+\item{title}{barplot title}
 
 \item{digits}{number of digits to round to}
 }
 \value{
-Barplot of biomarker frequencies
+Barplot of frequencies for each group
 }
 \description{
-Generates barplot on biomarker variables
+Generates barplot on variables and shows counts per group.
+}
+\details{
+The number of data points in each group is reported.
+The number of scorable and missing data are also reported by number
+and percentage in the barplot title.
 }
 \note{
 Function expects missing to be \code{NA}. Do not filter out missing data
 as this function reports missing data frequencies.
 }
+\examples{
+doBarplot(mtcars, "cyl", "title = Number of cylinders")
+doBarplot(mtcars, "cyl", "Cylinders", title = "Number of cylinders")
+}
 \author{
-Samuel Leung
+Samuel Leung, Derek Chiu
 }
 
