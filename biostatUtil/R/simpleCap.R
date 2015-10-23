@@ -16,11 +16,10 @@
 #' simpleCap("high grade serous carcinoma")
 #' simpleCap("ovarian cancer", first.only = TRUE)
 simpleCap <- function(x, first.only = FALSE) {
-  if (!first.only) {
+  if (!first.only)
     s <- strsplit(x, " ")[[1]]
-  } else {
+  else
     s <- x
-  }
   return(paste0(toupper(substring(s, 1, 1)), substring(s, 2),
-                collapse =" "))
+                collapse = " "))
 }

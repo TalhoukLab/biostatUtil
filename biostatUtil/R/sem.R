@@ -9,10 +9,8 @@
 #' @export
 sem <- function(x, missing.value = NA, return.missing.value = NA) {
   x <- x[!is.na(x)]
-  if (!is.na(missing.value)) {
+  if (!is.na(missing.value))
     x <- x[!x %in% missing.value]
-  }
-  return(ifelse(length(x) == 0,
-                return.missing.value,
+  return(ifelse(length(x) == 0, return.missing.value,
                 sqrt(var(x) / length(x))))
 }
