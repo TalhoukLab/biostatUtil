@@ -15,7 +15,7 @@ Depends:
     R (>= 3.2.0), ggplot2, survival
 Imports:
     boot, psy, gdata, Hmisc, coxphf, pander, htmlTable, plyr,
-    knitr, rms, grid, gridExtra, stringr
+    knitr, rms, grid, gridExtra, stringr, doBy
 Suggests:
     logistf, meta, bccaEndometrial
 License: GPL-2
