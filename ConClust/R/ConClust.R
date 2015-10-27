@@ -21,7 +21,7 @@
 #' \item{"gmmBIC": }{Gaussian Mixture Model using Bayesian Information Criterion on EM algorithm}
 #' \item{"biclust": }{Biclustering using a latent block model}
 #' }
-#' 
+#'
 #' The \code{min.sd} argument is used to filter the feature space for only highly variable
 #' features. Only features with a standard deviation across all samples greater than
 #' \code{min.sd} will be used.
@@ -39,6 +39,7 @@
 #' @param min.sd minimum standard deviation threshold. See details.
 #' @param dir directory where returned object will be saved at each iteration (as an RDS object).
 #' No output file is saved if \code{file} is \code{NULL}.
+#' @param fileName file name of the written object
 #' @param time.saved logical; if \code{TRUE} (default), the date saved is appended
 #' to the file name. Only applicable when \code{dir} is not \code{NULL}.
 #' @return An array of dimension \code{nrow(x)} by \code{reps} by \code{length(methods)}
@@ -51,13 +52,13 @@
 #' @export
 ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
                      seed = 123456, seed.method = 1, min.sd = 1, dir = NULL,
-                     time.saved = TRUE) {
+                     fileName = "ConClustOutput", time.saved = TRUE) {
   . <- NULL
   x.rest <- dataPrep(x, min.sd = min.sd)
   x.nmf <- x.rest %>%
     rbind(-.) %>%
     apply(2, function(x) ifelse(x < 0, 0, x))
-  
+
   samples <- colnames(x.rest)
   n <- ncol(x.rest)
   n.new <- floor(n * pItem)
@@ -118,8 +119,8 @@ ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
   }
   if (!is.null(dir))
     if (time.saved)
-      saveRDS(coclus, paste0(dir, "ConClustOutput_", Sys.Date(), ".rds"))
+      saveRDS(coclus, paste0(dir, fileName, "_", Sys.Date(), ".rds"))
     else
-      saveRDS(coclus, paste0(dir, "ConClustOutput.rds"))
+      saveRDS(coclus, paste0(dir, fileName, ".rds"))
   return(coclus)
 }

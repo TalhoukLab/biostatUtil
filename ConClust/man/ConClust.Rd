@@ -5,7 +5,8 @@
 \title{Consensus clustering over samples and algorithms}
 \usage{
 ConClust(x, k, pItem = 0.8, reps = 1000, method = NULL, seed = 123456,
-  seed.method = 1, min.sd = 1, dir = NULL, time.saved = TRUE)
+  seed.method = 1, min.sd = 1, dir = NULL, fileName = "ConClustOutput",
+  time.saved = TRUE)
 }
 \arguments{
 \item{x}{data matrix; genes are rows and samples are columns}
@@ -29,6 +30,8 @@ See details.}
 
 \item{dir}{directory where returned object will be saved at each iteration (as an RDS object).
 No output file is saved if \code{file} is \code{NULL}.}
+
+\item{fileName}{file name of the written object}
 
 \item{time.saved}{logical; if \code{TRUE} (default), the date saved is appended
 to the file name. Only applicable when \code{dir} is not \code{NULL}.}
