@@ -5,7 +5,7 @@
 \title{Run a series of ConsensusClusterPlus algorithms}
 \usage{
 ConClustPlus(dat, k = 3, reps = 1000, pItem = 0.8, dir = NULL,
-  seed = 123, min.sd = 1, ...)
+  fileName = "results_CCP", seed = 123, min.sd = 1, ...)
 }
 \arguments{
 \item{dat}{data matrix; columns are samples and rows are genes/features}
@@ -17,6 +17,8 @@ ConClustPlus(dat, k = 3, reps = 1000, pItem = 0.8, dir = NULL,
 \item{pItem}{proportion of features to use in each subsample}
 
 \item{dir}{directory to save results}
+
+\item{fileName}{file name of the written object}
 
 \item{seed}{random seed to maintain reproducible results}
 
