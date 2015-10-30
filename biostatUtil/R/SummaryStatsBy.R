@@ -3,6 +3,7 @@
 #' @param by1 split variable 1
 #' @param by2 split variable 2
 #' @param var.names The variables that you want the statistics for
+#' @param stats statistics to show compute for continuous variables
 #' @param marker.description The description for the variable(s) to split
 #' @param groups.description The groupings of the marker
 #' @param var.descriptions descriptions of \code{var.names}
@@ -16,6 +17,7 @@
 #' @importFrom magrittr set_colnames set_rownames extract
 #' @export
 SummaryStatsBy <- function(data, by1, by2, var.names,
+                           stats = c("mean", "sd", "median", "IQR", "range", "missing"),
                            marker.description = by1, groups.description = by2,
                            var.descriptions = var.names, digits = 3,
                            missing.codes.highlight = NULL,
@@ -27,46 +29,74 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
     types <- class(var.dat)
   else
     types <- sapply(var.dat, class)
-  num.dat <- cbind(var.dat[, which(types == "numeric")], facets)
-  fac.dat <- cbind(var.dat[, which(types == "factor")], facets)
-  rows <- c("mean", "median", "IQR", "range", "missing")
+  num.dat <- cbind(var.dat[, which(types %in% c("numeric", "integer"))], facets)
+  fac.dat <- cbind(var.dat[, which(types %in% c("factor", "character"))], facets)
+  rows <- stats
   row.order <- unlist(lapply(var.names, function(x)
-    paste0(x, c("", ".mean", ".median", ".IQR", ".range1", ".missing"))))
-    f <- as.formula(paste(paste(var.names, collapse = " + "), "~",
-                          paste(by1, by2, sep = " + ")))
-    values <- summaryBy(f, num.dat, FUN = contSumFunc, digits = digits)
-    facs <- values[, c(by1, by2)]
-    means <- values[, grep("\\.mean", names(values), value = T)]
-    sds <- values[, grep("\\.s", names(values), value = T)]
-    min <- values[, grep("\\.range1", names(values), value = T)]
-    max <- values[, grep("\\.range2", names(values), value = T)]
-    f1 <- as.formula(paste(paste(var.names, collapse = " + "), "~", by1))
-    f2 <- as.formula(paste(paste(var.names, collapse = " + "), "~", by2))
-    # tot1 <- summaryBy(f1, t.dat, FUN = contSumFunc)
-    # tot2 <- summaryBy(f2, t.dat, FUN = contSumFunc)
-    # tot <- c("Total", contSumFunc(t.dat[, var.names]))
-    main <- cbind(
-      # c(sapply(seq_len(length(levels(varby1))), function(i)
-      # c(levels(varby1)[i], rep(" ", each = length(levels(varby2)) - 1)))),
-      # rep(levels(varby2), length(levels(varby1))),
-      # mean = paste(values[, "var.mean"], values[, "var.s"], sep = " &#177; "),
-      apply(mapply(function(x, y) paste(x, y, sep = " &#177; "), means, sds),
-            2, cbind),
-      values[, grep("\\.median", names(values), value = T)],
-      values[, grep("\\.IQR", names(values), value = T)],
-      apply(mapply(function(x, y) paste(x, y, sep = "-"), min, max), 2, cbind),
-      values[, grep("\\.missing", names(values), value = T)],
-      matrix(rep("", sum(table(facets[, c(by1, by2)]) > 0)),
-             ncol = length(var.names),
-             dimnames = list(NULL, var.names))) %>% 
-      t %>% 
-      extract(row.order, ) %>% 
-      set_rownames(unlist(lapply(var.names, function(x) c(x, rows)))) %>% 
-      set_colnames(apply(mapply(function(x, y) paste(x, y, sep = "="),
-                                x = names(facs), y = facs), 1, function(x)
-                                  paste(x, collapse = ", ")))
-    rownames(main)[c(1, 7)] <- paste0("**", rownames(main)[c(1, 7)], "**")
+    paste0(x, c("", paste0(".", stats)))))
+  f <- as.formula(paste(paste(var.names, collapse = " + "), "~",
+                        paste(by1, by2, sep = " + ")))
+  values <- doBy::summaryBy(f, num.dat, FUN = contSumFunc,
+                            digits = digits, stats = stats)
+  facs <- values[, c(by1, by2)]
+  if (all(c("mean", "sd") %in% stats)) {
+    means <- values[, grep("\\.mean", names(values))]
+    sds <- values[, grep("\\.sd", names(values))]
+    ms <- apply(mapply(function(x, y) paste(x, y, sep = " &#177; "), means, sds),
+                2, cbind)
+    rows <- rows[-grep("sd", rows)]
+    row.order <- row.order[-grep("\\.sd", row.order)]
+  } else if ("mean" %in% stats & !"sd" %in% stats) {
+    ms <- values[, grep("\\.mean", names(values))]
+  } else if ("sd" %in% stats & !"mean" %in% stats) {
+    ms <- values[, grep("\\.sd", names(values))]
+  } else {
+    ms <- data.frame(row.names = 1:nrow(facs))
+  }
+  if ("median" %in% stats) {
+    med <- values[, grep("\\.median", names(values))]
+  } else {
+    med <- data.frame(row.names = 1:nrow(facs))
+  }
+  if ("IQR" %in% stats) {
+    iqr <- values[, grep("\\.IQR", names(values))]
+  } else {
+    iqr <- data.frame(row.names = 1:nrow(facs))
+  }
+  if ("range" %in% stats) {
+    min <- values[, grep("\\.min", names(values))]
+    max <- values[, grep("\\.max", names(values))]
+    range <- apply(mapply(function(x, y) paste(x, y, sep = "-"), min, max),
+                   2, cbind)
+    row.order <- stringr::str_replace_all(row.order, "range", "min")
+  } else {
+    range <- data.frame(row.names = 1:nrow(facs))
+  }
+  if ("missing" %in% stats) {
+    miss <- values[, grep("\\.missing", names(values), value = T)]
+  } else {
+    miss <- data.frame(row.names = 1:nrow(facs))
+  }
+  
+  # f1 <- as.formula(paste(paste(var.names, collapse = " + "), "~", by1))
+  # f2 <- as.formula(paste(paste(var.names, collapse = " + "), "~", by2))
+  # tot1 <- summaryBy(f1, t.dat, FUN = contSumFunc)
+  # tot2 <- summaryBy(f2, t.dat, FUN = contSumFunc)
+  # tot <- c("Total", contSumFunc(t.dat[, var.names]))
+  main <- cbind(ms, med, iqr, range, miss,
+                matrix(rep("", sum(table(facets[, c(by1, by2)]) > 0)),
+                       ncol = length(var.names),
+                       dimnames = list(NULL, var.names))) %>% 
+    t %>% 
+    extract(row.order, ) %>% 
+    set_rownames(unlist(lapply(paste0("**", var.names, "**"),
+                               function(x) c(x, rows)))) %>% 
+    set_colnames(apply(mapply(function(x, y) paste(x, y, sep = "="),
+                              names(facs), facs), 1, function(x)
+                                paste(x, collapse = ", ")))
   pander::pandoc.table(main, split.table = Inf, emphasize.rownames = F)
 }
 
 # SummaryStatsBy(data = mtcars, by1 = "cyl", by2 = "gear", var.names = c("mpg", "qsec"))
+# a <- mtcars[, c("vs", "cyl", "gear")]
+# b <- aggregate(vs ~ cyl + gear, a, summary)
