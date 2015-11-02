@@ -23,6 +23,7 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
                            missing.codes.highlight = NULL,
                            missing.codes = c("N/A", "", "Unk"),
                            decimal = 0, caption = NA) {
+  . <- NULL
   var.dat <- data[, var.names]
   facets <- data[, c(by1, by2)]
   if (is.null(dim(var.dat))) {
@@ -38,9 +39,14 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
     num.dat <- cbind(var.dat[, which(types %in% c("numeric", "integer"))], facets)
     fac.dat <- cbind(var.dat[, which(types %in% c("factor", "character"))], facets)
   }
-  rows <- stats
+  if ("range" %in% stats) {
+    rows <- gsub("range", "min", stats) %>% 
+      append("max", match("min", .))
+  } else {
+    rows <- stats
+  }
   row.order <- unlist(lapply(var.names, function(x)
-    paste0(x, c("", paste0(".", stats)))))
+    paste0(x, c("", paste0(".", rows)))))
   f <- as.formula(paste(paste(var.names, collapse = " + "), "~",
                         paste(by1, by2, sep = " + ")))
   values <- doBy::summaryBy(f, num.dat, FUN = contSumFunc,
@@ -54,14 +60,27 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
       t %>% 
       extract(row.order, ) %>% 
       set_rownames(unlist(lapply(paste0("**", var.names, "**"),
-                                 function(x) c(x, stats)))) 
+                                 function(x) c(x, rows)))) %>% 
+      set_colnames(apply(mapply(function(x, y) paste(x, y, sep = "="),
+                                names(facs), facs), 1, function(x)
+                                  paste(x, collapse = ", ")))
     if (all(c("mean", "sd") %in% stats)) {
       main <- main %>% 
-        rbind(mean = paste(.[which(rownames(main) == "mean"), ],
-                           .[which(rownames(main) == "sd"), ],
+        rbind(mean = paste(.[which(rownames(.) == "mean"), ],
+                           .[which(rownames(.) == "sd"), ],
                            sep = " &#177; ")) %>% 
-        extract(-match(c("mean", "sd"), rownames(.)), ) %>% 
-        extract(c(rownames(main)[1], stats[-which(stats == "sd")]), )
+        extract(-match("mean", rownames(.)), ) %>% 
+        extract(c(1, match(rows, rownames(.))), ) %>% 
+        extract(-match("sd", rownames(.)), )
+    }
+    if ("range" %in% stats) {
+      main <- main %>% 
+        rbind(range = paste(.[which(rownames(.) == "min"), ],
+                            .[which(rownames(.) == "max"), ],
+                            sep = "-")) %>% 
+        extract(-match(c("min", "max"), rownames(.)), ) %>% 
+        extract(c(1, match(stats, rownames(.))), )  %>% 
+        extract(-match(NA, rownames(.)), )
     }
     return(pander::pandoc.table(main, split.table = Inf, emphasize.rownames = F))
   } else {
@@ -92,9 +111,14 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
     if ("range" %in% stats) {
       min <- values[, grep("\\.min", names(values))]
       max <- values[, grep("\\.max", names(values))]
-      range <- apply(mapply(function(x, y) paste(x, y, sep = "-"), min, max),
-                     2, cbind)
-      row.order <- stringr::str_replace_all(row.order, "range", "min")
+      range <- mapply(function(x, y) paste(x, y, sep = "-"), min, max) %>% 
+        set_colnames(gsub("min", "range", colnames(.)))
+      rows <- rows %>% 
+        stringr::str_replace_all("min", "range") %>% 
+        extract(-grep("max", .))
+      row.order <- row.order %>% 
+        stringr::str_replace_all("min", "range") %>% 
+        extract(-grep("max", .))
     } else {
       range <- data.frame(row.names = 1:nrow(facs))
     }
@@ -124,6 +148,7 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
   }
 }
 
-# SummaryStatsBy(data = mtcars, by1 = "cyl", by2 = "gear", var.names = c("qsec"))
+# SummaryStatsBy(data = mtcars, by1 = "cyl", by2 = "gear", var.names = c("qsec", "mpg"))
+# SummaryStatsBy(data = mtcars, by1 = "cyl", by2 = "gear", var.names = c("mpg"))
 # a <- mtcars[, c("vs", "cyl", "gear")]
 # b <- aggregate(vs ~ cyl + gear, a, summary)
