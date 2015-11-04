@@ -16,6 +16,10 @@
 #' @import doBy dplyr
 #' @importFrom magrittr set_colnames set_rownames extract
 #' @export
+#' @examples 
+#' mtcars$vs <- as.factor(mtcars$vs)
+#' SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("vs"))
+#' SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("vs", "qsec"))
 SummaryStatsBy <- function(data, by1, by2, var.names,
                            stats = c("mean", "sd", "median", "IQR", "range",
                                      "missing"),
@@ -28,41 +32,55 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
   var.dat <- data[, var.names]
   facets <- data[, c(by1, by2)]
   types <- sapply(var.dat, class)
-  if (length(var.names) < 2) {
-    if (all(types %in% c("numeric", "integer"))) {
+  num.ind <- types %in% c("numeric", "integer")
+  fac.ind <- types %in% c("factor", "character")
+  # Separate numeric and factor components
+  if (length(var.names) < 2) {  # Single response
+    if (all(num.ind)) {  # Numeric
       num.var <- var.names
-    } else {
+      num.dat <- cbind(var.dat, facets) %>% 
+        set_colnames(c(num.var, by1, by2))
+      fac.var <- fac.dat <- NULL
+    } else if (all(fac.ind)) {  # Factor
       fac.var <- var.names
+      fac.dat <- cbind(var.dat, facets) %>% 
+        set_colnames(c(fac.var, by1, by2))
+      num.var <- num.dat <- NULL
+    } else {
+      stop('Variable must be numeric, integer, factor, or character.')
     }
-  } else {
-    num.var <- names(types)[which(types %in% c("numeric", "integer"))]
-    fac.var <- names(types)[which(types %in% c("factor", "character"))]
+  } else {  # Multiple responses
+    if (length(which(num.ind)) > 0) {  # Numeric cases
+      num.var <- names(types)[which(num.ind)]
+      num.dat <- cbind(var.dat[, num.var], facets) %>% 
+        set_colnames(c(num.var, by1, by2))
+    } else {
+      num.var <- num.dat <- NULL
+    }
+    if (length(which(fac.ind)) > 0) {  # Factor cases
+      fac.var <- names(types)[which(fac.ind)]
+      fac.dat <- cbind(var.dat[, fac.var], facets) %>% 
+        set_colnames(c(fac.var, by1, by2))
+    } else {
+      fac.var <- fac.dat <- NULL
+    }
   }
-  if (length(num.var) < 2) {
-    num.dat <- fac.dat <- cbind(var.dat, facets) %>% 
-      set_colnames(c(var.names, by1, by2))
-  } else {
-    num.dat <- cbind(var.dat[, num.var], facets) %>% 
-      set_colnames(c(num.var, by1, by2))
-    fac.dat <- cbind(var.dat[, fac.var], facets) %>% 
-      set_colnames(c(fac.var, by1, by2))
-  }
-  if ("range" %in% stats) {
-    rows <- gsub("range", "min", stats) %>% 
+  if ("range" %in% stats) {  # Replace "range" input with "min" & "max"
+    rows <- gsub("range", "min", stats) %>%
       append("max", match("min", .))
   } else {
     rows <- stats
   }
-  row.order <- unlist(lapply(num.var, function(x)
-    paste0(x, c("", paste0(".", rows)))))
-  if (length(num.var) != 0) {
-    f <- as.formula(paste(paste(num.var, collapse = " + "), "~",
-                          paste(by1, by2, sep = " + ")))
-    values <- doBy::summaryBy(f, num.dat, FUN = contSumFunc,
-                              digits = digits, stats = stats)
-    facs <- values[, c(by1, by2)]
-    if (length(num.var) < 2) {
-      main <- values %>% 
+  if (length(num.var) > 0) {  # Compute numerical summaries
+    row.order <- unlist(lapply(num.var, function(x)
+      paste0(x, c("", paste0(".", rows)))))
+    num.form <- as.formula(paste(paste(num.var, collapse = " + "), "~",
+                                 paste(by1, by2, sep = " + ")))
+    num.values <- doBy::summaryBy(num.form, num.dat, FUN = contSumFunc,
+                                  digits = digits, stats = stats)
+    facs <- num.values[, c(by1, by2)]
+    if (length(num.var) < 2) {  # Single numeric response
+      num.result <- num.values %>% 
         extract(, -match(c(by1, by2), colnames(.))) %>% 
         mutate(filler = "") %>% 
         set_colnames(gsub("filler", eval(num.var), colnames(.))) %>% 
@@ -74,7 +92,7 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
                                   names(facs), facs), 1, function(x)
                                     paste(x, collapse = ", ")))
       if (all(c("mean", "sd") %in% stats)) {
-        main <- main %>% 
+        num.result <- num.result %>% 
           rbind(mean = paste(.[which(rownames(.) == "mean"), ],
                              .[which(rownames(.) == "sd"), ],
                              sep = " &#177; ")) %>% 
@@ -83,7 +101,7 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
           extract(-match("sd", rownames(.)), )
       }
       if ("range" %in% stats) {
-        main <- main %>% 
+        num.result <- num.result %>% 
           rbind(range = paste(.[which(rownames(.) == "min"), ],
                               .[which(rownames(.) == "max"), ],
                               sep = "-")) %>% 
@@ -91,38 +109,38 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
           extract(c(1, match(stats, rownames(.))), )  %>% 
           extract(-match(NA, rownames(.)), )
       }
-    } else {
+    } else {  # Multiple numeric response
       if (all(c("mean", "sd") %in% stats)) {
-        means <- values[, grep("\\.mean", names(values))]
-        sds <- values[, grep("\\.sd", names(values))]
+        means <- num.values[, grep("\\.mean", names(num.values))]
+        sds <- num.values[, grep("\\.sd", names(num.values))]
         ms <- apply(mapply(function(x, y) paste(x, y, sep = " &#177; "),
                            means, sds), 2, cbind)
         rows <- rows[-grep("sd", rows)]
         row.order <- row.order[-grep("\\.sd", row.order)]
       } else if ("mean" %in% stats & !"sd" %in% stats) {
-        ms <- values[, grep("\\.mean", names(values))]
+        ms <- num.values[, grep("\\.mean", names(num.values))]
       } else if ("sd" %in% stats & !"mean" %in% stats) {
-        ms <- values[, grep("\\.sd", names(values))]
+        ms <- num.values[, grep("\\.sd", names(num.values))]
       } else {
         ms <- data.frame(row.names = 1:nrow(facs))
       }
       if ("median" %in% stats) {
-        med <- values[, grep("\\.median", names(values))]
+        med <- num.values[, grep("\\.median", names(num.values))]
       } else {
         med <- data.frame(row.names = 1:nrow(facs))
       }
       if ("IQR" %in% stats) {
-        iqr <- values[, grep("\\.IQR", names(values))]
+        iqr <- num.values[, grep("\\.IQR", names(num.values))]
       } else {
         iqr <- data.frame(row.names = 1:nrow(facs))
       }
       if ("range" %in% stats) {
-        min <- values[, grep("\\.min", names(values))]
-        max <- values[, grep("\\.max", names(values))]
+        min <- num.values[, grep("\\.min", names(num.values))]
+        max <- num.values[, grep("\\.max", names(num.values))]
         range <- mapply(function(x, y) paste(x, y, sep = "-"), min, max) %>%
           set_colnames(gsub("min", "range", colnames(.)))
         rows <- rows %>% 
-          stringr::str_replace_all("min", "range") %>% 
+          gsub("min", "range", .) %>% 
           extract(-grep("max", .))
         row.order <- row.order %>% 
           stringr::str_replace_all("min", "range") %>% 
@@ -131,31 +149,34 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
         range <- data.frame(row.names = 1:nrow(facs))
       }
       if ("missing" %in% stats) {
-        miss <- values[, grep("\\.missing", names(values), value = T)]
+        miss <- num.values[, grep("\\.missing", names(num.values), value = T)]
       } else {
         miss <- data.frame(row.names = 1:nrow(facs))
       }
-      main <- cbind(ms, med, iqr, range, miss,
-                    matrix(rep("", sum(table(facets[, c(by1, by2)]) > 0)),
-                           ncol = length(var.names),
-                           dimnames = list(NULL, var.names))) %>% 
+      num.result <- cbind(ms, med, iqr, range, miss,
+                          matrix(rep("", sum(table(facets[, c(by1, by2)]) > 0)),
+                                 ncol = length(num.var),
+                                 dimnames = list(NULL, num.var))) %>% 
         t %>% 
         extract(row.order, ) %>% 
-        set_rownames(unlist(lapply(paste0("**", var.names, "**"),
+        set_rownames(unlist(lapply(paste0("**", num.var, "**"),
                                    function(x) c(x, rows)))) %>% 
         set_colnames(apply(mapply(function(x, y) paste(x, y, sep = "="),
                                   names(facs), facs), 1, function(x)
                                     paste(x, collapse = ", ")))
     }
   } else {
-    main <- NULL
+    num.result <- NULL
   }
-  if (length(fac.var) != 0) {
-    g <- as.formula(paste(paste(fac.var, collapse = " + "), "~",
+  if (length(fac.var) > 0) {
+    fac.form <- as.formula(paste(paste(fac.var, collapse = " + "), "~",
                           paste(by1, by2, sep = " + ")))
-    fac.values <- as.data.frame(as.matrix(aggregate(g, fac.dat, summary)))
+    fac.values <- aggregate(fac.form, fac.dat, summary)
+    facs <- fac.values %>% 
+      extract(order(.[, by1]), match(c(by1, by2), colnames(.)))
     if (length(fac.var) < 2) {
-      main2 <- fac.values %>% 
+      fac.result <- fac.values %>%
+        as.matrix %>% 
         extract(order(.[, by1]), -match(c(by1, by2), colnames(.))) %>% 
         t %>% 
         rbind("", .) %>% 
@@ -166,15 +187,12 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
                                     paste(x, collapse = ", ")))
     }
   } else {
-    main2 <- NULL
+    fac.result <- NULL
   }
-  return(pander::pandoc.table(rbind(main, main2), split.table = Inf,
+  final.result <- rbind(num.result, fac.result)
+  return(pander::pandoc.table(final.result, split.table = Inf,
                               emphasize.rownames = F))
 }
-# SummaryStatsBy(data = mtcars, by1 = "cyl", by2 = "gear", var.names = c("qsec", "vs"))
-# SummaryStatsBy2(data = mtcars, by1 = "cyl", by2 = "gear", var.names = c("mpg"))
-# a <- mtcars[, c("vs", "cyl", "gear")]
-# b <- aggregate(vs ~ cyl + gear, a, summary)
 # f1 <- as.formula(paste(paste(var.names, collapse = " + "), "~", by1))
 # f2 <- as.formula(paste(paste(var.names, collapse = " + "), "~", by2))
 # tot1 <- summaryBy(f1, t.dat, FUN = contSumFunc)

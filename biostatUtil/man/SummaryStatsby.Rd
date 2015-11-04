@@ -40,6 +40,11 @@ SummaryStatsBy(data, by1, by2, var.names, stats = c("mean", "sd", "median",
 \description{
 Generate cohort characteristics
 }
+\examples{
+mtcars$vs <- as.factor(mtcars$vs)
+SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("vs"))
+SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("vs", "qsec"))
+}
 \author{
 Aline Talhouk, Derek Chiu
 }
