@@ -6,9 +6,7 @@
 \usage{
 SummaryStatsBy(data, by1, by2, var.names, stats = c("mean", "sd", "median",
   "IQR", "range", "missing"), marker.description = by1,
-  groups.description = by2, var.descriptions = var.names, digits = 3,
-  missing.codes.highlight = NULL, missing.codes = c("N/A", "", "Unk"),
-  decimal = 0, caption = NA)
+  groups.description = by2, var.descriptions = var.names, digits = 3)
 }
 \arguments{
 \item{data}{The \code{data.frame} containing the data}
@@ -28,21 +26,13 @@ SummaryStatsBy(data, by1, by2, var.names, stats = c("mean", "sd", "median",
 \item{var.descriptions}{descriptions of \code{var.names}}
 
 \item{digits}{number of digits to round to}
-
-\item{missing.codes.highlight}{NAs}
-
-\item{missing.codes}{search strings to detect missing entries}
-
-\item{decimal}{number of decimal places}
-
-\item{caption}{caption for summary table}
 }
 \description{
 Generate cohort characteristics
 }
 \examples{
-mtcars$vs <- as.factor(mtcars$vs)
-SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("vs"))
+mtcars$vs <- as.factor(mtcars$vs); mtcars$am <- as.factor(mtcars$am)
+SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("am"))
 SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("vs", "qsec"))
 }
 \author{

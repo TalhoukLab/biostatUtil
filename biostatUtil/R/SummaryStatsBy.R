@@ -8,26 +8,19 @@
 #' @param groups.description The groupings of the marker
 #' @param var.descriptions descriptions of \code{var.names}
 #' @param digits number of digits to round to
-#' @param missing.codes.highlight NAs
-#' @param missing.codes search strings to detect missing entries
-#' @param decimal number of decimal places
-#' @param caption caption for summary table
 #' @author Aline Talhouk, Derek Chiu
 #' @import doBy dplyr
 #' @importFrom magrittr set_colnames set_rownames extract
 #' @export
 #' @examples 
-#' mtcars$vs <- as.factor(mtcars$vs)
-#' SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("vs"))
+#' mtcars$vs <- as.factor(mtcars$vs); mtcars$am <- as.factor(mtcars$am)
+#' SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("vs", "am", "mpg", "qsec"))
 #' SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("vs", "qsec"))
 SummaryStatsBy <- function(data, by1, by2, var.names,
                            stats = c("mean", "sd", "median", "IQR", "range",
                                      "missing"),
                            marker.description = by1, groups.description = by2,
-                           var.descriptions = var.names, digits = 3,
-                           missing.codes.highlight = NULL,
-                           missing.codes = c("N/A", "", "Unk"),
-                           decimal = 0, caption = NA) {
+                           var.descriptions = var.names, digits = 3) {
   . <- NULL
   var.dat <- data[, var.names]
   facets <- data[, c(by1, by2)]
@@ -168,24 +161,39 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
   } else {
     num.result <- NULL
   }
-  if (length(fac.var) > 0) {
-    fac.form <- as.formula(paste(paste(fac.var, collapse = " + "), "~",
-                          paste(by1, by2, sep = " + ")))
-    fac.values <- aggregate(fac.form, fac.dat, summary)
-    facs <- fac.values %>% 
-      extract(order(.[, by1]), match(c(by1, by2), colnames(.)))
-    if (length(fac.var) < 2) {
-      fac.result <- fac.values %>%
-        as.matrix %>% 
-        extract(order(.[, by1]), -match(c(by1, by2), colnames(.))) %>% 
-        t %>% 
-        rbind("", .) %>% 
-        set_rownames(c(paste0("**", fac.var, "**"),
-                       levels(fac.dat[, fac.var]))) %>% 
-        set_colnames(apply(mapply(function(x, y) paste(x, y, sep = "="),
-                                  names(facs), facs), 1, function(x)
-                                    paste(x, collapse = ", ")))
+  if (length(fac.var) > 0) {  # Compute factor summaries
+    if (length(fac.var) > 1) {
+      row.order <- fac.var %>% 
+        mapply(function(x, y) paste0(x, ".", levels(y)), ., fac.dat[, .]) %>%
+        rbind(colnames(.), .) %>% 
+        as.vector()
+    } else {
+      row.order <- c(fac.var, paste0(fac.var, ".", levels(fac.dat[, fac.var])))
     }
+    fac.values <- fac.var %>% 
+      sapply(function(x) as.formula(paste(x, "~",
+                                          paste(by1, by2, sep = " + ")))) %>%
+      lapply(aggregate, fac.dat, summary) %>% 
+      Reduce(merge, .) %>% 
+      extract(order(.[, by1]), )
+    facs <- fac.values %>% 
+      extract(, match(c(by1, by2), colnames(.)))
+    fac.result <- fac.values %>%
+      cbind(matrix(rep("", sum(table(facets[, c(by1, by2)]) > 0)),
+                   ncol = length(fac.var),
+                   dimnames = list(NULL, fac.var))) %>% 
+      as.matrix %>% 
+      t %>% 
+      extract(row.order, ) %>% 
+      set_rownames(stringr::str_replace_all(
+        rownames(.), setNames(c(rep("", length(fac.var))),
+                              paste0(fac.var, ".")))) %>% 
+      set_rownames(stringr::str_replace_all(
+        rownames(.), setNames(paste0("**", var.names, "**"), var.names))) %>%
+      set_colnames(apply(mapply(function(x, y) paste(x, y, sep = "="),
+                                names(facs), facs), 1, function(x)
+                                  paste(x, collapse = ", "))) %>% 
+      trimws()
   } else {
     fac.result <- NULL
   }
