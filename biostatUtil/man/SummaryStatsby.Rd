@@ -6,7 +6,8 @@
 \usage{
 SummaryStatsBy(data, by1, by2, var.names, stats = c("mean", "sd", "median",
   "IQR", "range", "missing"), marker.description = by1,
-  groups.description = by2, var.descriptions = var.names, digits = 3)
+  groups.description = by2, var.descriptions = var.names, digits = 3,
+  format = c("pandoc", "html"))
 }
 \arguments{
 \item{data}{The \code{data.frame} containing the data}
@@ -26,13 +27,15 @@ SummaryStatsBy(data, by1, by2, var.names, stats = c("mean", "sd", "median",
 \item{var.descriptions}{descriptions of \code{var.names}}
 
 \item{digits}{number of digits to round to}
+
+\item{format}{format to return the table in}
 }
 \description{
 Generate cohort characteristics
 }
 \examples{
 mtcars$vs <- as.factor(mtcars$vs); mtcars$am <- as.factor(mtcars$am)
-SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("am"))
+SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("mpg", "vs", "qsec", "am"))
 SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("vs", "qsec"))
 }
 \author{

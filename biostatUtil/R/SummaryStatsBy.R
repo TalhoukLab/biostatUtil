@@ -8,19 +8,21 @@
 #' @param groups.description The groupings of the marker
 #' @param var.descriptions descriptions of \code{var.names}
 #' @param digits number of digits to round to
+#' @param format format to return the table in
 #' @author Aline Talhouk, Derek Chiu
 #' @import doBy dplyr
 #' @importFrom magrittr set_colnames set_rownames extract
 #' @export
 #' @examples 
 #' mtcars$vs <- as.factor(mtcars$vs); mtcars$am <- as.factor(mtcars$am)
-#' SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("vs", "am", "mpg", "qsec"))
+#' SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("mpg", "vs", "qsec", "am"))
 #' SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("vs", "qsec"))
 SummaryStatsBy <- function(data, by1, by2, var.names,
                            stats = c("mean", "sd", "median", "IQR", "range",
                                      "missing"),
                            marker.description = by1, groups.description = by2,
-                           var.descriptions = var.names, digits = 3) {
+                           var.descriptions = var.names, digits = 3,
+                           format = c("pandoc", "html")) {
   . <- NULL
   var.dat <- data[, var.names]
   facets <- data[, c(by1, by2)]
@@ -198,8 +200,19 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
     fac.result <- NULL
   }
   final.result <- rbind(num.result, fac.result)
-  return(pander::pandoc.table(final.result, split.table = Inf,
-                              emphasize.rownames = F))
+  ind <- grep("\\*", rownames(final.result))
+  org.ord <- gsub("\\*\\*", "", rownames(final.result)[ind])
+  fin <- final.result %>% 
+    extract(mapply(rep, match(org.ord, var.names),
+                   diff(c(ind, nrow(.) + 1))) %>% 
+              unlist() %>% 
+              factor() %>% 
+              order(), )
+  format <- match.arg(format)
+  return(switch(format,
+                pandoc = pander::pandoc.table(fin, split.table = Inf,
+                                              emphasize.rownames = F),
+                html = NA))
 }
 # f1 <- as.formula(paste(paste(var.names, collapse = " + "), "~", by1))
 # f2 <- as.formula(paste(paste(var.names, collapse = " + "), "~", by2))
