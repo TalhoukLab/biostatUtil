@@ -19,7 +19,6 @@
 #' @importFrom magrittr extract and is_greater_than is_less_than divide_by
 #' @import dplyr
 #' @export
-#'
 PAC <- function(cons.mat, lower = 0, upper = 1) {
   . <- NULL
   pac <- cons.mat %>%
