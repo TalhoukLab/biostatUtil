@@ -2,14 +2,13 @@
 % Please edit documentation in R/consensusConfmat.R
 \name{consensusConfmat}
 \alias{consensusConfmat}
-\title{Confusion matrix between meta-consensus clusters and true classes}
+\title{Confusion matrix between consensus clusters and true classes}
 \usage{
-consensusConfmat(cl.mat, cl.true, k, pred.lab = "Prediction",
-  ref.lab = "Reference", weight.algs = NULL, weights = NULL)
+consensusConfmat(clust, cl.true, k, pred.lab = "Prediction",
+  ref.lab = "Reference")
 }
 \arguments{
-\item{cl.mat}{matrix or data frame, where each column is a cluster assignment
-coming from a different algorithm, and each row is a different sample.}
+\item{clust}{vector of cluster assignments}
 
 \item{cl.true}{true class labels}
 
@@ -18,14 +17,9 @@ coming from a different algorithm, and each row is a different sample.}
 \item{pred.lab}{label for the predicted clusters}
 
 \item{ref.lab}{label for the reference classes}
-
-\item{weight.algs}{Specify the weights remaining}
-
-\item{weights}{Specify a weights to compute a weighted meta-consensus
-clustering. By default set to \code{NULL} (unweighted).}
 }
 \value{
-A confusion matrix with the predicted meta-consensus cluster 
+A confusion matrix with the predicted cluster 
 assignments compared to the reference true class labels.
 }
 \description{
