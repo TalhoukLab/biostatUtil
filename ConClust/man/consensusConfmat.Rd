@@ -19,11 +19,11 @@ consensusConfmat(clust, cl.true, k, pred.lab = "Prediction",
 \item{ref.lab}{label for the reference classes}
 }
 \value{
-A confusion matrix with the predicted cluster 
+A confusion matrix with the predicted cluster
 assignments compared to the reference true class labels.
 }
 \description{
-Combines the cluster assignments from multiple algorithms, then 
+Combines the cluster assignments from multiple algorithms, then
 compares to the true class partitions.
 }
 \author{
