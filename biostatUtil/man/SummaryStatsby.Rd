@@ -7,7 +7,7 @@
 SummaryStatsBy(data, by1, by2, var.names, stats = c("mean", "sd", "median",
   "IQR", "range", "missing"), marker.description = by1,
   groups.description = by2, var.descriptions = var.names, digits = 3,
-  format = c("pandoc", "html"))
+  format = c("pandoc", "html", "long"))
 }
 \arguments{
 \item{data}{The \code{data.frame} containing the data}
@@ -28,7 +28,8 @@ SummaryStatsBy(data, by1, by2, var.names, stats = c("mean", "sd", "median",
 
 \item{digits}{number of digits to round to}
 
-\item{format}{format to return the table in}
+\item{format}{format to return the table in. Either "pandoc" (for Word and PDF),
+"html", or "long" format for graphing and data manipulation using raw values.}
 }
 \description{
 Generate cohort characteristics

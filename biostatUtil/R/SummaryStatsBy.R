@@ -8,7 +8,8 @@
 #' @param groups.description The groupings of the marker
 #' @param var.descriptions descriptions of \code{var.names}
 #' @param digits number of digits to round to
-#' @param format format to return the table in
+#' @param format format to return the table in. Either "pandoc" (for Word and PDF),
+#' "html", or "long" format for graphing and data manipulation using raw values.
 #' @author Aline Talhouk, Derek Chiu
 #' @import doBy dplyr
 #' @importFrom magrittr set_colnames set_rownames extract
@@ -22,8 +23,8 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
                                      "missing"),
                            marker.description = by1, groups.description = by2,
                            var.descriptions = var.names, digits = 3,
-                           format = c("pandoc", "html")) {
-  . <- NULL
+                           format = c("pandoc", "html", "long")) {
+  . <- stat <- value <- NULL
   var.dat <- data[, var.names]
   facets <- data[, c(by1, by2)]
   types <- sapply(var.dat, class)
@@ -31,12 +32,12 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
   fac.ind <- types %in% c("factor", "character")
   # Separate numeric and factor components
   if (length(var.names) < 2) {  # Single response
-    if (all(num.ind)) {  # Numeric
+    if (all(num.ind)) {  # Numeric case
       num.var <- var.names
       num.dat <- cbind(var.dat, facets) %>% 
         set_colnames(c(num.var, by1, by2))
       fac.var <- fac.dat <- NULL
-    } else if (all(fac.ind)) {  # Factor
+    } else if (all(fac.ind)) {  # Factor case
       fac.var <- var.names
       fac.dat <- cbind(var.dat, facets) %>% 
         set_colnames(c(fac.var, by1, by2))
@@ -73,6 +74,11 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
                                  paste(by1, by2, sep = " + ")))
     num.values <- doBy::summaryBy(num.form, num.dat, FUN = contSumFunc,
                                   digits = digits, stats = stats)
+    num.values.long <- num.values %>% 
+      tidyr::gather(stat, value, -match(c(by1, by2), colnames(.))) %>%
+      tidyr::separate(stat, c("var", "stat"), "\\.") %>%
+      extract(order(.[, "var"], .[, by1], .[, by2]), ) %>% 
+      set_rownames(NULL)
     facs <- num.values[, c(by1, by2)]
     if (length(num.var) < 2) {  # Single numeric response
       num.result <- num.values %>% 
@@ -161,7 +167,7 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
                                     paste(x, collapse = ", ")))
     }
   } else {
-    num.result <- NULL
+    num.result <- num.values.long <- NULL
   }
   if (length(fac.var) > 0) {  # Compute factor summaries
     if (length(fac.var) > 1) {
@@ -177,14 +183,21 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
                                           paste(by1, by2, sep = " + ")))) %>%
       lapply(aggregate, fac.dat, summary) %>% 
       Reduce(merge, .) %>% 
-      extract(order(.[, by1]), )
+      extract(order(.[, by1]), ) %>% 
+      as.matrix()
+    fac.values.long <- fac.values %>% 
+      as.data.frame() %>% 
+      tidyr::gather(stat, value, -match(c(by1, by2), colnames(.))) %>% 
+      tidyr::separate(stat, c("var", "stat"), "\\.") %>%
+      extract(order(.[, "var"], .[, by1], .[, by2]), ) %>% 
+      set_rownames(NULL)
     facs <- fac.values %>% 
-      extract(, match(c(by1, by2), colnames(.)))
+      extract(, match(c(by1, by2), colnames(.))) %>% 
+      as.data.frame()
     fac.result <- fac.values %>%
-      cbind(matrix(rep("", sum(table(facets[, c(by1, by2)]) > 0)),
+      cbind(matrix(rep("", sum(table(facets[, c(by1, by2)]) > 0) * length(fac.var)),
                    ncol = length(fac.var),
                    dimnames = list(NULL, fac.var))) %>% 
-      as.matrix %>% 
       t %>% 
       extract(row.order, ) %>% 
       set_rownames(stringr::str_replace_all(
@@ -194,12 +207,16 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
         rownames(.), setNames(paste0("**", var.names, "**"), var.names))) %>%
       set_colnames(apply(mapply(function(x, y) paste(x, y, sep = "="),
                                 names(facs), facs), 1, function(x)
-                                  paste(x, collapse = ", "))) %>% 
-      trimws()
+                                  paste(x, collapse = ", ")))
   } else {
-    fac.result <- NULL
+    fac.result <- fac.values.long <- NULL
   }
+  final.values.long <- rbind(num.values.long, fac.values.long) %>% 
+    extract(order(match(.$var, var.names)), )
   final.result <- rbind(num.result, fac.result)
+  fin.html <- final.result %>% 
+    set_rownames(stringr::str_replace_all(
+      rownames(.), c("^\\*\\*" = "<b>", "\\*\\*$" = "</b>")))
   ind <- grep("\\*", rownames(final.result))
   org.ord <- gsub("\\*\\*", "", rownames(final.result)[ind])
   fin <- final.result %>% 
@@ -210,9 +227,10 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
               order(), )
   format <- match.arg(format)
   return(switch(format,
-                pandoc = pander::pandoc.table(fin, split.table = Inf,
-                                              emphasize.rownames = F),
-                html = NA))
+                pandoc = pander::pandoc.table.return(fin, split.table = Inf,
+                                                     emphasize.rownames = F),
+                html = htmlTable::htmlTable(fin.html),
+                long = final.values.long))
 }
 # f1 <- as.formula(paste(paste(var.names, collapse = " + "), "~", by1))
 # f2 <- as.formula(paste(paste(var.names, collapse = " + "), "~", by2))
