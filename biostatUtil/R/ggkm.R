@@ -39,15 +39,11 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                  timeby = 5, pval = TRUE, HR = TRUE,
                  use.firth = 1, subs = NULL, legend = FALSE,
                  line.y.increment = 0.05, ...) {
-  
-  # to satisfy R CMD check where variables can't be found when input data passed from ggplot
   surv <- lower <- upper <- n.censor <- n.risk <- NULL
-  
-  # sorting the use of subsetting
   times <- seq(0, max(sfit$time), by = timeby)
   if (is.null(subs)) {
     subs1 <- 1:length(levels(summary(sfit)$strata))
-    subs2 <- 1:length(summary(sfit, censored = T)$strata)
+    subs2 <- 1:length(summary(sfit, censored = TRUE)$strata)
     subs3 <- 1:length(summary(sfit, times = times, extend = TRUE)$strata)
   } else {
     for (i in 1:length(subs)) {
@@ -62,17 +58,14 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
     }
     subs1 <- which(regexpr(ssvar, levels(summary(sfit)$strata),
                            perl = T) != -1)
-    subs2 <- which(regexpr(ssvar, summary(sfit, censored = T)$strata,
+    subs2 <- which(regexpr(ssvar, summary(sfit, censored = TRUE)$strata,
                            perl = T) != -1)
     subs3 <- which(regexpr(ssvar, summary(sfit, times = times,
                                           extend = TRUE)$strata,
                            perl = T) != -1)
   }
-  
   if (!is.null(subs))
     pval <- FALSE
-  
-  # data manipulation pre-plotting ----
   if (is.null(ystratalabs))
     ystratalabs <- as.character(sub("group=*", "", names(sfit$strata))) 
   if (is.null(ystrataname))
@@ -86,13 +79,14 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
     n.event = sfit$n.event[subs2],
     n.censor = sfit$n.censor[subs2],
     surv = sfit$surv[subs2],
-    strata = factor(summary(sfit, censored = T)$strata[subs2]),
+    strata = factor(summary(sfit, censored = TRUE)$strata[subs2]),
     upper = sfit$upper[subs2],
     lower = sfit$lower[subs2])
   levels(.df$strata) <- ystratalabs       # final changes to data for survival plot
-  zeros <- data.frame(time = 0, surv = 1,
-                      strata = factor(ystratalabs, levels=levels(.df$strata)),
-                      upper = 1, lower = 1)
+  zeros <- data.frame(
+    time = 0, surv = 1,
+    strata = factor(ystratalabs, levels = levels(.df$strata)),
+    upper = 1, lower = 1)
   .df <- plyr::rbind.fill(zeros, .df)
   d <- length(levels(.df$strata))
   
@@ -111,32 +105,24 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
     theme(plot.margin = grid::unit(c(0, 1, .5,
                                      ifelse(m < 10, 1.5, 2.5)), "lines")) +
     ggtitle(main)
-  
-  # Legend----
-  if (legend == TRUE)
+  if (legend == TRUE)  # Legend----
     p <- p + theme(legend.position = c(.8, .88)) +
       theme(legend.key = element_rect(colour = NA)) +
       theme(legend.title = element_blank())
   else
     p <- p + theme(legend.position = "none")
-  
-  #Confidence Bands----  
-  if (CI == TRUE)
+  if (CI == TRUE)  # Confidence Bands----  
     p <- p + geom_ribbon(data = .df, aes(ymin = lower, ymax = upper),
                          alpha = 0.05, linetype = 0) 
-  
-  # Censor Marks----
-  if (marks == TRUE)
+  if (marks == TRUE)  # Censor Marks----
     p <- p + geom_point(data = subset(.df, n.censor >= 1), 
                         aes(x = time, y = surv), shape = "/", size = 4)
-  
   ## Create a blank plot for place-holding
   blank.pic <- ggplot(.df, aes(time, surv)) + geom_blank() + theme_bw() +
     theme(axis.text.x = element_blank(), axis.text.y = element_blank(),
           axis.title.x = element_blank(), axis.title.y = element_blank(),
-          axis.ticks = element_blank(),
-          panel.grid.major = element_blank(), panel.border = element_blank())
-  
+          axis.ticks = element_blank(), panel.grid.major = element_blank(),
+          panel.border = element_blank())
   # p-value placement----
   if (is.null(sfit2)) {
     if (pval) {
@@ -173,7 +159,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
   } else {
     if (pval) {
       sdiff <- survdiff(eval(sfit2$call$formula), data = eval(sfit2$call$data))
-      pval <- pchisq(sdiff$chisq,length(sdiff$n) - 1, lower.tail = FALSE)
+      pval <- pchisq(sdiff$chisq, length(sdiff$n) - 1, lower.tail = FALSE)
       pvaltxt <- ifelse(pval < 0.001, "Log Rank p < 0.001",
                         paste("Log Rank p =", signif(pval, 3)))
       if (HR) {
@@ -210,13 +196,12 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
       strata = factor(summary(sfit,times = times,
                               extend = TRUE)$strata[subs3], ),
       time = as.numeric(summary(sfit,times = times,
-                                extend = TRUE)$time[subs3]) * 
-        0.97 + xlims[2] * 0.02, # doing some nasty empirical scaling/shifting here!!!  remove scaling/shifting factors if dosen't look right
+                                extend = TRUE)$time[subs3]) * 0.97 +
+        xlims[2] * 0.02, # doing some nasty empirical scaling/shifting here!!!  remove scaling/shifting factors if dosen't look right
       n.risk = summary(sfit, times = times, extend = TRUE)$n.risk[subs3]
     )
     risk.data$strata <- factor(risk.data$strata,
                                levels = rev(levels(risk.data$strata)))
-    
     data.table <- ggplot(risk.data, aes(x = time, y = strata,
                                         label = format(n.risk, nsmall = 0))) +
       geom_text(size = 3.5) + theme_bw() +
@@ -230,21 +215,18 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
             axis.text.x = element_blank(),
             axis.ticks = element_blank(),
             axis.text.y = element_text(face = "bold",
-                                       color = rev(shading.colors[1:length(ystratalabs)]), hjust = 1))
-    
-    data.table <- data.table +
-      theme(legend.position = "none") + xlab(NULL) + ylab(NULL)
-    
-    data.table <- data.table +
-      theme(plot.margin = grid::unit(c(-1.5, 1, 0.1,
-                                 ifelse(m < 10, 2.5, 3.5) - 0.28 * m),
-                               "lines")) # ADJUST POSITION OF TABLE FOR AT RISK
-    
+                                       color = rev(shading.colors[1:length(
+                                         ystratalabs)]), hjust = 1),
+            legend.position = "none",
+            plot.margin = grid::unit(
+              c(-1.5, 1, 0.1, ifelse(m < 10, 2.5, 3.5) - 0.28 * m), "lines")) +
+      xlab(NULL) + ylab(NULL)
     if (returns)
       gridExtra::grid.arrange(p, blank.pic, data.table,
                               clip = FALSE, nrow = 3, ncol = 1,
                               heights = grid::unit(c(2, .1, .25),
                                                    c("null", "null", "null")))
   } else {
-      return(p)}
+    return(p)
+  }
 }
