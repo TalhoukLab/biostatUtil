@@ -1,8 +1,8 @@
 Package: ConClust
 Type: Package
 Title: Consensus Clustering Analysis
-Version: 0.0.0.9012
-Date: 2015-11-09
+Version: 0.0.0.9013
+Date: 2015-11-03
 Authors@R: c(
     person("Derek", "Chiu", , "dchiu@bccrc.ca", c("aut", "cre")))
 Description: Helper functions used for performing consensus clustering
@@ -26,4 +26,4 @@ Imports:
     clue
 License: CC0
 LazyData: TRUE
-RoxygenNote: 5.0.0
+RoxygenNote: 5.0.1

@@ -26,7 +26,7 @@ combineAlgs <- function(..., res.CCP, k, element, alg.names = NULL) {
     if (!is.null(alg.names))
       names(out) <- alg.names
   } else if (element == "class") {
-    out.CC <- sapply(obj, "[[", "consensusClass")
+    out.CC <- apply(sapply(obj, "[[", "consensusClass"), c(1, 2), as.integer)
     out.CCP <- sapply(lapply(res.CCP, "[[", k), "[[", "consensusClass")
     out <- as.matrix(data.frame(out.CCP, out.CC))
     if (!is.null(alg.names))
