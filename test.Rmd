@@ -1,7 +1,7 @@
 ---
 title: "SummaryStatsBy Test"
 author: "Derek Chiu"
-date: "November 12, 2015"
+date: "November 16, 2015"
 output: word_document
 ---
 
@@ -9,7 +9,7 @@ output: word_document
 library(bccaEndometrial)
 library(ECClocal)
 library(biostatUtil)
-data("emdb.all")
+mtcars$vs <- as.factor(mtcars$vs); mtcars$am <- as.factor(mtcars$am)
 cat(SummaryStatsBy(data = mtcars, by1 = "cyl", by2 = "gear", var.names = c("mpg", "qsec")))
 ```
 
@@ -18,3 +18,16 @@ White Space
 ```{r, echo=FALSE, results='asis'}
 cat(SummaryStatsBy(data = mtcars, by1 = "cyl", by2 = "gear", var.names = c("mpg")))
 ```
+
+White Space
+
+```{r, echo=FALSE, results='asis'}
+cat(SummaryStatsBy(data = mtcars, by1 = "cyl", by2 = "gear", var.names = c("mpg", "vs", "qsec", "am")))
+```
+
+White Space
+
+```{r, echo=FALSE, results='asis'}
+cat(SummaryStatsBy(data = mtcars, by1 = "cyl", by2 = "gear", var.names = c("vs", "qsec")))
+```
+

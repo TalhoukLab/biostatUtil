@@ -12,7 +12,7 @@
 #' "html", or "long" format for graphing and data manipulation using raw values.
 #' @author Aline Talhouk, Derek Chiu
 #' @import doBy dplyr
-#' @importFrom magrittr set_colnames set_rownames extract
+#' @importFrom magrittr set_colnames set_rownames extract use_series
 #' @export
 #' @examples 
 #' mtcars$vs <- as.factor(mtcars$vs); mtcars$am <- as.factor(mtcars$am)
@@ -24,7 +24,7 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
                            marker.description = by1, groups.description = by2,
                            var.descriptions = var.names, digits = 3,
                            format = c("pandoc", "html", "long")) {
-  . <- stat <- value <- NULL
+  . <- stat <- value <- grp <- vars <- lev <- NULL
   var.dat <- data[, var.names]
   facets <- data[, c(by1, by2)]
   types <- sapply(var.dat, class)
@@ -84,8 +84,8 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
       num.result <- num.values %>% 
         extract(, -match(c(by1, by2), colnames(.))) %>% 
         mutate(filler = "") %>% 
-        set_colnames(gsub("filler", eval(num.var), colnames(.))) %>% 
-        t %>% 
+        set_colnames(gsub("filler", eval(num.var), colnames(.))) %>%
+        t() %>% 
         extract(row.order, ) %>% 
         set_rownames(unlist(lapply(paste0("**", num.var, "**"),
                                    function(x) c(x, rows)))) %>% 
@@ -194,11 +194,28 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
     facs <- fac.values %>% 
       extract(, match(c(by1, by2), colnames(.))) %>% 
       as.data.frame()
-    fac.result <- fac.values %>%
+    fac.result <- fac.values %>% 
+      extract(, -match(c(by1, by2), colnames(.))) %>% 
+      t() %>% 
+      as.data.frame() %>% 
+      mutate(grp = stringr::str_split_fixed(rownames(.), "\\.", 2)[, 1]) %>% 
+      group_by(grp) %>% 
+      do(vars = rowColPercent(.[, -ncol(.)])) %>%
+      extract(match(.$grp, fac.var), ) %>% 
+      use_series(vars) %>% 
+      lapply(function(x) cbind(x, lev = rep(letters[1:(nrow(x) / 3)], each = 3)) %>% 
+               as.data.frame() %>% 
+               group_by(lev) %>%
+               by(.$lev, function(x) apply(x[, -ncol(.)], 2, pandoc.pcts)) %>% 
+               do.call(rbind, .)) %>% 
+      do.call(rbind, .) %>% 
+      t() %>% 
+      cbind(facs, .) %>% 
+      set_colnames(colnames(as.matrix(fac.values))) %>%
       cbind(matrix(rep("", sum(table(facets[, c(by1, by2)]) > 0) * length(fac.var)),
                    ncol = length(fac.var),
                    dimnames = list(NULL, fac.var))) %>% 
-      t %>% 
+      t() %>% 
       extract(row.order, ) %>% 
       set_rownames(stringr::str_replace_all(
         rownames(.), setNames(c(rep("", length(fac.var))),
@@ -232,8 +249,8 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
                 html = htmlTable::htmlTable(fin.html),
                 long = final.values.long))
 }
-# f1 <- as.formula(paste(paste(var.names, collapse = " + "), "~", by1))
-# f2 <- as.formula(paste(paste(var.names, collapse = " + "), "~", by2))
-# tot1 <- summaryBy(f1, t.dat, FUN = contSumFunc)
-# tot2 <- summaryBy(f2, t.dat, FUN = contSumFunc)
+# f1 <- as.formula(paste(paste(num.var, collapse = " + "), "~", by1))
+# f2 <- as.formula(paste(paste(num.var, collapse = " + "), "~", by2))
+# tot1 <- doBy::summaryBy(f1, num.dat, FUN = contSumFunc, digits = 3)
+# tot2 <- doBy::summaryBy(f2, num.dat, FUN = contSumFunc, digits = 3)
 # tot <- c("Total", contSumFunc(t.dat[, var.names]))
