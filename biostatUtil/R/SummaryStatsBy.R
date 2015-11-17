@@ -74,14 +74,25 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
                                  paste(by1, by2, sep = " + ")))
     num.values <- doBy::summaryBy(num.form, num.dat, FUN = contSumFunc,
                                   digits = digits, stats = stats)
+    num.values.tot <- num.var %>% 
+      paste(collapse = " + ") %>% 
+      paste("~", by1) %>% 
+      as.formula() %>% 
+      doBy::summaryBy(., num.dat, FUN = contSumFunc, digits = digits) %>% 
+      cbind(filler = NA) %>% 
+      extract(, c(1, ncol(.), 2:(ncol(.) - 1))) %>% 
+      set_colnames(gsub("filler", eval(by2), colnames(.))) %>% 
+      rbind(num.values, .) %>% 
+      extract(order(.[, by1]), ) %>% 
+      set_rownames(NULL)
     num.values.long <- num.values %>% 
       tidyr::gather(stat, value, -match(c(by1, by2), colnames(.))) %>%
       tidyr::separate(stat, c("var", "stat"), "\\.") %>%
       extract(order(.[, "var"], .[, by1], .[, by2]), ) %>% 
       set_rownames(NULL)
-    facs <- num.values[, c(by1, by2)]
+    facs <- num.values.tot[, c(by1, by2)]
     if (length(num.var) < 2) {  # Single numeric response
-      num.result <- num.values %>% 
+      num.result <- num.values.tot %>% 
         extract(, -match(c(by1, by2), colnames(.))) %>% 
         mutate(filler = "") %>% 
         set_colnames(gsub("filler", eval(num.var), colnames(.))) %>%
@@ -91,7 +102,10 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
                                    function(x) c(x, rows)))) %>% 
         set_colnames(apply(mapply(function(x, y) paste(x, y, sep = "="),
                                   names(facs), facs), 1, function(x)
-                                    paste(x, collapse = ", ")))
+                                    paste(x, collapse = ", "))) %>% 
+        set_colnames(ifelse(grepl("NA", colnames(.)),
+                            stringr::str_split_fixed(colnames(.), ", ", 2)[, 1],
+                            colnames(.)))
       if (all(c("mean", "sd") %in% stats)) {
         num.result <- num.result %>% 
           rbind(mean = paste(.[which(rownames(.) == "mean"), ],
@@ -112,32 +126,32 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
       }
     } else {  # Multiple numeric response
       if (all(c("mean", "sd") %in% stats)) {
-        means <- num.values[, grep("\\.mean", names(num.values))]
-        sds <- num.values[, grep("\\.sd", names(num.values))]
+        means <- num.values.tot[, grep("\\.mean", names(num.values.tot))]
+        sds <- num.values.tot[, grep("\\.sd", names(num.values.tot))]
         ms <- apply(mapply(function(x, y) paste(x, y, sep = " &#177; "),
                            means, sds), 2, cbind)
         rows <- rows[-grep("sd", rows)]
         row.order <- row.order[-grep("\\.sd", row.order)]
       } else if ("mean" %in% stats & !"sd" %in% stats) {
-        ms <- num.values[, grep("\\.mean", names(num.values))]
+        ms <- num.values.tot[, grep("\\.mean", names(num.values.tot))]
       } else if ("sd" %in% stats & !"mean" %in% stats) {
-        ms <- num.values[, grep("\\.sd", names(num.values))]
+        ms <- num.values.tot[, grep("\\.sd", names(num.values.tot))]
       } else {
         ms <- data.frame(row.names = 1:nrow(facs))
       }
       if ("median" %in% stats) {
-        med <- num.values[, grep("\\.median", names(num.values))]
+        med <- num.values.tot[, grep("\\.median", names(num.values.tot))]
       } else {
         med <- data.frame(row.names = 1:nrow(facs))
       }
       if ("IQR" %in% stats) {
-        iqr <- num.values[, grep("\\.IQR", names(num.values))]
+        iqr <- num.values.tot[, grep("\\.IQR", names(num.values.tot))]
       } else {
         iqr <- data.frame(row.names = 1:nrow(facs))
       }
       if ("range" %in% stats) {
-        min <- num.values[, grep("\\.min", names(num.values))]
-        max <- num.values[, grep("\\.max", names(num.values))]
+        min <- num.values.tot[, grep("\\.min", names(num.values.tot))]
+        max <- num.values.tot[, grep("\\.max", names(num.values.tot))]
         range <- mapply(function(x, y) paste(x, y, sep = "-"), min, max) %>%
           set_colnames(gsub("min", "range", colnames(.)))
         rows <- rows %>% 
@@ -150,12 +164,13 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
         range <- data.frame(row.names = 1:nrow(facs))
       }
       if ("missing" %in% stats) {
-        miss <- num.values[, grep("\\.missing", names(num.values), value = T)]
+        miss <- num.values.tot[, grep("\\.missing", names(num.values.tot),
+                                      value = T)]
       } else {
         miss <- data.frame(row.names = 1:nrow(facs))
       }
       num.result <- cbind(ms, med, iqr, range, miss,
-                          matrix(rep("", sum(table(facets[, c(by1, by2)]) > 0)),
+                          matrix(rep("", nrow(facs) * length(num.var)),
                                  ncol = length(num.var),
                                  dimnames = list(NULL, num.var))) %>% 
         t %>% 
@@ -164,7 +179,10 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
                                    function(x) c(x, rows)))) %>% 
         set_colnames(apply(mapply(function(x, y) paste(x, y, sep = "="),
                                   names(facs), facs), 1, function(x)
-                                    paste(x, collapse = ", ")))
+                                    paste(x, collapse = ", "))) %>% 
+        set_colnames(ifelse(grepl("NA", colnames(.)),
+                            stringr::str_split_fixed(colnames(.), ", ", 2)[, 1],
+                            colnames(.)))
     }
   } else {
     num.result <- num.values.long <- NULL
@@ -191,8 +209,39 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
       tidyr::separate(stat, c("var", "stat"), "\\.") %>%
       extract(order(.[, "var"], .[, by1], .[, by2]), ) %>% 
       set_rownames(NULL)
+    fac.values.tot <- fac.var %>% 
+      sapply(function(x) as.formula(paste(x, "~", paste(by1, sep = " + ")))) %>%
+      lapply(aggregate, fac.dat, summary) %>% 
+      Reduce(merge, .) %>% 
+      extract(order(.[, by1]), ) %>% 
+      as.matrix() %>% 
+      cbind(filler = NA) %>% 
+      extract(, c(1, ncol(.), 2:(ncol(.) - 1))) %>% 
+      set_colnames(gsub("filler", eval(by2), colnames(.))) 
+    fac.values.res <- fac.values.tot %>% 
+      as.data.frame() %>% 
+      split(.[, by1]) %>% 
+      plyr::llply(function(x) x %>% extract(, -match(c(by1, by2), colnames(.))) %>% 
+              t() %>% 
+              as.data.frame() %>% 
+              mutate(grp = factor(stringr::str_split_fixed(rownames(.), "\\.", 2)[, 1], levels = fac.var)) %>% 
+              group_by(grp) %>% 
+              do(vars = colPercent(.[, -ncol(.)]))) %>% 
+      do.call(rbind, .) %>% 
+      extract(order(match(.$grp, fac.var)), ) %>% 
+      split(.$grp) %>% 
+      lapply(function(x) do.call(cbind, rbind(x$vars))) %>% 
+      lapply(function(x) cbind(x, lev = rep(letters[1:(nrow(x) / 2)], 2)) %>% 
+               as.data.frame() %>% 
+               group_by(lev) %>%
+               by(.$lev, function(x) apply(x[, -ncol(.)], 2, pandoc.pcts)) %>% 
+               do.call(rbind, .)) %>% 
+      do.call(rbind, .) %>% 
+      t()
     facs <- fac.values %>% 
+      rbind(fac.values.tot) %>% 
       extract(, match(c(by1, by2), colnames(.))) %>% 
+      set_rownames(NULL) %>% 
       as.data.frame()
     fac.result <- fac.values %>% 
       extract(, -match(c(by1, by2), colnames(.))) %>% 
@@ -210,9 +259,12 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
                do.call(rbind, .)) %>% 
       do.call(rbind, .) %>% 
       t() %>% 
+      rbind(fac.values.res) %>% 
+      set_rownames(NULL) %>% 
       cbind(facs, .) %>% 
-      set_colnames(colnames(as.matrix(fac.values))) %>%
-      cbind(matrix(rep("", sum(table(facets[, c(by1, by2)]) > 0) * length(fac.var)),
+      extract(order(.[, by1]), ) %>% 
+      set_colnames(colnames(fac.values.tot)) %>%
+      cbind(matrix(rep("", nrow(facs) * length(fac.var)),
                    ncol = length(fac.var),
                    dimnames = list(NULL, fac.var))) %>% 
       t() %>% 
@@ -223,8 +275,11 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
       set_rownames(stringr::str_replace_all(
         rownames(.), setNames(paste0("**", var.names, "**"), var.names))) %>%
       set_colnames(apply(mapply(function(x, y) paste(x, y, sep = "="),
-                                names(facs), facs), 1, function(x)
-                                  paste(x, collapse = ", ")))
+                                names(facs), facs[order(facs[, by1]), ]), 1, function(x)
+                                  paste(x, collapse = ", "))) %>% 
+      set_colnames(ifelse(grepl("NA", colnames(.)),
+                          stringr::str_split_fixed(colnames(.), ", ", 2)[, 1],
+                          colnames(.)))
   } else {
     fac.result <- fac.values.long <- NULL
   }
@@ -244,7 +299,7 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
               order(), )
   format <- match.arg(format)
   return(switch(format,
-                pandoc = pander::pandoc.table.return(fin, split.table = Inf,
+                pandoc = pander::pandoc.table.return(fin,
                                                      emphasize.rownames = F),
                 html = htmlTable::htmlTable(fin.html),
                 long = final.values.long))
