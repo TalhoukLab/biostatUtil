@@ -304,8 +304,3 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
                 html = htmlTable::htmlTable(fin.html),
                 long = final.values.long))
 }
-# f1 <- as.formula(paste(paste(num.var, collapse = " + "), "~", by1))
-# f2 <- as.formula(paste(paste(num.var, collapse = " + "), "~", by2))
-# tot1 <- doBy::summaryBy(f1, num.dat, FUN = contSumFunc, digits = 3)
-# tot2 <- doBy::summaryBy(f2, num.dat, FUN = contSumFunc, digits = 3)
-# tot <- c("Total", contSumFunc(t.dat[, var.names]))
