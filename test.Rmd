@@ -1,7 +1,7 @@
 ---
 title: "SummaryStatsBy Test"
 author: "Derek Chiu"
-date: "November 16, 2015"
+date: "November 18, 2015"
 output: word_document
 ---
 
