@@ -93,15 +93,21 @@ prettyCoxph <- function(input.formula, input.d, use.firth = 1,
     }
   }
   
-  if (ok.to.use.firth)
+  if (ok.to.use.firth) {
     result <- cbind(exp(fit.firth$coefficients), fit.firth$ci.lower,
                     fit.firth$ci.upper, fit.firth$prob, ph.check)
-  else
-    result <- cbind(summary(fit)$conf.int[, c('exp(coef)', 'lower .95',
-                                              'upper .95')],
-                    "Pr(>|z|)" = summary(fit)$coefficients[, 'Pr(>|z|)'],
-                    ph.check)
-  
+  } else {
+    if (any(grepl("\\+", .my.formula)))
+      result <- cbind(summary(fit)$conf.int[, c('exp(coef)', 'lower .95',
+                                                'upper .95')],
+                      "Pr(>|z|)" = summary(fit)$coefficients[, 'Pr(>|z|)'],
+                      ph.check)
+    else
+      result <- cbind(rbind(summary(fit)$conf.int[, c('exp(coef)', 'lower .95',
+                                                      'upper .95')]),
+                      "Pr(>|z|)" = summary(fit)$coefficients[, 'Pr(>|z|)'],
+                      ph.check)
+  }
   if (check.ph)
     return.obj <- list(output = result, fit = fit, fit.firth = fit.firth,
                        n = fit$n, nevent = fit$nevent, ph.test = ph.test,
