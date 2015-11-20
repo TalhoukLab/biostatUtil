@@ -26,5 +26,5 @@ minFnorm <- function(A, B = diag(nrow(A))) {
     }
   }
   vec <- c(clue::solve_LSAP(D))
-  return(A[vec, ])
+  return(list(pmat = A[vec, ], perm = vec, ord = order(vec)))
 }
