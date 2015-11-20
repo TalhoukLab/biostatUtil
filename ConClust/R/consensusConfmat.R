@@ -18,6 +18,7 @@ consensusConfmat <- function(clust, cl.true, k,
   . <- NULL
   table(clust, cl.true, dnn = c(eval(pred.lab), eval(ref.lab))) %>%
     minFnorm() %>%
+    use_series(pmat) %>% 
     set_rownames(colnames(.)) %>%
     as.table() %>%
     return()
