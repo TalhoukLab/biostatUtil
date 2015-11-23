@@ -6,7 +6,7 @@ type.fd <- unname(sapply(fd, class))
 num.ind <- type.fd %in% c("numeric")
 fac.ind <- type.fd %in% c("factor")
 catvars <- colnames(fd)[fac.ind]
-par(ask=T)
+
 for (i in 1: length(catvars)){
 print(i)
 x= fd[, catvars[i]]
@@ -20,6 +20,11 @@ gplots::textplot(mat)
 }
 
 
-# numvars=c("bmi")
-# y= input.d[, numvars]
-# boxplot(y~input.d[,"TMA"], main=numvars,las=2)
+numvars <- colnames(fd)[num.ind]
+for (i in 1: length(numvars)){
+print(i)
+par(mfrow=c(2,1))
+x= fd[, numvars[i]]
+boxplotSum(x,numvars[i])
+histSum(x)
+}
