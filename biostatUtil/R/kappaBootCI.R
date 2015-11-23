@@ -1,4 +1,4 @@
-#' Boostrapped confidence interval for kappa statistic.
+#' Bootstrapped confidence interval for kappa statistic.
 #' 
 #' Function to compute cohen's kappa with binary data with a bootstrap confidence interval
 #' 
