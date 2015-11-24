@@ -1,4 +1,4 @@
 library(testthat)
-library(NanoStringQC)
+library(NanoString)
 
-test_check("NanoStringQC")
+test_check("NanoString")
