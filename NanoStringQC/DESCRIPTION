@@ -1,8 +1,8 @@
 Package: NanoStringQC
 Type: Package
 Title: Performs Quality Control on the NanoString platform
-Version: 0.0.0.9000
-Date: 2015-11-19
+Version: 0.0.0.9001
+Date: 2015-11-23
 Authors@R: as.person(c(
     "Derek Chiu <dchiu@bccrc.ca> [cre]",
     "Aline Talhouk <atalhouk@bccrc.ca> [aut]"
@@ -12,5 +12,6 @@ Depends: R (>= 3.2.0)
 Imports: dplyr, magrittr, assertthat
 License: GPL | file LICENSE
 LazyData: TRUE
-Suggests: otta, NanoStringNorm
+Suggests: otta, NanoStringNorm,
+    testthat
 RoxygenNote: 5.0.1

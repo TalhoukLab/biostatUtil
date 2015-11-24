@@ -33,6 +33,7 @@
 NanoStringQC <- function(raw, exp, detect = 80, sn = 150, plots = TRUE,
                           ttl = " ", explore = TRUE) {
   assertthat::assert_that(check_colnames(raw))
+  assertthat::assert_that(check_genes(raw))
   sn.in <- sn
   genes <- raw$Name
   rownames(raw) <- genes

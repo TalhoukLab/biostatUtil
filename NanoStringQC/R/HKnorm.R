@@ -18,8 +18,8 @@
 #'
 #' HKnorm(NanoString.mRNA)
 HKnorm <- function(raw.data, corr = 0.0001) {
-  assertthat::assert_that(
-    all(names(raw.data)[1:3] == c("Code.Class", "Name", "Accession")))
+  assertthat::assert_that(check_colnames(raw.data))
+  assertthat::assert_that(check_genes(raw.data))
   rawdat <- raw.data[, -(1:3)] + corr
   rownames(rawdat) <- raw.data$Name
   hks <- raw.data$Code.Class == "Housekeeping"
