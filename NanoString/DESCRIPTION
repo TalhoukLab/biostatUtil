@@ -1,7 +1,7 @@
 Package: NanoString
 Type: Package
 Title: Performs Quality Control on the NanoString platform
-Version: 0.0.0.9002
+Version: 0.0.0.9003
 Date: 2015-11-24
 Authors@R: as.person(c(
     "Derek Chiu <dchiu@bccrc.ca> [cre]",
@@ -13,5 +13,9 @@ Imports: dplyr, magrittr, assertthat
 License: GPL | file LICENSE
 LazyData: TRUE
 Suggests: otta, NanoStringNorm,
-    testthat
+    testthat,
+    knitr,
+    rmarkdown,
+    pander
 RoxygenNote: 5.0.1
+VignetteBuilder: knitr
