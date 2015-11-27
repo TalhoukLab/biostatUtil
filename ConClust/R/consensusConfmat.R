@@ -11,14 +11,14 @@
 #' @return A confusion matrix with the predicted cluster
 #' assignments compared to the reference true class labels.
 #' @author Derek Chiu
-#' @importFrom magrittr set_names set_rownames
+#' @importFrom magrittr set_names set_rownames use_series
 #' @export
 consensusConfmat <- function(clust, cl.true, k,
                              pred.lab = "Prediction", ref.lab = "Reference") {
-  . <- NULL
+  . <- pmat <- NULL
   table(clust, cl.true, dnn = c(eval(pred.lab), eval(ref.lab))) %>%
     minFnorm() %>%
-    use_series(pmat) %>% 
+    use_series(pmat) %>%
     set_rownames(colnames(.)) %>%
     as.table() %>%
     return()
