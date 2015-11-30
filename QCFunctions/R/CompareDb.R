@@ -60,6 +60,13 @@ CompareDb <- function(db.old, db.new, id.var,
     cat("\n")
   }
   if (length(rows.added)>0) {
+    btw.nums.is1 <- apply(cbind(rows.added,c(rows.added[c(1,1:(length(rows.added)-1))])),1,function(x){return((x[1]-x[2])==1)})
+    btw.nums.is1 <- which(!btw.nums.is1)
+    if (length(btw.nums.is1)==1) {
+      if (btw.nums.is1==1) {
+        rows.added <- paste(rows.added[1],rows.added[length(rows.added)],sep="-")
+      }
+    }
     cat("rows added:",paste(rows.added,collapse=", "),"\n")
     cat("\n")
   }
