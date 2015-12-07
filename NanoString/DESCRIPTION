@@ -16,6 +16,7 @@ Suggests: otta, NanoStringNorm,
     testthat,
     knitr,
     rmarkdown,
-    pander
+    pander,
+    stringr
 RoxygenNote: 5.0.1
 VignetteBuilder: knitr
