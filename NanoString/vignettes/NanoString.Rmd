@@ -18,6 +18,7 @@ vignette: >
 library(NanoString)
 library(NanoStringNorm)
 library(otta)
+library(stringr)
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
@@ -29,7 +30,10 @@ We demonstrate how to use some of the functions in this package below.
 data(rawOVCA2, rawPROT, rawOTTA, annot)
 
 # Codeset 1, 2, 3 and annotations
-cs1 <- rawOVCA2; cs2 <- rawPROT; cs3 <- rawOTTA; exp0 <- annot
+cs1 <- rawOVCA2
+cs2 <- rawPROT
+cs3 <- rawOTTA
+exp0 <- annot
 exp0$geneRLF <- as.character(factor(exp0$geneRLF,
                      labels = c("HL1", "HL2", "HL3", "HuRef", "CS3", "mini", "CS1", "CS2")))
 
@@ -37,9 +41,29 @@ exp0$geneRLF <- as.character(factor(exp0$geneRLF,
 exp.CS1 <- NanoStringQC(cs1, exp0[exp0$geneRLF == "CS1", ],
                         plots = FALSE, detect = 50, ttl = "CodeSet 1")
 exp.CS2 <- NanoStringQC(cs2, exp0[exp0$geneRLF == "CS2", ],
-                      plots = FALSE, sn = 100, ttl = "CodeSet 2")
+                        plots = FALSE, sn = 100, ttl = "CodeSet 2")
 exp.CS3 <- NanoStringQC(cs3, exp0[exp0$geneRLF == "CS3", ],
                         plots = TRUE, detect = 50, sn = 100, ttl = "CodeSet 3")
+```
+
+We can also look at the 3 pools:
+
+```{r}
+pool1 <- exp0$File.Name[which(exp0$POOL1 == "Yes")]
+pool2 <- exp0$File.Name[which(exp0$POOL2 == "Yes")]
+pool3 <- exp0$File.Name[which(exp0$POOL3 == "Yes")]
+cs3.names <- str_sub(names(cs3), start = 2)
+cs2.names <- str_sub(names(cs2), start = 2)
+cs3.pools <- cs3[, c(1:3, sort(match(c(pool1, pool2, pool3), cs3.names)))]
+cs2.pools <- cs2[, c(1:3, sort(match(c(pool1, pool2, pool3), cs2.names)))]
+
+# Compute NanoString QC
+exp.CS3.pools <- NanoStringQC(cs3.pools, exp0[sort(match(c(pool1, pool2, pool3), cs3.names)) - 3, ],
+                              plots = TRUE, detect = 50, sn = 100,
+                              ttl = "CodeSet 3 in POOL 1-3")
+exp.CS2.pools <- NanoStringQC(cs2.pools, exp0[sort(match(c(pool1, pool2, pool3), cs2.names)) - 3, ],
+                              plots = TRUE, detect = 50, sn = 100,
+                              ttl = "CodeSet 2 in POOL 1-3")
 ```
 
 ## ratioMethod
