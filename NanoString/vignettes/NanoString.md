@@ -31,7 +31,7 @@ exp.CS3 <- NanoStringQC(cs3, exp0[exp0$geneRLF == "CS3", ],
                         plots = TRUE, detect = 50, sn = 100, ttl = "CodeSet 3")
 ```
 
-![](NanoString_files/figure-html/unnamed-chunk-1-1.png) 
+![](NanoString_files/figure-html/codesets-1.png) 
 
 We can also look at the 3 pools:
 
@@ -51,7 +51,7 @@ exp.CS3.pools <- NanoStringQC(cs3.pools, exp0[sort(match(c(pool1, pool2, pool3),
                               ttl = "CodeSet 3 in POOL 1-3")
 ```
 
-![](NanoString_files/figure-html/unnamed-chunk-2-1.png) 
+![](NanoString_files/figure-html/pools-1.png) 
 
 ```r
 exp.CS2.pools <- NanoStringQC(cs2.pools, exp0[sort(match(c(pool1, pool2, pool3), cs2.names)) - 3, ],
@@ -59,7 +59,7 @@ exp.CS2.pools <- NanoStringQC(cs2.pools, exp0[sort(match(c(pool1, pool2, pool3),
                               ttl = "CodeSet 2 in POOL 1-3")
 ```
 
-![](NanoString_files/figure-html/unnamed-chunk-2-2.png) 
+![](NanoString_files/figure-html/pools-2.png) 
 
 ## ratioMethod
 

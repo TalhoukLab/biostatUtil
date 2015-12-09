@@ -6,6 +6,8 @@ output:
   rmarkdown::html_vignette:
     toc: true
     keep_md: true
+    fig_height: 4.5
+    fig_width: 6
 vignette: >
   %\VignetteIndexEntry{Introduction to using the NanoString package}
   %\VignetteEngine{knitr::rmarkdown}
@@ -26,7 +28,7 @@ We demonstrate how to use some of the functions in this package below.
 
 ## NanoStringQC
 
-```{r}
+```{r codesets}
 data(rawOVCA2, rawPROT, rawOTTA, annot)
 
 # Codeset 1, 2, 3 and annotations
@@ -48,7 +50,7 @@ exp.CS3 <- NanoStringQC(cs3, exp0[exp0$geneRLF == "CS3", ],
 
 We can also look at the 3 pools:
 
-```{r}
+```{r pools}
 pool1 <- exp0$File.Name[which(exp0$POOL1 == "Yes")]
 pool2 <- exp0$File.Name[which(exp0$POOL2 == "Yes")]
 pool3 <- exp0$File.Name[which(exp0$POOL3 == "Yes")]
@@ -68,7 +70,7 @@ exp.CS2.pools <- NanoStringQC(cs2.pools, exp0[sort(match(c(pool1, pool2, pool3),
 
 ## ratioMethod
 
-```{r, results='asis'}
+```{r ratioMethod, results='asis'}
 set.seed(12)
 A <- matrix(rnorm(120), ncol = 10)
 B <- matrix(rnorm(80), ncol = 10)
@@ -78,7 +80,7 @@ pander::pandoc.table(ratioMethod(A, B, C))
 
 ## HKnorm
 
-```{r, results='asis'}
+```{r HKnorm, results='asis'}
 data(NanoString)
 NanoString.mRNA[NanoString.mRNA$Name %in%
 c('Eef1a1','Gapdh','Hprt1','Ppia','Sdha'), 'Code.Class'] <- 'Housekeeping'

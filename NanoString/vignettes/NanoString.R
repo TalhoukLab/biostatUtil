@@ -5,7 +5,7 @@ library(otta)
 library(stringr)
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 
-## ------------------------------------------------------------------------
+## ----codesets------------------------------------------------------------
 data(rawOVCA2, rawPROT, rawOTTA, annot)
 
 # Codeset 1, 2, 3 and annotations
@@ -24,7 +24,7 @@ exp.CS2 <- NanoStringQC(cs2, exp0[exp0$geneRLF == "CS2", ],
 exp.CS3 <- NanoStringQC(cs3, exp0[exp0$geneRLF == "CS3", ],
                         plots = TRUE, detect = 50, sn = 100, ttl = "CodeSet 3")
 
-## ------------------------------------------------------------------------
+## ----pools---------------------------------------------------------------
 pool1 <- exp0$File.Name[which(exp0$POOL1 == "Yes")]
 pool2 <- exp0$File.Name[which(exp0$POOL2 == "Yes")]
 pool3 <- exp0$File.Name[which(exp0$POOL3 == "Yes")]
@@ -41,14 +41,14 @@ exp.CS2.pools <- NanoStringQC(cs2.pools, exp0[sort(match(c(pool1, pool2, pool3),
                               plots = TRUE, detect = 50, sn = 100,
                               ttl = "CodeSet 2 in POOL 1-3")
 
-## ---- results='asis'-----------------------------------------------------
+## ----ratioMethod, results='asis'-----------------------------------------
 set.seed(12)
 A <- matrix(rnorm(120), ncol = 10)
 B <- matrix(rnorm(80), ncol = 10)
 C <- matrix(rnorm(50), ncol = 10)
 pander::pandoc.table(ratioMethod(A, B, C))
 
-## ---- results='asis'-----------------------------------------------------
+## ----HKnorm, results='asis'----------------------------------------------
 data(NanoString)
 NanoString.mRNA[NanoString.mRNA$Name %in%
 c('Eef1a1','Gapdh','Hprt1','Ppia','Sdha'), 'Code.Class'] <- 'Housekeeping'
