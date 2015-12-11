@@ -1,8 +1,8 @@
 Package: NanoString
 Type: Package
 Title: Performs Quality Control on the NanoString platform
-Version: 0.0.0.9006
-Date: 2015-12-09
+Version: 0.0.0.9007
+Date: 2015-12-11
 Authors@R: as.person(c(
     "Derek Chiu <dchiu@bccrc.ca> [cre]",
     "Aline Talhouk <atalhouk@bccrc.ca> [aut]"
@@ -17,6 +17,8 @@ Suggests: otta, NanoStringNorm,
     knitr,
     rmarkdown,
     pander,
-    stringr
+    stringr,
+    tidyr,
+    ggplot2
 RoxygenNote: 5.0.1
 VignetteBuilder: knitr

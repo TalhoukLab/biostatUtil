@@ -33,7 +33,7 @@ exp.CS3 <- NanoStringQC(cs3, exp0[exp0$geneRLF == "CS3", ],
 
 ![](NanoString_files/figure-html/codesets-1.png) 
 
-We can also look at the 3 pools:
+We can also compute the quality control parameters *just* for the the 3 POOLs:
 
 
 ```r
@@ -43,6 +43,9 @@ pool3 <- exp0$File.Name[which(exp0$POOL3 == "Yes")]
 cs3.names <- str_sub(names(cs3), start = 2)
 cs2.names <- str_sub(names(cs2), start = 2)
 cs3.pools <- cs3[, c(1:3, sort(match(c(pool1, pool2, pool3), cs3.names)))]
+cs3.pool1 <- cs3[, sort(match(pool1, cs3.names))]
+cs3.pool2 <- cs3[, sort(match(pool2, cs3.names))]
+cs3.pool3 <- cs3[, sort(match(pool3, cs3.names))]
 cs2.pools <- cs2[, c(1:3, sort(match(c(pool1, pool2, pool3), cs2.names)))]
 
 # Compute NanoString QC
@@ -60,6 +63,81 @@ exp.CS2.pools <- NanoStringQC(cs2.pools, exp0[sort(match(c(pool1, pool2, pool3),
 ```
 
 ![](NanoString_files/figure-html/pools-2.png) 
+
+More importantly, we want to verify the concordance between CodeSet2 and CodeSet3 in terms of the gene expression in common genes for each of POOL1, POOL2, and POOL3.
+
+
+```r
+cs3.pool1 <- cs3[, c(1:3, sort(match(pool1, cs3.names)))]
+cs3.pool2 <- cs3[, c(1:3, sort(match(pool2, cs3.names)))]
+cs3.pool3 <- cs3[, c(1:3, sort(match(pool3, cs3.names)))]
+
+cs2.pool1 <- cs2[, c(1:3, sort(match(pool1, cs2.names)))]
+cs2.pool2 <- cs2[, c(1:3, sort(match(pool2, cs2.names)))]
+cs2.pool3 <- cs2[, c(1:3, sort(match(pool3, cs2.names)))]
+
+cs3.pool1.c <- cs3.pool1[cs3.pool1$Name %in% intersect(cs3.pool1$Name, cs2.pool1$Name), ]
+cs2.pool1.c <- cs2.pool1[cs2.pool1$Name %in% intersect(cs3.pool1$Name, cs2.pool1$Name), ]
+
+cs3.pool2.c <- cs3.pool2[cs3.pool2$Name %in% intersect(cs3.pool2$Name, cs2.pool2$Name), ]
+cs2.pool2.c <- cs2.pool2[cs2.pool2$Name %in% intersect(cs3.pool2$Name, cs2.pool2$Name), ]
+
+cs3.pool3.c <- cs3.pool3[cs3.pool3$Name %in% intersect(cs3.pool3$Name, cs2.pool3$Name), ]
+cs2.pool3.c <- cs2.pool3[cs2.pool3$Name %in% intersect(cs3.pool3$Name, cs2.pool3$Name), ]
+
+pool1.dat <- merge(cs3.pool1.c, cs2.pool1.c, by = c("Name", "Code.Class")) %>% 
+  tidyr::gather(CodeSets, Expr, which(startsWith(names(.), "X"))) %>% 
+  mutate(CodeSets = ifelse(grepl("RNA", CodeSets), "CS2", "CS3")) %>% 
+  arrange(Name) %>% 
+  select(Name, CodeSets, Expr)
+
+pool2.dat <- merge(cs3.pool2.c, cs2.pool2.c, by = c("Name", "Code.Class")) %>% 
+  tidyr::gather(CodeSets, Expr, which(startsWith(names(.), "X"))) %>% 
+  mutate(CodeSets = ifelse(grepl("RNA", CodeSets), "CS2", "CS3")) %>% 
+  arrange(Name) %>% 
+  select(Name, CodeSets, Expr)
+
+pool3.dat <- merge(cs3.pool3.c, cs2.pool3.c, by = c("Name", "Code.Class")) %>% 
+  tidyr::gather(CodeSets, Expr, which(startsWith(names(.), "X"))) %>% 
+  mutate(CodeSets = ifelse(grepl("RNA", CodeSets), "CS2", "CS3")) %>% 
+  arrange(Name) %>% 
+  select(Name, CodeSets, Expr)
+
+# Randomly select 20 genes from each pool
+set.seed(2016)
+ngenes <- 20
+pool1.rand <- pool1.dat %>% 
+  magrittr::extract(.$Name %in% sample(unique(.$Name), ngenes), )
+pool2.rand <- pool2.dat %>% 
+  magrittr::extract(.$Name %in% sample(unique(.$Name), ngenes), )
+pool3.rand <- pool3.dat %>% 
+  magrittr::extract(.$Name %in% sample(unique(.$Name), ngenes), )
+
+# Create side-by-side boxplots
+ggplot(pool1.rand, aes(x = CodeSets, y = Expr)) +
+  geom_boxplot() +
+  facet_wrap(~ Name)
+```
+
+![](NanoString_files/figure-html/pool_concord-1.png) 
+
+```r
+
+ggplot(pool2.rand, aes(x = CodeSets, y = Expr)) +
+  geom_boxplot() +
+  facet_wrap(~ Name)
+```
+
+![](NanoString_files/figure-html/pool_concord-2.png) 
+
+```r
+
+ggplot(pool3.rand, aes(x = CodeSets, y = Expr)) +
+  geom_boxplot() +
+  facet_wrap(~ Name)
+```
+
+![](NanoString_files/figure-html/pool_concord-3.png) 
 
 ## ratioMethod
 
