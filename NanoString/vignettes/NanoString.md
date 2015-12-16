@@ -116,7 +116,9 @@ pool3.rand <- pool3.dat %>%
 # Create side-by-side boxplots
 ggplot(pool1.rand, aes(x = CodeSets, y = Expr)) +
   geom_boxplot() +
-  facet_wrap(~ Name, ncol = 6)
+  facet_wrap(~ Name, ncol = 6) +
+  scale_y_continuous(trans = "log2")
+#> Warning: Removed 1 rows containing non-finite values (stat_boxplot).
 ```
 
 ![](NanoString_files/figure-html/pool_concord-1.png) 
@@ -125,7 +127,9 @@ ggplot(pool1.rand, aes(x = CodeSets, y = Expr)) +
 
 ggplot(pool2.rand, aes(x = CodeSets, y = Expr)) +
   geom_boxplot() +
-  facet_wrap(~ Name, ncol = 6)
+  facet_wrap(~ Name, ncol = 6) +
+  scale_y_continuous(trans = "log2")
+#> Warning: Removed 3 rows containing non-finite values (stat_boxplot).
 ```
 
 ![](NanoString_files/figure-html/pool_concord-2.png) 
@@ -134,7 +138,9 @@ ggplot(pool2.rand, aes(x = CodeSets, y = Expr)) +
 
 ggplot(pool3.rand, aes(x = CodeSets, y = Expr)) +
   geom_boxplot() +
-  facet_wrap(~ Name, ncol = 6)
+  facet_wrap(~ Name, ncol = 6) +
+  scale_y_continuous(trans = "log2")
+#> Warning: Removed 1 rows containing non-finite values (stat_boxplot).
 ```
 
 ![](NanoString_files/figure-html/pool_concord-3.png) 

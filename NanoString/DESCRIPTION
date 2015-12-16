@@ -1,8 +1,8 @@
 Package: NanoString
 Type: Package
 Title: Performs Quality Control on the NanoString platform
-Version: 0.0.0.9007
-Date: 2015-12-11
+Version: 0.0.0.9008
+Date: 2015-12-16
 Authors@R: as.person(c(
     "Derek Chiu <dchiu@bccrc.ca> [cre]",
     "Aline Talhouk <atalhouk@bccrc.ca> [aut]"
