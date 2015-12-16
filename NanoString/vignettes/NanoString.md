@@ -103,9 +103,9 @@ pool3.dat <- merge(cs3.pool3.c, cs2.pool3.c, by = c("Name", "Code.Class")) %>%
   arrange(Name) %>% 
   select(Name, CodeSets, Expr)
 
-# Randomly select 20 genes from each pool
+# Randomly select 60 genes from each pool
 set.seed(2016)
-ngenes <- 20
+ngenes <- 60
 pool1.rand <- pool1.dat %>% 
   magrittr::extract(.$Name %in% sample(unique(.$Name), ngenes), )
 pool2.rand <- pool2.dat %>% 
@@ -116,7 +116,7 @@ pool3.rand <- pool3.dat %>%
 # Create side-by-side boxplots
 ggplot(pool1.rand, aes(x = CodeSets, y = Expr)) +
   geom_boxplot() +
-  facet_wrap(~ Name)
+  facet_wrap(~ Name, ncol = 6)
 ```
 
 ![](NanoString_files/figure-html/pool_concord-1.png) 
@@ -125,7 +125,7 @@ ggplot(pool1.rand, aes(x = CodeSets, y = Expr)) +
 
 ggplot(pool2.rand, aes(x = CodeSets, y = Expr)) +
   geom_boxplot() +
-  facet_wrap(~ Name)
+  facet_wrap(~ Name, ncol = 6)
 ```
 
 ![](NanoString_files/figure-html/pool_concord-2.png) 
@@ -134,7 +134,7 @@ ggplot(pool2.rand, aes(x = CodeSets, y = Expr)) +
 
 ggplot(pool3.rand, aes(x = CodeSets, y = Expr)) +
   geom_boxplot() +
-  facet_wrap(~ Name)
+  facet_wrap(~ Name, ncol = 6)
 ```
 
 ![](NanoString_files/figure-html/pool_concord-3.png) 

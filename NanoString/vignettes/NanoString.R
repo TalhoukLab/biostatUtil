@@ -46,7 +46,7 @@ exp.CS2.pools <- NanoStringQC(cs2.pools, exp0[sort(match(c(pool1, pool2, pool3),
                               plots = TRUE, detect = 50, sn = 100,
                               ttl = "CodeSet 2 in POOL 1-3")
 
-## ----pool_concord--------------------------------------------------------
+## ----pool_concord, fig.width=8, fig.height=10----------------------------
 cs3.pool1 <- cs3[, c(1:3, sort(match(pool1, cs3.names)))]
 cs3.pool2 <- cs3[, c(1:3, sort(match(pool2, cs3.names)))]
 cs3.pool3 <- cs3[, c(1:3, sort(match(pool3, cs3.names)))]
@@ -82,9 +82,9 @@ pool3.dat <- merge(cs3.pool3.c, cs2.pool3.c, by = c("Name", "Code.Class")) %>%
   arrange(Name) %>% 
   select(Name, CodeSets, Expr)
 
-# Randomly select 20 genes from each pool
+# Randomly select 60 genes from each pool
 set.seed(2016)
-ngenes <- 20
+ngenes <- 60
 pool1.rand <- pool1.dat %>% 
   magrittr::extract(.$Name %in% sample(unique(.$Name), ngenes), )
 pool2.rand <- pool2.dat %>% 
@@ -95,15 +95,15 @@ pool3.rand <- pool3.dat %>%
 # Create side-by-side boxplots
 ggplot(pool1.rand, aes(x = CodeSets, y = Expr)) +
   geom_boxplot() +
-  facet_wrap(~ Name)
+  facet_wrap(~ Name, ncol = 6)
 
 ggplot(pool2.rand, aes(x = CodeSets, y = Expr)) +
   geom_boxplot() +
-  facet_wrap(~ Name)
+  facet_wrap(~ Name, ncol = 6)
 
 ggplot(pool3.rand, aes(x = CodeSets, y = Expr)) +
   geom_boxplot() +
-  facet_wrap(~ Name)
+  facet_wrap(~ Name, ncol = 6)
 
 ## ----ratioMethod, results='asis'-----------------------------------------
 set.seed(12)
