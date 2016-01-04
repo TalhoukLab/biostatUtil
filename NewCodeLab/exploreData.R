@@ -1,6 +1,7 @@
+datmat<-emdb.all
 
-types <- unname(sapply(emdb.all, class))
-fd <- emdb.all[,types%in%c("factor", "numeric")]
+types <- unname(sapply(datmat, class))
+fd <- datmat[,types%in%c("factor", "numeric")]
 type.fd <- unname(sapply(fd, class))
 
 num.ind <- type.fd %in% c("numeric")
@@ -17,8 +18,8 @@ barplot(prop.table(tx)*100,
         horiz = T, las=2,names.arg = wr.lap, offset = 0,
         main=catvars[i], xlab = "%", cex.names = 0.5, col="lightblue")
 mat <- data.matrix(cbind(tx,round(prop.table(tx)*100,1)));colnames(mat) <- c("Freq","%")
-
-PerformanceAnalytics::textplot(mat,wrap=F)
+tmat <- rbind(mat, apply(mat[,1:2],2,sum))
+PerformanceAnalytics::textplot(tmat,wrap=F)
 }
 
 

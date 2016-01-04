@@ -1,4 +1,4 @@
-dehistSum<-function(var,xlab="",txt="",sub=""){
+histSum<-function(var,xlab="",txt="",sub=""){
   h<-hist(var,main=paste("Mean", round(mean(var,na.rm=T),2), "SD",round(sd(var,na.rm=T),2)),xlab=xlab,col="azure3",sub=sub,prob=F)
   xfit<-seq(min(var,na.rm=T),max(var,na.rm=T),length=50)
   yfit<-dnorm(xfit,mean=mean(var,na.rm=T),sd=sd(var,na.rm=T))

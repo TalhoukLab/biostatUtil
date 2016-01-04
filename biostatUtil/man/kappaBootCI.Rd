@@ -2,7 +2,7 @@
 % Please edit documentation in R/kappaBootCI.R
 \name{kappaBootCI}
 \alias{kappaBootCI}
-\title{Boostrapped confidence interval for kappa statistic.}
+\title{Bootstrapped confidence interval for kappa statistic.}
 \usage{
 kappaBootCI(x, y, seed = 20, num.boot = 1000, conf.level = 0.95)
 }
