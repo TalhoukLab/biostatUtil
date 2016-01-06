@@ -12,8 +12,7 @@ formatNA(y, type = "cat")
 \item{type}{whether the variable is "cat" or "cont". Defaults to cat.}
 }
 \value{
-A formatted vector.
-\item{x}{formatted}
+A categorical or numerical vector with all missing as formatted NA.
 }
 \description{
 Takes a numeric vector and replaces all Missing codes with NA and returns a factor if the variable is categorical or a numeric variable if it's numeric.

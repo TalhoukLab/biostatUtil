@@ -1,19 +1,4 @@
-histSum<-function(var,xlab="",txt="",sub=""){
-  h<-hist(var,main=paste("Mean", round(mean(var,na.rm=T),2), "SD",round(sd(var,na.rm=T),2)),xlab=xlab,col="azure3",sub=sub,prob=F)
-  xfit<-seq(min(var,na.rm=T),max(var,na.rm=T),length=50)
-  yfit<-dnorm(xfit,mean=mean(var,na.rm=T),sd=sd(var,na.rm=T))
-  yfit <- yfit*diff(h$mids[1:2])*length(var)
-  lines(xfit, yfit, col="blue", lwd=2)
 
-
-  mtext(txt, side=3, outer=TRUE, line=-3)
-}
-
-boxplotSum<-function(var,ttl){
-  bxp <- boxplot(var, horizontal=TRUE, axes=FALSE, main=ttl)
-  mtext(c("Min","Q1","Med","Q3","Max"), side=3, at=bxp$stats, line=-7)
-  mtext(c(round(bxp$stats[1],2),round(bxp$stats[2],2),round(bxp$stats[3],2),round(bxp$stats[4],2),round(bxp$stats[5],2)), side=3, at=bxp$stats, line=-8)
-}
 
 SumPlots<-function(df){
 genes=colnames(df)

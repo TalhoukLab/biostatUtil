@@ -1,3 +1,12 @@
+#' Graphical Exploration of a Dataset
+#'
+#' Function to provide a graphical exploration of a dataset will print results to file.
+#' @param datmat the data frame (only categorical and numerical variables will be analysed)
+#' @author Aline Talhouk
+#' @export
+#'
+#'
+
 exploreData <- function(datmat){
 types <- unname(sapply(datmat, class))
 fd <- datmat[,types%in%c("factor", "numeric")]
