@@ -5,6 +5,9 @@ Derek Chiu
 ## Introduction
 
 
+```
+## Warning: package 'ggplot2' was built under R version 3.2.3
+```
 
 We demonstrate how to use some of the functions in this package below.
 
@@ -31,7 +34,7 @@ exp.CS3 <- NanoStringQC(cs3, exp0[exp0$geneRLF == "CS3", ],
                         plots = TRUE, detect = 50, sn = 100, ttl = "CodeSet 3")
 ```
 
-![](NanoString_files/figure-html/codesets-1.png) 
+![](NanoString_files/figure-html/codesets-1.png)\
 
 We can also compute the quality control parameters *just* for the the 3 POOLs:
 
@@ -54,7 +57,7 @@ exp.CS3.pools <- NanoStringQC(cs3.pools, exp0[sort(match(c(pool1, pool2, pool3),
                               ttl = "CodeSet 3 in POOL 1-3")
 ```
 
-![](NanoString_files/figure-html/pools-1.png) 
+![](NanoString_files/figure-html/pools-1.png)\
 
 ```r
 exp.CS2.pools <- NanoStringQC(cs2.pools, exp0[sort(match(c(pool1, pool2, pool3), cs2.names)) - 3, ],
@@ -62,7 +65,7 @@ exp.CS2.pools <- NanoStringQC(cs2.pools, exp0[sort(match(c(pool1, pool2, pool3),
                               ttl = "CodeSet 2 in POOL 1-3")
 ```
 
-![](NanoString_files/figure-html/pools-2.png) 
+![](NanoString_files/figure-html/pools-2.png)\
 
 More importantly, we want to verify the concordance between CodeSet2 and CodeSet3 in terms of the gene expression in common genes for each of POOL1, POOL2, and POOL3.
 
@@ -121,7 +124,7 @@ ggplot(pool1.rand, aes(x = CodeSets, y = Expr)) +
 #> Warning: Removed 1 rows containing non-finite values (stat_boxplot).
 ```
 
-![](NanoString_files/figure-html/pool_concord-1.png) 
+![](NanoString_files/figure-html/pool_concord-1.png)\
 
 ```r
 
@@ -132,7 +135,7 @@ ggplot(pool2.rand, aes(x = CodeSets, y = Expr)) +
 #> Warning: Removed 3 rows containing non-finite values (stat_boxplot).
 ```
 
-![](NanoString_files/figure-html/pool_concord-2.png) 
+![](NanoString_files/figure-html/pool_concord-2.png)\
 
 ```r
 
@@ -143,7 +146,7 @@ ggplot(pool3.rand, aes(x = CodeSets, y = Expr)) +
 #> Warning: Removed 1 rows containing non-finite values (stat_boxplot).
 ```
 
-![](NanoString_files/figure-html/pool_concord-3.png) 
+![](NanoString_files/figure-html/pool_concord-3.png)\
 
 ## ratioMethod
 
