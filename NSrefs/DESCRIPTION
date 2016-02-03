@@ -12,7 +12,7 @@ Depends: R (>= 3.2.0)
 Imports: dplyr, magrittr, assertthat
 License: MIT + file LICENSE
 LazyData: TRUE
-Suggests: otta, NanoStringNorm,
+Suggests: otta,
     testthat,
     knitr,
     rmarkdown,
