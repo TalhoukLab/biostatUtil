@@ -50,7 +50,8 @@ CCplot <- function(method1, method2, Ptype = "None", metrics = FALSE,
   cclab <- paste0("Rc: ", round(tmp.ccc$rho.c[,1], digits = 2), " (",
                  round(tmp.ccc$rho.c[, 2], digits = 2), " - ",
                  round(tmp.ccc$rho.c[, 3], digits = 2), ")")
-  r2lab <- bquote(R^2 : .( round(cor(method1, method2),2)))
+  r2lab <- bquote(R : .( round(cor(method1, method2),2)))
+  r2rob <- bquote(rM : .( round(ccaPP::corM(method1, method2),2)))
   Acc <- paste("Ca:", round(tmp.ccc$C.b, 2))
   loc <- paste0("Location shift:", round(tmp.ccc$l.shift, 2))
   scl <- paste0("Scale shift:", round(tmp.ccc$s.shift, 2))
@@ -69,6 +70,7 @@ CCplot <- function(method1, method2, Ptype = "None", metrics = FALSE,
     usr <- par("usr")  	# get user coordinates
     par(usr = c(0, 1, 0, 1))  # new relative user coordinates
     text(0.5, 0.18, r2lab, adj = 0)
+    text(0.5, 0.23, r2rob, adj = 0)
     text(0.5, 0.12, Acc, adj = 0)
     text(0.5, 0.05, cclab, adj = 0)
     par(usr = usr)	# restore original user coordinates

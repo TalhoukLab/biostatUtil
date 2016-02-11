@@ -6,8 +6,15 @@ Authors@R: c(
     person("Aline", "Talhouk", email = "atalhouk@bccrc.ca", role = c("aut", "cre")),
     person("Derek", "Chiu", email = "dchiu@bccrc.ca", role = "aut"))
 Description: Batch adjustment functions for the NanoString project.
-Depends: R (>= 3.2.0)
-Imports: MASS, ber, epiR, assertthat
+Depends:
+    R (>= 3.2.0)
+Imports:
+    MASS,
+    ber,
+    epiR,
+    assertthat
 License: GPL
 LazyData: true
-Suggests: NanoStringNorm
+Suggests:
+    NanoStringNorm
+RoxygenNote: 5.0.1
