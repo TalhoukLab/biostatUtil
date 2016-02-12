@@ -3,8 +3,8 @@
 #' Computes NanoString quality control parameters and flags
 #' @param raw matrix of raw counts obtained from nCounter (rows are genes).
 #' The first three columns must be labeled: \code{c("Code.Class", "Name", "Accession")} and contain that information.
-#' @param exp matrix of annotations with rows in the same order as the columns of raw.
-#' @param detect Percent threshold of genes over load that we would like to detect (not decimal).
+#' @param exp matrix of annotations with rows in the same order as the columns of raw. Needs a column labeled File.Name with entries corresponding to sample names in raw count. Defaults to NULL.
+#' @param detect percent threshold of genes over load that we would like to detect (not decimal).
 #' @param sn Signal to noise ratio of the housekeeping genes we are willing to tolerate
 #' @param plots logical; indicates whether plots to visualise the results are requested, defaults to \code{TRUE}
 #' @param ttl a string to show the title on the plots
@@ -30,11 +30,17 @@
 #'                         plots = FALSE, sn = 100, ttl = "CodeSet 2")
 #' exp.CS3 <- NanoStringQC(cs3, exp0[exp0$geneRLF == "CS3", ],
 #'                         plots = TRUE, detect = 50, sn = 100, ttl = "CodeSet 3")
-NanoStringQC <- function(raw, exp, detect = 80, sn = 150, plots = TRUE,
+NanoStringQC <- function(raw, exp = NULL, detect = 80, sn = 150, plots = TRUE,
                           ttl = " ", explore = TRUE) {
-  assertthat::assert_that(check_colnames(raw))
-  assertthat::assert_that(check_genes(raw))
+  
+  # Run a bunch of checks to make sure the data is in the right order
+  assertthat::assert_that(check_colnames(raw)) #Checks format of raw counts
+  assertthat::assert_that(check_genes(raw)) #Checks that HK genes are specified
+  if(is.null(exp)){ #Creates annotation matrix exp if is null
+    exp <- data.frame(File.Name = colnames(raw[,-(1:3)]))} 
   assertthat::assert_that(ncol(raw) == nrow(exp) + 3)
+  assertthat::assert_that(all(substring(colnames(raw[,-(1:3)]),2) == exp$File.Name))
+  
   sn.in <- sn
   genes <- raw$Name
   rownames(raw) <- genes
