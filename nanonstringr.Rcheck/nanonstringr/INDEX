@@ -1,0 +1,6 @@
+HKnorm                  Normalization to Housekeeping Genes
+                        (Single-Patient sample)
+NanoStringQC            QC for NanoString Data
+nanostringr             nanostringr: Quality Control and normalization
+                        for nanostringr platform
+ratioMethod             Ratio method for batch adjustment
