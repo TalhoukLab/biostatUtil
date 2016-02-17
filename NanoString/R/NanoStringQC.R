@@ -3,7 +3,7 @@
 #' Computes NanoString quality control parameters and flags
 #' @param raw matrix of raw counts obtained from nCounter (rows are genes).
 #' The first three columns must be labeled: \code{c("Code.Class", "Name", "Accession")} and contain that information.
-#' @param exp matrix of annotations with rows in the same order as the columns of raw. Needs a column labeled File.Name with entries corresponding to sample names in raw count. Defaults to NULL.
+#' @param exp matrix of annotations with rows in the same order as the columns of raw. Needs a column labeled File.Name with entries corresponding to sample names in raw count, also needs columns fov.counted and fov.count as well as binding.density. These fields can be extracted from the RCC files.
 #' @param detect percent threshold of genes over load that we would like to detect (not decimal).
 #' @param sn Signal to noise ratio of the housekeeping genes we are willing to tolerate
 #' @param plots logical; indicates whether plots to visualise the results are requested, defaults to \code{TRUE}
@@ -30,14 +30,12 @@
 #'                         plots = FALSE, sn = 100, ttl = "CodeSet 2")
 #' exp.CS3 <- NanoStringQC(cs3, exp0[exp0$geneRLF == "CS3", ],
 #'                         plots = TRUE, detect = 50, sn = 100, ttl = "CodeSet 3")
-NanoStringQC <- function(raw, exp = NULL, detect = 80, sn = 150, plots = TRUE,
+NanoStringQC <- function(raw, exp, detect = 80, sn = 150, plots = TRUE,
                           ttl = " ", explore = TRUE) {
   
   # Run a bunch of checks to make sure the data is in the right order
   assertthat::assert_that(check_colnames(raw)) #Checks format of raw counts
   assertthat::assert_that(check_genes(raw)) #Checks that HK genes are specified
-  if(is.null(exp)){ #Creates annotation matrix exp if is null
-    exp <- data.frame(File.Name = colnames(raw[,-(1:3)]))} 
   assertthat::assert_that(ncol(raw) == nrow(exp) + 3)
   assertthat::assert_that(all(substring(colnames(raw[,-(1:3)]),2) == exp$File.Name))
   
@@ -84,7 +82,7 @@ NanoStringQC <- function(raw, exp = NULL, detect = 80, sn = 150, plots = TRUE,
              ifelse(sn < sn.in | pergd < detect,
                     "Failed", "Passed"), flag.levs),
            QCFlag = factor(ifelse(
-             as.vector(spcFlag == "Failed" | normFlag == "Failed" |
+             as.vector(spcFlag == "Failed"|
                          imagingFlag == "Failed" | linFlag == "Failed"),
              "Failed", "Passed"))) %>%
     magrittr::set_rownames(.$rn) %>%
@@ -94,8 +92,8 @@ NanoStringQC <- function(raw, exp = NULL, detect = 80, sn = 150, plots = TRUE,
   if (plots) {
     par(mfrow = c(1, 2))
     plot(exp$sn, exp$pergd, pch = 20, col = "deepskyblue", xaxt = "n",
-         ylim = c(0, 100), xlab = "Signal to Noise Ratio",
-         ylab = "Ratio of Genes Detected")
+         ylim = c(0, 100), xlab = "Signal/Noise Ratio",
+         ylab = "Percent of Genes Detected")
     axis(1, at = seq(0, max(exp$sn) + 1, 300))
     abline(v = sn, col = "red", lwd = 2)
     abline(h = detect, lty = 2)
