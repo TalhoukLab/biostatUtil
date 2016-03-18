@@ -16,7 +16,7 @@ library(reshape2)
 genBootSpls <- function(dat, B=1000){
   # Generate Bootstrap Samples by sampling with replacement 
   # the bootstrap samples are saved in a list called tr
-  # the unselected samples are save in a list called te
+  # the unselected samples are saved in a list called te
   N <- nrow(dat)
   boot.dat <- plyr::rlply(B, {
     tr.ind <- sample(1:N, replace = TRUE)
@@ -30,6 +30,11 @@ genBootSpls <- function(dat, B=1000){
   boot.te <- lapply(boot.dat, function(x) x$te)
   return(list(boot.tr=boot.tr,boot.te=boot.te))
 }
+error.bar <- function(x, y, upper, lower=upper, length=0.1,...){
+  if(length(x) != length(y) | length(y) !=length(lower) | length(lower) != length(upper))
+    stop("vectors must be same length")
+  arrows(x,upper, x, lower, angle=90, code=3, length=length, ...)
+}
 
 
 survPerfInd <- function(mod.pred,surv.time,surv.event){
@@ -42,16 +47,10 @@ survPerfInd <- function(mod.pred,surv.time,surv.event){
 #  coxphCPE(app.mod.fit)
 }
 
-error.bar <- function(x,g, ylim = range(c(0,l,u)),...)
-{
-  m <- by(x,g,mean)
-  SD <- by(x,g,sd)
-  n <- by(x,g,length)
-  l <- quantile(m,0.025)
-  u <- quantile(m, 0.975)
-  b <- barplot(m,ylim=ylim,...)
-  arrows(x0=b,x1=b,y0=l,y1=u,code=3,angle=90)
-  abline(h=0.5,lty=2)
+error.bar <- function(x, y, upper, lower=upper, length=0.1,...){
+  if(length(x) != length(y) | length(y) !=length(lower) | length(lower) != length(upper))
+    stop("vectors must be same length")
+  arrows(x,y+upper, x, y-lower, angle=90, code=3, length=length, ...)
 }
 
 
@@ -106,16 +105,8 @@ dat0$rfs.sts <- as.numeric(dat0$rfs.sts=="rfs.event")
 time.var <- c("os.yrs","dss.yrs","rfs.yrs")
 event.ind <- c("os.sts","dss.sts","rfs.sts")
 
-B <- 1000
+B <- 5000
 
-esmo_all <- 
-  
-  data=dat0;
-modelVars=c("esmo", "any.treatment")
-modelName="esmo"
-dataName="all"
-B=1000
-  
 runBootValidation <- function(data, modelVars,time.var,event.ind,B, modelName, dataName){  
   CbootSample <- mapply(function(X,Y){bootPerf(data,modelVars, X,Y,B)$boot632}, X=time.var, Y=event.ind, SIMPLIFY = T) %>%
   set_colnames(c("OS","DSS","PFS"))%>%
@@ -157,8 +148,22 @@ df1 <- rbind(esmo_all,esmo_bjc,esmo_val,
              ProMisE_all,ProMisE_bjc,ProMisE_val,
              esmoProMisE_all,esmoProMisE_bjc,esmoProMisE_val)
 
+write.csv(df1, "bootCindex.csv")
+bootCI <- function(x) quantile(x,c(0.5,0.025,0.975), names=F, na.rm = TRUE)
 
-bootCI <- function(x) quantile(x,c(0.5,0.025,0.975), na.rm = TRUE)
+agg.dat <-gather(Cindex~Model+Endpoint+Data,bootCI, data=df1)
 
-aggregate(Cindex~Model+Data,bootCI, data=df1)
+by_model <- group_by(df1,Model, Data, Endpoint)
+
+y.mean <- summarise(by_model,CindexMedian=median(Cindex, na.rm = T), lower=quantile(Cindex, c(0.025),na.rm=TRUE), upper=quantile(Cindex, c(0.975),na.rm=TRUE)) %>% filter(Data=="ALL") %>% select(Endpoint,Model, CindexMedian) %>% spread(Endpoint,CindexMedian)
+
+y.lower<- summarise(by_model,CindexMedian=median(Cindex, na.rm = T), lower=quantile(Cindex, c(0.025),na.rm=TRUE), upper=quantile(Cindex, c(0.975),na.rm=TRUE)) %>% filter(Data=="ALL") %>% select(Endpoint,Model, lower) %>% spread(Endpoint,lower)
+
+y.upper<- summarise(by_model,CindexMedian=median(Cindex, na.rm = T), lower=quantile(Cindex, c(0.025),na.rm=TRUE), upper=quantile(Cindex, c(0.975),na.rm=TRUE)) %>% filter(Data=="ALL") %>% select(Endpoint,Model, upper) %>% spread(Endpoint,upper)
+
+
+barx <- barplot(as.matrix(y.mean[,3:5]), beside=TRUE,col=c("blue","magenta","green"), ylim=c(0,1.5), names.arg=c("OS", "DSS", "PFS"), axis.lty=1, xlab="Endpoint", ylab="C-Index (Median)", legend.text = as.character(y.mean$Model), main="ALL")
+abline(h=0.5)
+error.bar(barx,as.matrix(y.mean[,3:5]),as.matrix(y.upper[,3:5]),as.matrix(y.lower[,3:5]))
+
 

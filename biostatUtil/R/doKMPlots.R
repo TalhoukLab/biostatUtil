@@ -27,8 +27,8 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
                       line.name = NULL, line.color = NULL, line.pattern = NULL,
                       km.plot.ref.group = "single",
                       single.test.type = "logrank", surv.type = "os",
-                      use.firth = FIRTH.THRESHOLD, CI = TRUE, HR = TRUE,
-                      show.risk = TRUE, use.aline.plot = FALSE, ...) {
+                      use.firth = -1, CI = TRUE, HR = TRUE,
+                      show.risk = TRUE, use.ggkm = FALSE, ...) {
   pos <- 1
   if (is.null(line.name))
     line.name <- names(table(input.d[, var.name])) 
@@ -45,18 +45,18 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
   sfit <- survival::survfit(formula.obj, data = temp.d)
   assign("formula.obj", formula.obj, envir = as.environment(pos)) 
   assign("temp.d", temp.d, envir = as.environment(pos)) 
-  if (!use.aline.plot) {
+  if (!use.ggkm) {
     plotKM(temp.d, formula.obj,
            line.name, line.color, line.pattern = line.pattern, 
            main.text = paste0(var.description, " (", toupper(surv.type), ")"),
            show.test = km.plot.ref.group, single.test.type = single.test.type,
-           obs.survyrs = 3, ...)
+           obs.survyrs = 3,...)
   } else {	
     ggkm(sfit, sfit2 = NULL, table = show.risk, marks = TRUE,
          xlims = c(0, max(sfit$time)), ylims = c(0, 1),
          ystratalabs = line.name, ystrataname = NULL,
          main = paste0(var.description, " (", toupper(surv.type), ")"),
          pval = TRUE, HR = HR, use.firth = use.firth, CI = CI, subs = NULL,
-         legend = FALSE, ...)	
+         legend = FALSE,...)	
   }
 }
