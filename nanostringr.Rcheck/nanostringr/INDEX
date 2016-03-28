@@ -1,0 +1,6 @@
+CCplot                  Concordance Correlation Plot
+HKnorm                  Normalization to Housekeeping Genes
+NanoStringQC            QC metrics for NanoString Data
+nanostringr             nanostringr: Quality Control and normalization
+                        for nanostringr platform
+refMethod               Reference-based approach for batch adjustment

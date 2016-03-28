@@ -97,7 +97,7 @@ confusionMatrix <- function(x, y, seed = 20, num.boot = 1000,
                   dimnames = list(c("Accuracy", "Sensitivity", "Specificity",
                                     "PPV", "NPV", "kappa"),
                                   c("Point Estimate", "Lower CI", "Upper CI")))
-  table <- pander::pandoc.table.return(table)
+  ptable <- pander::pandoc.table.return(table)
   
   return(list(Accuracy = Accuracy, Sensitivity = Sensitivity,
               Specificity = Specificity, PPV = PPV, NPV = NPV, kappa = kappa,

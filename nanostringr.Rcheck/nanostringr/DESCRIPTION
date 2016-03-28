@@ -1,0 +1,27 @@
+Package: nanostringr
+Type: Package
+Title: Performs quality control and data normalization and batch effect
+        correction for NanoString nCounter data
+Version: 0.0.0.9008
+Date: 2015-12-16
+Authors@R: as.person(c(
+    "Aline Talhouk <atalhouk@bccrc.ca> [aut]",
+    "Samuel Leung <Samuel.Leung@vch.ca> [aut]",
+    "Derek Chiu <dchiu@bccrc.ca> [cre]"
+  ))
+Description: QC and batch adjustment operations for NanoString data.
+Depends: R (>= 3.2.0)
+Imports: dplyr, magrittr, assertthat
+License: MIT + file LICENSE
+LazyData: TRUE
+Suggests: epiR, dplyr, testthat, knitr, rmarkdown, pander, stringr,
+        tidyr, ggplot2
+RoxygenNote: 5.0.1
+VignetteBuilder: knitr
+NeedsCompilation: no
+Packaged: 2016-03-24 19:42:14 UTC; atalhouk
+Author: Aline Talhouk [aut],
+  Samuel Leung [aut],
+  Derek Chiu [cre]
+Maintainer: Derek Chiu <dchiu@bccrc.ca>
+Built: R 3.2.2; ; 2016-03-24 19:42:16 UTC; unix

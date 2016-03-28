@@ -42,6 +42,17 @@ survPerfInd <- function(mod.pred,surv.time,surv.event){
  # C <- rcorrcens(surv.form ~ I(-1 * mod.pred), data = dat)
   perf <- concordance.index(x = mod.pred, surv.time, 
                             surv.event, method = "conservative")
+  LLf <- mod.pred$loglik[2]
+  LL0 <- mod.pred$loglik[1]
+  #McFadden pseudo-R2
+  Rmc <- as.vector(1 - (LLf / LL0))
+  
+  #Cox & Snell
+  Rcox <- as.vector(1 - exp((2/mod.pred$n) * (LL0 - LLf)))
+  
+  #Nagelkerke
+  Rneg <- as.vector((1 - exp((2/mod.pred$n) * (LL0 - LLf))) / (1 - exp(LL0)^(2/mod.pred$n)))
+  
   return(round(unlist(perf[1:6]),3))
   
 #  coxphCPE(app.mod.fit)
