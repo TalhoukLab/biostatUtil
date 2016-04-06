@@ -39,3 +39,5 @@ Suggests:
     bccaEndometrial
 License: GPL-2
 RoxygenNote: 5.0.1
+LazyData: FALSE
+
