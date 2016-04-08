@@ -115,12 +115,10 @@ ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
         biclust = cocluster(as.matrix(x.rest[, ind.new]), "continuous",
                             nbcocluster = c(k, k))@colclass + 1
         )
+      if(i %% 10==0) {
+          saveRDS(coclus, paste0(dir, fileName,".rds"))
+        }
     }
   }
-  if (!is.null(dir))
-    if (time.saved)
-      saveRDS(coclus, paste0(dir, fileName, "_", Sys.Date(), ".rds"))
-    else
-      saveRDS(coclus, paste0(dir, fileName, ".rds"))
-  return(coclus)
+    return(coclus)
 }
