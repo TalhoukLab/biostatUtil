@@ -155,7 +155,7 @@ doCoxphGeneric <- function(
                              ifelse(is.na(caption), "",
                                     paste0("<caption style='",
                                            TABLE.CAPTION.STYLE, "'>",
-                                           addTableNumber(caption),
+                                           caption,
                                            "</caption>")))
   result.table.html <- paste0(result.table.html, "<tr><th style='",
                               col.th.style, "' colspan=2></th><th style='",
@@ -279,7 +279,7 @@ doCoxphGeneric <- function(
   
   options("table_counter" = options()$table_counter - 1)
   result.table.bamboo <- pander::pandoc.table.return(
-    result.table.bamboo, caption = paste0("*", addTableNumber(caption), "*"),
+    result.table.bamboo, caption = caption,
     emphasize.rownames = FALSE, split.table = split.table, ...)
   result.table.bamboo <- gsub(kLocalConstantHrSepFlag,"; ",result.table.bamboo)
   

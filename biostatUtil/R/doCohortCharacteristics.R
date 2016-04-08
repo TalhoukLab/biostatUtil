@@ -379,7 +379,7 @@ if (show.missing | is.var.continuous[i]&show.missing.continuous) {
   
   ##################################
   ### generate html table ...	 ###
-  result.table.html <- paste("<table border=",html.table.border,">",ifelse(is.na(caption),"",paste("<caption style='",TABLE.CAPTION.STYLE,"'>",addTableNumber(caption),"</caption>",sep="")),sep="")
+  result.table.html <- paste("<table border=",html.table.border,">",ifelse(is.na(caption),"",paste("<caption style='",TABLE.CAPTION.STYLE,"'>",caption,"</caption>",sep="")),sep="")
   result.table.html <- paste(
     result.table.html,
     "<tr><th style='",col.th.style,"' colspan=2></th><th style='",col.th.style,"'>",
@@ -509,7 +509,7 @@ if (show.missing | is.var.continuous[i]&show.missing.continuous) {
     }
   }
   result.table.bamboo <- pander::pandoc.table.return(result.table.bamboo, emphasize.rownames = FALSE, split.table=split.table, ...,
-                                             caption = paste0("*", addTableNumber(caption), "*"))                                     
+                                             caption = caption)                                     
                                            
   ##############################################################################
   ### remove the indicator flags e.g. kLocalConstantRowColPercentEndFlag     ###

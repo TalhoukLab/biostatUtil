@@ -158,7 +158,7 @@ doCoxphMultivariable <- function(
   rownames(result.table) <- result.table.row.names
   
   ### generate html table ###
-  result.table.html <- paste("<table border=",html.table.border,">",ifelse(is.na(caption),"",paste("<caption style='",TABLE.CAPTION.STYLE,"'>",addTableNumber(caption),"</caption>",sep="")),sep="")
+  result.table.html <- paste("<table border=",html.table.border,">",ifelse(is.na(caption),"",paste("<caption style='",TABLE.CAPTION.STYLE,"'>",caption,"</caption>",sep="")),sep="")
   result.table.html <- paste(result.table.html,"<tr><th style='",col.th.style,"' colspan=2></th><th style='",col.th.style,"'>",paste(result.table.col.names,collapse=paste("</th><th style='",col.th.style,"'>",sep="")),"</th></tr>",sep="")
   # print values
   i <- 1
@@ -271,7 +271,7 @@ doCoxphMultivariable <- function(
   
   options("table_counter" = options()$table_counter - 1)
   result.table.bamboo <- pander::pandoc.table.return(
-      result.table.bamboo, caption = paste0("*", addTableNumber(caption), "*"),
+      result.table.bamboo, caption = caption,
       emphasize.rownames = FALSE, split.table = split.table, ...)
   result.table.bamboo <- gsub(kLocalConstantHrSepFlag,"; ",result.table.bamboo)
   
