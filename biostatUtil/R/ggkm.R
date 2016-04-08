@@ -91,11 +91,15 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
   d <- length(levels(.df$strata))
   
   # specifying plot parameteres etc ----
+  names(shading.colors) <- ystratalabs
+  colScale <- scale_colour_manual(values = shading.colors)
+  colFill <- scale_fill_manual(values = shading.colors)
+  
   p <- ggplot(.df , aes(time, surv, color = strata, fill = strata)) +
     geom_step(aes(color = strata), size = .7) + 
     theme_bw() +
-    scale_colour_manual(values = shading.colors) +
-    scale_fill_manual(values = shading.colors) + 
+    colScale+
+    colFill+ 
     theme(axis.title.x = element_text(vjust = 0.5)) + 
     scale_x_continuous(xlabs, breaks = times, limits = xlims) + 
     scale_y_continuous(ylabs, limits = ylims) + 
