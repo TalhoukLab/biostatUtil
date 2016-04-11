@@ -6,9 +6,8 @@
 \usage{
 doKMPlots(input.d, time, status, var.name, var.description, line.name = NULL,
   line.color = NULL, line.pattern = NULL, km.plot.ref.group = "single",
-  single.test.type = "logrank", surv.type = "os",
-  use.firth = FIRTH.THRESHOLD, CI = TRUE, HR = TRUE, show.risk = TRUE,
-  use.aline.plot = FALSE, ...)
+  single.test.type = "logrank", surv.type = "os", use.firth = -1,
+  CI = TRUE, HR = TRUE, show.risk = TRUE, use.ggkm = FALSE, ...)
 }
 \arguments{
 \item{input.d}{\code{data.frame} containing data}
@@ -43,9 +42,9 @@ log-rank statistic}
 \item{show.risk}{logical; if \code{TRUE}, will show the number of people at risk
 at each time of death beneath the plot}
 
-\item{use.aline.plot}{if \code{TRUE}, will use Aline's plot function}
-
 \item{...}{additional arguments to other functions and methods}
+
+\item{use.aline.plot}{if \code{TRUE}, will use Aline's plot function}
 }
 \value{
 A Kaplan-Meier plot for the specified survival outcome split on the desired
