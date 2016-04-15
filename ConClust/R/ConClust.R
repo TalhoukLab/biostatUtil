@@ -120,5 +120,6 @@ ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
         }
     }
   }
-    return(coclus)
+  saveRDS(coclus, paste0(dir, fileName,".rds"))
+  return(coclus)
 }
