@@ -24,6 +24,8 @@
 #' @param banded.rows If \code{TRUE}, rows have alternating shading colour
 #' @param css.class.name.odd Used to set the row colour for odd rows
 #' @param css.class.name.even Used to set the row colour for even rows
+#' @param custom.marker.labels labels of marker to show; default NULL means using existing value label of the marker
+#' @param custom.total.label label of the "Total" column; default NULL means show "Total"
 #' @param split.table number of chars per row before table is split.
 #' @param ... additional arguments to \code{pander}
 #' @return A table with statistics reported for multiple variables, such as
@@ -51,6 +53,8 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
                                     banded.rows = FALSE,
                                     css.class.name.odd = "odd", 
                                     css.class.name.even = "even",
+									custom.marker.labels = NULL,
+									custom.total.label = NULL,
                                     split.table = 200, # set default for pander
                                     ...) {
 kLocalConstantRowColPercentBeginFlag <- "kLocalConstantRowColPercentBeginFlag" 
@@ -80,16 +84,36 @@ if (is.factor(input.d.no.missing[,marker.name]) & do.droplevels) {
     input.d.no.missing[, marker.name] <- droplevels(input.d.no.missing[, marker.name])
 }
 # Formatting Labels
-marker.categories <- names(table(input.d.no.missing[, marker.name]))
+marker.categories <- names(table(input.d.no.missing[,marker.name]))
 marker.categories <- marker.categories[!marker.categories %in% missing.codes]
+
 total.label <- ifelse(sum(sapply(var.descriptions, function(x){
     return(ifelse(isFirstLetterUpperCase(x), 1, 0))})) == length(var.descriptions), "Total", "total")
+
+if (!is.null(custom.total.label)) {
+	total.label <- custom.total.label
+}
 
 if (marker.value.labels.tolower) {
     result.table.col.names <- c(total.label, paste(marker.description, tolower(marker.categories)))
   } else {
     result.table.col.names <- c(total.label, paste(marker.description, marker.categories))	
   }
+
+if (!is.null(custom.marker.labels)) {
+	custom.marker.labels.length <- length(custom.marker.labels)
+	result.table.col.names.length <- length(result.table.col.names)
+	if (result.table.col.names.length == (custom.marker.labels.length+1)) {
+		result.table.col.names[2:result.table.col.names.length] <- custom.marker.labels
+	} else if (result.table.col.names.length < (custom.marker.labels.length+1)) {
+		result.table.col.names[2:result.table.col.names.length] <- custom.marker.labels[c(1:(result.table.col.names.length-1))]
+	} else {
+		# length(marker.categories) > length(custom.marker.labels)
+		result.table.col.names[2:result.table.col.names.length] <- custom.marker.labels[
+				rep(c(1:custom.marker.labels.length),floor(result.table.col.names.length/custom.marker.labels.length)),
+				c(1:(result.table.col.names.length%%custom.marker.labels.length))]
+	}
+}
   
 # If all items in var.descriptions starts with capital letter, first row header should be capital as well i.e. "Total"
 result.table.row.names <- total.label
