@@ -208,7 +208,7 @@ doCoxphGeneric <- function(
   result.table.bamboo.base.indexes <- c() # base indexes for each variable in result.table.bamboo
   # want to add empty rows for var description
   for (var.count in 1:length(var.names)) {  
-    result.table.bamboo.base.index <- 1 + (var.count-1)*4
+    result.table.bamboo.base.index <- 1 + (var.count-1)*(length(surv.descriptions)+1)
     if (var.count==1) {
       result.table.bamboo <- rbind(rep("",result.table.ncol),result.table.bamboo)
     } else {
@@ -218,7 +218,7 @@ doCoxphGeneric <- function(
         result.table.bamboo[result.table.bamboo.base.index:nrow(result.table.bamboo),])
     }
     rownames(result.table.bamboo)[result.table.bamboo.base.index] <- paste("**",var.descriptions[var.count],"**",sep="")
-    rownames(result.table.bamboo)[result.table.bamboo.base.index+c(1:3)] <- surv.descriptions
+    rownames(result.table.bamboo)[result.table.bamboo.base.index+c(1:length(surv.descriptions))] <- surv.descriptions
     result.table.bamboo.base.indexes <- c(result.table.bamboo.base.indexes,result.table.bamboo.base.index)
   }
   # want to add a column to describe different factor level for categorical 
