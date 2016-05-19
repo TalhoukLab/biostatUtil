@@ -9,8 +9,8 @@
 #' (NPV), and the kappa statistic, along with their bootstrapped confidence
 #' intervals are returned.
 #' 
-#' @param x a vector of predicted classes
-#' @param y a vector of reference classes
+#' @param x a vector of predicted binary classes
+#' @param y a vector of reference binary classes
 #' @param seed random seed for bootstrapping
 #' @param num.boot number of times to bootstrap. Defaults to 1000.
 #' @param conf.level confidence level. Defaults to 95\%.
@@ -41,17 +41,18 @@
 #' n <- 80
 #' x <- rbinom(n, size = 1, prob = 0.6)
 #' y <- rbinom(n, size = 1, prob = 0.4)
-#' confusionMatrix(x, y)
+#' binaryCM(x, y)
 #' 
 #' ### 90% CI from 500 bootstrapped samples
-#' confusionMatrix(x, y, num.boot = 500, conf.level = 0.90)
+#' binaryCM(x, y, num.boot = 500, conf.level = 0.90)
 #' 
 #' ### Round to 2 digits
-#' confusionMatrix(x, y, digits = 2)
-confusionMatrix <- function(x, y, seed = 20, num.boot = 1000,
+#' binaryCM(x, y, digits = 2)
+binaryCM <- function(x, y, seed = 20, num.boot = 1000,
                             conf.level = 0.95, digits = 4,
                             method = "wilson", verbose = FALSE) {
   CM <- table(Prediction = x, Reference = y)
+  if(dim(CM)[1]>2){stop("This function only works for binary classes!")}
   if (verbose) {
     cat("Confusion Matrix", "\n")
     print(CM)

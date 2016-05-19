@@ -13,6 +13,7 @@ doCohortCharacteristics(input.d, marker.name, marker.description, var.names,
   missing.codes.highlight = NULL, missing.codes = c("N/A", "", "Unk"),
   decimal = 0, caption = NA, html.table.border = 0, banded.rows = FALSE,
   css.class.name.odd = "odd", css.class.name.even = "even",
+  custom.marker.labels = NULL, custom.total.label = NULL,
   split.table = 200, ...)
 }
 \arguments{
@@ -63,6 +64,10 @@ Tests: chisq, fisher, ttest, wilcox, kendall, spearman, pearson, kruskal, confus
 \item{css.class.name.odd}{Used to set the row colour for odd rows}
 
 \item{css.class.name.even}{Used to set the row colour for even rows}
+
+\item{custom.marker.labels}{labels of marker to show; default NULL means using existing value label of the marker}
+
+\item{custom.total.label}{label of the "Total" column; default NULL means show "Total"}
 
 \item{split.table}{number of chars per row before table is split.}
 
