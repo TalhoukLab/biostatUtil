@@ -74,6 +74,10 @@ prettyCoxph <- function(input.formula, input.d, use.firth = 1,
                                function(x) !any(is.na(x))), ]
     fit.firth <- coxphf::coxphf(.my.formula, .my.data, ...)	
     fit.firth$nevent <- sum(fit.firth$y[, "status"])
+	# if lower/upper ci becomes NaN, change to NA for better display 
+	# e.g. in KM plot "NA" would be easier to understand compared to "NaN"
+	fit.firth$ci.lower[is.nan(fit.firth$ci.lower)] <- NA
+	fit.firth$ci.upper[is.nan(fit.firth$ci.upper)] <- NA
   } else {
     fit.firth <- NA
   }

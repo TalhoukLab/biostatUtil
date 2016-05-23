@@ -205,12 +205,16 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
       n.risk = summary(sfit, times = times, extend = TRUE)$n.risk[subs3]
     )
     risk.data$strata <- factor(risk.data$strata,
-                               levels = rev(levels(risk.data$strata)))
+			# want to print at-risk numbers same order as appears in HR, 
+			# therefore, do not rev the levels
+			levels = levels(risk.data$strata))#levels = rev(levels(risk.data$strata)))
     data.table <- ggplot(risk.data, aes(x = time, y = strata,
                                         label = format(n.risk, nsmall = 0))) +
       geom_text(size = 3.5) + theme_bw() +
       scale_y_discrete(breaks = as.character(levels(risk.data$strata)),
-                       labels = rev(ystratalabs)) +
+			  # want to print at-risk numbers same order as appears in HR, 
+			  # therefore, do not rev the levels		  
+			  labels = ystratalabs) +#labels = rev(ystratalabs)) +
       scale_x_continuous("Numbers at risk", limits = xlims) +
       theme(axis.title.x = element_text(size = 12, vjust = 1),
             panel.grid.major = element_blank(),
@@ -219,8 +223,10 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
             axis.text.x = element_blank(),
             axis.ticks = element_blank(),
             axis.text.y = element_text(face = "bold",
-                                       color = rev(shading.colors[1:length(
-                                         ystratalabs)]), hjust = 1),
+				# want to print at-risk numbers same order as appears in HR, 
+				# therefore, do not rev the levels					
+				color = shading.colors[1:length(ystratalabs)],#color = rev(shading.colors[1:length(ystratalabs)]),
+				hjust = 1),
             legend.position = "none",
             plot.margin = grid::unit(
               c(-1.5, 1, 0.1, ifelse(m < 10, 2.5, 3.5) - 0.28 * m), "lines")) +
