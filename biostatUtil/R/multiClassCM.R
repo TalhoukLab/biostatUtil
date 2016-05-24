@@ -65,8 +65,11 @@ multiClassCM <- function(x,y,seed = 20, num.boot = 1000,
   
 # Overall----
   cc <- round(caret::confusionMatrix(x,y)$overall,digits = digits)
-  kappa <- round(kappaBootCI(x, y, seed, num.boot, conf.level),
+  ckappa <- round(kappaBootCI(x, y, seed, num.boot, conf.level),
                  digits)
+  wkappa <- round(kappaBootCI(t$biopsy,t$surgery, method="weighted"),digits)
+  fkappa <- round(kappaBootCI(t$biopsy,t$surgery, method="fleiss"),digits)
+  
 # By class----
   acc <- (TP+TN)/N
   Accuracy <- round(Hmisc::binconf(TP+TN, N, alpha = 1 - conf.level,
@@ -109,7 +112,9 @@ multiClassCM <- function(x,y,seed = 20, num.boot = 1000,
   
 overall <- 
  rbind("Overall Accuracy"= printCI(c(cc[1],cc[3],cc[4])),
-       "kappa"=printCI(kappa),
+       "Cohen's kappa"=printCI(ckappa),
+       "Weighted Cohen's kappa"=printCI(wkappa),
+       "Fleiss's kappa"=printCI(fkappa),
        "No Information Rate" = cc[5],         
        "P-Value [Acc > NIR]" = cc[6]) %>% 
   set_colnames("Overall Concordance Statistics")

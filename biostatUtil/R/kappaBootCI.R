@@ -20,12 +20,32 @@
 #' 
 #' ## Use a different seed
 #' kappaBootCI(a, b, 5)
-kappaBootCI <- function(x, y, seed = 20, num.boot = 1000, conf.level = 0.95) {
+kappaBootCI <- function(x, y, seed = 20, num.boot = 1000, conf.level = 0.95, 
+                        method="cohen", type="nominal") {
   set.seed(seed)
+  
   ckappa.boot <- function(data, x) {
     psy::ckappa(data[x, ])[[2]]
   }
-  res <- boot::boot(cbind(x, y), ckappa.boot, num.boot)
+  wkappa.boot <- function(data, x,weight="squared") {
+    irr::kappa2(data[x, ], weight)$value
+  }
+  fkappa.boot <- function(data, x) {
+    irr::kappam.fleiss(data[x, ])$value
+  }
+  kripalpha.boot <- function(data, x, method=type) {
+    irr::kripp.alpha(data[x, ], method)$value
+  }
+if (method=="cohen"){ 
+  fun <-  ckappa.boot
+} else if (method=="weighted"){
+  fun <- wkappa.boot
+} else if (method=="fleiss"){
+  fun <- fkappa.boot
+}else if (method=="krippendorff"){
+  fun <- kripalpha.boot
+}
+  res <- boot::boot(cbind(x, y), fun, num.boot)
   bootCI <- boot::boot.ci(res, type = "bca", conf = conf.level)
   kappa <- c(PointEst = bootCI[[2]], bootCI[[4]][4:5])
   names(kappa)[2:3] <- c(paste0((1 - conf.level) / 2 * 100, "%"),
