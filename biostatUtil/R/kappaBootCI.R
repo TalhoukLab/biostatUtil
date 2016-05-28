@@ -38,15 +38,15 @@ kappaBootCI <- function(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
   kripalpha.boot <- function(data, x, method = type) {
     irr::kripp.alpha(data[x, ], method)$value
   }
-if (method == "cohen") { 
-  fun <- ckappa.boot
-} else if (method == "weighted") {
-  fun <- wkappa.boot
-} else if (method == "fleiss") {
-  fun <- fkappa.boot
-} else if (method == "krippendorff") {
-  fun <- kripalpha.boot
-}
+  if (method == "cohen") { 
+    fun <- ckappa.boot
+  } else if (method == "weighted") {
+    fun <- wkappa.boot
+  } else if (method == "fleiss") {
+    fun <- fkappa.boot
+  } else if (method == "krippendorff") {
+    fun <- kripalpha.boot
+  }
   res <- boot::boot(cbind(x, y), fun, num.boot)
   bootCI <- boot::boot.ci(res, type = "bca", conf = conf.level)
   kappa <- c(PointEst = bootCI[[2]], bootCI[[4]][4:5])

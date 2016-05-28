@@ -52,88 +52,90 @@ multiClassCM <- function(x,y,seed = 20, num.boot = 1000,
                          method = "wilson"){
   CM <- table(Prediction = x, Reference = y)
   CMu <- addmargins(CM)
-
-#  if(dim(CM)[1]<3){stop("This function only works for multi-class variables!")}
-  if(!all(levels(x)==levels(y))){stop("levels should be the same in the prediction and reference class!")}
+  
+  #  if(dim(CM)[1]<3){stop("This function only works for multi-class variables!")}
+  if (!all(levels(x) == levels(y))) {
+    stop("levels should be the same in the prediction and reference class!")
+  }
   clm <- colSums(CM)
   rwm <- rowSums(CM)
   N <-  sum(CM)
   TP <- diag(CM)
-  FP <- rwm-TP
-  FN <- clm-TP
-  TN <- N-(TP+FP+FN)
+  FP <- rwm - TP
+  FN <- clm - TP
+  TN <- N - (TP + FP + FN)
   
-# Overall----
+  # Overall----
   cc <- round(caret::confusionMatrix(x,y)$overall,digits = digits)
   ckappa <- round(kappaBootCI(x, y, seed, num.boot, conf.level),
-                 digits)
+                  digits)
   
-# By class----
-  acc <- (TP+TN)/N
-  Accuracy <- round(Hmisc::binconf(TP+TN, N, alpha = 1 - conf.level,
+  # By class----
+  acc <- (TP + TN)/N
+  Accuracy <- round(Hmisc::binconf(TP + TN, N, alpha = 1 - conf.level,
                                    method = method), digits)  
   sens <- TP/clm
   Sensitivity <- round(Hmisc::binconf(TP, clm, alpha = 1 - conf.level,
                                       method = method), digits)
   
-  spec <- TN/(N-clm)
-  Specificity <- round(Hmisc::binconf(TN, (N-clm), alpha = 1 - conf.level,
+  spec <- TN/(N - clm)
+  Specificity <- round(Hmisc::binconf(TN, (N - clm), alpha = 1 - conf.level,
                                       method = method), digits)
   
   ppv <- TP/rwm
   PPV <- round(Hmisc::binconf(TP, rwm, alpha = 1 - conf.level,
                               method = method), digits)
   
-  npv <- TN/(N-rwm)
-  NPV <- round(Hmisc::binconf(TN, (N-rwm), alpha = 1 - conf.level,
+  npv <- TN/(N - rwm)
+  NPV <- round(Hmisc::binconf(TN, (N - rwm), alpha = 1 - conf.level,
                               method = method), digits)
   prev <- clm/N
   Prevalence <- round(Hmisc::binconf(clm, N, alpha = 1 - conf.level,
-                                    method = method), digits)
+                                     method = method), digits)
   detect <- TP/N
   Detection <- round(Hmisc::binconf(TP, N, alpha = 1 - conf.level,
-                                       method = method), digits)
+                                    method = method), digits)
   detectPrev <- rwm/N
-  DetectionPrev<- round(Hmisc::binconf(rwm, N, alpha = 1 - conf.level,
-                          method = method), digits)
+  DetectionPrev <- round(Hmisc::binconf(rwm, N, alpha = 1 - conf.level,
+                                        method = method), digits)
   
-  BA <- (sens+spec)/2
- 
+  BA <- (sens + spec)/2
+  
   colnames(Sensitivity)[2:3] <- colnames(Specificity)[2:3] <-
     colnames(PPV)[2:3] <- colnames(NPV)[2:3] <- colnames(Prevalence)[2:3] <-
-    colnames(Detection)[2:3] <-colnames(DetectionPrev)[2:3] <-
+    colnames(Detection)[2:3] <- colnames(DetectionPrev)[2:3] <-
     c(paste0((1 - conf.level) / 2 * 100, "%"),
       paste0((1 - (1 - conf.level) / 2) * 100, "%"))
   
   printCI <- function(z) {
     paste0(z[1], " (", z[2], "-", z[3], ")")}
   
-overall <- 
- rbind("Overall Accuracy"= printCI(c(cc[1],cc[3],cc[4])),
-       "Cohen's kappa"=printCI(ckappa),
-       "No Information Rate" = cc[5],         
-       "P-Value [Acc > NIR]" = cc[6]) %>% 
-  set_colnames("Overall Concordance Statistics")
- 
-table <- rbind("Sensitivity"=c(round(mean(sens),digits),
-                               apply(Sensitivity, 1, printCI)),
-        "Specificity"=c(round(mean(spec),digits), 
-                        apply(Specificity, 1, printCI)),
-        "Pos Pred Value"=c(round(mean(ppv), digits),
-                           apply(PPV, 1, printCI)),
-        "Neg Pred Value"=c(round(mean(npv), digits),
-                           apply(NPV, 1, printCI)),
-        "Prevalence"=c("",
-                       apply(Prevalence, 1, printCI)),
-        "Detection Rate"=c("",
-                           apply(Detection, 1, printCI)),
-        "Detection Prevalence"=c("",
-                                 apply(DetectionPrev, 1, printCI)),
-        "Accuracy"=c(round(mean(acc),digits),
-                           apply(Accuracy, 1, printCI)),
-        "Balanced Accuracy"=c(round(mean(BA),digits),
-                              round(BA, digits = digits))) %>% 
-    set_colnames(c("Average",levels(x)))
-        
-return(list(CM=CMu,overall=overall,table=table))
-    }
+  overall <- 
+    rbind("Overall Accuracy" = printCI(c(cc[1], cc[3], cc[4])),
+          "Cohen's kappa" = printCI(ckappa),
+          "No Information Rate" = cc[5],         
+          "P-Value [Acc > NIR]" = cc[6]) %>% 
+    set_colnames("Overall Concordance Statistics")
+  
+  table <- rbind("Sensitivity" = c(round(mean(sens),digits),
+                                   apply(Sensitivity, 1, printCI)),
+                 "Specificity" = c(round(mean(spec),digits), 
+                                   apply(Specificity, 1, printCI)),
+                 "Pos Pred Value" = c(round(mean(ppv), digits),
+                                      apply(PPV, 1, printCI)),
+                 "Neg Pred Value" = c(round(mean(npv), digits),
+                                      apply(NPV, 1, printCI)),
+                 "Prevalence" = c("",
+                                  apply(Prevalence, 1, printCI)),
+                 "Detection Rate" = c("",
+                                      apply(Detection, 1, printCI)),
+                 "Detection Prevalence" = c("",
+                                            apply(DetectionPrev, 1, printCI)),
+                 "Accuracy" = c(round(mean(acc),digits),
+                                apply(Accuracy, 1, printCI)),
+                 "Balanced Accuracy" = c(round(mean(BA),digits),
+                                         round(BA, digits = digits))) %>% 
+    set_colnames(c("Average", levels(x)))
+  
+  return(list(CM = CMu, overall = overall, table = table))
+}
