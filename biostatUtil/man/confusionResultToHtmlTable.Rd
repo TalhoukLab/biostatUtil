@@ -24,7 +24,7 @@ If \code{num.boot = NA}, do not show CI.}
 \item{digits}{number of digits to round p-values to}
 }
 \description{
-Prints results from \code{confusionMatrix} into a nice HTML table format.
+Prints results from \code{binaryCM} into a nice HTML table format.
 }
 \examples{
 # 95\% CI from 10 bootstraped samples
@@ -37,6 +37,6 @@ results <- confusionResultToHtmlTable(x, y, "Test", num.boot = 10)
 htmlTable(results)
 }
 \author{
-Samuel Leung, Derek CHiu
+Samuel Leung, Derek Chiu
 }
 

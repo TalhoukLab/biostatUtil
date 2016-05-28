@@ -49,10 +49,12 @@
 #' ### Round to 2 digits
 #' binaryCM(x, y, digits = 2)
 binaryCM <- function(x, y, seed = 20, num.boot = 1000,
-                            conf.level = 0.95, digits = 4,
-                            method = "wilson", verbose = FALSE) {
+                     conf.level = 0.95, digits = 4,
+                     method = "wilson", verbose = FALSE) {
   CM <- table(Prediction = x, Reference = y)
-  if(dim(CM)[1]>2){stop("This function only works for binary classes!")}
+  if (dim(CM)[1] > 2){
+    stop("This function only works for binary classes!")
+  }
   if (verbose) {
     cat("Confusion Matrix", "\n")
     print(CM)

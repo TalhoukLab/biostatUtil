@@ -1,6 +1,6 @@
 #' Confusion matrix results in HTML
 #' 
-#' Prints results from \code{confusionMatrix} into a nice HTML table format.
+#' Prints results from \code{binaryCM} into a nice HTML table format.
 #' @param prediction vector of predicted classes
 #' @param reference vector of reference classes
 #' @param ref.description description of classes
@@ -9,7 +9,7 @@
 #' If \code{num.boot = NA}, do not show CI.
 #' @param conf.level confidence level. Defaults to 95\%.
 #' @param digits number of digits to round p-values to
-#' @author Samuel Leung, Derek CHiu
+#' @author Samuel Leung, Derek Chiu
 #' @export
 #' @examples 
 #' # 95% CI from 10 bootstraped samples
@@ -30,7 +30,7 @@ confusionResultToHtmlTable <- function(prediction, reference, ref.description,
   ci <- c((1 - conf.level) / 2, (1 - (1 - conf.level) / 2))
   prediction <- as.factor(prediction)
   reference <- as.factor(reference)
-  confusionResult <- caret::confusionMatrix(prediction, reference)
+  confusionResult <- binaryCM(prediction, reference)
   boot.confusionResults <- NA
   if (do.ci) {
     boot.confusionResults <- as.data.frame(cbind(
@@ -41,8 +41,8 @@ confusionResultToHtmlTable <- function(prediction, reference, ref.description,
       "npv" = rep(NA, num.boot)))
     for (i in 1:num.boot) {
       index <- sample(1:length(prediction), replace = TRUE)
-      boot.result <- caret::confusionMatrix(prediction[index], reference[index],
-                                     seed = NULL)
+      boot.result <- binaryCM(prediction[index], reference[index],
+                              seed = NULL)
       boot.confusionResults$kappa[i] <- boot.result$kappa[1]
       boot.confusionResults$sens[i] <- boot.result$Sensitivity[1]
       boot.confusionResults$specs[i] <- boot.result$Specificity[1]
