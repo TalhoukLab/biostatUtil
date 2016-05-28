@@ -32,7 +32,10 @@ Imports:
     gridExtra,
     stringr,
     doBy,
-    tidyr
+    tidyr,
+    caret,
+    PerformanceAnalytics,
+    irr
 Suggests:
     logistf,
     meta,
