@@ -7,12 +7,12 @@
 barplotSum(tx, ttl = "")
 }
 \arguments{
-\item{ttl}{the title of the boxplot}
+\item{tx}{table of a categorical variable}
 
-\item{var}{the variable to be plotted (must be categorical)}
+\item{ttl}{the title of the boxplot}
 }
 \description{
-Function to provide a barplot from a table of categorical variable with labels wraped
+Function to provide a barplot from a table of categorical variable with labels wrapped
 }
 \author{
 Aline Talhouk

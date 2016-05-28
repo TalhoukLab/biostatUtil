@@ -16,7 +16,6 @@
 #' @param digits number of digits to round summaries to
 #' @param method method for obtaining confidence intervals for binomial
 #' probabilities. See \code{Hmisc::binconf} for details.
-#' @param verbose logical; if \code{TRUE}, outputs are printed to the screen
 #' @return A confusion matrix for the predicted and reference classes. Then
 #' the estimated statistics along with bootstrapped confidence intervals. A
 #' list with the following elements

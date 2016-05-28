@@ -22,8 +22,6 @@ multiClassCM(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
 
 \item{method}{method for obtaining confidence intervals for binomial
 probabilities. See \code{Hmisc::binconf} for details.}
-
-\item{verbose}{logical; if \code{TRUE}, outputs are printed to the screen}
 }
 \value{
 A confusion matrix for the predicted and reference classes. Then

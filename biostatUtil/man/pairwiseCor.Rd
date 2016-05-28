@@ -2,15 +2,17 @@
 % Please edit documentation in R/pairwiseCor.R
 \name{pairwiseCor}
 \alias{pairwiseCor}
-\title{Computes all pairwise correlations between the columns of a data frame}
+\title{Pairwise Correlations}
 \usage{
 pairwiseCor(dataframe)
 }
+\arguments{
+\item{dataframe}{A data frame containing numeric variables of interest.}
+}
+\value{
+all pairwise absolute correlations, correlations, Pval, Adj P val by decreasing order of absolute correlations.
+}
 \description{
-Args:
- dataframe:A data frame containing numeric variables of interest. 
-Returns:
- pairwiseCorDF:  all pairwise absolute correlations,  correlations, Pval, Adj P val by decreasing order of absolute corre,ations.
- @export
+Computes all pairwise correlations between the columns of a data frame
 }
 

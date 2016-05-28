@@ -17,6 +17,10 @@ kappaBootCI(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
 \item{num.boot}{number of times to bootstrap. Defaults to 1000.}
 
 \item{conf.level}{confidence level. Defaults to 95\%.}
+
+\item{method}{statistic to calculate bootstrap estimate}
+
+\item{type}{method setting for \code{method = "krippendorff"}}
 }
 \value{
 bootstraped confidence interval for Cohen's kappa.

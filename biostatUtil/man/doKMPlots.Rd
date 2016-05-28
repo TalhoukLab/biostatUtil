@@ -42,9 +42,9 @@ log-rank statistic}
 \item{show.risk}{logical; if \code{TRUE}, will show the number of people at risk
 at each time of death beneath the plot}
 
-\item{...}{additional arguments to other functions and methods}
+\item{use.ggkm}{if \code{TRUE}, will use function \code{ggkm} for plotting}
 
-\item{use.aline.plot}{if \code{TRUE}, will use Aline's plot function}
+\item{...}{additional arguments to other functions and methods}
 }
 \value{
 A Kaplan-Meier plot for the specified survival outcome split on the desired

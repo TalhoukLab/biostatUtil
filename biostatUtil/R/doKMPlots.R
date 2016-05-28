@@ -17,7 +17,7 @@
 #' @param HR logical; if \code{TRUE}, will show hazard ratios
 #' @param show.risk logical; if \code{TRUE}, will show the number of people at risk
 #' at each time of death beneath the plot
-#' @param use.aline.plot if \code{TRUE}, will use Aline's plot function
+#' @param use.ggkm if \code{TRUE}, will use function \code{ggkm} for plotting
 #' @param ... additional arguments to other functions and methods
 #' @return A Kaplan-Meier plot for the specified survival outcome split on the desired
 #' variable.
