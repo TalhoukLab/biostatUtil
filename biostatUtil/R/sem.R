@@ -6,6 +6,7 @@
 #' @return The standard error of the mean of \code{x}
 #' @author Samuel Leung
 #' @references http://en.wikipedia.org/wiki/Standard_error
+#' @importFrom stats var
 #' @export
 sem <- function(x, missing.value = NA, return.missing.value = NA) {
   x <- x[!is.na(x)]

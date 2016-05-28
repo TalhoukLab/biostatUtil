@@ -33,6 +33,7 @@
 #' percentages for categorical variables. Relevant association and correlation
 #' tests are performed as well.
 #' @author Aline Talhouk
+#' @importFrom stats cor.test kruskal.test wilcox.test quantile chisq.test fisher.test
 #' @export
 doCohortCharacteristics <- function(input.d, marker.name, marker.description,
                                     var.names, is.var.continuous, 

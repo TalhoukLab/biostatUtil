@@ -15,6 +15,7 @@
 #' \item{pval}{estimated p-value}
 #' @author Aline Talhouk, Derek Chiu
 #' @references http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1920534/
+#' @importFrom stats qnorm
 #' @export
 #' @examples
 #' library(meta)
@@ -28,6 +29,6 @@
 sdFromCI <- function(HR, lower.limit, upper.limit, alpha = 0.05) {
   sdlnHR <- sqrt(((log(upper.limit) - log(lower.limit)) /
                     (2 * qnorm(1 - alpha / 2)))^2)
-  estPval <- pchisq((log(HR) /sdlnHR)^2, 1, lower.tail = F)
+  estPval <- pchisq((log(HR) / sdlnHR)^2, 1, lower.tail = F)
   return(list(sd = sdlnHR, Pval = estPval))
 }

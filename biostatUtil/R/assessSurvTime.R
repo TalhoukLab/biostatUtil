@@ -17,6 +17,7 @@
 #' \item{KFT}{Known Function Time}
 #' \item{RevKM}{Reverse Kaplan-Meier Time}
 #' @author Samuel Leung
+#' @importFrom utils capture.output read.table
 #' @export
 assessSurvTime <- function(T1, T2, status) { 
   # in case there are any is.na(status)

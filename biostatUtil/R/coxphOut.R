@@ -23,6 +23,7 @@
 #' \item{Lower CI Limit}{Defaults to \code{2.5 \%}}
 #' \item{Upper CI Limit}{Defaults to \code{97.5 \%}}
 #' @author Aline Talhouk, Derek Chiu
+#' @importFrom stats confint
 #' @export
 #' @examples
 #' test1 <- list(time=c(4,3,1,1,2,2,3), 

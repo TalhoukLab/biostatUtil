@@ -30,7 +30,7 @@ confusionResultToHtmlTable <- function(prediction, reference, ref.description,
   ci <- c((1 - conf.level) / 2, (1 - (1 - conf.level) / 2))
   prediction <- as.factor(prediction)
   reference <- as.factor(reference)
-  confusionResult <- confusionMatrix(prediction, reference)
+  confusionResult <- caret::confusionMatrix(prediction, reference)
   boot.confusionResults <- NA
   if (do.ci) {
     boot.confusionResults <- as.data.frame(cbind(
@@ -41,7 +41,7 @@ confusionResultToHtmlTable <- function(prediction, reference, ref.description,
       "npv" = rep(NA, num.boot)))
     for (i in 1:num.boot) {
       index <- sample(1:length(prediction), replace = TRUE)
-      boot.result <- confusionMatrix(prediction[index], reference[index],
+      boot.result <- caret::confusionMatrix(prediction[index], reference[index],
                                      seed = NULL)
       boot.confusionResults$kappa[i] <- boot.result$kappa[1]
       boot.confusionResults$sens[i] <- boot.result$Sensitivity[1]

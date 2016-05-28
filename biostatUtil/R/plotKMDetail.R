@@ -30,6 +30,8 @@
 #' @author Samuel Leung
 #' @references http://courses.nus.edu.sg/course/stacar/internet/st3242/handouts/notes2.pdf
 #' @seealso \code{\link{plotKM}}
+#' @importFrom grDevices cairo_pdf dev.off png tiff
+#' @importFrom graphics plot legend box text
 #' @export
 plotKMDetail <- function(input.data, surv.formula, main.text, xlab.text,
                          ylab.text, line.name, line.color, line.pattern = NULL,

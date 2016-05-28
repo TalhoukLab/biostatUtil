@@ -4,6 +4,7 @@
 #' @param tx table of a categorical variable
 #' @param ttl the title of the boxplot
 #' @author Aline Talhouk
+#' @importFrom graphics barplot
 #' @export
 barplotSum <- function(tx, ttl = "") {
   wrap.labels <- function(x, len) {

@@ -17,6 +17,7 @@
 #' @param cex.axis scalar indicating amount of scaling for axes
 #' @return A jitterplot shown across different subtypes
 #' @author Samuel Leung
+#' @importFrom graphics par stripchart arrows points
 #' @export
 doJitterplotAmongSubtypes <- function(input.d, data.description,
                                       biomarker.var.name, biomarker.name,

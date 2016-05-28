@@ -17,6 +17,8 @@
 #' @param ... additional arguments to \code{hist}
 #' @return A histogram with some annotated values.
 #' @author Samuel Leung, Derek Chiu
+#' @importFrom graphics hist lines mtext
+#' @importFrom stats dnorm
 #' @export
 #' @examples 
 #' doHist(mtcars, "mpg")

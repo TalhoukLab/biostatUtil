@@ -13,6 +13,7 @@
 #' @author Aline Talhouk, Derek Chiu
 #' @import doBy dplyr
 #' @importFrom magrittr set_colnames set_rownames extract use_series
+#' @importFrom stats aggregate setNames
 #' @export
 #' @examples 
 #' mtcars$vs <- as.factor(mtcars$vs); mtcars$am <- as.factor(mtcars$am)

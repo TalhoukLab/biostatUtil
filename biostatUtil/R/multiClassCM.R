@@ -32,6 +32,7 @@
 #' \item{kappa}{kappa point estimate, lower bound and upper bound for
 #' bootstrapped CI}
 #' @author Aline Talhouk, Derek Chiu
+#' @importFrom stats addmargins
 #' @export
 #' @examples
 #' ### 95% CI from 1000 bootstraped samples

@@ -4,6 +4,8 @@
 #'
 #' @param dataframe A data frame containing numeric variables of interest. 
 #' @return all pairwise absolute correlations, correlations, Pval, Adj P val by decreasing order of absolute correlations.
+#' @importFrom utils combn
+#' @importFrom stats cor p.adjust
 #' @export
 pairwiseCor <- function(dataframe) {
   

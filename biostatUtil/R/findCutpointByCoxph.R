@@ -16,6 +16,7 @@
 #' example, \code{Surv(time, status) ~ x + age} won't work but 
 #' \code{Surv(time, status) ~ x} is fine.
 #' @author Samuel Leung
+#' @importFrom stats extractAIC
 #' @export
 findCutpointByCoxph <- function(input.d, surv.formula){
   if (length(surv.formula[[3]]) > 1) {

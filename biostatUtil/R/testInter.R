@@ -6,6 +6,7 @@
 #' model.
 #' @return A summary output for each model showing test for interaction
 #' @author Aline Talhouk
+#' @importFrom stats anova
 #' @export
 testInter <- function(dmat, event, labs = c("POLE wt", "Rx", "POLE wt * Rx"),
                       use.firth = FALSE) {

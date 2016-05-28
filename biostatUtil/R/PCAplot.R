@@ -1,8 +1,10 @@
 #' function to plot the first three PCAs and draw ellipses highlighting differences in the levels of a factor
 #' @param by factor to plot as ellipses on PCA plots
-#' @param tdat data matrix to compute principal componentsT 
+#' @param tdat data matrix to compute principal componentsT
+#' @importFrom stats prcomp
 #' @export
 PCAplot <- function(by, tdat) {
+  PC1 <- PC2 <- PC3 <- var.name <- NULL
   p <- prcomp(tdat, rtx = T, scale. = T)
   var3 <- round(((p$sdev^2 / sum(p$sdev^2))*100)[1:3], 2)
   pcaX <- p$x
