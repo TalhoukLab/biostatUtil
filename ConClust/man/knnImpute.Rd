@@ -4,10 +4,17 @@
 \alias{knnImpute}
 \title{Function to any missing clustering (due to resampling using K nearest neighbour)}
 \usage{
-knnImpute(res, data = tdat, seed = 123456)
+knnImpute(res, tdat = tdat, seed = 123456)
 }
 \arguments{
 \item{res}{is a vector representing a column of the output from ConClust or ConClustPlus}
+
+\item{tdat}{is the data matrix with samples are rows and genes as columns}
+
+\item{seed}{set random seed for reproducibility}
+}
+\value{
+results matrix with missing values filled in except when fewer than 3 out 5 nearest neighbours are in agreement
 }
 \description{
 Function to any missing clustering (due to resampling using K nearest neighbour)
