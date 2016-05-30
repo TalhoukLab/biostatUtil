@@ -9,10 +9,9 @@
 #' @return A list of length \code{nSim}. Each element is a pcNormal simulated
 #' matrix.
 #' @author Derek Chiu
+#' @importFrom stats princomp rnorm
 #' @export
-#'
 #' @examples
-#'
 #' A <- matrix(rnorm(300), nrow = 20)
 #' pcDats <- pcNormal(A)
 pcNormal <- function(data, nSim = 50) {

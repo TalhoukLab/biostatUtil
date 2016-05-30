@@ -10,6 +10,7 @@
 #' \item{ind}{index of representative simulation}
 #' \item{dat}{simulation data representation of all in pcNormal}
 #' @author Derek Chiu
+#' @importFrom stats median
 #' @export
 pcNormalSelect <- function(sim.dat, cl, type = c("rep", "range"), int = 5) {
   ss <- plyr::ldply(sim.dat, silStats, cl)

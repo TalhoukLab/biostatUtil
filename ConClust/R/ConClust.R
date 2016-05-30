@@ -48,6 +48,8 @@
 #' subsample. Each entry represents a class membership.
 #' @author Derek Chiu, Aline Talhouk
 #' @importFrom magrittr extract
+#' @importFrom utils setTxtProgressBar txtProgressBar
+#' @importFrom stats dist hclust kmeans setNames
 #' @import apcluster kernlab mclust blockcluster
 #' @export
 ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,

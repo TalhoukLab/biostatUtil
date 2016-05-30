@@ -20,7 +20,6 @@ Using a principal component constructed from the sample space,
 we simulate null distributions with univariate Normal distributions.
 }
 \examples{
-
 A <- matrix(rnorm(300), nrow = 20)
 pcDats <- pcNormal(A)
 }
