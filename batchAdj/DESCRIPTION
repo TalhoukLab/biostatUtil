@@ -1,7 +1,7 @@
 Package: batchAdj
 Title: Batch Adjustment
-Version: 0.0.0.9004
-Date: 2015-10-15
+Version: 0.1.0.9005
+Date: 2016-05-29
 Authors@R: c(
     person("Aline", "Talhouk", email = "atalhouk@bccrc.ca", role = c("aut", "cre")),
     person("Derek", "Chiu", email = "dchiu@bccrc.ca", role = "aut"))
@@ -12,7 +12,8 @@ Imports:
     MASS,
     ber,
     epiR,
-    assertthat
+    assertthat,
+    ccaPP
 License: GPL
 LazyData: true
 Suggests:

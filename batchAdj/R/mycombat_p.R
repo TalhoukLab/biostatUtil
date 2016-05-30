@@ -6,6 +6,8 @@
 #' @param prior.plots If \code{TRUE}, prior plots to compare kernel density estimate and
 #' parametric estimate are produced.
 #' @author Marco Giordan, Aline Talhouk
+#' @importFrom stats dnorm qqnorm qqline rgamma qqplot density model.matrix
+#' @importFrom graphics lines title
 #' @export
 mycombat_p <- function(Y, b, prior.plots = F) {
   if (missing(Y)) {
