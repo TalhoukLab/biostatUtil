@@ -6,8 +6,15 @@ Authors@R: c(
     person("Aline", "Talhouk", email = "atalhouk@bccrc.ca", role = c("aut", "cre")),
     person("Derek", "Chiu", email = "dchiu@bccrc.ca", role = "aut"))
 Description: Quality Control functions for NanoString project.
-Depends: R (>= 3.2.0)
-Imports: dplyr, magrittr, stringr, assertthat
+Depends:
+    R (>= 3.2.0)
+Imports:
+    dplyr,
+    magrittr,
+    stringr,
+    assertthat
 License: GPL
 LazyData: true
-Suggests: otta
+Suggests:
+    otta
+RoxygenNote: 5.0.1
