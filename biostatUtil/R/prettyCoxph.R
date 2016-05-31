@@ -10,6 +10,9 @@
 #' \code{~} operator, and the terms on the right. The response must be a
 #' survival object as returned by the \code{Surv} function.
 #' @param input.d data.frame containing the variables in \code{input.formula}
+#' @param ref.grp a named array indicating reference group(s) for any variables 
+#' in the cox model.  this parameter will be ignored if not applicable, e.g. for 
+#' continuous variable
 #' @param use.firth if set to -1, Firth's correction is applied using
 #' \code{coxphf}. The default value is 1, which uses \code{coxph}.
 #' @param check.ph if \code{TRUE}, checks the proportional hazard assumption.
@@ -42,11 +45,22 @@
 #' 
 #' # Pretty output
 #' prettyCoxph(Surv(time, status) ~ x + strata(sex), test1) 
-prettyCoxph <- function(input.formula, input.d, use.firth = 1,
+prettyCoxph <- function(input.formula, input.d, ref.grp = NULL, use.firth = 1,
                         check.ph = FALSE,
                         ph.test.plot.filename = "no.file", ...) {
   pos <- 1
   assign(".my.formula", input.formula, envir = as.environment(pos)) 
+  # modify input.d if ref.grp is defined!
+  if (length(ref.grp)>0) {
+	  terms.in.formula <- all.vars(input.formula[[3]])
+	  for(var.name in names(ref.grp)) {
+		  if (var.name %in% terms.in.formula) {
+		    # if var.name not in formula, just silently ignore it
+		    input.d[,var.name] <- relevel(input.d[,var.name],ref=ref.grp[var.name])
+		  }
+ 	  }
+  }	
+	
   assign(".my.data", input.d, envir = as.environment(pos))
   ok.to.use.firth <- ifelse(use.firth == -1, TRUE, FALSE)
   if (use.firth < 1 & use.firth > -1) {

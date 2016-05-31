@@ -17,6 +17,9 @@
 #' @param ylims vertical limits for plot
 #' @param ystratalabs labels for the strata being compared in \code{survfit}
 #' @param ystrataname name of the strata
+#' @param cox.ref.grp indicates reference group for the variable of interest 
+#' in the cox model.  this parameter will be ignored if not applicable, e.g. for 
+#' continuous variable
 #' @param timeby length of time between consecutive time points spanning the entire range of follow-up. Defaults to 5.
 #' @param pval logical; if \code{TRUE} (default), the logrank test p-value is shown on the plot
 #' @param HR logical; if \code{TRUE} (default), the estimated hazard ratio and its 95\% confidence interval will be shown
@@ -35,7 +38,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                  main = "Kaplan-Meier Plot",
                  xlabs = "Time", ylabs = "Survival Probability",
                  xlims = c(0, max(sfit$time)), ylims = c(0, 1),
-                 ystratalabs = NULL, ystrataname = NULL,
+                 ystratalabs = NULL, ystrataname = NULL, cox.ref.grp = NULL,
                  timeby = 5, pval = TRUE, HR = TRUE,
                  use.firth = 1, subs = NULL, legend = FALSE,
                  line.y.increment = 0.05, ...) {
@@ -72,6 +75,10 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
     ystrataname <- "Strata"
   m <- max(nchar(ystratalabs))
   times <- seq(0, max(sfit$time), by = timeby)
+  if (!is.null(cox.ref.grp)) {
+	  # very ugly ... hope this will work for most cases!
+	  names(cox.ref.grp) <- strsplit(names(sfit$strata)[1],"=")[[1]][1]
+  }
   
   .df <- data.frame(                      # data to be used in the survival plot
     time = sfit$time[subs2],
@@ -137,6 +144,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
       if (HR) {
         pretty.coxph.obj <- prettyCoxph(eval(sfit$call$formula),
                                         input.d = eval(sfit$call$data),
+										ref.grp = cox.ref.grp,
                                         use.firth = use.firth)
         if (pretty.coxph.obj$used.firth) {
           coxm <- pretty.coxph.obj$fit.firth
@@ -146,11 +154,15 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
           HRtxts <- Xunivcoxph(coxm)
         }
         show.ref.group <- length(HRtxts) > 1
+		cox.strata.labs <- ystratalabs
+		if (!is.null(cox.ref.grp)) {
+			cox.strata.labs <- c(cox.ref.grp,ystratalabs[ystratalabs!=cox.ref.grp])
+		}
         for (i in 1:length(HRtxts)) {
           HRtxt <- HRtxts[i]
           if (show.ref.group) {
-            HRtxt <- paste0(HRtxt, " ~ ", ystratalabs[i + 1],
-                            " vs. ", ystratalabs[1])
+            HRtxt <- paste0(HRtxt, " ~ ", cox.strata.labs[i + 1],
+                            " vs. ", cox.strata.labs[1])
           }
           p <- p + annotate("text", x = 0.2 * max(sfit$time), hjust = 0,
                             y = 0.01 + line.y.increment * i, label = HRtxt,
@@ -169,6 +181,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
       if (HR) {
         pretty.coxph.obj <- prettyCoxph(eval(sfit2$call$formula),
                                         input.d = eval(sfit2$call$data),
+										ref.grp = cox.ref.grp,
                                         use.firth = use.firth)
         if (pretty.coxph.obj$used.firth) {
           coxm <- pretty.coxph.obj$fit.firth
@@ -178,11 +191,15 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
           HRtxts <- Xunivcoxph(coxm)
         }
         show.ref.group <- length(HRtxts) > 1
+		cox.strata.labs <- ystratalabs
+		if (!is.null(cox.ref.grp)) {
+			cox.strata.labs <- c(cox.ref.grp,ystratalabs[ystratalabs!=cox.ref.grp])
+		}
         for (i in 1:length(HRtxts)) {
           HRtxt <- HRtxts[i]
           if (show.ref.group) {
-            HRtxt <- paste0(HRtxt, " ~ ", ystratalabs[i + 1],
-                           " vs. ", ystratalabs[1])
+            HRtxt <- paste0(HRtxt, " ~ ", cox.strata.labs[i + 1],
+                           " vs. ", cox.strata.labs[1])
           }
           p <- p + annotate("text", x = 0.2 * max(sfit2$time), hjust = 0,
                             y = 0.01 + line.y.increment * i, label = HRtxt,

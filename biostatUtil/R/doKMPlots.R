@@ -5,9 +5,11 @@
 #' @param status status indicator
 #' @param var.name name of variable to make Kaplan-Meier plots on
 #' @param var.description description for \code{var.name}
+#' 
 #' @param line.name names for each survival curve
 #' @param line.color colors for survival curves
 #' @param line.pattern line type for survival curves
+#' @param cox.ref.group specify reference group for cox model i.e. hazard ratio(s)
 #' @param km.plot.ref.group specify KM plot reference group; "single" means a lump
 #' log-rank statistic
 #' @param single.test.type test to use for survival curves. Defaults to "logrank".
@@ -25,6 +27,7 @@
 #' @export
 doKMPlots <- function(input.d, time, status, var.name, var.description,
                       line.name = NULL, line.color = NULL, line.pattern = NULL,
+					  cox.ref.group = NULL,
                       km.plot.ref.group = "single",
                       single.test.type = "logrank", surv.type = "os",
                       use.firth = -1, CI = TRUE, HR = TRUE,
@@ -36,8 +39,9 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
     line.color <- c(1:length(names(table(input.d[, var.name]))))
   if (is.null(line.pattern))
     line.pattern <- 1
-  if (is.factor(input.d[, var.name]))
-    input.d[, var.name] <- droplevels(input.d[, var.name])
+  if (is.factor(input.d[, var.name])) {
+    input.d[, var.name] <- droplevels(input.d[, var.name]) 
+  }
   temp.d <- input.d
   temp.d[, time] <- as.numeric(temp.d[, time])
   formula.obj <- as.formula(paste0("Surv(", time, ", ", status, ") ~ ",
@@ -54,7 +58,7 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
   } else {	
     ggkm(sfit, sfit2 = NULL, table = show.risk, marks = TRUE,
          xlims = c(0, max(sfit$time)), ylims = c(0, 1),
-         ystratalabs = line.name, ystrataname = NULL,
+         ystratalabs = line.name, ystrataname = NULL,  cox.ref.grp = cox.ref.group,
          main = paste0(var.description, " (", toupper(surv.type), ")"),
          pval = TRUE, HR = HR, use.firth = use.firth, CI = CI, subs = NULL,
          legend = FALSE,...)	
