@@ -12,11 +12,11 @@ bootPerf <- function(dat0, var.names, time.var, event.ind, B=1000, seed=2014, fi
   mod.form <- as.formula(paste("Surv(",time.var,",",event.ind,")" ,"~", paste(var.names, collapse = " + ")))
 
   #Apparent fit
-  app.mod.fit <- survival::doCox(mod.form, data = dat, firth = firth)
-  perf.app <- Cindex(app.mod.fit, dat)
+  app.mod.fit <- survPlus::doCox(mod.form, data = dat, firth = firth)
+  perf.app <- survPlus::Cindex(app.mod.fit, dat)
 
   #Bootstrap fit
-  boot.mod<- lapply(boots$boot.tr, function(x) survival::doCox(mod.form,data = x, firth = firth))
+  boot.mod<- lapply(boots$boot.tr, function(x) survPlus::doCox(mod.form,data = x, firth = firth))
 
   ## Standard bootstrap
   perf.boot <- mapply(function(X,Y){Cindex(X, newdat0=Y)},

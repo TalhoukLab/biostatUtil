@@ -16,5 +16,5 @@ doCox <- function(formula, data0, firth=TRUE){
       res <- cbind(beta.lp=fit$coefficients,lower= log(summary(fit)$conf.int[,3]),upper= log(summary(fit)$conf.int[,4]))
     loglik <- fit$loglik
     }
-  return(list(model=fit,results=res,loglik=loglik, firth=firth))
+  return(list(model=fit, formula=formula,results=res,loglik=loglik, firth=firth))
   }
