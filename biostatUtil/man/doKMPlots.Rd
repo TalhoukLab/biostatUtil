@@ -5,9 +5,10 @@
 \title{Make Kaplan-Meier plots}
 \usage{
 doKMPlots(input.d, time, status, var.name, var.description, line.name = NULL,
-  line.color = NULL, line.pattern = NULL, km.plot.ref.group = "single",
-  single.test.type = "logrank", surv.type = "os", use.firth = -1,
-  CI = TRUE, HR = TRUE, show.risk = TRUE, use.ggkm = FALSE, ...)
+  line.color = NULL, line.pattern = NULL, cox.ref.group = NULL,
+  km.plot.ref.group = "single", single.test.type = "logrank",
+  surv.type = "os", use.firth = -1, CI = TRUE, HR = TRUE,
+  show.risk = TRUE, use.ggkm = FALSE, ...)
 }
 \arguments{
 \item{input.d}{\code{data.frame} containing data}
@@ -25,6 +26,8 @@ doKMPlots(input.d, time, status, var.name, var.description, line.name = NULL,
 \item{line.color}{colors for survival curves}
 
 \item{line.pattern}{line type for survival curves}
+
+\item{cox.ref.group}{specify reference group for cox model i.e. hazard ratio(s)}
 
 \item{km.plot.ref.group}{specify KM plot reference group; "single" means a lump
 log-rank statistic}

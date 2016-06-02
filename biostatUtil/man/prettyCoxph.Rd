@@ -4,8 +4,8 @@
 \alias{prettyCoxph}
 \title{Nicer outputs from coxph model fits}
 \usage{
-prettyCoxph(input.formula, input.d, use.firth = 1, check.ph = FALSE,
-  ph.test.plot.filename = "no.file", ...)
+prettyCoxph(input.formula, input.d, ref.grp = NULL, use.firth = 1,
+  check.ph = FALSE, ph.test.plot.filename = "no.file", ...)
 }
 \arguments{
 \item{input.formula}{a formula object, with the response on the left of a
@@ -13,6 +13,10 @@ prettyCoxph(input.formula, input.d, use.firth = 1, check.ph = FALSE,
 survival object as returned by the \code{Surv} function.}
 
 \item{input.d}{data.frame containing the variables in \code{input.formula}}
+
+\item{ref.grp}{a named array indicating reference group(s) for any variables 
+in the cox model.  this parameter will be ignored if not applicable, e.g. for 
+continuous variable}
 
 \item{use.firth}{if set to -1, Firth's correction is applied using
 \code{coxphf}. The default value is 1, which uses \code{coxph}.}
