@@ -9,7 +9,7 @@ bootPerf <- function(dat0, var.names, time.var, event.ind, B=1000, seed=2014, fi
   dat <- na.omit(dat0[,c(time.var,event.ind,var.names)])
   boots <- genBootSpls(dat,B)
 
-  mod.form <- as.formula(paste("Surv(",time.var,",",event.ind,")" ,"~", paste(var.names, collapse = " + ")))
+  mod.form <- as.formula(paste("survival::Surv(",time.var,",",event.ind,")" ,"~", paste(var.names, collapse = " + ")))
 
   #Apparent fit
   app.mod.fit <- survPlus::doCox(mod.form, data = dat, firth = firth)

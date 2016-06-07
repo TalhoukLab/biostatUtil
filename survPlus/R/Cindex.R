@@ -15,7 +15,7 @@ Cindex <- function(mod, newdat0){
   # A list of performance indices for survival model
   pred <- survPlus::predictCox(mod, newdata=newdat)
 
-  C <- Hmisc::rcorrcens(Surv(newdat[,surv[1]],newdat[,surv[2]]) ~ I(-1 * pred))
+  C <- Hmisc::rcorrcens(survival::Surv(newdat[,surv[1]],newdat[,surv[2]]) ~ I(-1 * pred))
 
  return(c(round(C[1],3)))
 
