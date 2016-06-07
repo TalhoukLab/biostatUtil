@@ -17,8 +17,7 @@
 #' @return a litst with with boot.tr being the bootstrap samples and boot.te being the unseleceted samples
 #' @author Aline Talhouk, Derek Chiu
 #' @export
-
-genBootSpls <- function(dat, B=1000){
+genBootSpls <- function(dat, B = 1000) {
   N <- nrow(dat)
   boot.dat <- plyr::rlply(B, {
     tr.ind <- sample(1:N, replace = TRUE)
@@ -30,5 +29,5 @@ genBootSpls <- function(dat, B=1000){
 
   boot.tr <- lapply(boot.dat, function(x) x$tr)
   boot.te <- lapply(boot.dat, function(x) x$te)
-  return(list(boot.tr=boot.tr,boot.te=boot.te))
+  return(list(boot.tr = boot.tr, boot.te = boot.te))
 }

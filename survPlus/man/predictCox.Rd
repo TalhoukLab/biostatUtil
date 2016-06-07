@@ -6,7 +6,15 @@
 \usage{
 predictCox(mod, newdata)
 }
+\arguments{
+\item{mod}{model object}
+
+\item{newdata}{new data to predict on}
+}
 \description{
 A function to make prediction in cox model (works for both coxph and coxphf)
+}
+\references{
+https://stats.stackexchange.com/questions/44896/how-to-interpret-the-output-of-predict-coxph/44911#44911
 }
 

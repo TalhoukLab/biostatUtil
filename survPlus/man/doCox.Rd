@@ -6,6 +6,13 @@
 \usage{
 doCox(formula, data0, firth = TRUE)
 }
+\arguments{
+\item{formula}{formula}
+
+\item{data0}{data object}
+
+\item{firth}{logical; if \code{TRUE}, uses firth correction}
+}
 \description{
 Perform Coxph or Coxphf
 }

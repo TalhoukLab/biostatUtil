@@ -6,6 +6,11 @@
 \usage{
 decomposeSurvform(formula, data)
 }
+\arguments{
+\item{formula}{formula}
+
+\item{data}{data}
+}
 \description{
 a function to decompose a survival formula
 }
