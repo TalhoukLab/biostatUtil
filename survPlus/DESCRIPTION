@@ -1,13 +1,13 @@
 Package: survPlus
 Type: Package
-Title: survival Plus
+Title: A local survival library with modified functions to accomodate firth
+    corrections
 Version: 0.1.1
 Date: 2016-03-30
 Author: Aline Talhouk
 Maintainer: Aline Talhouk <atalhouk@bccrc.ca>
-Description: A local survival library with modified functions to accomodate firth
-    corrections.
-License: CC0
+Description: More about what it does (maybe more than one line)
+License: What license is it under?
 LazyData: FALSE
 RoxygenNote: 5.0.1
-Imports: survival, Hmisc, coxphf, plyr, tidyr, magrittr, reshape2
+Import:survival, Hmisc, coxphf, tidyr, magrittr, reshape2
