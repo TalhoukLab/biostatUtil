@@ -7,21 +7,6 @@
 bootPerf(dat0, var.names, time.var, event.ind, B = 1000, seed = 2014,
   firth = TRUE)
 }
-\arguments{
-\item{dat0}{data}
-
-\item{var.names}{variable names}
-
-\item{time.var}{time variable}
-
-\item{event.ind}{event indicator}
-
-\item{B}{number of bootstrap samples}
-
-\item{seed}{random seed}
-
-\item{firth}{logical; if \code{TRUE}, uses firth correction}
-}
 \description{
 Produce metrics to evaluate a survival model in Bootstrap samples
 }

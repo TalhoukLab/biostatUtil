@@ -6,11 +6,6 @@
 \usage{
 Cindex(mod, newdat0)
 }
-\arguments{
-\item{mod}{model object}
-
-\item{newdat0}{new data for prediction}
-}
 \description{
 Produce metrics to evaluate a survival model
 }
