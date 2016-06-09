@@ -1,8 +1,8 @@
 Package: survPlus
 Type: Package
 Title: survival Plus
-Version: 0.1.2
-Date: 2016-06-07
+Version: 0.1.1
+Date: 2016-03-30
 Author: Aline Talhouk
 Maintainer: Aline Talhouk <atalhouk@bccrc.ca>
 Description: A local survival library with modified functions to accomodate firth
