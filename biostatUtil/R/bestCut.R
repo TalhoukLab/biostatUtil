@@ -27,6 +27,8 @@
 #' \item{results}{A table showing the likelihood ratio test p-value,
 #' log likelihood, and AIC for each cutpoint}
 #' \item{opt.cut}{optimal cutpoint value}
+#' \item{flat.lik}{If \code{TRUE}, the likelihood was too flat and the
+#' alternative method was used}
 #' @author Derek Chiu
 #' @importFrom stats AIC logLik
 #' @importFrom broom glance
@@ -56,41 +58,44 @@ bestCut <- function(f, d, AIC.range = 3, plot = TRUE, save = TRUE,
   AIC.vals <- unlist(results$AIC)
   AIC.lowest <- which.min(AIC.vals)
   
-  # Cutpoint that halves the group size and number of events best
-  half.ind <- sapply(diffs, function(x) summary(x)$table[, "events"]) %>%
-    prop.table(2) %>% 
-    apply(., 2, prod) %>% 
-    which.max()
-  
   # Check for flat likelihood issue using range of AIC
   if (diff(range(results$AIC)) < AIC.range) {
-    opt.ind <- half.ind
+    opt.ind <- sapply(diffs, function(x) summary(x)$table[, "events"]) %>%
+      prop.table(2) %>% 
+      apply(., 2, prod) %>% 
+      which.max()  # Cutpoint that halves the group size and number of events best
+    flat.lik <- TRUE
   } else {
     opt.ind <- which.min(results$AIC)
+    flat.lik <- FALSE
   }
   opt.cut <- results$cutpoints[[opt.ind]]
+  best.ind <- rep("", length(cuts)) %>% 
+    magrittr::inset(opt.ind, "(Best)")
+  title.range <- cutRange(levs)
   
   # Plot survival curves for every cutpoint in PNG file
   if (plot) {
     if (save) {
       png(filename, width = 8.5, height = 11, units = "in", res = 300)
       par(mfrow = c(nrow, ncol))
-      mapply(function(x, y) {
-        plot(x, main = paste(title, y), col = 1:2, lwd = 1, ...)
+      mapply(function(x, y, z) {
+        plot(x, main = paste(title, y, z), col = 1:2, lwd = 1, ...)
         legend("bottomleft", legend = stringr::str_split_fixed(
           names(x$strata),"=", 2)[, 2], col = 1:2, lwd = 1, cex = 0.75)},
-        diffs, cuts)
+        diffs, title.range, best.ind)
       dev.off()
       par(mfrow = c(1, 1))
     } else {
       par(mfrow = c(nrow, ncol))
-      mapply(function(x, y) {
-        plot(x, main = paste(title, y), col = 1:2, lwd = 1, ...)
+      mapply(function(x, y, z) {
+        plot(x, main = paste(title, y, z), col = 1:2, lwd = 1, ...)
         legend("bottomleft", legend = stringr::str_split_fixed(
           names(x$strata), "=", 2)[, 2], col = 1:2, lwd = 1, cex = 0.75)},
-        diffs, cuts)
+        diffs, title.range, best.ind)
       par(mfrow = c(1, 1))
     }
   }
-  return(list(cuts = cuts, fits = coxs, results = results, opt.cut = opt.cut))
+  return(list(cuts = cuts, fits = coxs, results = results, opt.cut = opt.cut,
+              flat.lik = flat.lik))
 }

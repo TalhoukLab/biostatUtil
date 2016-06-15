@@ -37,6 +37,8 @@ A list with the following elements
 \item{results}{A table showing the likelihood ratio test p-value,
 log likelihood, and AIC for each cutpoint}
 \item{opt.cut}{optimal cutpoint value}
+\item{flat.lik}{If \code{TRUE}, the likelihood was too flat and the
+alternative method was used}
 }
 \description{
 Repeatedly finds cutpoints for an explanatory variable in a
