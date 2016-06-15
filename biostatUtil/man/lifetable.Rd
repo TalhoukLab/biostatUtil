@@ -5,7 +5,7 @@
 \title{Generate lifetables for multiclass variables}
 \usage{
 lifetable(obj, ntimes = 3, times = round(quantile(obj$time, 1/ntimes *
-  rep(1:ntimes))))
+  rep(1:ntimes))), nround = 3, var.name = TRUE)
 }
 \arguments{
 \item{obj}{An object of class \code{survfit}}
@@ -15,6 +15,11 @@ lifetable(obj, ntimes = 3, times = round(quantile(obj$time, 1/ntimes *
 \item{times}{A vector of endpoints of time intervals to show life table calculations.
 By default, these are \code{ntimes} evenly spaced out endpoints based on the full range
 of survival times.}
+
+\item{nround}{number of digits to round table values}
+
+\item{var.name}{logical; if \code{TRUE} (default), the variable name is appended to the
+beginning of each stratum in the lifetable's \code{strata} column}
 }
 \value{
 A table with the following columns:
@@ -41,7 +46,7 @@ object instead of vectors of raw values.
 \examples{
 obj <- survfit(Surv(futime, fustat) ~ rx, data = ovarian)
 lifetable(obj)
-lifetable(obj, ntimes = 4)
+lifetable(obj, ntimes = 4, var.name = FALSE)
 lifetable(obj, ntimes = 4, times = c(200, 500, 800, 1000))
 }
 \author{
