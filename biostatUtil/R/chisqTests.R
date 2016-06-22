@@ -33,10 +33,14 @@ chisqTests <- function(x, digits = 3) {
   . <- NULL
   Pearson <- x$CST
   G.test <- Deducer::likelihood.test(x$tab)
-  LBL <- coin::lbl_test(x$tab)
+  LBL <- tryCatch(coin::lbl_test(x$tab), error = function(e) return(NA))
+  if (is.na(LBL))
+    LBL.obj <- rep(NA, 3)
+  else
+    LBL.obj <- c(coin::statistic(LBL), 1, coin::pvalue(LBL))
   res <- matrix(c(Pearson$statistic, Pearson$parameter, Pearson$p.value,
                   G.test$statistic, G.test$parameter, G.test$p.value,
-                  coin::statistic(LBL), 1, coin::pvalue(LBL)), ncol = 3, byrow = T,
+                  LBL.obj), ncol = 3, byrow = T,
                 dimnames = list(c("Pearson Chi-Square", "Likelihood Ratio",
                                   "Linear-by-Linear Association"),
                                 c("Value", "df", "P-value"))) %>% 
