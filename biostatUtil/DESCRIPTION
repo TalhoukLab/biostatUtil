@@ -40,7 +40,8 @@ Imports:
     Deducer,
     broom,
     descr,
-    readr
+    readr,
+    coin
 Suggests:
     logistf,
     meta,

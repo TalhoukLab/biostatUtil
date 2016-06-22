@@ -2,20 +2,22 @@
 % Please edit documentation in R/chisqTests.R
 \name{chisqTests}
 \alias{chisqTests}
-\title{Chi-Squared Tests for independence in contingency tables}
+\title{Chi-Squared Tests for Independence in Contingency Tables}
 \usage{
-chisqTests(x)
+chisqTests(x, digits = 3)
 }
 \arguments{
 \item{x}{an object of class \code{CrossTable} containing the contingency table}
+
+\item{digits}{number of digits to round to}
 }
 \value{
 A table with method name, test statistic, degrees of freedom, and
 p-value reported for each Chi-squared test.
 }
 \description{
-The Pearson's Chi-Squared test and likelihood ratio (G test) of independence
-are performed on the data matrix
+The Pearson's Chi-Squared test, likelihood ratio (G test) of independence,
+and linear-by-linear association test are performed on the data matrix.
 }
 \examples{
 # Example from documentation of CrossTable
