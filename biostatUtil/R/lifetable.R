@@ -42,8 +42,17 @@ lifetable <- function(obj, ntimes = 3,
                       nround = 3, var.name = TRUE) {
   . <- NULL
   cuts <- cumsum(obj$strata)
-  ind <- lapply(splitAt(obj$time, cuts), function(x)
-    apply(abs(sapply(times, "-", x)), 2, which.min))
+  if (ntimes > 1) {
+    ind <- sapply(splitAt(obj$time, cuts), function(x) {
+      mat <- abs(sapply(times, "-", x)) %>% 
+        apply(., 2, which.min)
+      return(mat)
+    })
+    ind[ntimes, ] <- obj$strata
+    ind <- as.list(as.data.frame(ind))
+  } else {
+    ind <- obj$strata
+  }
   cs <- mapply(function(x, ind) sapply(splitAt(x, ind), sum)[-(length(ind) + 1)],
                splitAt(obj$n.censor, cuts), ind, SIMPLIFY = FALSE)
   es <- mapply(function(x, ind) sapply(splitAt(x, ind), sum)[-(length(ind) + 1)],
