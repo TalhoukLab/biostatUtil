@@ -1,8 +1,8 @@
 Package: biostatUtil
 Type: Package
 Title: Utility functions used in biostatistical projects
-Version: 0.1.0.9035
-Date: 2016-06-21
+Version: 0.1.0.9036
+Date: 2016-06-22
 Authors@R: as.person(c(
     "Derek Chiu <dchiu@bccrc.ca> [aut, cre]", 
     "Aline Talhouk <atalhouk@bccrc.ca> [aut]",
