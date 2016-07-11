@@ -208,7 +208,7 @@ switch (stat.tests[i],
 result.table <- rbind(result.table, # Add the mean
                   c(paste(format(round(mean(input.d.no.missing.var.only[, var.name]), decimal),nsmall=decimal),
                           format(round(sd(  input.d.no.missing.var.only[, var.name]), decimal),nsmall=decimal),
-                              sep=" &#177; "), sapply(marker.categories,function(x){
+                              sep=" SD:"), sapply(marker.categories,function(x){
                               temp.d <- input.d.no.missing.var[input.d.no.missing.var[,marker.name] == x,
                                                                var.name]
                           if (length(temp.d) == 0){
@@ -217,7 +217,7 @@ result.table <- rbind(result.table, # Add the mean
                                   return(paste(
                                     format(round(mean(temp.d), decimal),nsmall=decimal),
                                     format(round(sd(  temp.d), decimal),nsmall=decimal),											
-                                    sep=" &#177; "
+                                    sep=" SD:" #sep=" &#177; "
                                   ))		
                                 }
                               })

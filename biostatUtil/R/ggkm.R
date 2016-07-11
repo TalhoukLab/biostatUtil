@@ -28,6 +28,7 @@
 #' @param subs use of subsetting
 #' @param legend logical; if \code{TRUE}, the legend is overlaid on the graph (instead of on the side).
 #' @param line.y.increment how much y should be incremented for each line
+#' @param digits number of digits to round
 #' @param ... additional arguments to other methods
 #' @import ggplot2
 #' @export
@@ -41,7 +42,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                  ystratalabs = NULL, ystrataname = NULL, cox.ref.grp = NULL,
                  timeby = 5, pval = TRUE, HR = TRUE,
                  use.firth = 1, subs = NULL, legend = FALSE,
-                 line.y.increment = 0.05, ...) {
+                 line.y.increment = 0.05, digits = 3, ...) {
   time <- surv <- lower <- upper <- n.censor <- n.risk <- NULL
   times <- seq(0, max(sfit$time), by = timeby)
   if (is.null(subs)) {
@@ -140,7 +141,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
       sdiff <- survdiff(eval(sfit$call$formula), data = eval(sfit$call$data))
       pval <- pchisq(sdiff$chisq,length(sdiff$n) - 1, lower.tail = FALSE)
       pvaltxt <- ifelse(pval < 0.001, "Log Rank p < 0.001",
-                        paste("Log Rank p =", signif(pval, 3)))
+                        paste("Log Rank p =", signif(pval, digits)))
       if (HR) {
         pretty.coxph.obj <- prettyCoxph(eval(sfit$call$formula),
                                         input.d = eval(sfit$call$data),
@@ -148,10 +149,10 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                                         use.firth = use.firth)
         if (pretty.coxph.obj$used.firth) {
           coxm <- pretty.coxph.obj$fit.firth
-          HRtxts <- Xunivcoxph(coxm, coxph.type = "coxphf")
+          HRtxts <- Xunivcoxph(coxm, coxph.type = "coxphf", digits=digits)
         } else {
           coxm <- pretty.coxph.obj$fit
-          HRtxts <- Xunivcoxph(coxm)
+          HRtxts <- Xunivcoxph(coxm, digits=digits)
         }
         show.ref.group <- length(HRtxts) > 1
 		cox.strata.labs <- ystratalabs
@@ -177,7 +178,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
       sdiff <- survdiff(eval(sfit2$call$formula), data = eval(sfit2$call$data))
       pval <- pchisq(sdiff$chisq, length(sdiff$n) - 1, lower.tail = FALSE)
       pvaltxt <- ifelse(pval < 0.001, "Log Rank p < 0.001",
-                        paste("Log Rank p =", signif(pval, 3)))
+                        paste("Log Rank p =", signif(pval, digits)))
       if (HR) {
         pretty.coxph.obj <- prettyCoxph(eval(sfit2$call$formula),
                                         input.d = eval(sfit2$call$data),
@@ -185,10 +186,10 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                                         use.firth = use.firth)
         if (pretty.coxph.obj$used.firth) {
           coxm <- pretty.coxph.obj$fit.firth
-          HRtxts <- Xunivcoxph(coxm, coxph.type = "coxphf")
+          HRtxts <- Xunivcoxph(coxm, coxph.type = "coxphf", digits=digits)
         } else {
           coxm <- pretty.coxph.obj$fit
-          HRtxts <- Xunivcoxph(coxm)
+          HRtxts <- Xunivcoxph(coxm, digits=digits)
         }
         show.ref.group <- length(HRtxts) > 1
 		cox.strata.labs <- ystratalabs
