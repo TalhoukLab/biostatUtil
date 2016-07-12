@@ -11,7 +11,7 @@ ggkm(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
   ylims = c(0, 1), ystratalabs = NULL, ystrataname = NULL,
   cox.ref.grp = NULL, timeby = 5, pval = TRUE, HR = TRUE,
   use.firth = 1, subs = NULL, legend = FALSE, line.y.increment = 0.05,
-  ...)
+  digits = 3, ...)
 }
 \arguments{
 \item{sfit}{an object of class \code{survfit} containing one or more survival curves}
@@ -61,6 +61,8 @@ Setting \code{use.firth = 1} (default) means Firth is never used, and \code{use.
 \item{legend}{logical; if \code{TRUE}, the legend is overlaid on the graph (instead of on the side).}
 
 \item{line.y.increment}{how much y should be incremented for each line}
+
+\item{digits}{number of digits to round}
 
 \item{...}{additional arguments to other methods}
 }
