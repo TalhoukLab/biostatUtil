@@ -4,6 +4,7 @@
 #'
 #' @param x vector to split by certain cutpoints
 #' @param n either "b" for binarization (2 groups) or "t" for trinarization (3 groups)
+#' @param var.prefix variable name prefix
 #'
 #' @return A data frame of cutpoint variables built from a categorical biomarker. The
 #' number of columns correspond to all the ways the biomarker could be cut into \code{n}
@@ -15,9 +16,10 @@
 #' @examples
 #' set.seed(1108)
 #' x <- sample(0:4, size = 1000, replace = TRUE)
-#' head(build_cuts(x, "b"))
-#' head(build_cuts(x, "t"))
-build_cuts <- function(x, n = c("b", "t")) {
+#' head(build_cuts(x, n = "b"))
+#' head(build_cuts(x, n = "t"))
+#' head(build_cuts(x, n = "t", var.prefix = "PHGDH"))
+build_cuts <- function(x, n = c("b", "t"), var.prefix = NULL) {
   . <- NULL
   n <- match.arg(n)
   ulevs <- sort(unique(x[x > min(x)]))
@@ -42,7 +44,8 @@ build_cuts <- function(x, n = c("b", "t")) {
              }) %>% 
              paste(collapse = "v") %>% 
              ifelse(stringr::str_sub(., -1) == max(x), ., paste0(., max(x))) %>% 
-             paste0(ifelse(n == "b", "b", "t"), .)
+             paste0(ifelse(n == "b", "b", "t"), .) %>% 
+             ifelse(is.null(var.prefix), ., paste0(var.prefix, "_", .))
     )
   result <- data.frame(cut.list) %>% 
     magrittr::set_names(v.name)

@@ -4,12 +4,14 @@
 \alias{build_cuts}
 \title{Build cutpoint variables}
 \usage{
-build_cuts(x, n = c("b", "t"))
+build_cuts(x, n = c("b", "t"), var.prefix = NULL)
 }
 \arguments{
 \item{x}{vector to split by certain cutpoints}
 
 \item{n}{either "b" for binarization (2 groups) or "t" for trinarization (3 groups)}
+
+\item{var.prefix}{variable name prefix}
 }
 \value{
 A data frame of cutpoint variables built from a categorical biomarker. The
@@ -23,8 +25,9 @@ Transforms an ordinal variable into two or three groups for cutpoint analysis.
 \examples{
 set.seed(1108)
 x <- sample(0:4, size = 1000, replace = TRUE)
-head(build_cuts(x, "b"))
-head(build_cuts(x, "t"))
+head(build_cuts(x, n = "b"))
+head(build_cuts(x, n = "t"))
+head(build_cuts(x, n = "t", var.prefix = "PHGDH"))
 }
 \author{
 Derek Chiu
