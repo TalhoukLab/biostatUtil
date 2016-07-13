@@ -33,21 +33,23 @@
 #' @importFrom stats AIC logLik
 #' @importFrom broom glance
 #' @export
-bestCut <- function(f, d, AIC.range = 3, plot = TRUE, save = TRUE,
-                    filename = NULL, nrow = NULL, ncol = NULL, title = "",
-                    ...) {
+bestCut <- function(f, d, n = c("b", "t", "q"), AIC.range = 3, nround = 3,
+                    plot = TRUE, save = TRUE, filename = NULL, nrow = NULL,
+                    ncol = NULL, title = "", lwd = 1, cex = 0.75, ...) {
   . <- cutpoints <- p.value.log <- NULL
   pos <- 1
+  ncolor <- switch(n, b = 2, t = 3, q = 4)
   assign("f", f, envir = as.environment(pos))
   assign("d", d, envir = as.environment(pos))
   term <- all.vars(f)[3]
   levs <- sort(unique(d[, term]))
-  cuts <- levs[-length(levs)]
-  bins <- sapply(cuts, function(x) 
-    ifelse(d[, term] <= x, paste("At Most", x), paste("Over", x)))
-  coxs <- apply(bins, 2, function(bin) 
+  bins <- build_cuts(d[, term], n = n) 
+  cuts <- stringr::str_extract_all(names(bins), ".v", simplify = TRUE) %>% 
+    apply(., 1, paste, collapse = ", ") %>% 
+    gsub("v", "", .)
+  coxs <- lapply(as.list(bins), function(bin) 
     coxph(as.formula(paste(deparse(f[[2]]), "~ bin")), d))
-  diffs <- apply(bins, 2, function(bin)
+  diffs <- lapply(as.list(bins), function(bin)
     survfit(as.formula(paste(deparse(f[[2]]), "~ bin")), d))
   results <- coxs %>% 
     sapply(., broom::glance) %>% 
@@ -55,7 +57,8 @@ bestCut <- function(f, d, AIC.range = 3, plot = TRUE, save = TRUE,
     t() %>%
     data.frame() %>% 
     dplyr::select(cutpoints, p.value.log, logLik, AIC)
-  AIC.vals <- unlist(results$AIC)
+  p.vals <- signif(unlist(results$p.value.log), nround)
+  AIC.vals <- round(unlist(results$AIC), nround)
   AIC.lowest <- which.min(AIC.vals)
   
   # Check for flat likelihood issue using range of AIC
@@ -72,27 +75,32 @@ bestCut <- function(f, d, AIC.range = 3, plot = TRUE, save = TRUE,
   opt.cut <- results$cutpoints[[opt.ind]]
   best.ind <- rep("", length(cuts)) %>% 
     magrittr::inset(opt.ind, "(Best)")
-  title.range <- cutRange(levs)
+  # title.range <- cutRange(levs)
+  title.range <- names(bins)
   
   # Plot survival curves for every cutpoint in PNG file
   if (plot) {
     if (save) {
       png(filename, width = 8.5, height = 11, units = "in", res = 300)
       par(mfrow = c(nrow, ncol))
-      mapply(function(x, y, z) {
-        plot(x, main = paste(title, y, z), col = 1:2, lwd = 1, ...)
+      mapply(function(x, y, z, aic, pval) {
+        plot(x, main = paste(title, y, z), col = 1:ncolor, lwd = lwd, ...)
         legend("bottomleft", legend = stringr::str_split_fixed(
-          names(x$strata),"=", 2)[, 2], col = 1:2, lwd = 1, cex = 0.75)},
-        diffs, title.range, best.ind)
+          names(x$strata), "=", 2)[, 2], col = 1:ncolor, lwd = lwd, cex = cex)
+        mtext(paste("P =", pval), side = 1, line = -3, at = max(x$time), adj = 1, cex = cex)
+        mtext(paste("AIC:", aic), side = 1, line = -1, at = max(x$time), adj = 1, cex = cex)
+      }, diffs, title.range, best.ind, AIC.vals, p.vals)
       dev.off()
       par(mfrow = c(1, 1))
     } else {
       par(mfrow = c(nrow, ncol))
-      mapply(function(x, y, z) {
-        plot(x, main = paste(title, y, z), col = 1:2, lwd = 1, ...)
+      mapply(function(x, y, z, aic, pval) {
+        plot(x, main = paste(title, y, z), col = 1:ncolor, lwd = lwd, ...)
         legend("bottomleft", legend = stringr::str_split_fixed(
-          names(x$strata), "=", 2)[, 2], col = 1:2, lwd = 1, cex = 0.75)},
-        diffs, title.range, best.ind)
+          names(x$strata), "=", 2)[, 2], col = 1:ncolor, lwd = lwd, cex = cex)
+        mtext(paste("P =", pval), side = 1, line = -3, at = max(x$time), adj = 1, cex = cex)
+        mtext(paste("AIC:", aic), side = 1, line = -1, at = max(x$time), adj = 1, cex = cex)
+      }, diffs, title.range, best.ind, AIC.vals, p.vals)
       par(mfrow = c(1, 1))
     }
   }
