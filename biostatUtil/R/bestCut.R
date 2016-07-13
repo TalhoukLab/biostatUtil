@@ -94,7 +94,7 @@ bestCut <- function(f, d, n = c("b", "t", "q"), AIC.range = 3, nround = 3,
         plot(x, main = paste(title, y, z), col = 1:ncolor, lwd = lwd, ...)
         legend("bottomleft", legend = stringr::str_split_fixed(
           names(x$strata), "=", 2)[, 2], col = 1:ncolor, lwd = lwd, cex = cex)
-        mtext(paste("P =", pval), side = 1, line = -3, at = max(x$time), adj = 1, cex = cex)
+        mtext(paste("P =", pval), side = 1, line = -2, at = max(x$time), adj = 1, cex = cex)
         mtext(paste("AIC:", aic), side = 1, line = -1, at = max(x$time), adj = 1, cex = cex)
       }, diffs, title.range, best.ind, AIC.vals, p.vals)
       dev.off()
@@ -105,7 +105,7 @@ bestCut <- function(f, d, n = c("b", "t", "q"), AIC.range = 3, nround = 3,
         plot(x, main = paste(title, y, z), col = 1:ncolor, lwd = lwd, ...)
         legend("bottomleft", legend = stringr::str_split_fixed(
           names(x$strata), "=", 2)[, 2], col = 1:ncolor, lwd = lwd, cex = cex)
-        mtext(paste("P =", pval), side = 1, line = -3, at = max(x$time), adj = 1, cex = cex)
+        mtext(paste("P =", pval), side = 1, line = -2, at = max(x$time), adj = 1, cex = cex)
         mtext(paste("AIC:", aic), side = 1, line = -1, at = max(x$time), adj = 1, cex = cex)
       }, diffs, title.range, best.ind, AIC.vals, p.vals)
       par(mfrow = c(1, 1))
