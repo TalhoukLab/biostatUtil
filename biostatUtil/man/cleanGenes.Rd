@@ -24,4 +24,7 @@ The following cleaning procedures are made: 1) The "<" needs to be removed from 
 FDR column. 2) Duplicate the GeneSet column. 3) Add a column of ones. 4) Replace
 unicode characters with ASCII plain text.
 }
+\author{
+Derek Chiu
+}
 

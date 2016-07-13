@@ -10,8 +10,10 @@
 #'
 #' @param f formula object
 #' @param d data frame
+#' @param n number of groups to transform variable into. Options are "b" (two), "t" (three), and "q" (four).
 #' @param AIC.range If range of AIC is within \code{AIC.range} units, the
 #' likelihood is too flat. We choose the best cutpoint using the alternative method.
+#' @param nround number of digits to round AIC and p-value on plots
 #' @param plot logical; If \code{TRUE}, shows the survival curves for each cutpoint
 #' in a facetted figure
 #' @param save logical; If \code{TRUE}, saves the plot as a png image
@@ -19,6 +21,8 @@
 #' @param nrow number of rows in facetted plot
 #' @param ncol number of columns in facetted plot
 #' @param title title for plot
+#' @param lwd line weight for survival curves
+#' @param cex scale of text size
 #' @param ... additional arguments to \code{plot}
 #'
 #' @return A list with the following elements
@@ -29,6 +33,9 @@
 #' \item{opt.cut}{optimal cutpoint value}
 #' \item{flat.lik}{If \code{TRUE}, the likelihood was too flat and the
 #' alternative method was used}
+#' Additionally, if \code{plot = TRUE}, the function also returns KM survival curves
+#' for each possible cutpoint.
+#' 
 #' @author Derek Chiu
 #' @importFrom stats AIC logLik
 #' @importFrom broom glance

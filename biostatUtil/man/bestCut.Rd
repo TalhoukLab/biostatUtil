@@ -4,16 +4,21 @@
 \alias{bestCut}
 \title{Find the best cutpoint for a covariate}
 \usage{
-bestCut(f, d, AIC.range = 3, plot = TRUE, save = TRUE, filename = NULL,
-  nrow = NULL, ncol = NULL, title = "", ...)
+bestCut(f, d, n = c("b", "t", "q"), AIC.range = 3, nround = 3,
+  plot = TRUE, save = TRUE, filename = NULL, nrow = NULL, ncol = NULL,
+  title = "", lwd = 1, cex = 0.75, ...)
 }
 \arguments{
 \item{f}{formula object}
 
 \item{d}{data frame}
 
+\item{n}{number of groups to transform variable into. Options are "b" (two), "t" (three), and "q" (four).}
+
 \item{AIC.range}{If range of AIC is within \code{AIC.range} units, the
 likelihood is too flat. We choose the best cutpoint using the alternative method.}
+
+\item{nround}{number of digits to round AIC and p-value on plots}
 
 \item{plot}{logical; If \code{TRUE}, shows the survival curves for each cutpoint
 in a facetted figure}
@@ -28,6 +33,10 @@ in a facetted figure}
 
 \item{title}{title for plot}
 
+\item{lwd}{line weight for survival curves}
+
+\item{cex}{scale of text size}
+
 \item{...}{additional arguments to \code{plot}}
 }
 \value{
@@ -39,6 +48,8 @@ log likelihood, and AIC for each cutpoint}
 \item{opt.cut}{optimal cutpoint value}
 \item{flat.lik}{If \code{TRUE}, the likelihood was too flat and the
 alternative method was used}
+Additionally, if \code{plot = TRUE}, the function also returns KM survival curves
+for each possible cutpoint.
 }
 \description{
 Repeatedly finds cutpoints for an explanatory variable in a

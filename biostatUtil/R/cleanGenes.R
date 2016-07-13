@@ -11,6 +11,7 @@
 #' @param file.path The file path to save the object.
 #'
 #' @return A cleaned gene set table.
+#' @author Derek Chiu
 #' @export
 cleanGenes <- function(data, save = TRUE, file.path = "") {
   . <- FDR <- GeneSet <- GeneSet2 <- `P-value` <- Phenotype <- NULL
