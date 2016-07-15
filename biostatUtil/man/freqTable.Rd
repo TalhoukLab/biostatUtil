@@ -4,13 +4,13 @@
 \alias{freqTable}
 \title{Generate a Frequency Table}
 \usage{
-freqTable(x, levels, missing = NULL, description = NULL, round = 1,
-  plot = FALSE)
+freqTable(x, levels = sort(unique(x)), missing = NULL, description = NULL,
+  round = 1, plot = FALSE)
 }
 \arguments{
 \item{x}{vector of values to show frequencies for}
 
-\item{levels}{order of levels for \code{x}}
+\item{levels}{(optional) vector for order of levels in \code{x}}
 
 \item{missing}{vector of levels for which we consider missing and don't count
 in the valid percentage}
@@ -34,6 +34,17 @@ A data frame with the following columns
 }
 \description{
 A frequency table emulating the SPSS FREQ output is generated.
+}
+\examples{
+# Create vector of randomly reordered alphabet with various frequencies
+# for each letter
+set.seed(123)
+n <- sample(10, length(letters), replace = TRUE)
+x <- sample(rep.int(letters, times = n))
+freqTable(x, plot = TRUE)
+
+# Treat vowels as missing
+freqTable(x, missing = c("a", "e", "i", "o", "u"), round = 2)
 }
 \author{
 Derek Chiu

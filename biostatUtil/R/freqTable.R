@@ -3,7 +3,7 @@
 #' A frequency table emulating the SPSS FREQ output is generated.
 #'
 #' @param x vector of values to show frequencies for
-#' @param levels order of levels for \code{x}
+#' @param levels (optional) vector for order of levels in \code{x}
 #' @param missing vector of levels for which we consider missing and don't count
 #' in the valid percentage
 #' @param description (optional) description for each level of \code{x}.
@@ -22,8 +22,19 @@
 #' 
 #' @author Derek Chiu
 #' @export
-freqTable <- function(x, levels, missing = NULL, description = NULL, round = 1,
-                      plot = FALSE) {
+#' 
+#' @examples 
+#' # Create vector of randomly reordered alphabet with various frequencies
+#' # for each letter
+#' set.seed(123)
+#' n <- sample(10, length(letters), replace = TRUE)
+#' x <- sample(rep.int(letters, times = n))
+#' freqTable(x, plot = TRUE)
+#' 
+#' # Treat vowels as missing
+#' freqTable(x, missing = c("a", "e", "i", "o", "u"), round = 2)
+freqTable <- function(x, levels = sort(unique(x)), missing = NULL, description = NULL,
+                      round = 1, plot = FALSE) {
   . <- Class <- Frequency <- Score <- `Valid Percent` <- NULL
   tab <- descr::freq(x, user.missing = missing, plot = plot) %>% 
     as.data.frame() %>% 
