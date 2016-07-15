@@ -5,8 +5,8 @@
 \title{Find the best cutpoint for a covariate}
 \usage{
 bestCut(f, d, n = c("b", "t", "q"), AIC.range = 3, nround = 3,
-  plot = TRUE, save = TRUE, filename = NULL, nrow = NULL, ncol = NULL,
-  title = "", lwd = 1, cex = 0.75, ...)
+  plot = TRUE, filename = NULL, nrow = NULL, ncol = NULL, title = "",
+  ...)
 }
 \arguments{
 \item{f}{formula object}
@@ -23,9 +23,7 @@ likelihood is too flat. We choose the best cutpoint using the alternative method
 \item{plot}{logical; If \code{TRUE}, shows the survival curves for each cutpoint
 in a facetted figure}
 
-\item{save}{logical; If \code{TRUE}, saves the plot as a png image}
-
-\item{filename}{file name for png image of figure}
+\item{filename}{file name for saving a png image of figure}
 
 \item{nrow}{number of rows in facetted plot}
 
@@ -33,11 +31,7 @@ in a facetted figure}
 
 \item{title}{title for plot}
 
-\item{lwd}{line weight for survival curves}
-
-\item{cex}{scale of text size}
-
-\item{...}{additional arguments to \code{plot}}
+\item{...}{additional arguments for \code{plot}}
 }
 \value{
 A list with the following elements
