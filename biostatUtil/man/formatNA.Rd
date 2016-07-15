@@ -2,22 +2,30 @@
 % Please edit documentation in R/formatNA.R
 \name{formatNA}
 \alias{formatNA}
-\title{Missing Value Formatting Function}
+\title{Missing Value Formatting}
 \usage{
-formatNA(y, type = "cat")
+formatNA(y, type = c("cat", "cont"), codes = c("", "Unk", "N/A"))
 }
 \arguments{
 \item{y}{a vector.}
 
-\item{type}{whether the variable is "cat" or "cont". Defaults to cat.}
+\item{type}{whether the variable is \code{"cat"} (categorical) or \code{"cont"} (continuous).
+Defaults to \code{"cat"}.}
+
+\item{codes}{vector of missing codes to replace with \code{NA}}
 }
 \value{
-A categorical or numerical vector with all missing as formatted NA.
+A categorical or numerical vector with all missing formatted as \code{NA}.
 }
 \description{
-Takes a numeric vector and replaces all Missing codes with NA and returns a factor if the variable is categorical or a numeric variable if it's numeric.
+Takes a numeric vector and replaces all missing codes with NA and returns a factor
+if the variable is categorical or a numeric variable if it's numeric.
+}
+\examples{
+y <- c(1:10, "Unk", 12)
+formatNA(y)
 }
 \author{
-Aline Talhouk
+Aline Talhouk, Derek Chiu
 }
 

@@ -1,19 +1,21 @@
-#' Missing Value Formatting Function
+#' Missing Value Formatting
 #'
-#' Takes a numeric vector and replaces all Missing codes with NA and returns a factor if the variable is categorical or a numeric variable if it's numeric.
+#' Takes a numeric vector and replaces all missing codes with NA and returns a factor
+#' if the variable is categorical or a numeric variable if it's numeric.
+#' 
 #' @param y a vector.
-#' @param type whether the variable is "cat" or "cont". Defaults to cat.
-#' @return A categorical or numerical vector with all missing as formatted NA.
-#' @author Aline Talhouk
+#' @param type whether the variable is \code{"cat"} (categorical) or \code{"cont"} (continuous).
+#' Defaults to \code{"cat"}.
+#' @param codes vector of missing codes to replace with \code{NA}
+#' @return A categorical or numerical vector with all missing formatted as \code{NA}.
+#' @author Aline Talhouk, Derek Chiu
 #' @export
 #'
-formatNA <- function(y,type="cat"){
-  x <- y
-  x[x %in% c("", "Unk", "N/A", NA)] <- NA
-  if(type == "cat"){
-    res <- factor(x)
-  }else{
-      res <- as.numeric(x)}
-return(res)
+#' @examples 
+#' y <- c(1:10, "Unk", 12)
+#' formatNA(y)
+formatNA <- function(y, type = c("cat", "cont"), codes = c("", "Unk", "N/A")) {
+  y[y %in% c(codes, NA)] <- NA
+  res <- switch(match.arg(type), cat = factor(y), cont = as.numeric(y))
+  return(res)
 }
-
