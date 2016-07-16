@@ -3,38 +3,34 @@
 #' Computes all pairwise correlations between the columns of a data frame
 #'
 #' @param dataframe A data frame containing numeric variables of interest. 
-#' @return all pairwise absolute correlations, correlations, Pval, Adj P val by decreasing order of absolute correlations.
+#' @return all pairwise absolute correlations, correlations, Pval, Adj P val by
+#' decreasing order of absolute correlations.
+#' 
+#' @author Aline Talhouk, Derek Chiu
 #' @importFrom utils combn
 #' @importFrom stats cor p.adjust
 #' @export
+#' 
+#' @examples 
+#' set.seed(123)
+#' x <- data.frame(matrix(rnorm(25), nrow = 5))
+#' pairwiseCor(x)
 pairwiseCor <- function(dataframe) {
-  
   # Check that the data provided is numeric 
-  if (!all(apply(dataframe,2,is.numeric))) {
+  if (!all(apply(dataframe, 2, is.numeric))) {
     stop("All columns of data matrix must be numeric")
   }
-  pairs <- combn(colnames(dataframe), 2, simplify = FALSE)
-  df <- data.frame(Vairable1 = rep(0, length(pairs)),
-                   Variable2 = rep(0, length(pairs)), 
-                   AbsCor = rep(0, length(pairs)),
-                   Cor = rep(0, length(pairs)),
-                   Pval = rep(0, length(pairs)),
-                   AdjP = rep(0,length(pairs)))
-  for (i in 1:length(pairs)) {
-    df[i, 1] <- pairs[[i]][1]
-    df[i, 2] <- pairs[[i]][2]
-    df[i, 3] <- round(abs(cor(dataframe[, pairs[[i]][1]],
-                              dataframe[, pairs[[i]][2]])), 4)
-    df[i, 4] <- round(cor(dataframe[, pairs[[i]][1]],
-                          dataframe[, pairs[[i]][2]]), 4)
-    df[i, 5] <- round(cor.test(dataframe[, pairs[[i]][1]],
-                               dataframe[, pairs[[i]][2]])$p.value, 4)
-  }
-  df[, 6] <- round(p.adjust(df[, 5], method = "fdr"), 4)
-  pairwiseCorDF <- df
-  pairwiseCorDF <- pairwiseCorDF[order(pairwiseCorDF$AbsCor,
-                                       decreasing = TRUE), ]
-  row.names(pairwiseCorDF) <- 1:length(pairs)
-  pairwiseCorDF <<- pairwiseCorDF
+  x <- dataframe
+  pairs <- combn(colnames(dataframe), 2) %>% 
+    set_rownames(paste0("Variable", 1:2))
+  pairwiseCorDF <- data.frame(Cor = apply(pairs, 2, function(df) cor(x[, df]))[2, ]) %>% 
+    mutate(AbsCor = abs(Cor),
+           Pval = mapply(function(v1, v2) cor.test(v1, v2)$p.value,
+                         x[pairs[1, ]], x[pairs[2, ]]),
+           AdjP = p.adjust(Pval, "fdr")) %>% 
+    select(AbsCor, Cor, Pval, AdjP) %>% 
+    round(4) %>% 
+    data.frame(t(pairs), ., stringsAsFactors = FALSE) %>% 
+    arrange(desc(AbsCor))
   return(pairwiseCorDF)
 }

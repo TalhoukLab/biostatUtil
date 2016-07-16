@@ -10,9 +10,18 @@ pairwiseCor(dataframe)
 \item{dataframe}{A data frame containing numeric variables of interest.}
 }
 \value{
-all pairwise absolute correlations, correlations, Pval, Adj P val by decreasing order of absolute correlations.
+all pairwise absolute correlations, correlations, Pval, Adj P val by
+decreasing order of absolute correlations.
 }
 \description{
 Computes all pairwise correlations between the columns of a data frame
+}
+\examples{
+set.seed(123)
+x <- data.frame(matrix(rnorm(25), nrow = 5))
+pairwiseCor(x)
+}
+\author{
+Aline Talhouk, Derek Chiu
 }
 
