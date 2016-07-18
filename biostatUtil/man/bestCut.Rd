@@ -4,7 +4,7 @@
 \alias{bestCut}
 \title{Find the best cutpoint for a covariate}
 \usage{
-bestCut(f, d, n = c("b", "t", "q"), AIC.range = 3, nround = 3,
+bestCut(f, d, n = c("b", "t", "qd", "qn"), AIC.range = 3, nround = 3,
   plot = TRUE, filename = NULL, nrow = NULL, ncol = NULL, title = "",
   ...)
 }
@@ -13,7 +13,8 @@ bestCut(f, d, n = c("b", "t", "q"), AIC.range = 3, nround = 3,
 
 \item{d}{data frame}
 
-\item{n}{number of groups to transform variable into. Options are "b" (two), "t" (three), and "q" (four).}
+\item{n}{number of groups to transform variable into. Options are "b" (two),
+"t" (three), "qd" (four), and "qn" (five)}
 
 \item{AIC.range}{If range of AIC is within \code{AIC.range} units, the
 likelihood is too flat. We choose the best cutpoint using the alternative method.}
@@ -53,7 +54,8 @@ cutpoint.
 \details{
 Takes the cutpoint resulting in the lowest AIC. If the range of AIC values is 
 within \code{AIC.range} units, take the cutpoint that results in the
-two groups having the most similar numbers of events and cases
+two groups having the most similar numbers of events and cases. The function can
+cut a variable into anywhere from 2 to 5 groups.
 }
 \author{
 Derek Chiu

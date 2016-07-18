@@ -6,11 +6,13 @@
 #' 
 #' Takes the cutpoint resulting in the lowest AIC. If the range of AIC values is 
 #' within \code{AIC.range} units, take the cutpoint that results in the
-#' two groups having the most similar numbers of events and cases
+#' two groups having the most similar numbers of events and cases. The function can
+#' cut a variable into anywhere from 2 to 5 groups.
 #'
 #' @param f formula object
 #' @param d data frame
-#' @param n number of groups to transform variable into. Options are "b" (two), "t" (three), and "q" (four).
+#' @param n number of groups to transform variable into. Options are "b" (two),
+#' "t" (three), "qd" (four), and "qn" (five)
 #' @param AIC.range If range of AIC is within \code{AIC.range} units, the
 #' likelihood is too flat. We choose the best cutpoint using the alternative method.
 #' @param nround number of digits to round AIC and p-value on plots
@@ -37,9 +39,9 @@
 #' @importFrom stats AIC logLik
 #' @importFrom broom glance
 #' @export
-bestCut <- function(f, d, n = c("b", "t", "q"), AIC.range = 3, nround = 3,
-                    plot = TRUE, filename = NULL, nrow = NULL,
-                    ncol = NULL, title = "", ...) {
+bestCut <- function(f, d, n = c("b", "t", "qd", "qn"), AIC.range = 3,
+                    nround = 3, plot = TRUE, filename = NULL,
+                    nrow = NULL, ncol = NULL, title = "", ...) {
   . <- cutpoints <- p.value.log <- NULL
   pos <- 1
   assign("f", f, envir = as.environment(pos))
