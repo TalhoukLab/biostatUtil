@@ -16,10 +16,10 @@
 #' x <- data.frame(matrix(rnorm(25), nrow = 5))
 #' pairwiseCor(x)
 pairwiseCor <- function(dataframe) {
-  # Check that the data provided is numeric 
   if (!all(apply(dataframe, 2, is.numeric))) {
     stop("All columns of data matrix must be numeric")
   }
+  . <- Cor <- AbsCor <- Pval <- AdjP <- NULL
   x <- dataframe
   pairs <- combn(colnames(dataframe), 2) %>% 
     set_rownames(paste0("Variable", 1:2))
