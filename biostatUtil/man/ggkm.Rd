@@ -62,7 +62,7 @@ Setting \code{use.firth = 1} (default) means Firth is never used, and \code{use.
 
 \item{line.y.increment}{how much y should be incremented for each line}
 
-\item{digits}{number of digits to round}
+\item{digits}{number of digits to round: p-values digits=nunber of significant digits, HR digits=number of digits after decimal point NOT significant digits}
 
 \item{...}{additional arguments to other methods}
 }

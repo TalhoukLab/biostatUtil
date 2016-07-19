@@ -32,19 +32,30 @@
 chisqTests <- function(x, digits = 3) {
   . <- NULL
   Pearson <- x$CST
+  Pearson.obj <- c(Pearson$statistic, Pearson$parameter, Pearson$p.value)
   G.test <- Deducer::likelihood.test(x$tab)
-  LBL <- tryCatch(coin::lbl_test(x$tab), error = function(e) return(NA))
-  if (is.na(LBL))
-    LBL.obj <- rep(NA, 3)
+  G.test.obj <- c(G.test$statistic, G.test$parameter, G.test$p.value)
+  
+  Fisher <- x$fisher.ts
+  if (!any(is.na(Fisher)))
+    Fisher.obj <- c(NA, NA, Fisher$p.value)
   else
-    LBL.obj <- c(coin::statistic(LBL), 1, coin::pvalue(LBL))
-  res <- matrix(c(Pearson$statistic, Pearson$parameter, Pearson$p.value,
-                  G.test$statistic, G.test$parameter, G.test$p.value,
-                  LBL.obj), ncol = 3, byrow = T,
-                dimnames = list(c("Pearson Chi-Square", "Likelihood Ratio",
+    Fisher.obj <- rep(NA, 3)
+  
+  LBL <- tryCatch(coin::lbl_test(x$tab), error = function(e) return(NULL))
+  if (!is.null(LBL))
+    LBL.obj <- c(coin::statistic(LBL), 1, coin::pvalue(LBL))  
+  else
+    LBL.obj <- rep(NA, 3)
+  
+  res <- matrix(c(Pearson.obj, G.test.obj, Fisher.obj, LBL.obj), ncol = 3,
+                byrow = TRUE,
+                dimnames = list(c("Pearson Chi-Square",
+                                  "Likelihood Ratio",
+                                  "Fisher's Exact Test",
                                   "Linear-by-Linear Association"),
                                 c("Value", "df", "P-value"))) %>% 
     round(digits) %>% 
-    rbind(., "N of Valid Cases" = c(x$total.n, "", ""))
+    rbind(., "N of Valid Cases" = c(x$gt, "", ""))
   return(res)
 }
