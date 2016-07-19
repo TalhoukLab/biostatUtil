@@ -168,7 +168,7 @@ input.d.no.missing.var.only[, var.name] <- as.numeric(input.d.no.missing.var.onl
 input.d.no.missing.var[, var.name] <- as.numeric(input.d.no.missing.var[, var.name])
 
 # 4 rows: mean (+/- std dev) / median / IQR / number of missing
-var.row.names <- c("mean","median","IQR","range")
+var.row.names <- c("mean (SD)","median","IQR","range")
 if (show.missing | show.missing.continuous) {
         var.row.names <- c(var.row.names, num.missing.row.header.name)
       }
@@ -207,8 +207,8 @@ switch (stat.tests[i],
 # Assemble Continuous Results     
 result.table <- rbind(result.table, # Add the mean
                   c(paste(format(round(mean(input.d.no.missing.var.only[, var.name]), decimal),nsmall=decimal),
-                          format(round(sd(  input.d.no.missing.var.only[, var.name]), decimal),nsmall=decimal),
-                              sep=" SD:"), sapply(marker.categories,function(x){
+                          " (",format(round(sd(  input.d.no.missing.var.only[, var.name]), decimal),nsmall=decimal),")",
+                              sep=""), sapply(marker.categories,function(x){
                               temp.d <- input.d.no.missing.var[input.d.no.missing.var[,marker.name] == x,
                                                                var.name]
                           if (length(temp.d) == 0){
@@ -216,8 +216,8 @@ result.table <- rbind(result.table, # Add the mean
                                 } else {
                                   return(paste(
                                     format(round(mean(temp.d), decimal),nsmall=decimal),
-                                    format(round(sd(  temp.d), decimal),nsmall=decimal),											
-                                    sep=" SD:" #sep=" &#177; "
+                                    " (",format(round(sd(  temp.d), decimal),nsmall=decimal),")",											
+                                    sep="" #sep=" &#177; "
                                   ))		
                                 }
                               })

@@ -28,7 +28,7 @@
 #' @param subs use of subsetting
 #' @param legend logical; if \code{TRUE}, the legend is overlaid on the graph (instead of on the side).
 #' @param line.y.increment how much y should be incremented for each line
-#' @param digits number of digits to round
+#' @param digits number of digits to round: p-values digits=nunber of significant digits, HR digits=number of digits after decimal point NOT significant digits
 #' @param ... additional arguments to other methods
 #' @import ggplot2
 #' @export
