@@ -37,25 +37,28 @@ chisqTests <- function(x, digits = 3) {
   G.test.obj <- c(G.test$statistic, G.test$parameter, G.test$p.value)
   
   Fisher <- x$fisher.ts
-  if (!any(is.na(Fisher)))
+  if (!any(is.na(Fisher))) {
     Fisher.obj <- c(NA, NA, Fisher$p.value)
-  else
+  } else {
     Fisher.obj <- rep(NA, 3)
+  }
   
   LBL <- tryCatch(coin::lbl_test(x$tab), error = function(e) return(NULL))
-  if (!is.null(LBL))
+  if (!is.null(LBL)) {
     LBL.obj <- c(coin::statistic(LBL), 1, coin::pvalue(LBL))  
-  else
+  } else {
     LBL.obj <- rep(NA, 3)
-  
-  res <- matrix(c(Pearson.obj, G.test.obj, Fisher.obj, LBL.obj), ncol = 3,
-                byrow = TRUE,
-                dimnames = list(c("Pearson Chi-Square",
-                                  "Likelihood Ratio",
-                                  "Fisher's Exact Test",
-                                  "Linear-by-Linear Association"),
-                                c("Value", "df", "P-value"))) %>% 
-    round(digits) %>% 
+  }
+  res <- data.frame(Pearson.obj, G.test.obj, Fisher.obj, LBL.obj) %>% 
+    t() %>% 
+    as.data.frame() %>% 
+    magrittr::set_colnames(c("Value", "df", "P-value")) %>% 
+    mutate_each(funs(round(., digits)), 1:2) %>%
+    mutate(`P-value` = sapply(`P-value`, round_small, digits)) %>%
+    magrittr::set_rownames(c("Pearson Chi-Square",
+                             "Likelihood Ratio",
+                             "Fisher's Exact Test",
+                             "Linear-by-Linear Association")) %>% 
     rbind(., "N of Valid Cases" = c(x$gt, "", ""))
   return(res)
 }
