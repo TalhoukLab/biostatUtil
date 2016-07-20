@@ -1,7 +1,11 @@
-#' Chi-Squared Tests for Independence in Contingency Tables
+#' Tests for Independence in Contingency Tables
 #' 
 #' The Pearson's Chi-Squared test, likelihood ratio (G test) of independence,
-#' and linear-by-linear association test are performed on the data matrix.
+#' Fisher's Exact test, and linear-by-linear association test are performed on
+#' the data matrix.
+#' 
+#' A Pearson's Chi-Squared test Yate's Continuity Correction is applied in the case
+#' of 2 by 2 tables. 
 #'
 #' @param x an object of class \code{CrossTable} containing the contingency table
 #' @param digits number of digits to round to
@@ -21,18 +25,30 @@
 #' ct <- CrossTable(esoph$alcgp, esoph$agegp, expected = TRUE,
 #'                  chisq = FALSE, prop.chisq = FALSE,
 #'                  dnn = c("Alcohol consumption", "Tobacco consumption"))
-#' chisqTests(ct)
+#' indepTests(ct)
 #'                  
 #' # Better example
 #' set.seed(1108)
 #' A <- rbinom(100, 3, 0.2)
 #' B <- rbinom(100, 4, 0.8)
 #' ct <- CrossTable(A, B)
-#' chisqTests(ct)
-chisqTests <- function(x, digits = 3) {
+#' indepTests(ct)
+indepTests <- function(x, digits = 3) {
   . <- NULL
   Pearson <- x$CST
-  Pearson.obj <- c(Pearson$statistic, Pearson$parameter, Pearson$p.value)
+  if (any(Pearson$expected < 1) | mean(Pearson$expected < 5) > 0.2) {
+    Pearson.obj <- rep(NA, 3)
+  } else {
+    Pearson.obj <- c(Pearson$statistic, Pearson$parameter, Pearson$p.value)  
+  }
+  
+  CC <- x$chisq.corr
+  if (!is.na(CC) & !all(is.na(Pearson.obj))) {
+    CC.obj <- c(CC$statistic, CC$parameter, CC$p.value)
+  } else {
+    CC.obj <- rep(NA, 3)
+  }
+  
   G.test <- Deducer::likelihood.test(x$tab)
   G.test.obj <- c(G.test$statistic, G.test$parameter, G.test$p.value)
   
@@ -49,13 +65,14 @@ chisqTests <- function(x, digits = 3) {
   } else {
     LBL.obj <- rep(NA, 3)
   }
-  res <- data.frame(Pearson.obj, G.test.obj, Fisher.obj, LBL.obj) %>% 
+  res <- data.frame(Pearson.obj, CC.obj, G.test.obj, Fisher.obj, LBL.obj) %>% 
     t() %>% 
     as.data.frame() %>% 
     magrittr::set_colnames(c("Value", "df", "P-value")) %>% 
     mutate_each(funs(round(., digits)), 1:2) %>%
     mutate(`P-value` = sapply(`P-value`, round_small, digits)) %>%
     magrittr::set_rownames(c("Pearson Chi-Square",
+                             "Continuity Correction",
                              "Likelihood Ratio",
                              "Fisher's Exact Test",
                              "Linear-by-Linear Association")) %>% 
