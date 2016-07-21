@@ -4,10 +4,10 @@
 \alias{round_small}
 \title{Rounding of Small Numbers}
 \usage{
-round_small(x, digits = 3)
+round_small(..., digits = 3)
 }
 \arguments{
-\item{x}{a numeric vector}
+\item{...}{a numeric vector}
 
 \item{digits}{integer indicating number of decimal places to round to}
 }

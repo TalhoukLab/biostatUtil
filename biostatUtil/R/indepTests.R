@@ -34,7 +34,7 @@
 #' ct <- CrossTable(A, B)
 #' indepTests(ct)
 indepTests <- function(x, digits = 3) {
-  . <- NULL
+  . <- `P-value` <- NULL
   Pearson <- x$CST
   if (any(Pearson$expected < 1) | mean(Pearson$expected < 5) > 0.2) {
     Pearson.obj <- rep(NA, 3)
@@ -65,12 +65,13 @@ indepTests <- function(x, digits = 3) {
   } else {
     LBL.obj <- rep(NA, 3)
   }
+  
   res <- data.frame(Pearson.obj, CC.obj, G.test.obj, Fisher.obj, LBL.obj) %>% 
     t() %>% 
     as.data.frame() %>% 
     magrittr::set_colnames(c("Value", "df", "P-value")) %>% 
     mutate_each(funs(round(., digits)), 1:2) %>%
-    mutate(`P-value` = sapply(`P-value`, round_small, digits)) %>%
+    mutate(`P-value` = round_small(`P-value`, digits)) %>%
     magrittr::set_rownames(c("Pearson Chi-Square",
                              "Continuity Correction",
                              "Likelihood Ratio",

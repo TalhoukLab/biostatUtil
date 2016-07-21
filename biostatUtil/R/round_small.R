@@ -7,7 +7,7 @@
 #' if a p-value is 2e-05 and we want to round to 3 digits, the function will return
 #' "<0.001.
 #'
-#' @param x a numeric vector
+#' @param ... a numeric vector
 #' @param digits integer indicating number of decimal places to round to
 #'
 #' @return If precision of number is larger than desired rounding, the default
@@ -20,14 +20,16 @@
 #' round_small(2e-04)
 #' round_small(5e-04)
 #' round_small(6e-04)
-round_small <- function(x, digits = 3) {
-  if (is.na(x)) {
-    return(NA)
-  } else {
-    if (x <= 5 * 10 ^ -(digits + 1)) {
-      return(paste0("<", 1 * 10 ^ -digits))
+round_small <- function(..., digits = 3) {
+  sapply(as.list(...), function(x) {
+    if (is.na(x)) {
+      return(NA)
     } else {
-      return(round(x, digits = digits))
+      if (x <= 5 * 10 ^ -(digits + 1)) {
+        return(paste0("<", 1 * 10 ^ -digits))
+      } else {
+        return(round(x, digits = digits))
+      }
     }
-  }
+  })
 }
