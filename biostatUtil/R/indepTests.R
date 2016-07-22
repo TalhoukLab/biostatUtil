@@ -43,7 +43,7 @@ indepTests <- function(x, digits = 3) {
   }
   
   CC <- x$chisq.corr
-  if (!is.na(CC) & !all(is.na(Pearson.obj))) {
+  if (!all(is.na(CC)) & !all(is.na(Pearson.obj))) {
     CC.obj <- c(CC$statistic, CC$parameter, CC$p.value)
   } else {
     CC.obj <- rep(NA, 3)
