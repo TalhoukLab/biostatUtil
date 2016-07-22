@@ -4,8 +4,8 @@
 \alias{freqTable}
 \title{Generate a Frequency Table}
 \usage{
-freqTable(x, levels = sort(unique(x)), missing = NULL, description = NULL,
-  round = 1, plot = FALSE)
+freqTable(x, levels = sort(unique(as.character(x))), missing = NULL,
+  description = NULL, round = 1, plot = FALSE)
 }
 \arguments{
 \item{x}{vector of values to show frequencies for}
@@ -24,11 +24,13 @@ Must be same length and order as \code{levels}}
 }
 \value{
 A data frame with the following columns
-\item{Class}{Tells you which scores are valid and which are missing}
+\item{Class}{Tells you which scores are valid and which are missing. Not shown if
+there are no missing values.}
 \item{Score}{Different levels}
 \item{Frequency}{Count for each score}
 \item{Percent}{Percent of Frequency out of the grand total}
-\item{Valid Percent}{Percent of Frequency out of the Valid scores}
+\item{Valid Percent}{Percent of Frequency out of the Valid scores. Not applicable if
+there are no missing values.}
 \item{Cumulative Percent}{Accumulated Percent of Frequency out of the Valid Scores}
 \item{Description}{If \code{description} is given, a description for each level}
 }
@@ -48,5 +50,8 @@ freqTable(x, missing = c("a", "e", "i", "o", "u"), round = 2)
 }
 \author{
 Derek Chiu
+}
+\seealso{
+\code{\link{freq}}
 }
 
