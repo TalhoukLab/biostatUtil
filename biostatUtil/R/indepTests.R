@@ -34,7 +34,7 @@
 #' ct <- CrossTable(A, B)
 #' indepTests(ct)
 indepTests <- function(x, digits = 3) {
-  . <- `P-value` <- NULL
+  . <- `P-Value` <- Test <- Value <- df <- NULL
   Pearson <- x$CST
   if (any(Pearson$expected < 1) | mean(Pearson$expected < 5) > 0.2) {
     Pearson.obj <- rep(NA, 3)
@@ -69,14 +69,16 @@ indepTests <- function(x, digits = 3) {
   res <- data.frame(Pearson.obj, CC.obj, G.test.obj, Fisher.obj, LBL.obj) %>% 
     t() %>% 
     as.data.frame() %>% 
-    magrittr::set_colnames(c("Value", "df", "P-value")) %>% 
-    mutate_each(funs(round(., digits)), 1:2) %>%
-    mutate(`P-value` = round_small(`P-value`, digits)) %>%
+    magrittr::set_colnames(c("Value", "df", "P-Value")) %>% 
     magrittr::set_rownames(c("Pearson Chi-Square",
                              "Continuity Correction",
                              "Likelihood Ratio",
                              "Fisher's Exact Test",
                              "Linear-by-Linear Association")) %>% 
-    rbind(., "N of Valid Cases" = c(x$gt, "", ""))
+    mutate(Test = rownames(.)) %>% 
+    mutate_each(funs(round(., digits)), 1:2) %>%
+    mutate(`P-Value` = round_small(`P-Value`, digits)) %>%
+    select(Test, Value, df, `P-Value`) %>% 
+    rbind(., c("N of Valid Cases", x$gt, "", ""))
   return(res)
 }
