@@ -27,6 +27,7 @@
 #' Setting \code{use.firth = 1} (default) means Firth is never used, and \code{use.firth = -1} means Firth is always used.
 #' @param subs use of subsetting
 #' @param legend logical; if \code{TRUE}, the legend is overlaid on the graph (instead of on the side).
+#' @param legend.xy; named vector specifying the x/y position of the legend
 #' @param line.y.increment how much y should be incremented for each line
 #' @param digits number of digits to round: p-values digits=nunber of significant digits, HR digits=number of digits after decimal point NOT significant digits
 #' @param ... additional arguments to other methods
@@ -34,6 +35,7 @@
 #' @export
 ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                  marks = TRUE, CI = TRUE,
+				 line.pattern = NULL,
                  shading.colors = c("blue2", "red2",
                                     "deepskyblue", "indianred3"),
                  main = "Kaplan-Meier Plot",
@@ -41,7 +43,8 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                  xlims = c(0, max(sfit$time)), ylims = c(0, 1),
                  ystratalabs = NULL, ystrataname = NULL, cox.ref.grp = NULL,
                  timeby = 5, pval = TRUE, HR = TRUE,
-                 use.firth = 1, subs = NULL, legend = FALSE,
+                 use.firth = 1, subs = NULL, 
+				 legend = FALSE, legend.xy = c("x"=0.8,"y"=0.88),
                  line.y.increment = 0.05, digits = 3, ...) {
   time <- surv <- lower <- upper <- n.censor <- n.risk <- NULL
   times <- seq(0, max(sfit$time), by = timeby)
@@ -102,12 +105,18 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
   names(shading.colors) <- ystratalabs
   colScale <- scale_colour_manual(values = shading.colors)
   colFill <- scale_fill_manual(values = shading.colors)
+  if (is.null(line.pattern) | length(line.pattern)==1) {
+	  line.pattern <- rep(1,length(ystratalabs))
+  }
+  names(line.pattern) <- ystratalabs
+  lineType <- scale_linetype_manual(values=line.pattern)
   
   p <- ggplot(.df , aes(time, surv, color = strata, fill = strata)) +
-    geom_step(aes(color = strata), size = .7) + 
+    geom_step(aes(color = strata,  linetype=strata), size = .7) + 
     theme_bw() +
     colScale+
     colFill+ 
+	lineType+
     theme(axis.title.x = element_text(vjust = 0.5)) + 
     scale_x_continuous(xlabs, breaks = times, limits = xlims) + 
     scale_y_continuous(ylabs, limits = ylims) + 
@@ -118,7 +127,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                                      ifelse(m < 10, 1.5, 2.5)), "lines")) +
     ggtitle(main)
   if (legend == TRUE)  # Legend----
-    p <- p + theme(legend.position = c(.8, .88)) +
+    p <- p + theme(legend.position = legend.xy[c("x","y")]) +
       theme(legend.key = element_rect(colour = NA)) +
       theme(legend.title = element_blank())
   else

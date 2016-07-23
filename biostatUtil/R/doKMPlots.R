@@ -9,6 +9,7 @@
 #' @param line.name names for each survival curve
 #' @param line.color colors for survival curves
 #' @param line.pattern line type for survival curves
+#' @param legend logical; if \code{TRUE}, the legend is overlaid on the graph (instead of on the side).
 #' @param cox.ref.group specify reference group for cox model i.e. hazard ratio(s)
 #' @param km.plot.ref.group specify KM plot reference group; "single" means a lump
 #' log-rank statistic
@@ -27,7 +28,7 @@
 #' @export
 doKMPlots <- function(input.d, time, status, var.name, var.description,
                       line.name = NULL, line.color = NULL, line.pattern = NULL,
-					  cox.ref.group = NULL,
+					  cox.ref.group = NULL, legend=FALSE,
                       km.plot.ref.group = "single",
                       single.test.type = "logrank", surv.type = "os",
                       use.firth = -1, CI = TRUE, HR = TRUE,
@@ -61,6 +62,6 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
          ystratalabs = line.name, ystrataname = NULL,  cox.ref.grp = cox.ref.group,
          main = paste0(var.description, " (", toupper(surv.type), ")"),
          pval = TRUE, HR = HR, use.firth = use.firth, CI = CI, subs = NULL,
-         legend = FALSE,...)	
+         legend = legend, line.pattern = line.pattern,...)	
   }
 }
