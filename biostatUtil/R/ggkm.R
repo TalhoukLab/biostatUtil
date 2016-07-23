@@ -28,6 +28,7 @@
 #' @param subs use of subsetting
 #' @param legend logical; if \code{TRUE}, the legend is overlaid on the graph (instead of on the side).
 #' @param legend.xy; named vector specifying the x/y position of the legend
+#' @param legend.direction; layout of items in legends ("horizontal" (default) or "vertical")
 #' @param line.y.increment how much y should be incremented for each line
 #' @param digits number of digits to round: p-values digits=nunber of significant digits, HR digits=number of digits after decimal point NOT significant digits
 #' @param ... additional arguments to other methods
@@ -44,7 +45,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                  ystratalabs = NULL, ystrataname = NULL, cox.ref.grp = NULL,
                  timeby = 5, pval = TRUE, HR = TRUE,
                  use.firth = 1, subs = NULL, 
-				 legend = FALSE, legend.xy = c("x"=0.8,"y"=0.88),
+				 legend = FALSE, legend.xy = c("x"=0.8,"y"=0.88), legend.direction="horizontal",
                  line.y.increment = 0.05, digits = 3, ...) {
   time <- surv <- lower <- upper <- n.censor <- n.risk <- NULL
   times <- seq(0, max(sfit$time), by = timeby)
@@ -129,7 +130,8 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
   if (legend == TRUE)  # Legend----
     p <- p + theme(legend.position = legend.xy[c("x","y")]) +
       theme(legend.key = element_rect(colour = NA)) +
-      theme(legend.title = element_blank())
+      theme(legend.title = element_blank()) +
+	  theme(legend.direction="horizontal")
   else
     p <- p + theme(legend.position = "none")
   if (CI == TRUE)  # Confidence Bands----  
@@ -233,7 +235,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
     )
     risk.data$strata <- factor(risk.data$strata,
 			# want to print at-risk numbers same order as appears in HR, 
-			# therefore, do not rev the levels
+			# therefore, do not rev the levels	
 			levels = levels(risk.data$strata))#levels = rev(levels(risk.data$strata)))
     data.table <- ggplot(risk.data, aes(x = time, y = strata,
                                         label = format(n.risk, nsmall = 0))) +
