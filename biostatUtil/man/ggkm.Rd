@@ -5,12 +5,13 @@
 \title{Kaplan-Meier Plots using ggplot}
 \usage{
 ggkm(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
-  CI = TRUE, shading.colors = c("blue2", "red2", "deepskyblue",
-  "indianred3"), main = "Kaplan-Meier Plot", xlabs = "Time",
+  CI = TRUE, line.pattern = NULL, shading.colors = c("blue2", "red2",
+  "deepskyblue", "indianred3"), main = "Kaplan-Meier Plot", xlabs = "Time",
   ylabs = "Survival Probability", xlims = c(0, max(sfit$time)),
   ylims = c(0, 1), ystratalabs = NULL, ystrataname = NULL,
   cox.ref.grp = NULL, timeby = 5, pval = TRUE, HR = TRUE,
-  use.firth = 1, subs = NULL, legend = FALSE, line.y.increment = 0.05,
+  use.firth = 1, subs = NULL, legend = FALSE, legend.xy = c(x = 0.8, y =
+  0.88), legend.direction = "horizontal", line.y.increment = 0.05,
   digits = 3, ...)
 }
 \arguments{
@@ -26,6 +27,8 @@ shown as a table underneath the plot}
 \item{marks}{logical; if \code{TRUE} (default), censoring marks are shown on survival curves}
 
 \item{CI}{logical; if \code{TRUE} (default), confidence bands are drawn for survival curves}
+
+\item{line.pattern}{linetype for survival curves}
 
 \item{shading.colors}{vector of colours for each survival curve}
 
@@ -59,6 +62,10 @@ Setting \code{use.firth = 1} (default) means Firth is never used, and \code{use.
 \item{subs}{use of subsetting}
 
 \item{legend}{logical; if \code{TRUE}, the legend is overlaid on the graph (instead of on the side).}
+
+\item{legend.xy}{named vector specifying the x/y position of the legend}
+
+\item{legend.direction}{layout of items in legends ("horizontal" (default) or "vertical")}
 
 \item{line.y.increment}{how much y should be incremented for each line}
 

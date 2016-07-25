@@ -9,6 +9,7 @@
 #' @param returns logical; if \code{TRUE} the plot is returned
 #' @param marks logical; if \code{TRUE} (default), censoring marks are shown on survival curves
 #' @param CI logical; if \code{TRUE} (default), confidence bands are drawn for survival curves
+#' @param line.pattern linetype for survival curves
 #' @param shading.colors vector of colours for each survival curve
 #' @param main plot title
 #' @param xlabs horizontal axis label
@@ -27,8 +28,8 @@
 #' Setting \code{use.firth = 1} (default) means Firth is never used, and \code{use.firth = -1} means Firth is always used.
 #' @param subs use of subsetting
 #' @param legend logical; if \code{TRUE}, the legend is overlaid on the graph (instead of on the side).
-#' @param legend.xy; named vector specifying the x/y position of the legend
-#' @param legend.direction; layout of items in legends ("horizontal" (default) or "vertical")
+#' @param legend.xy named vector specifying the x/y position of the legend
+#' @param legend.direction layout of items in legends ("horizontal" (default) or "vertical")
 #' @param line.y.increment how much y should be incremented for each line
 #' @param digits number of digits to round: p-values digits=nunber of significant digits, HR digits=number of digits after decimal point NOT significant digits
 #' @param ... additional arguments to other methods
@@ -36,7 +37,7 @@
 #' @export
 ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                  marks = TRUE, CI = TRUE,
-				 line.pattern = NULL,
+                 line.pattern = NULL,
                  shading.colors = c("blue2", "red2",
                                     "deepskyblue", "indianred3"),
                  main = "Kaplan-Meier Plot",
@@ -45,7 +46,8 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                  ystratalabs = NULL, ystrataname = NULL, cox.ref.grp = NULL,
                  timeby = 5, pval = TRUE, HR = TRUE,
                  use.firth = 1, subs = NULL, 
-				 legend = FALSE, legend.xy = c("x"=0.8,"y"=0.88), legend.direction="horizontal",
+                 legend = FALSE, legend.xy = c("x" = 0.8, "y" = 0.88),
+                 legend.direction = "horizontal",
                  line.y.increment = 0.05, digits = 3, ...) {
   time <- surv <- lower <- upper <- n.censor <- n.risk <- NULL
   times <- seq(0, max(sfit$time), by = timeby)
@@ -106,18 +108,17 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
   names(shading.colors) <- ystratalabs
   colScale <- scale_colour_manual(values = shading.colors)
   colFill <- scale_fill_manual(values = shading.colors)
-  if (is.null(line.pattern) | length(line.pattern)==1) {
+  if (is.null(line.pattern) | length(line.pattern) == 1) {
 	  line.pattern <- rep(1,length(ystratalabs))
   }
   names(line.pattern) <- ystratalabs
-  lineType <- scale_linetype_manual(values=line.pattern)
-  
+  lineType <- scale_linetype_manual(values = line.pattern)
   p <- ggplot(.df , aes(time, surv, color = strata, fill = strata)) +
-    geom_step(aes(color = strata,  linetype=strata), size = .7) + 
+    geom_step(aes(color = strata,  linetype = strata), size = .7) + 
     theme_bw() +
-    colScale+
-    colFill+ 
-	lineType+
+    colScale +
+    colFill + 
+    lineType +
     theme(axis.title.x = element_text(vjust = 0.5)) + 
     scale_x_continuous(xlabs, breaks = times, limits = xlims) + 
     scale_y_continuous(ylabs, limits = ylims) + 
@@ -131,7 +132,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
     p <- p + theme(legend.position = legend.xy[c("x","y")]) +
       theme(legend.key = element_rect(colour = NA)) +
       theme(legend.title = element_blank()) +
-	  theme(legend.direction="horizontal")
+	  theme(legend.direction = "horizontal")
   else
     p <- p + theme(legend.position = "none")
   if (CI == TRUE)  # Confidence Bands----  
@@ -160,15 +161,15 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                                         use.firth = use.firth)
         if (pretty.coxph.obj$used.firth) {
           coxm <- pretty.coxph.obj$fit.firth
-          HRtxts <- Xunivcoxph(coxm, coxph.type = "coxphf", digits=digits)
+          HRtxts <- Xunivcoxph(coxm, coxph.type = "coxphf", digits = digits)
         } else {
           coxm <- pretty.coxph.obj$fit
-          HRtxts <- Xunivcoxph(coxm, digits=digits)
+          HRtxts <- Xunivcoxph(coxm, digits = digits)
         }
         show.ref.group <- length(HRtxts) > 1
 		cox.strata.labs <- ystratalabs
 		if (!is.null(cox.ref.grp)) {
-			cox.strata.labs <- c(cox.ref.grp,ystratalabs[ystratalabs!=cox.ref.grp])
+			cox.strata.labs <- c(cox.ref.grp,ystratalabs[ystratalabs != cox.ref.grp])
 		}
         for (i in 1:length(HRtxts)) {
           HRtxt <- HRtxts[i]
@@ -197,15 +198,15 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                                         use.firth = use.firth)
         if (pretty.coxph.obj$used.firth) {
           coxm <- pretty.coxph.obj$fit.firth
-          HRtxts <- Xunivcoxph(coxm, coxph.type = "coxphf", digits=digits)
+          HRtxts <- Xunivcoxph(coxm, coxph.type = "coxphf", digits = digits)
         } else {
           coxm <- pretty.coxph.obj$fit
-          HRtxts <- Xunivcoxph(coxm, digits=digits)
+          HRtxts <- Xunivcoxph(coxm, digits = digits)
         }
         show.ref.group <- length(HRtxts) > 1
 		cox.strata.labs <- ystratalabs
 		if (!is.null(cox.ref.grp)) {
-			cox.strata.labs <- c(cox.ref.grp,ystratalabs[ystratalabs!=cox.ref.grp])
+			cox.strata.labs <- c(cox.ref.grp,ystratalabs[ystratalabs != cox.ref.grp])
 		}
         for (i in 1:length(HRtxts)) {
           HRtxt <- HRtxts[i]
@@ -234,16 +235,16 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
       n.risk = summary(sfit, times = times, extend = TRUE)$n.risk[subs3]
     )
     risk.data$strata <- factor(risk.data$strata,
-			# want to print at-risk numbers same order as appears in HR, 
-			# therefore, do not rev the levels	
-			levels = levels(risk.data$strata))#levels = rev(levels(risk.data$strata)))
+                               # want to print at-risk numbers same order as appears in HR, 
+                               # therefore, do not rev the levels	
+                               levels = levels(risk.data$strata))#levels = rev(levels(risk.data$strata)))
     data.table <- ggplot(risk.data, aes(x = time, y = strata,
                                         label = format(n.risk, nsmall = 0))) +
       geom_text(size = 3.5) + theme_bw() +
       scale_y_discrete(breaks = as.character(levels(risk.data$strata)),
-			  # want to print at-risk numbers same order as appears in HR, 
-			  # therefore, do not rev the levels		  
-			  labels = ystratalabs) +#labels = rev(ystratalabs)) +
+                       # want to print at-risk numbers same order as appears in HR, 
+                       # therefore, do not rev the levels		  
+                       labels = ystratalabs) +#labels = rev(ystratalabs)) +
       scale_x_continuous("Numbers at risk", limits = xlims) +
       theme(axis.title.x = element_text(size = 12, vjust = 1),
             panel.grid.major = element_blank(),
@@ -256,9 +257,9 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
 				# therefore, do not rev the levels					
 				color = shading.colors[1:length(ystratalabs)],#color = rev(shading.colors[1:length(ystratalabs)]),
 				hjust = 1),
-            legend.position = "none",
-            plot.margin = grid::unit(
-              c(-1.5, 1, 0.1, ifelse(m < 10, 2.5, 3.5) - 0.28 * m), "lines")) +
+				legend.position = "none",
+				plot.margin = grid::unit(
+				  c(-1.5, 1, 0.1, ifelse(m < 10, 2.5, 3.5) - 0.28 * m), "lines")) +
       xlab(NULL) + ylab(NULL)
     if (returns)
       gridExtra::grid.arrange(p, blank.pic, data.table,
