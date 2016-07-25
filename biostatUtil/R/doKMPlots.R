@@ -28,7 +28,7 @@
 #' @export
 doKMPlots <- function(input.d, time, status, var.name, var.description,
                       line.name = NULL, line.color = NULL, line.pattern = NULL,
-					  cox.ref.group = NULL, legend=FALSE,
+                      cox.ref.group = NULL, legend = FALSE,
                       km.plot.ref.group = "single",
                       single.test.type = "logrank", surv.type = "os",
                       use.firth = -1, CI = TRUE, HR = TRUE,
