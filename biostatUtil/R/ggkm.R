@@ -32,6 +32,7 @@
 #' @param legend.direction layout of items in legends ("horizontal" (default) or "vertical")
 #' @param line.y.increment how much y should be incremented for each line
 #' @param digits number of digits to round: p-values digits=nunber of significant digits, HR digits=number of digits after decimal point NOT significant digits
+#' @param min.p.value the min. p-value below which the p-value will be shown as e.g. <0.0001, otherwise the exact p-value will be shown
 #' @param ... additional arguments to other methods
 #' @import ggplot2
 #' @export
@@ -48,7 +49,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                  use.firth = 1, subs = NULL, 
                  legend = FALSE, legend.xy = c("x" = 0.8, "y" = 0.88),
                  legend.direction = "horizontal",
-                 line.y.increment = 0.05, digits = 3, ...) {
+                 line.y.increment = 0.05, digits = 3, min.p.value = 0.0001, ...) {
   time <- surv <- lower <- upper <- n.censor <- n.risk <- NULL
   times <- seq(0, max(sfit$time), by = timeby)
   if (is.null(subs)) {
@@ -152,7 +153,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
     if (pval) {
       sdiff <- survdiff(eval(sfit$call$formula), data = eval(sfit$call$data))
       pval <- pchisq(sdiff$chisq,length(sdiff$n) - 1, lower.tail = FALSE)
-      pvaltxt <- ifelse(pval < 0.001, "Log Rank p < 0.001",
+      pvaltxt <- ifelse(pval < min.p.value, paste("Log Rank p <",format(min.p.value,scientific=FALSE)),
                         paste("Log Rank p =", signif(pval, digits)))
       if (HR) {
         pretty.coxph.obj <- prettyCoxph(eval(sfit$call$formula),
@@ -189,7 +190,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
     if (pval) {
       sdiff <- survdiff(eval(sfit2$call$formula), data = eval(sfit2$call$data))
       pval <- pchisq(sdiff$chisq, length(sdiff$n) - 1, lower.tail = FALSE)
-      pvaltxt <- ifelse(pval < 0.001, "Log Rank p < 0.001",
+      pvaltxt <- ifelse(pval < min.p.value, paste("Log Rank p <",format(min.p.value,scientific=FALSE)),
                         paste("Log Rank p =", signif(pval, digits)))
       if (HR) {
         pretty.coxph.obj <- prettyCoxph(eval(sfit2$call$formula),
