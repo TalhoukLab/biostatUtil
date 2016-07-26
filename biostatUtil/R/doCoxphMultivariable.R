@@ -30,6 +30,8 @@
 #' @param stat.test the overall model test to perform on the Cox regression model. Can be any of
 #' "waldtest", "logtest", or "sctest". If Firth is used, only "logtest" can be performed.
 #' @param round.digits.p.value number of digits for p-value
+#' @param round.small if \code{TRUE}, uses small number rounding via \code{round_small}
+#' @param scientific if \code{TRUE}, uses scientific notation when rounding
 #' @param caption caption for returned object
 #' @param html.table.border the border type to use for html tables
 #' @param banded.rows logical. If \code{TRUE}, rows have alternating shading colour
@@ -52,6 +54,7 @@ doCoxphMultivariable <- function(
   missing.codes = c("N/A", "", "Unk"),
   use.firth = 1, firth.caption = FIRTH.CAPTION,
   stat.test = "waldtest", round.digits.p.value = 4,
+  round.small = FALSE, scientific = FALSE,
   caption = NA, html.table.border = 0, banded.rows = FALSE,
   css.class.name.odd = "odd", css.class.name.even = "even",
   split.table = 300, ...) {
@@ -133,27 +136,38 @@ doCoxphMultivariable <- function(
       
       result.table <- rbind(
         result.table,
-        "DUMMY_ROW_NAME" =c(
+        "DUMMY_ROW_NAME" = c(
           paste(cox.stats$nevent,"/",cox.stats$n),
-          paste(paste(
-            sprintf("%.2f",round(as.numeric(cox.stats$output[cox.stats.output.indexes,1]),2))," (",
-            sprintf("%.2f",round(as.numeric(cox.stats$output[cox.stats.output.indexes,2]),2)),"-",
-            sprintf("%.2f",round(as.numeric(cox.stats$output[cox.stats.output.indexes,3]),2)),")",
-            ifelse(cox.stats$used.firth,firth.caption,""),
-            sep=""
-          ),collapse=kLocalConstantHrSepFlag),
-          sprintf(paste("%.",round.digits.p.value,"f",sep=""),round(as.numeric(p.value),digits=round.digits.p.value))) # waldtest for Wald test, logtest for likelihood ratio test
+          paste(paste0(
+            sprintf("%.2f", round(as.numeric(cox.stats$output[cox.stats.output.indexes, 1]), 2)), " (",
+            sprintf("%.2f", round(as.numeric(cox.stats$output[cox.stats.output.indexes, 2]), 2)), "-",
+            sprintf("%.2f", round(as.numeric(cox.stats$output[cox.stats.output.indexes, 3]), 2)), ")",
+            ifelse(cox.stats$used.firth, firth.caption, "")
+          ), collapse = kLocalConstantHrSepFlag),
+          if (round.small) {
+            p <- round_small(as.numeric(p.value), round.digits.p.value, sci = scientific)
+            if (grepl("<", p)) {
+              p
+            } else {
+              sprintf(paste0("%.", round.digits.p.value, "f"), p)
+            }
+          } else {
+            sprintf(
+              paste0("%.", round.digits.p.value, "f"),
+              round(as.numeric(p.value), digits = round.digits.p.value)) 
+          }
+        ) # waldtest for Wald test, logtest for likelihood ratio test
       )
-      
       cox.stats.output[[surv.descriptions[j]]] <- cox.stats
     }
   }
   
-  result.table.col.names <- c("# of events / n","Hazard Ratio (95% CI)",paste(ifelse(stat.test=="logtest","LRT ",""),"P-value",sep=""))
+  result.table.col.names <- c("# of events / n","Hazard Ratio (95% CI)",
+                              paste0(ifelse(stat.test == "logtest", "LRT ", ""), "P-value"))
   colnames(result.table) <- result.table.col.names
   result.table.row.names <- c()
   for (i in 1:num.surv.endpoints) {
-    result.table.row.names <- c(result.table.row.names,paste(var.names,paste("-",surv.descriptions[i],sep=""),sep=""))
+    result.table.row.names <- c(result.table.row.names, paste0(var.names, paste0("-", surv.descriptions[i])))
   }
   rownames(result.table) <- result.table.row.names
   

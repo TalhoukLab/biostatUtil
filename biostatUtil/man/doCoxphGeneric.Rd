@@ -11,8 +11,9 @@ doCoxphGeneric(input.d, var.names, var.descriptions, show.var.detail = FALSE,
   event.codes.surv = c("os.event", "dss.event", "rfs.event"),
   surv.descriptions = c("OS", "DSS", "PFS"), missing.codes = c("N/A", "",
   "Unk"), use.firth = 1, firth.caption = FIRTH.CAPTION,
-  stat.test = "waldtest", round.digits.p.value = 4, caption = NA,
-  html.table.border = 0, banded.rows = FALSE, css.class.name.odd = "odd",
+  stat.test = "waldtest", round.digits.p.value = 4, round.small = FALSE,
+  scientific = FALSE, caption = NA, html.table.border = 0,
+  banded.rows = FALSE, css.class.name.odd = "odd",
   css.class.name.even = "even", split.table = 300, ...)
 }
 \arguments{
@@ -52,6 +53,10 @@ always used.}
 "waldtest", "logtest", or "sctest". If Firth is used, only "logtest" can be performed.}
 
 \item{round.digits.p.value}{number of digits for p-value}
+
+\item{round.small}{if \code{TRUE}, uses small number rounding via \code{round_small}}
+
+\item{scientific}{if \code{TRUE}, uses scientific notation when rounding}
 
 \item{caption}{caption for returned object}
 

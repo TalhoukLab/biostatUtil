@@ -30,6 +30,8 @@
 #' @param stat.test the overall model test to perform on the Cox regression model. Can be any of
 #' "waldtest", "logtest", or "sctest". If Firth is used, only "logtest" can be performed.
 #' @param round.digits.p.value number of digits for p-value
+#' @param round.small if \code{TRUE}, uses small number rounding via \code{round_small}
+#' @param scientific if \code{TRUE}, uses scientific notation when rounding
 #' @param caption caption for returned object
 #' @param html.table.border the border type to use for html tables
 #' @param banded.rows logical. If \code{TRUE}, rows have alternating shading colour
@@ -51,6 +53,7 @@ doCoxphGeneric <- function(
   missing.codes = c("N/A", "", "Unk"),
   use.firth = 1, firth.caption = FIRTH.CAPTION,
   stat.test = "waldtest", round.digits.p.value = 4,
+  round.small = FALSE, scientific = FALSE,
   caption = NA, html.table.border = 0, banded.rows = FALSE,
   css.class.name.odd = "odd", css.class.name.even = "even",
   split.table = 300, ...) {
@@ -117,7 +120,7 @@ doCoxphGeneric <- function(
       result.table <- rbind(
         result.table,
         "DUMMY_ROW_NAME" = c(
-          paste(cox.stats$nevent, cox.stats$n, sep=" / "),
+          paste(cox.stats$nevent, cox.stats$n, sep = " / "),
           paste(paste0(
             sprintf("%.2f", round(as.numeric(cox.stats$output[, 1]), 2)), " (",
             sprintf("%.2f", round(as.numeric(cox.stats$output[, 2]), 2)), "-",
@@ -128,21 +131,31 @@ doCoxphGeneric <- function(
             }), ")",
             ifelse(cox.stats$used.firth, firth.caption, "")),
             collapse = kLocalConstantHrSepFlag),
-          sprintf(
-            paste0("%.", round.digits.p.value, "f"),
-            round(
-              # per instruction from Aline 2015-04-14,15 ... for p-value, ALWAYS use coxph
-              as.numeric(summary(cox.stats$fit)[[stat.test]]["pvalue"]), # waldtest for Wald test, logtest for likelihood ratio test
-              digits <- round.digits.p.value
-            )
-          ) 
+          if (round.small) {
+            p <- round_small(as.numeric(summary(cox.stats$fit)[[stat.test]]["pvalue"]),
+                             round.digits.p.value, sci = scientific)
+            if (grepl("<", p)) {
+              p
+            } else {
+              sprintf(paste0("%.", round.digits.p.value, "f"), p)
+            }
+          } else {
+            sprintf(
+              paste0("%.", round.digits.p.value, "f"),
+              round(
+                # per instruction from Aline 2015-04-14,15 ... for p-value, ALWAYS use coxph
+                as.numeric(summary(cox.stats$fit)[[stat.test]]["pvalue"]), # waldtest for Wald test, logtest for likelihood ratio test
+                digits <- round.digits.p.value
+              )
+            ) 
+          }
         )
       )
     }
   }
   result.table.col.names <- c("# of events / n", "Hazard Ratio (95% CI)",
                               paste0(ifelse(stat.test == "logtest", "LRT ", ""),
-                                    "P-value"))
+                                     "P-value"))
   colnames(result.table) <- result.table.col.names
   result.table.row.names <- c()
   for (i in 1:length(var.names)) {
