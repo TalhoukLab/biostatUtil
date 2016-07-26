@@ -4,12 +4,14 @@
 \alias{round_small}
 \title{Rounding of Small Numbers}
 \usage{
-round_small(x, digits = 3)
+round_small(x, digits = 3, sci = FALSE)
 }
 \arguments{
 \item{x}{a numeric vector or matrix}
 
 \item{digits}{integer indicating number of decimal places to round to}
+
+\item{sci}{if \code{TRUE}, scientific notation is used}
 }
 \value{
 If precision of number is larger than desired rounding, the default

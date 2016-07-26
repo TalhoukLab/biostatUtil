@@ -9,6 +9,7 @@
 #'
 #' @param x a numeric vector or matrix
 #' @param digits integer indicating number of decimal places to round to
+#' @param sci if \code{TRUE}, scientific notation is used
 #'
 #' @return If precision of number is larger than desired rounding, the default
 #' \code{round} is used. Otherwise, we provide an upper bound instead of coercion
@@ -26,10 +27,10 @@
 #' set.seed(12)
 #' x <- matrix(rexp(25, 3), nrow = 5)
 #' round_small(x, digits = 1)
-round_small <- function(x, digits = 3) {
+round_small <- function(x, digits = 3, sci = FALSE) {
   if (is.null(dim(x))) {
-    return(sapply(as.list(x), round_s, digits))
+    return(sapply(as.list(x), round_s, digits, sci))
   } else {
-    return(apply(x, c(1, 2), round_s, digits))
+    return(apply(x, c(1, 2), round_s, digits, sci))
   }
 }
