@@ -190,11 +190,13 @@ doCoxphGeneric <- function(
     var.index <- floor((i - 1) / num.surv.endpoints) + 1
     var.description <- var.descriptions[var.index]
     if (show.var.detail) {
-     var.categories <- names(table(input.d[,var.names[var.index]]))
+     var.categories <- names(table(input.d[, var.names[var.index]]))
      var.categories <- var.categories[!var.categories %in% missing.codes]
      if (!is.na(var.ref.groups[var.index])) {
        # this variable is categorical ... print ref group and categories
-        var.description <- paste0(var.description,":<br><br><i>",paste(var.categories,collapse="<br>"),"<br><br>(reference group:",var.ref.groups[var.index],")</i>")
+        var.description <- paste0(var.description, ":<br><br><i>",
+                                  paste(var.categories, collapse = "<br>"),
+                                  "<br><br>(reference group:", var.ref.groups[var.index], ")</i>")
       }
     }
     result.table.html <- paste0(result.table.html, "<tr", tr.class,
@@ -206,7 +208,7 @@ doCoxphGeneric <- function(
         result.table.html,
         ifelse(is.first.row, "", paste0("<tr", tr.class, ">")),
         "<th style='", row.th.style, "'>", surv.description, "</th><td>",
-        paste(gsub(kLocalConstantHrSepFlag,"<br>",result.table[i, ]), collapse = "</td><td>"), "</td></tr>")
+        paste(gsub(kLocalConstantHrSepFlag, "<br>", result.table[i, ]), collapse = "</td><td>"), "</td></tr>")
       
       is.first.row <- FALSE # if run any time after the first row, must not be the first row any more
       i <- i + 1
@@ -221,90 +223,90 @@ doCoxphGeneric <- function(
   result.table.bamboo.base.indexes <- c() # base indexes for each variable in result.table.bamboo
   # want to add empty rows for var description
   for (var.count in 1:length(var.names)) {  
-    result.table.bamboo.base.index <- 1 + (var.count-1)*(length(surv.descriptions)+1)
-    if (var.count==1) {
-      result.table.bamboo <- rbind(rep("",result.table.ncol),result.table.bamboo)
+    result.table.bamboo.base.index <- 1 + (var.count - 1) * (length(surv.descriptions) + 1)
+    if (var.count == 1) {
+      result.table.bamboo <- rbind(rep("", result.table.ncol), result.table.bamboo)
     } else {
       result.table.bamboo <- rbind(
-        result.table.bamboo[1:(result.table.bamboo.base.index-1),],
-        rep("",result.table.ncol),
-        result.table.bamboo[result.table.bamboo.base.index:nrow(result.table.bamboo),])
+        result.table.bamboo[1:(result.table.bamboo.base.index - 1), ],
+        rep("", result.table.ncol),
+        result.table.bamboo[result.table.bamboo.base.index:nrow(result.table.bamboo), ])
     }
-    rownames(result.table.bamboo)[result.table.bamboo.base.index] <- paste("**",var.descriptions[var.count],"**",sep="")
-    rownames(result.table.bamboo)[result.table.bamboo.base.index+c(1:length(surv.descriptions))] <- surv.descriptions
-    result.table.bamboo.base.indexes <- c(result.table.bamboo.base.indexes,result.table.bamboo.base.index)
+    rownames(result.table.bamboo)[result.table.bamboo.base.index] <- paste0("**", var.descriptions[var.count], "**")
+    rownames(result.table.bamboo)[result.table.bamboo.base.index + c(1:length(surv.descriptions))] <- surv.descriptions
+    result.table.bamboo.base.indexes <- c(result.table.bamboo.base.indexes, result.table.bamboo.base.index)
   }
   # want to add a column to describe different factor level for categorical 
   # whenever reference group is specified
-  if (sum(is.na(var.ref.groups))!=length(var.ref.groups)) {
+  if (sum(is.na(var.ref.groups)) != length(var.ref.groups)) {
     first.col.name <- colnames(result.table.bamboo)[1]
-    result.table.bamboo <- cbind(result.table.bamboo[,1],"",result.table.bamboo[,2:3])
+    result.table.bamboo <- cbind(result.table.bamboo[, 1], "", result.table.bamboo[, 2:3])
     colnames(result.table.bamboo)[1] <- first.col.name
     hr.col.index <- 3 # column with the hazard ratios
     for (var.count in 1:length(var.names)) {  
       if (!is.na(var.ref.groups[var.count])) {
         ref.group <- var.ref.groups[var.count]
-        other.groups <- names(table(input.d[,var.names[var.count]]))
-        other.groups <- other.groups[other.groups!=ref.group & !(other.groups%in%missing.codes)]
+        other.groups <- names(table(input.d[, var.names[var.count]]))
+        other.groups <- other.groups[other.groups != ref.group & !(other.groups %in% missing.codes)]
         num.other.groups <- length(other.groups)
         result.table.bamboo.base.index <- result.table.bamboo.base.indexes[var.count]
         for (i in 1:num.surv.endpoints) { # for each survival end points e.g. os, dss, rfs
-          curr.base.index <- result.table.bamboo.base.index + (i-1)*num.other.groups + 1
-          if (num.other.groups>1) {
-            for (j in 1:(num.other.groups-1)) {
-              if (curr.base.index<nrow(result.table.bamboo)) {
+          curr.base.index <- result.table.bamboo.base.index + (i - 1) * num.other.groups + 1
+          if (num.other.groups > 1) {
+            for (j in 1:(num.other.groups - 1)) {
+              if (curr.base.index < nrow(result.table.bamboo)) {
                 last.row.name <- rownames(result.table.bamboo)[nrow(result.table.bamboo)]
                 result.table.bamboo <- rbind(
-                  result.table.bamboo[1:curr.base.index,],
-                  rep("",ncol(result.table.bamboo)),
-                  result.table.bamboo[(curr.base.index+1):nrow(result.table.bamboo),])
+                  result.table.bamboo[1:curr.base.index, ],
+                  rep("", ncol(result.table.bamboo)),
+                  result.table.bamboo[(curr.base.index + 1):nrow(result.table.bamboo), ])
                 rownames(result.table.bamboo)[nrow(result.table.bamboo)] <- last.row.name
               } else {
                 result.table.bamboo <- rbind(
                   result.table.bamboo,
-                  rep("",ncol(result.table.bamboo))
+                  rep("", ncol(result.table.bamboo))
                 )
               }
             }
           }
-          if (num.other.groups>1 | show.group.name.for.bin.var) {
-            result.table.bamboo[curr.base.index:(curr.base.index+num.other.groups-1),hr.col.index] <- 
-             strsplit(result.table.bamboo[curr.base.index,hr.col.index],kLocalConstantHrSepFlag)[[1]]
-            result.table.bamboo[curr.base.index:(curr.base.index+num.other.groups-1),hr.col.index-1] <- other.groups
+          if (num.other.groups > 1 | show.group.name.for.bin.var) {
+            result.table.bamboo[curr.base.index:(curr.base.index + num.other.groups - 1), hr.col.index] <- 
+             strsplit(result.table.bamboo[curr.base.index, hr.col.index], kLocalConstantHrSepFlag)[[1]]
+            result.table.bamboo[curr.base.index:(curr.base.index + num.other.groups - 1), hr.col.index - 1] <- other.groups
           }
         }	
       
         # need to update result.table.bamboo.base.indexes since we've added rows!!!
-        if (var.count<length(var.names)) {
-          result.table.bamboo.base.indexes[(var.count+1):length(var.names)] <- result.table.bamboo.base.indexes[(var.count+1):length(var.names)] + (num.other.groups-1)*num.surv.endpoints
+        if (var.count < length(var.names)) {
+          result.table.bamboo.base.indexes[(var.count + 1):length(var.names)] <- result.table.bamboo.base.indexes[(var.count + 1):length(var.names)] +
+            (num.other.groups - 1) * num.surv.endpoints
         }
       }
     }
     # if the column of hazard ratio category ends up being empty, remove it
-    if (sum(result.table.bamboo[,hr.col.index-1]=="")==nrow(result.table.bamboo)) {
-      hr.col.index <- hr.col.index-1
-      result.table.bamboo <- result.table.bamboo[,-hr.col.index]
+    if (sum(result.table.bamboo[, hr.col.index - 1] == "") == nrow(result.table.bamboo)) {
+      hr.col.index <- hr.col.index - 1
+      result.table.bamboo <- result.table.bamboo[, -hr.col.index]
     }
   }
     
   ## subscript syntax for pandoc
   result.table.bamboo <- gsub(x = result.table.bamboo, pattern = "<sup>|</sup>", replacement = "^")
-  
   options("table_counter" = options()$table_counter - 1)
   result.table.bamboo <- pander::pandoc.table.return(
     result.table.bamboo, caption = caption,
     emphasize.rownames = FALSE, split.table = split.table, ...)
-  result.table.bamboo <- gsub(kLocalConstantHrSepFlag,"; ",result.table.bamboo)
+  result.table.bamboo <- gsub(kLocalConstantHrSepFlag, "; ", result.table.bamboo)
   
   ## line break syntax for pandoc
   result.table.bamboo <- gsub(x = result.table.bamboo, pattern = "<br>", replacement = "\\\\\n")
   ### end of result.table.bamboo ###
 
   ### clean result.table ###
-  result.table <- gsub(kLocalConstantHrSepFlag,", ",result.table)
+  result.table <- gsub(kLocalConstantHrSepFlag, ", ", result.table)
   ### end of clean result.table ###
   
   return(list("result.table" = result.table,
-          "result.table.bamboo" = result.table.bamboo,
+              "result.table.bamboo" = result.table.bamboo,
               "result.table.html" = result.table.html))
 }

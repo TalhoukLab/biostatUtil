@@ -8,24 +8,26 @@
 #' @param marker.value.labels.tolower Indicator as to whether to put marker value labels to lower case
 #' @param show.missing an indicator to whether to show missing values
 #' @param show.missing.continuous if set to \code{FALSE} and \code{show.missing == FALSE},
-#' will not show the number of missing cases for continuous variables. Otherwise, it shows the number of missing for continuous variables even if show.missing==FALSE.
-#' @param do.droplevels drop categories of unobserved levels set to TRUE
+#' will not show the number of missing cases for continuous variables.
+#' Otherwise, it shows the number of missing for continuous variables even if \code{show.missing == FALSE}.
+#' @param do.droplevels drop categories of unobserved levels set to \code{TRUE}
 #' @param show.percent defaults to "both" which shows both rows and columns other possible values: "column", "row".
-#' @param stat.tests statistical test to perform. NULL indicates do not do test for all variables, NA indicates do not do test for specified variable.
+#' @param stat.tests statistical test to perform. \code{NULL} indicates do not do test for all variables,
+#' \code{NA} indicates do not do test for specified variable.
 #' Tests: chisq, fisher, ttest, wilcox, kendall, spearman, pearson, kruskal, confusionMarkerAsRef, confusionVarAsRef
 #' @param stat.test.column.header The name to show on the header defaults to "association/correlation test"
 #' @param round.digits.p.value The number of digits to round the P values
 #' @param num.boot the number of bootstrap samples for any bootstrap method that may be used
-#' @param missing.codes.highlight default to NULL this indicates whether we wanted the missing values broken down down or lumped together.
-#' @param missing.codes a vector to indicate how missing values are coded, default is c("N/A","","Unk")
+#' @param missing.codes.highlight default to \code{NULL} this indicates whether we wanted the missing values broken down down or lumped together.
+#' @param missing.codes a vector to indicate how missing values are coded, default is \code{c("N/A", "", "Unk")}
 #' @param decimal number of decimal places to show for aggregate numbers such as proportions or averages; default to 0 
 #' @param caption caption to use for the Table
 #' @param html.table.border the border type to use for html tables
 #' @param banded.rows If \code{TRUE}, rows have alternating shading colour
 #' @param css.class.name.odd Used to set the row colour for odd rows
 #' @param css.class.name.even Used to set the row colour for even rows
-#' @param custom.marker.labels labels of marker to show; default NULL means using existing value label of the marker
-#' @param custom.total.label label of the "Total" column; default NULL means show "Total"
+#' @param custom.marker.labels labels of marker to show; default \code{NULL} means using existing value label of the marker
+#' @param custom.total.label label of the "Total" column; default \code{NULL} means show "Total"
 #' @param split.table number of chars per row before table is split.
 #' @param ... additional arguments to \code{pander}
 #' @return A table with statistics reported for multiple variables, such as
@@ -54,344 +56,341 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
                                     banded.rows = FALSE,
                                     css.class.name.odd = "odd", 
                                     css.class.name.even = "even",
-									custom.marker.labels = NULL,
-									custom.total.label = NULL,
+                                    custom.marker.labels = NULL,
+                                    custom.total.label = NULL,
                                     split.table = 200, # set default for pander
                                     ...) {
-kLocalConstantRowColPercentBeginFlag <- "kLocalConstantRowColPercentBeginFlag" 
-kLocalConstantRowColPercentEndFlag <- "kLocalConstantRowColPercentEndFlag" 
-kLocalConstantRowColPercentSepFlag <- "kLocalConstantRowColPercentSepFlag" 
-kLocalConstantItalicBeginFlag <- "kLocalConstantItalicBeginFlag"
-kLocalConstantItalicEndFlag <- "kLocalConstantItalicEndFlag"
-kLocalConstantStatTestBeginFlag <- "kLocalConstantStatTestBeginFlag"
-kLocalConstantNewLineFlag <- "kLocalConstantNewLineFlag"
-col.th.style <- "border-bottom: 1px solid grey; border-top: 4px double grey; text-align: center; padding-right:10px; padding-right:10px;"
-row.th.style <- "text-align: left; padding-right:10px; padding-right:10px;"
+  kLocalConstantRowColPercentBeginFlag <- "kLocalConstantRowColPercentBeginFlag" 
+  kLocalConstantRowColPercentEndFlag <- "kLocalConstantRowColPercentEndFlag" 
+  kLocalConstantRowColPercentSepFlag <- "kLocalConstantRowColPercentSepFlag" 
+  kLocalConstantItalicBeginFlag <- "kLocalConstantItalicBeginFlag"
+  kLocalConstantItalicEndFlag <- "kLocalConstantItalicEndFlag"
+  kLocalConstantStatTestBeginFlag <- "kLocalConstantStatTestBeginFlag"
+  kLocalConstantNewLineFlag <- "kLocalConstantNewLineFlag"
+  col.th.style <- "border-bottom: 1px solid grey; border-top: 4px double grey; text-align: center; padding-right:10px; padding-right:10px;"
+  row.th.style <- "text-align: left; padding-right:10px; padding-right:10px;"
   
-if (is.null(missing.codes.highlight)) {
-     missing.codes.highlight <- list()
+  if (is.null(missing.codes.highlight)) {
+    missing.codes.highlight <- list()
     for (var.name in var.names) {
       missing.codes.highlight[var.name] <- NA
     }
   }
   
-# input.d.no.missing DEFINED HERE!!!
-
-#Filter Missing Value for the marker but other missing values may still exist
-input.d.no.missing <- input.d[!is.na(input.d[,marker.name]) & !input.d[,marker.name] %in% missing.codes, ] 
+  # input.d.no.missing DEFINED HERE!!!
   
-# Droplevels
-if (is.factor(input.d.no.missing[,marker.name]) & do.droplevels) {
+  #Filter Missing Value for the marker but other missing values may still exist
+  input.d.no.missing <- input.d[!is.na(input.d[, marker.name]) & !input.d[, marker.name] %in% missing.codes, ] 
+  
+  # Droplevels
+  if (is.factor(input.d.no.missing[,marker.name]) & do.droplevels) {
     input.d.no.missing[, marker.name] <- droplevels(input.d.no.missing[, marker.name])
-}
-# Formatting Labels
-marker.categories <- names(table(input.d.no.missing[,marker.name]))
-marker.categories <- marker.categories[!marker.categories %in% missing.codes]
-
-total.label <- ifelse(sum(sapply(var.descriptions, function(x){
+  }
+  # Formatting Labels
+  marker.categories <- names(table(input.d.no.missing[, marker.name]))
+  marker.categories <- marker.categories[!marker.categories %in% missing.codes]
+  
+  total.label <- ifelse(sum(sapply(var.descriptions, function(x){
     return(ifelse(isFirstLetterUpperCase(x), 1, 0))})) == length(var.descriptions), "Total", "total")
-
-if (!is.null(custom.total.label)) {
-	total.label <- custom.total.label
-}
-
-if (marker.value.labels.tolower) {
+  
+  if (!is.null(custom.total.label)) {
+    total.label <- custom.total.label
+  }
+  
+  if (marker.value.labels.tolower) {
     result.table.col.names <- c(total.label, paste(marker.description, tolower(marker.categories)))
   } else {
     result.table.col.names <- c(total.label, paste(marker.description, marker.categories))	
   }
-
-if (!is.null(custom.marker.labels)) {
-	custom.marker.labels.length <- length(custom.marker.labels)
-	result.table.col.names.length <- length(result.table.col.names)
-	if (result.table.col.names.length == (custom.marker.labels.length+1)) {
-		result.table.col.names[2:result.table.col.names.length] <- custom.marker.labels
-	} else if (result.table.col.names.length < (custom.marker.labels.length+1)) {
-		result.table.col.names[2:result.table.col.names.length] <- custom.marker.labels[c(1:(result.table.col.names.length-1))]
-	} else {
-		# length(marker.categories) > length(custom.marker.labels)
-		result.table.col.names[2:result.table.col.names.length] <- custom.marker.labels[
-				rep(c(1:custom.marker.labels.length),floor(result.table.col.names.length/custom.marker.labels.length)),
-				c(1:(result.table.col.names.length%%custom.marker.labels.length))]
-	}
-}
   
-# If all items in var.descriptions starts with capital letter, first row header should be capital as well i.e. "Total"
-result.table.row.names <- total.label
-result.table <- c(paste(nrow(input.d)," (100%)", sep = ""),
-    sapply(marker.categories, function(x){
-      return(paste(sum(input.d.no.missing[, marker.name] == x), " (", format(round(sum(input.d.no.missing[, marker.name] == x) / nrow(input.d.no.missing) * 100, decimal),nsmall=decimal), "%)", sep = ""))
-      })
+  if (!is.null(custom.marker.labels)) {
+    custom.marker.labels.length <- length(custom.marker.labels)
+    result.table.col.names.length <- length(result.table.col.names)
+    if (result.table.col.names.length == (custom.marker.labels.length + 1)) {
+      result.table.col.names[2:result.table.col.names.length] <- custom.marker.labels
+    } else if (result.table.col.names.length < (custom.marker.labels.length + 1)) {
+      result.table.col.names[2:result.table.col.names.length] <- custom.marker.labels[c(1:(result.table.col.names.length - 1))]
+    } else {
+      # length(marker.categories) > length(custom.marker.labels)
+      result.table.col.names[2:result.table.col.names.length] <- custom.marker.labels[
+        rep(c(1:custom.marker.labels.length), floor(result.table.col.names.length / custom.marker.labels.length)),
+        c(1:(result.table.col.names.length %% custom.marker.labels.length))]
+    }
+  }
+  
+  # If all items in var.descriptions starts with capital letter, first row header should be capital as well i.e. "Total"
+  result.table.row.names <- total.label
+  result.table <- c(paste0(nrow(input.d), " (100%)"),
+                    sapply(marker.categories, function(x){
+                      return(paste0(sum(input.d.no.missing[, marker.name] == x), " (",
+                                   format(round(sum(input.d.no.missing[, marker.name] == x) / nrow(input.d.no.missing) * 100, decimal),
+                                          nsmall = decimal), "%)"))
+                    })
   )
-
-do.stats <- !is.null(stat.tests)
-stat.tests.results <- c()
   
-num.var <- length(var.names)
-
-# Loop over all variables
-for (i in 1:num.var) {
-#############################
-# NOTE: three data matrices here ...
-# input.d.no.missing - no missing marker only (may contain missing var)
-# input.d.no.missing.var.only - missing var only (may contain missing marker)
-# input.d.no.missing.var - no missing marker and no missing var
-#############################
+  do.stats <- !is.null(stat.tests)
+  stat.tests.results <- c()
+  num.var <- length(var.names)
+  
+  # Loop over all variables
+  for (i in 1:num.var) {
+    #############################
+    # NOTE: three data matrices here ...
+    # input.d.no.missing - no missing marker only (may contain missing var)
+    # input.d.no.missing.var.only - missing var only (may contain missing marker)
+    # input.d.no.missing.var - no missing marker and no missing var
+    #############################
     
-# Header row for each var
-result.table <- rbind(result.table, c("", rep("", length(marker.categories))))
-result.table.row.names <- c(result.table.row.names, var.descriptions[i])
-var.name <- var.names[i]
-var.description <- var.descriptions[i]
+    # Header row for each var
+    result.table <- rbind(result.table, c("", rep("", length(marker.categories))))
+    result.table.row.names <- c(result.table.row.names, var.descriptions[i])
+    var.name <- var.names[i]
+    var.description <- var.descriptions[i]
     
-num.missing.row.header.name <- c()
-if (sum(!is.na(missing.codes.highlight[[var.name]])) > 0) {
+    num.missing.row.header.name <- c()
+    if (sum(!is.na(missing.codes.highlight[[var.name]])) > 0) {
       num.missing.row.header.name <- c(num.missing.row.header.name, missing.codes.highlight[[var.name]]) # need double [[]] for missing.codes.highlight because its a list
     }
-num.missing.row.header.name <- c(num.missing.row.header.name, "missing")
+    num.missing.row.header.name <- c(num.missing.row.header.name, "missing")
     
-# input.d.no.missing.var.only DEFINED HERE!!!
-input.d.no.missing.var.only <- input.d[!is.na(input.d[, var.name]) & !input.d[, var.name] %in% missing.codes & !input.d[, var.name] %in% missing.codes.highlight[[var.name]], ]
-if (is.factor(input.d.no.missing.var.only[, var.name]) & do.droplevels) {
-      input.d.no.missing.var.only[,var.name] <- droplevels(input.d.no.missing.var.only[, var.name])
-}
+    # input.d.no.missing.var.only DEFINED HERE!!!
+    input.d.no.missing.var.only <- input.d[!is.na(input.d[, var.name]) & !input.d[, var.name] %in% 
+                                             missing.codes & !input.d[, var.name] %in% missing.codes.highlight[[var.name]], ]
+    if (is.factor(input.d.no.missing.var.only[, var.name]) & do.droplevels) {
+      input.d.no.missing.var.only[, var.name] <- droplevels(input.d.no.missing.var.only[, var.name])
+    }
 
-# input.d.no.missing.var DEFINED HERE!!!
-input.d.no.missing.var <- input.d.no.missing.var.only[!is.na(input.d.no.missing.var.only[, marker.name]) & !input.d.no.missing.var.only[, marker.name] %in% missing.codes, ]
-if (is.factor(input.d.no.missing.var[, marker.name]) & do.droplevels) {
-  input.d.no.missing.var[, marker.name] <- droplevels(input.d.no.missing.var[, marker.name])
-}
-
-
-if (is.var.continuous[i]) { # If continuous variable
-input.d.no.missing.var.only[, var.name] <- as.numeric(input.d.no.missing.var.only[, var.name])
-input.d.no.missing.var[, var.name] <- as.numeric(input.d.no.missing.var[, var.name])
-
-# 4 rows: mean (+/- std dev) / median / IQR / number of missing
-var.row.names <- c("mean (SD)","median","IQR","range")
-if (show.missing | show.missing.continuous) {
+    # input.d.no.missing.var DEFINED HERE!!!
+    input.d.no.missing.var <- input.d.no.missing.var.only[!is.na(input.d.no.missing.var.only[, marker.name]) &
+                                                            !input.d.no.missing.var.only[, marker.name] %in% missing.codes, ]
+    if (is.factor(input.d.no.missing.var[, marker.name]) & do.droplevels) {
+      input.d.no.missing.var[, marker.name] <- droplevels(input.d.no.missing.var[, marker.name])
+    }
+    
+    if (is.var.continuous[i]) { # If continuous variable
+      input.d.no.missing.var.only[, var.name] <- as.numeric(input.d.no.missing.var.only[, var.name])
+      input.d.no.missing.var[, var.name] <- as.numeric(input.d.no.missing.var[, var.name])
+      
+      # 4 rows: mean (+/- std dev) / median / IQR / number of missing
+      var.row.names <- c("mean (SD)", "median", "IQR", "range")
+      if (show.missing | show.missing.continuous) {
         var.row.names <- c(var.row.names, num.missing.row.header.name)
       }
-result.table.row.names <- c(result.table.row.names,var.row.names)
+      result.table.row.names <- c(result.table.row.names, var.row.names)
       
-# Statistical testing for continuous variables (ignore non-applicable tests!) ...
-stat.test.result <- NA
-if (do.stats) {
-switch (stat.tests[i],
- spearman={spearman.result <- cor.test(input.d.no.missing.var[, var.name], 
-                          as.numeric(input.d.no.missing.var[, marker.name]),
-                          method="spearman")
-          stat.test.result <- paste( "Spearman correlation",kLocalConstantStatTestBeginFlag,
-                    "rho = ", round(spearman.result$estimate,2),
-                    kLocalConstantNewLineFlag,"P = ", sprintf(paste("%.", round.digits.p.value, "f",
-                    sep=""), round(spearman.result$p.value, digits = round.digits.p.value)), sep = "")
-          },
- kruskal={kruskal.result <- kruskal.test(input.d.no.missing.var[, var.name] ~ 
-                                           as.numeric(input.d.no.missing.var[, marker.name]))
-          stat.test.result <- paste("Kruskal-Wallis rank sum test",kLocalConstantStatTestBeginFlag, kLocalConstantNewLineFlag,"P = ", 
-                    sprintf(paste("%.", round.digits.p.value, "f", sep = ""), 
-                            round(kruskal.result$p.value, digits = round.digits.p.value)), sep = "")
-          },
- wilcox={wilcox.result <- wilcox.test(input.d.no.missing.var[, var.name] ~ 
-                                        as.numeric(input.d.no.missing.var[, marker.name]))
-          stat.test.result <- paste("Wilcoxon rank sum test",kLocalConstantStatTestBeginFlag, "P = ",
-                    sprintf(paste("%.",round.digits.p.value, "f",sep = ""),
-                            round(wilcox.result$p.value,digits = round.digits.p.value)),sep = ""
-                  )
-          }
-  )
- 
-  stat.tests.results <- c(stat.tests.results, stat.test.result)
-}
- 
-# Assemble Continuous Results     
-result.table <- rbind(result.table, # Add the mean
-                  c(paste(format(round(mean(input.d.no.missing.var.only[, var.name]), decimal),nsmall=decimal),
-                          " (",format(round(sd(  input.d.no.missing.var.only[, var.name]), decimal),nsmall=decimal),")",
-                              sep=""), sapply(marker.categories,function(x){
-                              temp.d <- input.d.no.missing.var[input.d.no.missing.var[,marker.name] == x,
-                                                               var.name]
-                          if (length(temp.d) == 0){
-                                  return(MISSING.EXPLICIT)
-                                } else {
-                                  return(paste(
-                                    format(round(mean(temp.d), decimal),nsmall=decimal),
-                                    " (",format(round(sd(  temp.d), decimal),nsmall=decimal),")",											
-                                    sep="" #sep=" &#177; "
-                                  ))		
-                                }
-                              })
-                            ),
-                    c( # Add the median
-                      format(round(median(input.d.no.missing.var.only[,var.name]), decimal),nsmall=decimal), 
-                        sapply(marker.categories, function(x){
-                        temp.d <- input.d.no.missing.var[input.d.no.missing.var[, marker.name] == x, 
-                                                         var.name]
-                                if (length(temp.d) == 0){
-                                  return(MISSING.EXPLICIT)
-                                } else {
-                                  return(format(round(median(temp.d), decimal),nsmall=decimal))
-                                }
-                              })
-                            ),
-                    c( # Add inter quartile range
-                    paste(format(round(quantile(input.d.no.missing.var.only[, var.name], c(0.25,0.75)),
-                                decimal),nsmall=decimal), collapse = " to "), 
-                      sapply(marker.categories,function(x){
-                        temp.d <- input.d.no.missing.var[input.d.no.missing.var[, marker.name] == x,
-                                                         var.name]
-                                if (length(temp.d) == 0){
-                                  return(MISSING.EXPLICIT)
-                                } else {
-                                  return(paste(format(round(quantile(temp.d,c(0.25,0.75)), decimal),nsmall=decimal),
-                                               collapse = " to "))		
-                                }
-                              })
-                    ),
-                    c( # Add range
-                      paste(format(round(range(input.d.no.missing.var.only[, var.name]),
-                                  decimal),nsmall=decimal), collapse = " to "), 
-                      sapply(marker.categories,function(x){
-                        temp.d <- input.d.no.missing.var[input.d.no.missing.var[, marker.name] == x,
-                                                         var.name]
-                        if (length(temp.d) == 0){
-                          return(MISSING.EXPLICIT)
-                        } else {
-                          return(paste(format(round(range(temp.d), decimal),nsmall=decimal),
-                                       collapse = " to "))		
-                        }
-                      }))
-      )
-    } else { # If categorical variable
-var.categories <- names(table(input.d.no.missing.var.only[, var.name]))
-var.row.names <- var.categories
-if (show.missing) {
-        var.row.names <- c(var.row.names, num.missing.row.header.name)
-      }
-result.table.row.names <- c(result.table.row.names,var.row.names)
-
-# do statistical test for continuous variables (ignore non-applicable tests!) ...
-stat.test.result <- NA
-if (do.stats) {switch (stat.tests[i],
-      kendall = {kendall.result <- cor.test(as.numeric(input.d.no.missing.var[, var.name]),
-                                  as.numeric(input.d.no.missing.var[, marker.name]), method = "kendall")
-                stat.test.result <- paste("Kendall correlation",kLocalConstantStatTestBeginFlag,
-                                  "tau = ", round(kendall.result$estimate, 2),
-                                  kLocalConstantNewLineFlag,"P = ", sprintf(paste("%.", round.digits.p.value, "f", sep = ""),
-                                 round(kendall.result$p.value, digits = round.digits.p.value)), sep= "" )
-                },
-      chisq = {chisq.result <- chisq.test(table(input.d.no.missing.var[, var.name],
-                    input.d.no.missing.var[, marker.name]))
-              stat.test.result <- paste("Chi-square test",kLocalConstantStatTestBeginFlag,
-                                  "P = ", sprintf(paste("%.", round.digits.p.value, "f", sep = ""),
-                            round(chisq.result$p.value, digits = round.digits.p.value)), sep = "")
-                },
-      fisher = {fisher.result <- fisher.test(table(input.d.no.missing.var[, var.name],
-                    input.d.no.missing.var[, marker.name]), workspace = 2e6)
-                  stat.test.result <- paste("Fisher's exact test",kLocalConstantStatTestBeginFlag, "P = ", 
-                            sprintf(paste("%.", round.digits.p.value, "f", sep = ""),
-                            round(fisher.result$p.value,digits=round.digits.p.value)), sep = "")
-                },
-      confusionMarkerAsRef={ 
-        # confusion matrix, marker as the reference
-        # require both marker and var to be factor ...
-        # if not, just print err msg
-if (!is.factor(input.d.no.missing.var[,var.name]) | !is.factor(input.d.no.missing.var[, marker.name])) {
-    stat.test.result <- "error: both marker and variable needs to be factor"
-    } else {
-    stat.test.result <- confusionResultToHtmlTable(as.numeric(input.d.no.missing.var[, var.name]),
-                                                   as.numeric(input.d.no.missing.var[,marker.name]),
-                                                   marker.description,round.digits.p.value,
-                                                   num.boot = num.boot)
-            }
-                            },
-      confusionVarAsRef={ 
-        # confusion matrix, variable as the reference
-        # require both marker and var to be factor ...
-        # if not, just print err msg
-if (!is.factor(input.d.no.missing.var[, var.name]) | !is.factor(input.d.no.missing.var[, marker.name])) {
-    stat.test.result <- "error: both marker and variable needs to be factor"
-    } else {
-    stat.test.result <- confusionResultToHtmlTable(as.numeric(input.d.no.missing.var[, marker.name]),
-                                                   as.numeric(input.d.no.missing.var[, var.name]),
-                                                   var.description, round.digits.p.value,
-                                                   num.boot = num.boot)
-            }
-                          }
-)
-
- stat.tests.results <- c(stat.tests.results, stat.test.result)
-}
-      
-for (var.category in var.categories) {
-        total.value <- paste(sum(input.d.no.missing.var.only[, var.name] == var.category), " (",
-          format(round(sum(input.d.no.missing.var.only[, var.name] == var.category) / 
-                  nrow(input.d.no.missing.var.only) * 100, decimal),nsmall=decimal), "%)",sep = "")
-        result.table <- rbind(result.table,
-    switch(show.percent,
-    row={c(total.value, sapply(marker.categories, function(x){
-    return(paste(sum(input.d.no.missing.var[, var.name] == var.category & 
-                       input.d.no.missing.var[,marker.name] == x), " (",
-                 ifelse(sum(input.d.no.missing.var[, var.name] == var.category) > 0,
-                        format(round(sum(input.d.no.missing.var[, var.name] == var.category & 
-                          input.d.no.missing.var[, marker.name] == x) / 
-                            sum(input.d.no.missing.var[, var.name] == x) * 100, decimal),nsmall=decimal),
-                            0), 
-                 "%)", sep = ""))
-      })
-    )},
-    column={c(total.value, sapply(marker.categories, function(x){
-      return(paste(sum(input.d.no.missing.var[, var.name] == var.category & 
-                         input.d.no.missing.var[, marker.name] == x), " (",
-                   ifelse(sum(input.d.no.missing.var[, marker.name] == x) > 0,
-                          format(round(sum(input.d.no.missing.var[, var.name] == var.category & 
-                          input.d.no.missing.var[, marker.name] == x) / 
-                          sum(input.d.no.missing.var[, marker.name] == x) * 100, decimal),nsmall=decimal), 0),
-                "%)", sep = ""))
-    })
-    )},
-    both={c(total.value, sapply(marker.categories,function(x){
-      return(paste(sum(input.d.no.missing.var[, var.name] == var.category & 
-                         input.d.no.missing.var[,marker.name] == x),
-                         kLocalConstantRowColPercentBeginFlag,
-                    ifelse(sum(input.d.no.missing.var[, var.name] == var.category) > 0,
-                         format(round(sum(input.d.no.missing.var[, var.name] == var.category & 
-                         input.d.no.missing.var[, marker.name] == x) / 
-                         sum(input.d.no.missing.var[,var.name] == var.category) * 100, decimal),nsmall=decimal), 0),
-                         "%",kLocalConstantRowColPercentSepFlag,
-                    ifelse(sum(input.d.no.missing.var[, marker.name] == x) > 0,
-                         format(round(sum(input.d.no.missing.var[, var.name] == var.category & 
-                         input.d.no.missing.var[, marker.name] == x) / 
-                         sum(input.d.no.missing.var[, marker.name] == x) * 100, decimal),nsmall=decimal), 0),
-                          "%",kLocalConstantRowColPercentEndFlag, sep = ""))
-          })
-      )}
-    )
+      # Statistical testing for continuous variables (ignore non-applicable tests!) ...
+      stat.test.result <- NA
+      if (do.stats) {
+        switch(stat.tests[i],
+               spearman = {spearman.result <- cor.test(input.d.no.missing.var[, var.name], 
+                                                     as.numeric(input.d.no.missing.var[, marker.name]),
+                                                     method = "spearman")
+               stat.test.result <- paste0("Spearman correlation", kLocalConstantStatTestBeginFlag,
+                                          "rho = ", round(spearman.result$estimate, 2),
+                                          kLocalConstantNewLineFlag, "P = ",
+                                          sprintf(paste0("%.", round.digits.p.value, "f"),
+                                                  round(spearman.result$p.value, digits = round.digits.p.value)))
+               },
+               kruskal = {kruskal.result <- kruskal.test(input.d.no.missing.var[, var.name] ~ 
+                                                           as.numeric(input.d.no.missing.var[, marker.name]))
+               stat.test.result <- paste0("Kruskal-Wallis rank sum test",kLocalConstantStatTestBeginFlag,
+                                          kLocalConstantNewLineFlag,"P = ", 
+                                          sprintf(paste0("%.", round.digits.p.value, "f"), 
+                                                  round(kruskal.result$p.value, digits = round.digits.p.value)))
+               },
+               wilcox = {wilcox.result <- wilcox.test(input.d.no.missing.var[, var.name] ~ 
+                                                      as.numeric(input.d.no.missing.var[, marker.name]))
+               stat.test.result <- paste0("Wilcoxon rank sum test", kLocalConstantStatTestBeginFlag, "P = ",
+                                          sprintf(paste0("%.",round.digits.p.value, "f"),
+                                                  round(wilcox.result$p.value, digits = round.digits.p.value)))
+               }
         )
-}
-}
-
-if (show.missing | is.var.continuous[i]&show.missing.continuous) {
-      if (sum(!is.na(missing.codes.highlight[[var.name]]))>0) {
+        stat.tests.results <- c(stat.tests.results, stat.test.result)
+      }
+      
+      # Assemble Continuous Results     
+      result.table <- rbind(
+        result.table, # Add the mean
+        c(paste0(format(round(mean(input.d.no.missing.var.only[, var.name]), decimal), nsmall = decimal),
+                " (", format(round(sd(input.d.no.missing.var.only[, var.name]), decimal), nsmall = decimal), ")"),
+          sapply(marker.categories, function(x) {
+            temp.d <- input.d.no.missing.var[input.d.no.missing.var[, marker.name] == x, var.name]
+            if (length(temp.d) == 0) {
+              return(MISSING.EXPLICIT)
+            } else {
+              return(paste0(
+                format(round(mean(temp.d), decimal), nsmall = decimal),
+                " (", format(round(sd(temp.d), decimal), nsmall = decimal), ")"))		
+            }
+          })
+        ),
+        c( # Add the median
+          format(round(median(input.d.no.missing.var.only[, var.name]), decimal), nsmall = decimal), 
+          sapply(marker.categories, function(x) {
+            temp.d <- input.d.no.missing.var[input.d.no.missing.var[, marker.name] == x, var.name]
+            if (length(temp.d) == 0) {
+              return(MISSING.EXPLICIT)
+            } else {
+              return(format(round(median(temp.d), decimal), nsmall = decimal))
+            }
+          })
+        ),
+        c( # Add inter quartile range
+          paste(format(round(quantile(input.d.no.missing.var.only[, var.name], c(0.25, 0.75)),
+                             decimal), nsmall = decimal), collapse = " to "), 
+          sapply(marker.categories, function(x) {
+            temp.d <- input.d.no.missing.var[input.d.no.missing.var[, marker.name] == x, var.name]
+            if (length(temp.d) == 0) {
+              return(MISSING.EXPLICIT)
+            } else {
+              return(paste(format(round(quantile(temp.d, c(0.25, 0.75)), decimal), nsmall = decimal), collapse = " to "))		
+            }
+          })
+        ),
+        c( # Add range
+          paste(format(round(range(input.d.no.missing.var.only[, var.name]),
+                             decimal), nsmall = decimal), collapse = " to "), 
+          sapply(marker.categories, function(x) {
+            temp.d <- input.d.no.missing.var[input.d.no.missing.var[, marker.name] == x, var.name]
+            if (length(temp.d) == 0) {
+              return(MISSING.EXPLICIT)
+            } else {
+              return(paste(format(round(range(temp.d), decimal), nsmall = decimal), collapse = " to "))		
+            }
+          })
+        )
+      )
+    } else {# If categorical variable
+      var.categories <- names(table(input.d.no.missing.var.only[, var.name]))
+      var.row.names <- var.categories
+      if (show.missing) {
+        var.row.names <- c(var.row.names, num.missing.row.header.name)
+      }
+      result.table.row.names <- c(result.table.row.names, var.row.names)
+      
+      # do statistical test for continuous variables (ignore non-applicable tests!) ...
+      stat.test.result <- NA
+      if (do.stats) {
+        switch(stat.tests[i],
+               kendall = {kendall.result <- cor.test(as.numeric(input.d.no.missing.var[, var.name]),
+                                                     as.numeric(input.d.no.missing.var[, marker.name]), method = "kendall")
+               stat.test.result <- paste0("Kendall correlation", kLocalConstantStatTestBeginFlag,
+                                          "tau = ", round(kendall.result$estimate, 2),
+                                          kLocalConstantNewLineFlag, "P = ",
+                                          sprintf(paste0("%.", round.digits.p.value, "f"),
+                                                  round(kendall.result$p.value, digits = round.digits.p.value)))
+               },
+               chisq = {chisq.result <- chisq.test(table(input.d.no.missing.var[, var.name],
+                                                         input.d.no.missing.var[, marker.name]))
+               stat.test.result <- paste0("Chi-square test", kLocalConstantStatTestBeginFlag,
+                                          "P = ", sprintf(paste0("%.", round.digits.p.value, "f"),
+                                                          round(chisq.result$p.value, digits = round.digits.p.value)))
+               },
+               fisher = {fisher.result <- fisher.test(table(input.d.no.missing.var[, var.name],
+                                                            input.d.no.missing.var[, marker.name]), workspace = 2e6)
+               stat.test.result <- paste0("Fisher's exact test", kLocalConstantStatTestBeginFlag, "P = ", 
+                                          sprintf(paste0("%.", round.digits.p.value, "f"),
+                                                  round(fisher.result$p.value, digits = round.digits.p.value)))
+               },
+               confusionMarkerAsRef = { 
+                 # confusion matrix, marker as the reference
+                 # require both marker and var to be factor ...
+                 # if not, just print err msg
+                 if (!is.factor(input.d.no.missing.var[,var.name]) | !is.factor(input.d.no.missing.var[, marker.name])) {
+                   stat.test.result <- "error: both marker and variable needs to be factor"
+                 } else {
+                   stat.test.result <- confusionResultToHtmlTable(as.numeric(input.d.no.missing.var[, var.name]),
+                                                                  as.numeric(input.d.no.missing.var[, marker.name]),
+                                                                  marker.description,round.digits.p.value,
+                                                                  num.boot = num.boot)
+                 }
+               },
+               confusionVarAsRef = { 
+                 # confusion matrix, variable as the reference
+                 # require both marker and var to be factor ...
+                 # if not, just print err msg
+                 if (!is.factor(input.d.no.missing.var[, var.name]) | !is.factor(input.d.no.missing.var[, marker.name])) {
+                   stat.test.result <- "error: both marker and variable needs to be factor"
+                 } else {
+                   stat.test.result <- confusionResultToHtmlTable(as.numeric(input.d.no.missing.var[, marker.name]),
+                                                                  as.numeric(input.d.no.missing.var[, var.name]),
+                                                                  var.description, round.digits.p.value,
+                                                                  num.boot = num.boot)
+                 }
+               }
+        )
+        stat.tests.results <- c(stat.tests.results, stat.test.result)
+      }
+      
+      for (var.category in var.categories) {
+        total.value <- paste0(sum(input.d.no.missing.var.only[, var.name] == var.category), " (",
+                              format(round(sum(input.d.no.missing.var.only[, var.name] == var.category) / 
+                                             nrow(input.d.no.missing.var.only) * 100, decimal), nsmall = decimal), "%)")
+        result.table <- rbind(
+          result.table,
+          switch(show.percent,
+                 row = {c(total.value, sapply(marker.categories, function(x) {
+                   return(paste0(sum(input.d.no.missing.var[, var.name] == var.category & 
+                                       input.d.no.missing.var[, marker.name] == x), " (",
+                                 ifelse(sum(input.d.no.missing.var[, var.name] == var.category) > 0,
+                                        format(round(sum(input.d.no.missing.var[, var.name] == var.category & 
+                                                           input.d.no.missing.var[, marker.name] == x) / 
+                                                       sum(input.d.no.missing.var[, var.name] == x) * 100, decimal), nsmall = decimal), 0), 
+                                 "%)"))
+                 })
+                 )},
+                 column = {c(total.value, sapply(marker.categories, function(x) {
+                   return(paste0(sum(input.d.no.missing.var[, var.name] == var.category & 
+                                       input.d.no.missing.var[, marker.name] == x), " (",
+                                 ifelse(sum(input.d.no.missing.var[, marker.name] == x) > 0,
+                                        format(round(sum(input.d.no.missing.var[, var.name] == var.category & 
+                                                           input.d.no.missing.var[, marker.name] == x) / 
+                                                       sum(input.d.no.missing.var[, marker.name] == x) * 100, decimal), nsmall = decimal), 0),
+                                 "%)"))
+                 })
+                 )},
+                 both = {c(total.value, sapply(marker.categories, function(x) {
+                   return(paste0(sum(input.d.no.missing.var[, var.name] == var.category & 
+                                       input.d.no.missing.var[, marker.name] == x),
+                                 kLocalConstantRowColPercentBeginFlag,
+                                 ifelse(sum(input.d.no.missing.var[, var.name] == var.category) > 0,
+                                        format(round(sum(input.d.no.missing.var[, var.name] == var.category & 
+                                                           input.d.no.missing.var[, marker.name] == x) / 
+                                                       sum(input.d.no.missing.var[,var.name] == var.category) * 100, decimal), nsmall = decimal), 0),
+                                 "%",kLocalConstantRowColPercentSepFlag,
+                                 ifelse(sum(input.d.no.missing.var[, marker.name] == x) > 0,
+                                        format(round(sum(input.d.no.missing.var[, var.name] == var.category & 
+                                                           input.d.no.missing.var[, marker.name] == x) / 
+                                                       sum(input.d.no.missing.var[, marker.name] == x) * 100, decimal), nsmall = decimal), 0),
+                                 "%",kLocalConstantRowColPercentEndFlag))
+                 })
+                 )}
+          )
+        )
+      }
+    }
+    
+    if (show.missing | is.var.continuous[i] & show.missing.continuous) {
+      if (sum(!is.na(missing.codes.highlight[[var.name]])) > 0) {
         # there's some missing values we want to highlight ...
         for (missing.code in missing.codes.highlight[[var.name]]) {
           result.table <- rbind(result.table,
                                 c( # number of missing
-                                  sum(!is.na(input.d[,var.name]) & input.d[,var.name]==missing.code),
-                                  sapply(marker.categories,function(x){
-                                    temp.d <- input.d.no.missing[input.d.no.missing[,marker.name]==x,var.name]
-                                    return(sum(!is.na(temp.d) & temp.d==missing.code))		
+                                  sum(!is.na(input.d[, var.name]) & input.d[, var.name] == missing.code),
+                                  sapply(marker.categories, function(x) {
+                                    temp.d <- input.d.no.missing[input.d.no.missing[, marker.name] == x, var.name]
+                                    return(sum(!is.na(temp.d) & temp.d == missing.code))
                                   })
                                 )
           )
         }
-      } 
+      }
       result.table <- rbind(result.table,
                             c( # number of missing
-                              sum(is.na(input.d[,var.name]) | input.d[,var.name]%in%missing.codes),
-                              sapply(marker.categories,function(x){
-                                temp.d <- input.d.no.missing[input.d.no.missing[,marker.name]==x,var.name]
-                                return(sum(is.na(temp.d) | temp.d%in%missing.codes))		
+                              sum(is.na(input.d[,var.name]) | input.d[,var.name] %in% missing.codes),
+                              sapply(marker.categories, function(x) {
+                                temp.d <- input.d.no.missing[input.d.no.missing[, marker.name] == x, var.name]
+                                return(sum(is.na(temp.d) | temp.d %in% missing.codes))		
                               })
                             )
       )
@@ -404,98 +403,97 @@ if (show.missing | is.var.continuous[i]&show.missing.continuous) {
   
   ##################################
   ### generate html table ...	 ###
-  result.table.html <- paste("<table border=",html.table.border,">",ifelse(is.na(caption),"",paste("<caption style='",TABLE.CAPTION.STYLE,"'>",caption,"</caption>",sep="")),sep="")
-  result.table.html <- paste(
+  result.table.html <- paste0("<table border=", html.table.border, ">",
+                              ifelse(is.na(caption), "",
+                                     paste0("<caption style='", TABLE.CAPTION.STYLE, "'>", caption, "</caption>")))
+  result.table.html <- paste0(
     result.table.html,
-    "<tr><th style='",col.th.style,"' colspan=2></th><th style='",col.th.style,"'>",
-    paste(
-      result.table.col.names,collapse=paste("</th><th style='",col.th.style,"'>",
-                                            sep="")
-    ),
+    "<tr><th style='", col.th.style, "' colspan=2></th><th style='", col.th.style, "'>",
+    paste(result.table.col.names, collapse = paste0("</th><th style='", col.th.style, "'>")),
     "</th>",
-    ifelse(do.stats,paste("<th style='",col.th.style,"'>",stat.test.column.header,"</th>",sep=""),""),
-    "</tr>",
-    sep=""
-  )
+    ifelse(do.stats, paste0("<th style='", col.th.style, "'>", stat.test.column.header, "</th>"), ""),
+    "</tr>")
   
   row.band.toggle <- TRUE
   var.count <- -1 # want to skip the header row which contains the total count
   for (i in 1:nrow(result.table)) {
-    
     num.missing.row.header.name <- c()
     if (var.count > 0) {
       var.name <- var.names[var.count]
-      if (sum(!is.na(missing.codes.highlight[[var.name]]))>0) {
+      if (sum(!is.na(missing.codes.highlight[[var.name]])) > 0) {
         num.missing.row.header.name <- c(num.missing.row.header.name, missing.codes.highlight[[var.name]]) # need double [[]] for missing.codes.highlight because its a list
       }
     }
-    num.missing.row.header.name <- c(num.missing.row.header.name,"missing")
-    
+    num.missing.row.header.name <- c(num.missing.row.header.name, "missing")
     
     # check to see if this is the start of a new category or 1st row ...
     var.header.row <- FALSE
-    if ( i==1 | sum(result.table[i,]=="",na.rm=TRUE)>1) {
+    if (i == 1 | sum(result.table[i, ] == "", na.rm = TRUE) > 1) {
       # this must be the start of a first category since row contains >1 empty cells (there will be 1 empty cell for any var with no stats test)
       var.header.row <- TRUE
-      var.count <- var.count+1
+      var.count <- var.count + 1
       if (i > 1) { # varname not available for i==1 (the row for the total)
         var.name <- var.names[var.count]
       }
       row.band.toggle <- !row.band.toggle
-      tr.class <- ifelse(banded.rows,paste(" class='",ifelse(row.band.toggle,css.class.name.even,css.class.name.odd),"'",sep=""),"")
-      result.table.html <- paste(
+      tr.class <- ifelse(banded.rows, paste0(" class='",
+                                             ifelse(row.band.toggle, css.class.name.even, css.class.name.odd), "'"),"")
+      result.table.html <- paste0(
         result.table.html,
-        "<tr",tr.class,"><th style='",row.th.style,"' colspan=",2,">",result.table.row.names[i],"</th>",
-        sep=""
-      )
+        "<tr", tr.class, "><th style='", row.th.style, "' colspan=", 2, ">", result.table.row.names[i], "</th>")
     } else {
-      if (num.var==1) {
+      if (num.var == 1) {
         row.band.toggle <- !row.band.toggle # always toggle when there's only one variable
       }
-      tr.class <- ifelse(banded.rows,paste(" class='",ifelse(row.band.toggle,css.class.name.even,css.class.name.odd),"'",sep=""),"")
-      result.table.html <- paste(
+      tr.class <- ifelse(banded.rows, paste0(" class='", ifelse(row.band.toggle, css.class.name.even, css.class.name.odd), "'"), "")
+      result.table.html <- paste0(
         result.table.html,
-        "<tr",tr.class,"><th>&nbsp;&nbsp;&nbsp;&nbsp;</th><th style='",row.th.style,"'>",
+        "<tr", tr.class, "><th>&nbsp;&nbsp;&nbsp;&nbsp;</th><th style='", row.th.style, "'>",
         result.table.row.names[i],
-        ifelse(!is.var.continuous[var.count] & show.percent=="both",
-               ifelse(!result.table.row.names[i]%in%num.missing.row.header.name | !show.missing,"<i><br>&nbsp;&nbsp;&nbsp;&nbsp;row%<br>&nbsp;&nbsp;&nbsp;&nbsp;col%</i>",""),
+        ifelse(!is.var.continuous[var.count] & show.percent == "both",
+               ifelse(!result.table.row.names[i] %in% num.missing.row.header.name | !show.missing,
+                      "<i><br>&nbsp;&nbsp;&nbsp;&nbsp;row%<br>&nbsp;&nbsp;&nbsp;&nbsp;col%</i>", ""),
                ""),
-        "</th>",
-        sep=""
-      )
+        "</th>")
     }	 
     
-    result.table.html <- paste(
+    result.table.html <- paste0(
       result.table.html,
-      "<td>",paste(
-	    gsub(kLocalConstantRowColPercentBeginFlag,"<br><i>",gsub(kLocalConstantRowColPercentEndFlag,"</i>",gsub(kLocalConstantRowColPercentSepFlag,"<br>",result.table[i,]))),
-		collapse="</td><td>"
-      ),"</td>",
+      "<td>", paste(
+        gsub(kLocalConstantRowColPercentBeginFlag, "<br><i>",
+             gsub(kLocalConstantRowColPercentEndFlag, "</i>",
+                  gsub(kLocalConstantRowColPercentSepFlag, "<br>", result.table[i, ]))),
+        collapse = "</td><td>"
+      ), "</td>",
       ifelse(
-        (var.header.row & do.stats & var.count>0) | i==1, 
-        ifelse(i==1,
+        (var.header.row & do.stats & var.count > 0) | i == 1, 
+        ifelse(i == 1,
                "<td></td>",
-               paste(
+               paste0(
                  "<td rowspan=",
                  ifelse(
                    is.var.continuous[var.count],
-                   ifelse(show.missing,1+sum(!is.na(missing.codes.highlight[[var.name]])),0)+4,
-                   ifelse(show.missing,1+sum(!is.na(missing.codes.highlight[[var.name]])),0)+1+as.numeric(ifelse(
-                     is.factor(input.d.no.missing[,var.name]),
-                     length(names(table(droplevels(input.d.no.missing.var.only[!is.na(input.d.no.missing.var.only[,var.name]) & !input.d.no.missing.var.only[,var.name]%in%c(missing.codes,missing.codes.highlight[[var.name]]),var.name])))),
-                     length(names(table(           input.d.no.missing.var.only[!is.na(input.d.no.missing.var.only[,var.name]) & !input.d.no.missing.var.only[,var.name]%in%c(missing.codes,missing.codes.highlight[[var.name]]),var.name] )))
+                   ifelse(show.missing, 1 + sum(!is.na(missing.codes.highlight[[var.name]])), 0) + 4,
+                   ifelse(show.missing, 1 + sum(!is.na(missing.codes.highlight[[var.name]])), 0) + 1 + as.numeric(ifelse(
+                     is.factor(input.d.no.missing[, var.name]),
+                     length(names(table(droplevels(input.d.no.missing.var.only[!is.na(input.d.no.missing.var.only[, var.name]) &
+                                                                                 !input.d.no.missing.var.only[, var.name] %in%
+                                                                                 c(missing.codes,missing.codes.highlight[[var.name]]), var.name])))),
+                     length(names(table(input.d.no.missing.var.only[!is.na(input.d.no.missing.var.only[, var.name]) &
+                                                                      !input.d.no.missing.var.only[, var.name] %in%
+                                                                      c(missing.codes, missing.codes.highlight[[var.name]]), var.name])))
                    ))
                  ),
-                 ">",gsub(kLocalConstantNewLineFlag,"<br>",gsub(kLocalConstantStatTestBeginFlag,"<br>",stat.tests.results[var.count])),"</td>",
-                 sep=""
-               )
+                 ">", gsub(kLocalConstantNewLineFlag, "<br>",
+                           gsub(kLocalConstantStatTestBeginFlag, "<br>",
+                                stat.tests.results[var.count])), "</td>")
         ),
         ""
       ),
-      "</tr>",sep="")
+      "</tr>")
   }
   
-  result.table.html <- paste(result.table.html,"</table>",sep="")
+  result.table.html <- paste0(result.table.html, "</table>")
   ### end of generate html table ###
   ##################################  
   options("table_counter" = options()$table_counter - 1)
@@ -519,23 +517,25 @@ if (show.missing | is.var.continuous[i]&show.missing.continuous) {
   var.count <- 1
   for (i in 1:nrow(result.table)) {
     var.header.row <- FALSE
-    if ( i==1 | sum(result.table[i,]=="",na.rm=TRUE)>1) {
+    if (i == 1 | sum(result.table[i, ] == "", na.rm = TRUE) > 1) {
       # this must be the start of a first category since row contains >1 empty cells (there will be 1 empty cell for any var with no stats test)
       var.header.row <- TRUE
-      rownames(result.table.bamboo)[i] <- paste("**",rownames(result.table)[i],"**",sep="") # make it bold
-      if (i>1) {
+      rownames(result.table.bamboo)[i] <- paste0("**", rownames(result.table)[i], "**") # make it bold
+      if (i > 1) {
         if (do.stats) {
           result.table.bamboo[i,num.col.in.result.table.bamboo] <- 
-              gsub(kLocalConstantNewLineFlag,", ",
-                  gsub(kLocalConstantStatTestBeginFlag,": ",stat.tests.results[var.count]))
+            gsub(kLocalConstantNewLineFlag, ", ",
+                 gsub(kLocalConstantStatTestBeginFlag, ": ",
+                      stat.tests.results[var.count]))
         }
-        var.count <- var.count+1
+        var.count <- var.count + 1
       }
     }
   }
-  result.table.bamboo <- pander::pandoc.table.return(result.table.bamboo, emphasize.rownames = FALSE, split.table=split.table, ...,
-                                             caption = caption)                                     
-                                           
+  result.table.bamboo <- pander::pandoc.table.return(result.table.bamboo, emphasize.rownames = FALSE,
+                                                     split.table = split.table, ...,
+                                                     caption = caption)                                     
+  
   ##############################################################################
   ### remove the indicator flags e.g. kLocalConstantRowColPercentEndFlag     ###
   ### from result.table so that it can be viewed in R by others without so   ###
@@ -546,12 +546,14 @@ if (show.missing | is.var.continuous[i]&show.missing.continuous) {
       result.table[i,j] <- gsub(
         kLocalConstantRowColPercentBeginFlag,"(",
         gsub(kLocalConstantRowColPercentEndFlag,")",
-        gsub(kLocalConstantRowColPercentSepFlag,", ",            
-            result.table[i,j])))
+             gsub(kLocalConstantRowColPercentSepFlag,", ",            
+                  result.table[i,j])))
     }
   }
   for (i in 1:length(stat.tests.results)) {
-    stat.tests.results[i] <- gsub(kLocalConstantNewLineFlag,", ",gsub(kLocalConstantStatTestBeginFlag,": ",stat.tests.results[i]))
+    stat.tests.results[i] <- gsub(kLocalConstantNewLineFlag, ", ",
+                                  gsub(kLocalConstantStatTestBeginFlag, ": ",
+                                       stat.tests.results[i]))
   }
   
   return(list("result.table" = result.table,
