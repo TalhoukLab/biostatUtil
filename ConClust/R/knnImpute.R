@@ -1,5 +1,5 @@
 #' Function to any missing clustering (due to resampling using K nearest neighbour)
-#' @param res is a vector representing a column of the output from ConClust or ConClustPlus
+#' @param res is a vector representing a column of the output from ConClust
 #' @param tdat is the data matrix with samples are rows and genes as columns
 #' @param seed set random seed for reproducibility
 #' @return results matrix with missing values filled in except when fewer than 3 out 5 nearest neighbours are in agreement
