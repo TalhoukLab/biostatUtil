@@ -6,7 +6,7 @@
 #' @export
 setupKnitr <- function(fw = 8, fh = 6) {
   # Don't set knitr options outside knitr
-  if ("package:knitr" %in% search()){
+  if ("package:knitr" %in% search()) {
     # Set some basic options. You usually do not want your code, messages, warnings etc. to show in your actual manuscript
     knitr::opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE, dpi = 96,
                           fig.width = fw, fig.height = fh, dev = "png",
@@ -95,4 +95,3 @@ setupKnitr <- function(fw = 8, fh = 6) {
     as.numeric(options("figure_counter"))))
   pander::panderOptions('table.style', 'rmarkdown')
 }
-          

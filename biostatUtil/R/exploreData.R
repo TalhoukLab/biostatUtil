@@ -23,7 +23,7 @@ exploreData <- function(datmat){
     colnames(mat) <- c("Freq", "%")
     rownames(mat)[is.na(rownames(mat))] <- "Missing"
     tmat <- rbind(mat, apply(mat[, 1:2], 2, sum))
-    PerformanceAnalytics::textplot(tmat, wrap = F)
+    PerformanceAnalytics::textplot(tmat, wrap = FALSE)
   }
   
   numvars <- colnames(fd)[num.ind]

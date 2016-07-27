@@ -38,10 +38,10 @@ For objects of class \code{coxphf}, the calculation of the number of events used
 in the fit is slightly different.
 }
 \examples{
-test1 <- list(time=c(4,3,1,1,2,2,3), 
-status=c(1,1,1,0,1,1,0), 
-x=c(0,2,1,1,1,0,0), 
-sex=c(0,0,0,0,1,1,1)) 
+test1 <- list(time = c(4, 3, 1, 1, 2, 2, 3), 
+status = c(1, 1, 1, 0, 1, 1, 0), 
+x = c(0, 2, 1, 1, 1, 0, 0), 
+sex = c(0, 0, 0, 0, 1, 1, 1)) 
 
 # Stratified
 mod1 <- coxph(Surv(time, status) ~ x + strata(sex), test1) 

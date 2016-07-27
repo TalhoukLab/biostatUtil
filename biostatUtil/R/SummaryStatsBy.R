@@ -165,7 +165,7 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
       }
       if ("missing" %in% stats) {
         miss <- num.values.tot[, grep("\\.missing", names(num.values.tot),
-                                      value = T)]
+                                      value = TRUE)]
       } else {
         miss <- data.frame(row.names = 1:nrow(facs))
       }
@@ -294,7 +294,7 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
   format <- match.arg(format)
   return(switch(format,
                 pandoc = pander::pandoc.table.return(
-                  fin, emphasize.rownames = F),
+                  fin, emphasize.rownames = FALSE),
                 html = htmlTable::htmlTable(fin.html),
                 long = final.values.long))
 }

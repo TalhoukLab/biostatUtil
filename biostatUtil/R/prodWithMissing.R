@@ -21,5 +21,5 @@ prodWithMissing <- function(x, missing.value = -1, return.missing.value = -1) {
 	if (sum(x.missing) == length(x) | sum(is.na(x)) == length(x))
 		return(return.missing.value)
 	
-	return (prod(as.numeric(x[!x.missing]), na.rm = TRUE))
+	return(prod(as.numeric(x[!x.missing]), na.rm = TRUE))
 }

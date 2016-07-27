@@ -46,7 +46,7 @@ doSurvTrendBarplot <- function(input.d, title, surv.yrs, surv.sts, surv.event,
   survival.trend <- cbind(survival.trend, rep("", nrow(survival.trend)))
   colnames(survival.trend)[ncol(survival.trend)] <- ""
   survival.trend.n <- c(survival.trend.n, legend.space)
-  barplot(survival.trend, width = survival.trend.n, legend.text = T,
+  barplot(survival.trend, width = survival.trend.n, legend.text = TRUE,
           args.legend = list(x = "right"), col = c("grey", "pink"),
           las = 2, main = title,
           ylab = "Percentage of cases", xlab = "Year of diagnosis",

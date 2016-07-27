@@ -5,8 +5,8 @@
 #' @export
 PCAplot <- function(by, tdat) {
   PC1 <- PC2 <- PC3 <- var.name <- NULL
-  p <- prcomp(tdat, rtx = T, scale. = T)
-  var3 <- round(((p$sdev^2 / sum(p$sdev^2))*100)[1:3], 2)
+  p <- prcomp(tdat, rtx = TRUE, scale. = TRUE)
+  var3 <- round(((p$sdev ^ 2 / sum(p$sdev ^ 2)) * 100)[1:3], 2)
   pcaX <- p$x
   scores <- pcaX[, 1:3]
   df <- data.frame(var.name = factor(by), scores)

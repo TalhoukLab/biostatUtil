@@ -115,7 +115,7 @@ plotKMDetail <- function(input.data, surv.formula, main.text, xlab.text,
     )
     if (legend.pos == "top") {
       l1 <- legend(x = (max(fit$time, na.rm = TRUE) -
-                          min(fit$time,na.rm = TRUE)) / 2, y = 0.99, # i.e. top 1% ... since survival plot always start at 100% survival
+                          min(fit$time, na.rm = TRUE)) / 2, y = 0.99, # i.e. top 1% ... since survival plot always start at 100% survival
                    legend = line.name,
                    lty = line.pattern,
                    lwd = line.width,
@@ -173,7 +173,7 @@ plotKMDetail <- function(input.data, surv.formula, main.text, xlab.text,
     tarone.ware.p.values <- tarone.ware.p.value
     tarone.ware.p.value <- round(tarone.ware.p.value, digits = round.digits.p.value)
     text(
-      x = l1$rect$w + l1$rect$left + l2$rect$w + 1.3*l3$rect$w,
+      x = l1$rect$w + l1$rect$left + l2$rect$w + 1.3 * l3$rect$w,
       y = show.single.test.pos, # position of the test statistics on plot
       paste0(
         ifelse(sum(single.test.type %in% c("logrank",   "all")) >= 1,
@@ -202,18 +202,18 @@ plotKMDetail <- function(input.data, surv.formula, main.text, xlab.text,
         # construct data
         temp.d <- input.data[input.data[, var.name] == show.test |
                                input.data[, var.name] == value.name, ]
-        if(sum(input.data[, var.name] == value.name, na.rm = TRUE) == 0) {
+        if (sum(input.data[, var.name] == value.name, na.rm = TRUE) == 0) {
           # no case in this group
           p.value <- NA 
           w.p.value <- NA
           t.p.value <- NA
         } else {
           # calculate log rank p-values
-          p.value   <- getPval(survival::survdiff(surv.formula, data = temp.d, rho = 0 ))
+          p.value   <- getPval(survival::survdiff(surv.formula, data = temp.d, rho = 0))
           log.rank.p.values    <- c(log.rank.p.values,    p.value)
           p.value   <- round(p.value,  digits = round.digits.p.value)
           
-          w.p.value <- getPval(survival::survdiff(surv.formula, data = temp.d, rho = 1 ))
+          w.p.value <- getPval(survival::survdiff(surv.formula, data = temp.d, rho = 1))
           wilcox.p.values      <- c(wilcox.p.values,      w.p.value)
           w.p.value <- round(w.p.value, digits = round.digits.p.value)
           
@@ -238,7 +238,7 @@ plotKMDetail <- function(input.data, surv.formula, main.text, xlab.text,
       ifelse("taroneware" %in% single.test.type, "Tarone-Ware ", ""))
     if (endsWith(legend.title, " / ")) {
       legend.title <- substr(legend.title, 0, nchar(legend.title) - 2)
-      }
+    }
     legend.title <- paste0(legend.title, "P-values")
     
     l4 <- legend(x = l1$rect$w + l2$rect$w + l3$rect$w, y = y.pos,#y=l1$rect$h,

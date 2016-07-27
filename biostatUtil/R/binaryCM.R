@@ -96,7 +96,7 @@ binaryCM <- function(x, y, seed = 20, num.boot = 1000,
                "\n"))
   
   table <- matrix(c(Accuracy, Sensitivity, Specificity, PPV, NPV, kappa),
-                  ncol = 3, byrow = T,
+                  ncol = 3, byrow = TRUE,
                   dimnames = list(c("Accuracy", "Sensitivity", "Specificity",
                                     "PPV", "NPV", "kappa"),
                                   c("Point Estimate", "Lower CI", "Upper CI")))

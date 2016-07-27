@@ -37,11 +37,10 @@
 #' @export
 #' @examples 
 #' # Base output
-#' library(survival)
-#' test1 <- list(time=c(4,3,1,1,2,2,3), 
-#' status=c(1,1,1,0,1,1,0), 
-#' x=c(0,2,1,1,1,0,0), 
-#' sex=c(0,0,0,0,1,1,1)) 
+#' test1 <- list(time = c(4, 3, 1, 1, 2, 2, 3), 
+#' status = c(1, 1, 1, 0, 1, 1, 0), 
+#' x = c(0, 2, 1, 1, 1, 0, 0), 
+#' sex = c(0, 0, 0, 0, 1, 1, 1))  
 #' coxph(Surv(time, status) ~ x + strata(sex), test1) 
 #' 
 #' # Pretty output
@@ -52,16 +51,16 @@ prettyCoxph <- function(input.formula, input.d, ref.grp = NULL, use.firth = 1,
   pos <- 1
   assign(".my.formula", input.formula, envir = as.environment(pos)) 
   # modify input.d if ref.grp is defined!
-  if (length(ref.grp)>0) {
+  if (length(ref.grp) > 0) {
 	  terms.in.formula <- all.vars(input.formula[[3]])
-	  for(var.name in names(ref.grp)) {
+	  for (var.name in names(ref.grp)) {
 		  if (var.name %in% terms.in.formula) {
 		    # if var.name not in formula, just silently ignore it
-		    input.d[,var.name] <- relevel(input.d[,var.name],ref=ref.grp[var.name])
+		    input.d[, var.name] <- relevel(input.d[, var.name], ref = ref.grp[var.name])
 		  }
  	  }
   }	
-	
+  
   assign(".my.data", input.d, envir = as.environment(pos))
   ok.to.use.firth <- ifelse(use.firth == -1, TRUE, FALSE)
   if (use.firth < 1 & use.firth > -1) {

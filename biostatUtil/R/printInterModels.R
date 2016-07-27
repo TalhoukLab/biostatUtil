@@ -6,7 +6,7 @@
 #' @return an HTML formated table showing different models tested for interactions
 #' @author Aline Talhouk
 #' @export
-printInterModels <- function(mod1, mod2, mod3, Capt){
+printInterModels <- function(mod1, mod2, mod3, Capt) {
   vars <- rbind(mod1, mod2, mod3)
   cgroup <- c("Coefficients", "HR and [95% CI]")
   n.cgroup <- c(4, 3)

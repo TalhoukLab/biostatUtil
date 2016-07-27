@@ -84,8 +84,8 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
   m <- max(nchar(ystratalabs))
   times <- seq(0, max(sfit$time), by = timeby)
   if (!is.null(cox.ref.grp)) {
-	  # very ugly ... hope this will work for most cases!
-	  names(cox.ref.grp) <- strsplit(names(sfit$strata)[1],"=")[[1]][1]
+    # very ugly ... hope this will work for most cases!
+    names(cox.ref.grp) <- strsplit(names(sfit$strata)[1],"=")[[1]][1]
   }
   
   .df <- data.frame(                      # data to be used in the survival plot
@@ -110,7 +110,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
   colScale <- scale_colour_manual(values = shading.colors)
   colFill <- scale_fill_manual(values = shading.colors)
   if (is.null(line.pattern) | length(line.pattern) == 1) {
-	  line.pattern <- rep(1,length(ystratalabs))
+    line.pattern <- rep(1,length(ystratalabs))
   }
   names(line.pattern) <- ystratalabs
   lineType <- scale_linetype_manual(values = line.pattern)
@@ -130,18 +130,18 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                                      ifelse(m < 10, 1.5, 2.5)), "lines")) +
     ggtitle(main)
   if (legend == TRUE)  # Legend----
-    p <- p + theme(legend.position = legend.xy[c("x","y")]) +
-      theme(legend.key = element_rect(colour = NA)) +
-      theme(legend.title = element_blank()) +
-	  theme(legend.direction = "horizontal")
+  p <- p + theme(legend.position = legend.xy[c("x","y")]) +
+    theme(legend.key = element_rect(colour = NA)) +
+    theme(legend.title = element_blank()) +
+    theme(legend.direction = "horizontal")
   else
     p <- p + theme(legend.position = "none")
   if (CI == TRUE)  # Confidence Bands----  
-    p <- p + geom_ribbon(data = .df, aes(ymin = lower, ymax = upper),
-                         alpha = 0.05, linetype = 0) 
+  p <- p + geom_ribbon(data = .df, aes(ymin = lower, ymax = upper),
+                       alpha = 0.05, linetype = 0) 
   if (marks == TRUE)  # Censor Marks----
-    p <- p + geom_point(data = subset(.df, n.censor >= 1), 
-                        aes(x = time, y = surv), shape = "/", size = 4)
+  p <- p + geom_point(data = subset(.df, n.censor >= 1), 
+                      aes(x = time, y = surv), shape = "/", size = 4)
   ## Create a blank plot for place-holding
   blank.pic <- ggplot(.df, aes(time, surv)) + geom_blank() + theme_bw() +
     theme(axis.text.x = element_blank(), axis.text.y = element_blank(),
@@ -153,12 +153,12 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
     if (pval) {
       sdiff <- survdiff(eval(sfit$call$formula), data = eval(sfit$call$data))
       pval <- pchisq(sdiff$chisq,length(sdiff$n) - 1, lower.tail = FALSE)
-      pvaltxt <- ifelse(pval < min.p.value, paste("Log Rank p <",format(min.p.value,scientific=FALSE)),
+      pvaltxt <- ifelse(pval < min.p.value, paste("Log Rank p <", format(min.p.value, scientific = FALSE)),
                         paste("Log Rank p =", signif(pval, digits)))
       if (HR) {
         pretty.coxph.obj <- prettyCoxph(eval(sfit$call$formula),
                                         input.d = eval(sfit$call$data),
-										ref.grp = cox.ref.grp,
+                                        ref.grp = cox.ref.grp,
                                         use.firth = use.firth)
         if (pretty.coxph.obj$used.firth) {
           coxm <- pretty.coxph.obj$fit.firth
@@ -168,10 +168,10 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
           HRtxts <- Xunivcoxph(coxm, digits = digits)
         }
         show.ref.group <- length(HRtxts) > 1
-		cox.strata.labs <- ystratalabs
-		if (!is.null(cox.ref.grp)) {
-			cox.strata.labs <- c(cox.ref.grp,ystratalabs[ystratalabs != cox.ref.grp])
-		}
+        cox.strata.labs <- ystratalabs
+        if (!is.null(cox.ref.grp)) {
+          cox.strata.labs <- c(cox.ref.grp,ystratalabs[ystratalabs != cox.ref.grp])
+        }
         for (i in 1:length(HRtxts)) {
           HRtxt <- HRtxts[i]
           if (show.ref.group) {
@@ -190,12 +190,12 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
     if (pval) {
       sdiff <- survdiff(eval(sfit2$call$formula), data = eval(sfit2$call$data))
       pval <- pchisq(sdiff$chisq, length(sdiff$n) - 1, lower.tail = FALSE)
-      pvaltxt <- ifelse(pval < min.p.value, paste("Log Rank p <",format(min.p.value,scientific=FALSE)),
+      pvaltxt <- ifelse(pval < min.p.value, paste("Log Rank p <", format(min.p.value, scientific = FALSE)),
                         paste("Log Rank p =", signif(pval, digits)))
       if (HR) {
         pretty.coxph.obj <- prettyCoxph(eval(sfit2$call$formula),
                                         input.d = eval(sfit2$call$data),
-										ref.grp = cox.ref.grp,
+                                        ref.grp = cox.ref.grp,
                                         use.firth = use.firth)
         if (pretty.coxph.obj$used.firth) {
           coxm <- pretty.coxph.obj$fit.firth
@@ -205,15 +205,15 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
           HRtxts <- Xunivcoxph(coxm, digits = digits)
         }
         show.ref.group <- length(HRtxts) > 1
-		cox.strata.labs <- ystratalabs
-		if (!is.null(cox.ref.grp)) {
-			cox.strata.labs <- c(cox.ref.grp,ystratalabs[ystratalabs != cox.ref.grp])
-		}
+        cox.strata.labs <- ystratalabs
+        if (!is.null(cox.ref.grp)) {
+          cox.strata.labs <- c(cox.ref.grp,ystratalabs[ystratalabs != cox.ref.grp])
+        }
         for (i in 1:length(HRtxts)) {
           HRtxt <- HRtxts[i]
           if (show.ref.group) {
             HRtxt <- paste0(HRtxt, " ~ ", cox.strata.labs[i + 1],
-                           " vs. ", cox.strata.labs[1])
+                            " vs. ", cox.strata.labs[1])
           }
           p <- p + annotate("text", x = 0.2 * max(sfit2$time), hjust = 0,
                             y = 0.01 + line.y.increment * i, label = HRtxt,
@@ -254,13 +254,13 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
             axis.text.x = element_blank(),
             axis.ticks = element_blank(),
             axis.text.y = element_text(face = "bold",
-				# want to print at-risk numbers same order as appears in HR, 
-				# therefore, do not rev the levels					
-				color = shading.colors[1:length(ystratalabs)],#color = rev(shading.colors[1:length(ystratalabs)]),
-				hjust = 1),
-				legend.position = "none",
-				plot.margin = grid::unit(
-				  c(-1.5, 1, 0.1, ifelse(m < 10, 2.5, 3.5) - 0.28 * m), "lines")) +
+                                       # want to print at-risk numbers same order as appears in HR, 
+                                       # therefore, do not rev the levels					
+                                       color = shading.colors[1:length(ystratalabs)],#color = rev(shading.colors[1:length(ystratalabs)]),
+                                       hjust = 1),
+            legend.position = "none",
+            plot.margin = grid::unit(
+              c(-1.5, 1, 0.1, ifelse(m < 10, 2.5, 3.5) - 0.28 * m), "lines")) +
       xlab(NULL) + ylab(NULL)
     if (returns)
       gridExtra::grid.arrange(p, blank.pic, data.table,

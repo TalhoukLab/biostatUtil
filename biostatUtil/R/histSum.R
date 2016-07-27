@@ -10,12 +10,12 @@
 #' @importFrom stats sd IQR
 #' @export
 histSum <- function(var, xlab = "", txt = "", sub = "", digit = 1) {
-  h <- hist(var, main = paste("Mean", round(mean(var, na.rm = T), digit),
-                              "SD", round(sd(var, na.rm = T), digit),
+  h <- hist(var, main = paste("Mean", round(mean(var, na.rm = TRUE), digit),
+                              "SD", round(sd(var, na.rm = TRUE), digit),
                               "Missing", sum(is.na(var))), prob = F, xlab = xlab,
             col = "white", border = "grey", sub = sub, cex = 0.8)
-  xfit <- seq(min(var, na.rm = T), max(var, na.rm = T), length = 50)
-  yfit <- dnorm(xfit, mean = mean(var, na.rm = T), sd = sd(var, na.rm = T))
+  xfit <- seq(min(var, na.rm = TRUE), max(var, na.rm = TRUE), length = 50)
+  yfit <- dnorm(xfit, mean = mean(var, na.rm = TRUE), sd = sd(var, na.rm = TRUE))
   yfit <- yfit * diff(h$mids[1:2]) * length(var)
   lines(xfit, yfit, col = "blue", lwd = 2)
   mtext(txt, side = 3, outer = TRUE, line = -3)

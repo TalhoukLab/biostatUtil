@@ -47,9 +47,9 @@
 #' 
 #' ### Round to 2 digits
 #' binaryCM(x, y, digits = 2)
-multiClassCM <- function(x,y,seed = 20, num.boot = 1000,
+multiClassCM <- function(x, y, seed = 20, num.boot = 1000,
                          conf.level = 0.95, digits = 2,
-                         method = "wilson"){
+                         method = "wilson") {
   CM <- table(Prediction = x, Reference = y)
   CMu <- addmargins(CM)
   
@@ -99,7 +99,7 @@ multiClassCM <- function(x,y,seed = 20, num.boot = 1000,
   DetectionPrev <- round(Hmisc::binconf(rwm, N, alpha = 1 - conf.level,
                                         method = method), digits)
   
-  BA <- (sens + spec)/2
+  BA <- (sens + spec) / 2
   
   colnames(Sensitivity)[2:3] <- colnames(Specificity)[2:3] <-
     colnames(PPV)[2:3] <- colnames(NPV)[2:3] <- colnames(Prevalence)[2:3] <-

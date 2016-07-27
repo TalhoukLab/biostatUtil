@@ -34,13 +34,15 @@ doCohortCharacteristics(input.d, marker.name, marker.description, var.names,
 \item{show.missing}{an indicator to whether to show missing values}
 
 \item{show.missing.continuous}{if set to \code{FALSE} and \code{show.missing == FALSE},
-will not show the number of missing cases for continuous variables. Otherwise, it shows the number of missing for continuous variables even if show.missing==FALSE.}
+will not show the number of missing cases for continuous variables.
+Otherwise, it shows the number of missing for continuous variables even if \code{show.missing == FALSE}.}
 
-\item{do.droplevels}{drop categories of unobserved levels set to TRUE}
+\item{do.droplevels}{drop categories of unobserved levels set to \code{TRUE}}
 
 \item{show.percent}{defaults to "both" which shows both rows and columns other possible values: "column", "row".}
 
-\item{stat.tests}{statistical test to perform. NULL indicates do not do test for all variables, NA indicates do not do test for specified variable.
+\item{stat.tests}{statistical test to perform. \code{NULL} indicates do not do test for all variables,
+\code{NA} indicates do not do test for specified variable.
 Tests: chisq, fisher, ttest, wilcox, kendall, spearman, pearson, kruskal, confusionMarkerAsRef, confusionVarAsRef}
 
 \item{stat.test.column.header}{The name to show on the header defaults to "association/correlation test"}
@@ -49,9 +51,9 @@ Tests: chisq, fisher, ttest, wilcox, kendall, spearman, pearson, kruskal, confus
 
 \item{num.boot}{the number of bootstrap samples for any bootstrap method that may be used}
 
-\item{missing.codes.highlight}{default to NULL this indicates whether we wanted the missing values broken down down or lumped together.}
+\item{missing.codes.highlight}{default to \code{NULL} this indicates whether we wanted the missing values broken down down or lumped together.}
 
-\item{missing.codes}{a vector to indicate how missing values are coded, default is c("N/A","","Unk")}
+\item{missing.codes}{a vector to indicate how missing values are coded, default is \code{c("N/A", "", "Unk")}}
 
 \item{decimal}{number of decimal places to show for aggregate numbers such as proportions or averages; default to 0}
 
@@ -65,9 +67,9 @@ Tests: chisq, fisher, ttest, wilcox, kendall, spearman, pearson, kruskal, confus
 
 \item{css.class.name.even}{Used to set the row colour for even rows}
 
-\item{custom.marker.labels}{labels of marker to show; default NULL means using existing value label of the marker}
+\item{custom.marker.labels}{labels of marker to show; default \code{NULL} means using existing value label of the marker}
 
-\item{custom.total.label}{label of the "Total" column; default NULL means show "Total"}
+\item{custom.total.label}{label of the "Total" column; default \code{NULL} means show "Total"}
 
 \item{split.table}{number of chars per row before table is split.}
 

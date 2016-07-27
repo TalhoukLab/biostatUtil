@@ -20,6 +20,6 @@ barplotSum <- function(tx, ttl = "") {
   }
   wr.lap <- wrap.labels(names(tx), 35)
   barplot(prop.table(tx) * 100, border = "white",
-          horiz = T, las = 2,names.arg = wr.lap, offset = 0,
+          horiz = TRUE, las = 2,names.arg = wr.lap, offset = 0,
           main = ttl, xlab = "%", cex.names = 0.5, col = "lightblue")
 }

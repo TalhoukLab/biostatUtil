@@ -45,6 +45,6 @@ doBoxplotAmongSubtypes <- function(input.d, data.description,
           main = paste0(data.description, "\n", test.name, " test P=",
                         format(p.value, digits = digits)),
           outline = FALSE, ...)
-  stripchart(jitter(biomarker) ~ subtype, vertical = T, method = "jitter",
-             pch = pch, add = T, jitter = jitter)
+  stripchart(jitter(biomarker) ~ subtype, vertical = TRUE, method = "jitter",
+             pch = pch, add = TRUE, jitter = jitter)
 } 

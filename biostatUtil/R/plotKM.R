@@ -39,7 +39,7 @@ plotKM <- function(input.d, input.formula,
   
   # calculate "obs.survyrs"-yrs survival
   summary.surv.fit <- summary(survfit(input.formula, data = input.d),
-                              time = obs.survyrs, extend = T)
+                              time = obs.survyrs, extend = TRUE)
   
   n.cases <- table(input.d[, deparse(input.formula[[3]])]) # number of cases in each group variable = deparse(input.formula[[3]])
   decrement.count <- 0 # the number we need to take away from "i" because if n.cases[i]==0, length(summary.surv.fit) < length(line.name)
