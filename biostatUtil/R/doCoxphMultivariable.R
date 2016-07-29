@@ -58,28 +58,21 @@ doCoxphMultivariable <- function(
   caption = NA, html.table.border = 0, banded.rows = FALSE,
   css.class.name.odd = "odd", css.class.name.even = "even",
   split.table = 300, ...) {
-  
+  . <- NULL
   kLocalConstantHrSepFlag <- "kLocalConstantHrSepFlag" # separates the hazard ratio estimates
   col.th.style <- COL.TH.STYLE
   row.th.style <- ROW.TH.STYLE
   row.td.style.for.multi.cox <- ROW.TD.STYLE.FOR.MULTI.COX
   row.td.style.for.multi.cox.align.top <- ROW.TD.STYLE.FOR.MULTI.COX.ALIGN.TOP
-  for (var.name in var.names) {
-    if (is.factor(input.d[, var.name])) {
-      input.d[, var.name] <- droplevels(input.d[, var.name])
-    }
-  }
   
+  input.d <- droplevels(input.d)
   num.surv.endpoints <- length(var.names.surv.time)
+  assertthat::assert_that(num.surv.endpoints == length(var.names.surv.status),
+                          num.surv.endpoints == length(event.codes.surv),
+                          num.surv.endpoints == length(surv.descriptions))
   
-  # qc: make sure length of var.names.surv.time=var.names.surv.status=event.codes.surv=surv.descriptions
-  if (length(var.names.surv.time) != length(var.names.surv.status) | 
-      length(var.names.surv.time) != length(event.codes.surv) |
-      length(var.names.surv.time) != length(surv.descriptions)) {
-    cat("ERROR IN do.coxph.generic!!!! input error ... please double check\n")
-  }
-  for (i in 1:num.surv.endpoints) {
-    input.d[,var.names.surv.time[i]] <- as.numeric(input.d[, var.names.surv.time[i]])
+  for (var in var.names.surv.time) {
+    input.d[, var] <- as.numeric(input.d[, var])
   }
   
   if (is.null(var.ref.groups)) {
@@ -88,23 +81,18 @@ doCoxphMultivariable <- function(
   result.table <- c()
   for (i in 1:length(var.names)) {
     var.name <- var.names[i]
-    input.d <- input.d[!sapply(input.d[, var.name], as.character) %in% missing.codes, ]
-    input.d <- input.d[!is.na(input.d[, var.name]), ]
-    # automatically set ref.group to lowest group if not specified
-    if (is.factor(input.d[, var.name])) {
-      input.d[, var.name] <- droplevels(input.d[, var.name])
-      if (is.na(var.ref.groups[i])) {
-        var.ref.groups[i] <- names(table(input.d[, var.name]))[1]
-      }
+    input.d <- input.d %>% 
+      filter(!is.na(.[, var.name]) &
+               !(as.character(.[, var.name]) %in% missing.codes)) # remove any cases with NA's or missing values
+    if (is.factor(input.d[, var.name]) & is.na(var.ref.groups[i])) {     # automatically set ref.group to lowest group if not specified
+      var.ref.groups[i] <- names(table(input.d[, var.name]))[1]
     }
     if (is.na(var.ref.groups[i])) {
       input.d[, var.name] <- as.numeric(input.d[, var.name]) # numeric
       var.levels <- c(0, 1) # dummy levels ... used to build result.table
     } else {
       # assume ref group exist!!!
-      var.levels <- names(table(input.d[, var.name]))
-      var.levels <- c(var.ref.groups[i], var.levels[-which(var.levels == var.ref.groups[i])])
-      input.d[, var.name] <- factor(input.d[, var.name], levels = var.levels)
+      input.d[, var.name] <- relevel(input.d[, var.name], var.ref.groups[i])
     }
   }
   
@@ -175,17 +163,14 @@ doCoxphMultivariable <- function(
   
   result.table.col.names <- c("# of events / n", "Hazard Ratio (95% CI)",
                               paste0(ifelse(stat.test == "logtest", "LRT ", ""), "P-value"))
-  colnames(result.table) <- result.table.col.names
-  result.table.row.names <- c()
-  for (i in 1:num.surv.endpoints) {
-    result.table.row.names <- c(result.table.row.names, paste0(var.names, paste0("-", surv.descriptions[i])))
-  }
-  rownames(result.table) <- result.table.row.names
+  result.table <- result.table %>% 
+    set_colnames(result.table.col.names) %>% 
+    set_rownames(paste(var.names, rep(surv.descriptions, each = length(var.names)), sep = "-"))
   
   ### generate html table ###
   result.table.html <- paste0("<table border=", html.table.border, ">",
-                              ifelse(is.na(caption), "", paste0("<caption style='", TABLE.CAPTION.STYLE, "'>", caption, "</caption>")))
-  result.table.html <- paste0(result.table.html, "<tr><th style='", col.th.style, "' colspan=2></th><th style='", col.th.style, "'>",
+                              ifelse(is.na(caption), "", paste0("<caption style='", TABLE.CAPTION.STYLE, "'>", caption, "</caption>")),
+                              "<tr><th style='", col.th.style, "' colspan=2></th><th style='", col.th.style, "'>",
                               paste(result.table.col.names, collapse = paste0("</th><th style='", col.th.style, "'>")), "</th></tr>")
   # print values
   i <- 1
@@ -203,13 +188,11 @@ doCoxphMultivariable <- function(
         "<th style='", row.td.style.for.multi.cox, "'>",
         var.descriptions[j],
         #"</th><td style='",row.td.style.for.multi.cox,"'>",paste(result.table[i,],collapse=paste("</td><td style='",row.td.style.for.multi.cox,"'>"),sep=""),"</td></tr>",
-        ifelse(
-          is.first.row,
-          paste0(
-            "</th><td style='", row.td.style.for.multi.cox.align.top, "' rowspan=", num.row.per.surv.type, ">",
-            result.table[i, 1]),
-          ""
-        ),
+        ifelse(is.first.row,
+               paste0("</th><td style='", row.td.style.for.multi.cox.align.top,
+                      "' rowspan=", num.row.per.surv.type, ">",
+                      result.table[i, 1]),
+               ""),
         "</td><td style='", row.td.style.for.multi.cox, "'>",
         paste0(gsub(kLocalConstantHrSepFlag, "<br>", result.table[i, 2:3]),
                collapse = paste("</td><td style='", row.td.style.for.multi.cox, "'>")), "</td></tr>")
@@ -237,7 +220,9 @@ doCoxphMultivariable <- function(
           result.table.bamboo[result.table.bamboo.base.index:nrow(result.table.bamboo), ])
     }
     rownames(result.table.bamboo)[result.table.bamboo.base.index] <- paste0("**", surv.descriptions[i], "**")
-    rownames(result.table.bamboo)[result.table.bamboo.base.index + c(1:num.var)] <- var.descriptions
+    rownames(result.table.bamboo)[result.table.bamboo.base.index + c(1:num.var)] <- paste0(var.descriptions,
+                                                                                           ifelse(rep(show.var.detail, length(var.ref.groups)),
+                                                                                                  paste0(" (reference group: ", var.ref.groups, ")"), ""))
     # want to show # of events only once for each surv endpoint
     result.table.bamboo[result.table.bamboo.base.index, 1] <- result.table.bamboo[result.table.bamboo.base.index + 1, 1]
     result.table.bamboo[result.table.bamboo.base.index + c(1:num.var), 1] <- ""
