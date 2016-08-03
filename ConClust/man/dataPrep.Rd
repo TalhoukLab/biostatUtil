@@ -23,4 +23,7 @@ The \code{min.sd} argument is used to filter the feature space for only highly v
 features. Only features with a standard deviation across all samples greater than
 \code{min.sd} will be used.
 }
+\author{
+Derek Chiu
+}
 
