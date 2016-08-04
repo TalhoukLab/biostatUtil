@@ -27,40 +27,18 @@
 build_cuts <- function(x, n = c("b", "t", "qd", "qn"), var.prefix = NULL,
                        list = FALSE) {
   . <- NULL
-  n <- match.arg(n)
   ulevs <- sort(unique(x[x > min(x)]))
-  if (n == "b") {
-    cuts <- rbind(ulevs, max(x))
-  } else if (n == "t") {
-    cuts <- rbind(combn(ulevs, 2), max(x))
-  } else if (n == "qd") {
-    cuts <- rbind(combn(ulevs, 3), max(x))
-  } else if (n == "qn") {
-    cits <- rbind(combn(ulevs, 4), max(x))
-  }
+  ng <- switch(match.arg(n), b = 1, t = 2, qd = 3, qn = 4)
+  assertthat::assert_that(length(ulevs) >= ng)
+  cuts <- rbind(combn(ulevs, ng), max(x))
   cut.list <- plyr::alply(cuts, 2, Hmisc::cut2, x = x)
-  v.name <- cut.list %>% 
-    sapply(function(z) z %>% 
-             table() %>% 
-             names() %>% 
-             stringr::str_replace_all("[\\[,\\)\\]]", "") %>% 
-             sapply(function(z) {
-               y <- as.numeric(unlist(strsplit(z, "")))
-               if (length(y) > 1) {
-                 return(paste(seq(y[1], y[2] - 1), collapse = ""))
-               } else {
-                 return(y)
-               }
-             }) %>% 
-             paste(collapse = "v") %>% 
-             paste0(n, .) %>% 
-             ifelse(stringr::str_sub(., -1) == max(x), ., paste0(., max(x))) %>% 
-             ifelse(is.null(var.prefix), ., paste0(var.prefix, "_", .))
-    )
-  result <- data.frame(cut.list) %>% 
-    magrittr::set_names(v.name)
+  res <- cut.list %>% 
+    as.data.frame() %>% 
+    magrittr::set_names(sapply(cut.list, name_cuts)) %>% 
+    magrittr::set_names(ifelse(rep(is.null(var.prefix), ncol(.)), names(.),
+                               paste0(var.prefix, "_", names(.))))
   if (list)
-    return(as.list(result))
+    return(as.list(res))
   else
-    return(result)
+    return(res)
 }
