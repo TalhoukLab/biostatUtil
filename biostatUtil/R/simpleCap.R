@@ -5,11 +5,13 @@
 #' To capitalize only the first word, use \code{first.only = TRUE}.
 #' 
 #' @param x character string
-#' @param first.only logical; if \code{TRUE}, only the first word
-#' will be capitalized
+#' @param first.only logical; if \code{TRUE}, only the first word will be 
+#'   capitalized
 #' @return A character string with every word's first letter capitalized.
 #' @author Samuel Leung
-#' @references http://stackoverflow.com/questions/6364783/capitalize-the-first-letter-of-both-words-in-a-two-word-string
+#' @references
+#'   http://stackoverflow.com/questions/6364783/capitalize-the-first-letter-of-both-words-in-a-two-word-string
+#'   
 #' @export
 #' @examples 
 #' simpleCap("clear cell")

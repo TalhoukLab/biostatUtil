@@ -9,8 +9,8 @@ simpleCap(x, first.only = FALSE)
 \arguments{
 \item{x}{character string}
 
-\item{first.only}{logical; if \code{TRUE}, only the first word
-will be capitalized}
+\item{first.only}{logical; if \code{TRUE}, only the first word will be 
+capitalized}
 }
 \value{
 A character string with every word's first letter capitalized.
