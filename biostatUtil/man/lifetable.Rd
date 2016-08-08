@@ -13,20 +13,20 @@ lifetable(obj, ntimes = 3, times = round(quantile(obj$time, 1/ntimes *
 
 \item{ntimes}{number of time intervals}
 
-\item{times}{A vector of endpoints of time intervals to show life table
-calculations. By default, these are \code{ntimes} evenly spaced out
+\item{times}{A vector of endpoints of time intervals to show life table 
+calculations. By default, these are \code{ntimes} evenly spaced out 
 endpoints based on the full range of survival times.}
 
 \item{nround}{number of digits to round table values}
 
-\item{show.strata}{logical; if \code{TRUE} (default), the variable name is
-appended to the beginning of each stratum in the lifetable's \code{strata}
+\item{show.strata}{logical; if \code{TRUE} (default), the variable name is 
+appended to the beginning of each stratum in the lifetable's \code{strata} 
 column}
 
 \item{strata.name}{column name for the different strata}
 
-\item{summary}{logical; if \code{TRUE}, a case processing summary is shown
-with number of subjects, events, censored, and percent censored per
+\item{summary}{logical; if \code{TRUE}, a case processing summary is shown 
+with number of subjects, events, censored, and percent censored per 
 stratum.}
 }
 \value{
@@ -45,11 +45,11 @@ A table with the following columns:
 \item{se.hazard}{See \code{\link{lifetab}}}
 }
 \description{
-Specify vector of time endpoints and create a cohort life table for two or
+Specify vector of time endpoints and create a cohort life table for two or 
 more strata
 }
 \details{
-Essentially a wrapper around \code{lifetab} that allows the user to input a
+Essentially a wrapper around \code{lifetab} that allows the user to input a 
 \code{survfit} object instead of vectors of raw values.
 }
 \examples{

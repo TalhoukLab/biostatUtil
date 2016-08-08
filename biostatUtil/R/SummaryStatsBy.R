@@ -225,7 +225,7 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
                cbind(., lev = rep(letters[1:(nrow(.) / 2)], 2)) %>% 
                as.data.frame() %>% 
                group_by(lev) %>%
-               by(.$lev, function(x) apply(x[, -ncol(.)], 2, pandoc.pcts)) %>% 
+               by(.$lev, function(x) apply(x[, -ncol(.)], 2, pandoc_pcts)) %>% 
                do.call(rbind, .)) %>% 
       do.call(rbind, .)
     facs <- fac.values %>% 
@@ -246,7 +246,7 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
                cbind(lev = rep(letters[1:(nrow(x) / 3)], each = 3)) %>% 
                as.data.frame() %>% 
                group_by(lev) %>%
-               by(.$lev, function(x) apply(x[, -ncol(.)], 2, pandoc.pcts)) %>% 
+               by(.$lev, function(x) apply(x[, -ncol(.)], 2, pandoc_pcts)) %>% 
                do.call(rbind, .)) %>% 
       do.call(rbind, .) %>% 
       cbind(fac.values.res) %>% 
@@ -294,4 +294,15 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
                   fin, emphasize.rownames = FALSE),
                 html = htmlTable::htmlTable(fin.html),
                 long = final.values.long))
+}
+
+#' Formatting percentages for Pandoc
+#' @noRd
+pandoc_pcts <- function(char) {
+  count <- as.integer(char[1])
+  pcts <- as.numeric(char[-1]) * 100
+  if (length(char) > 2)
+    return(paste0(count, " (", pcts[1], "%, ", pcts[2], "%)"))
+  else
+    return(paste0(count, " (", pcts, "%)"))
 }
