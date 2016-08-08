@@ -1,15 +1,14 @@
 #' Name cutpoint variables
 #' 
-#' Create a name for cutpoint variables based on location of cut and number
-#' of groups.
-#'
+#' Create a name for cutpoint variables based on location of cut and number of
+#' groups.
+#' 
 #' @param cut.obj a factor variable returned by \code{cut2}
-#'
+#'   
 #' @return A character string representing the cutpoint variable name.
 #' @author Derek Chiu
-#' @importFrom utils tail
 #' @export
-#'
+#' 
 #' @examples
 #' library(Hmisc)
 #' set.seed(1108)

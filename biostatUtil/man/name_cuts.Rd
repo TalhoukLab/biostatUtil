@@ -13,8 +13,8 @@ name_cuts(cut.obj)
 A character string representing the cutpoint variable name.
 }
 \description{
-Create a name for cutpoint variables based on location of cut and number
-of groups.
+Create a name for cutpoint variables based on location of cut and number of
+groups.
 }
 \examples{
 library(Hmisc)

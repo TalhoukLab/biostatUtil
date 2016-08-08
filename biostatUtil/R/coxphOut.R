@@ -1,18 +1,18 @@
 #' Nice output from Cox regression object
 #' 
-#' Nicely formatted output from a Cox regression object,
-#' either \code{coxph} or \code{coxphf}.
+#' Nicely formatted output from a Cox regression object, either \code{coxph} or
+#' \code{coxphf}.
 #' 
-#' For objects of class \code{coxphf}, the calculation of the number of events used
-#' in the fit is slightly different.
+#' For objects of class \code{coxphf}, the calculation of the number of events
+#' used in the fit is slightly different.
 #' 
 #' @param object a model fit object returned from \code{coxph} or \code{coxphf}
-#' @param coefnames a vector of labels for the coefficient names returned by the fit.
-#' \code{NULL} by default, uses original coefficient names.
+#' @param coefnames a vector of labels for the coefficient names returned by the
+#'   fit. \code{NULL} by default, uses original coefficient names.
 #' @param conf.level confidence level for hazard ratio. Defaults to 95\%.
 #' @param digits number of digits to round to
-#' @return A matrix with a row for each coefficient, and a column for each of the following
-#' elements
+#' @return A matrix with a row for each coefficient, and a column for each of
+#'   the following elements
 #' \item{n}{the number of observations used in the fit.}
 #' \item{events}{the number of events used in the fit.}
 #' \item{coef}{log hazard ratio}
@@ -23,7 +23,6 @@
 #' \item{Lower CI Limit}{Defaults to \code{2.5 \%}}
 #' \item{Upper CI Limit}{Defaults to \code{97.5 \%}}
 #' @author Aline Talhouk, Derek Chiu
-#' @importFrom stats confint
 #' @export
 #' @examples
 #' test1 <- list(time = c(4, 3, 1, 1, 2, 2, 3), 

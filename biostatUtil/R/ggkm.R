@@ -2,13 +2,17 @@
 #' 
 #' Produce nicely annotated KM plots using ggplot.
 #' 
-#' @param sfit an object of class \code{survfit} containing one or more survival curves
-#' @param sfit2 an (optional) second object of class \code{survfit} to compare with \code{sfit}
-#' @param table logical; if \code{TRUE} (default), the numbers at risk at each time of death is
-#' shown as a table underneath the plot
+#' @param sfit an object of class \code{survfit} containing one or more survival
+#'   curves
+#' @param sfit2 an (optional) second object of class \code{survfit} to compare
+#'   with \code{sfit}
+#' @param table logical; if \code{TRUE} (default), the numbers at risk at each
+#'   time of death is shown as a table underneath the plot
 #' @param returns logical; if \code{TRUE} the plot is returned
-#' @param marks logical; if \code{TRUE} (default), censoring marks are shown on survival curves
-#' @param CI logical; if \code{TRUE} (default), confidence bands are drawn for survival curves
+#' @param marks logical; if \code{TRUE} (default), censoring marks are shown on
+#'   survival curves
+#' @param CI logical; if \code{TRUE} (default), confidence bands are drawn for
+#'   survival curves
 #' @param line.pattern linetype for survival curves
 #' @param shading.colors vector of colours for each survival curve
 #' @param main plot title
@@ -18,23 +22,32 @@
 #' @param ylims vertical limits for plot
 #' @param ystratalabs labels for the strata being compared in \code{survfit}
 #' @param ystrataname name of the strata
-#' @param cox.ref.grp indicates reference group for the variable of interest 
-#' in the cox model.  this parameter will be ignored if not applicable, e.g. for 
-#' continuous variable
-#' @param timeby length of time between consecutive time points spanning the entire range of follow-up. Defaults to 5.
-#' @param pval logical; if \code{TRUE} (default), the logrank test p-value is shown on the plot
-#' @param HR logical; if \code{TRUE} (default), the estimated hazard ratio and its 95\% confidence interval will be shown
-#' @param use.firth Firth's method for Cox regression is used if the percentage of censored cases exceeds \code{use.firth}.
-#' Setting \code{use.firth = 1} (default) means Firth is never used, and \code{use.firth = -1} means Firth is always used.
+#' @param cox.ref.grp indicates reference group for the variable of interest in
+#'   the cox model.  this parameter will be ignored if not applicable, e.g. for 
+#'   continuous variable
+#' @param timeby length of time between consecutive time points spanning the
+#'   entire range of follow-up. Defaults to 5.
+#' @param pval logical; if \code{TRUE} (default), the logrank test p-value is
+#'   shown on the plot
+#' @param HR logical; if \code{TRUE} (default), the estimated hazard ratio and
+#'   its 95\% confidence interval will be shown
+#' @param use.firth Firth's method for Cox regression is used if the percentage
+#'   of censored cases exceeds \code{use.firth}. Setting \code{use.firth = 1}
+#'   (default) means Firth is never used, and \code{use.firth = -1} means Firth
+#'   is always used.
 #' @param subs use of subsetting
-#' @param legend logical; if \code{TRUE}, the legend is overlaid on the graph (instead of on the side).
+#' @param legend logical; if \code{TRUE}, the legend is overlaid on the graph
+#'   (instead of on the side).
 #' @param legend.xy named vector specifying the x/y position of the legend
-#' @param legend.direction layout of items in legends ("horizontal" (default) or "vertical")
+#' @param legend.direction layout of items in legends ("horizontal" (default) or
+#'   "vertical")
 #' @param line.y.increment how much y should be incremented for each line
-#' @param digits number of digits to round: p-values digits=nunber of significant digits, HR digits=number of digits after decimal point NOT significant digits
-#' @param min.p.value the min. p-value below which the p-value will be shown as e.g. <0.0001, otherwise the exact p-value will be shown
+#' @param digits number of digits to round: p-values digits=nunber of
+#'   significant digits, HR digits=number of digits after decimal point NOT
+#'   significant digits
+#' @param min.p.value the min. p-value below which the p-value will be shown as
+#'   e.g. <0.0001, otherwise the exact p-value will be shown
 #' @param ... additional arguments to other methods
-#' @import ggplot2
 #' @export
 ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                  marks = TRUE, CI = TRUE,

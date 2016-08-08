@@ -1,7 +1,7 @@
 #' Calculates ratio with specifying missing values
 #' 
-#' Returns the ratio of input vectors: x/y with the ability to specify
-#' which values are missing
+#' Returns the ratio of input vectors: x/y with the ability to specify which
+#' values are missing
 #' @param x input vector
 #' @param y input vector
 #' @param missing.value missing values in \code{x}

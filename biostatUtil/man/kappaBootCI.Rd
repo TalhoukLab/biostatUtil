@@ -26,11 +26,12 @@ kappaBootCI(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
 bootstraped confidence interval for Cohen's kappa.
 }
 \description{
-Function to compute cohen's kappa with binary data with a bootstrap confidence interval
+Function to compute cohen's kappa with binary data with a bootstrap
+confidence interval
 }
 \details{
-Cohen's kappa measures the amount of agreement between 2 raters of a binary variable.
-The bootstrap confidence interval is adjusted (BCa).
+Cohen's kappa measures the amount of agreement between 2 raters of a binary
+variable. The bootstrap confidence interval is adjusted (BCa).
 }
 \examples{
 a <- rbinom(n = 100, size = 1, prob = 0.3)

@@ -1,9 +1,10 @@
 #' Bootstrapped confidence interval for kappa statistic.
 #' 
-#' Function to compute cohen's kappa with binary data with a bootstrap confidence interval
+#' Function to compute cohen's kappa with binary data with a bootstrap
+#' confidence interval
 #' 
-#' Cohen's kappa measures the amount of agreement between 2 raters of a binary variable.
-#' The bootstrap confidence interval is adjusted (BCa).
+#' Cohen's kappa measures the amount of agreement between 2 raters of a binary
+#' variable. The bootstrap confidence interval is adjusted (BCa).
 #' 
 #' @param x vector of binary scores from first rater
 #' @param y vector of binary scores from second rater

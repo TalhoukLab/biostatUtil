@@ -2,16 +2,18 @@
 #' 
 #' Prints a date into a pretty format.
 #' 
-#' Given the day, month, and year of a date, returns the date in a specific format. 
-#' The order and separating string can be modified using \code{date.format} and \code{sep} respectively.
-#' Take note the order of the arguments: day, month, and year. Only accepts "MM.DD.YYYY", "MMM.DD.YYYY",
+#' Given the day, month, and year of a date, returns the date in a specific 
+#' format. The order and separating string can be modified using 
+#' \code{date.format} and \code{sep} respectively. Take note the order of the 
+#' arguments: day, month, and year. Only accepts "MM.DD.YYYY", "MMM.DD.YYYY", 
 #' "DD.MM.YYYY", "DD.MMM.YYYY", "YYYY.MM.DD", "YYYY.MMM.DD".
 #' 
 #' @param d day of the month (1-31)
 #' @param m month of the year (1-12)
 #' @param y year of date
 #' @param date.format how to format the date. Defaults to "month/day/year".
-#' @param sep string used to separate \code{d}, \code{m}, and \code{y}. Defaults to "/".
+#' @param sep string used to separate \code{d}, \code{m}, and \code{y}. Defaults
+#'   to "/".
 #' @return A character string of a formatted date.
 #' @author Samuel Leung, Derek Chiu
 #' @export

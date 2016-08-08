@@ -33,7 +33,6 @@
 #' \item{used.firth}{logical; if \code{TRUE}, Firth's correction was applied
 #' using \code{coxphf}}
 #' @author Samuel Leung, Derek Chiu
-#' @importFrom stats relevel
 #' @export
 #' @examples 
 #' # Base output

@@ -3,7 +3,8 @@
 #' @param mod2 model 2
 #' @param mod3 model 3
 #' @param Capt caption for the table
-#' @return an HTML formated table showing different models tested for interactions
+#' @return an HTML formated table showing different models tested for
+#'   interactions
 #' @author Aline Talhouk
 #' @export
 printInterModels <- function(mod1, mod2, mod3, Capt) {

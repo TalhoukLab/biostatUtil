@@ -1,12 +1,12 @@
 #' Confusion matrix summaries
 #' 
-#' Calculates summaries from cross-tabulated reference and prediction labels
-#' for a multi-class variable.
+#' Calculates summaries from cross-tabulated reference and prediction labels for
+#' a multi-class variable.
 #' 
-#' Given two multi-class variables summarized in a confusion matrix, this
-#' function provides performance summaries. It provides overall accuracy with confidence intervals, as well as per class accuracy, sensitivity,
-#' specificity, positive predictive value (PPV), negative predictive value
-#' (NPV)
+#' Given two multi-class variables summarized in a confusion matrix, this 
+#' function provides performance summaries. It provides overall accuracy with 
+#' confidence intervals, as well as per class accuracy, sensitivity, 
+#' specificity, positive predictive value (PPV), negative predictive value (NPV)
 #' 
 #' @param x a vector of predicted classes
 #' @param y a vector of reference classes
@@ -14,10 +14,10 @@
 #' @param num.boot number of times to bootstrap. Defaults to 1000.
 #' @param conf.level confidence level. Defaults to 95\%.
 #' @param digits number of digits to round summaries to
-#' @param method method for obtaining confidence intervals for binomial
-#' probabilities. See \code{Hmisc::binconf} for details.
-#' @return A confusion matrix for the predicted and reference classes. Then
-#' the estimated statistics along with bootstrapped confidence intervals. A
+#' @param method method for obtaining confidence intervals for binomial 
+#'   probabilities. See \code{Hmisc::binconf} for details.
+#' @return A confusion matrix for the predicted and reference classes. Then the 
+#'   estimated statistics along with bootstrapped confidence intervals. A
 #' list with the following elements
 #' \item{Accuracy}{Accuracy point estimate, lower bound and upper bound for
 #' bootstrapped CI}
@@ -32,7 +32,6 @@
 #' \item{kappa}{kappa point estimate, lower bound and upper bound for
 #' bootstrapped CI}
 #' @author Aline Talhouk, Derek Chiu
-#' @importFrom stats addmargins
 #' @export
 #' @examples
 #' ### 95% CI from 1000 bootstraped samples

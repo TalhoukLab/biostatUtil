@@ -10,12 +10,12 @@ isFirstLetterUpperCase(x)
 \item{x}{character string}
 }
 \value{
-logical; if \code{TRUE}, the first letter of the input
-string is uppercase.
+logical; if \code{TRUE}, the first letter of the input string is
+  uppercase.
 }
 \description{
-Returns a logical indicating whether the first letter
-of a character string is uppercase.
+Returns a logical indicating whether the first letter of a character string
+is uppercase.
 }
 \details{
 If the input is an empty string, the function returns \code{TRUE}.

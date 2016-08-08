@@ -1,24 +1,24 @@
 #' Generate a Frequency Table
 #' 
 #' A frequency table emulating the SPSS FREQ output is generated.
-#'
+#' 
 #' @param x vector of values to show frequencies for
 #' @param levels (optional) vector for order of levels in \code{x}
 #' @param missing vector of levels for which we consider missing and don't count
-#' in the valid percentage
-#' @param description (optional) description for each level of \code{x}.
-#' Must be same length and order as \code{levels}
+#'   in the valid percentage
+#' @param description (optional) description for each level of \code{x}. Must be
+#'   same length and order as \code{levels}
 #' @param round number of digits to round percentages to
 #' @param plot logical; if \code{TRUE}, a barplot is produced.
 #'
 #' @return A data frame with the following columns
 #' \item{Class}{Tells you which scores are valid and which are missing. Not shown if
-#' there are no missing values.}
+#'   there are no missing values.}
 #' \item{Score}{Different levels}
 #' \item{Frequency}{Count for each score}
 #' \item{Percent}{Percent of Frequency out of the grand total}
 #' \item{Valid Percent}{Percent of Frequency out of the Valid scores. Not applicable if
-#' there are no missing values.}
+#'   there are no missing values.}
 #' \item{Cumulative Percent}{Accumulated Percent of Frequency out of the Valid Scores}
 #' \item{Description}{If \code{description} is given, a description for each level}
 #' 

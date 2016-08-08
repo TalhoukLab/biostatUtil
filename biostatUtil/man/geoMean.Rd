@@ -12,10 +12,10 @@ geoMean(x, na.rm = FALSE)
 \item{na.rm}{logical; should NA values be removed?}
 }
 \value{
-If \code{x} has any \code{NA} values then \code{geoMean}
-will return \code{NA} just like \code{mean} unless \code{na.rm = TRUE}
-is specified. Otherwise, the geometric mean of \code{x} is returned.
-If the input only has \code{NA} values then \code{NA} is returned as well.
+If \code{x} has any \code{NA} values then \code{geoMean} will return
+  \code{NA} just like \code{mean} unless \code{na.rm = TRUE} is specified.
+  Otherwise, the geometric mean of \code{x} is returned. If the input only
+  has \code{NA} values then \code{NA} is returned as well.
 }
 \description{
 Calculates the geometric mean

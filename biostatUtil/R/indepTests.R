@@ -1,23 +1,22 @@
 #' Tests for Independence in Contingency Tables
 #' 
-#' The Pearson's Chi-Squared test, likelihood ratio (G test) of independence,
-#' Fisher's Exact test, and linear-by-linear association test are performed on
+#' The Pearson's Chi-Squared test, likelihood ratio (G test) of independence, 
+#' Fisher's Exact test, and linear-by-linear association test are performed on 
 #' the data matrix.
 #' 
-#' A Pearson's Chi-Squared test Yate's Continuity Correction is applied in the case
-#' of 2 by 2 tables. 
-#'
-#' @param x an object of class \code{CrossTable} containing the contingency table
+#' A Pearson's Chi-Squared test Yate's Continuity Correction is applied in the
+#' case of 2 by 2 tables.
+#' 
+#' @param x an object of class \code{CrossTable} containing the contingency
+#'   table
 #' @param digits number of digits to round to
-#'
-#' @return A table with method name, test statistic, degrees of freedom, and
-#' p-value reported for each Chi-squared test.
+#'   
+#' @return A table with method name, test statistic, degrees of freedom, and 
+#'   p-value reported for each Chi-squared test.
 #' @author Derek Chiu
 #' @seealso \code{\link{CrossTable}}
-#' @importFrom Deducer likelihood.test
-#' @importFrom coin lbl_test statistic pvalue
 #' @export
-#'
+#' 
 #' @examples
 #' # Example from documentation of CrossTable
 #' library(descr)

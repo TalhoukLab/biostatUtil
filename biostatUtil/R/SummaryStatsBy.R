@@ -11,9 +11,6 @@
 #' @param format format to return the table in. Either "pandoc" (for Word and PDF),
 #' "html", or "long" format for graphing and data manipulation using raw values.
 #' @author Aline Talhouk, Derek Chiu
-#' @import doBy dplyr
-#' @importFrom magrittr set_colnames set_rownames extract use_series
-#' @importFrom stats aggregate setNames
 #' @export
 #' @examples 
 #' mtcars$vs <- as.factor(mtcars$vs); mtcars$am <- as.factor(mtcars$am)

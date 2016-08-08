@@ -8,7 +8,6 @@
 #' @param x a matrix
 #' @return A matrix with median centered rows.
 #' @author Samuel Leung
-#' @importFrom stats median
 #' @export
 #' @examples 
 #' x <- matrix(rnorm(200), nrow = 10)

@@ -15,8 +15,8 @@ freqTable(x, levels = sort(unique(as.character(x))), missing = NULL,
 \item{missing}{vector of levels for which we consider missing and don't count
 in the valid percentage}
 
-\item{description}{(optional) description for each level of \code{x}.
-Must be same length and order as \code{levels}}
+\item{description}{(optional) description for each level of \code{x}. Must be
+same length and order as \code{levels}}
 
 \item{round}{number of digits to round percentages to}
 
@@ -25,12 +25,12 @@ Must be same length and order as \code{levels}}
 \value{
 A data frame with the following columns
 \item{Class}{Tells you which scores are valid and which are missing. Not shown if
-there are no missing values.}
+  there are no missing values.}
 \item{Score}{Different levels}
 \item{Frequency}{Count for each score}
 \item{Percent}{Percent of Frequency out of the grand total}
 \item{Valid Percent}{Percent of Frequency out of the Valid scores. Not applicable if
-there are no missing values.}
+  there are no missing values.}
 \item{Cumulative Percent}{Accumulated Percent of Frequency out of the Valid Scores}
 \item{Description}{If \code{description} is given, a description for each level}
 }

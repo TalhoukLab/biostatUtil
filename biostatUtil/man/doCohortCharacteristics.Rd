@@ -25,37 +25,49 @@ doCohortCharacteristics(input.d, marker.name, marker.description, var.names,
 
 \item{var.names}{The variables that you want the statistics for}
 
-\item{is.var.continuous}{Vector of length equal to the length of var.names with 1 indicating a continuous variable and 0 otherwise (this should be inferred in the function)}
+\item{is.var.continuous}{Vector of length equal to the length of var.names
+with 1 indicating a continuous variable and 0 otherwise (this should be
+inferred in the function)}
 
-\item{var.descriptions}{Vector of strings to describe the variables as they are to appear in the table}
+\item{var.descriptions}{Vector of strings to describe the variables as they
+are to appear in the table}
 
-\item{marker.value.labels.tolower}{Indicator as to whether to put marker value labels to lower case}
+\item{marker.value.labels.tolower}{Indicator as to whether to put marker
+value labels to lower case}
 
 \item{show.missing}{an indicator to whether to show missing values}
 
-\item{show.missing.continuous}{if set to \code{FALSE} and \code{show.missing == FALSE},
-will not show the number of missing cases for continuous variables.
-Otherwise, it shows the number of missing for continuous variables even if \code{show.missing == FALSE}.}
+\item{show.missing.continuous}{if set to \code{FALSE} and \code{show.missing
+== FALSE}, will not show the number of missing cases for continuous
+variables. Otherwise, it shows the number of missing for continuous
+variables even if \code{show.missing == FALSE}.}
 
 \item{do.droplevels}{drop categories of unobserved levels set to \code{TRUE}}
 
-\item{show.percent}{defaults to "both" which shows both rows and columns other possible values: "column", "row".}
+\item{show.percent}{defaults to "both" which shows both rows and columns
+other possible values: "column", "row".}
 
-\item{stat.tests}{statistical test to perform. \code{NULL} indicates do not do test for all variables,
-\code{NA} indicates do not do test for specified variable.
-Tests: chisq, fisher, ttest, wilcox, kendall, spearman, pearson, kruskal, confusionMarkerAsRef, confusionVarAsRef}
+\item{stat.tests}{statistical test to perform. \code{NULL} indicates do not
+do test for all variables, \code{NA} indicates do not do test for specified
+variable. Tests: chisq, fisher, ttest, wilcox, kendall, spearman, pearson,
+kruskal, confusionMarkerAsRef, confusionVarAsRef}
 
-\item{stat.test.column.header}{The name to show on the header defaults to "association/correlation test"}
+\item{stat.test.column.header}{The name to show on the header defaults to
+"association/correlation test"}
 
 \item{round.digits.p.value}{The number of digits to round the P values}
 
-\item{num.boot}{the number of bootstrap samples for any bootstrap method that may be used}
+\item{num.boot}{the number of bootstrap samples for any bootstrap method that
+may be used}
 
-\item{missing.codes.highlight}{default to \code{NULL} this indicates whether we wanted the missing values broken down down or lumped together.}
+\item{missing.codes.highlight}{default to \code{NULL} this indicates whether
+we wanted the missing values broken down down or lumped together.}
 
-\item{missing.codes}{a vector to indicate how missing values are coded, default is \code{c("N/A", "", "Unk")}}
+\item{missing.codes}{a vector to indicate how missing values are coded,
+default is \code{c("N/A", "", "Unk")}}
 
-\item{decimal}{number of decimal places to show for aggregate numbers such as proportions or averages; default to 0}
+\item{decimal}{number of decimal places to show for aggregate numbers such as
+proportions or averages; default to 0}
 
 \item{caption}{caption to use for the Table}
 
@@ -67,19 +79,21 @@ Tests: chisq, fisher, ttest, wilcox, kendall, spearman, pearson, kruskal, confus
 
 \item{css.class.name.even}{Used to set the row colour for even rows}
 
-\item{custom.marker.labels}{labels of marker to show; default \code{NULL} means using existing value label of the marker}
+\item{custom.marker.labels}{labels of marker to show; default \code{NULL}
+means using existing value label of the marker}
 
-\item{custom.total.label}{label of the "Total" column; default \code{NULL} means show "Total"}
+\item{custom.total.label}{label of the "Total" column; default \code{NULL}
+means show "Total"}
 
 \item{split.table}{number of chars per row before table is split.}
 
 \item{...}{additional arguments to \code{pander}}
 }
 \value{
-A table with statistics reported for multiple variables, such as
-mean, median, and range for continuous variables and proportions and 
-percentages for categorical variables. Relevant association and correlation
-tests are performed as well.
+A table with statistics reported for multiple variables, such as 
+  mean, median, and range for continuous variables and proportions and 
+  percentages for categorical variables. Relevant association and correlation
+  tests are performed as well.
 }
 \description{
 Generate cohort characteristics

@@ -4,11 +4,11 @@
 #' 
 #' @param date character string of date
 #' @param char.format character text format of date. Either one of 
-#' \code{"MM.DD.YYYY"}, \code{"MMMM.DD.YYYY"}, \code{"DD.MM.YYYY"},
-#' \code{"DD.MMM.YYYY"}, \code{"YYYY.MM.DD"}, or \code{"YYYY.MMM.DD"}.
+#'   \code{"MM.DD.YYYY"}, \code{"MMMM.DD.YYYY"}, \code{"DD.MM.YYYY"}, 
+#'   \code{"DD.MMM.YYYY"}, \code{"YYYY.MM.DD"}, or \code{"YYYY.MMM.DD"}.
 #' @param sep character string separating \code{date}
-#' @return A character string representing the POSIX standard date format
-#' equivalent of the string in \code{char.format}.
+#' @return A character string representing the POSIX standard date format 
+#'   equivalent of the string in \code{char.format}.
 #' @author Derek Chiu
 #' @export
 #' @examples 

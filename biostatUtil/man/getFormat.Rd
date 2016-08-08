@@ -10,14 +10,14 @@ getFormat(date, char.format, sep = "")
 \item{date}{character string of date}
 
 \item{char.format}{character text format of date. Either one of 
-\code{"MM.DD.YYYY"}, \code{"MMMM.DD.YYYY"}, \code{"DD.MM.YYYY"},
+\code{"MM.DD.YYYY"}, \code{"MMMM.DD.YYYY"}, \code{"DD.MM.YYYY"}, 
 \code{"DD.MMM.YYYY"}, \code{"YYYY.MM.DD"}, or \code{"YYYY.MMM.DD"}.}
 
 \item{sep}{character string separating \code{date}}
 }
 \value{
-A character string representing the POSIX standard date format
-equivalent of the string in \code{char.format}.
+A character string representing the POSIX standard date format 
+  equivalent of the string in \code{char.format}.
 }
 \description{
 Get the POSIX standard date formats from character text formats.

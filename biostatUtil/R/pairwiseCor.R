@@ -1,14 +1,12 @@
 #' Pairwise Correlations
 #' 
 #' Computes all pairwise correlations between the columns of a data frame
-#'
-#' @param dataframe A data frame containing numeric variables of interest. 
-#' @return all pairwise absolute correlations, correlations, Pval, Adj P val by
-#' decreasing order of absolute correlations.
 #' 
+#' @param dataframe A data frame containing numeric variables of interest.
+#' @return all pairwise absolute correlations, correlations, Pval, Adj P val by 
+#'   decreasing order of absolute correlations.
+#'   
 #' @author Aline Talhouk, Derek Chiu
-#' @importFrom utils combn
-#' @importFrom stats cor p.adjust
 #' @export
 #' 
 #' @examples 

@@ -2,7 +2,6 @@
 #' 
 #' @param fw figure width (default = 8)
 #' @param fh figure height (default = 6)
-#' @importFrom utils as.roman
 #' @export
 setupKnitr <- function(fw = 8, fh = 6) {
   # Don't set knitr options outside knitr

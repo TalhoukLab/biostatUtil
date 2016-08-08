@@ -7,8 +7,6 @@
 #' @param var.description label to use for \code{var.name} in plots
 #' @return Schoenfeld residual plots for each survival outcome
 #' @author Samuel Leung
-#' @importFrom graphics title
-#' @importFrom stats as.formula
 #' @export
 doCheckPHMulti <- function(data, var.name, var.description) {
   # OS

@@ -11,10 +11,11 @@
 #' @param line.color line colour of survival curves
 #' @param line.pattern line pattern of survival curves
 #' @param line.width line width of survival curves
-#' @param show.test show single or the reference group value (for pairwise comparisons).
-#' If \code{"none"}, then no test is show.
-#' @param single.test.type test to show if specified \code{show.test = "single"}. Possible
-#' choices are \code{"logrank"} (default), \code{"wilcoxon"}, \code{"taroneware"}, or \code{"all"}.
+#' @param show.test show single or the reference group value (for pairwise 
+#'   comparisons). If \code{"none"}, then no test is show.
+#' @param single.test.type test to show if specified \code{show.test = 
+#'   "single"}. Possible choices are \code{"logrank"} (default), 
+#'   \code{"wilcoxon"}, \code{"taroneware"}, or \code{"all"}.
 #' @param round.digits.p.value number of digits for p-value
 #' @param obs.survyrs show the observed survival years survival rate on KM plot
 #' @param legend.pos legend position keyword
@@ -22,8 +23,8 @@
 #' @param file.width width of figure in saved file
 #' @param file.height height of figure in saved file
 #' @param grey.scale logical. If \code{TRUE}, the plot will be in grey scale.
-#' @param show.single.test.pos position to show single test; defaults to 0.5 if
-#' \code{legend.pos = "top"}. Otherwise 0.1
+#' @param show.single.test.pos position to show single test; defaults to 0.5 if 
+#'   \code{legend.pos = "top"}. Otherwise 0.1
 #' @param ... additional arguments to \code{plotKMDetail}
 #' @author Samuel Leung
 #' @seealso \code{\link{plotKMDetail}}

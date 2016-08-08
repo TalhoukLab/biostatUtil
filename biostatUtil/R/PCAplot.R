@@ -1,7 +1,8 @@
-#' function to plot the first three PCAs and draw ellipses highlighting differences in the levels of a factor
+#' Plot the first three PCAs and draw ellipses highlighting
+#' differences in the levels of a factor
 #' @param by factor to plot as ellipses on PCA plots
-#' @param tdat data matrix to compute principal componentsT
-#' @importFrom stats prcomp
+#' @param tdat data matrix to compute principal components
+#' @return A PCA plot
 #' @export
 PCAplot <- function(by, tdat) {
   PC1 <- PC2 <- PC3 <- var.name <- NULL

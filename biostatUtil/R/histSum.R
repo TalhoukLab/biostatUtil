@@ -1,5 +1,5 @@
 #' Summary histogram
-#'
+#' 
 #' Function to create an annotated histogram, with density plot
 #' @param var  a variable to be plotted
 #' @param xlab X axis label
@@ -7,7 +7,6 @@
 #' @param sub  a sublabel (defaults to none)
 #' @param digit number of digits used in rounding (defaults to 1)
 #' @author Aline Talhouk
-#' @importFrom stats sd IQR
 #' @export
 histSum <- function(var, xlab = "", txt = "", sub = "", digit = 1) {
   h <- hist(var, main = paste("Mean", round(mean(var, na.rm = TRUE), digit),

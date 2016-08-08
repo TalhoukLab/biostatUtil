@@ -2,21 +2,21 @@
 #' 
 #' Rounding of a number smaller than specified precision doesn't coerce to 0.
 #' 
-#' This function is useful when we have small p-values and don't want to show the
-#' scientific notation, or coercion to 0. Instead we show an upper bound. For example,
-#' if a p-value is 2e-05 and we want to round to 3 digits, the function will return
-#' "<0.001".
-#'
+#' This function is useful when we have small p-values and don't want to show
+#' the scientific notation, or coercion to 0. Instead we show an upper bound.
+#' For example, if a p-value is 2e-05 and we want to round to 3 digits, the
+#' function will return "<0.001".
+#' 
 #' @param x a numeric vector or matrix
 #' @param digits integer indicating number of decimal places to round to
 #' @param sci if \code{TRUE}, scientific notation is used
-#'
-#' @return If precision of number is larger than desired rounding, the default
-#' \code{round} is used. Otherwise, we provide an upper bound instead of coercion
-#' to 0.
+#'   
+#' @return If precision of number is larger than desired rounding, the default 
+#'   \code{round} is used. Otherwise, we provide an upper bound instead of
+#'   coercion to 0.
 #' @author Derek Chiu
 #' @export
-#'
+#' 
 #' @examples
 #' # Vector inputs
 #' round_small(2e-04)

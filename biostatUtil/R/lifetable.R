@@ -1,21 +1,24 @@
 #' Generate lifetables for multiclass variables
 #' 
-#' Specify vector of time endpoints and create a cohort life table for two or more strata
+#' Specify vector of time endpoints and create a cohort life table for two or
+#' more strata
 #' 
-#' Essentially a wrapper around \code{lifetab} that allows the user to input a \code{survfit}
-#' object instead of vectors of raw values.
-#'
+#' Essentially a wrapper around \code{lifetab} that allows the user to input a
+#' \code{survfit} object instead of vectors of raw values.
+#' 
 #' @param obj An object of class \code{survfit}
 #' @param ntimes number of time intervals
-#' @param times A vector of endpoints of time intervals to show life table calculations.
-#' By default, these are \code{ntimes} evenly spaced out endpoints based on the full range
-#' of survival times.
+#' @param times A vector of endpoints of time intervals to show life table
+#'   calculations. By default, these are \code{ntimes} evenly spaced out
+#'   endpoints based on the full range of survival times.
 #' @param nround number of digits to round table values
-#' @param show.strata logical; if \code{TRUE} (default), the variable name is appended to the
-#' beginning of each stratum in the lifetable's \code{strata} column
+#' @param show.strata logical; if \code{TRUE} (default), the variable name is
+#'   appended to the beginning of each stratum in the lifetable's \code{strata}
+#'   column
 #' @param strata.name column name for the different strata
-#' @param summary logical; if \code{TRUE}, a case processing summary is shown with number 
-#' of subjects, events, censored, and percent censored per stratum.
+#' @param summary logical; if \code{TRUE}, a case processing summary is shown
+#'   with number of subjects, events, censored, and percent censored per
+#'   stratum.
 #' @return A table with the following columns:
 #' \item{strata}{name of specific group in variable}
 #' \item{times}{time interval}
@@ -31,9 +34,7 @@
 #' \item{se.hazard}{See \code{\link{lifetab}}}
 #' @author Derek Chiu
 #' @seealso \code{\link{lifetab}}
-#' @importFrom KMsurv lifetab
 #' @export
-#'
 #' @examples
 #' obj <- survfit(Surv(futime, fustat) ~ rx, data = ovarian)
 #' lifetable(obj)

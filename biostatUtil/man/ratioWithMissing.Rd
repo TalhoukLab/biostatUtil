@@ -16,8 +16,8 @@ ratioWithMissing(x, y, missing.value = -1, return.missing.value = -1)
 \item{return.missing.value}{character to return for missing values}
 }
 \description{
-Returns the ratio of input vectors: x/y with the ability to specify
-which values are missing
+Returns the ratio of input vectors: x/y with the ability to specify which
+values are missing
 }
 \note{
 \code{NAs} are ignored.

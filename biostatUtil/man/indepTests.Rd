@@ -7,22 +7,23 @@
 indepTests(x, digits = 3)
 }
 \arguments{
-\item{x}{an object of class \code{CrossTable} containing the contingency table}
+\item{x}{an object of class \code{CrossTable} containing the contingency
+table}
 
 \item{digits}{number of digits to round to}
 }
 \value{
-A table with method name, test statistic, degrees of freedom, and
-p-value reported for each Chi-squared test.
+A table with method name, test statistic, degrees of freedom, and 
+  p-value reported for each Chi-squared test.
 }
 \description{
-The Pearson's Chi-Squared test, likelihood ratio (G test) of independence,
-Fisher's Exact test, and linear-by-linear association test are performed on
+The Pearson's Chi-Squared test, likelihood ratio (G test) of independence, 
+Fisher's Exact test, and linear-by-linear association test are performed on 
 the data matrix.
 }
 \details{
-A Pearson's Chi-Squared test Yate's Continuity Correction is applied in the case
-of 2 by 2 tables.
+A Pearson's Chi-Squared test Yate's Continuity Correction is applied in the
+case of 2 by 2 tables.
 }
 \examples{
 # Example from documentation of CrossTable

@@ -1,15 +1,15 @@
 #' Assess survival time
 #' 
-#' Given range of survival times and censoring status, provides different
+#' Given range of survival times and censoring status, provides different 
 #' time-related summary statistics
 #' 
-#' The observation time is defined as the median time in days between all
-#' \code{T1} and \code{T2}. Censoring time is the median time in days between
+#' The observation time is defined as the median time in days between all 
+#' \code{T1} and \code{T2}. Censoring time is the median time in days between 
 #' all \code{T1} and \code{T2} for events only.
 #' 
 #' @param T1 vector of start dates
 #' @param T2 vector of end dates
-#' @param status logical; 
+#' @param status logical;
 #' @return A list with elements
 #' \item{Otime}{Observation time}
 #' \item{Stime}{Censoring time}
@@ -17,7 +17,6 @@
 #' \item{KFT}{Known Function Time}
 #' \item{RevKM}{Reverse Kaplan-Meier Time}
 #' @author Samuel Leung
-#' @importFrom utils capture.output read.table
 #' @export
 assessSurvTime <- function(T1, T2, status) { 
   # in case there are any is.na(status)

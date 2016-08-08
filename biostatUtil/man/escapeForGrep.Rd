@@ -10,8 +10,8 @@ escapeForGrep(x)
 \item{x}{a character vector}
 }
 \value{
-A character vector with opening and closing square brackets and parentheses
-escaped for use in \code{grep}.
+A character vector with opening and closing square brackets and
+  parentheses escaped for use in \code{grep}.
 }
 \description{
 Escape [, ], (, and ) for use in \code{grep}.

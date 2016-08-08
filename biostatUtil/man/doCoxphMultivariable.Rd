@@ -21,17 +21,19 @@ doCoxphMultivariable(input.d, var.names, var.descriptions,
 
 \item{var.names}{variables to include as univariable predictors}
 
-\item{var.descriptions}{vector of strings to describe the variables as they are to appear in the table}
+\item{var.descriptions}{vector of strings to describe the variables as they
+are to appear in the table}
 
-\item{show.var.detail}{logical. If \code{TRUE}, details such as categories and the reference group for
-categorical variables are shown.}
+\item{show.var.detail}{logical. If \code{TRUE}, details such as categories
+and the reference group for categorical variables are shown.}
 
-\item{show.group.name.for.bin.var}{logical. If \code{TRUE}, the non-reference group name is shown beside
-the hazard ratio for dichotomized variables.}
+\item{show.group.name.for.bin.var}{logical. If \code{TRUE}, the non-reference
+group name is shown beside the hazard ratio for dichotomized variables.}
 
-\item{var.ref.groups}{a vector of reference groups. If \code{NULL}, assume all variables are binary/continuous.
-If an item in the vector is \code{NA}, assume that particular marker is binary or continuous
-(i.e., treat it as a numeric variable)}
+\item{var.ref.groups}{a vector of reference groups. If \code{NULL}, assume
+all variables are binary/continuous. If an item in the vector is \code{NA},
+assume that particular marker is binary or continuous (i.e., treat it as a
+numeric variable)}
 
 \item{var.names.surv.time}{variable names of survival time}
 
@@ -39,22 +41,26 @@ If an item in the vector is \code{NA}, assume that particular marker is binary o
 
 \item{event.codes.surv}{event coding of survival status variable}
 
-\item{surv.descriptions}{names abbreviated survival endpoints in returned output}
+\item{surv.descriptions}{names abbreviated survival endpoints in returned
+output}
 
-\item{missing.codes}{character strings of missing values used in \code{input.d}}
+\item{missing.codes}{character strings of missing values used in
+\code{input.d}}
 
-\item{use.firth}{percentage of censored cases before using Firth's method for Cox regression.
-If \code{use.firth = 1} (default), Firth is never used and if \code{use.firth = -1} Firth is
-always used.}
+\item{use.firth}{percentage of censored cases before using Firth's method for
+Cox regression. If \code{use.firth = 1} (default), Firth is never used and
+if \code{use.firth = -1} Firth is always used.}
 
 \item{firth.caption}{subscript in html table output indicating Firth was used}
 
-\item{stat.test}{the overall model test to perform on the Cox regression model. Can be any of
-"waldtest", "logtest", or "sctest". If Firth is used, only "logtest" can be performed.}
+\item{stat.test}{the overall model test to perform on the Cox regression
+model. Can be any of "waldtest", "logtest", or "sctest". If Firth is used,
+only "logtest" can be performed.}
 
 \item{round.digits.p.value}{number of digits for p-value}
 
-\item{round.small}{if \code{TRUE}, uses small number rounding via \code{round_small}}
+\item{round.small}{if \code{TRUE}, uses small number rounding via
+\code{round_small}}
 
 \item{scientific}{if \code{TRUE}, uses scientific notation when rounding}
 
@@ -62,14 +68,15 @@ always used.}
 
 \item{html.table.border}{the border type to use for html tables}
 
-\item{banded.rows}{logical. If \code{TRUE}, rows have alternating shading colour}
+\item{banded.rows}{logical. If \code{TRUE}, rows have alternating shading
+colour}
 
 \item{css.class.name.odd}{Used to set the row colour for odd rows}
 
 \item{css.class.name.even}{Used to set the row colour for even rows}
 
-\item{split.table}{number of characters per row before splitting the table. Applies to
-the pandoc table output.}
+\item{split.table}{number of characters per row before splitting the table.
+Applies to the pandoc table output.}
 
 \item{...}{additional arguments to \code{pandoc.table.return}}
 }
@@ -80,11 +87,12 @@ A list with the following elements
 Fits multivariable Cox models for each specified endpoints.
 }
 \details{
-Please note the following assumptions. 1) Marker can be
-binary, continuous or categorical. 2) Missing survival time/status variables
-are coded as \code{NA} (i.e. will only be checked by \code{is.na()}).
-3) Survival time/status variable name specified in the following order: "os", "dss", "rfs".
-4) Coding of survival status is binary only (i.e. cannot take survival status of > 2 categories).
+Please note the following assumptions. 1) Marker can be binary, continuous or
+categorical. 2) Missing survival time/status variables are coded as \code{NA}
+(i.e. will only be checked by \code{is.na()}). 3) Survival time/status
+variable name specified in the following order: "os", "dss", "rfs". 4) Coding
+of survival status is binary only (i.e. cannot take survival status of > 2
+categories).
 }
 \author{
 Samuel Leung, Aline Talhouk, Derek Chiu

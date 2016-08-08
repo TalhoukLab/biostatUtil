@@ -1,21 +1,20 @@
 #' Standard deviation of log hazard ratio
 #' 
-#' Compute the standard deviation of a log hazard ratio when only given its
+#' Compute the standard deviation of a log hazard ratio when only given its 
 #' repoted confidence limits.
 #' 
-#' Extract standard deviation from a confidence limit and obtain a
-#' corresponding p-value, which can be compared to the reported p-value.
-#' The null p-values are calculated from the Chi-squared 1 distribution.
+#' Extract standard deviation from a confidence limit and obtain a corresponding
+#' p-value, which can be compared to the reported p-value. The null p-values are
+#' calculated from the Chi-squared 1 distribution.
 #' @param HR reported hazard ratio
 #' @param lower.limit reported lower confidence limit
 #' @param upper.limit reported upper confidence limit
 #' @param alpha significance level
-#' @return A list with elements
-#' \item{sd}{standard deviation of log HR}
+#' @return A list with elements 
+#' \item{sd}{standard deviation of log HR} 
 #' \item{pval}{estimated p-value}
 #' @author Aline Talhouk, Derek Chiu
 #' @references http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1920534/
-#' @importFrom stats qnorm
 #' @export
 #' @examples
 #' library(meta)

@@ -12,7 +12,8 @@ barplotSum(tx, ttl = "")
 \item{ttl}{the title of the boxplot}
 }
 \description{
-Function to provide a barplot from a table of categorical variable with labels wrapped
+Function to provide a barplot from a table of categorical variable with
+labels wrapped
 }
 \author{
 Aline Talhouk

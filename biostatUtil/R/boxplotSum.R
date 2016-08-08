@@ -5,7 +5,6 @@
 #' @param ttl the title of the boxplot
 #' @param digit the number of digits used for rounding (defaults to 1)
 #' @author Aline Talhouk
-#' @importFrom graphics boxplot
 #' @export
 boxplotSum <- function(var, ttl, digit = 1) {
   bxp <- boxplot(var, col = "lightgrey", border = "darkgrey",

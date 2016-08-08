@@ -16,7 +16,8 @@ printInterModels(mod1, mod2, mod3, Capt)
 \item{Capt}{caption for the table}
 }
 \value{
-an HTML formated table showing different models tested for interactions
+an HTML formated table showing different models tested for
+  interactions
 }
 \description{
 Print intereraction test results for different models

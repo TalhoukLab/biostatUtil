@@ -2,8 +2,8 @@
 #' 
 #' Escape [, ], (, and ) for use in \code{grep}.
 #' @param x a character vector
-#' @return A character vector with opening and closing square brackets and parentheses
-#' escaped for use in \code{grep}.
+#' @return A character vector with opening and closing square brackets and
+#'   parentheses escaped for use in \code{grep}.
 #' @author Samuel Leung
 #' @export
 #' @examples

@@ -15,12 +15,12 @@ endsWith(a, b)
 logical; if TRUE, \code{a} is a string that ends with \code{b}.
 }
 \description{
-Returns a logical indicating whether the string in the first argument ends
+Returns a logical indicating whether the string in the first argument ends 
 with the string in the second argument.
 }
 \details{
-Although intended for strings, \code{endsWith} works with numeric vectors
-as well.
+Although intended for strings, \code{endsWith} works with numeric vectors as
+well.
 }
 \examples{
 ## Strings

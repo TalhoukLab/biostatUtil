@@ -15,18 +15,22 @@ ggkm(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
   digits = 3, min.p.value = 1e-04, ...)
 }
 \arguments{
-\item{sfit}{an object of class \code{survfit} containing one or more survival curves}
+\item{sfit}{an object of class \code{survfit} containing one or more survival
+curves}
 
-\item{sfit2}{an (optional) second object of class \code{survfit} to compare with \code{sfit}}
+\item{sfit2}{an (optional) second object of class \code{survfit} to compare
+with \code{sfit}}
 
-\item{table}{logical; if \code{TRUE} (default), the numbers at risk at each time of death is
-shown as a table underneath the plot}
+\item{table}{logical; if \code{TRUE} (default), the numbers at risk at each
+time of death is shown as a table underneath the plot}
 
 \item{returns}{logical; if \code{TRUE} the plot is returned}
 
-\item{marks}{logical; if \code{TRUE} (default), censoring marks are shown on survival curves}
+\item{marks}{logical; if \code{TRUE} (default), censoring marks are shown on
+survival curves}
 
-\item{CI}{logical; if \code{TRUE} (default), confidence bands are drawn for survival curves}
+\item{CI}{logical; if \code{TRUE} (default), confidence bands are drawn for
+survival curves}
 
 \item{line.pattern}{linetype for survival curves}
 
@@ -46,32 +50,42 @@ shown as a table underneath the plot}
 
 \item{ystrataname}{name of the strata}
 
-\item{cox.ref.grp}{indicates reference group for the variable of interest 
-in the cox model.  this parameter will be ignored if not applicable, e.g. for 
+\item{cox.ref.grp}{indicates reference group for the variable of interest in
+the cox model.  this parameter will be ignored if not applicable, e.g. for 
 continuous variable}
 
-\item{timeby}{length of time between consecutive time points spanning the entire range of follow-up. Defaults to 5.}
+\item{timeby}{length of time between consecutive time points spanning the
+entire range of follow-up. Defaults to 5.}
 
-\item{pval}{logical; if \code{TRUE} (default), the logrank test p-value is shown on the plot}
+\item{pval}{logical; if \code{TRUE} (default), the logrank test p-value is
+shown on the plot}
 
-\item{HR}{logical; if \code{TRUE} (default), the estimated hazard ratio and its 95\% confidence interval will be shown}
+\item{HR}{logical; if \code{TRUE} (default), the estimated hazard ratio and
+its 95\% confidence interval will be shown}
 
-\item{use.firth}{Firth's method for Cox regression is used if the percentage of censored cases exceeds \code{use.firth}.
-Setting \code{use.firth = 1} (default) means Firth is never used, and \code{use.firth = -1} means Firth is always used.}
+\item{use.firth}{Firth's method for Cox regression is used if the percentage
+of censored cases exceeds \code{use.firth}. Setting \code{use.firth = 1}
+(default) means Firth is never used, and \code{use.firth = -1} means Firth
+is always used.}
 
 \item{subs}{use of subsetting}
 
-\item{legend}{logical; if \code{TRUE}, the legend is overlaid on the graph (instead of on the side).}
+\item{legend}{logical; if \code{TRUE}, the legend is overlaid on the graph
+(instead of on the side).}
 
 \item{legend.xy}{named vector specifying the x/y position of the legend}
 
-\item{legend.direction}{layout of items in legends ("horizontal" (default) or "vertical")}
+\item{legend.direction}{layout of items in legends ("horizontal" (default) or
+"vertical")}
 
 \item{line.y.increment}{how much y should be incremented for each line}
 
-\item{digits}{number of digits to round: p-values digits=nunber of significant digits, HR digits=number of digits after decimal point NOT significant digits}
+\item{digits}{number of digits to round: p-values digits=nunber of
+significant digits, HR digits=number of digits after decimal point NOT
+significant digits}
 
-\item{min.p.value}{the min. p-value below which the p-value will be shown as e.g. <0.0001, otherwise the exact p-value will be shown}
+\item{min.p.value}{the min. p-value below which the p-value will be shown as
+e.g. <0.0001, otherwise the exact p-value will be shown}
 
 \item{...}{additional arguments to other methods}
 }

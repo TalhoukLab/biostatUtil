@@ -18,8 +18,8 @@ A caption with a table counter prepended to its text.
 Prepends a table counter label to a table caption.
 }
 \details{
-The table counter automatically increments based on the number of
-existing tables that have already called  using \code{addTableNumber}.
+The table counter automatically increments based on the number of existing
+tables that have already called  using \code{addTableNumber}.
 }
 \examples{
 addTableNumber("Overall Survival Hazard Ratios")
