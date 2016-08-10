@@ -52,6 +52,7 @@ If Firth is called, we first determine if the percentage of
 censored cases is large enough to use Firth.
 }
 \examples{
+library(survival)
 # Base output
 test1 <- list(time = c(4, 3, 1, 1, 2, 2, 3), 
 status = c(1, 1, 1, 0, 1, 1, 0), 

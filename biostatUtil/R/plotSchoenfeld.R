@@ -18,12 +18,11 @@
 plotSchoenfeld <- function(input.d, input.formula, vars.to.plot = NULL,
                            main = NULL) {
 	pos <- 1
-	.my.data <- input.d
-	assign(".my.data", .my.data, envir = as.environment(pos))
-	# do cox model first
-	fit <- survival::coxph(input.formula, .my.data)
-	
-	var.names <- all.vars(input.formula[[3]]) # there may ne > 1 terms in formula
+	assign(".my.data", input.d, envir = as.environment(pos))
+	assign(".my.formula", as.formula(paste0("survival::", deparse(input.formula))),
+	       envir = as.environment(pos)) 
+	fit <- coxph(get(".my.formula"), get(".my.data"))
+	var.names <- all.vars(input.formula[[3]])  # there may be > 1 terms in formula
 	for (var.name in var.names) {
 	  names(fit$coefficients) <- sapply(names(fit$coefficients), function(x) {
 	    return(ifelse(var.name == x, x, sub(var.name, "", x)))

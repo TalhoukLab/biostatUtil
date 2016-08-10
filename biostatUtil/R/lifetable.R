@@ -36,6 +36,7 @@
 #' @seealso \code{\link{lifetab}}
 #' @export
 #' @examples
+#' library(survival)
 #' obj <- survfit(Surv(futime, fustat) ~ rx, data = ovarian)
 #' lifetable(obj)
 #' lifetable(obj, ntimes = 4, show.strata = FALSE)

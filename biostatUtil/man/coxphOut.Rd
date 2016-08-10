@@ -38,6 +38,7 @@ For objects of class \code{coxphf}, the calculation of the number of events
 used in the fit is slightly different.
 }
 \examples{
+library(survival)
 test1 <- list(time = c(4, 3, 1, 1, 2, 2, 3), 
 status = c(1, 1, 1, 0, 1, 1, 0), 
 x = c(0, 2, 1, 1, 1, 0, 0), 

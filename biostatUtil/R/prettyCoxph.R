@@ -35,6 +35,7 @@
 #' @author Samuel Leung, Derek Chiu
 #' @export
 #' @examples 
+#' library(survival)
 #' # Base output
 #' test1 <- list(time = c(4, 3, 1, 1, 2, 2, 3), 
 #' status = c(1, 1, 1, 0, 1, 1, 0), 
@@ -48,7 +49,8 @@ prettyCoxph <- function(input.formula, input.d, ref.grp = NULL, use.firth = 1,
                         check.ph = FALSE,
                         ph.test.plot.filename = "no.file", ...) {
   pos <- 1
-  assign(".my.formula", input.formula, envir = as.environment(pos)) 
+  assign(".my.formula", as.formula(paste0("survival::", deparse(input.formula))),
+         envir = as.environment(pos)) 
   # modify input.d if ref.grp is defined!
   if (length(ref.grp) > 0) {
 	  terms.in.formula <- all.vars(input.formula[[3]])

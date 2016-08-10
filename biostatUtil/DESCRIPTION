@@ -1,8 +1,8 @@
 Package: biostatUtil
 Type: Package
 Title: Utility functions used in biostatistical projects
-Version: 0.1.0.9056
-Date: 2016-08-08
+Version: 0.1.0.9057
+Date: 2016-08-09
 Authors@R: as.person(c(
     "Derek Chiu <dchiu@bccrc.ca> [aut, cre]", 
     "Aline Talhouk <atalhouk@bccrc.ca> [aut]",
@@ -13,8 +13,7 @@ Description: Provides some commonly used utility functions used in
     date formatting, survival functions, confusion matrices,
     contingency tables, plotting functions, and more.
 Depends:
-    R (>= 3.2.0),
-    survival
+    R (>= 3.2.0)
 Imports:
     assertthat,
     boot,
@@ -43,6 +42,7 @@ Imports:
     readr,
     rms,
     stringr,
+    survival,
     tidyr
 Suggests:
     bccaEndometrial,

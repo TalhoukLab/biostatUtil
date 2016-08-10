@@ -28,6 +28,7 @@ corresponds to \code{rho = 1} in \code{survdiff}. This function emulates the
 "Overall Comparisons" table output from SPSS.
 }
 \examples{
+library(survival)
 grhoTests(Surv(futime, fustat) ~ rx, data = ovarian)
 }
 \author{

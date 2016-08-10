@@ -17,6 +17,7 @@
 #' @export
 #' 
 #' @examples
+#' library(survival)
 #' grhoTests(Surv(futime, fustat) ~ rx, data = ovarian)
 grhoTests <- function(formula, data, digits = 4) {
   pos <- 1

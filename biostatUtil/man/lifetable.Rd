@@ -53,6 +53,7 @@ Essentially a wrapper around \code{lifetab} that allows the user to input a
 \code{survfit} object instead of vectors of raw values.
 }
 \examples{
+library(survival)
 obj <- survfit(Surv(futime, fustat) ~ rx, data = ovarian)
 lifetable(obj)
 lifetable(obj, ntimes = 4, show.strata = FALSE)
