@@ -18,7 +18,7 @@
 #' 
 #' @docType package
 #' @name biostatUtil
-#' @import doBy dplyr ggplot2 survival
+#' @import dplyr ggplot2 survival
 #' @importFrom broom glance
 #' @importFrom coin lbl_test statistic pvalue
 #' @importFrom Deducer likelihood.test
@@ -26,7 +26,7 @@
 #'   plot points stripchart title text
 #' @importFrom grDevices cairo_pdf dev.off pdf png tiff
 #' @importFrom KMsurv lifetab
-#' @importFrom magrittr set_colnames set_rownames extract use_series
+#' @importFrom magrittr extract set_colnames set_rownames use_series
 #' @importFrom stats addmargins aggregate AIC anova as.formula chisq.test
 #'   confint cor cor.test dnorm extractAIC fisher.test IQR kruskal.test logLik
 #'   median p.adjust prcomp qnorm quantile relevel sd setNames wilcox.test
