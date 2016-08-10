@@ -2,8 +2,7 @@
 % Please edit documentation in R/PCAplot.R
 \name{PCAplot}
 \alias{PCAplot}
-\title{Plot the first three PCAs and draw ellipses highlighting
-differences in the levels of a factor}
+\title{Plot Principal Components}
 \usage{
 PCAplot(by, tdat)
 }
@@ -13,10 +12,18 @@ PCAplot(by, tdat)
 \item{tdat}{data matrix to compute principal components}
 }
 \value{
-A PCA plot
+PCA plots for every combination of PC1, PC2, and PC3. The 
+percentage of variation contribution is shown in the axes labels.
 }
 \description{
-Plot the first three PCAs and draw ellipses highlighting
+Plot the first three PCs and draw ellipses highlighting
 differences in the levels of a factor
+}
+\examples{
+PCAplot(mtcars$cyl, mtcars)
+PCAplot(mtcars$gear, mtcars)
+}
+\author{
+Aline Talhouk, Derek Chiu
 }
 
