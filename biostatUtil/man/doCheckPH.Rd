@@ -2,9 +2,12 @@
 % Please edit documentation in R/doCheckPH.R
 \name{doCheckPH}
 \alias{doCheckPH}
+\alias{doCheckPHMulti}
 \title{Check Cox proportional hazards assumption}
 \usage{
 doCheckPH(data, var.name, var.description)
+
+doCheckPHMulti(data, var.name, var.description)
 }
 \arguments{
 \item{data}{the data object}
@@ -17,7 +20,12 @@ doCheckPH(data, var.name, var.description)
 Schoenfeld residual plots for each survival outcome
 }
 \description{
-Use Schoenfeld residuals to test the Cox proportional hazards assumption.
+Use Schoenfeld residuals to test the Cox proportional hazards assumption in a
+(multivariable) survival model.
+}
+\details{
+\code{doCheckPH} is intended for use in univariable models, and
+\code{doCheckPHMulti} is intended for use in multivariable models.
 }
 \author{
 Samuel Leung
