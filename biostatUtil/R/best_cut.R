@@ -37,9 +37,9 @@
 #' 
 #' @author Derek Chiu
 #' @export
-bestCut <- function(f, d, n = c("b", "t", "qd", "qn"), AIC.range = 3,
-                    nround = 3, plot = TRUE, filename = NULL,
-                    nrow = NULL, ncol = NULL, title = "", ...) {
+best_cut <- function(f, d, n = c("b", "t", "qd", "qn"), AIC.range = 3,
+                     nround = 3, plot = TRUE, filename = NULL,
+                     nrow = NULL, ncol = NULL, title = "", ...) {
   . <- cutpoints <- p.value.log <- NULL
   pos <- 1
   assign("f", f, envir = as.environment(pos))
@@ -60,8 +60,7 @@ bestCut <- function(f, d, n = c("b", "t", "qd", "qn"), AIC.range = 3,
     dplyr::select(cutpoints, p.value.log, logLik, AIC)
   p.vals <- signif(unlist(results$p.value.log), nround)
   AIC.vals <- round(unlist(results$AIC), nround)
-  AIC.lowest <- which.min(AIC.vals)
-  
+
   # Check for flat likelihood issue using range of AIC
   if (diff(range(results$AIC)) < AIC.range) {
     opt.ind <- sapply(diffs, function(x) summary(x)$table[, "events"]) %>%
@@ -83,12 +82,12 @@ bestCut <- function(f, d, n = c("b", "t", "qd", "qn"), AIC.range = 3,
     if (!is.null(filename)) {
       png(filename, width = 8.5, height = 11, units = "in", res = 300)
       par(mfrow = c(nrow, ncol))
-      mapply(bestCut_plot, diffs, titles, p.vals, AIC.vals, MoreArgs = list(...))
+      mapply(best_cut_plot, diffs, titles, p.vals, AIC.vals, MoreArgs = list(...))
       par(mfrow = c(1, 1))
       dev.off()
     } else {
       par(mfrow = c(nrow, ncol))
-      mapply(bestCut_plot, diffs, titles, p.vals, AIC.vals, MoreArgs = list(...))
+      mapply(best_cut_plot, diffs, titles, p.vals, AIC.vals, MoreArgs = list(...))
       par(mfrow = c(1, 1))
     }
   }
@@ -98,7 +97,7 @@ bestCut <- function(f, d, n = c("b", "t", "qd", "qn"), AIC.range = 3,
 
 #' Plotting function for bestCut
 #' @noRd
-bestCut_plot <- function(x, title, pval = NULL, aic = NULL, lwd = 1, cex = 0.75, ...) {
+best_cut_plot <- function(x, title, pval = NULL, aic = NULL, lwd = 1, cex = 0.75, ...) {
   plot(x, main = title, col = 1:length(x$strata), lwd = lwd, ...)
   legend("bottomleft", legend = stringr::str_split_fixed(
     names(x$strata), "=", 2)[, 2], col = 1:length(x$strata), lwd = lwd, cex = cex)
