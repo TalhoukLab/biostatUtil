@@ -33,23 +33,23 @@ stratum.}
 A table with the following columns:
 \item{strata}{name of specific group in variable}
 \item{times}{time interval}
-\item{nsubs}{See \code{\link{lifetab}}}
-\item{nlost}{See \code{\link{lifetab}}}
-\item{nrisk}{See \code{\link{lifetab}}}
-\item{nevent}{See \code{\link{lifetab}}}
-\item{surv}{See \code{\link{lifetab}}}
-\item{pdf}{See \code{\link{lifetab}}}
-\item{hazard}{See \code{\link{lifetab}}}
-\item{se.surv}{See \code{\link{lifetab}}}
-\item{se.pdf}{See \code{\link{lifetab}}}
-\item{se.hazard}{See \code{\link{lifetab}}}
+\item{nsubs}{See \code{\link[KMsurv]{lifetab}}}
+\item{nlost}{See \code{\link[KMsurv]{lifetab}}}
+\item{nrisk}{See \code{\link[KMsurv]{lifetab}}}
+\item{nevent}{See \code{\link[KMsurv]{lifetab}}}
+\item{surv}{See \code{\link[KMsurv]{lifetab}}}
+\item{pdf}{See \code{\link[KMsurv]{lifetab}}}
+\item{hazard}{See \code{\link[KMsurv]{lifetab}}}
+\item{se.surv}{See \code{\link[KMsurv]{lifetab}}}
+\item{se.pdf}{See \code{\link[KMsurv]{lifetab}}}
+\item{se.hazard}{See \code{\link[KMsurv]{lifetab}}}
 }
 \description{
 Specify vector of time endpoints and create a cohort life table for two or 
 more strata
 }
 \details{
-Essentially a wrapper around \code{lifetab} that allows the user to input a 
+Essentially a wrapper around \code{\link[KMsurv]{lifetab}} that allows the user to input a 
 \code{survfit} object instead of vectors of raw values.
 }
 \examples{
@@ -63,6 +63,6 @@ lifetable(obj, ntimes = 4, times = c(200, 500, 800, 1000))
 Derek Chiu
 }
 \seealso{
-\code{\link{lifetab}}
+\code{\link[KMsurv]{lifetab}}
 }
 

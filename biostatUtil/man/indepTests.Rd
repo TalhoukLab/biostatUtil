@@ -45,6 +45,6 @@ indepTests(ct)
 Derek Chiu
 }
 \seealso{
-\code{\link{CrossTable}}
+\code{\link[descr]{CrossTable}}
 }
 
