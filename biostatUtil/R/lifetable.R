@@ -33,11 +33,7 @@
 #' \item{se.pdf}{See \code{\link[KMsurv]{lifetab}}}
 #' \item{se.hazard}{See \code{\link[KMsurv]{lifetab}}}
 #' @author Derek Chiu
-<<<<<<< HEAD
 #' @seealso \code{\link[KMsurv]{lifetab}}
-=======
-#' @seealso \code{\link[KMsurv]{lifetab}}}
->>>>>>> a3cb9912ef5736493078308999174a702cc9af99
 #' @export
 #' @examples
 #' library(survival)
