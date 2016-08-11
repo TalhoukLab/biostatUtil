@@ -28,13 +28,13 @@ build_cuts <- function(x, n = c("b", "t", "qd", "qn"), var.prefix = NULL,
                        list = FALSE) {
   . <- NULL
   ulevs <- sort(unique(x[x > min(x)]))
-  ng <- switch(match.arg(n), b = 1, t = 2, qd = 3, qn = 4)
-  assertthat::assert_that(length(ulevs) >= ng)
-  cuts <- rbind(combn(ulevs, ng), max(x))
+  ng <- switch(match.arg(n), b = 2, t = 3, qd = 4, qn = 5)
+  assertthat::assert_that(length(ulevs) >= ng - 1)
+  cuts <- rbind(combn(ulevs, ng - 1), max(x))
   cut.list <- plyr::alply(cuts, 2, Hmisc::cut2, x = x)
   res <- cut.list %>% 
     as.data.frame() %>% 
-    magrittr::set_names(sapply(cut.list, name_cuts)) %>% 
+    magrittr::set_names(apply(cuts, 2, function(c) name_cuts(x, c))) %>% 
     magrittr::set_names(ifelse(rep(is.null(var.prefix), ncol(.)), names(.),
                                paste0(var.prefix, "_", names(.))))
   if (list)

@@ -4,28 +4,34 @@
 \alias{name_cuts}
 \title{Name cutpoint variables}
 \usage{
-name_cuts(cut.obj)
+name_cuts(x, cuts)
 }
 \arguments{
-\item{cut.obj}{a factor variable returned by \code{cut2}}
+\item{x}{vector to split by certain cutpoints}
+
+\item{cuts}{where to cut \code{x}}
 }
 \value{
 A character string representing the cutpoint variable name.
 }
 \description{
-Create a name for cutpoint variables based on location of cut and number of
+Create a name for cutpoint variables based on location of cut and number of 
 groups.
 }
+\details{
+The naming system is based on how \code{\link[Hmisc]{cut2}} cuts variables. Used in 
+\code{\link{build_cuts}} for naming the new cutpoint variables.
+}
 \examples{
-library(Hmisc)
 set.seed(1108)
 x <- sample(0:4, size = 1000, replace = TRUE)
-c1 <- cut2(x, c(1, 4))
-c2 <- cut2(x, c(2, 4))
-name_cuts(c1)
-name_cuts(c2)
+name_cuts(x, c(1, 4))
+name_cuts(x, c(2, 4))
 }
 \author{
 Derek Chiu
+}
+\seealso{
+\code{\link[Hmisc]{cut2}}, \code{\link{build_cuts}}
 }
 
