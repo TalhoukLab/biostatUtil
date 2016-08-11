@@ -14,7 +14,7 @@
 #' @return A table with method name, test statistic, degrees of freedom, and 
 #'   p-value reported for each Chi-squared test.
 #' @author Derek Chiu
-#' @seealso \code{\link{CrossTable}}
+#' @seealso \code{\link[descr]{CrossTable}}
 #' @export
 #' 
 #' @examples
