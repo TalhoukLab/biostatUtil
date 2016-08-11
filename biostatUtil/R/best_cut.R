@@ -95,7 +95,7 @@ best_cut <- function(f, d, n = c("b", "t", "qd", "qn"), AIC.range = 3,
               flat.lik = flat.lik))
 }
 
-#' Plotting function for bestCut
+#' Plotting function for best_cut
 #' @noRd
 best_cut_plot <- function(x, title, pval = NULL, aic = NULL, lwd = 1, cex = 0.75, ...) {
   plot(x, main = title, col = 1:length(x$strata), lwd = lwd, ...)
