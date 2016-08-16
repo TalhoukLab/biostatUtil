@@ -1,4 +1,7 @@
 #' Generate cohort characteristics
+#' 
+#' Splits the data by two variables, computing relevant statistics for each variable.
+#' 
 #' @param data The \code{data.frame} containing the data
 #' @param by1 split variable 1
 #' @param by2 split variable 2
@@ -16,6 +19,7 @@
 #' mtcars$vs <- as.factor(mtcars$vs); mtcars$am <- as.factor(mtcars$am)
 #' SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("mpg", "vs", "qsec", "am"))
 #' SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("vs", "qsec"))
+#' SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("mpg"))
 SummaryStatsBy <- function(data, by1, by2, var.names,
                            stats = c("mean", "sd", "median", "IQR", "range",
                                      "missing"),
@@ -45,159 +49,135 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
   } else {
     fac.var <- fac.dat <- NULL
   }
+  
   row.order <- unlist(lapply(num.var, function(x)
     paste0(x, c("", paste0(".", stats)))))
-  num.form <- as.formula(paste(paste(num.var, collapse = " + "), "~",
-                               paste(by1, by2, sep = " + ")))
-  num.form.tot <- as.formula(paste(paste(num.var, collapse = " + "), "~", by1))
-  num.values <- doBy::summaryBy(num.form, num.dat, FUN = contSumFunc,
-                                digits = digits, stats = stats) %>% 
-  mutate_each(funs(as.character))
-  num.values.tot <- doBy::summaryBy(num.form.tot, num.dat, FUN = contSumFunc,
-                                    digits = digits, stats = stats) %>% 
-    cbind(matrix(NA, dimnames = list(NULL, by2))) %>% 
-    extract(, c(1, ncol(.), 2:(ncol(.) - 1))) %>% 
-    rbind(num.values, .) %>% 
-    arrange_(by1)
-  num.values.long <- num.values %>% 
-    tidyr::gather(stat, value, -match(c(by1, by2), names(.))) %>%
-    tidyr::separate(stat, c("var", "stat"), "\\.") %>%
-    arrange_(by1, by2) %>% 
-    arrange(var)
-  facs <- num.values.tot[, c(by1, by2)]
+  if (all(c("mean", "sd") %in% stats)) {
+    stats <- stats[-grep("sd", stats)]
+    row.order <- row.order[-grep("sd", row.order)]
+  }
   
   # Compute numerical summaries
-  if (all(c("mean", "sd") %in% stats)) {
-    means <- num.values.tot[, grep("\\.mean", names(num.values.tot)), drop = FALSE]
-    sds <- num.values.tot[, grep("\\.sd", names(num.values.tot)), drop = FALSE]
-    ms <- apply(mapply(function(x, y) paste(x, y, sep = " &#177; "),
-                       means, sds), 2, cbind)
-    stats <- stats[-grep("sd", stats)]
-    row.order <- row.order[-grep("\\.sd", row.order)]
-  } else if ("mean" %in% stats & !"sd" %in% stats) {
-    ms <- num.values.tot[, grep("\\.mean", names(num.values.tot)), drop = FALSE]
-  } else if ("sd" %in% stats & !"mean" %in% stats) {
-    ms <- num.values.tot[, grep("\\.sd", names(num.values.tot)), drop = FALSE]
+  if (!is.null(num.var)) {
+    num.form <- as.formula(paste(paste(num.var, collapse = " + "), "~",
+                                 paste(by1, by2, sep = " + ")))
+    num.form.tot <- as.formula(paste(paste(num.var, collapse = " + "), "~", by1))
+    num.values <- doBy::summaryBy(num.form, num.dat, FUN = contSumFunc,
+                                  digits = digits, stats = stats) %>% 
+      mutate_each(funs(as.character))
+    num.values.tot <- doBy::summaryBy(num.form.tot, num.dat, FUN = contSumFunc,
+                                      digits = digits, stats = stats) %>% 
+      cbind(matrix(NA, dimnames = list(NULL, by2))) %>% 
+      extract(, c(1, ncol(.), 2:(ncol(.) - 1))) %>% 
+      rbind(num.values, .) %>% 
+      arrange_(by1)
+    num.values.long <- num.values.tot %>% 
+      tidyr::gather(stat, value, -match(c(by1, by2), names(.))) %>%
+      tidyr::separate(stat, c("var", "stat"), "\\.") %>%
+      arrange_(by1, by2)
+    facs <- num.values.tot[, c(by1, by2)]
+    num.result <- matrix(num.values.long$value, ncol = nrow(facs)) %>% 
+      rbind(matrix("", nrow = length(num.var), ncol = nrow(facs))) %>% 
+      set_rownames(c(grep(paste(num.var, collapse = "|"), names(num.values),
+                          value = TRUE), num.var)) %>% 
+      extract(row.order, ) %>% 
+      set_rownames(unlist(lapply(paste0("**", num.var, "**"),
+                                 function(x) c(x, stats)))) %>% 
+      set_colnames(mapply(function(x, y) paste(x, y, sep = "="),
+                          names(facs), facs[order(facs[, by1]), ]) %>%
+                     apply(., 1, function(x) paste(x, collapse = ", ")) %>% 
+                     ifelse(grepl("NA", .), 
+                            stringr::str_split_fixed(., ", ", 2)[, 1], .))
   } else {
-    ms <- data.frame(row.names = 1:nrow(facs))
+    num.result <- num.values.long <- NULL
   }
-  if ("median" %in% stats) {
-    med <- num.values.tot[, grep("\\.median", names(num.values.tot)), drop = FALSE]
-  } else {
-    med <- data.frame(row.names = 1:nrow(facs))
-  }
-  if ("IQR" %in% stats) {
-    iqr <- num.values.tot[, grep("\\.IQR", names(num.values.tot)), drop = FALSE]
-  } else {
-    iqr <- data.frame(row.names = 1:nrow(facs))
-  }
-  if ("range" %in% stats) {
-    rng <- num.values.tot[, grep("\\.range", names(num.values.tot)), drop = FALSE]
-  } else {
-    rng <- data.frame(row.names = 1:nrow(facs))
-  }
-  if ("missing" %in% stats) {
-    miss <- num.values.tot[, grep("\\.missing", names(num.values.tot),
-                                  value = TRUE), drop = FALSE]
-  } else {
-    miss <- data.frame(row.names = 1:nrow(facs))
-  }
-  num.result <- cbind(ms, med, iqr, rng, miss,
-                      matrix(rep("", nrow(facs) * length(num.var)),
-                             ncol = length(num.var),
-                             dimnames = list(NULL, num.var))) %>% 
-    t() %>% 
-    extract(row.order, ) %>% 
-    set_rownames(unlist(lapply(paste0("**", num.var, "**"),
-                               function(x) c(x, stats)))) %>% 
-    set_colnames(mapply(function(x, y) paste(x, y, sep = "="),
-                        names(facs), facs[order(facs[, by1]), ]) %>%
-                   apply(., 1, function(x) paste(x, collapse = ", ")) %>% 
-                   ifelse(grepl("NA", .), 
-                          stringr::str_split_fixed(., ", ", 2)[, 1], .))
-  # Compute factor summaries
-  row.order <- fac.var %>% 
-    mapply(function(x, y) paste0(x, ".", levels(y)), ., fac.dat[, ., drop = FALSE]) %>%
-    rbind(colnames(.), .) %>% 
-    c()
-  fac.values <- fac.var %>% 
-    sapply(function(x) as.formula(paste(x, "~",
-                                        paste(by1, by2, sep = " + ")))) %>%
-    lapply(aggregate, fac.dat, summary) %>% 
-    Reduce(merge, .) %>% 
-    extract(order(.[, by1]), ) %>% 
-    as.matrix() %>% 
-    as.data.frame()
-  fac.values.tot <- fac.var %>% 
-    sapply(function(x) as.formula(paste(x, "~",
-                                        paste(by1, sep = " + ")))) %>%
-    lapply(aggregate, fac.dat, summary) %>% 
-    Reduce(merge, .) %>% 
-    extract(order(.[, by1]), ) %>% 
-    as.matrix() %>% 
-    as.data.frame() %>% 
-    cbind(matrix(rep(NA, nrow(.)), dimnames = list(NULL, by2))) %>% 
-    extract(, c(1, ncol(.), 2:(ncol(.) - 1)))
-  fac.values.res <- fac.values.tot %>% 
-    split(.[, by1]) %>% 
-    lapply(function(x) x %>% 
-             select(-one_of(by1, by2)) %>% 
-             t() %>% 
-             as.data.frame() %>% 
-             mutate(grp = factor(stringr::str_split_fixed(
-               rownames(.), "\\.", 2)[, 1], levels = fac.var)) %>% 
-             group_by(grp) %>% 
-             do(vars = colPercent(.[, -ncol(.)]))) %>% 
-    do.call(rbind, .) %>% 
-    split(.$grp) %>% 
-    lapply(function(x) do.call(cbind, rbind(x$vars)) %>% 
-             cbind(., lev = rep(letters[1:(nrow(.) / 2)], 2)) %>% 
-             as.data.frame() %>% 
-             group_by(lev) %>%
-             by(.$lev, function(x) apply(x[, -ncol(.)], 2, pandoc_pcts)) %>% 
-             do.call(rbind, .)) %>% 
-    do.call(rbind, .)
-  facs <- rbind(fac.values, fac.values.tot, make.row.names = FALSE) %>%
-    select_(by1, by2)
-  fac.result <- fac.values %>% 
-    select(-one_of(by1, by2)) %>% 
-    t() %>% 
-    as.data.frame() %>% 
-    mutate(grp = stringr::str_split_fixed(rownames(.), "\\.", 2)[, 1]) %>% 
-    group_by(grp) %>% 
-    do(vars = rowColPercent(.[, -ncol(.)])) %>%
-    extract(match(.$grp, fac.var), ) %>% 
-    use_series(vars) %>% 
-    lapply(function(x) x %>% 
-             cbind(lev = rep(letters[1:(nrow(x) / 3)], each = 3)) %>% 
-             as.data.frame() %>% 
-             group_by(lev) %>%
-             by(.$lev, function(x) apply(x[, -ncol(.)], 2, pandoc_pcts)) %>% 
-             do.call(rbind, .)) %>% 
-    do.call(rbind, .) %>% 
-    cbind(fac.values.res) %>% 
-    rbind(t(facs), .) %>% 
-    extract(, order(.[by1, ])) %>% 
-    set_rownames(colnames(fac.values.tot)) %>%
-    rbind(matrix(rep("", nrow(facs) * length(fac.var)),
-                 nrow = length(fac.var), dimnames = list(fac.var, NULL))) %>%
-    extract(row.order, ) %>% 
-    set_rownames(stringr::str_replace_all(
-      rownames(.),
-      c(setNames(c(rep("", length(fac.var))), paste0(fac.var, ".")),
-        setNames(paste0("**", fac.var, "**"), fac.var)))) %>% 
-    set_colnames(mapply(function(x, y) paste(x, y, sep = "="),
-                        names(facs), facs[order(facs[, by1]), ]) %>% 
-                   apply(., 1, function(x) paste(x, collapse = ", ")) %>%
-                   ifelse(grepl("NA", .),
-                          stringr::str_split_fixed(., ", ", 2)[, 1], .))
-  fac.values.long <- fac.values %>% 
-    as.data.frame() %>% 
-    tidyr::gather(stat, value, -match(c(by1, by2), colnames(.))) %>% 
-    tidyr::separate(stat, c("var", "stat"), "\\.") %>%
-    arrange_(by1, by2) %>% 
-    arrange(var)
   
+  # Compute factor summaries
+  if (!is.null(fac.var)) {
+    row.order <- fac.var %>% 
+      mapply(function(x, y) paste0(x, ".", levels(y)), ., fac.dat[, ., drop = FALSE]) %>%
+      rbind(colnames(.), .) %>% 
+      c()
+    fac.values <- fac.var %>% 
+      sapply(function(x) as.formula(paste(x, "~",
+                                          paste(by1, by2, sep = " + ")))) %>%
+      lapply(aggregate, fac.dat, summary) %>% 
+      Reduce(merge, .) %>% 
+      extract(order(.[, by1]), ) %>% 
+      as.matrix() %>% 
+      as.data.frame()
+    fac.values.tot <- fac.var %>% 
+      sapply(function(x) as.formula(paste(x, "~",
+                                          paste(by1, sep = " + ")))) %>%
+      lapply(aggregate, fac.dat, summary) %>% 
+      Reduce(merge, .) %>% 
+      extract(order(.[, by1]), ) %>% 
+      as.matrix() %>% 
+      as.data.frame() %>% 
+      cbind(matrix(rep(NA, nrow(.)), dimnames = list(NULL, by2))) %>% 
+      extract(, c(1, ncol(.), 2:(ncol(.) - 1)))
+    fac.values.res <- fac.values.tot %>% 
+      split(.[, by1]) %>% 
+      lapply(function(x) x %>% 
+               select(-one_of(by1, by2)) %>% 
+               t() %>% 
+               as.data.frame() %>% 
+               mutate(grp = factor(stringr::str_split_fixed(
+                 rownames(.), "\\.", 2)[, 1], levels = fac.var)) %>% 
+               group_by(grp) %>% 
+               do(vars = colPercent(.[, -ncol(.)]))) %>% 
+      do.call(rbind, .) %>% 
+      split(.$grp) %>% 
+      lapply(function(x) do.call(cbind, rbind(x$vars)) %>% 
+               cbind(., lev = rep(letters[1:(nrow(.) / 2)], 2)) %>% 
+               as.data.frame() %>% 
+               group_by(lev) %>%
+               by(.$lev, function(x) apply(x[, -ncol(.)], 2, pandoc_pcts)) %>% 
+               do.call(rbind, .)) %>% 
+      do.call(rbind, .)
+    facs <- rbind(fac.values, fac.values.tot, make.row.names = FALSE) %>%
+      select_(by1, by2)
+    fac.result <- fac.values %>% 
+      select(-one_of(by1, by2)) %>% 
+      t() %>% 
+      as.data.frame() %>% 
+      mutate(grp = stringr::str_split_fixed(rownames(.), "\\.", 2)[, 1]) %>% 
+      group_by(grp) %>% 
+      do(vars = rowColPercent(.[, -ncol(.)])) %>%
+      extract(match(.$grp, fac.var), ) %>% 
+      use_series(vars) %>% 
+      lapply(function(x) x %>% 
+               cbind(lev = rep(letters[1:(nrow(x) / 3)], each = 3)) %>% 
+               as.data.frame() %>% 
+               group_by(lev) %>%
+               by(.$lev, function(x) apply(x[, -ncol(.)], 2, pandoc_pcts)) %>% 
+               do.call(rbind, .)) %>% 
+      do.call(rbind, .) %>% 
+      cbind(fac.values.res) %>% 
+      rbind(t(facs), .) %>% 
+      extract(, order(.[by1, ])) %>% 
+      set_rownames(colnames(fac.values.tot)) %>%
+      rbind(matrix(rep("", nrow(facs) * length(fac.var)),
+                   nrow = length(fac.var), dimnames = list(fac.var, NULL))) %>%
+      extract(row.order, ) %>% 
+      set_rownames(stringr::str_replace_all(
+        rownames(.),
+        c(setNames(c(rep("", length(fac.var))), paste0(fac.var, ".")),
+          setNames(paste0("**", fac.var, "**"), fac.var)))) %>% 
+      set_colnames(mapply(function(x, y) paste(x, y, sep = "="),
+                          names(facs), facs[order(facs[, by1]), ]) %>% 
+                     apply(., 1, function(x) paste(x, collapse = ", ")) %>%
+                     ifelse(grepl("NA", .),
+                            stringr::str_split_fixed(., ", ", 2)[, 1], .))
+    fac.values.long <- fac.values.tot %>% 
+      as.data.frame() %>% 
+      tidyr::gather(stat, value, -match(c(by1, by2), colnames(.))) %>% 
+      tidyr::separate(stat, c("var", "stat"), "\\.") %>%
+      arrange_(by1, by2)
+  } else {
+    fac.result <- fac.values.long <- NULL
+  }
+
   # Final results in each format
   final.result <- rbind(num.result, fac.result)
   ind <- grep("\\*", rownames(final.result))
@@ -241,16 +221,20 @@ contSumFunc <- function(x, digits, stats = c("mean", "sd", "median", "IQR",
   stats.choices <- c("mean", "sd", "median", "IQR", "range", "missing")
   stats.arg <- match.arg(stats, stats.choices, several.ok = TRUE)
   funs.arg <- stats.arg
-  if ("missing" %in% funs.arg)
+  if ("missing" %in% stats)
     funs.arg[match("missing", funs.arg)] <- "n_missing"
-  all.stats <- mapply(function(c, f) match_fun_null(x, c, stats.arg,
+  all.stats <- mapply(function(c, f) match_fun_null(x, c, stats.choices,
                                                     f, na.rm = TRUE),
-                      c = stats.choices, f = funs.arg) %>%
-    extract(!sapply(., is.null)) %>% 
+                      c = stats.arg, f = funs.arg) %>%
     sapply(function(x) {
       r <- as.character(round(x, digits = digits))
       ifelse(length(r) > 1, paste(r, collapse = "-"), r)
     })
+  if (all(c("mean", "sd") %in% stats)) {
+    all.stats["mean"] <- paste(all.stats["mean"], all.stats["sd"],
+                               sep = " &#177; ")
+    all.stats <- all.stats[-match("sd", names(all.stats))]
+  }
   return(all.stats)
 }
 
