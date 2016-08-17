@@ -49,8 +49,9 @@ prettyCoxph <- function(input.formula, input.d, ref.grp = NULL, use.firth = 1,
                         check.ph = FALSE,
                         ph.test.plot.filename = "no.file", ...) {
   pos <- 1
-  assign(".my.formula", as.formula(paste0("survival::", deparse(input.formula))),
-         envir = as.environment(pos)) 
+  assign(".my.formula", as.formula(
+    paste0("survival::", paste(deparse(input.formula), collapse = ""))),
+    envir = as.environment(pos))
   # modify input.d if ref.grp is defined!
   if (length(ref.grp) > 0) {
 	  terms.in.formula <- all.vars(input.formula[[3]])
