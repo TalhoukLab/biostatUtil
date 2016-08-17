@@ -45,6 +45,8 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
   if (!(num.ind || fac.ind)) {
     stop('Variables must be numeric, integer, factor, or character.')
   }
+  assertthat::assert_that(n_distinct(data[, by1]) >= 2 &
+                            n_distinct(data[, by2]) >= 2)
   if (sum(num.ind) > 0) {
     num.var <- var.names[num.ind]
     num.dat <- structure(data.frame(var.dat[num.var], data[, c(by1, by2)]),
@@ -103,17 +105,21 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
   
   # Compute factor summaries
   if (!is.null(fac.var)) {
-    fac.ord <- c(mapply(function(x, y) paste0(x, c("", paste0(".", levels(y)))),
-                        fac.var, fac.dat[, fac.var, drop = FALSE]))
+    fac.ord <- mapply(function(x, y) paste0(x, c("", paste0(".", levels(y)))),
+                      fac.var, fac.dat[, fac.var, drop = FALSE]) %>% 
+      c() %>% 
+      unlist()
     fac.val <- sapply(fac.var, function(x)
       as.formula(paste(x, "~", paste(by1, by2, sep = " + ")))) %>%
       lapply(function(y) as.matrix(aggregate(y, fac.dat, summary))) %>% 
       Reduce(merge, .) %>% 
+      set_colnames(c(by1, by2, grep("\\.", fac.ord, value = TRUE))) %>% 
       as.data.frame()
     fac.val.tot <- sapply(fac.var, function(x)
       as.formula(paste(x, "~", paste(by1, sep = " + ")))) %>%
       lapply(function(y) as.matrix(aggregate(y, fac.dat, summary))) %>% 
       Reduce(merge, .) %>% 
+      set_colnames(c(by1, grep("\\.", fac.ord, value = TRUE))) %>% 
       as.data.frame()
     fac.all <- data.table::rbindlist(list(fac.val, fac.val.tot), fill = TRUE) %>%
       as.data.frame()
@@ -124,7 +130,7 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
       mutate(grp = stringr::str_split_fixed(rownames(.), "\\.", 2)[, 1]) %>% 
       group_by(grp) %>% 
       do(vars = rowColPercent(.[, -ncol(.)])) %>%
-      extract(match(.$grp, fac.var), ) %>% 
+      extract(order(match(.$grp, fac.var)), ) %>% 
       use_series(vars) %>% 
       lapply(function(x) x %>% 
                cbind(lev = rep(letters[1:(nrow(x) / 3)], each = 3)) %>% 
