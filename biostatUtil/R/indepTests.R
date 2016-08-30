@@ -35,30 +35,48 @@
 indepTests <- function(x, digits = 3) {
   . <- `P-Value` <- Test <- Value <- df <- NULL
   Pearson <- x$CST
-  if (any(Pearson$expected < 1) | mean(Pearson$expected < 5) > 0.2) {
+  if (is.na(Pearson)) {
     Pearson.obj <- rep(NA, 3)
   } else {
-    Pearson.obj <- c(Pearson$statistic, Pearson$parameter, Pearson$p.value)  
+    if (any(Pearson$expected < 1) | mean(Pearson$expected < 5) > 0.2) {
+      Pearson.obj <- rep(NA, 3)
+    } else {
+      Pearson.obj <- c(Pearson$statistic, Pearson$parameter, Pearson$p.value)  
+    }
   }
   
   CC <- x$chisq.corr
-  if (!all(is.na(CC)) & !all(is.na(Pearson.obj))) {
-    CC.obj <- c(CC$statistic, CC$parameter, CC$p.value)
-  } else {
+  if (is.na(CC)) {
     CC.obj <- rep(NA, 3)
+  } else {
+    if (!all(is.na(CC)) & !all(is.na(Pearson.obj))) {
+      CC.obj <- c(CC$statistic, CC$parameter, CC$p.value)
+    } else {
+      CC.obj <- rep(NA, 3)
+    }
   }
   
-  G.test <- Deducer::likelihood.test(x$tab)
-  G.test.obj <- c(G.test$statistic, G.test$parameter, G.test$p.value)
+  G.test <- tryCatch(Deducer::likelihood.test(x$tab),
+                     error = function(e) return(NULL))
+  if (!is.null(G.test)) {
+    G.test.obj <- c(G.test$statistic, G.test$parameter, G.test$p.value)
+  } else {
+    G.test.obj <- rep(NA, 3)
+  }
   
   Fisher <- x$fisher.ts
-  if (!any(is.na(Fisher))) {
-    Fisher.obj <- c(NA, NA, Fisher$p.value)
-  } else {
+  if (is.na(Fisher)) {
     Fisher.obj <- rep(NA, 3)
+  } else {
+    if (!any(is.na(Fisher))) {
+      Fisher.obj <- c(NA, NA, Fisher$p.value)
+    } else {
+      Fisher.obj <- rep(NA, 3)
+    }
   }
   
-  LBL <- tryCatch(coin::lbl_test(x$tab), error = function(e) return(NULL))
+  LBL <- tryCatch(coin::lbl_test(x$tab),
+                  error = function(e) return(NULL))
   if (!is.null(LBL)) {
     LBL.obj <- c(coin::statistic(LBL), 1, coin::pvalue(LBL))  
   } else {
