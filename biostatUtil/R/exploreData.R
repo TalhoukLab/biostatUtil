@@ -7,16 +7,16 @@
 #' @export
 exploreData <- function(datmat){
   types <- unname(sapply(datmat, class))
-  fd <- datmat[, types %in% c("factor", "numeric")]
+  fd <- datmat[, types %in% c("factor", "numeric", "integer")]
   type.fd <- unname(sapply(fd, class))
-  num.ind <- type.fd %in% c("numeric")
+  num.ind <- type.fd %in% c("numeric","integer")
   fac.ind <- type.fd %in% c("factor")
   catvars <- colnames(fd)[fac.ind]
   pdf("DataSummary.pdf")
   
   for (i in 1:length(catvars)) {
-    x = fd[, catvars[i]]
-    tx = table(x, useNA = "ifany")
+    x <-  fd[, catvars[i]]
+    tx <-  table(x, useNA = "ifany")
     par(mfrow = c(2, 1), mar = c(3.1, 9.5, 4.1, 2.1))
     biostatUtil::barplotSum(tx, catvars[i])
     mat <- data.matrix(cbind(tx, round(prop.table(tx) * 100, 1)))
