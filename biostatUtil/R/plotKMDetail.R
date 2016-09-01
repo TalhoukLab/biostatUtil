@@ -11,10 +11,11 @@
 #' @param line.color line colour of survival curves
 #' @param line.pattern line pattern of survival curves
 #' @param line.width line width of survival curves
-#' @param show.test show single or the reference group value (for pairwise comparisons).
-#' If \code{"none"}, then no test is show.
-#' @param single.test.type test to show if specified \code{show.test = "single"}. Possible
-#' choices are \code{"logrank"} (default), \code{"wilcoxon"}, \code{"taroneware"}, or \code{"all"}.
+#' @param show.test show single or the reference group value (for pairwise
+#'   comparisons). If \code{"none"}, then no test is show.
+#' @param single.test.type test to show if specified \code{show.test =
+#'   "single"}. Possible choices are \code{"logrank"} (default),
+#'   \code{"wilcoxon"}, \code{"taroneware"}, or \code{"all"}.
 #' @param round.digits.p.value number of digits for p-value
 #' @param obs.survyrs show the observed survival years survival rate on KM plot
 #' @param ten.years.surv.95CI show ten year survival 95\% confidence interval
@@ -24,14 +25,13 @@
 #' @param file.width width of figure in saved file
 #' @param file.height height of figure in saved file
 #' @param grey.scale logical. If \code{TRUE}, the plot will be in grey scale.
-#' @param show.single.test.pos position to show single test; defaults to 0.5 if
-#' \code{legend.pos = "top"}. Otherwise 0.1
+#' @param show.single.test.pos position to show single test; defaults to 0.5 if 
+#'   \code{legend.pos = "top"}. Otherwise 0.1
 #' @param ... additional arguments to \code{plot}
 #' @author Samuel Leung
-#' @references http://courses.nus.edu.sg/course/stacar/internet/st3242/handouts/notes2.pdf
+#' @references
+#'   http://courses.nus.edu.sg/course/stacar/internet/st3242/handouts/notes2.pdf
 #' @seealso \code{\link{plotKM}}
-#' @importFrom grDevices cairo_pdf dev.off png tiff
-#' @importFrom graphics plot legend box text
 #' @export
 plotKMDetail <- function(input.data, surv.formula, main.text, xlab.text,
                          ylab.text, line.name, line.color, line.pattern = NULL,
@@ -115,7 +115,7 @@ plotKMDetail <- function(input.data, surv.formula, main.text, xlab.text,
     )
     if (legend.pos == "top") {
       l1 <- legend(x = (max(fit$time, na.rm = TRUE) -
-                          min(fit$time,na.rm = TRUE)) / 2, y = 0.99, # i.e. top 1% ... since survival plot always start at 100% survival
+                          min(fit$time, na.rm = TRUE)) / 2, y = 0.99, # i.e. top 1% ... since survival plot always start at 100% survival
                    legend = line.name,
                    lty = line.pattern,
                    lwd = line.width,
@@ -173,7 +173,7 @@ plotKMDetail <- function(input.data, surv.formula, main.text, xlab.text,
     tarone.ware.p.values <- tarone.ware.p.value
     tarone.ware.p.value <- round(tarone.ware.p.value, digits = round.digits.p.value)
     text(
-      x = l1$rect$w + l1$rect$left + l2$rect$w + 1.3*l3$rect$w,
+      x = l1$rect$w + l1$rect$left + l2$rect$w + 1.3 * l3$rect$w,
       y = show.single.test.pos, # position of the test statistics on plot
       paste0(
         ifelse(sum(single.test.type %in% c("logrank",   "all")) >= 1,
@@ -202,18 +202,18 @@ plotKMDetail <- function(input.data, surv.formula, main.text, xlab.text,
         # construct data
         temp.d <- input.data[input.data[, var.name] == show.test |
                                input.data[, var.name] == value.name, ]
-        if(sum(input.data[, var.name] == value.name, na.rm = TRUE) == 0) {
+        if (sum(input.data[, var.name] == value.name, na.rm = TRUE) == 0) {
           # no case in this group
           p.value <- NA 
           w.p.value <- NA
           t.p.value <- NA
         } else {
           # calculate log rank p-values
-          p.value   <- getPval(survival::survdiff(surv.formula, data = temp.d, rho = 0 ))
+          p.value   <- getPval(survival::survdiff(surv.formula, data = temp.d, rho = 0))
           log.rank.p.values    <- c(log.rank.p.values,    p.value)
           p.value   <- round(p.value,  digits = round.digits.p.value)
           
-          w.p.value <- getPval(survival::survdiff(surv.formula, data = temp.d, rho = 1 ))
+          w.p.value <- getPval(survival::survdiff(surv.formula, data = temp.d, rho = 1))
           wilcox.p.values      <- c(wilcox.p.values,      w.p.value)
           w.p.value <- round(w.p.value, digits = round.digits.p.value)
           
@@ -238,7 +238,7 @@ plotKMDetail <- function(input.data, surv.formula, main.text, xlab.text,
       ifelse("taroneware" %in% single.test.type, "Tarone-Ware ", ""))
     if (endsWith(legend.title, " / ")) {
       legend.title <- substr(legend.title, 0, nchar(legend.title) - 2)
-      }
+    }
     legend.title <- paste0(legend.title, "P-values")
     
     l4 <- legend(x = l1$rect$w + l2$rect$w + l3$rect$w, y = y.pos,#y=l1$rect$h,

@@ -44,7 +44,7 @@ doTrtTrendBarplot <- function(input.d, title, legend.space = 0.2,
   treatment.trend <- cbind(treatment.trend, rep("", nrow(treatment.trend)))
   colnames(treatment.trend)[ncol(treatment.trend)] <- ""
   treatment.trend.n <- c(treatment.trend.n, legend.space)
-  barplot(treatment.trend, width = treatment.trend.n, legend.text = T,
+  barplot(treatment.trend, width = treatment.trend.n, legend.text = TRUE,
           args.legend = list(x = "right"),
           col = c("red", "yellow", "brown", "blue"), las = 2, main = title,
           ylab = "Percentage of cases", xlab = "Year of diagnosis",

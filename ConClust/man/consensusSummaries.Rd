@@ -23,4 +23,7 @@ two elements: consensusMatrix and consensusClass.
 Given an output from ConClust, returns a list of consensus matrices and classes
 for each algorithm.
 }
+\author{
+Derek Chiu
+}
 

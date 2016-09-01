@@ -7,11 +7,9 @@
 numericToDate(x, date.origin = DATE.ORIGIN)
 }
 \arguments{
-\item{x}{a number that represents the number of days after
-\code{date.origin}}
+\item{x}{a number that represents the number of days after \code{date.origin}}
 
-\item{date.origin}{the date from which we count the number of days
-passed}
+\item{date.origin}{the date from which we count the number of days passed}
 }
 \value{
 A date object, converted from a numeric object.

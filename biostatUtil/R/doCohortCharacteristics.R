@@ -3,39 +3,52 @@
 #' @param marker.name The variable that you want to split into different columns
 #' @param marker.description The description for the variable(s) to split
 #' @param var.names The variables that you want the statistics for
-#' @param is.var.continuous Vector of length equal to the length of var.names with 1 indicating a continuous variable and 0 otherwise (this should be inferred in the function)
-#' @param var.descriptions Vector of strings to describe the variables as they are to appear in the table
-#' @param marker.value.labels.tolower Indicator as to whether to put marker value labels to lower case
+#' @param is.var.continuous Vector of length equal to the length of var.names
+#'   with 1 indicating a continuous variable and 0 otherwise (this should be
+#'   inferred in the function)
+#' @param var.descriptions Vector of strings to describe the variables as they
+#'   are to appear in the table
+#' @param marker.value.labels.tolower Indicator as to whether to put marker
+#'   value labels to lower case
 #' @param show.missing an indicator to whether to show missing values
-#' @param show.missing.continuous if set to \code{FALSE} and \code{show.missing == FALSE},
-#' will not show the number of missing cases for continuous variables.
-#' Otherwise, it shows the number of missing for continuous variables even if \code{show.missing == FALSE}.
+#' @param show.missing.continuous if set to \code{FALSE} and \code{show.missing
+#'   == FALSE}, will not show the number of missing cases for continuous
+#'   variables. Otherwise, it shows the number of missing for continuous
+#'   variables even if \code{show.missing == FALSE}.
 #' @param do.droplevels drop categories of unobserved levels set to \code{TRUE}
-#' @param show.percent defaults to "both" which shows both rows and columns other possible values: "column", "row".
-#' @param stat.tests statistical test to perform. \code{NULL} indicates do not do test for all variables,
-#' \code{NA} indicates do not do test for specified variable.
-#' Tests: chisq, fisher, ttest, wilcox, kendall, spearman, pearson, kruskal, confusionMarkerAsRef, confusionVarAsRef
-#' @param stat.test.column.header The name to show on the header defaults to "association/correlation test"
+#' @param show.percent defaults to "both" which shows both rows and columns
+#'   other possible values: "column", "row".
+#' @param stat.tests statistical test to perform. \code{NULL} indicates do not
+#'   do test for all variables, \code{NA} indicates do not do test for specified
+#'   variable. Tests: chisq, fisher, ttest, wilcox, kendall, spearman, pearson,
+#'   kruskal, confusionMarkerAsRef, confusionVarAsRef
+#' @param stat.test.column.header The name to show on the header defaults to
+#'   "association/correlation test"
 #' @param round.digits.p.value The number of digits to round the P values
-#' @param num.boot the number of bootstrap samples for any bootstrap method that may be used
-#' @param missing.codes.highlight default to \code{NULL} this indicates whether we wanted the missing values broken down down or lumped together.
-#' @param missing.codes a vector to indicate how missing values are coded, default is \code{c("N/A", "", "Unk")}
-#' @param decimal number of decimal places to show for aggregate numbers such as proportions or averages; default to 0 
+#' @param num.boot the number of bootstrap samples for any bootstrap method that
+#'   may be used
+#' @param missing.codes.highlight default to \code{NULL} this indicates whether
+#'   we wanted the missing values broken down down or lumped together.
+#' @param missing.codes a vector to indicate how missing values are coded,
+#'   default is \code{c("N/A", "", "Unk")}
+#' @param decimal number of decimal places to show for aggregate numbers such as
+#'   proportions or averages; default to 0
 #' @param caption caption to use for the Table
 #' @param html.table.border the border type to use for html tables
 #' @param banded.rows If \code{TRUE}, rows have alternating shading colour
 #' @param css.class.name.odd Used to set the row colour for odd rows
 #' @param css.class.name.even Used to set the row colour for even rows
-#' @param custom.marker.labels labels of marker to show; default \code{NULL} means using existing value label of the marker
-#' @param custom.total.label label of the "Total" column; default \code{NULL} means show "Total"
+#' @param custom.marker.labels labels of marker to show; default \code{NULL}
+#'   means using existing value label of the marker
+#' @param custom.total.label label of the "Total" column; default \code{NULL}
+#'   means show "Total"
 #' @param split.table number of chars per row before table is split.
 #' @param ... additional arguments to \code{pander}
-#' @return A table with statistics reported for multiple variables, such as
-#' mean, median, and range for continuous variables and proportions and 
-#' percentages for categorical variables. Relevant association and correlation
-#' tests are performed as well.
+#' @return A table with statistics reported for multiple variables, such as 
+#'   mean, median, and range for continuous variables and proportions and 
+#'   percentages for categorical variables. Relevant association and correlation
+#'   tests are performed as well.
 #' @author Aline Talhouk
-#' @importFrom stats cor.test kruskal.test wilcox.test quantile chisq.test fisher.test
 #' @export
 doCohortCharacteristics <- function(input.d, marker.name, marker.description,
                                     var.names, is.var.continuous, 

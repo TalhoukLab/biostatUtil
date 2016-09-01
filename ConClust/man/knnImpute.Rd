@@ -7,7 +7,7 @@
 knnImpute(res, tdat = tdat, seed = 123456)
 }
 \arguments{
-\item{res}{is a vector representing a column of the output from ConClust or ConClustPlus}
+\item{res}{is a vector representing a column of the output from ConClust}
 
 \item{tdat}{is the data matrix with samples are rows and genes as columns}
 

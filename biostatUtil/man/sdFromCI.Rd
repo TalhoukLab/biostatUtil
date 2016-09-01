@@ -16,18 +16,18 @@ sdFromCI(HR, lower.limit, upper.limit, alpha = 0.05)
 \item{alpha}{significance level}
 }
 \value{
-A list with elements
-\item{sd}{standard deviation of log HR}
+A list with elements 
+\item{sd}{standard deviation of log HR} 
 \item{pval}{estimated p-value}
 }
 \description{
-Compute the standard deviation of a log hazard ratio when only given its
+Compute the standard deviation of a log hazard ratio when only given its 
 repoted confidence limits.
 }
 \details{
-Extract standard deviation from a confidence limit and obtain a
-corresponding p-value, which can be compared to the reported p-value.
-The null p-values are calculated from the Chi-squared 1 distribution.
+Extract standard deviation from a confidence limit and obtain a corresponding
+p-value, which can be compared to the reported p-value. The null p-values are
+calculated from the Chi-squared 1 distribution.
 }
 \examples{
 library(meta)

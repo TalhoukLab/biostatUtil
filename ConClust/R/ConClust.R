@@ -77,7 +77,7 @@ ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
     set.seed(seed.method)
     for (i in 1:reps) {
       setTxtProgressBar(pb, i)
-      ind.new <- sample(n, n.new, replace = F)
+      ind.new <- sample(n, n.new, replace = FALSE)
       if (any(c("nmfDiv", "nmfEucl") %in% method))
         x.nmf.samp <- x.nmf[!(apply(x.nmf[, ind.new], 1,
                                     function(x) all(x == 0))), ind.new]
@@ -116,10 +116,10 @@ ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
         gmmBIC = Mclust(t(x.rest[, ind.new]), k)$classification,
         biclust = cocluster(as.matrix(x.rest[, ind.new]), "continuous",
                             nbcocluster = c(k, k))@colclass + 1
-        )
-      if(i %% 10==0) {
-          saveRDS(coclus, paste0(dir, fileName,".rds"))
-        }
+      )
+      if (i %% 10 == 0) {
+        saveRDS(coclus, paste0(dir, fileName,".rds"))
+      }
     }
   }
   saveRDS(coclus, paste0(dir, fileName,".rds"))

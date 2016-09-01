@@ -2,15 +2,16 @@
 #' 
 #' Adds a period of time to a date string and returns a new date string.
 #' 
-#' The added period of time can be in \code{"days"}, \code{"months"},
-#' or \code{"years"}. If \code{delta} is negative, then the returned date
-#' will be earlier than \code{org.date}. The output date format will be the
-#' same as the input date format.
+#' The added period of time can be in \code{"days"}, \code{"months"}, or
+#' \code{"years"}. If \code{delta} is negative, then the returned date will be
+#' earlier than \code{org.date}. The output date format will be the same as the
+#' input date format.
 #' 
 #' @param org.date original date
 #' @param delta amount of time to add to \code{org.date}
 #' @param date.format how to format the resulting date
-#' @param units the unit of time for which to take the difference. Defaults to "days".
+#' @param units the unit of time for which to take the difference. Defaults to
+#'   "days".
 #' @param existing.missing.codes missing dates
 #' @param return.missing.code what to return if there is a missing input
 #' @param ... additional arguments to \code{formatDate}

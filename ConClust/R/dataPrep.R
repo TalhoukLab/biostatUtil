@@ -10,17 +10,18 @@
 #' @param data data matrix. Columns are samples and rows are genes/features.
 #' @param min.sd minimum standard deviation threshold. See details.
 #' @return dataset prepared for usage in \code{ConClust}
+#' @author Derek Chiu
 #' @importFrom stats sd
 #' @export
 dataPrep <- function(data, min.sd = 1) {
   . <- NULL
   dat.out <- data %>%
-    as.data.frame %>%
+    as.data.frame() %>%
     select(which(sapply(., class) == "numeric")) %>%
-    extract(apply(., 1, function(x) sd(x, na.rm = T)) > min.sd,
+    extract(apply(., 1, function(x) sd(x, na.rm = TRUE)) > min.sd,
             apply(., 2, function(x) !any(is.na(x)))) %>%
-    t %>%
-    scale %>%
-    t
+    t() %>%
+    scale() %>%
+    t()
   return(dat.out)
 }

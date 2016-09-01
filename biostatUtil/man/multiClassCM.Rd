@@ -20,12 +20,12 @@ multiClassCM(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
 
 \item{digits}{number of digits to round summaries to}
 
-\item{method}{method for obtaining confidence intervals for binomial
+\item{method}{method for obtaining confidence intervals for binomial 
 probabilities. See \code{Hmisc::binconf} for details.}
 }
 \value{
-A confusion matrix for the predicted and reference classes. Then
-the estimated statistics along with bootstrapped confidence intervals. A
+A confusion matrix for the predicted and reference classes. Then the 
+  estimated statistics along with bootstrapped confidence intervals. A
 list with the following elements
 \item{Accuracy}{Accuracy point estimate, lower bound and upper bound for
 bootstrapped CI}
@@ -41,14 +41,14 @@ bootstrapped CI}
 bootstrapped CI}
 }
 \description{
-Calculates summaries from cross-tabulated reference and prediction labels
-for a multi-class variable.
+Calculates summaries from cross-tabulated reference and prediction labels for
+a multi-class variable.
 }
 \details{
-Given two multi-class variables summarized in a confusion matrix, this
-function provides performance summaries. It provides overall accuracy with confidence intervals, as well as per class accuracy, sensitivity,
-specificity, positive predictive value (PPV), negative predictive value
-(NPV)
+Given two multi-class variables summarized in a confusion matrix, this 
+function provides performance summaries. It provides overall accuracy with 
+confidence intervals, as well as per class accuracy, sensitivity, 
+specificity, positive predictive value (PPV), negative predictive value (NPV)
 }
 \examples{
 ### 95\% CI from 1000 bootstraped samples

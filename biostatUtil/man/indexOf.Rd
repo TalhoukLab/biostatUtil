@@ -11,20 +11,19 @@ indexOf(a, b, ignore.case = FALSE)
 
 \item{b}{string to check}
 
-\item{ignore.case}{logical; if \code{TRUE}, case is ignored when
-performing the check}
+\item{ignore.case}{logical; if \code{TRUE}, case is ignored when performing 
+the check}
 }
 \value{
-Indices where \code{b} occurs in \code{a}. Returns \code{NA}
-if there are no occurences.
+Indices where \code{b} occurs in \code{a}. Returns \code{NA} if there
+  are no occurences.
 }
 \description{
 Returns a vector of the indices where a string occurs in another string
 }
 \details{
-If \code{b} is longer than \code{a}, \code{indexOf} returns \code{NA},
-since it is not possible for a longer string to occur in a shorter
-string.
+If \code{b} is longer than \code{a}, \code{indexOf} returns \code{NA}, since 
+it is not possible for a longer string to occur in a shorter string.
 }
 \examples{
 indexOf("derek", "e")

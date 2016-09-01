@@ -20,7 +20,7 @@ binaryCM(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
 
 \item{digits}{number of digits to round summaries to}
 
-\item{method}{method for obtaining confidence intervals for binomial
+\item{method}{method for obtaining confidence intervals for binomial 
 probabilities. See \code{Hmisc::binconf} for details.}
 
 \item{verbose}{logical; if \code{TRUE}, outputs are printed to the screen}
@@ -43,14 +43,14 @@ bootstrapped CI}
 bootstrapped CI}
 }
 \description{
-Calculates summaries from cross-tabulated reference and prediction labels
-for a two-class variable.
+Calculates summaries from cross-tabulated reference and prediction labels for
+a two-class variable.
 }
 \details{
-Given two dichotomous variables summarized in a confusion matrix, this
-function provides performance summaries. The accuracy, sensitivity,
-specificity, positive predictive value (PPV), negative predictive value
-(NPV), and the kappa statistic, along with their bootstrapped confidence
+Given two dichotomous variables summarized in a confusion matrix, this 
+function provides performance summaries. The accuracy, sensitivity, 
+specificity, positive predictive value (PPV), negative predictive value 
+(NPV), and the kappa statistic, along with their bootstrapped confidence 
 intervals are returned.
 }
 \examples{

@@ -13,43 +13,47 @@ lifetable(obj, ntimes = 3, times = round(quantile(obj$time, 1/ntimes *
 
 \item{ntimes}{number of time intervals}
 
-\item{times}{A vector of endpoints of time intervals to show life table calculations.
-By default, these are \code{ntimes} evenly spaced out endpoints based on the full range
-of survival times.}
+\item{times}{A vector of endpoints of time intervals to show life table 
+calculations. By default, these are \code{ntimes} evenly spaced out 
+endpoints based on the full range of survival times.}
 
 \item{nround}{number of digits to round table values}
 
-\item{show.strata}{logical; if \code{TRUE} (default), the variable name is appended to the
-beginning of each stratum in the lifetable's \code{strata} column}
+\item{show.strata}{logical; if \code{TRUE} (default), the variable name is 
+appended to the beginning of each stratum in the lifetable's \code{strata} 
+column}
 
 \item{strata.name}{column name for the different strata}
 
-\item{summary}{logical; if \code{TRUE}, a case processing summary is shown with number 
-of subjects, events, censored, and percent censored per stratum.}
+\item{summary}{logical; if \code{TRUE}, a case processing summary is shown 
+with number of subjects, events, censored, and percent censored per 
+stratum.}
 }
 \value{
 A table with the following columns:
 \item{strata}{name of specific group in variable}
 \item{times}{time interval}
-\item{nsubs}{See \code{\link{lifetab}}}
-\item{nlost}{See \code{\link{lifetab}}}
-\item{nrisk}{See \code{\link{lifetab}}}
-\item{nevent}{See \code{\link{lifetab}}}
-\item{surv}{See \code{\link{lifetab}}}
-\item{pdf}{See \code{\link{lifetab}}}
-\item{hazard}{See \code{\link{lifetab}}}
-\item{se.surv}{See \code{\link{lifetab}}}
-\item{se.pdf}{See \code{\link{lifetab}}}
-\item{se.hazard}{See \code{\link{lifetab}}}
+\item{nsubs}{See \code{\link[KMsurv]{lifetab}}}
+\item{nlost}{See \code{\link[KMsurv]{lifetab}}}
+\item{nrisk}{See \code{\link[KMsurv]{lifetab}}}
+\item{nevent}{See \code{\link[KMsurv]{lifetab}}}
+\item{surv}{See \code{\link[KMsurv]{lifetab}}}
+\item{pdf}{See \code{\link[KMsurv]{lifetab}}}
+\item{hazard}{See \code{\link[KMsurv]{lifetab}}}
+\item{se.surv}{See \code{\link[KMsurv]{lifetab}}}
+\item{se.pdf}{See \code{\link[KMsurv]{lifetab}}}
+\item{se.hazard}{See \code{\link[KMsurv]{lifetab}}}
 }
 \description{
-Specify vector of time endpoints and create a cohort life table for two or more strata
+Specify vector of time endpoints and create a cohort life table for two or 
+more strata
 }
 \details{
-Essentially a wrapper around \code{lifetab} that allows the user to input a \code{survfit}
-object instead of vectors of raw values.
+Essentially a wrapper around \code{\link[KMsurv]{lifetab}} that allows the user to input a 
+\code{survfit} object instead of vectors of raw values.
 }
 \examples{
+library(survival)
 obj <- survfit(Surv(futime, fustat) ~ rx, data = ovarian)
 lifetable(obj)
 lifetable(obj, ntimes = 4, show.strata = FALSE)
@@ -59,6 +63,6 @@ lifetable(obj, ntimes = 4, times = c(200, 500, 800, 1000))
 Derek Chiu
 }
 \seealso{
-\code{\link{lifetab}}
+\code{\link[KMsurv]{lifetab}}
 }
 

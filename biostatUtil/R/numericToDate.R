@@ -2,10 +2,8 @@
 #' 
 #' Change a numeric value to a date object by specifying a date of origin.
 #' 
-#' @param x a number that represents the number of days after
-#' \code{date.origin}
-#' @param date.origin the date from which we count the number of days
-#' passed
+#' @param x a number that represents the number of days after \code{date.origin}
+#' @param date.origin the date from which we count the number of days passed
 #' @return A date object, converted from a numeric object.
 #' @author Samuel Leung
 #' @export

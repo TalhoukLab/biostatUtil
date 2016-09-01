@@ -1,12 +1,12 @@
 #' Confusion matrix summaries
 #' 
-#' Calculates summaries from cross-tabulated reference and prediction labels
-#' for a two-class variable.
+#' Calculates summaries from cross-tabulated reference and prediction labels for
+#' a two-class variable.
 #' 
-#' Given two dichotomous variables summarized in a confusion matrix, this
-#' function provides performance summaries. The accuracy, sensitivity,
-#' specificity, positive predictive value (PPV), negative predictive value
-#' (NPV), and the kappa statistic, along with their bootstrapped confidence
+#' Given two dichotomous variables summarized in a confusion matrix, this 
+#' function provides performance summaries. The accuracy, sensitivity, 
+#' specificity, positive predictive value (PPV), negative predictive value 
+#' (NPV), and the kappa statistic, along with their bootstrapped confidence 
 #' intervals are returned.
 #' 
 #' @param x a vector of predicted binary classes
@@ -15,8 +15,8 @@
 #' @param num.boot number of times to bootstrap. Defaults to 1000.
 #' @param conf.level confidence level. Defaults to 95\%.
 #' @param digits number of digits to round summaries to
-#' @param method method for obtaining confidence intervals for binomial
-#' probabilities. See \code{Hmisc::binconf} for details.
+#' @param method method for obtaining confidence intervals for binomial 
+#'   probabilities. See \code{Hmisc::binconf} for details.
 #' @param verbose logical; if \code{TRUE}, outputs are printed to the screen
 #' @return A confusion matrix for the predicted and reference classes. Then
 #' the estimated statistics along with bootstrapped confidence intervals. A
@@ -96,7 +96,7 @@ binaryCM <- function(x, y, seed = 20, num.boot = 1000,
                "\n"))
   
   table <- matrix(c(Accuracy, Sensitivity, Specificity, PPV, NPV, kappa),
-                  ncol = 3, byrow = T,
+                  ncol = 3, byrow = TRUE,
                   dimnames = list(c("Accuracy", "Sensitivity", "Specificity",
                                     "PPV", "NPV", "kappa"),
                                   c("Point Estimate", "Lower CI", "Upper CI")))

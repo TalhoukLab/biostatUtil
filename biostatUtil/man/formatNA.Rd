@@ -9,17 +9,18 @@ formatNA(y, type = c("cat", "cont"), codes = c("", "Unk", "N/A"))
 \arguments{
 \item{y}{a vector.}
 
-\item{type}{whether the variable is \code{"cat"} (categorical) or \code{"cont"} (continuous).
-Defaults to \code{"cat"}.}
+\item{type}{whether the variable is \code{"cat"} (categorical) or
+\code{"cont"} (continuous). Defaults to \code{"cat"}.}
 
 \item{codes}{vector of missing codes to replace with \code{NA}}
 }
 \value{
-A categorical or numerical vector with all missing formatted as \code{NA}.
+A categorical or numerical vector with all missing formatted as
+  \code{NA}.
 }
 \description{
-Takes a numeric vector and replaces all missing codes with NA and returns a factor
-if the variable is categorical or a numeric variable if it's numeric.
+Takes a numeric vector and replaces all missing codes with NA and returns a
+factor if the variable is categorical or a numeric variable if it's numeric.
 }
 \examples{
 y <- c(1:10, "Unk", 12)

@@ -2,42 +2,53 @@
 % Please edit documentation in R/SummaryStatsBy.R
 \name{SummaryStatsBy}
 \alias{SummaryStatsBy}
-\title{Generate cohort characteristics}
+\title{Generate summary statistics}
 \usage{
 SummaryStatsBy(data, by1, by2, var.names, stats = c("mean", "sd", "median",
-  "IQR", "range", "missing"), marker.description = by1,
-  groups.description = by2, var.descriptions = var.names, digits = 3,
-  format = c("pandoc", "html", "long"))
+  "IQR", "range", "missing"), digits = 3, format = c("raw", "pandoc",
+  "html", "long"))
 }
 \arguments{
 \item{data}{The \code{data.frame} containing the data}
 
-\item{by1}{split variable 1}
+\item{by1}{character string of splitting variable 1}
 
-\item{by2}{split variable 2}
+\item{by2}{character string of splitting variable 2}
 
-\item{var.names}{The variables that you want the statistics for}
+\item{var.names}{character vector of variables to compute statistics for}
 
-\item{stats}{statistics to show compute for continuous variables}
-
-\item{marker.description}{The description for the variable(s) to split}
-
-\item{groups.description}{The groupings of the marker}
-
-\item{var.descriptions}{descriptions of \code{var.names}}
+\item{stats}{statistics to compute for continuous variables}
 
 \item{digits}{number of digits to round to}
 
-\item{format}{format to return the table in. Either "pandoc" (for Word and PDF),
-"html", or "long" format for graphing and data manipulation using raw values.}
+\item{format}{format to return the table in. Either "raw", "pandoc" (for Word
+and PDF), "html", or "long" format for graphing and data manipulation using
+raw values.}
 }
 \description{
-Generate cohort characteristics
+Splits the data by two variables, computing relevant statistics for each 
+variable.
+}
+\details{
+The \code{data} is split by two variables, \code{by1} and \code{by2}, and 
+statistics are computed for continuous variables. Statistics currently 
+supported include \code{ mean, sd, median, IQR, range}, and the number of 
+missing cases. For factor variables, the counts, column and row percentages 
+are shown for each of the variable levels.
+
+Note that marginal statistics are also shown for \code{by1}, so the order in 
+which you split \code{data} matters.
+
+There are four print options for the output: \code{raw} gives the output as a
+character matrix, \code{pandoc} gives a Pandoc-friendly output for Word and 
+PDF reports, \code{html} gives HTML supported output, and \code{long} is a 
+tidy version of \code{raw}.
 }
 \examples{
 mtcars$vs <- as.factor(mtcars$vs); mtcars$am <- as.factor(mtcars$am)
 SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("mpg", "vs", "qsec", "am"))
 SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("vs", "qsec"))
+SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("mpg"))
 }
 \author{
 Aline Talhouk, Derek Chiu

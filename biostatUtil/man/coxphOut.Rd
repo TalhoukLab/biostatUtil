@@ -9,16 +9,16 @@ coxphOut(object, coefnames = NULL, conf.level = 0.95, digits = 2)
 \arguments{
 \item{object}{a model fit object returned from \code{coxph} or \code{coxphf}}
 
-\item{coefnames}{a vector of labels for the coefficient names returned by the fit.
-\code{NULL} by default, uses original coefficient names.}
+\item{coefnames}{a vector of labels for the coefficient names returned by the
+fit. \code{NULL} by default, uses original coefficient names.}
 
 \item{conf.level}{confidence level for hazard ratio. Defaults to 95\%.}
 
 \item{digits}{number of digits to round to}
 }
 \value{
-A matrix with a row for each coefficient, and a column for each of the following
-elements
+A matrix with a row for each coefficient, and a column for each of
+  the following elements
 \item{n}{the number of observations used in the fit.}
 \item{events}{the number of events used in the fit.}
 \item{coef}{log hazard ratio}
@@ -30,18 +30,19 @@ elements
 \item{Upper CI Limit}{Defaults to \code{97.5 \%}}
 }
 \description{
-Nicely formatted output from a Cox regression object,
-either \code{coxph} or \code{coxphf}.
+Nicely formatted output from a Cox regression object, either \code{coxph} or
+\code{coxphf}.
 }
 \details{
-For objects of class \code{coxphf}, the calculation of the number of events used
-in the fit is slightly different.
+For objects of class \code{coxphf}, the calculation of the number of events
+used in the fit is slightly different.
 }
 \examples{
-test1 <- list(time=c(4,3,1,1,2,2,3), 
-status=c(1,1,1,0,1,1,0), 
-x=c(0,2,1,1,1,0,0), 
-sex=c(0,0,0,0,1,1,1)) 
+library(survival)
+test1 <- list(time = c(4, 3, 1, 1, 2, 2, 3), 
+status = c(1, 1, 1, 0, 1, 1, 0), 
+x = c(0, 2, 1, 1, 1, 0, 0), 
+sex = c(0, 0, 0, 0, 1, 1, 1)) 
 
 # Stratified
 mod1 <- coxph(Surv(time, status) ~ x + strata(sex), test1) 

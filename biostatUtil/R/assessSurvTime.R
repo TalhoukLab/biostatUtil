@@ -1,15 +1,15 @@
 #' Assess survival time
 #' 
-#' Given range of survival times and censoring status, provides different
+#' Given range of survival times and censoring status, provides different 
 #' time-related summary statistics
 #' 
-#' The observation time is defined as the median time in days between all
-#' \code{T1} and \code{T2}. Censoring time is the median time in days between
+#' The observation time is defined as the median time in days between all 
+#' \code{T1} and \code{T2}. Censoring time is the median time in days between 
 #' all \code{T1} and \code{T2} for events only.
 #' 
 #' @param T1 vector of start dates
 #' @param T2 vector of end dates
-#' @param status logical; 
+#' @param status logical;
 #' @return A list with elements
 #' \item{Otime}{Observation time}
 #' \item{Stime}{Censoring time}
@@ -17,7 +17,6 @@
 #' \item{KFT}{Known Function Time}
 #' \item{RevKM}{Reverse Kaplan-Meier Time}
 #' @author Samuel Leung
-#' @importFrom utils capture.output read.table
 #' @export
 assessSurvTime <- function(T1, T2, status) { 
   # in case there are any is.na(status)
@@ -38,10 +37,10 @@ assessSurvTime <- function(T1, T2, status) {
   SumServ <- read.table(textConnection(capture.output(Ftime)),
                         skip = 2, header = TRUE)
   MedianTime <- list(
-    Otime = as.numeric(round(median(Otime, na.rm = T) / NUM.DAYS.IN.YEAR, 2)),
-    Stime = as.numeric(round(median(Stime, na.rm = T) / NUM.DAYS.IN.YEAR, 2)),
-    Etime = as.numeric(round(median(Etime, na.rm = T) / NUM.DAYS.IN.YEAR, 2)),
-    KFT = as.numeric(round(median(KFT, na.rm = T) / NUM.DAYS.IN.YEAR, 2)), 
+    Otime = as.numeric(round(median(Otime, na.rm = TRUE) / NUM.DAYS.IN.YEAR, 2)),
+    Stime = as.numeric(round(median(Stime, na.rm = TRUE) / NUM.DAYS.IN.YEAR, 2)),
+    Etime = as.numeric(round(median(Etime, na.rm = TRUE) / NUM.DAYS.IN.YEAR, 2)),
+    KFT = as.numeric(round(median(KFT, na.rm = TRUE) / NUM.DAYS.IN.YEAR, 2)), 
     RevKM = as.numeric(round(SumServ[, "median"] / NUM.DAYS.IN.YEAR, 2)))
   return(MedianTime)
 }

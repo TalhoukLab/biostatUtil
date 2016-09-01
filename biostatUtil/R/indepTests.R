@@ -1,23 +1,22 @@
 #' Tests for Independence in Contingency Tables
 #' 
-#' The Pearson's Chi-Squared test, likelihood ratio (G test) of independence,
-#' Fisher's Exact test, and linear-by-linear association test are performed on
+#' The Pearson's Chi-Squared test, likelihood ratio (G test) of independence, 
+#' Fisher's Exact test, and linear-by-linear association test are performed on 
 #' the data matrix.
 #' 
-#' A Pearson's Chi-Squared test Yate's Continuity Correction is applied in the case
-#' of 2 by 2 tables. 
-#'
-#' @param x an object of class \code{CrossTable} containing the contingency table
+#' A Pearson's Chi-Squared test Yate's Continuity Correction is applied in the
+#' case of 2 by 2 tables.
+#' 
+#' @param x an object of class \code{CrossTable} containing the contingency
+#'   table
 #' @param digits number of digits to round to
-#'
-#' @return A table with method name, test statistic, degrees of freedom, and
-#' p-value reported for each Chi-squared test.
+#'   
+#' @return A table with method name, test statistic, degrees of freedom, and 
+#'   p-value reported for each Chi-squared test.
 #' @author Derek Chiu
-#' @seealso \code{\link{CrossTable}}
-#' @importFrom Deducer likelihood.test
-#' @importFrom coin lbl_test statistic pvalue
+#' @seealso \code{\link[descr]{CrossTable}}
 #' @export
-#'
+#' 
 #' @examples
 #' # Example from documentation of CrossTable
 #' library(descr)
@@ -36,30 +35,48 @@
 indepTests <- function(x, digits = 3) {
   . <- `P-Value` <- Test <- Value <- df <- NULL
   Pearson <- x$CST
-  if (any(Pearson$expected < 1) | mean(Pearson$expected < 5) > 0.2) {
+  if (is.na(Pearson)) {
     Pearson.obj <- rep(NA, 3)
   } else {
-    Pearson.obj <- c(Pearson$statistic, Pearson$parameter, Pearson$p.value)  
+    if (any(Pearson$expected < 1) | mean(Pearson$expected < 5) > 0.2) {
+      Pearson.obj <- rep(NA, 3)
+    } else {
+      Pearson.obj <- c(Pearson$statistic, Pearson$parameter, Pearson$p.value)  
+    }
   }
   
   CC <- x$chisq.corr
-  if (!all(is.na(CC)) & !all(is.na(Pearson.obj))) {
-    CC.obj <- c(CC$statistic, CC$parameter, CC$p.value)
-  } else {
+  if (is.na(CC)) {
     CC.obj <- rep(NA, 3)
+  } else {
+    if (!all(is.na(CC)) & !all(is.na(Pearson.obj))) {
+      CC.obj <- c(CC$statistic, CC$parameter, CC$p.value)
+    } else {
+      CC.obj <- rep(NA, 3)
+    }
   }
   
-  G.test <- Deducer::likelihood.test(x$tab)
-  G.test.obj <- c(G.test$statistic, G.test$parameter, G.test$p.value)
+  G.test <- tryCatch(Deducer::likelihood.test(x$tab),
+                     error = function(e) return(NULL))
+  if (!is.null(G.test)) {
+    G.test.obj <- c(G.test$statistic, G.test$parameter, G.test$p.value)
+  } else {
+    G.test.obj <- rep(NA, 3)
+  }
   
   Fisher <- x$fisher.ts
-  if (!any(is.na(Fisher))) {
-    Fisher.obj <- c(NA, NA, Fisher$p.value)
-  } else {
+  if (is.na(Fisher)) {
     Fisher.obj <- rep(NA, 3)
+  } else {
+    if (!any(is.na(Fisher))) {
+      Fisher.obj <- c(NA, NA, Fisher$p.value)
+    } else {
+      Fisher.obj <- rep(NA, 3)
+    }
   }
   
-  LBL <- tryCatch(coin::lbl_test(x$tab), error = function(e) return(NULL))
+  LBL <- tryCatch(coin::lbl_test(x$tab),
+                  error = function(e) return(NULL))
   if (!is.null(LBL)) {
     LBL.obj <- c(coin::statistic(LBL), 1, coin::pvalue(LBL))  
   } else {

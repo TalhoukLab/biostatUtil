@@ -8,15 +8,14 @@
 #' @param x a matrix
 #' @return A matrix with median centered rows.
 #' @author Samuel Leung
-#' @importFrom stats median
 #' @export
 #' @examples 
 #' x <- matrix(rnorm(200), nrow = 10)
 #' medianCtr(x)
 medianCtr <- function(x) {
   annAll <- dimnames(x)
-  medians <- apply(x, 1, median, na.rm = T)
-  x <- t(scale(t(x), center = medians, scale = F))  
+  medians <- apply(x, 1, median, na.rm = TRUE)
+  x <- t(scale(t(x), center = medians, scale = FALSE))  
   dimnames(x) <- annAll
   return(x)
 }

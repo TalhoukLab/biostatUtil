@@ -2,8 +2,8 @@
 #' 
 #' Finds the earliest date given a vector of dates.
 #' 
-#' The input vector should have dates formatted as YYYY-MM-DD. If \code{na.rm}
-#' is not set to the default (\code{TRUE}) and \code{dates} has \code{NA}
+#' The input vector should have dates formatted as YYYY-MM-DD. If \code{na.rm} 
+#' is not set to the default (\code{TRUE}) and \code{dates} has \code{NA} 
 #' values, then the function will also return \code{NA}.
 #' 
 #' @param dates vector of dates
@@ -15,7 +15,7 @@
 #' ### No NA
 #' t1 <- c("2015-03-01", "2015-02-15", "2015-05-01")
 #' minDate(t1)
-#'
+#' 
 #' ### With NA
 #' t2 <- c("2015-03-01", "2015-02-15", NA, "2015-05-01")
 #' minDate(t2)

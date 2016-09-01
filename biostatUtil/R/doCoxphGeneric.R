@@ -2,43 +2,51 @@
 #' 
 #' Fits \code{coxph} for all univariable markers on all survival endpoints.
 #' 
-#' Please note the following assumptions. 1) Marker can be
-#' binary, continuous or categorical. 2) Missing survival time/status variables
-#' are coded as \code{NA} (i.e. will only be checked by \code{is.na()}).
-#' 3) Survival time/status variable name specified in the following order: "os", "dss", "rfs".
-#' 4) Coding of survival status is binary only (i.e. cannot take survival status of > 2 categories).
+#' Please note the following assumptions. 1) Marker can be binary, continuous or
+#' categorical. 2) Missing survival time/status variables are coded as \code{NA}
+#' (i.e. will only be checked by \code{is.na()}). 3) Survival time/status
+#' variable name specified in the following order: "os", "dss", "rfs". 4) Coding
+#' of survival status is binary only (i.e. cannot take survival status of > 2
+#' categories).
 #' 
 #' @param input.d The \code{data.frame} containing the data
 #' @param var.names variables to include as univariable predictors
-#' @param var.descriptions vector of strings to describe the variables as they are to appear in the table
-#' @param show.var.detail logical. If \code{TRUE}, details such as categories and the reference group for
-#' categorical variables are shown.
-#' @param show.group.name.for.bin.var logical. If \code{TRUE}, the non-reference group name is shown beside
-#' the hazard ratio for dichotomized variables.
-#' @param var.ref.groups a vector of reference groups. If \code{NULL}, assume all variables are binary/continuous.
-#' If an item in the vector is \code{NA}, assume that particular marker is binary or continuous
-#' (i.e., treat it as a numeric variable)
+#' @param var.descriptions vector of strings to describe the variables as they
+#'   are to appear in the table
+#' @param show.var.detail logical. If \code{TRUE}, details such as categories
+#'   and the reference group for categorical variables are shown.
+#' @param show.group.name.for.bin.var logical. If \code{TRUE}, the non-reference
+#'   group name is shown beside the hazard ratio for dichotomized variables.
+#' @param var.ref.groups a vector of reference groups. If \code{NULL}, assume
+#'   all variables are binary/continuous. If an item in the vector is \code{NA},
+#'   assume that particular marker is binary or continuous (i.e., treat it as a
+#'   numeric variable)
 #' @param var.names.surv.time variable names of survival time
 #' @param var.names.surv.status variable names of survival status
 #' @param event.codes.surv event coding of survival status variable
-#' @param surv.descriptions names abbreviated survival endpoints in returned output
-#' @param missing.codes character strings of missing values used in \code{input.d}
-#' @param use.firth percentage of censored cases before using Firth's method for Cox regression.
-#' If \code{use.firth = 1} (default), Firth is never used and if \code{use.firth = -1} Firth is
-#' always used.
+#' @param surv.descriptions names abbreviated survival endpoints in returned
+#'   output
+#' @param missing.codes character strings of missing values used in
+#'   \code{input.d}
+#' @param use.firth percentage of censored cases before using Firth's method for
+#'   Cox regression. If \code{use.firth = 1} (default), Firth is never used and
+#'   if \code{use.firth = -1} Firth is always used.
 #' @param firth.caption subscript in html table output indicating Firth was used
-#' @param stat.test the overall model test to perform on the Cox regression model. Can be any of
-#' "waldtest", "logtest", or "sctest". If Firth is used, only "logtest" can be performed.
+#' @param stat.test the overall model test to perform on the Cox regression
+#'   model. Can be any of "waldtest", "logtest", or "sctest". If Firth is used,
+#'   only "logtest" can be performed.
 #' @param round.digits.p.value number of digits for p-value
-#' @param round.small if \code{TRUE}, uses small number rounding via \code{round_small}
+#' @param round.small if \code{TRUE}, uses small number rounding via
+#'   \code{round_small}
 #' @param scientific if \code{TRUE}, uses scientific notation when rounding
 #' @param caption caption for returned object
 #' @param html.table.border the border type to use for html tables
-#' @param banded.rows logical. If \code{TRUE}, rows have alternating shading colour
+#' @param banded.rows logical. If \code{TRUE}, rows have alternating shading
+#'   colour
 #' @param css.class.name.odd Used to set the row colour for odd rows
 #' @param css.class.name.even Used to set the row colour for even rows
-#' @param split.table number of characters per row before splitting the table. Applies to
-#' the pandoc table output.
+#' @param split.table number of characters per row before splitting the table.
+#'   Applies to the pandoc table output.
 #' @param ... additional arguments to \code{pandoc.table.return}
 #' @return A list with the following elements
 #' @author Samuel Leung, Aline Talhouk, Derek Chiu
@@ -49,7 +57,7 @@ doCoxphGeneric <- function(
   var.names.surv.time = c("os.yrs", "dss.yrs", "rfs.yrs"), 
   var.names.surv.status = c("os.sts", "dss.sts", "rfs.sts"),
   event.codes.surv = c("os.event", "dss.event", "rfs.event"),
-  surv.descriptions = c("OS","DSS", "PFS"),
+  surv.descriptions = c("OS", "DSS", "PFS"),
   missing.codes = c("N/A", "", "Unk"),
   use.firth = 1, firth.caption = FIRTH.CAPTION,
   stat.test = "waldtest", round.digits.p.value = 4,
@@ -57,27 +65,19 @@ doCoxphGeneric <- function(
   caption = NA, html.table.border = 0, banded.rows = FALSE,
   css.class.name.odd = "odd", css.class.name.even = "even",
   split.table = 300, ...) {
-  
+  . <- NULL
   kLocalConstantHrSepFlag <- "kLocalConstantHrSepFlag" # separates the hazard ratio estimates 
   col.th.style <- COL.TH.STYLE
   row.th.style <- ROW.TH.STYLE
-  for (var.name in var.names) {
-    if (is.factor(input.d[, var.name])) {
-      input.d[, var.name] <- droplevels(input.d[, var.name])
-    }
-  }
   
+  input.d <- droplevels(input.d)
   num.surv.endpoints <- length(var.names.surv.time)
+  assertthat::assert_that(num.surv.endpoints == length(var.names.surv.status),
+                          num.surv.endpoints == length(event.codes.surv),
+                          num.surv.endpoints == length(surv.descriptions))
   
-  # qc ... make sure length of var.names.surv.time=var.names.surv.status=event.codes.surv=surv.descriptions
-  if (length(var.names.surv.time) != length(var.names.surv.status) |
-      length(var.names.surv.time) != length(event.codes.surv) |
-      length(var.names.surv.time) != length(surv.descriptions)) {
-    cat("ERROR IN do.coxph.generic!!!! input error ... please double check\n")
-  }
-  for (i in 1:num.surv.endpoints) {
-    input.d[, var.names.surv.time[i]] <- as.numeric(
-      input.d[, var.names.surv.time[i]])
+  for (var in var.names.surv.time) {
+    input.d[, var] <- as.numeric(input.d[, var])
   }
   
   if (is.null(var.ref.groups)) {
@@ -86,25 +86,18 @@ doCoxphGeneric <- function(
   result.table <- c()
   for (i in 1:length(var.names)) {
     var.name <- var.names[i]
-    temp.d <- input.d[!is.na(input.d[, var.name]), ] # remove any cases with NA's for marker
-    temp.d <- temp.d[!(sapply(temp.d[, var.name], as.character) %in% 
-                         missing.codes), ]
-    # automatically set ref.group to lowest group if not specified
-    if (is.factor(temp.d[, var.name])) {
-      temp.d[, var.name] <- droplevels(temp.d[, var.name])
-      if (is.na(var.ref.groups[i])) {
-        var.ref.groups[i] <- names(table(temp.d[, var.name]))[1]
-      }
+    temp.d <- input.d %>% 
+      filter(!is.na(.[, var.name]) &
+               !(as.character(.[, var.name]) %in% missing.codes)) # remove any cases with NA's or missing values
+    if (is.factor(temp.d[, var.name]) & is.na(var.ref.groups[i])) {  # automatically set ref.group to lowest group if not specified
+      var.ref.groups[i] <- names(table(temp.d[, var.name]))[1]
     }
     if (is.na(var.ref.groups[i])) {
-      temp.d[,var.name] <- as.numeric(temp.d[, var.name])
+      temp.d[, var.name] <- as.numeric(temp.d[, var.name])
       var.levels <- c(0, 1) # dummy levels ... used to build result.table
     } else {
       # assume ref group exist!!!
-      var.levels <- names(table(temp.d[, var.name]))
-      var.levels <- c(var.ref.groups[i], var.levels[-which(
-        var.levels == var.ref.groups[i])])
-      temp.d[, var.name] <- factor(temp.d[, var.name], levels = var.levels)
+      temp.d[, var.name] <- relevel(temp.d[, var.name], var.ref.groups[i])
     }
     
     for (j in 1:num.surv.endpoints) {
@@ -112,11 +105,10 @@ doCoxphGeneric <- function(
                                         var.names.surv.status[j], "=='",
                                         event.codes.surv[j], "'  ) ~",
                                         var.name))
-      temp.d.no.missing.survival <- temp.d[!is.na(
-        temp.d[, var.names.surv.status[j]]) &
-          !is.na(temp.d[, var.names.surv.time[j]]), ]
+      temp.d.no.missing.survival <- temp.d[!is.na(temp.d[, var.names.surv.status[j]]) &
+                                             !is.na(temp.d[, var.names.surv.time[j]]), ]
       cox.stats  <- prettyCoxph(surv.formula, 
-        input.d = temp.d.no.missing.survival, use.firth = use.firth)
+                                input.d = temp.d.no.missing.survival, use.firth = use.firth)
       result.table <- rbind(
         result.table,
         "DUMMY_ROW_NAME" = c(
@@ -156,44 +148,41 @@ doCoxphGeneric <- function(
   result.table.col.names <- c("# of events / n", "Hazard Ratio (95% CI)",
                               paste0(ifelse(stat.test == "logtest", "LRT ", ""),
                                      "P-value"))
-  colnames(result.table) <- result.table.col.names
-  result.table.row.names <- c()
-  for (i in 1:length(var.names)) {
-    result.table.row.names <- c(result.table.row.names, paste0(var.names[i], paste0("-", surv.descriptions)))
-  }
-  rownames(result.table) <- result.table.row.names
+  result.table <- result.table %>% 
+    set_colnames(result.table.col.names) %>% 
+    set_rownames(paste(rep(var.names, each = num.surv.endpoints),
+                       surv.descriptions, sep = "-"))
   
   ### generate html table ... ###
   result.table.html <- paste0("<table border=", html.table.border, ">",
-                             ifelse(is.na(caption), "",
-                                    paste0("<caption style='",
-                                           TABLE.CAPTION.STYLE, "'>",
-                                           caption,
-                                           "</caption>")))
-  result.table.html <- paste0(result.table.html, "<tr><th style='",
-                              col.th.style, "' colspan=2></th><th style='",
-                              col.th.style, "'>",
+                              ifelse(is.na(caption), "",
+                                     paste0("<caption style='",
+                                            TABLE.CAPTION.STYLE, "'>",
+                                            caption,
+                                            "</caption>")),
+                              "<tr><th style='", col.th.style,
+                              "' colspan=2></th><th style='", col.th.style,
+                              "'>",
                               paste(result.table.col.names,
                                     collapse = paste0("</th><th style='",
                                                       col.th.style, "'>")),
                               "</th></tr>")
   # print values
   i <- 1
-  num.row.per.cat <- length(var.names.surv.time)
-  while (i <= nrow(result.table) ) {
+  while (i <= nrow(result.table)) {
     is.first.row <- TRUE
     tr.class <- ifelse(banded.rows,
                        paste0(" class='",
-                             ifelse((floor(i / num.surv.endpoints) + 1) %%
-                                      2 == 0, css.class.name.even,
-                                    css.class.name.odd), "'"), "")
+                              ifelse((floor(i / num.surv.endpoints) + 1) %%
+                                       2 == 0, css.class.name.even,
+                                     css.class.name.odd), "'"), "")
     var.index <- floor((i - 1) / num.surv.endpoints) + 1
     var.description <- var.descriptions[var.index]
     if (show.var.detail) {
-     var.categories <- names(table(input.d[, var.names[var.index]]))
-     var.categories <- var.categories[!var.categories %in% missing.codes]
-     if (!is.na(var.ref.groups[var.index])) {
-       # this variable is categorical ... print ref group and categories
+      var.categories <- names(table(input.d[, var.names[var.index]]))
+      var.categories <- var.categories[!var.categories %in% missing.codes]
+      if (!is.na(var.ref.groups[var.index])) {
+        # this variable is categorical ... print ref group and categories
         var.description <- paste0(var.description, ":<br><br><i>",
                                   paste(var.categories, collapse = "<br>"),
                                   "<br><br>(reference group:", var.ref.groups[var.index], ")</i>")
@@ -201,7 +190,7 @@ doCoxphGeneric <- function(
     }
     result.table.html <- paste0(result.table.html, "<tr", tr.class,
                                 "><th style='", row.th.style, "' rowspan=",
-                                num.row.per.cat, ">",
+                                num.surv.endpoints, ">",
                                 var.description, "</th>")
     for (surv.description in surv.descriptions) {
       result.table.html <- paste0(
@@ -232,7 +221,10 @@ doCoxphGeneric <- function(
         rep("", result.table.ncol),
         result.table.bamboo[result.table.bamboo.base.index:nrow(result.table.bamboo), ])
     }
-    rownames(result.table.bamboo)[result.table.bamboo.base.index] <- paste0("**", var.descriptions[var.count], "**")
+    rownames(result.table.bamboo)[result.table.bamboo.base.index] <- paste0("**", var.descriptions[var.count],
+                                                                            ifelse(show.var.detail,
+                                                                                   paste0(" (reference group:", var.ref.groups[var.count], ")"),
+                                                                                   ""), "**")
     rownames(result.table.bamboo)[result.table.bamboo.base.index + c(1:length(surv.descriptions))] <- surv.descriptions
     result.table.bamboo.base.indexes <- c(result.table.bamboo.base.indexes, result.table.bamboo.base.index)
   }

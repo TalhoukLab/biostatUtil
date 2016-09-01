@@ -21,7 +21,7 @@
 #' rowPercent(A, pretty.text = TRUE)
 #' rowPercent(A, pretty.text = TRUE, keep = TRUE)
 rowPercent <- function(t, pretty.text = FALSE, keep = TRUE, digits = 4) {
-  if (!is.null(dim(t)) & !class(t) == "table") {
+  if (!(is.null(dim(t)) | "table" %in% class(t))) {
     pcts <- t / apply(t, 1, sum)
     if (pretty.text) {
       pcts <- apply(pcts * 100, c(1, 2),

@@ -24,7 +24,7 @@ PAC <- function(cons.mat, lower = 0, upper = 1) {
   pac <- cons.mat %>%
     extract(lower.tri(.)) %>%
     extract(and(is_greater_than(., lower), is_less_than(., upper))) %>%
-    length %>%
+    length() %>%
     divide_by(., length(cons.mat[lower.tri(cons.mat)]))
   return(pac)
 }

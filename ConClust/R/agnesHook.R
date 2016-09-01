@@ -12,8 +12,8 @@
 #' @author Derek Chiu
 #' @import cluster
 #' @export
-agnesHook = function(this_dist, k){
-  tmp = agnes(this_dist, diss = TRUE)
-  assignment = cutree(tmp, k)
+agnesHook = function(this_dist, k) {
+  tmp <- agnes(this_dist, diss = TRUE)
+  assignment <- cutree(tmp, k)
   return(assignment)
 }

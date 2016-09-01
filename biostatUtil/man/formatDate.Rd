@@ -15,7 +15,8 @@ formatDate(d, m, y, date.format = "MM.DD.YYYY", sep = "/")
 
 \item{date.format}{how to format the date. Defaults to "month/day/year".}
 
-\item{sep}{string used to separate \code{d}, \code{m}, and \code{y}. Defaults to "/".}
+\item{sep}{string used to separate \code{d}, \code{m}, and \code{y}. Defaults
+to "/".}
 }
 \value{
 A character string of a formatted date.
@@ -24,9 +25,10 @@ A character string of a formatted date.
 Prints a date into a pretty format.
 }
 \details{
-Given the day, month, and year of a date, returns the date in a specific format. 
-The order and separating string can be modified using \code{date.format} and \code{sep} respectively.
-Take note the order of the arguments: day, month, and year. Only accepts "MM.DD.YYYY", "MMM.DD.YYYY",
+Given the day, month, and year of a date, returns the date in a specific 
+format. The order and separating string can be modified using 
+\code{date.format} and \code{sep} respectively. Take note the order of the 
+arguments: day, month, and year. Only accepts "MM.DD.YYYY", "MMM.DD.YYYY", 
 "DD.MM.YYYY", "DD.MMM.YYYY", "YYYY.MM.DD", "YYYY.MMM.DD".
 }
 \examples{

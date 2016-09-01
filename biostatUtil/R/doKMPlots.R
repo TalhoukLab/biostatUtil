@@ -5,7 +5,6 @@
 #' @param status status indicator
 #' @param var.name name of variable to make Kaplan-Meier plots on
 #' @param var.description description for \code{var.name}
-#' 
 #' @param line.name names for each survival curve
 #' @param line.color colors for survival curves
 #' @param line.pattern line type for survival curves

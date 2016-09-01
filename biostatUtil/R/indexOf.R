@@ -2,16 +2,15 @@
 #' 
 #' Returns a vector of the indices where a string occurs in another string
 #' 
-#' If \code{b} is longer than \code{a}, \code{indexOf} returns \code{NA},
-#' since it is not possible for a longer string to occur in a shorter
-#' string.
+#' If \code{b} is longer than \code{a}, \code{indexOf} returns \code{NA}, since 
+#' it is not possible for a longer string to occur in a shorter string.
 #' 
 #' @param a string to be checked against
 #' @param b string to check
-#' @param ignore.case logical; if \code{TRUE}, case is ignored when
-#' performing the check
-#' @return Indices where \code{b} occurs in \code{a}. Returns \code{NA}
-#' if there are no occurences.
+#' @param ignore.case logical; if \code{TRUE}, case is ignored when performing 
+#'   the check
+#' @return Indices where \code{b} occurs in \code{a}. Returns \code{NA} if there
+#'   are no occurences.
 #' @author Samuel Leung
 #' @export
 #' @examples 

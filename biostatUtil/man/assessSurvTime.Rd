@@ -22,12 +22,12 @@ A list with elements
 \item{RevKM}{Reverse Kaplan-Meier Time}
 }
 \description{
-Given range of survival times and censoring status, provides different
+Given range of survival times and censoring status, provides different 
 time-related summary statistics
 }
 \details{
-The observation time is defined as the median time in days between all
-\code{T1} and \code{T2}. Censoring time is the median time in days between
+The observation time is defined as the median time in days between all 
+\code{T1} and \code{T2}. Censoring time is the median time in days between 
 all \code{T1} and \code{T2} for events only.
 }
 \author{

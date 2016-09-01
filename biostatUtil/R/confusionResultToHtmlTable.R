@@ -12,13 +12,13 @@
 #' @author Samuel Leung, Derek Chiu
 #' @export
 #' @examples 
-#' # 95% CI from 10 bootstraped samples
+#' # 95% CI from 5 bootstraped samples
 #' library(htmlTable)
 #' set.seed(547)
-#' n <- 80
+#' n <- 20
 #' x <- rbinom(n, size = 1, prob = 0.6)
 #' y <- rbinom(n, size = 1, prob = 0.4)
-#' results <- confusionResultToHtmlTable(x, y, "Test", num.boot = 10)
+#' results <- confusionResultToHtmlTable(x, y, "Test", num.boot = 5)
 #' htmlTable(results)
 confusionResultToHtmlTable <- function(prediction, reference, ref.description,
                                        seed = 20, num.boot = NA,

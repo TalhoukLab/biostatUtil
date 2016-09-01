@@ -3,16 +3,7 @@
 \name{doInteractionCox}
 \alias{doInteractionCox}
 \title{Do interaction test with cox model
-likelihood ratio test only - two terms only
- 
-NOTE: the order of variable names in var.names dictates when will the 
-term added in stepwise likelihood ratio test of nested models i.e. 
-given var.names = c("A","B","C"), likelihood ratio test of nested model 
-will be:
- 
-A
-A+B
-A+B+C}
+likelihood ratio test only - two terms only}
 \usage{
 doInteractionCox(input.d, var.names, var.descriptions,
   show.var.detail = FALSE, show.group.name.for.bin.var = FALSE,
@@ -81,15 +72,16 @@ A list with the following elements
 \description{
 Do interaction test with cox model
 likelihood ratio test only - two terms only
- 
-NOTE: the order of variable names in var.names dictates when will the 
+}
+\note{
+the order of variable names in var.names dictates when will the 
 term added in stepwise likelihood ratio test of nested models i.e. 
-given var.names = c("A","B","C"), likelihood ratio test of nested model 
+given \code{var.names = c("A", "B", "C")}, likelihood ratio test of nested model 
 will be:
  
 A
-A+B
-A+B+C
+A + B
+A + B + C
 }
 \author{
 Samuel Leung

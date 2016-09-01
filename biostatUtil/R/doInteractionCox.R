@@ -1,15 +1,6 @@
 #' Do interaction test with cox model
 #' likelihood ratio test only - two terms only
 #'  
-#' NOTE: the order of variable names in var.names dictates when will the 
-#' term added in stepwise likelihood ratio test of nested models i.e. 
-#' given var.names = c("A","B","C"), likelihood ratio test of nested model 
-#' will be:
-#'  
-#' A
-#' A+B
-#' A+B+C
-#' 
 #' @param input.d The \code{data.frame} containing the data
 #' @param var.names variables to include as univariable predictors
 #' @param var.descriptions vector of strings to describe the variables as they are to appear in the table
@@ -40,6 +31,14 @@
 #' the pandoc table output.
 #' @param ... additional arguments to \code{pandoc.table.return}
 #' @return A list with the following elements
+#' @note the order of variable names in var.names dictates when will the 
+#' term added in stepwise likelihood ratio test of nested models i.e. 
+#' given \code{var.names = c("A", "B", "C")}, likelihood ratio test of nested model 
+#' will be:
+#'  
+#' A
+#' A + B
+#' A + B + C
 #' @author Samuel Leung
 #' @export
 doInteractionCox <- function(
@@ -179,7 +178,7 @@ doInteractionCox <- function(
           result.table.bamboo[result.table.bamboo.base.index:nrow(result.table.bamboo), ])
     }
     rownames(result.table.bamboo)[result.table.bamboo.base.index] <- paste0("**", surv.descriptions[i], "**")
-    rownames(result.table.bamboo)[result.table.bamboo.base.index+c(1:num.var)] <- var.descriptions
+    rownames(result.table.bamboo)[result.table.bamboo.base.index + c(1:num.var)] <- var.descriptions
     # want to show # of events only once for each surv endpoint
     result.table.bamboo[result.table.bamboo.base.index, 1] <- result.table.bamboo[result.table.bamboo.base.index + 1, 1]
     result.table.bamboo[result.table.bamboo.base.index + c(1:num.var), 1] <- ""
@@ -223,14 +222,14 @@ doInteractionCox <- function(
           if (num.other.groups > 1 | show.group.name.for.bin.var) {
             result.table.bamboo[curr.base.index:(curr.base.index + num.other.groups - 1), hr.col.index] <- 
                 strsplit(result.table.bamboo[curr.base.index, hr.col.index], kLocalConstantHrSepFlag)[[1]]
-            result.table.bamboo[curr.base.index:(curr.base.index+num.other.groups - 1), hr.col.index - 1] <- other.groups
+            result.table.bamboo[curr.base.index:(curr.base.index + num.other.groups - 1), hr.col.index - 1] <- other.groups
           }
         }
       }
       
       # need to update result.table.bamboo.base.indexes since we've added rows!!!
-      if (i<num.surv) {
-        result.table.bamboo.base.indexes[(i+1):num.surv] <- result.table.bamboo.base.indexes[(i+1):num.surv] + rows.added
+      if (i < num.surv) {
+        result.table.bamboo.base.indexes[(i + 1):num.surv] <- result.table.bamboo.base.indexes[(i + 1):num.surv] + rows.added
       }
     }
   }

@@ -9,6 +9,7 @@
 #' @param fileName file name of the written object
 #' @return A list with summaries for each algorithm. Each algorithm has a list with
 #' two elements: consensusMatrix and consensusClass.
+#' @author Derek Chiu
 #' @export
 consensusSummaries <- function(res, k, dir = NULL, fileName = "results_CC") {
   con.mats <- plyr::alply(res, 3, consensusMatrix,

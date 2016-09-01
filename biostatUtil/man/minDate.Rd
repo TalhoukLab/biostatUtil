@@ -18,8 +18,8 @@ The earliest date from a vector of dates.
 Finds the earliest date given a vector of dates.
 }
 \details{
-The input vector should have dates formatted as YYYY-MM-DD. If \code{na.rm}
-is not set to the default (\code{TRUE}) and \code{dates} has \code{NA}
+The input vector should have dates formatted as YYYY-MM-DD. If \code{na.rm} 
+is not set to the default (\code{TRUE}) and \code{dates} has \code{NA} 
 values, then the function will also return \code{NA}.
 }
 \examples{
