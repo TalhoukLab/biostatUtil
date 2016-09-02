@@ -7,12 +7,10 @@
 exploreData(datmat)
 }
 \arguments{
-\item{datmat}{the data frame (only categorical and numerical variables will
-be analysed)}
+\item{datmat}{the data frame (only categorical and numerical variables will be analysed)}
 }
 \description{
-Function to provide a graphical exploration of a dataset will print results
-to file.
+Function to provide a graphical exploration of a dataset will print results to file.
 }
 \author{
 Aline Talhouk
