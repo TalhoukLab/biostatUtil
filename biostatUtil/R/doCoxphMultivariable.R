@@ -72,6 +72,9 @@ doCoxphMultivariable <- function(
   row.td.style.for.multi.cox <- ROW.TD.STYLE.FOR.MULTI.COX
   row.td.style.for.multi.cox.align.top <- ROW.TD.STYLE.FOR.MULTI.COX.ALIGN.TOP
   
+  # remove all variables not used in analysis from input.d 
+  input.d <- dplyr::select(input.d,match(c(var.names,var.names.surv.time,var.names.surv.status),names(input.d)))
+  
   input.d <- droplevels(input.d)
   num.surv.endpoints <- length(var.names.surv.time)
   assertthat::assert_that(num.surv.endpoints == length(var.names.surv.status),
