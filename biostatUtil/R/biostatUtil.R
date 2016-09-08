@@ -26,7 +26,7 @@
 #'   plot points stripchart title text
 #' @importFrom grDevices cairo_pdf dev.off pdf png tiff
 #' @importFrom KMsurv lifetab
-#' @importFrom magrittr extract set_colnames set_rownames use_series
+#' @importFrom magrittr extract set_colnames set_rownames set_names use_series
 #' @importFrom stats addmargins aggregate AIC anova as.formula chisq.test
 #'   confint cor cor.test dnorm extractAIC fisher.test IQR kruskal.test logLik
 #'   median p.adjust prcomp qnorm quantile relevel sd setNames wilcox.test
