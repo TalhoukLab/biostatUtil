@@ -38,6 +38,8 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
                                      "missing"), digits = 3,
                            format = c("raw", "pandoc", "html", "long")) {
   . <- stat <- value <- grp <- vars <- lev <- NULL
+  stats <- match.arg(stats, c("mean", "sd", "median", "IQR", "range",
+                              "missing"), several.ok = TRUE)
   var.dat <- data[, var.names, drop = FALSE]
   types <- sapply(var.dat, class)
   num.ind <- types %in% c("numeric", "integer")
@@ -74,7 +76,6 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
     num.ord <- unlist(lapply(num.var, function(x)
       paste0(x, c("", paste0(".", stats)))))
     if (all(c("mean", "sd") %in% stats)) {
-      stats <- stats[-grep("sd", stats)]
       num.ord <- num.ord[-grep("sd", num.ord)]
     }
     num.val <- doBy::summaryBy(as.formula(
@@ -97,8 +98,9 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
       rbind(matrix("", nrow = length(num.var), ncol = nrow(num.all),
                    dimnames = list(num.var))) %>% 
       extract(num.ord, ) %>% 
-      set_rownames(unlist(lapply(paste0("**", num.var, "**"),
-                                 function(x) c(x, stats))))
+      set_rownames(num.ord %>%
+                     ifelse(!grepl("\\.", .), paste0("**", ., "**"), .) %>%
+                     gsub(".+\\.", "\\1", .))
   } else {
     num.res <- num.long <- NULL
   }
@@ -213,34 +215,28 @@ pandoc_pcts <- function(char) {
 contSumFunc <- function(x, digits, stats = c("mean", "sd", "median", "IQR",
                                              "range", "missing")) {
   stats.choices <- c("mean", "sd", "median", "IQR", "range", "missing")
-  stats.arg <- match.arg(stats, stats.choices, several.ok = TRUE)
-  funs.arg <- stats.arg
+  funs.arg <- match.arg(stats, stats.choices, several.ok = TRUE)
   if ("missing" %in% stats)
     funs.arg[match("missing", funs.arg)] <- "n_missing"
-  all.stats <- mapply(function(c, f) match_fun_null(x, c, stats.choices,
-                                                    f, na.rm = TRUE),
-                      c = stats.arg, f = funs.arg) %>%
-    sapply(function(x) {
-      r <- as.character(round(x, digits = digits))
-      ifelse(length(r) > 1, paste(r, collapse = "-"), r)
-    })
+  all.stats <- sapply(funs.arg, function(f) {
+    match_fun_null(x = x, f, na.rm = TRUE) %>% 
+      round(., digits = digits) %>% 
+      as.character() %>% 
+      ifelse(length(.) > 1, paste(., collapse = "-"), .)
+  }) %>%
+    set_names(stats)
   if (all(c("mean", "sd") %in% stats)) {
-    all.stats["mean"] <- paste(all.stats["mean"], all.stats["sd"],
-                               sep = " &#177; ")
+    all.stats["mean"] <- paste(all.stats[c("mean", "sd")],
+                               collapse = " &#177; ")
     all.stats <- all.stats[-match("sd", names(all.stats))]
   }
   return(all.stats)
 }
 
-#' If match found, apply function, otherwise NULL
+#' Apply function on every element of list
 #' @noRd
-match_fun_null <- function(x, case, table, FUN, ...) {
-  if (case %in% table) {
-    out <- do.call(FUN, c(list(x), ...))
-  } else {
-    out <- NULL
-  }
-  return(out)
+match_fun_null <- function(x, FUN, ...) {
+  return(do.call(FUN, c(list(x), ...)))
 }
 
 #' Count number of missing elements
