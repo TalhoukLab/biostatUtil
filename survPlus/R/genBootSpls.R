@@ -14,7 +14,7 @@
 #' unselected samples are saved seperately.
 #' @param dat, the data matrix that needs to be bootstrapped
 #' @param B, the number of bootstrap samples desired (default to 1000)
-#' @return a litst with with boot.tr being the bootstrap samples and boot.te being the unseleceted samples
+#' @return a list with with boot.tr being the bootstrap samples and boot.te being the unseleceted samples
 #' @author Aline Talhouk, Derek Chiu
 #' @export
 

@@ -1,6 +1,15 @@
-#' Assess Performance
+#' Assess Performance of a survival model
 #'
-#' Produce metrics to evaluate a survival model in Bootstrap samples
+#' Produce metrics to evaluate a survival model in Bootstrap samples (Internal Validation)
+#' @param dat0 is the training data
+#' @param var.names are the names of the predictors
+#' @param is the time variable
+#' @param event.ind is the event indicator
+#' @param B is the number of bootstrap iterations defaults to 1000
+#' @param seed is a random number generator seed set to 2014
+#' @param firth whether or not to perform a firth correction set to TRUE
+#' @return
+#' @author Aline Talhouk
 #' @export
 
 bootPerf <- function(dat0, var.names, time.var, event.ind, B=1000, seed=2014, firth=TRUE){
