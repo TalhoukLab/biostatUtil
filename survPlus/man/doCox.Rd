@@ -2,11 +2,33 @@
 % Please edit documentation in R/doCox.R
 \name{doCox}
 \alias{doCox}
-\title{Perform Coxph or Coxphf}
+\title{A function to perform Cox proportional hazard with or without firth correction}
 \usage{
-doCox(formula, data0, firth = TRUE)
+doCox(formula, data, firth = TRUE)
+}
+\arguments{
+\item{formula}{a formula object, with the response on the left of a ~ operator, and the terms on the right. The response must be a survival object as returned by the Surv function.}
+
+\item{data}{a data.frame in which to interpret the variables named in the formula.}
+}
+\value{
+\item{model} n object of class coxph representing the fit. See coxph.object for details.
+\item{formula} formula used
+\item {predtable} predictor table on the log scale with upper and lower bounds
+\item{loglik} the loglikelihood
+\item{firth} whether a firth correction was performed.
 }
 \description{
-Perform Coxph or Coxphf
+A function to perform Cox proportional hazard with or without firth correction
+}
+\examples{
+dat <- data.frame(time=c(4,3,1,1,2,2,3),
+status=c(1,1,1,0,1,1,0),
+x=c(0,2,1,1,1,0,0),
+sex=c(0,0,0,0,1,1,1))
+doCox(Surv(time, status) ~ x + strata(sex), data=dat)
+}
+\author{
+Aline Talhouk
 }
 

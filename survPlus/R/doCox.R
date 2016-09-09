@@ -1,3 +1,4 @@
+
 #' A function to perform Cox proportional hazard with or without firth correction
 #' @param formula a formula object, with the response on the left of a ~ operator, and the terms on the right. The response must be a survival object as returned by the Surv function.
 #' @param data a data.frame in which to interpret the variables named in the formula.
@@ -9,7 +10,7 @@
 #' \item{firth} whether a firth correction was performed.
 #' @author Aline Talhouk
 #'@export
-#'@example
+#'@examples
 #'dat <- data.frame(time=c(4,3,1,1,2,2,3),
 #'status=c(1,1,1,0,1,1,0),
 #'x=c(0,2,1,1,1,0,0),

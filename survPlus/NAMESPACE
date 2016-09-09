@@ -2,7 +2,6 @@
 
 export(Cindex)
 export(bootPerf)
-export(decomposeSurvform)
 export(doCox)
 export(genBootSpls)
 export(predictCox)

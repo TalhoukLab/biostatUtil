@@ -12,7 +12,7 @@ genBootSpls(dat, B = 1000)
 \item{B, }{the number of bootstrap samples desired (default to 1000)}
 }
 \value{
-a litst with with boot.tr being the bootstrap samples and boot.te being the unseleceted samples
+a list with with boot.tr being the bootstrap samples and boot.te being the unseleceted samples
 }
 \description{
 Compute the standard deviation of a log hazard ratio when only given its

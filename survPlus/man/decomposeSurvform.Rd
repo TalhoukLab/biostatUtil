@@ -2,11 +2,27 @@
 % Please edit documentation in R/decomposeSurvform.R
 \name{decomposeSurvform}
 \alias{decomposeSurvform}
-\title{a function to decompose a survival formula}
+\title{an internal function that decomposes a survival formula}
 \usage{
 decomposeSurvform(formula, data)
 }
+\arguments{
+\item{formula}{a formula object, with the response on the left of a ~ operator, and the terms on the right. The response must be a survival object as returned by the Surv function.}
+
+\item{data}{a data.frame in which to interpret the variables named in the formula.}
+}
+\value{
+This function retuns a list with the following parameters
+\item{resp} Surv response matrix
+\item{mm1} Model matrix without time effects
+\item{survpair} names of survival pairs
+\item{predictors} names of covariates
+\item{indcc} indicator of complete cases
+}
 \description{
-a function to decompose a survival formula
+an internal function that decomposes a survival formula
+}
+\author{
+Aline Talhouk (adapted from an existing function)
 }
 
