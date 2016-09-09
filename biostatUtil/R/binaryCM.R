@@ -68,9 +68,11 @@ binaryCM <- function(x,
     print(CM0)
   }
   #Check the position of the positive condition and move it to [1,1] in the table
-  ppos <- match(pcond, rownames(CM0))
-  newpos <- c(ppos, which(!(c(1, 2) %in% ppos)))
-  CM <- CM0[newpos, newpos]
+  xppos <- match(pcond, rownames(CM0))
+  newxpos <- c(xppos, which(!(c(1, 2) %in% xppos)))
+  yppos <- match(pcond, colnames(CM0))
+  newypos <- c(yppos, which(!(c(1, 2) %in% yppos)))
+  CM <- CM0[newxpos, newypos]
   
   # Compute marginal totals and correct predictions
   c1 <- CM[1, 1] + CM[2, 1]
