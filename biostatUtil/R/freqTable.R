@@ -66,8 +66,10 @@ freqTable <- function(x, levels = sort(unique(as.character(x))),
   }
   if (!is.null(description)) {
     assertthat::assert_that(length(levels) == length(description))
+    desc.ord <- order(match(levels, with(tab, Score[!grepl("Total|^$", Score)])))
     tab <- tab %>%
-    mutate(Description = c(append(description, "", which(Score == "Total") - 1), ""))
+      mutate(Description = c(append(description[desc.ord], "",
+                                    which(Score == "Total") - 1), ""))
   }
   return(tab)
 }

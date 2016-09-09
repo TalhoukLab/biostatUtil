@@ -117,6 +117,11 @@ doCoxphMultivariable <- function(
     cox.stats  <- prettyCoxph(full.model.formula, input.d = temp.d,
                               use.firth = use.firth)
     cox.stats.output.indexes <- c(0)
+    if (stat.test=="logtest") {
+      # need to do coxph one more time since annova cannot access the formula object 
+      # within coxph object returned from prettyCoxph
+      coxph.full.fit <- coxph(full.model.formula, temp.d)
+    }
     for (i in 1:length(var.names)) {
       var.name <- var.names[i]
       cox.stats.output.indexes <- max(cox.stats.output.indexes) + 1
@@ -133,7 +138,7 @@ doCoxphMultivariable <- function(
                                                           var.names.surv.status[j], "=='",
                                                           event.codes.surv[j], "'  ) ~",
                                                           paste(var.names[-i], collapse = "+"))), temp.d)	
-               p.value <- anova(cox.stats$fit, cox.exclude.var)[[4]][2] # always the second one, since its comparing only two nested model
+               p.value <- anova(coxph.full.fit, cox.exclude.var)[[4]][2] # always the second one, since its comparing only two nested model
              },
              waldtest = {
                p.value <- anova(rms::cph(as.formula(paste0("Surv(", var.names.surv.time[j], ", ",
