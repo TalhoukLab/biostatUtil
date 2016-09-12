@@ -1,5 +1,4 @@
 
-library(Hmisc)
 library(stringr)
 context("Naming cutpoints")
 set.seed(1108)
