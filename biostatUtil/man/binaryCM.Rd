@@ -4,23 +4,25 @@
 \alias{binaryCM}
 \title{Confusion matrix summaries}
 \usage{
-binaryCM(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
+binaryCM(x, y, seed = 20, num.boot = 1000, pcond = 1, conf.level = 0.95,
   digits = 4, method = "wilson", verbose = FALSE)
 }
 \arguments{
-\item{x}{a vector of predicted binary classes}
+\item{x}{a vector of reference binary classes}
 
-\item{y}{a vector of reference binary classes}
+\item{y}{a vector of predicted binary classes}
 
 \item{seed}{random seed for bootstrapping}
 
 \item{num.boot}{number of times to bootstrap. Defaults to 1000.}
 
+\item{pcond}{a string or value to be considered positive condition; defaults to 1.}
+
 \item{conf.level}{confidence level. Defaults to 95\%.}
 
 \item{digits}{number of digits to round summaries to}
 
-\item{method}{method for obtaining confidence intervals for binomial 
+\item{method}{method for obtaining confidence intervals for binomial
 probabilities. See \code{Hmisc::binconf} for details.}
 
 \item{verbose}{logical; if \code{TRUE}, outputs are printed to the screen}
@@ -29,6 +31,7 @@ probabilities. See \code{Hmisc::binconf} for details.}
 A confusion matrix for the predicted and reference classes. Then
 the estimated statistics along with bootstrapped confidence intervals. A
 list with the following elements
+\item{CM}{The confusion matrix, whose columns are the predicted conditions and its rows are the true conditions}
 \item{Accuracy}{Accuracy point estimate, lower bound and upper bound for
 bootstrapped CI}
 \item{Sensitivity}{Sensitivity point estimate, lower bound and upper bound for
@@ -47,10 +50,10 @@ Calculates summaries from cross-tabulated reference and prediction labels for
 a two-class variable.
 }
 \details{
-Given two dichotomous variables summarized in a confusion matrix, this 
-function provides performance summaries. The accuracy, sensitivity, 
-specificity, positive predictive value (PPV), negative predictive value 
-(NPV), and the kappa statistic, along with their bootstrapped confidence 
+Given two dichotomous variables summarized in a confusion matrix, this
+function provides performance summaries. The accuracy, sensitivity,
+specificity, positive predictive value (PPV), negative predictive value
+(NPV), and the kappa statistic, along with their bootstrapped confidence
 intervals are returned.
 }
 \examples{

@@ -22,7 +22,7 @@
 #' @return A confusion matrix for the predicted and reference classes. Then
 #' the estimated statistics along with bootstrapped confidence intervals. A
 #' list with the following elements
-#' \item{CM} The confusion matrix, whose columns are the predicted conditions and its rows are the true conditions.
+#' \item{CM}{The confusion matrix, whose columns are the predicted conditions and its rows are the true conditions}
 #' \item{Accuracy}{Accuracy point estimate, lower bound and upper bound for
 #' bootstrapped CI}
 #' \item{Sensitivity}{Sensitivity point estimate, lower bound and upper bound for
@@ -107,10 +107,6 @@ binaryCM <- function(x,
     c(paste0((1 - conf.level) / 2 * 100, "%"),
       paste0((1 - (1 - conf.level) / 2) * 100, "%"))
   
-  printCI <- function(z) {
-    paste(z[1], "(", z[2], "-", z[3], ")")
-  }
-  
   if (verbose)
     cat(
       paste0(
@@ -168,4 +164,10 @@ binaryCM <- function(x,
       table = table
     )
   )
+}
+
+#' Print confidence interval wrapper
+#' @noRd
+printCI <- function(z) {
+  paste(z[1], "(", z[2], "-", z[3], ")")
 }
