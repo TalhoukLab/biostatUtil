@@ -20,16 +20,14 @@
 #' library(survival)
 #' grhoTests(Surv(futime, fustat) ~ rx, data = ovarian)
 grhoTests <- function(formula, data, digits = 4) {
-  pos <- 1
-  assign("formula", formula, envir = as.environment(pos))
-  assign("data", data, envir = as.environment(pos))
   tab <- plyr::ldply(c(0, 1), function(r) {
     mod <- survdiff(formula, data, rho = r)
     c <- mod$chisq
     d <- length(mod$n) - 1
     p <- pchisq(c, d, lower.tail = FALSE)
     res <- data.frame(c, d, p)
-    return(res)}) %>%
+    return(res)
+  }) %>%
     signif(digits) %>% 
     set_rownames(c("Log Rank (Mantel-Cox)", "Breslow (Generalized Wilcoxon)")) %>% 
     set_colnames(c("Chi-Square", "df", "Sig."))
