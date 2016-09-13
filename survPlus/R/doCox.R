@@ -1,4 +1,3 @@
-
 #' A function to perform Cox proportional hazard with or without firth correction
 #' @param formula a formula object, with the response on the left of a ~ operator, and the terms on the right. The response must be a survival object as returned by the Surv function.
 #' @param data a data.frame in which to interpret the variables named in the formula.
@@ -29,7 +28,7 @@ doCox <- function(formula, data, firth=TRUE){
 
   #Do if firth correction is requested (default)
   if (firth){
-    fit <- coxphf::coxphf(formula,datac)
+    fit <- coxphf::coxphf(formula,data)
     res <- cbind(beta.lp=fit$coefficients,lower= log(fit$ci.lower),upper= log(fit$ci.upper))
     loglik <- fit$loglik #the null and maximimized (penalized) log likelihood
    }else{ #Do if no firth correction is requested
