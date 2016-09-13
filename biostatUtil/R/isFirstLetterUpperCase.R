@@ -8,7 +8,7 @@
 #' @param x character string
 #' @return logical; if \code{TRUE}, the first letter of the input string is
 #'   uppercase.
-#' @author Samuel Leung
+#' @author Samuel Leung, Derek Chiu
 #' @export
 #' @examples 
 #' isFirstLetterUpperCase("peanut butter")
@@ -16,9 +16,5 @@
 #' isFirstLetterUpperCase("Samuel butter")
 #' isFirstLetterUpperCase("")
 isFirstLetterUpperCase <- function(x) {
-  arr <- strsplit(x, "")[[1]]
-  if (length(arr) == 0)
-    return(TRUE)
-  else
-    return(arr[1] == toupper(arr[1]))
+  return(sub("(.).*", "\\1", x) %in% c(LETTERS, ""))
 }

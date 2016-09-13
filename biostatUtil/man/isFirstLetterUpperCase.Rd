@@ -27,6 +27,6 @@ isFirstLetterUpperCase("Samuel butter")
 isFirstLetterUpperCase("")
 }
 \author{
-Samuel Leung
+Samuel Leung, Derek Chiu
 }
 
