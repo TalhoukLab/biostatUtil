@@ -4,9 +4,8 @@
 \alias{lifetable}
 \title{Generate lifetables for multiclass variables}
 \usage{
-lifetable(obj, ntimes = 3, times = round(quantile(obj$time, 1/ntimes *
-  rep(1:ntimes))), nround = 3, show.strata = TRUE, strata.name = "strata",
-  summary = FALSE)
+lifetable(obj, ntimes = 3, times = NULL, nround = 3, show.strata = TRUE,
+  strata.name = "strata", summary = FALSE)
 }
 \arguments{
 \item{obj}{An object of class \code{survfit}}
@@ -49,8 +48,8 @@ Specify vector of time endpoints and create a cohort life table for two or
 more strata
 }
 \details{
-Essentially a wrapper around \code{\link[KMsurv]{lifetab}} that allows the user to input a 
-\code{survfit} object instead of vectors of raw values.
+Essentially a wrapper around \code{\link[KMsurv]{lifetab}} that allows the
+user to input a \code{survfit} object instead of vectors of raw values.
 }
 \examples{
 library(survival)

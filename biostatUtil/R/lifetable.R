@@ -3,8 +3,8 @@
 #' Specify vector of time endpoints and create a cohort life table for two or 
 #' more strata
 #' 
-#' Essentially a wrapper around \code{\link[KMsurv]{lifetab}} that allows the user to input a 
-#' \code{survfit} object instead of vectors of raw values.
+#' Essentially a wrapper around \code{\link[KMsurv]{lifetab}} that allows the
+#' user to input a \code{survfit} object instead of vectors of raw values.
 #' 
 #' @param obj An object of class \code{survfit}
 #' @param ntimes number of time intervals
@@ -41,13 +41,14 @@
 #' lifetable(obj)
 #' lifetable(obj, ntimes = 4, show.strata = FALSE)
 #' lifetable(obj, ntimes = 4, times = c(200, 500, 800, 1000))
-lifetable <- function(obj, ntimes = 3,
-                      times = round(quantile(obj$time, 1 / ntimes *
-                                               rep(1:ntimes))),
-                      nround = 3, show.strata = TRUE, strata.name = "strata",
+lifetable <- function(obj, ntimes = 3, times = NULL, nround = 3,
+                      show.strata = TRUE, strata.name = "strata",
                       summary = FALSE) {
-  . <- nevent <- nlost <- nsubs <- plost <- NULL
+  nevent <- nlost <- nsubs <- plost <- NULL
   cuts <- cumsum(obj$strata)
+  if (is.null(times)) {
+    times <- round(quantile(obj$time, 1 / ntimes * rep(1:ntimes)))
+  }
   if (ntimes > 1) {
     ind <- sapply(split_pos(obj$time, cuts), function(x) {
       mat <- abs(sapply(times, "-", x)) %>% 
