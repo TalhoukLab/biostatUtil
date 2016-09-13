@@ -7,6 +7,8 @@
 #' For example, if a p-value is 2e-05 and we want to round to 3 digits, the
 #' function will return "<0.001".
 #' 
+#' If \code{x} is a \code{logical}, the function returns \code{NA}.
+#' 
 #' @param x a numeric vector or matrix
 #' @param digits integer indicating number of decimal places to round to
 #' @param sci if \code{TRUE}, scientific notation is used
@@ -28,23 +30,33 @@
 #' x <- matrix(rexp(25, 3), nrow = 5)
 #' round_small(x, digits = 1)
 round_small <- function(x, digits = 3, sci = FALSE) {
-  if (is.null(dim(x))) {
-    return(sapply(as.list(x), round_s, digits, sci))
-  } else {
-    return(apply(x, c(1, 2), round_s, digits, sci))
-  }
+  UseMethod("round_small")
+}
+
+#' @export
+#' @rdname round_small
+round_small.numeric <- function(x, digits = 3, sci = FALSE) {
+  return(sapply(as.list(x), round_s, digits, sci))
+}
+
+#' @export
+#' @rdname round_small
+round_small.matrix <- function(x, digits = 3, sci = FALSE) {
+  return(apply(x, c(1, 2), round_s, digits, sci))
+}
+
+#' @export
+#' @rdname round_small
+round_small.logical <- function(x) {
+  return(NA)
 }
 
 #' Base function for rounding small numbers
 #' @noRd
 round_s <- function(x, digits, sci) {
-  if (is.na(x)) {
-    return(NA)
+  if (x <= 5 * 10 ^ -(digits + 1)) {
+    return(paste0("<", format(1 * 10 ^ -digits, scientific = sci)))
   } else {
-    if (x <= 5 * 10 ^ -(digits + 1)) {
-      return(paste0("<", format(1 * 10 ^ -digits, scientific = sci)))
-    } else {
-      return(round(x, digits))
-    }
+    return(round(x, digits))
   }
 }

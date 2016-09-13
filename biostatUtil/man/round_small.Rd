@@ -2,9 +2,18 @@
 % Please edit documentation in R/round_small.R
 \name{round_small}
 \alias{round_small}
+\alias{round_small.logical}
+\alias{round_small.matrix}
+\alias{round_small.numeric}
 \title{Rounding of Small Numbers}
 \usage{
 round_small(x, digits = 3, sci = FALSE)
+
+\method{round_small}{numeric}(x, digits = 3, sci = FALSE)
+
+\method{round_small}{matrix}(x, digits = 3, sci = FALSE)
+
+\method{round_small}{logical}(x)
 }
 \arguments{
 \item{x}{a numeric vector or matrix}
@@ -26,6 +35,8 @@ This function is useful when we have small p-values and don't want to show
 the scientific notation, or coercion to 0. Instead we show an upper bound.
 For example, if a p-value is 2e-05 and we want to round to 3 digits, the
 function will return "<0.001".
+
+If \code{x} is a \code{logical}, the function returns \code{NA}.
 }
 \examples{
 # Vector inputs
