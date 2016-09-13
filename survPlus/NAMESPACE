@@ -2,6 +2,7 @@
 
 export(Cindex)
 export(bootPerf)
+export(defineEventDate)
 export(doCox)
 export(genBootSpls)
 export(predictCox)

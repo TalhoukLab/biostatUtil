@@ -46,7 +46,6 @@ Imports:
     survival,
     tidyr
 Suggests:
-    bccaEndometrial,
     logistf,
     meta,
     testthat
