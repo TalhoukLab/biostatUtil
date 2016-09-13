@@ -11,5 +11,4 @@ test_that("first letter uppercase is TRUE", {
 
 test_that("first character empty string returns TRUE", {
   expect_true(isFirstLetterUpperCase(""))
-  expect_true(isFirstLetterUpperCase(" true"))
 })
