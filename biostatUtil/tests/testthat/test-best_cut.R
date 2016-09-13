@@ -1,6 +1,7 @@
 
 context("Best cutpoint")
 
+library(survival)
 set.seed(1108)
 n <- 4
 lung_mod <- cbind(lung, fac = sample(1:n, nrow(lung), replace = TRUE))
@@ -15,8 +16,8 @@ test_that("factor with n levels can be separated into at most n groups", {
 test_that("survival curves can be saved or not saved", {
   expect_error(best_cut(Surv(time, status) ~ fac, lung_mod, n = "b", plot = TRUE), NA)
   expect_error(best_cut(Surv(time, status) ~ fac, lung_mod, n = "b", plot = TRUE,
-                        filename = "tests/testthat/test.png"), NA)
-  file.remove("tests/testthat/test.png")
+                        filename = "test.png"), NA)
+  file.remove("test.png")
 })
 
 test_that("cutpoint criteria changes when likelihood is flat", {
