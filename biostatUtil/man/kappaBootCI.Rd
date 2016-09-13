@@ -5,7 +5,8 @@
 \title{Bootstrapped confidence interval for kappa statistic.}
 \usage{
 kappaBootCI(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
-  method = "cohen", type = "nominal")
+  method = c("cohen", "weighted", "fleiss", "krippendorff"),
+  type = "nominal")
 }
 \arguments{
 \item{x}{vector of binary scores from first rater}
