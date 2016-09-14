@@ -8,6 +8,7 @@
 #'\item{predictors} names of covariates
 #'\item{indcc} indicator of complete cases
 #'@author Aline Talhouk (adapted from an existing function)
+
 decomposeSurvform <-function(formula,data){
     # save the entered formula
     orig.formula <- formula

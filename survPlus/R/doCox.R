@@ -27,7 +27,7 @@ doCox <- function(formula, data, firth=TRUE){
 
   #Do if firth correction is requested (default)
   if (firth){
-    fit <- coxphf::coxphf(formula,data)
+    fit <- coxphf::coxphf(formula,datac)
     res <- cbind(beta.lp=fit$coefficients,lower= log(fit$ci.lower),upper= log(fit$ci.upper))
     loglik <- fit$loglik #the null and maximimized (penalized) log likelihood
    }else{ #Do if no firth correction is requested
