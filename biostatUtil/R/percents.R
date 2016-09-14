@@ -65,12 +65,19 @@ rowPercent <- function(t, pretty.text = FALSE, keep = TRUE, digits = 4) {
 #' @rdname percents
 #' @param ... additional arguments from \code{colPercent} and \code{rowPercent}
 #' @export
-rowColPercent <- function(t, ...) {
+rowColPercent <- function(t, keep = TRUE, ...) {
   if (is.null(rownames(t)))
     rownames(t) <- seq_len(nrow(t))
-  row.p <- rowPercent(t, keep = FALSE, ...)
-  col.p <- colPercent(t, keep = FALSE, ...)
-  result <- as.matrix(gdata::interleave(t, row.p, col.p)) %>% 
-    set_rownames(paste0(rownames(.), rep(c("", " Row %", " Col %"), nrow(t))))
+  row.p <- rowPercent(t, keep = !keep, ...)
+  col.p <- colPercent(t, keep = !keep, ...)
+  if (keep) {
+    result <- as.matrix(gdata::interleave(t, row.p, col.p)) %>% 
+      set_rownames(paste0(rownames(.), rep(c("", " Row %", " Col %"), nrow(t))))
+  } else {
+    result <- as.matrix(gdata::interleave(row.p, col.p)) %>% 
+      extract(grep("%", rownames(.)), ) %>% 
+      set_rownames(paste0(gsub(" .", "", rownames(.)),
+                          rep(c(" Row %", " Col %"), nrow(t))))
+  }
   return(result)
 }

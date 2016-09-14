@@ -1,4 +1,5 @@
 #' Row and column percentages in HTML format
+#' 
 #' @param t a matrix
 #' @param show.count logical. If \code{TRUE}, the table counts will be shown.
 #' @param row.names (optional) vector of row names in table
@@ -11,37 +12,44 @@
 #' @param css.class.name.even how to format the even numbered rows in CSS
 #' @param ... additional arguments to \code{rowColPercent}
 #' @return The HTML code used to generate a table that shows row percentages.
-#' @author Samuel Leung
+#' @author Samuel Leung, Derek Chiu
 #' @export
-rowColPercentAsHTML <- function(t, show.count = FALSE, row.names = NULL,
-  column.names = NULL, html.table.border = 0, banded.rows = FALSE,
-  css.class.name.odd = "odd", css.class.name.even = "even", ...) {
+rowColPercentAsHTML <- function(
+  t, show.count = FALSE, row.names = NULL, column.names = NULL,
+  html.table.border = 0, banded.rows = FALSE,
+  css.class.name.odd = "odd", css.class.name.even = "even", caption = NA, ...) {
   
   col.th.style <- COL.TH.STYLE
   row.th.style <- ROW.TH.STYLE
-  table.values <- rowColPercent(t, ...)
-  result <- paste0("<table border=", html.table.border, ">")
+  table.values <- rowColPercent(t, keep = show.count, ...)
+  
   # print header
   if (!is.null(column.names)) {
     colnames(table.values) <- column.names
   } else {
     column.names <- colnames(table.values)
   }
+  
   if (!is.null(row.names)) {
-    rownames(table.values)[rep(c(TRUE, FALSE, FALSE),
-                               nrow(table.values) / 3)] <- row.names
+    rownames.mat <- stringr::str_split_fixed(rownames(table.values), " ", 2)
+    rownames.mat[, 1] <- rep(row.names, each = ifelse(show.count, 3, 2))
+    rownames(table.values) <- apply(rownames.mat, 1, paste, collapse = " ")
   } else {
-    row.names <- rownames(table.values)[rep(c(TRUE, FALSE, FALSE),
-                                            nrow(table.values) / 3)]
+    row.names <- unique(gsub(" .+", "", rownames(table.values)))
   }
-  result <- paste0(result, "<tr><th style='", col.th.style,
-                   "' colspan=2></th><th style='", col.th.style, "'>",
-                  paste(column.names, collapse = paste0("</th><th style='",
-                                                        col.th.style, "'>")),
-                  "</th></tr>")
+  
+  result <- paste0(
+    paste0("<table border=", html.table.border, ">",
+           ifelse(is.na(caption), "",
+                  paste0("<caption style='", TABLE.CAPTION.STYLE, "'>",
+                         addTableNumber(caption), "</caption>"))
+    ), "<tr><th style='", col.th.style,
+    "' colspan=2></th><th style='", col.th.style, "'>",
+    paste(column.names, collapse = paste0("</th><th style='",
+                                          col.th.style, "'>")
+    ), "</th></tr>")
   # print values
   i <- 1
-  num.row.per.cat <- ifelse(show.count, 3, 2)
   while (i <= nrow(table.values)) {
     tr.class <- ifelse(banded.rows,
                        paste0(" class='",
@@ -49,12 +57,16 @@ rowColPercentAsHTML <- function(t, show.count = FALSE, row.names = NULL,
                                      css.class.name.even, css.class.name.odd),
                               "'"), "")
     result <- paste0(result, "<tr", tr.class, "><th style='", row.th.style,
-                     "' rowspan=", num.row.per.cat, ">",
-                     row.names[floor(i / 3) + 1], "</th>")
+                     "' rowspan=3>", row.names[floor(i / 3) + 1], "</th>")
     if (show.count) {
       result <- paste0(result, "<th style='", row.th.style, "'>count</th><td>",
                        paste(table.values[i, ], collapse = "</td><td>"),
                        "</td></tr>")	
+    } else {
+      result <- paste0(result, "<tr", tr.class, "><th style='", row.th.style,
+                       "'>row %</th><td>",
+                       paste(table.values[i, ], collapse = "</td><td>"),
+                       "</td></tr>")
     }
     i <- i + 1
     if (show.count) {
@@ -62,25 +74,21 @@ rowColPercentAsHTML <- function(t, show.count = FALSE, row.names = NULL,
                        "'><i>row %</i></th><td><i>",
                        paste(table.values[i, ], collapse = "</i></td><td><i>"),
                        "</td></tr>")
+      
     } else {
       result <- paste0(result, "<tr", tr.class, "><th style='", row.th.style,
-                      "'>row %</th><td>",
-                      paste(table.values[i, ], collapse = "</td><td>"),
-                      "</td></tr>")
+                       "'>col %</th><td>",
+                       paste(table.values[i, ], collapse = "</td><td>"),
+                       "</td></tr>")
     }
     i <- i + 1
     if (show.count) {
       result <- paste0(result, "<tr", tr.class, "><th style='", row.th.style,
-                      "'><i>col %</i></th><td><i>",
-                      paste(table.values[i, ], collapse = "</i></td><td><i>"),
-                      "</td></tr>")
-    } else {
-      result <- paste0(result, "<tr", tr.class, "><th style='", row.th.style,
-                      "'>col %</th><td>",
-                      paste(table.values[i, ], collapse = "</td><td>"),
-                      "</td></tr>")
+                       "'><i>col %</i></th><td><i>",
+                       paste(table.values[i, ], collapse = "</i></td><td><i>"),
+                       "</td></tr>")
+      i <- i + 1
     }
-    i <- i + 1
   }
   result <- paste0(result, "</table>")
   return(result)
