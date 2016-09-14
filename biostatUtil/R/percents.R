@@ -1,0 +1,76 @@
+#' Row and Column Percentages
+#' 
+#' Calculate percentages in a table. \code{rowPercent} gives row percentages, 
+#' \code{colPercent} gives column percentages, and \code{rowColPercent} gives 
+#' both row and column percentages.
+#' 
+#' Generates a table of row and/or column percentages given table \code{t}. 
+#' Using \code{pretty.text = TRUE} will add the \% sign to the percentages.
+#' 
+#' @param t a matrix
+#' @param pretty.text logical. If \code{TRUE}, will format the table into nice 
+#'   display
+#' @param keep logical; if \code{TRUE}, the original table counts will be kept 
+#'   along with the percentages
+#' @param digits number of digits to round to
+#' @return A table with row-wise/column-wise percentages added. The percentages 
+#'   sum to 1 per row/column.
+#' @author Aline Talhouk, Derek Chiu
+#' @name percents
+#' @rdname percents
+#' @export
+#' @examples
+#' A <- matrix(c(2, 3, 5, 10), nrow = 2, dimnames = list(c("Row1", "Row2"), c("Col1", "Col2")))
+#' rowPercent(A)
+#' rowPercent(A, keep = FALSE)
+#' colPercent(A, pretty.text = TRUE)
+#' colPercent(A, pretty.text = TRUE, keep = FALSE)
+#' rowColPercent(A, digits = 2)
+colPercent <- function(t, pretty.text = FALSE, keep = TRUE, digits = 4) {
+  t <- as.matrix(t)
+  if (is.null(rownames(t)))
+    rownames(t) <- seq_len(nrow(t))
+  pcts <- round(t / colSums(t)[col(t)], digits = digits)
+  if (pretty.text)
+    pcts <- apply(pcts * 100, 1:2,
+                  function(x) ifelse(!is.nan(x), paste0(x, "%"), "-"))
+  if (keep) {
+    pcts <- rbind(t, pcts)
+    rownames(pcts) <- paste0(rownames(pcts), rep(c("", " %"), each = nrow(t)))
+    return(pcts)
+  } else {
+    return(pcts)
+  }
+}
+
+#' @rdname percents
+#' @export
+rowPercent <- function(t, pretty.text = FALSE, keep = TRUE, digits = 4) {
+  t <- as.matrix(t)
+  if (is.null(rownames(t)))
+    rownames(t) <- seq_len(nrow(t))
+  pcts <- round(t / apply(t, 1, sum), digits = digits)
+  if (pretty.text)
+    pcts <- apply(pcts * 100, 1:2,
+                  function(x) ifelse(!is.nan(x), paste0(x, "%"), "-"))
+  if (keep) {
+    pcts <- rbind(t, pcts)
+    rownames(pcts) <- paste0(rownames(pcts), rep(c("", " %"), each = nrow(t)))
+    return(pcts)
+  } else {
+    return(pcts)  
+  }
+}
+
+#' @rdname percents
+#' @param ... additional arguments from \code{colPercent} and \code{rowPercent}
+#' @export
+rowColPercent <- function(t, ...) {
+  if (is.null(rownames(t)))
+    rownames(t) <- seq_len(nrow(t))
+  row.p <- rowPercent(t, keep = FALSE, ...)
+  col.p <- colPercent(t, keep = FALSE, ...)
+  result <- as.matrix(gdata::interleave(t, row.p, col.p)) %>% 
+    set_rownames(paste0(rownames(.), rep(c("", " Row %", " Col %"), nrow(t))))
+  return(result)
+}
