@@ -7,7 +7,7 @@ Author: Aline Talhouk
 Maintainer: Aline Talhouk <atalhouk@bccrc.ca>
 Description: A local survival library with modified functions to accomodate
     firth corrections.
-License: What license is it under?
+License: GPL-2
 LazyData: FALSE
 RoxygenNote: 5.0.1
 Imports:

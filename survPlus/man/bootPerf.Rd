@@ -23,12 +23,16 @@ bootPerf(dat0, var.names, time.var, event.ind, B = 1000, seed = 2014,
 \item{is}{the time variable}
 }
 \value{
-\item{apparent} the apparent fit: testing the model on the full training data
-\item{boot} the bootstrap fit: testing the model on the bootstrapped training data
-\item{boot632} the bootstrap 0.632 fit: testing the model on the bootstrapped test data, ie the data that was not selected for bootstrap training.
+\item{apparent}{the apparent fit: testing the model on the full training
+data}
+\item{boot}{the bootstrap fit: testing the model on the bootstrapped training
+data}
+\item{boot632}{the bootstrap 0.632 fit: testing the model on the bootstrapped
+test data, ie the data that was not selected for bootstrap training}
 }
 \description{
-Produce metrics to evaluate a survival model in Bootstrap samples (Internal Validation)
+Produce metrics to evaluate a survival model in Bootstrap samples (Internal
+Validation)
 }
 \author{
 Aline Talhouk

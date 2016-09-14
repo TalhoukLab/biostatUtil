@@ -13,11 +13,11 @@ decomposeSurvform(formula, data)
 }
 \value{
 This function retuns a list with the following parameters
-\item{resp} Surv response matrix
-\item{mm1} Model matrix without time effects
-\item{survpair} names of survival pairs
-\item{predictors} names of covariates
-\item{indcc} indicator of complete cases
+\item{resp}{Surv response matrix}
+\item{mm1}{Model matrix without time effects}
+\item{survpair}{ames of survival pairs}
+\item{predictors}{names of covariates}
+\item{indcc}{indicator of complete cases}
 }
 \description{
 An internal function that decomposes a survival formula
