@@ -8,16 +8,15 @@
 #' \item{loglik} the loglikelihood
 #' \item{firth} whether a firth correction was performed.
 #' @author Aline Talhouk
-#'@export
-#'@examples
-#'dat <- data.frame(time=c(4,3,1,1,2,2,3),
-#'status=c(1,1,1,0,1,1,0),
-#'x=c(0,2,1,1,1,0,0),
-#'sex=c(0,0,0,0,1,1,1))
-#'doCox(Surv(time, status) ~ x + strata(sex), data=dat)
+#' @export
+#' @examples
+#' dat <- data.frame(time=c(4,3,1,1,2,2,3),
+#' status=c(1,1,1,0,1,1,0),
+#' x=c(0,2,1,1,1,0,0),
+#' sex=c(0,0,0,0,1,1,1))
+#' doCox(Surv(time, status) ~ x + strata(sex), data=dat)
 
 doCox <- function(formula, data, firth=TRUE){
-
   if(!is.data.frame(data)){stop("Must provide data in a data.frame")}
   # Decompose the model
   obj <- decomposeSurvform(formula, data)

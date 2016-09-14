@@ -2,7 +2,7 @@
 % Please edit documentation in R/decomposeSurvform.R
 \name{decomposeSurvform}
 \alias{decomposeSurvform}
-\title{an internal function that decomposes a survival formula}
+\title{An internal function that decomposes a survival formula}
 \usage{
 decomposeSurvform(formula, data)
 }
@@ -20,7 +20,7 @@ This function retuns a list with the following parameters
 \item{indcc} indicator of complete cases
 }
 \description{
-an internal function that decomposes a survival formula
+An internal function that decomposes a survival formula
 }
 \author{
 Aline Talhouk (adapted from an existing function)
