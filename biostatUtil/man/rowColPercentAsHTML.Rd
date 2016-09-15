@@ -6,7 +6,8 @@
 \usage{
 rowColPercentAsHTML(t, show.count = FALSE, row.names = NULL,
   column.names = NULL, html.table.border = 0, banded.rows = FALSE,
-  css.class.name.odd = "odd", css.class.name.even = "even", ...)
+  css.class.name.odd = "odd", css.class.name.even = "even", caption = NA,
+  ...)
 }
 \arguments{
 \item{t}{a matrix}
@@ -36,6 +37,6 @@ The HTML code used to generate a table that shows row percentages.
 Row and column percentages in HTML format
 }
 \author{
-Samuel Leung
+Samuel Leung, Derek Chiu
 }
 

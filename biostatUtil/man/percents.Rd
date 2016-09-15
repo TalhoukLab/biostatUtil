@@ -11,7 +11,7 @@ colPercent(t, pretty.text = FALSE, keep = TRUE, digits = 4)
 
 rowPercent(t, pretty.text = FALSE, keep = TRUE, digits = 4)
 
-rowColPercent(t, ...)
+rowColPercent(t, keep = TRUE, ...)
 }
 \arguments{
 \item{t}{a matrix}

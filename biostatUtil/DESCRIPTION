@@ -29,6 +29,7 @@ Imports:
     grid,
     gridExtra,
     Hmisc,
+    htmltools,
     htmlTable,
     irr,
     KMsurv,
