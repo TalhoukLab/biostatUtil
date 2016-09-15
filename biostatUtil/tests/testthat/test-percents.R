@@ -36,4 +36,5 @@ test_that("row names are added if none by default", {
   expect_error(rowPercent(A), NA)
   expect_error(colPercent(A), NA)
   expect_error(rowColPercent(A), NA)
+  expect_error(rowColPercent(A, keep = FALSE), NA)
 })

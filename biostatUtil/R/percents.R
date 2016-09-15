@@ -35,8 +35,8 @@ colPercent <- function(t, pretty.text = FALSE, keep = TRUE, digits = 4) {
     pcts <- apply(pcts * 100, 1:2,
                   function(x) ifelse(!is.nan(x), paste0(x, "%"), "-"))
   if (keep) {
-    pcts <- rbind(t, pcts)
-    rownames(pcts) <- paste0(rownames(pcts), rep(c("", " %"), each = nrow(t)))
+    pcts <- gdata::interleave(t, pcts)
+    rownames(pcts) <- paste0(rownames(pcts), rep(c("", " Col %"), nrow(t)))
     return(pcts)
   } else {
     return(pcts)
@@ -54,8 +54,8 @@ rowPercent <- function(t, pretty.text = FALSE, keep = TRUE, digits = 4) {
     pcts <- apply(pcts * 100, 1:2,
                   function(x) ifelse(!is.nan(x), paste0(x, "%"), "-"))
   if (keep) {
-    pcts <- rbind(t, pcts)
-    rownames(pcts) <- paste0(rownames(pcts), rep(c("", " %"), each = nrow(t)))
+    pcts <- gdata::interleave(t, pcts)
+    rownames(pcts) <- paste0(rownames(pcts), rep(c("", " Row %"), nrow(t)))
     return(pcts)
   } else {
     return(pcts)  
@@ -75,9 +75,7 @@ rowColPercent <- function(t, keep = TRUE, ...) {
       set_rownames(paste0(rownames(.), rep(c("", " Row %", " Col %"), nrow(t))))
   } else {
     result <- as.matrix(gdata::interleave(row.p, col.p)) %>% 
-      extract(grep("%", rownames(.)), ) %>% 
-      set_rownames(paste0(gsub(" .", "", rownames(.)),
-                          rep(c(" Row %", " Col %"), nrow(t))))
+      extract(grep("%", rownames(.)), )
   }
   return(result)
 }
