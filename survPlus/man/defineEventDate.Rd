@@ -31,12 +31,12 @@ A list with elements
 Calculate event/status given censor date
 }
 \details{
-Defines the event dates given a vector of cutoff dates. If the cutoff is a 
+Defines the event dates given a vector of cutoff dates. If the cutoff is a
 single value, it is repeated to equal the number of rows of \code{ed}.
 }
 \note{
 Since there may be some string, e.g. "Unk" in the return date
-\code{ev.Date}, R changed the date to string. Therefore, you need to do 
+\code{ev.Date}, R changed the date to string. Therefore, you need to do
 \code{as.numeric()} and \code{as.Date()} to change \code{ev.Date} from
 a string back to a \code{Date} object.
 }
