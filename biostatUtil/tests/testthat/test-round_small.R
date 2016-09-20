@@ -14,3 +14,7 @@ test_that("matrix input works", {
 test_that("scientific notation works", {
   expect_true(grepl("e", round_small(2e-4, sci = TRUE)))
 })
+
+test_that("NA doesn't affect rounding", {
+  round_small(c(2e-05, 3e-04, NA, 4e-02))
+})

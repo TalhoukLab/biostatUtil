@@ -7,8 +7,6 @@
 #' For example, if a p-value is 2e-05 and we want to round to 3 digits, the
 #' function will return "<0.001".
 #' 
-#' If \code{x} is a \code{logical}, the function returns \code{NA}.
-#' 
 #' @param x a numeric vector or matrix
 #' @param digits integer indicating number of decimal places to round to
 #' @param sci if \code{TRUE}, scientific notation is used
