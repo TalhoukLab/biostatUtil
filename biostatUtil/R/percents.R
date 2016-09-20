@@ -8,14 +8,14 @@
 #' Using \code{pretty.text = TRUE} will add the \% sign to the percentages.
 #' 
 #' @param t a matrix
-#' @param pretty.text logical. If \code{TRUE}, will format the table into nice 
+#' @param pretty.text logical; if \code{TRUE}, will format the table into nice 
 #'   display
 #' @param keep logical; if \code{TRUE}, the original table counts will be kept 
 #'   along with the percentages
 #' @param digits number of digits to round to
 #' @return A table with row-wise/column-wise percentages added. The percentages 
 #'   sum to 1 per row/column.
-#' @author Aline Talhouk, Derek Chiu
+#' @author Aline Talhouk, Samuel Leung, Derek Chiu
 #' @name percents
 #' @rdname percents
 #' @export
@@ -64,6 +64,8 @@ rowPercent <- function(t, pretty.text = FALSE, keep = TRUE, digits = 4) {
 
 #' @rdname percents
 #' @param ... additional arguments from \code{colPercent} and \code{rowPercent}
+#' for \code{rowColPercent}, or additional arguments from non-HTML functions
+#' to HTML functions.
 #' @export
 rowColPercent <- function(t, keep = TRUE, ...) {
   if (is.null(rownames(t)))
