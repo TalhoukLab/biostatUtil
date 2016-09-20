@@ -2,7 +2,6 @@
 % Please edit documentation in R/round_small.R
 \name{round_small}
 \alias{round_small}
-\alias{round_small.logical}
 \alias{round_small.matrix}
 \alias{round_small.numeric}
 \title{Rounding of Small Numbers}
@@ -12,8 +11,6 @@ round_small(x, digits = 3, sci = FALSE)
 \method{round_small}{numeric}(x, digits = 3, sci = FALSE)
 
 \method{round_small}{matrix}(x, digits = 3, sci = FALSE)
-
-\method{round_small}{logical}(x)
 }
 \arguments{
 \item{x}{a numeric vector or matrix}

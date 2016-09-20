@@ -14,7 +14,3 @@ test_that("matrix input works", {
 test_that("scientific notation works", {
   expect_true(grepl("e", round_small(2e-4, sci = TRUE)))
 })
-
-test_that("NA returned if input is NA", {
-  expect_equal(round_small(NA), NA)
-})

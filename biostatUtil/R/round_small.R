@@ -45,18 +45,16 @@ round_small.matrix <- function(x, digits = 3, sci = FALSE) {
   return(apply(x, c(1, 2), round_s, digits, sci))
 }
 
-#' @export
-#' @rdname round_small
-round_small.logical <- function(x) {
-  return(NA)
-}
-
 #' Base function for rounding small numbers
 #' @noRd
 round_s <- function(x, digits, sci) {
-  if (x <= 5 * 10 ^ -(digits + 1)) {
-    return(paste0("<", format(1 * 10 ^ -digits, scientific = sci)))
+  if (is.na(x)) {
+    return(NA)
   } else {
-    return(round(x, digits))
+    if (x <= 5 * 10 ^ -(digits + 1)) {
+      return(paste0("<", format(1 * 10 ^ -digits, scientific = sci)))
+    } else {
+      return(round(x, digits))
+    }
   }
 }
