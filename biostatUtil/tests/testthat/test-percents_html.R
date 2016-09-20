@@ -48,5 +48,5 @@ test_that("Transpose can be useful", {
   D <- matrix(rbinom(10, 10, 0.4), ncol = 1)
   htmlTable(rowPercentAsHTML(C, transpose = FALSE))
   htmlTable(rowPercentAsHTML(C, transpose = TRUE))
-  htmlTable(colPercentAsHTML(D, transpose = FALSE))
+  htmlTable(colPercentAsHTML(D, transpose = TRUE))
 })
