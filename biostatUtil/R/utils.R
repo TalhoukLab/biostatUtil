@@ -4,6 +4,72 @@ n_missing <- function(x, na.rm = FALSE) {
   return(sum(is.na(x), na.rm = na.rm))
 }
 
+#' Missing Value Formatting
+#' 
+#' Takes a numeric vector and replaces all missing codes with NA and returns a
+#' factor if the variable is categorical or a numeric variable if it's numeric.
+#' 
+#' @param y a vector.
+#' @param type whether the variable is \code{"cat"} (categorical) or
+#'   \code{"cont"} (continuous). Defaults to \code{"cat"}.
+#' @param codes vector of missing codes to replace with \code{NA}
+#' @return A categorical or numerical vector with all missing formatted as
+#'   \code{NA}.
+#' @author Aline Talhouk, Derek Chiu
+#' @export
+#' 
+#' @examples 
+#' y <- c(1:10, "Unk", 12)
+#' formatNA(y)
+formatNA <- function(y, type = c("cat", "cont"), codes = c("", "Unk", "N/A")) {
+  y[y %in% c(codes, NA)] <- NA
+  res <- switch(match.arg(type), cat = factor(y), cont = as.numeric(y))
+  return(res)
+}
+
+#' Generate a legend
+#' 
+#' Given a ggplot object, generates a legend
+#' 
+#' @param a.gplot ggplot object
+#' @return ggplot object with legend
+#' @author Aline Talhouk
+#' @export
+g_legend <- function(a.gplot) {
+  tmp <- ggplot_gtable(ggplot_build(a.gplot))
+  leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
+  legend <- tmp$grobs[[leg]]
+  return(legend)
+}
+
+#' Get the p-value
+#' @param x an object from \code{\link[survival]{survdiff}}
+#' @return the Chi-squared p-value
+#' @references Christos Hatzis
+#'   (https://stat.ethz.ch/pipermail/r-help/2007-April/130676.html)
+#' @importFrom stats pchisq
+#' @export
+getPval <- function(x) { 
+  return(pchisq(x$chisq, length(x$n) - 1, lower.tail = FALSE))
+}
+
+#' Standard error of the mean
+#' 
+#' @param x input vector
+#' @param missing.value values that are missing
+#' @param return.missing.value the value to return where there are missing values
+#' @return The standard error of the mean of \code{x}
+#' @author Samuel Leung
+#' @references http://en.wikipedia.org/wiki/Standard_error
+#' @export
+sem <- function(x, missing.value = NA, return.missing.value = NA) {
+  x <- x[!is.na(x)]
+  if (!is.na(missing.value))
+    x <- x[!x %in% missing.value]
+  return(ifelse(length(x) == 0, return.missing.value,
+                sqrt(var(x) / length(x))))
+}
+
 # magrittr placeholder
 globalVariables(".")
 
