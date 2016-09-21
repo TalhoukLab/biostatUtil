@@ -2,10 +2,10 @@
 #' 
 #' Adds a period of time to a date string and returns a new date string.
 #' 
-#' The added period of time can be in \code{"days"}, \code{"months"}, or
-#' \code{"years"}. If \code{delta} is negative, then the returned date will be
-#' earlier than \code{org.date}. The output date format will be the same as the
-#' input date format.
+#' The added period of time can be in \code{"days"}, \code{"weeks"},
+#' \code{"months"}, or \code{"years"}. If \code{delta} is negative, then the
+#' returned date will be earlier than \code{org.date}. The output date format
+#' will be the same as the input date format.
 #' 
 #' @param org.date original date
 #' @param delta amount of time to add to \code{org.date}
@@ -24,8 +24,9 @@
 #' addToDate("2014/07/08", 10, date.format = "YYYY.MM.DD", units = "months")
 #' addToDate("2014/07/08", -10, date.format = "YYYY.MM.DD", units = "years")
 addToDate <- function(org.date, delta, date.format = "MM.DD.YYYY",
-                      units = "days", existing.missing.codes = NA,
-                      return.missing.code = NA, ...) {
+                      units = c("days", "weeks", "months", "years"),
+                      existing.missing.codes = NA, return.missing.code = NA,
+                      ...) {
   if (is.na(org.date) | is.na(delta)) 
     return(NA)
   if (length(unique(existing.missing.codes
@@ -34,8 +35,9 @@ addToDate <- function(org.date, delta, date.format = "MM.DD.YYYY",
        delta %in% existing.missing.codes))
     return(return.missing.code)
   delta <- as.numeric(delta)
-  delta.in.days <- delta
-  if (units == "weeks") {
+  if (units == "days") {
+    delta.in.days <- delta
+  } else if (units == "weeks") {
     delta.in.days <- delta * 7
   } else if (units == "months") {
     delta.in.days <- delta * NUM.DAYS.IN.MONTH

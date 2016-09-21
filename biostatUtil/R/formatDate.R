@@ -22,26 +22,18 @@
 #' formatDate(8, 7, 2011, date.format = "YYYY.MM.DD")
 #' formatDate(8, 7, 2011, date.format = "DD.MM.YYYY", sep = "-")
 #' formatDate(10, 1, 2015, date.format = "MMM.DD.YYYY", sep = "-")
-formatDate <- function(d, m, y, date.format = "MM.DD.YYYY", sep = "/") {
+formatDate <- function(d, m, y, date.format = c("MM.DD.YYYY", "MMM.DD.YYYY",
+                                                "DD.MM.YYYY", "DD.MMM.YYYY",
+                                                "YYYY.MM.DD", "YYYY.MMM.DD"),
+                       sep = "/") {
   d <- as.numeric(d)
   m <- as.numeric(m)
   y <- as.numeric(y)
-  if (date.format == "MM.DD.YYYY") {
-    return(paste(sprintf("%02d", m), sprintf("%02d", d), y, sep = sep))
-  } else if (date.format == "MMM.DD.YYYY") {
-    return(paste(month.abb[m], sprintf("%02d", d), y, sep = sep))
-  } else if (date.format == "DD.MM.YYYY") {
-    return(paste(sprintf("%02d", d), sprintf("%02d", m), y, sep = sep))
-  } else if (date.format == "DD.MMM.YYYY") {
-    return(paste(sprintf("%02d", d), month.abb[m], y, sep = sep))
-  } else if (date.format == "YYYY.MM.DD") {
-    return(paste(y, sprintf("%02d", m), sprintf("%02d", d), sep = sep))
-  } else if (date.format == "YYYY.MMM.DD") {
-    return(paste(y, month.abb[m], sprintf("%02d", d), sep = sep))
-  } else {
-    stop('unknown format: "', date.format, '". Use one of "MM.DD.YYYY",
-          "MMM.DD.YYYY", "DD.MM.YYYY", "DD.MMM.YYYY", "YYYY.MM.DD",
-          "YYYY.MMM.DD".')
-    return(NA)
-  }
+  switch(match.arg(date.format),
+         MM.DD.YYYY = paste(sprintf("%02d", m), sprintf("%02d", d), y, sep = sep),
+         MMM.DD.YYYY = paste(month.abb[m], sprintf("%02d", d), y, sep = sep),
+         DD.MM.YYYY = paste(sprintf("%02d", d), sprintf("%02d", m), y, sep = sep),
+         DD.MMM.YYYY = paste(sprintf("%02d", d), month.abb[m], y, sep = sep),
+         YYYY.MM.DD = paste(y, sprintf("%02d", m), sprintf("%02d", d), sep = sep),
+         YYYY.MMM.DD = paste(y, month.abb[m], sprintf("%02d", d), sep = sep))
 }

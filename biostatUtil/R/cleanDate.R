@@ -25,7 +25,7 @@ cleanDate <- function(x, original.format, preferred.format,
   x <- trimws(x)
   if (x %in% existing.missing.codes)
     return(x)
-  date.comp <- strsplit(x, "/|-")[[1]]
+  date.comp <- strsplit(x, "/|-|\\|")[[1]]
   temp <- suppressWarnings(as.numeric(date.comp[1]))
   if (is.na(temp))
     return(return.missing.code)
@@ -46,7 +46,6 @@ cleanDate <- function(x, original.format, preferred.format,
     } else {
       stop('ERROR (cleanDate): original.format must be one of
            "DD.MM.YYYY", "MM.DD.YYYY", or "YYYY.MM.DD".')
-      return(NA)
     }
   } else if (temp > 31) {  # must be YYYY/MM/DD
     return(formatDate(date.comp[3], date.comp[2], date.comp[1],
@@ -54,12 +53,12 @@ cleanDate <- function(x, original.format, preferred.format,
   } else if (temp > 12) {  # must be DD/MM/YYYY
     return(formatDate(date.comp[1], date.comp[2], date.comp[3],
                       date.format = preferred.format, ...))
-  } else { # first component <= 12 ... however, we are not sure if it refers to a day or month
+  } else {# first component <= 12 ... however, we are not sure if it refers to a day or month
     temp <- as.numeric(date.comp[2]) # second component can either be a day or month
     if (temp > 12) {   # must be MM/DD/YYYY
       return(formatDate(date.comp[2], date.comp[1], date.comp[3],
                         date.format = preferred.format, ...))
-    } else {  # BOTH first & second component <=12; assume original.format
+    } else {# BOTH first & second component <=12; assume original.format
       if (original.format == "MM.DD.YYYY") {
         return(formatDate(date.comp[2], date.comp[1], date.comp[3],
                           date.format = preferred.format, ...))
@@ -69,7 +68,6 @@ cleanDate <- function(x, original.format, preferred.format,
       } else {
         stop('ERROR (cleanDate): unknown original.format specified: ',
              original.format)
-        return(NA)
       }
     }
   }

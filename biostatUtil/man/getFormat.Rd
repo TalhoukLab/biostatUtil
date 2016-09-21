@@ -4,14 +4,13 @@
 \alias{getFormat}
 \title{Get date format from character text}
 \usage{
-getFormat(date, char.format, sep = "")
+getFormat(date, char.format = c("MM.DD.YYYY", "MMM.DD.YYYY", "DD.MM.YYYY",
+  "DD.MMM.YYYY", "YYYY.MM.DD", "YYYY.MMM.DD"), sep = "")
 }
 \arguments{
 \item{date}{character string of date}
 
-\item{char.format}{character text format of date. Either one of 
-\code{"MM.DD.YYYY"}, \code{"MMMM.DD.YYYY"}, \code{"DD.MM.YYYY"}, 
-\code{"DD.MMM.YYYY"}, \code{"YYYY.MM.DD"}, or \code{"YYYY.MMM.DD"}.}
+\item{char.format}{character text format of date}
 
 \item{sep}{character string separating \code{date}}
 }

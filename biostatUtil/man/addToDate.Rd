@@ -4,8 +4,9 @@
 \alias{addToDate}
 \title{Add to a date}
 \usage{
-addToDate(org.date, delta, date.format = "MM.DD.YYYY", units = "days",
-  existing.missing.codes = NA, return.missing.code = NA, ...)
+addToDate(org.date, delta, date.format = "MM.DD.YYYY", units = c("days",
+  "weeks", "months", "years"), existing.missing.codes = NA,
+  return.missing.code = NA, ...)
 }
 \arguments{
 \item{org.date}{original date}
@@ -30,10 +31,10 @@ The new date after adding \code{delta} to \code{org.date}.
 Adds a period of time to a date string and returns a new date string.
 }
 \details{
-The added period of time can be in \code{"days"}, \code{"months"}, or
-\code{"years"}. If \code{delta} is negative, then the returned date will be
-earlier than \code{org.date}. The output date format will be the same as the
-input date format.
+The added period of time can be in \code{"days"}, \code{"weeks"},
+\code{"months"}, or \code{"years"}. If \code{delta} is negative, then the
+returned date will be earlier than \code{org.date}. The output date format
+will be the same as the input date format.
 }
 \examples{
 addToDate("2014/07/08", 10, date.format = "YYYY.MM.DD")

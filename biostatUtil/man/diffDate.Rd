@@ -4,8 +4,9 @@
 \alias{diffDate}
 \title{Difference between two dates}
 \usage{
-diffDate(d1, d2, date.format = "MM.DD.YYYY", units = "days",
-  existing.missing.codes = NA, return.missing.code = NA, ...)
+diffDate(d1, d2, date.format = "MM.DD.YYYY", units = c("days", "weeks",
+  "months", "years"), existing.missing.codes = NA, return.missing.code = NA,
+  ...)
 }
 \arguments{
 \item{d1}{first date}
@@ -14,7 +15,8 @@ diffDate(d1, d2, date.format = "MM.DD.YYYY", units = "days",
 
 \item{date.format}{how to format the resulting date}
 
-\item{units}{the unit of time for which to take the difference. Defaults to "days".}
+\item{units}{the unit of time for which to take the difference. Defaults to 
+"days".}
 
 \item{existing.missing.codes}{missing dates}
 
@@ -23,15 +25,16 @@ diffDate(d1, d2, date.format = "MM.DD.YYYY", units = "days",
 \item{...}{additional arguments to \code{formatDate}}
 }
 \value{
-The difference between two dates \code{d1 - d2} returned in the specified 
-unit of time.
+The difference between two dates \code{d1 - d2} returned in the 
+  specified unit of time.
 }
 \description{
-Takes the difference between two dates and returns in the specified
-unit of time.
+Takes the difference between two dates and returns in the specified unit of 
+time.
 }
 \details{
-The unit of time can be \code{"days"} (default), \code{"months"}, or \code{"years"}.
+The unit of time can be \code{"days"} (default), \code{"weeks"},
+\code{"months"}, or \code{"years"}.
 }
 \examples{
 ## Wrong Order
