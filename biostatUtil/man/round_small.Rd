@@ -32,8 +32,6 @@ This function is useful when we have small p-values and don't want to show
 the scientific notation, or coercion to 0. Instead we show an upper bound.
 For example, if a p-value is 2e-05 and we want to round to 3 digits, the
 function will return "<0.001".
-
-If \code{x} is a \code{logical}, the function returns \code{NA}.
 }
 \examples{
 # Vector inputs
