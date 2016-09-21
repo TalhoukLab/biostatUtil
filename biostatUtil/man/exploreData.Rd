@@ -12,6 +12,11 @@ exploreData(datmat)
 \description{
 Function to provide a graphical exploration of a dataset will print results to file.
 }
+\examples{
+mtcars$vs <- as.factor(mtcars$vs)
+mtcars$am <- as.factor(mtcars$am)
+exploreData(mtcars)
+}
 \author{
 Aline Talhouk
 }

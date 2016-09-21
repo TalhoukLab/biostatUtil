@@ -5,11 +5,15 @@
 #' @author Aline Talhouk
 #' @importFrom grDevices pdf
 #' @export
-exploreData <- function(datmat){
+#' @examples 
+#' mtcars$vs <- as.factor(mtcars$vs)
+#' mtcars$am <- as.factor(mtcars$am)
+#' exploreData(mtcars)
+exploreData <- function(datmat) {
   types <- unname(sapply(datmat, class))
   fd <- datmat[, types %in% c("factor", "numeric", "integer")]
   type.fd <- unname(sapply(fd, class))
-  num.ind <- type.fd %in% c("numeric","integer")
+  num.ind <- type.fd %in% c("numeric", "integer")
   fac.ind <- type.fd %in% c("factor")
   catvars <- colnames(fd)[fac.ind]
   pdf("DataSummary.pdf")
@@ -30,8 +34,8 @@ exploreData <- function(datmat){
   for (i in 1:length(numvars)) {
     par(mfrow = c(2, 1))
     x = fd[, numvars[i]]
-    biostatUtil::boxplotSum(x, numvars[i])
-    biostatUtil::histSum(x)
+    boxplotSum(x, numvars[i])
+    histSum(x)
   }
   dev.off()
 }
