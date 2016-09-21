@@ -39,7 +39,7 @@ NULL
 #' @export
 minWithMissing <- function(x, missing.value = -1, return.missing.value = -1) {
   x.missing <- x %in% missing.value
-  if (sum(x.missing) == length(x) | sum(is.na(x)) == length(x))
+  if (sum(x.missing) == length(x) | n_missing(x) == length(x))
     return(return.missing.value)
   return(min(as.numeric(x[!x.missing]), na.rm = TRUE))
 }
@@ -48,7 +48,7 @@ minWithMissing <- function(x, missing.value = -1, return.missing.value = -1) {
 #' @export
 maxWithMissing <- function(x, missing.value = -1, return.missing.value = -1) {
   x.missing <- x %in% missing.value
-  if (sum(x.missing) == length(x) | sum(is.na(x)) == length(x))
+  if (sum(x.missing) == length(x) | n_missing(x) == length(x))
     return(return.missing.value)
   return(max(as.numeric(x[!x.missing]), na.rm = TRUE))
 }
@@ -57,7 +57,7 @@ maxWithMissing <- function(x, missing.value = -1, return.missing.value = -1) {
 #' @export
 meanWithMissing <- function(x, missing.value = -1, return.missing.value = -1) {
   x.missing <- x %in% missing.value
-  if (sum(x.missing) == length(x) | sum(is.na(x)) == length(x))
+  if (sum(x.missing) == length(x) | n_missing(x) == length(x))
     return(return.missing.value)
   return(mean(as.numeric(x[!x.missing]), na.rm = TRUE))
 }
@@ -66,7 +66,7 @@ meanWithMissing <- function(x, missing.value = -1, return.missing.value = -1) {
 #' @export
 sumWithMissing <- function(x, missing.value = -1, return.missing.value = -1) {
   x.missing <- x %in% missing.value
-  if (sum(x.missing) == length(x) | sum(is.na(x)) == length(x))
+  if (sum(x.missing) == length(x) | n_missing(x) == length(x))
     return(return.missing.value)
   return(sum(as.numeric(x[!x.missing]), na.rm = TRUE))
 }
@@ -75,7 +75,7 @@ sumWithMissing <- function(x, missing.value = -1, return.missing.value = -1) {
 #' @export
 prodWithMissing <- function(x, missing.value = -1, return.missing.value = -1) {
   x.missing <- x %in% missing.value
-  if (sum(x.missing) == length(x) | sum(is.na(x)) == length(x))
+  if (sum(x.missing) == length(x) | n_missing(x) == length(x))
     return(return.missing.value)
   return(prod(as.numeric(x[!x.missing]), na.rm = TRUE))
 }

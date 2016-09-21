@@ -1,3 +1,9 @@
+#' Count number of missing elements
+#' @noRd
+n_missing <- function(x, na.rm = FALSE) {
+  return(sum(is.na(x), na.rm = na.rm))
+}
+
 # magrittr placeholder
 globalVariables(".")
 

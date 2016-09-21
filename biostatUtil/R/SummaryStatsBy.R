@@ -238,9 +238,3 @@ contSumFunc <- function(x, digits, stats = c("mean", "sd", "median", "IQR",
 match_fun_null <- function(x, FUN, ...) {
   return(do.call(FUN, c(list(x), ...)))
 }
-
-#' Count number of missing elements
-#' @noRd
-n_missing <- function(x, na.rm = FALSE) {
-  return(sum(is.na(x), na.rm = na.rm))
-}
