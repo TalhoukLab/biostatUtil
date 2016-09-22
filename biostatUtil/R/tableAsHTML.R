@@ -1,28 +1,22 @@
-#' Change table to HTML format
+#' Table as HTML format
 #' 
-#' Generate HTML code for a table output. Assumes table as more than one row.
+#' Generate HTML code for a table output. Assumes table has more than one row.
 #' 
-#' @param t a matrix
-#' @param row.names (optional) vector of row names in table
-#' @param column.names (optional) vector of column names in table
-#' @param html.table.border border type for the table. Defaults to 0 in HTML
-#' syntax.
-#' @param banded.rows logical. If \code{TRUE}, alternating rows will have
-#' different shaded colours.
-#' @param css.class.name.odd how to format the odd numbered rows in CSS
-#' @param css.class.name.even how to format the even numbered rows in CSS
-#' @param caption caption for the table
-#' @author Samuel Leung
+#' @inheritParams rowPercentAsHTML
+#' @return A character string that can be parsed as HTML code to produce a nicer
+#'   table output.
+#' @author Samuel Leung, Derek Chiu
 #' @export
-tableAsHTML <- function(t, row.names = NULL, column.names = NULL,
-                        html.table.border = 0, banded.rows = FALSE,
-                        css.class.name.odd = "odd",
-                        css.class.name.even = "even", caption = NA) {
-  th.style <- "border-bottom: 1px solid grey; border-top: 4px double grey; text-align: center; padding-right:10px; padding-right:10px;"
-  result <- paste0("<table border=", html.table.border, ">",
-                  ifelse(is.na(caption), "",
-                         paste0("<caption style='", TABLE.CAPTION.STYLE, "'>",
-                                addTableNumber(caption), "</caption>")))
+#' @examples 
+#' library(htmlTable)
+#' A <- matrix(c(2, 3, 5, 10), nrow = 2, dimnames = list(c("Row1", "Row2"), c("Col1", "Col2")))
+#' htmlTable(tableAsHTML(A, banded.rows = TRUE))
+tableAsHTML <- function(
+  t, row.names = NULL, column.names = NULL,
+  html.table.border = 0, banded.rows = FALSE,
+  col.odd = "none", col.even = "lightgrey", caption = NA) {
+  
+  th.style <- COL.TH.STYLE
   if (!is.null(row.names)) {
     rownames(t) <- row.names
   } else {
@@ -33,20 +27,31 @@ tableAsHTML <- function(t, row.names = NULL, column.names = NULL,
   } else {
     column.names <- colnames(t)
   }
-  result <- paste0(result, "<tr><th style='", th.style, "'></th><th style='",
-                  th.style, "'>", paste(column.names,
-                                        collapse = paste0("</th><th style='",
-                                                          th.style, "'>")),
-                  "</th></tr>")
-  for (i in 1:nrow(t)) {
-    tr.class <- ifelse(banded.rows,
-                       paste0(" class='", ifelse(i %% 2 == 0,
-                                                 css.class.name.even,
-                                                 css.class.name.odd), "'"), "")
-    result <- paste0(result, "<tr", tr.class, "><th>", row.names[i],
-                     "</th><td>", paste(t[i, ], collapse = "</td><td>"),
-                     "</td></tr>")
+  if (banded.rows) {
+    row.col <- rep(paste0("background-color: ", c(col.odd, col.even)),
+                   nrow(t) / 2)
+  } else {
+    row.col <- rep("", nrow(t))
   }
-  result <- paste0(result, "</table>")
+  result <- paste0(HTML(paste0(
+    tags$caption(style = TABLE.CAPTION.STYLE,
+                 ifelse(is.na(caption), "", addTableNumber(caption))),
+    tags$tr(HTML(paste0(
+      tags$th(style = th.style),
+      paste(unlist(lapply(column.names, function(x)
+        paste(tags$th(style = th.style, x)))), collapse = "")
+    )))
+  )))
+  for (i in seq_len(nrow(t))) {
+    result <- paste0(HTML(paste0(
+      result,
+      tags$tr(style = row.col[i], HTML(paste0(
+        tags$th(row.names[i]),
+        paste(unlist(lapply(t[i, ], function(x)
+          paste(tags$td(x)))), collapse = "")
+      )))
+    )))
+  }
+  result <- paste0(tags$table(border = html.table.border, HTML(result)))
   return(result)
 }

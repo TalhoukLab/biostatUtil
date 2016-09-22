@@ -10,12 +10,18 @@ summaryAsHTML(d)
 \item{d}{assume \code{d} is an array of numbers}
 }
 \value{
-summary table with annotated HTMl code
+summary table with annotated HTML code
 }
 \description{
 Generate summary table as an HTML table
 }
+\examples{
+library(htmlTable)
+set.seed(1)
+x <- rnorm(100)
+htmlTable(summaryAsHTML(x))
+}
 \author{
-Samuel Leung
+Samuel Leung, Derek Chiu
 }
 

@@ -2,11 +2,11 @@
 % Please edit documentation in R/tableAsHTML.R
 \name{tableAsHTML}
 \alias{tableAsHTML}
-\title{Change table to HTML format}
+\title{Table as HTML format}
 \usage{
 tableAsHTML(t, row.names = NULL, column.names = NULL,
-  html.table.border = 0, banded.rows = FALSE, css.class.name.odd = "odd",
-  css.class.name.even = "even", caption = NA)
+  html.table.border = 0, banded.rows = FALSE, col.odd = "none",
+  col.even = "lightgrey", caption = NA)
 }
 \arguments{
 \item{t}{a matrix}
@@ -15,22 +15,32 @@ tableAsHTML(t, row.names = NULL, column.names = NULL,
 
 \item{column.names}{(optional) vector of column names in table}
 
-\item{html.table.border}{border type for the table. Defaults to 0 in HTML
+\item{html.table.border}{border type for the table. Defaults to 0 in HTML 
 syntax.}
 
-\item{banded.rows}{logical. If \code{TRUE}, alternating rows will have
+\item{banded.rows}{logical; if \code{TRUE}, alternating rows will have 
 different shaded colours.}
 
-\item{css.class.name.odd}{how to format the odd numbered rows in CSS}
+\item{col.odd}{colour to use for odd numbered rows}
 
-\item{css.class.name.even}{how to format the even numbered rows in CSS}
+\item{col.even}{colour to use for even numbered rows}
 
-\item{caption}{caption for the table}
+\item{caption}{table caption. Uses \code{\link{addTableNumber}} to increment 
+table number}
+}
+\value{
+A character string that can be parsed as HTML code to produce a nicer
+  table output.
 }
 \description{
-Generate HTML code for a table output. Assumes table as more than one row.
+Generate HTML code for a table output. Assumes table has more than one row.
+}
+\examples{
+library(htmlTable)
+A <- matrix(c(2, 3, 5, 10), nrow = 2, dimnames = list(c("Row1", "Row2"), c("Col1", "Col2")))
+htmlTable(tableAsHTML(A, banded.rows = TRUE))
 }
 \author{
-Samuel Leung
+Samuel Leung, Derek Chiu
 }
 
