@@ -3,7 +3,7 @@ context("HTML output of Row and Column percentages")
 
 library(htmlTable)
 set.seed(13)
-B <- matrix(rbinom(20, size = 20, prob = 0.3), nrow = 4,
+B <- matrix(rbinom(20, size = 20, prob = 0.3), nrow = 5,
             dimnames = list(paste0("Row", 1:5), paste0("Col", 1:4)))
 
 test_that("HTML output works", {
@@ -32,11 +32,11 @@ test_that("Other formatting options work", {
 })
 
 test_that("Row and column names can be overwritten", {
-  htmlTable(colPercentAsHTML(B, keep = TRUE, row.names = letters[1:4],
+  htmlTable(colPercentAsHTML(B, keep = TRUE, row.names = letters[1:5],
                              column.names = LETTERS[1:4]))
-  htmlTable(rowPercentAsHTML(B, keep = TRUE, row.names = letters[1:4],
+  htmlTable(rowPercentAsHTML(B, keep = TRUE, row.names = letters[1:5],
                              column.names = LETTERS[1:4]))
-  htmlTable(rowColPercentAsHTML(B, keep = TRUE, row.names = letters[1:4],
+  htmlTable(rowColPercentAsHTML(B, keep = TRUE, row.names = letters[1:5],
                                 column.names = LETTERS[1:4]))
 
 })
