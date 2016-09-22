@@ -35,6 +35,9 @@
 #' bootstrapped CI}
 #' \item{kappa}{kappa point estimate, lower bound and upper bound for
 #' bootstrapped CI}
+#' \item{table}{a data frame that contains all 6 of the estimated statistics
+#' along with confidence intervals}
+#' @family confusion matrix functions
 #' @author Aline Talhouk, Derek Chiu
 #' @export
 #' @examples
@@ -164,10 +167,4 @@ binaryCM <- function(x,
       table = table
     )
   )
-}
-
-#' Print confidence interval wrapper
-#' @noRd
-printCI <- function(z) {
-  paste(z[1], "(", z[2], "-", z[3], ")")
 }

@@ -44,6 +44,8 @@ bootstrapped CI}
 bootstrapped CI}
 \item{kappa}{kappa point estimate, lower bound and upper bound for
 bootstrapped CI}
+\item{table}{a data frame that contains all 6 of the estimated statistics
+along with confidence intervals}
 }
 \description{
 Calculates summaries from cross-tabulated reference and prediction labels for
@@ -72,5 +74,9 @@ binaryCM(x, y, digits = 2)
 }
 \author{
 Aline Talhouk, Derek Chiu
+}
+\seealso{
+Other confusion matrix functions: \code{\link{binaryCMAsHTML}},
+  \code{\link{multiClassCM}}
 }
 

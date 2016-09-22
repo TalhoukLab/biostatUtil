@@ -67,4 +67,8 @@ binaryCM(x, y, digits = 2)
 \author{
 Aline Talhouk, Derek Chiu
 }
+\seealso{
+Other confusion matrix functions: \code{\link{binaryCMAsHTML}},
+  \code{\link{binaryCM}}
+}
 

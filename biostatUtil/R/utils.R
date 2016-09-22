@@ -1,3 +1,9 @@
+#' Print confidence interval wrapper
+#' @noRd
+printCI <- function(z) {
+  paste0(z[1], " (", z[2], " - ", z[3], ")")
+}
+
 #' Count number of missing elements
 #' @noRd
 n_missing <- function(x, na.rm = FALSE) {

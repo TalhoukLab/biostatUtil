@@ -31,6 +31,7 @@
 #' bootstrapped CI}
 #' \item{kappa}{kappa point estimate, lower bound and upper bound for
 #' bootstrapped CI}
+#' @family confusion matrix functions
 #' @author Aline Talhouk, Derek Chiu
 #' @export
 #' @examples
