@@ -309,13 +309,13 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
                  # confusion matrix, marker as the reference
                  # require both marker and var to be factor ...
                  # if not, just print err msg
-                 if (!is.factor(input.d.no.missing.var[,var.name]) | !is.factor(input.d.no.missing.var[, marker.name])) {
+                 if (!is.factor(input.d.no.missing.var[, var.name]) | !is.factor(input.d.no.missing.var[, marker.name])) {
                    stat.test.result <- "error: both marker and variable needs to be factor"
                  } else {
-                   stat.test.result <- confusionResultToHtmlTable(as.numeric(input.d.no.missing.var[, var.name]),
-                                                                  as.numeric(input.d.no.missing.var[, marker.name]),
-                                                                  marker.description,round.digits.p.value,
-                                                                  num.boot = num.boot)
+                   stat.test.result <- binaryCMAsHTML(as.numeric(input.d.no.missing.var[, marker.name]),
+                                                      as.numeric(input.d.no.missing.var[, var.name]),
+                                                      marker.description, round.digits.p.value,
+                                                      num.boot = num.boot)
                  }
                },
                confusionVarAsRef = { 
@@ -325,10 +325,10 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
                  if (!is.factor(input.d.no.missing.var[, var.name]) | !is.factor(input.d.no.missing.var[, marker.name])) {
                    stat.test.result <- "error: both marker and variable needs to be factor"
                  } else {
-                   stat.test.result <- confusionResultToHtmlTable(as.numeric(input.d.no.missing.var[, marker.name]),
-                                                                  as.numeric(input.d.no.missing.var[, var.name]),
-                                                                  var.description, round.digits.p.value,
-                                                                  num.boot = num.boot)
+                   stat.test.result <- binaryCMAsHTML(as.numeric(input.d.no.missing.var[, var.name]),
+                                                      as.numeric(input.d.no.missing.var[, marker.name]),
+                                                      var.description, round.digits.p.value,
+                                                      num.boot = num.boot)
                  }
                }
         )
