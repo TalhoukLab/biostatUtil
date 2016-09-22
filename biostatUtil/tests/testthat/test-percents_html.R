@@ -3,8 +3,8 @@ context("HTML output of Row and Column percentages")
 
 library(htmlTable)
 set.seed(13)
-B <- matrix(rbinom(16, size = 20, prob = 0.3), nrow = 4,
-            dimnames = list(paste0("Row", 1:4), paste0("Col", 1:4)))
+B <- matrix(rbinom(20, size = 20, prob = 0.3), nrow = 4,
+            dimnames = list(paste0("Row", 1:5), paste0("Col", 1:4)))
 
 test_that("HTML output works", {
   htmlTable(colPercentAsHTML(B, keep = TRUE))
@@ -22,7 +22,6 @@ test_that("Banded rows alternate per row group", {
   htmlTable(rowPercentAsHTML(B, keep = FALSE, banded.rows = TRUE))
   htmlTable(rowColPercentAsHTML(B, keep = TRUE, banded.rows = TRUE))
   htmlTable(rowColPercentAsHTML(B, keep = FALSE, banded.rows = TRUE))
-
 })
 
 test_that("Other formatting options work", {

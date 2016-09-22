@@ -38,7 +38,6 @@ colPercentAsHTML <- function(
   } else {
     table.values <- colPercent(t, keep = keep, ...)
   }
-  
   if (!is.null(column.names)) {
     colnames(table.values) <- column.names
   } else {
@@ -50,6 +49,13 @@ colPercentAsHTML <- function(
     rownames(table.values) <- apply(rownames.mat, 1, paste, collapse = " ")
   } else {
     row.names <- unique(gsub(" .+", "", rownames(table.values)))
+  }
+  if (banded.rows) {
+    color.bands <- rep(rep(c(col.odd, col.even), each = ifelse(keep, 2, 1)),
+                       (nrow(t) + 1) %/% 2)
+    row.col <- paste0("background-color: ", color.bands)
+  } else {
+    row.col <- rep("", nrow(table.values))
   }
   
   result <- paste0(HTML(paste0(
@@ -64,23 +70,16 @@ colPercentAsHTML <- function(
   if (keep) {
     i <- 1
     while (i <= nrow(table.values)) {
-      if (banded.rows) {
-        row.col <- paste0(
-          "background-color: ",
-          ifelse(((i + 1) %/% 2) %% 2 == 1, col.odd, col.even), ";")
-      } else {
-        row.col <- ""
-      }
       result <- paste0(HTML(paste0(
         result,
-        tags$tr(style = row.col, HTML(paste0(
+        tags$tr(style = row.col[i], HTML(paste0(
           tags$th(style = row.th.style, rowspan = 2,
                   row.names[ceiling(i / 2)]),
           tags$th(style = row.th.style, "count"),
           paste(unlist(lapply(table.values[i, ], function(x)
             paste(tags$td(x)))), collapse = "")
         ))),
-        tags$tr(style = row.col, HTML(paste0(
+        tags$tr(style = row.col[i + 1], HTML(paste0(
           tags$th(style = row.th.style, tags$i("col %")),
           paste(unlist(lapply(table.values[i + 1, ], function(x)
             paste(tags$td(tags$i(x))))), collapse = "")
@@ -91,20 +90,13 @@ colPercentAsHTML <- function(
   } else {
     i <- 1
     while (i <= nrow(table.values)) {
-      if (banded.rows) {
-        row.col <- paste0(
-          "background-color: ",
-          ifelse(((i + 1) %/% 2) %% 2 == 1, col.odd, col.even), ";")
-      } else {
-        row.col <- ""
-      }
       result <- paste0(HTML(paste0(
         result,
-        tags$tr(style = row.col, HTML(paste0(
+        tags$tr(style = row.col[i], HTML(paste0(
           tags$th(style = row.th.style, rowspan = 2,
                   row.names[i])
         ))),
-        tags$tr(style = row.col, HTML(paste0(
+        tags$tr(style = row.col[i], HTML(paste0(
           tags$th(style = row.th.style, "col %"),
           paste(unlist(lapply(table.values[i, ], function(x)
             paste(tags$td(x)))), collapse = "")
@@ -132,7 +124,6 @@ rowPercentAsHTML <- function(
   } else {
     table.values <- rowPercent(t, keep = keep, ...)
   }
-
   if (!is.null(column.names)) {
     colnames(table.values) <- column.names
   } else {
@@ -144,6 +135,13 @@ rowPercentAsHTML <- function(
     rownames(table.values) <- apply(rownames.mat, 1, paste, collapse = " ")
   } else {
     row.names <- unique(gsub(" .+", "", rownames(table.values)))
+  }
+  if (banded.rows) {
+    color.bands <- rep(rep(c(col.odd, col.even), each = ifelse(keep, 2, 1)),
+                       (nrow(t) + 1) %/% 2)
+    row.col <- paste0("background-color: ", color.bands)
+  } else {
+    row.col <- rep("", nrow(table.values))
   }
   
   result <- paste0(HTML(paste0(
@@ -158,23 +156,16 @@ rowPercentAsHTML <- function(
   if (keep) {
     i <- 1
     while (i <= nrow(table.values)) {
-      if (banded.rows) {
-        row.col <- paste0(
-          "background-color: ",
-          ifelse(((i + 1) %/% 2) %% 2 == 1, col.odd, col.even), ";")
-      } else {
-        row.col <- ""
-      }
       result <- paste0(HTML(paste0(
         result,
-        tags$tr(style = row.col, HTML(paste0(
+        tags$tr(style = row.col[i], HTML(paste0(
           tags$th(style = row.th.style, rowspan = 2,
                   row.names[ceiling(i / 2)]),
           tags$th(style = row.th.style, "count"),
           paste(unlist(lapply(table.values[i, ], function(x)
             paste(tags$td(x)))), collapse = "")
         ))),
-        tags$tr(style = row.col, HTML(paste0(
+        tags$tr(style = row.col[i + 1], HTML(paste0(
           tags$th(style = row.th.style, tags$i("row %")),
           paste(unlist(lapply(table.values[i + 1, ], function(x)
             paste(tags$td(tags$i(x))))), collapse = "")
@@ -185,20 +176,13 @@ rowPercentAsHTML <- function(
   } else {
     i <- 1
     while (i <= nrow(table.values)) {
-      if (banded.rows) {
-        row.col <- paste0(
-          "background-color: ",
-          ifelse(((i + 1) %/% 2) %% 2 == 1, col.odd, col.even), ";")
-      } else {
-        row.col <- ""
-      }
       result <- paste0(HTML(paste0(
         result,
-        tags$tr(style = row.col, HTML(paste0(
+        tags$tr(style = row.col[i], HTML(paste0(
           tags$th(style = row.th.style, rowspan = 2,
                   row.names[i])
         ))),
-        tags$tr(style = row.col, HTML(paste0(
+        tags$tr(style = row.col[i], HTML(paste0(
           tags$th(style = row.th.style, "row %"),
           paste(unlist(lapply(table.values[i, ], function(x)
             paste(tags$td(x)))), collapse = "")
@@ -244,6 +228,13 @@ rowColPercentAsHTML <- function(
   } else {
     row.names <- unique(gsub(" .+", "", rownames(table.values)))
   }
+  if (banded.rows) {
+    color.bands <- rep(rep(c(col.odd, col.even), each = ifelse(keep, 3, 2)),
+                       (nrow(t) + 1) %/% 2)
+    row.col <- paste0("background-color: ", color.bands)
+  } else {
+    row.col <- rep("", nrow(table.values))
+  }
   
   result <- paste0(HTML(paste0(
     tags$caption(style = TABLE.CAPTION.STYLE,
@@ -257,28 +248,21 @@ rowColPercentAsHTML <- function(
   if (keep) {
     i <- 1
     while (i <= nrow(table.values)) {
-      if (banded.rows) {
-        row.col <- paste0(
-          "background-color: ",
-          ifelse(((i + 2) %/% 3) %% 2 == 1, col.odd, col.even), ";")
-      } else {
-        row.col <- ""
-      }
       result <- paste0(HTML(paste0(
         result,
-        tags$tr(style = row.col, HTML(paste0(
+        tags$tr(style = row.col[i], HTML(paste0(
           tags$th(style = row.th.style, rowspan = 3,
-                  row.names[floor(i / 3) + 1]),
+                  row.names[floor(i + 2) / 3]),
           tags$th(style = row.th.style, "count"),
           paste(unlist(lapply(table.values[i, ], function(x)
             paste(tags$td(x)))), collapse = "")
         ))),
-        tags$tr(style = row.col, HTML(paste0(
+        tags$tr(style = row.col[i + 1], HTML(paste0(
           tags$th(style = row.th.style, tags$i("row %")),
           paste(unlist(lapply(table.values[i + 1, ], function(x)
             paste(tags$td(tags$i(x))))), collapse = "")
         ))),
-        tags$tr(style = row.col, HTML(paste0(
+        tags$tr(style = row.col[i + 2], HTML(paste0(
           tags$th(style = row.th.style, tags$i("col %")),
           paste(unlist(lapply(table.values[i + 2, ], function(x)
             paste(tags$td(tags$i(x))))), collapse = "")
@@ -289,25 +273,18 @@ rowColPercentAsHTML <- function(
   } else {
     i <- 1
     while (i <= nrow(table.values)) {
-      if (banded.rows) {
-        row.col <- paste0(
-          "background-color: ",
-          ifelse(((i + 1) %/% 2) %% 2 == 1, col.odd, col.even), ";")
-      } else {
-        row.col <- ""
-      }
       result <- paste0(HTML(paste0(
         result,
-        tags$tr(style = row.col, HTML(paste0(
+        tags$tr(style = row.col[i], HTML(paste0(
           tags$th(style = row.th.style, rowspan = 3,
-                  row.names[floor(i / 3) + 1])
+                  row.names[floor(i + 1) / 2])
         ))),
-        tags$tr(style = row.col, HTML(paste0(
+        tags$tr(style = row.col[i], HTML(paste0(
           tags$th(style = row.th.style, "row %"),
           paste(unlist(lapply(table.values[i, ], function(x)
             paste(tags$td(tags$i(x))))), collapse = "")
         ))),
-        tags$tr(style = row.col, HTML(paste0(
+        tags$tr(style = row.col[i + 1], HTML(paste0(
           tags$th(style = row.th.style, "col %"),
           paste(unlist(lapply(table.values[i + 1, ], function(x)
             paste(tags$td(tags$i(x))))), collapse = "")
