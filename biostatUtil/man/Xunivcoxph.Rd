@@ -4,7 +4,7 @@
 \alias{Xunivcoxph}
 \title{Univariate cox proprtional hazards model}
 \usage{
-Xunivcoxph(mod, coxph.type = "coxph", digits = 3)
+Xunivcoxph(mod, coxph.type = c("coxph", "coxphf"), digits = 3)
 }
 \arguments{
 \item{mod}{model fit object, returned from either \code{coxph}

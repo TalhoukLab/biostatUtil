@@ -166,7 +166,8 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
     if (pval) {
       sdiff <- survdiff(eval(sfit$call$formula), data = eval(sfit$call$data))
       pval <- pchisq(sdiff$chisq,length(sdiff$n) - 1, lower.tail = FALSE)
-      pvaltxt <- ifelse(pval < min.p.value, paste("Log Rank p <", format(min.p.value, scientific = FALSE)),
+      pvaltxt <- ifelse(pval < min.p.value,
+                        paste("Log Rank p <", format(min.p.value, scientific = FALSE)),
                         paste("Log Rank p =", signif(pval, digits)))
       if (HR) {
         pretty.coxph.obj <- prettyCoxph(eval(sfit$call$formula),
@@ -175,11 +176,10 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                                         use.firth = use.firth)
         if (pretty.coxph.obj$used.firth) {
           coxm <- pretty.coxph.obj$fit.firth
-          HRtxts <- Xunivcoxph(coxm, coxph.type = "coxphf", digits = digits)
         } else {
           coxm <- pretty.coxph.obj$fit
-          HRtxts <- Xunivcoxph(coxm, digits = digits)
         }
+        HRtxts <- Xunivcoxph(coxm, digits = digits)
         show.ref.group <- length(HRtxts) > 1
         cox.strata.labs <- ystratalabs
         if (!is.null(cox.ref.grp)) {
@@ -203,7 +203,8 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
     if (pval) {
       sdiff <- survdiff(eval(sfit2$call$formula), data = eval(sfit2$call$data))
       pval <- pchisq(sdiff$chisq, length(sdiff$n) - 1, lower.tail = FALSE)
-      pvaltxt <- ifelse(pval < min.p.value, paste("Log Rank p <", format(min.p.value, scientific = FALSE)),
+      pvaltxt <- ifelse(pval < min.p.value,
+                        paste("Log Rank p <", format(min.p.value, scientific = FALSE)),
                         paste("Log Rank p =", signif(pval, digits)))
       if (HR) {
         pretty.coxph.obj <- prettyCoxph(eval(sfit2$call$formula),
@@ -212,11 +213,10 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                                         use.firth = use.firth)
         if (pretty.coxph.obj$used.firth) {
           coxm <- pretty.coxph.obj$fit.firth
-          HRtxts <- Xunivcoxph(coxm, coxph.type = "coxphf", digits = digits)
         } else {
           coxm <- pretty.coxph.obj$fit
-          HRtxts <- Xunivcoxph(coxm, digits = digits)
         }
+        HRtxts <- Xunivcoxph(coxm, digits = digits)
         show.ref.group <- length(HRtxts) > 1
         cox.strata.labs <- ystratalabs
         if (!is.null(cox.ref.grp)) {
