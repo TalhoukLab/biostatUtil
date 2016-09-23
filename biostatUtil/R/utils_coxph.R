@@ -63,6 +63,7 @@ coxphOut <- function(object, coefnames = NULL, conf.level = 0.95,
 #' @return Hazard ratio and 95/% confidence interval
 #' @author Aline Talhouk, Derek Chiu
 #' @export
+#' @examples
 #' # One predictor
 #' test1 <- list(
 #'   time = c(4, 3, 1, 1, 2, 2, 3),
