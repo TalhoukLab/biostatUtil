@@ -1,8 +1,8 @@
 Package: biostatUtil
 Type: Package
 Title: Utility Functions Used in Biostatistics Projects
-Version: 0.2.0.9063
-Date: 2016-09-20
+Version: 0.2.0.9064
+Date: 2016-09-23
 Authors@R: c(person("Derek", "Chiu", email = "dchiu@bccrc.ca", role = c("aut", "cre")),
     person("Aline", "Talhouk", email = "atalhouk@bccrc.ca", role = c("aut")),
     person("Samuel", "Leung", email = "Samuel.Leung@vch.ca", role = c("aut")))
@@ -10,9 +10,9 @@ Description: Provides some commonly used utility functions used in
     biostatistics, such as row and column percentages in a table,
     date formatting, survival functions, confusion matrices,
     contingency tables, plotting functions, and more.
-Depends:
+Depends: 
     R (>= 3.2.0)
-Imports:
+Imports: 
     assertthat,
     boot,
     broom,
@@ -44,10 +44,10 @@ Imports:
     stringr,
     survival,
     tidyr
-Suggests:
+Suggests: 
     logistf,
     meta,
     testthat
 License: GPL-2
-RoxygenNote: 5.0.1
+RoxygenNote: 5.0.1.9000
 LazyData: FALSE
