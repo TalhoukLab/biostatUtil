@@ -15,6 +15,15 @@
 #' @author Derek Chiu
 #' @import cluster bioDist
 #' @export
+#' @examples
+#' library(cluster)
+#' data(votes.repub)
+#' d <- dist(votes.repub)
+#' agnes_hook(d, k = 2)
+#' diana_hook(d, k = 2)
+#'
+#' x <- matrix(rnorm(100), nrow = 5)
+#' y <- mi_hook(x)
 agnes_hook <- function(d, k) {
   tmp <- agnes(d, diss = TRUE)
   a <- cutree(tmp, k)

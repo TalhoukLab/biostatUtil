@@ -33,6 +33,16 @@ ConsensusClusterPlus.
 The hierarchical structure returned using \code{agnes} is equivalent to using
 \code{\link{hclust}}.
 }
+\examples{
+library(cluster)
+data(votes.repub)
+d <- dist(votes.repub)
+agnes_hook(d, k = 2)
+diana_hook(d, k = 2)
+
+x <- matrix(rnorm(100), nrow = 5)
+y <- mi_hook(x)
+}
 \author{
 Derek Chiu
 }
