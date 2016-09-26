@@ -30,7 +30,7 @@ ConClustPlus <- function(dat, k = 3, reps = 1000, pItem = 0.8, dir = NULL,
                                   innerLinkage = "single",
                                   distance = "euclidean", seed = seed, ...)
   hcDianaEucl <- ConsensusClusterPlus(dat, maxK = k, reps = reps,
-                                      pItem = pItem, clusterAlg = "dianaHook",
+                                      pItem = pItem, clusterAlg = "diana_hook",
                                       distance = "euclidean", seed = seed, ...)
   kmEucl <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
                                  clusterAlg = "kmdist", distance = "euclidean",
@@ -39,7 +39,7 @@ ConClustPlus <- function(dat, k = 3, reps = 1000, pItem = 0.8, dir = NULL,
                                   clusterAlg = "kmdist", distance = "spearman",
                                   seed = seed, ...)
   kmMI <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
-                               clusterAlg = "kmdist", distance = "myMIdist",
+                               clusterAlg = "kmdist", distance = "mi_dist",
                                seed = seed, ...)
   pamEucl <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
                                   clusterAlg = "pam", distance = "euclidean",
@@ -48,7 +48,7 @@ ConClustPlus <- function(dat, k = 3, reps = 1000, pItem = 0.8, dir = NULL,
                                    clusterAlg = "pam", distance = "spearman",
                                    seed = seed, ...)
   pamMI <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
-                                clusterAlg = "pam", distance = "myMIdist",
+                                clusterAlg = "pam", distance = "mi_dist",
                                 seed = seed, ...)
   results <- list(hcAEucl = hcAEucl, hcSEucl = hcSEucl,
                   hcDianaEucl = hcDianaEucl, kmEucl = kmEucl,
