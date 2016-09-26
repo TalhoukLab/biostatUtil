@@ -22,7 +22,7 @@
 ConClustPlus <- function(dat, k = 3, reps = 1000, pItem = 0.8, dir = NULL,
                          fileName = "results_CCP", seed = 123, min.sd = 1,
                          ...) {
-  dat <- dataPrep(dat, min.sd = min.sd)
+  dat <- prepare_data(dat, min.sd = min.sd)
   hcAEucl <- ConsensusClusterPlus(dat, maxK = k, reps = reps, pItem = pItem,
                                   distance = "euclidean",
                                   seed = seed, ...)

@@ -56,7 +56,7 @@ ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
                      seed = 123456, seed.method = 1, min.sd = 1, dir = NULL,
                      fileName = "ConClustOutput", time.saved = TRUE) {
   . <- NULL
-  x.rest <- dataPrep(x, min.sd = min.sd)
+  x.rest <- prepare_data(x, min.sd = min.sd)
   x.nmf <- x.rest %>%
     rbind(-.) %>%
     apply(2, function(x) ifelse(x < 0, 0, x))
