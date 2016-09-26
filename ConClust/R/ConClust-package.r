@@ -5,7 +5,7 @@
 #' Each realization uses a unique combination of observations and clustering
 #' algorithms.
 #'
-#' @name ConClust
+#' @name ConClust-package
 #' @docType package
 #' @importFrom magrittr set_names set_rownames
 NULL
