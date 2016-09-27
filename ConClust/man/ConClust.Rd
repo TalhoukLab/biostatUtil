@@ -5,42 +5,46 @@
 \title{Consensus clustering over samples and algorithms}
 \usage{
 ConClust(x, k, pItem = 0.8, reps = 1000, method = NULL, seed = 123456,
-  seed.method = 1, min.sd = 1, dir = NULL, fileName = "ConClustOutput",
-  time.saved = TRUE)
+  seed.method = 1, min.sd = 1, save = TRUE,
+  file.name = "ConClustOutput", time.saved = FALSE)
 }
 \arguments{
 \item{x}{data matrix; genes are rows and samples are columns}
 
 \item{k}{number of clusters requested}
 
-\item{pItem}{proportion of items to be used in subsampling within an algorithm}
+\item{pItem}{proportion of items to be used in subsampling within an
+algorithm}
 
 \item{reps}{number of subsamples}
 
-\item{method}{vector of clustering algorithms for performing consensus clustering. Must be
-any number of the following: "nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl",
-"kmSpear", "kmMI", "pamEucl", "pamSpear", "pamMI", "apEucl", "scRbf", "gmmBIC", "biclust".
-See details.}
+\item{method}{vector of clustering algorithms for performing consensus
+clustering. Must be any number of the following: "nmfDiv", "nmfEucl",
+"hcAEucl", "hcDianaEucl", "kmEucl", "kmSpear", "pamEucl", "pamSpear",
+"apEucl", "scRbf", "gmmBIC", "biclust". See details.}
 
 \item{seed}{random seed to use for NMF-based algorithms}
 
-\item{seed.method}{seed to use to ensure each method operates on the same set of subsamples}
+\item{seed.method}{seed to use to ensure each method operates on the same set
+of subsamples}
 
 \item{min.sd}{minimum standard deviation threshold. See details.}
 
-\item{dir}{directory where returned object will be saved at each iteration (as an RDS object).
-No output file is saved if \code{file} is \code{NULL}.}
+\item{save}{logical; if \code{TRUE}, the returned object will be saved at
+each iteration as well as at the end.}
 
-\item{fileName}{file name of the written object}
+\item{file.name}{file name of the written object}
 
-\item{time.saved}{logical; if \code{TRUE} (default), the date saved is appended
-to the file name. Only applicable when \code{dir} is not \code{NULL}.}
+\item{time.saved}{logical; if \code{TRUE}, the date saved is
+appended to the file name. Only applicable when \code{dir} is not
+\code{NULL}.}
 }
 \value{
-An array of dimension \code{nrow(x)} by \code{reps} by \code{length(methods)}
-Each slice of the array is a matrix showing consensus clustering results for
-algorithms (method). The matrices have a row for each sample, and a column for each
-subsample. Each entry represents a class membership.
+An array of dimension \code{nrow(x)} by \code{reps} by
+  \code{length(methods)} Each slice of the array is a matrix showing
+  consensus clustering results for algorithms (method). The matrices have a
+  row for each sample, and a column for each subsample. Each entry represents
+  a class membership.
 }
 \description{
 Generates multiple runs for consensus clustering among replicated subsamples
@@ -52,14 +56,11 @@ The clustering algorithms provided in \code{ConClust} are:
 \item{"nmfDiv": }{Nonnegative Matrix Factorization using Kullback-Leibler Divergence}
 \item{"nmfEucl": }{Nonnegative Matrix Factorization using Euclidean distance}
 \item{"hcAEucl": }{Hierarchical Clustering using Average linkage and Euclidean distance}
-\item{"hcSEucl": }{Hierarchical Clustering using Single linkage and Euclidean distance}
 \item{"hcDianaEucl": }{Divisive Hierarchical Clustering using Euclidean distance}
 \item{"kmEucl": }{K-Means using Euclidean distance}
 \item{"kmSpear": }{K-Means using Spearman distance}
-\item{"kmMI": }{K-Means using Mutual Information distance}
 \item{"pamEucl": }{Partition Around Mediods using Euclidean distance}
 \item{"pamSpear": }{Partition Around Mediods using Spearman distance}
-\item{"pamMI": }{Partition Around Mediods using Mutual Information distance}
 \item{"apEucl": }{Affinity Propagation using Euclidean distance}
 \item{"scRbf": }{Spectral Clustering using Radial-Basis kernel function}
 \item{"gmmBIC": }{Gaussian Mixture Model using Bayesian Information Criterion on EM algorithm}
@@ -69,6 +70,10 @@ The clustering algorithms provided in \code{ConClust} are:
 The \code{min.sd} argument is used to filter the feature space for only highly variable
 features. Only features with a standard deviation across all samples greater than
 \code{min.sd} will be used.
+}
+\examples{
+data(hgsc)
+ConClust(hgsc, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
 }
 \author{
 Derek Chiu, Aline Talhouk

@@ -12,6 +12,7 @@ Depends:
 Imports:
     plyr,
     dplyr,
+    readr,
     magrittr,
     cluster,
     bioDist,
