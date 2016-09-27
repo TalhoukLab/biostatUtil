@@ -4,13 +4,13 @@
 \alias{consensus_matrix}
 \title{Consensus matrix}
 \usage{
-consensus_matrix(dat, weights = NULL)
+consensus_matrix(data, weights = NULL)
 }
 \arguments{
-\item{dat}{data matrix has rows as samples, columns as replicates}
+\item{data}{data matrix has rows as samples, columns as replicates}
 
 \item{weights}{a vector of weights for each algorithm used in meta-consensus
-clustering. Must have \code{length(weights)} equal to \code{ncol(dat)}.}
+clustering. Must have \code{length(weights)} equal to \code{ncol(data)}.}
 }
 \value{
 a consensus matrix
@@ -32,7 +32,20 @@ If a meta-consensus matrix is desired, where consensus classes of different
 clustering algorithms are aggregated, we can construct a weighted
 meta-consensus matrix using \code{weights}.
 }
+\examples{
+set.seed(2)
+x <- replicate(100, rbinom(100, 4, 0.2))
+w <- rexp(100)
+w <- w / sum(w)
+consensus_matrix(x)
+consensus_matrix(x, weights = w)
+}
 \author{
 Derek Chiu
+}
+\seealso{
+Other consensus functions: \code{\link{consensus_class}},
+  \code{\link{consensus_confmat}},
+  \code{\link{consensus_summary}}
 }
 

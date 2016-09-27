@@ -15,21 +15,23 @@
 #' clustering algorithms are aggregated, we can construct a weighted
 #' meta-consensus matrix using \code{weights}.
 #'
-#' @param dat data matrix has rows as samples, columns as replicates
+#' @param data data matrix has rows as samples, columns as replicates
 #' @param weights a vector of weights for each algorithm used in meta-consensus
-#'   clustering. Must have \code{length(weights)} equal to \code{ncol(dat)}.
+#'   clustering. Must have \code{length(weights)} equal to \code{ncol(data)}.
 #' @return a consensus matrix
+#' @family consensus functions
 #' @author Derek Chiu
 #' @export
 #' @examples
+#' set.seed(2)
 #' x <- replicate(100, rbinom(100, 4, 0.2))
 #' w <- rexp(100)
 #' w <- w / sum(w)
 #' consensus_matrix(x)
 #' consensus_matrix(x, weights = w)
-consensus_matrix <- function(dat, weights = NULL) {
-  all.IM <- plyr::alply(dat, 2, indicator_matrix)
-  all.CM <- plyr::alply(dat, 2, connectivity_matrix)
+consensus_matrix <- function(data, weights = NULL) {
+  all.IM <- plyr::alply(data, 2, indicator_matrix)
+  all.CM <- plyr::alply(data, 2, connectivity_matrix)
   sum.IM <- Reduce('+', all.IM)
   if (!is.null(weights)) {
     weighted.CM <- mapply('*', all.CM, weights, SIMPLIFY = FALSE)
