@@ -4,30 +4,23 @@
 \alias{agnes_hook}
 \alias{diana_hook}
 \alias{hooks}
-\alias{mi_hook}
 \title{Hook Functions}
 \usage{
 agnes_hook(d, k)
 
 diana_hook(d, k)
-
-mi_hook(x)
 }
 \arguments{
 \item{d}{distance matrix}
 
 \item{k}{scalar indicating number of clusters to cut tree into}
-
-\item{x}{data matrix}
 }
 \value{
-clustering assignment from \code{agnes} or \code{diana}; or for
-  \code{mi_hook}, the mutual information distance matrix
+clustering assignment from \code{agnes} or \code{diana}
 }
 \description{
 Custom hook functions for AGglomerative NESting and DIvisive ANAlysis
-clustering algorithms and Mutual Information distance in
-ConsensusClusterPlus.
+clustering algorithms
 }
 \details{
 The hierarchical structure returned using \code{agnes} is equivalent to using
@@ -39,9 +32,6 @@ data(votes.repub)
 d <- dist(votes.repub)
 agnes_hook(d, k = 2)
 diana_hook(d, k = 2)
-
-x <- matrix(rnorm(100), nrow = 5)
-y <- mi_hook(x)
 }
 \author{
 Derek Chiu

@@ -9,9 +9,3 @@ test_that("algorithm hooks work", {
   expect_length(agnes_hook(d, k = 2), nrow(votes.repub))
   expect_length(diana_hook(d, k = 2), nrow(votes.repub))
 })
-
-test_that("distance hook works", {
-  x <- matrix(rnorm(100), nrow = 5)
-  y <- mi_hook(x)
-  expect_is(y, "dist")
-})

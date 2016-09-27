@@ -1,16 +1,14 @@
 #' Hook Functions
 #'
 #' Custom hook functions for AGglomerative NESting and DIvisive ANAlysis
-#' clustering algorithms and Mutual Information distance in
-#' ConsensusClusterPlus.
+#' clustering algorithms
 #'
 #' The hierarchical structure returned using \code{agnes} is equivalent to using
 #' \code{\link{hclust}}.
 #'
 #' @param d distance matrix
 #' @param k scalar indicating number of clusters to cut tree into
-#' @return clustering assignment from \code{agnes} or \code{diana}; or for
-#'   \code{mi_hook}, the mutual information distance matrix
+#' @return clustering assignment from \code{agnes} or \code{diana}
 #' @name hooks
 #' @author Derek Chiu
 #' @import cluster bioDist
@@ -21,9 +19,6 @@
 #' d <- dist(votes.repub)
 #' agnes_hook(d, k = 2)
 #' diana_hook(d, k = 2)
-#'
-#' x <- matrix(rnorm(100), nrow = 5)
-#' y <- mi_hook(x)
 agnes_hook <- function(d, k) {
   tmp <- agnes(d, diss = TRUE)
   a <- cutree(tmp, k)
@@ -36,11 +31,4 @@ diana_hook <- function(d, k) {
   tmp <- diana(d, diss = TRUE)
   a <- cutree(tmp, k)
   return(a)
-}
-
-#' @rdname hooks
-#' @param x data matrix
-#' @export
-mi_hook <- function(x) {
-  MIdist(x)
 }
