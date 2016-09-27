@@ -21,6 +21,12 @@
 #' @return a consensus matrix
 #' @author Derek Chiu
 #' @export
+#' @examples
+#' x <- replicate(100, rbinom(100, 4, 0.2))
+#' w <- rexp(100)
+#' w <- w / sum(w)
+#' consensus_matrix(x)
+#' consensus_matrix(x, weights = w)
 consensus_matrix <- function(dat, weights = NULL) {
   all.IM <- plyr::alply(dat, 2, indicator_matrix)
   all.CM <- plyr::alply(dat, 2, connectivity_matrix)
@@ -37,7 +43,7 @@ consensus_matrix <- function(dat, weights = NULL) {
 
 #' Connectivity matrix
 #' @noRd
-connectivity_matrix <- function(cl) {
+connectivity_matrix <- function(cls) {
   # cls is a vector of cluster assignments
   cm <- cls %>%
     rep(., length(.)) %>%
