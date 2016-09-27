@@ -55,9 +55,9 @@
 #' @export
 #' @examples
 #' data(hgsc)
-#' ConClust(hgsc, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
+#' x <- ConClust(hgsc, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
 ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
-                     seed = 123456, seed.method = 1, min.sd = 1, save = TRUE,
+                     seed = 123456, seed.method = 1, min.sd = 1, save = FALSE,
                      file.name = "ConClustOutput", time.saved = FALSE) {
   x.rest <- prepare_data(x, min.sd = min.sd)
   x.nmf <- x.rest %>%
