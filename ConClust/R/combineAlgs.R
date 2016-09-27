@@ -1,8 +1,8 @@
 #' Combine the consensus results from all algorithms
-#' 
+#'
 #' The function can output either the consensus matrices
 #' or consensus classes for all algorithms
-#' 
+#'
 #' @param ... any number of objects outputted from \code{ConClust}
 #' @param res.CCP an object outputted from \code{ConClustPlus}
 #' @param k desired number of clusters
@@ -16,8 +16,8 @@
 combineAlgs <- function(..., res.CCP, k, element, alg.names = NULL) {
   obj <- unlist(list(...), recursive = FALSE)
   if (element == "matrix") {
-    out.CC <- lapply(obj, "[[", "consensusMatrix")
-    out.CCP <- lapply(lapply(res.CCP, "[[", k), "[[", "consensusMatrix")
+    out.CC <- lapply(obj, "[[", "consensus_matrix")
+    out.CCP <- lapply(lapply(res.CCP, "[[", k), "[[", "consensus_matrix")
     out.CCP <- lapply(out.CCP, function(x) {
       dimnames(x) <- dimnames(out.CC[[1]])
       return(x)

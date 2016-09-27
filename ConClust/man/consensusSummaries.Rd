@@ -17,7 +17,7 @@ consensusSummaries(res, k, dir = NULL, fileName = "results_CC")
 }
 \value{
 A list with summaries for each algorithm. Each algorithm has a list with
-two elements: consensusMatrix and consensusClass.
+two elements: consensus_matrix and consensusClass.
 }
 \description{
 Given an output from ConClust, returns a list of consensus matrices and classes
