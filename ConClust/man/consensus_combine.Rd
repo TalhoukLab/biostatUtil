@@ -77,7 +77,7 @@ element = "class")
 str(y2)
 
 # Compare algorithms on PAC and CHI
-z <- consensus_compare(x, y1, y2)
+z <- consensus_compare(x, cl.mat = y2, cons.mat = y1)
 
 # Weigh algorithms
 consensus_weigh(z)
