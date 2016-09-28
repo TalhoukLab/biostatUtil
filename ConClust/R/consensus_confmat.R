@@ -4,7 +4,6 @@
 #'
 #' @param cl.cons vector of cluster assignments
 #' @param cl.true true class labels
-#' @param k number of clusters
 #' @param pred.lab label for the predicted clusters
 #' @param ref.lab label for the reference classes
 #' @return A confusion matrix with the predicted cluster assignments compared to

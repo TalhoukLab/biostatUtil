@@ -15,8 +15,6 @@ consensus_confmat(cl.cons, cl.true, pred.lab = "Prediction",
 \item{pred.lab}{label for the predicted clusters}
 
 \item{ref.lab}{label for the reference classes}
-
-\item{k}{number of clusters}
 }
 \value{
 A confusion matrix with the predicted cluster assignments compared to
