@@ -2,7 +2,8 @@
 #'
 #' Combine results from ConClust and ConClustPlus and output either the
 #' consensus matrices or consensus classes for all algorithms from both objects.
-#' Then compare algorithms using validation indices PAC and CHI.
+#' Compare algorithms on validation indices PAC and CHI and weigh algorithms
+#' based on these two measures.
 #'
 #' @param ... any number of objects outputted from
 #'   \code{\link{consensus_summary}}
@@ -37,7 +38,10 @@
 #' str(y2)
 #'
 #' # Compare algorithms on PAC and CHI
-#' consensus_compare(x, y1, y2)
+#' z <- consensus_compare(x, y1, y2)
+#'
+#' # Weigh algorithms
+#' consensus_weigh(z)
 consensus_combine <- function(..., res.CCP, k, element = c("matrix", "class"),
                               alg.names = NULL) {
   obj <- unlist(list(...), recursive = FALSE)
