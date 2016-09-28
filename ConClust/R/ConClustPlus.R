@@ -23,6 +23,7 @@
 ConClustPlus <- function(dat, k = 3, reps = 1000, pItem = 0.8, save = FALSE,
                          file.name = "results_CCP", seed = 123, min.sd = 1,
                          ...) {
+  .Deprecated("ConClust")
   dat <- prepare_data(dat, min.sd = min.sd)
   algs <- setNames(c("hc", "diana_hook", "kmdist", "kmdist", "pam", "pam"),
                    c("hcAEucl", "hcDianaEucl", "kmEucl", "kmSpear", "pamEucl",
