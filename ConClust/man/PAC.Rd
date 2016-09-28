@@ -4,10 +4,10 @@
 \alias{PAC}
 \title{Proportion of Ambiguous Clusters}
 \usage{
-PAC(cons.mat, lower = 0, upper = 1)
+PAC(cm, lower = 0, upper = 1)
 }
 \arguments{
-\item{cons.mat}{consensus matrix. Should be symmetric and values between 0
+\item{cm}{consensus matrix. Should be symmetric and values between 0
 and 1.}
 
 \item{lower}{the lower bound that determines what is ambiguous}
@@ -29,6 +29,12 @@ and \code{upper} is the PAC. In a perfect clustering, the consensus matrix
 would consist of only 0s and 1s, and the PAC assessed on the (0, 1) interval
 would have a perfect score of 0. Using a (0.1, 0.9) interval for defining
 ambiguity is common as well.
+}
+\examples{
+set.seed(1)
+x <- replicate(100, rbinom(100, 4, 0.2))
+y <- consensus_matrix(x)
+PAC(y, lower = 0.05, upper = 0.95)
 }
 \author{
 Derek Chiu
