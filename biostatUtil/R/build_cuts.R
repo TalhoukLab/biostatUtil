@@ -27,10 +27,10 @@
 build_cuts <- function(x, n = c("b", "t", "qd", "qn"), var.prefix = NULL,
                        list = FALSE) {
   . <- NULL
-  ulevs <- sort(unique(x[x > min(x)]))
+  ulevs <- sort(unique(x[x > min(x,na.rm=TRUE)]))
   ng <- switch(match.arg(n), b = 2, t = 3, qd = 4, qn = 5)
   assertthat::assert_that(length(ulevs) >= ng - 1)
-  cuts <- rbind(combn(ulevs, ng - 1), max(x))
+  cuts <- rbind(combn(ulevs, ng - 1), max(x,na.rm=TRUE))
   cut.list <- plyr::alply(cuts, 2, Hmisc::cut2, x = x)
   res <- cut.list %>% 
     as.data.frame() %>% 
