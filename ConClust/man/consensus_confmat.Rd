@@ -35,6 +35,7 @@ Derek Chiu
 }
 \seealso{
 Other consensus functions: \code{\link{consensus_class}},
+  \code{\link{consensus_combine}},
   \code{\link{consensus_matrix}},
   \code{\link{consensus_summary}}
 }

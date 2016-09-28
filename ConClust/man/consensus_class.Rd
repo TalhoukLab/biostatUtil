@@ -34,7 +34,8 @@ consensus_class(cm)
 Derek Chiu
 }
 \seealso{
-Other consensus functions: \code{\link{consensus_confmat}},
+Other consensus functions: \code{\link{consensus_combine}},
+  \code{\link{consensus_confmat}},
   \code{\link{consensus_matrix}},
   \code{\link{consensus_summary}}
 }
