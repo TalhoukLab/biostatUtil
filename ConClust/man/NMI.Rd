@@ -24,6 +24,12 @@ Computes the NMI given a clustering assignment and true class labels.
 The function is adapted from the \code{mutinformation} function in the
 \code{infotheo} package.
 }
+\examples{
+set.seed(4)
+X <- sample(1:4, 100, replace = TRUE)
+Y <- sample(1:4, 100, replace = TRUE)
+NMI(X, Y)
+}
 \author{
 Derek Chiu
 }

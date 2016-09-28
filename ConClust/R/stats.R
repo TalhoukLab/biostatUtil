@@ -83,25 +83,3 @@ PAC <- function(cm, lower = 0, upper = 1) {
     divide_by(., length(cm[lower.tri(cm)]))
   return(pac)
 }
-
-#' Silhouette width statistics
-#'
-#' Computes the fraction of negative silhouette widths and average of positive
-#' silhouette widths.
-#'
-#' @param dat data matrix
-#' @param cl integer vector of cluster memberships
-#' @return A data frame with fN and aP
-#' @author Derek Chiu
-#' @export
-#' @examples
-#' set.seed(1)
-#' x <- replicate(100, rbinom(100, 4, 0.2))
-#' y <- consensus_class(consensus_matrix(x), k = 2)
-#' sil_widths(x, y)
-sil_widths <- function(dat, cl) {
-  s <- cluster::silhouette(cl, dist(dat))
-  fN <- sum(s[, "sil_width"] < 0) / nrow(s)
-  aP <- mean(s[, "sil_width"][s[, "sil_width"] > 0])
-  return(data.frame(fN, aP))
-}
