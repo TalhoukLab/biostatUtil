@@ -3,7 +3,8 @@
 #' Combine results from ConClust and ConClustPlus and output either the
 #' consensus matrices or consensus classes for all algorithms from both objects.
 #'
-#' @param ... any number of objects outputted from \code{\link{ConClust}}
+#' @param ... any number of objects outputted from
+#'   \code{\link{consensus_summary}}
 #' @param res.CCP an object outputted from \code{\link{ConClustPlus}}
 #' @param k desired number of clusters
 #' @param element either "matrix" or "class" to extract the consensus matrix or
@@ -14,22 +15,30 @@
 #' @author Derek Chiu
 #' @export
 #' @examples
+#' # Consensus clustering for multiple algorithms
 #' set.seed(911)
 #' x <- matrix(rnorm(1000), nrow = 10)
 #' CC1 <- ConClust(x, k = 4, reps = 10, method = "apEucl", save = FALSE)
 #' CC2 <- ConClust(x, k = 4, reps = 10, method = "gmmBIC", save = FALSE)
 #' CCP <- ConClustPlus(x, k = 4, reps = 10, save = FALSE)
-#' y1 <- combineAlgs(CC1, CC2, res.CCP = CCP, k = 4, element = "matrix")
+#'
+#' # Get summary for ConClust
+#' CC1.summ <- consensus_summary(CC1, k = 4)
+#' CC2.summ <- consensus_summary(CC2, k = 4)
+#'
+#' # Combine with CCP and return either matrices or classes
+#' y1 <- consensus_combine(CC1.summ, CC2.summ, res.CCP = CCP, k = 4,
+#' element = "matrix")
 #' str(y1)
-#' y2 <- combineAlgs(CC1, CC2, res.CCP = CCP, k = 4, element = "class")
+#' y2 <- consensus_combine(CC1.summ, CC2.summ, res.CCP = CCP, k = 4,
+#' element = "class")
 #' str(y2)
 consensus_combine <- function(..., res.CCP, k, element = c("matrix", "class"),
                               alg.names = NULL) {
-  obj <- list(...)
-  names(obj) <- sapply(obj, function(x) unlist(attr(x, "dimnames")[3]))
+  obj <- unlist(list(...), recursive = FALSE)
   switch(match.arg(element),
          matrix = {
-           out.CC <- lapply(obj, consensus_matrix)
+           out.CC <- lapply(obj, "[[", "consensus_matrix")
            out.CCP <- lapply(lapply(res.CCP, "[[", k), "[[", "consensusMatrix")
            out.CCP <- lapply(out.CCP, function(x) {
              dimnames(x) <- dimnames(out.CC[[1]])
@@ -40,8 +49,8 @@ consensus_combine <- function(..., res.CCP, k, element = c("matrix", "class"),
              names(out) <- alg.names
          },
          class = {
-           out.CC <- lapply(obj, function(x)
-             consensus_class(consensus_matrix(x), k))
+           out.CC <- apply(sapply(obj, "[[", "consensus_class"), c(1, 2),
+                           as.integer)
            out.CCP <- sapply(lapply(res.CCP, "[[", k), "[[", "consensusClass")
            out <- as.matrix(data.frame(out.CCP, out.CC))
            if (!is.null(alg.names))
