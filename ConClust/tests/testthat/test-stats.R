@@ -20,10 +20,3 @@ test_that("PAC can have different bounds", {
   y <- consensus_matrix(x)
   expect_error(PAC(y, lower = 0.3, upper = 0.7), NA)
 })
-
-test_that("silhouette widths work", {
-  set.seed(1)
-  x <- replicate(100, rbinom(100, 4, 0.2))
-  y <- as.numeric(as.character(consensus_class(consensus_matrix(x), k = 2)))
-  expect_error(sil_widths(x, y), NA)
-})
