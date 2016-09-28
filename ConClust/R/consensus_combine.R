@@ -1,7 +1,8 @@
-#' Combine consensus results
+#' Combine and compare consensus results
 #'
 #' Combine results from ConClust and ConClustPlus and output either the
 #' consensus matrices or consensus classes for all algorithms from both objects.
+#' Then compare algorithms using validation indices PAC and CHI.
 #'
 #' @param ... any number of objects outputted from
 #'   \code{\link{consensus_summary}}
@@ -10,8 +11,9 @@
 #' @param element either "matrix" or "class" to extract the consensus matrix or
 #'   consensus class, respectively.
 #' @param alg.names optional. Supply a vector of names for the algorithms.
-#' @return Either a list of all consensus matrices or a data frame showing all
-#'   the consensus classes
+#' @return \code{consensus_combine} returns either a list of all consensus
+#'   matrices or a data frame showing all the consensus classes
+#' @family consensus functions
 #' @author Derek Chiu
 #' @export
 #' @examples
@@ -33,6 +35,9 @@
 #' y2 <- consensus_combine(CC1.summ, CC2.summ, res.CCP = CCP, k = 4,
 #' element = "class")
 #' str(y2)
+#'
+#' # Compare algorithms on PAC and CHI
+#' consensus_compare(x, y1, y2)
 consensus_combine <- function(..., res.CCP, k, element = c("matrix", "class"),
                               alg.names = NULL) {
   obj <- unlist(list(...), recursive = FALSE)

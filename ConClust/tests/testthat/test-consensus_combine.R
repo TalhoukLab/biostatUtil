@@ -1,5 +1,5 @@
 
-context("Consensus results combine")
+context("Consensus results combine and compare")
 
 set.seed(911)
 x <- matrix(rnorm(1000), nrow = 10)
@@ -25,4 +25,10 @@ test_that("names can be overwritten", {
                           element = "class", alg.names = paste0("A", 1:8))
   expect_identical(names(y3), paste0("A", 1:8))
   expect_identical(colnames(y4), paste0("A", 1:8))
+})
+
+test_that("comparing results works", {
+  expect_error(consensus_compare(x, cl.mat = y2, cons.mat = y1), NA)
+  expect_error(consensus_compare(x, cl.mat = y2, cons.mat = y1,
+                                 alg.names =  paste0("A", 1:8)), NA)
 })
