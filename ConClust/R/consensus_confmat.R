@@ -20,7 +20,7 @@ consensus_confmat <- function(cl.cons, cl.true, pred.lab = "Prediction",
                              ref.lab = "Reference") {
   pmat <- NULL
   confmat <- table(cl.cons, cl.true, dnn = c(eval(pred.lab), eval(ref.lab))) %>%
-    minFnorm() %>%
+    min_fnorm() %>%
     use_series(pmat) %>%
     set_rownames(colnames(.)) %>%
     as.table()
