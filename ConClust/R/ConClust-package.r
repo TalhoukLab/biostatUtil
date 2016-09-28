@@ -7,5 +7,6 @@
 #'
 #' @name ConClust-package
 #' @docType package
-#' @importFrom magrittr set_names set_rownames
+#' @importFrom magrittr set_names set_rownames and is_greater_than is_less_than divide_by
+#' @import dplyr
 NULL

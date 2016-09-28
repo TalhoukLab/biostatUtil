@@ -4,8 +4,8 @@
 \alias{ConClustPlus}
 \title{Run a series of ConsensusClusterPlus algorithms}
 \usage{
-ConClustPlus(dat, k = 3, reps = 1000, pItem = 0.8, dir = NULL,
-  fileName = "results_CCP", seed = 123, min.sd = 1, ...)
+ConClustPlus(dat, k = 3, reps = 1000, pItem = 0.8, save = FALSE,
+  file.name = "results_CCP", seed = 123, min.sd = 1, ...)
 }
 \arguments{
 \item{dat}{data matrix; columns are samples and rows are genes/features}
@@ -16,9 +16,10 @@ ConClustPlus(dat, k = 3, reps = 1000, pItem = 0.8, dir = NULL,
 
 \item{pItem}{proportion of features to use in each subsample}
 
-\item{dir}{directory to save results}
+\item{save}{logical; if \code{TRUE}, the returned object will be saved at
+each iteration as well as at the end.}
 
-\item{fileName}{file name of the written object}
+\item{file.name}{file name of the written object}
 
 \item{seed}{random seed to maintain reproducible results}
 
@@ -35,7 +36,7 @@ Runs consensus clustering for multiple algorithms and saves the output
 }
 \examples{
 set.seed(23)
-ConClustPlus(matrix(rnorm(100), nrow = 10), k = 3, reps = 10, pItem = 0.9)
+x <- ConClustPlus(matrix(rnorm(100), nrow = 10), k = 3, reps = 10, pItem = 0.9)
 }
 \author{
 Derek Chiu

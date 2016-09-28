@@ -4,16 +4,17 @@
 \alias{consensus_summary}
 \title{Consensus summary}
 \usage{
-consensus_summary(res, k, dir = NULL, file = "results_CC")
+consensus_summary(res, k, save = FALSE, file.name = "results_CC")
 }
 \arguments{
 \item{res}{output from \code{ConClust}}
 
-\item{k}{number of clusters}
+\item{k}{number of clusters to compute for consensus class}
 
-\item{dir}{directory to save output}
+\item{save}{logical; if \code{TRUE}, the returned object will be saved at
+each iteration as well as at the end.}
 
-\item{file}{file name of the written object}
+\item{file.name}{file name of the written object}
 }
 \value{
 A list with summaries for each algorithm. Each algorithm has a list
@@ -22,6 +23,12 @@ A list with summaries for each algorithm. Each algorithm has a list
 \description{
 Given an object from \code{\link{ConClust}}, returns a list of consensus
 matrices and consensus classes for each clustering algorithm.
+}
+\examples{
+data(tcga)
+x <- ConClust(hgsc, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
+y <- consensus_summary(x, k = 2)
+str(y)
 }
 \author{
 Derek Chiu
