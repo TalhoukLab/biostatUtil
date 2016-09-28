@@ -28,7 +28,7 @@ class labels.
 set.seed(2)
 x <- replicate(100, rbinom(100, 4, 0.2))
 cm <- consensus_matrix(x)
-consensus_class(cm)
+consensus_class(cm, k = 3)
 }
 \author{
 Derek Chiu

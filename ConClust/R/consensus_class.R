@@ -17,7 +17,7 @@
 #' set.seed(2)
 #' x <- replicate(100, rbinom(100, 4, 0.2))
 #' cm <- consensus_matrix(x)
-#' consensus_class(cm)
+#' consensus_class(cm, k = 3)
 consensus_class <- function(x, k, method = "average", names = NULL) {
   tree <- hclust(dist(x), method = method)
   cl <- as.factor(cutree(tree, k))
