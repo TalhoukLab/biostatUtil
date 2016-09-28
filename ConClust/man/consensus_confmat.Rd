@@ -26,6 +26,7 @@ A confusion matrix with the predicted cluster assignments compared to
 Compares the consensus class to the true class partitions.
 }
 \examples{
+set.seed(2)
 a <- sample(1:4, 100, replace = TRUE)
 b <- sample(1:4, 100, replace = TRUE)
 consensus_confmat(a, b)

@@ -13,6 +13,7 @@
 #' @author Derek Chiu
 #' @export
 #' @examples
+#' set.seed(2)
 #' a <- sample(1:4, 100, replace = TRUE)
 #' b <- sample(1:4, 100, replace = TRUE)
 #' consensus_confmat(a, b)
