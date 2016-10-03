@@ -20,7 +20,8 @@
 #' @examples 
 #' library(logistf)
 #' data(sex2)
-#' fit<-logistf(case ~ age+oc+vic+vicl+vis+dia, data=sex2, alpha = 0.1)
+#' fit <- logistf(case ~ age + oc + vic + vicl + vis + dia, data = sex2,
+#' alpha = 0.1)
 #' summary(fit)
 #' 
 #' ## Streamlined summary
