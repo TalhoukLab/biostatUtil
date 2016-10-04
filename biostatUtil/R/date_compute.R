@@ -90,6 +90,8 @@ diffDate <- function(d1, d2, date.format = "MM.DD.YYYY",
                      units = c("days", "weeks", "months", "years"),
                      existing.missing.codes = NA, return.missing.code = NA,
                      sep = "/") {
+  d1 <- unname(d1)
+  d2 <- unname(d2)
   if (is.na(d1) | is.na(d2)) return(NA)
   if (n_distinct(existing.missing.codes, na.rm = TRUE) > 0 &
       any(c(d1, d2) %in% existing.missing.codes))
