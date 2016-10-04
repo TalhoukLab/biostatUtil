@@ -91,13 +91,14 @@ coxphOut <- function(object, coefnames = NULL, conf.level = 0.95,
 #' data = test2)
 #' Xunivcoxph(mod)
 Xunivcoxph <- function(mod, digits = 3) {
-  if (as.character(mod$call[1]) == "coxph") {
+  model_type <- as.character(mod$call[1])
+  if (endsWith(model_type,"coxph")) {
     mod.summ <- round(summary(mod)$conf.int, digits)
     HR <- mod.summ[, 1, drop = FALSE]
     CI <- paste(mod.summ[, 3], mod.summ[, 4], sep = "-")
     res <- paste0("HR ", HR, " (95% CI, ", CI, ")")
     return(res)
-  } else if (as.character(mod$call[1]) == "coxphf") {
+  } else if (endsWith(model_type,"coxphf")) {
     HR <- round(exp(mod$coefficients), digits)
     CI <- paste(round(mod$ci.lower, digits), round(mod$ci.upper, digits),
                 sep = "-")
