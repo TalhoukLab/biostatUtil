@@ -31,10 +31,11 @@ The observation time is defined as the median time in days between all
 all \code{T1} and \code{T2} for events only.
 }
 \examples{
-\dontrun{
+set.seed(3)
 starts <- seq(as.Date("2000/1/1"), as.Date("2003/1/1"), by = "quarter")
 ends <-  seq(as.Date("2003/1/1"), as.Date("2006/1/1"), by = "quarter")
-}
+statuses <- sample(0:1, 13, replace = TRUE)
+assessSurvTime(starts, ends, statuses)
 }
 \author{
 Samuel Leung
