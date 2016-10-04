@@ -18,6 +18,12 @@
 #' \item{RevKM}{Reverse Kaplan-Meier Time}
 #' @author Samuel Leung
 #' @export
+#' @examples 
+#' set.seed(3)
+#' starts <- seq(as.Date("2000/1/1"), as.Date("2003/1/1"), by = "quarter")
+#' ends <-  seq(as.Date("2003/1/1"), as.Date("2006/1/1"), by = "quarter")
+#' statuses <- sample(0:1, 13, replace = TRUE)
+#' assessSurvTime(starts, ends, statuses)
 assessSurvTime <- function(T1, T2, status) { 
   # in case there are any is.na(status)
   # T2 may be NA as well for rfs!!!

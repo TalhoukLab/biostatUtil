@@ -30,6 +30,12 @@ The observation time is defined as the median time in days between all
 \code{T1} and \code{T2}. Censoring time is the median time in days between 
 all \code{T1} and \code{T2} for events only.
 }
+\examples{
+\dontrun{
+starts <- seq(as.Date("2000/1/1"), as.Date("2003/1/1"), by = "quarter")
+ends <-  seq(as.Date("2003/1/1"), as.Date("2006/1/1"), by = "quarter")
+}
+}
 \author{
 Samuel Leung
 }
