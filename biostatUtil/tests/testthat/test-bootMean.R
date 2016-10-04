@@ -8,6 +8,10 @@ test.mat <- matrix(test.vec, nrow = 10)
 vecTestResult <- bootMean(test.vec)
 matTestResult <- bootMean(test.mat)
 
+set.seed(mySeed)
+s <- ifelse(rexp(100, 0.5) < 1, NA, rexp(100, 0.5))
+sTestResultNaRm <- bootMean(s, na.rm = TRUE)
+
 test_that("result should be equal regardless of input class", {
   expect_identical(vecTestResult, matTestResult)
 })
@@ -29,9 +33,6 @@ test_that("matrix output has correct values based on random seed", {
 })
 
 test_that("NAs are handled when na.rm = TRUE", {
-  set.seed(mySeed)
-  s <- ifelse(rexp(100, 0.5) < 1, NA, rexp(100, 0.5))
-  sTestResultNaRm <- bootMean(s, na.rm = TRUE)
   expect_equal(signif(sTestResultNaRm$obs.mean), signif(2.195333))
   expect_equal(signif(sTestResultNaRm$n), length(s))
   expect_equal(signif(sTestResultNaRm$ci[1]), signif(1.659419))
