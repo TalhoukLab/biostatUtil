@@ -22,7 +22,7 @@ exploreData <- function(datmat) {
     x <-  fd[, catvars[i]]
     tx <-  table(x, useNA = "ifany")
     par(mfrow = c(2, 1), mar = c(3.1, 9.5, 4.1, 2.1))
-    biostatUtil::barplotSum(tx, catvars[i])
+    barplotSum(tx, catvars[i])
     mat <- data.matrix(cbind(tx, round(prop.table(tx) * 100, 1)))
     colnames(mat) <- c("Freq", "%")
     rownames(mat)[is.na(rownames(mat))] <- "Missing"
