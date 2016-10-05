@@ -7,21 +7,17 @@
 #' @author Aline Talhouk
 #' @export
 barplotSum <- function(tx, ttl = "") {
-  wrap.labels <- function(x, len) {
-    wrap.it <- function(x, len) {
-      sapply(x, function(y) paste(strwrap(y, len), collapse = "\n"),
-             USE.NAMES = FALSE)
-    }
-    if (is.list(x)) {
-      lapply(x, wrap.it, len)
-    } else {
-      wrap.it(x, len)
-    }
-  }
   wr.lap <- wrap.labels(names(tx), 35)
   barplot(prop.table(tx) * 100, border = "white",
-          horiz = TRUE, las = 2,names.arg = wr.lap, offset = 0,
+          horiz = TRUE, las = 2, names.arg = wr.lap, offset = 0,
           main = ttl, xlab = "%", cex.names = 0.5, col = "lightblue")
+}
+
+#' Wrap labels
+#' @noRd
+wrap.labels <- function(x, len) {
+  return(sapply(x, function(y) paste(strwrap(y, len), collapse = "\n"),
+                USE.NAMES = FALSE))
 }
 
 #' Annotated Boxplot
