@@ -50,8 +50,8 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
   assign("formula.obj", formula.obj, envir = as.environment(pos)) 
   assign("temp.d", temp.d, envir = as.environment(pos)) 
   if (!use.ggkm) {
-    plotKM(temp.d, formula.obj,
-           line.name, line.color, line.pattern = line.pattern, 
+    plotKM(input.d=temp.d, input.formula=formula.obj,
+        line.name=line.name, line.color=line.color, line.pattern = line.pattern, 
            main.text = paste0(var.description, " (", toupper(surv.type), ")"),
            show.test = km.plot.ref.group, single.test.type = single.test.type,
            obs.survyrs = 3,...)

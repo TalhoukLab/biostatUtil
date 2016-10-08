@@ -16,7 +16,7 @@
 #' @param single.test.type test to show if specified \code{show.test = 
 #'   "single"}. Possible choices are \code{"logrank"} (default), 
 #'   \code{"wilcoxon"}, \code{"taroneware"}, or \code{"all"}.
-#' @param round.digits.p.value number of digits for p-value
+#' @param digits number of digits for p-value
 #' @param obs.survyrs show the observed survival years survival rate on KM plot
 #' @param legend.pos legend position keyword
 #' @param file.name name of file to save plot to
@@ -33,10 +33,16 @@ plotKM <- function(input.d, input.formula,
                    line.name, line.color, line.pattern = NULL, 
                    main.text = "", xlab.text = "", ylab.text = "",
                    line.width = NULL, show.test = "single",
-                   single.test.type = "logrank", round.digits.p.value = 4,
+                   single.test.type = "logrank", digits = 3,
                    obs.survyrs = 10, legend.pos = "bottomleft",
                    file.name = "no.file", file.width = 7, file.height = 7,
-                   grey.scale = FALSE, show.single.test.pos = "default", ...) {
+                   grey.scale = FALSE, show.single.test.pos = "default",
+                   xlabs=NULL,# dummy param to match ggkm so they don't get passed to ...
+                   legend.xy=NULL,# dummy param to match ggkm so they don't get passed to ...
+                   ylabs=NULL,# dummy param to match ggkm so they don't get passed to ...
+                   timeby=NULL,# dummy param to match ggkm so they don't get passed to ...
+                   shading.colors=NULL, # dummy param to match ggkm so they don't get passed to ...
+                   ...) {
   
   # calculate "obs.survyrs"-yrs survival
   summary.surv.fit <- summary(survfit(input.formula, data = input.d),
@@ -92,16 +98,16 @@ plotKM <- function(input.d, input.formula,
     }
   }
   # plot km
-  output <- plotKMDetail(input.d,
-                         input.formula,
-                         main.text, 
-                         xlab.text, 
-                         ylab.text,
-                         line.name,
-                         ten.yrs.surv,
-                         event.count,
-                         line.color,
-                         obs.survyrs,
+  output <- plotKMDetail(input.data=input.d,
+      surv.formula=input.formula,
+      main.text=main.text, 
+      xlab.text=xlab.text, 
+      ylab.text=ylab.text,
+      line.name=line.name,
+      ten.years.surv.95CI=ten.yrs.surv,
+      event.count=event.count,
+      line.color=line.color,
+      obs.survyrs=obs.survyrs,
                          line.pattern = line.pattern,
                          line.width = line.width,
                          legend.pos = legend.pos,
@@ -109,7 +115,7 @@ plotKM <- function(input.d, input.formula,
                          file.width = file.width,
                          file.height = file.height,
                          show.test = show.test,
-                         round.digits.p.value = round.digits.p.value,
+                         round.digits.p.value = digits,
                          single.test.type = single.test.type,
                          grey.scale = grey.scale,
                          show.single.test.pos = show.single.test.pos, ...)
