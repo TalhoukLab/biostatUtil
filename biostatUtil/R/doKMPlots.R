@@ -26,7 +26,8 @@
 #' @author Samuel Leung, Derek Chiu
 #' @export
 doKMPlots <- function(input.d, time, status, var.name, var.description,
-                      line.name = NULL, line.color = NULL, line.pattern = NULL,
+                      line.name = NULL, shading.colors = c("blue2", "red2", "deepskyblue", "indianred3"), 
+                      line.pattern = NULL,
                       cox.ref.group = NULL, legend = FALSE,
                       km.plot.ref.group = "single",
                       single.test.type = "logrank", surv.type = "os",
@@ -35,8 +36,8 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
   pos <- 1
   if (is.null(line.name))
     line.name <- names(table(input.d[, var.name])) 
-  if (is.null(line.color))
-    line.color <- c(1:length(names(table(input.d[, var.name]))))
+  if (is.null(shading.colors))
+    shading.colors <- c(1:length(names(table(input.d[, var.name]))))
   if (is.null(line.pattern))
     line.pattern <- 1
   if (is.factor(input.d[, var.name])) {
@@ -51,7 +52,7 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
   assign("temp.d", temp.d, envir = as.environment(pos)) 
   if (!use.ggkm) {
     plotKM(input.d=temp.d, input.formula=formula.obj,
-        line.name=line.name, line.color=line.color, line.pattern = line.pattern, 
+        line.name=line.name, line.color=shading.colors, line.pattern = line.pattern, 
            main.text = paste0(var.description, " (", toupper(surv.type), ")"),
            show.test = km.plot.ref.group, single.test.type = single.test.type,
            obs.survyrs = 3,...)
@@ -61,6 +62,7 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
          ystratalabs = line.name, ystrataname = NULL,  cox.ref.grp = cox.ref.group,
          main = paste0(var.description, " (", toupper(surv.type), ")"),
          pval = TRUE, HR = HR, use.firth = use.firth, CI = CI, subs = NULL,
-         legend = legend, line.pattern = line.pattern,...)	
+         legend = legend, line.pattern = line.pattern,
+         shading.colors=shading.colors,...)	
   }
 }

@@ -41,7 +41,6 @@ plotKM <- function(input.d, input.formula,
                    legend.xy=NULL,# dummy param to match ggkm so they don't get passed to ...
                    ylabs=NULL,# dummy param to match ggkm so they don't get passed to ...
                    timeby=NULL,# dummy param to match ggkm so they don't get passed to ...
-                   shading.colors=NULL, # dummy param to match ggkm so they don't get passed to ...
                    ...) {
   
   # calculate "obs.survyrs"-yrs survival
@@ -118,7 +117,9 @@ plotKM <- function(input.d, input.formula,
                          round.digits.p.value = digits,
                          single.test.type = single.test.type,
                          grey.scale = grey.scale,
-                         show.single.test.pos = show.single.test.pos, ...)
+                         show.single.test.pos = show.single.test.pos,
+                         mark.time=TRUE, # for plot.survfit to show censor time point
+                         ...)
   return(list("log.rank.p.values" = output$log.rank.p.values,
               "wilcox.p.values" = output$wilcox.p.values,
               "n" = sum(fit.obj$n),
