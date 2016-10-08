@@ -55,7 +55,7 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
         line.name=line.name, line.color=shading.colors, line.pattern = line.pattern, 
            main.text = paste0(var.description, " (", toupper(surv.type), ")"),
            show.test = km.plot.ref.group, single.test.type = single.test.type,
-           obs.survyrs = 3,...)
+           ...)
   } else {	
     ggkm(sfit, sfit2 = NULL, table = show.risk, marks = TRUE,
          xlims = c(0, max(sfit$time)), ylims = c(0, 1),

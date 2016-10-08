@@ -34,7 +34,7 @@ plotKM <- function(input.d, input.formula,
                    main.text = "", xlab.text = "", ylab.text = "",
                    line.width = NULL, show.test = "single",
                    single.test.type = "logrank", digits = 3,
-                   obs.survyrs = 10, legend.pos = "bottomleft",
+                   obs.survyrs = 3, legend.pos = "bottomleft",
                    file.name = "no.file", file.width = 7, file.height = 7,
                    grey.scale = FALSE, show.single.test.pos = "default",
                    xlabs=NULL,# dummy param to match ggkm so they don't get passed to ...
