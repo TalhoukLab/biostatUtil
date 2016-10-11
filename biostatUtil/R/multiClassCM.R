@@ -6,15 +6,16 @@
 #' Given two multi-class variables summarized in a confusion matrix, this 
 #' function provides performance summaries. It provides overall accuracy with 
 #' confidence intervals, as well as per class accuracy, sensitivity, 
-#' specificity, positive predictive value (PPV), negative predictive value (NPV)
+#' specificity, positive predictive value (PPV), negative predictive value (NPV).
+#' if variable entered is binary, it will automatically call binaryCM
 #' 
 #' @param x a vector of predicted classes
 #' @param y a vector of reference classes
-#' @param seed random seed for bootstrapping
-#' @param num.boot number of times to bootstrap. Defaults to 1000.
-#' @param conf.level confidence level. Defaults to 95\%.
-#' @param digits number of digits to round summaries to
-#' @param method method for obtaining confidence intervals for binomial 
+#' @param seed a random seed for bootstrapping
+#' @param num.boot the number of times to bootstrap. Defaults to 1000.
+#' @param conf.level the confidence level. Defaults to 95\%.
+#' @param digits the number of digits to round summaries to
+#' @param method the method for obtaining confidence intervals for binomial 
 #'   probabilities. See \code{Hmisc::binconf} for details.
 #' @return A confusion matrix for the predicted and reference classes. Then the 
 #'   estimated statistics along with bootstrapped confidence intervals. A
@@ -36,25 +37,25 @@
 #' @export
 #' @examples
 #' ### 95% CI from 1000 bootstraped samples
-#' set.seed(547)
-#' n <- 80
-#' x <- rbinom(n, size = 1, prob = 0.6)
-#' y <- rbinom(n, size = 1, prob = 0.4)
-#' binaryCM(x, y)
+#' set.seed(23)
+#' (x <- sample(1:k, 100, replace=TRUE, prob=c(0.15, 0.25,0.6)))
+#' (y <- sample(1:k, 100, replace=TRUE, prob=c(0.05, 0.4,0.65)))
+#' prop.table(table(y))
+#' multiClassCM(x, y)
 #' 
 #' ### 90% CI from 500 bootstrapped samples
-#' binaryCM(x, y, num.boot = 500, conf.level = 0.90)
+#' multiClassCM(x, y, num.boot = 500, conf.level = 0.90)
 #' 
 #' ### Round to 2 digits
-#' binaryCM(x, y, digits = 2)
+#' multiClassCM(x, y, digits = 2)
 multiClassCM <- function(x, y, seed = 20, num.boot = 1000,
                          conf.level = 0.95, digits = 2,
                          method = "wilson") {
-  CM <- table(Prediction = x, Reference = y)
+  CM <- table(Prediction = as.character(x), Reference = as.character(y))
   CMu <- addmargins(CM)
   
-  #  if(dim(CM)[1]<3){stop("This function only works for multi-class variables!")}
-  if (!all(levels(x) == levels(y))) {
+  if(dim(CM)[1]<3){stop("This function only works for multi-class variables!")}
+  if (!all(unique(x) %in% unique(y))) {
     stop("levels should be the same in the prediction and reference class!")
   }
   clm <- colSums(CM)
@@ -135,7 +136,7 @@ multiClassCM <- function(x, y, seed = 20, num.boot = 1000,
                                 apply(Accuracy, 1, printCI)),
                  "Balanced Accuracy" = c(round(mean(BA),digits),
                                          round(BA, digits = digits))) %>% 
-    set_colnames(c("Average", levels(x)))
+    set_colnames(c("Average", colnames(CM)))
   
   return(list(CM = CMu, overall = overall, table = table))
 }
