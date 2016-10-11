@@ -9,8 +9,8 @@
 #' specificity, positive predictive value (PPV), negative predictive value (NPV).
 #' if variable entered is binary, it will automatically call binaryCM
 #' 
-#' @param x a vector of predicted classes
-#' @param y a vector of reference classes
+#' @param x a vector of reference classes
+#' @param y a vector of prediction classes
 #' @param seed a random seed for bootstrapping
 #' @param num.boot the number of times to bootstrap. Defaults to 1000.
 #' @param conf.level the confidence level. Defaults to 95\%.
@@ -51,10 +51,10 @@
 multiClassCM <- function(x, y, seed = 20, num.boot = 1000,
                          conf.level = 0.95, digits = 2,
                          method = "wilson") {
-  CM <- table(Prediction = as.character(x), Reference = as.character(y))
+  CM <- table(Reference = as.character(x), Prediction = as.character(y))
   CMu <- addmargins(CM)
   
-  if(dim(CM)[1]<3){stop("This function only works for multi-class variables!")}
+  #if(dim(CM)[1]<3){stop("This function only works for multi-class variables!")}
   if (!all(unique(x) %in% unique(y))) {
     stop("levels should be the same in the prediction and reference class!")
   }
@@ -62,8 +62,8 @@ multiClassCM <- function(x, y, seed = 20, num.boot = 1000,
   rwm <- rowSums(CM)
   N <-  sum(CM)
   TP <- diag(CM)
-  FP <- rwm - TP
-  FN <- clm - TP
+  FP <- clm - TP
+  FN <- rwm - TP
   TN <- N - (TP + FP + FN)
   
   # Overall----
@@ -109,7 +109,7 @@ multiClassCM <- function(x, y, seed = 20, num.boot = 1000,
       paste0((1 - (1 - conf.level) / 2) * 100, "%"))
   
   printCI <- function(z) {
-    paste0(z[1], " (", z[2], "-", z[3], ")")}
+    paste0(z[1], " (", z[2], " - ", z[3], ")")}
   
   overall <- 
     rbind("Overall Accuracy" = printCI(c(cc[1], cc[3], cc[4])),

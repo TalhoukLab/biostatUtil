@@ -53,8 +53,8 @@
 #'
 #' ### Round to 2 digits
 #' binaryCM(x, y, digits = 2)
-binaryCM <- function(x,
-                     y,
+binaryCM <- function(x, #Reference
+                     y, #Prediction
                      seed = 20,
                      num.boot = 1000,
                      pcond = 1,
