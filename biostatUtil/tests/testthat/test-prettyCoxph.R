@@ -20,27 +20,21 @@ fit_prettyCoxph <- prettyCoxph(surv_formula_1,test.d) # default not use firth
 test_that("prettyCoxph returns values from survival::coxph when use.firth==1",
   expect_equal(fit_coxph$n,fit_prettyCoxph$n)
 )
+# prettyCoxph should check its inputs for validity.
+# prettyCoxph executes clause "if (use.firth < 1 & use.firth > -1) "
+# without checking for validity of use.firth.  This clause implies that
+# non-documented values of use.firth are used in the function.
+test1 <- list(time = c(4, 3, 1, 1, 2, 2, 3), 
+              status = c(1, 1, 1, 0, 1, 1, 0), 
+              x = c(0, 2, 1, 1, 1, 0, 0), 
+              sex = c(0, 0, 0, 0, 1, 1, 1))  
+fit_coxph <- coxph(Surv(time, status) ~ x + strata(sex), test1) 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+test_that("prettyCoxph returns values from survival::coxph when use==FALSE",
+          expect_equal(fit_coxph$n,
+                       prettyCoxph(Surv(time, status) ~ x + strata(sex), 
+                                   test1, use = FALSE)$n)
+)
 
 # clean up ---------------------------------------------------------------------
 if (exists("BAK.TEST.D")) {
