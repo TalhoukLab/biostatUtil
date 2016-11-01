@@ -6,10 +6,11 @@
 \usage{
 plotKM(input.d, input.formula, line.name, line.color, line.pattern = NULL,
   main.text = "", xlab.text = "", ylab.text = "", line.width = NULL,
-  show.test = "single", single.test.type = "logrank",
-  round.digits.p.value = 4, obs.survyrs = 10, legend.pos = "bottomleft",
-  file.name = "no.file", file.width = 7, file.height = 7,
-  grey.scale = FALSE, show.single.test.pos = "default", ...)
+  show.test = "single", single.test.type = "logrank", digits = 3,
+  obs.survyrs = 3, legend.pos = "bottomleft", file.name = "no.file",
+  file.width = 7, file.height = 7, grey.scale = FALSE,
+  show.single.test.pos = "default", xlabs = NULL, legend.xy = NULL,
+  ylabs = NULL, timeby = NULL, ...)
 }
 \arguments{
 \item{input.d}{input \code{data.frame}}
@@ -37,7 +38,7 @@ comparisons). If \code{"none"}, then no test is show.}
 "single"}. Possible choices are \code{"logrank"} (default), 
 \code{"wilcoxon"}, \code{"taroneware"}, or \code{"all"}.}
 
-\item{round.digits.p.value}{number of digits for p-value}
+\item{digits}{number of digits for p-value}
 
 \item{obs.survyrs}{show the observed survival years survival rate on KM plot}
 

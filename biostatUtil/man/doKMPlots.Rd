@@ -5,10 +5,11 @@
 \title{Make Kaplan-Meier plots}
 \usage{
 doKMPlots(input.d, time, status, var.name, var.description, line.name = NULL,
-  line.color = NULL, line.pattern = NULL, cox.ref.group = NULL,
-  legend = FALSE, km.plot.ref.group = "single",
-  single.test.type = "logrank", surv.type = "os", use.firth = -1,
-  CI = TRUE, HR = TRUE, show.risk = TRUE, use.ggkm = FALSE, ...)
+  shading.colors = c("blue2", "red2", "deepskyblue", "indianred3"),
+  line.pattern = NULL, cox.ref.group = NULL, legend = FALSE,
+  km.plot.ref.group = "single", single.test.type = "logrank",
+  surv.type = "os", use.firth = -1, CI = TRUE, HR = TRUE,
+  show.risk = TRUE, use.ggkm = FALSE, ...)
 }
 \arguments{
 \item{input.d}{\code{data.frame} containing data}
@@ -22,8 +23,6 @@ doKMPlots(input.d, time, status, var.name, var.description, line.name = NULL,
 \item{var.description}{description for \code{var.name}}
 
 \item{line.name}{names for each survival curve}
-
-\item{line.color}{colors for survival curves}
 
 \item{line.pattern}{line type for survival curves}
 
@@ -50,6 +49,8 @@ at each time of death beneath the plot}
 \item{use.ggkm}{if \code{TRUE}, will use function \code{ggkm} for plotting}
 
 \item{...}{additional arguments to other functions and methods}
+
+\item{line.color}{colors for survival curves}
 }
 \value{
 A Kaplan-Meier plot for the specified survival outcome split on the desired
