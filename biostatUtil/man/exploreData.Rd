@@ -16,6 +16,7 @@ Function to provide a graphical exploration of a dataset will print results to f
 mtcars$vs <- as.factor(mtcars$vs)
 mtcars$am <- as.factor(mtcars$am)
 exploreData(mtcars)
+file.remove("DataSummary.pdf")
 }
 \author{
 Aline Talhouk

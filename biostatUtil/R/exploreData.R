@@ -9,6 +9,7 @@
 #' mtcars$vs <- as.factor(mtcars$vs)
 #' mtcars$am <- as.factor(mtcars$am)
 #' exploreData(mtcars)
+#' file.remove("DataSummary.pdf")
 exploreData <- function(datmat) {
   types <- unname(sapply(datmat, class))
   fd <- datmat[, types %in% c("factor", "numeric", "integer")]
