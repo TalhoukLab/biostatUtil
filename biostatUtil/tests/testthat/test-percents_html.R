@@ -7,21 +7,21 @@ B <- matrix(rbinom(20, size = 20, prob = 0.3), nrow = 5,
             dimnames = list(paste0("Row", 1:5), paste0("Col", 1:4)))
 
 test_that("HTML output works", {
-  expect_error(htmlTable(colPercentAsHTML(B, keep = TRUE)), NA)
-  expect_error(htmlTable(colPercentAsHTML(B, keep = FALSE)), NA)
-  expect_error(htmlTable(rowPercentAsHTML(B, keep = TRUE)), NA)
-  expect_error(htmlTable(rowPercentAsHTML(B, keep = FALSE)), NA)
-  expect_error(htmlTable(rowColPercentAsHTML(B, keep = TRUE)), NA)
-  expect_error(htmlTable(rowColPercentAsHTML(B, keep = FALSE)), NA)
+  expect_error(htmlTable(colPercentAsHTML(B, keep = TRUE, caption = "Test Caption")), NA)
+  expect_error(htmlTable(colPercentAsHTML(B, keep = FALSE, caption = "Test Caption")), NA)
+  expect_error(htmlTable(rowPercentAsHTML(B, keep = TRUE, caption = "Test Caption")), NA)
+  expect_error(htmlTable(rowPercentAsHTML(B, keep = FALSE, caption = "Test Caption")), NA)
+  expect_error(htmlTable(rowColPercentAsHTML(B, keep = TRUE, caption = "Test Caption")), NA)
+  expect_error(htmlTable(rowColPercentAsHTML(B, keep = FALSE, caption = "Test Caption")), NA)
 })
 
 test_that("Banded rows alternate per row group", {
-  expect_error(htmlTable(colPercentAsHTML(B, keep = TRUE, banded.rows = TRUE)), NA)
-  expect_error(htmlTable(colPercentAsHTML(B, keep = FALSE, banded.rows = TRUE)), NA)
-  expect_error(htmlTable(rowPercentAsHTML(B, keep = TRUE, banded.rows = TRUE)), NA)
-  expect_error(htmlTable(rowPercentAsHTML(B, keep = FALSE, banded.rows = TRUE)), NA)
-  expect_error(htmlTable(rowColPercentAsHTML(B, keep = TRUE, banded.rows = TRUE)), NA)
-  expect_error(htmlTable(rowColPercentAsHTML(B, keep = FALSE, banded.rows = TRUE)), NA)
+  expect_error(htmlTable(colPercentAsHTML(B, keep = TRUE, banded.rows = TRUE, caption = "Test Caption")), NA)
+  expect_error(htmlTable(colPercentAsHTML(B, keep = FALSE, banded.rows = TRUE, caption = "Test Caption")), NA)
+  expect_error(htmlTable(rowPercentAsHTML(B, keep = TRUE, banded.rows = TRUE, caption = "Test Caption")), NA)
+  expect_error(htmlTable(rowPercentAsHTML(B, keep = FALSE, banded.rows = TRUE, caption = "Test Caption")), NA)
+  expect_error(htmlTable(rowColPercentAsHTML(B, keep = TRUE, banded.rows = TRUE, caption = "Test Caption")), NA)
+  expect_error(htmlTable(rowColPercentAsHTML(B, keep = FALSE, banded.rows = TRUE, caption = "Test Caption")), NA)
 })
 
 test_that("Other formatting options work", {
