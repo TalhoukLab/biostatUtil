@@ -64,6 +64,8 @@ coxphOut <- function(object, coefnames = NULL, conf.level = 0.95,
 #' @author Aline Talhouk, Derek Chiu
 #' @export
 #' @examples
+#' library(survival)
+#' library(coxphf)
 #' # One predictor
 #' test1 <- list(
 #'   time = c(4, 3, 1, 1, 2, 2, 3),

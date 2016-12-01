@@ -19,6 +19,8 @@ Hazard ratio and 95/% confidence interval
 Univariate cox proprtional hazards model
 }
 \examples{
+library(survival)
+library(coxphf)
 # One predictor
 test1 <- list(
   time = c(4, 3, 1, 1, 2, 2, 3),
