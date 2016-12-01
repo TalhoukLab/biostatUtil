@@ -16,8 +16,10 @@
 #' @export
 #' 
 #' @examples
+#' \dontrun{
 #' tab <- parse_rd()
 #' str(tab)
+#' }
 parse_rd <- function(path, tags = c("name", "title", "desc", "details"),
                      save = FALSE) {
   rd.files <- list.files("man", full.names = TRUE)
