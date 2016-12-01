@@ -86,7 +86,7 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
       paste(paste(num.var, collapse = " + "), "~", by1)),
       num.dat, FUN = contSumFunc, digits = digits, stats = stats) %>% 
       mutate_each(funs(as.character))
-    num.all <- data.table::rbindlist(list(num.val, num.val.tot), fill = TRUE)
+    num.all <- dplyr::bind_rows(list(num.val, num.val.tot))
     num.long <- num.all %>% 
       tidyr::gather(stat, value, -match(c(by1, by2), names(.))) %>%
       tidyr::separate(stat, c("var", "stat"), "\\.") %>%
@@ -123,7 +123,7 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
       Reduce(merge, .) %>% 
       set_colnames(c(by1, grep("\\.", fac.ord, value = TRUE))) %>% 
       as.data.frame()
-    fac.all <- data.table::rbindlist(list(fac.val, fac.val.tot), fill = TRUE) %>%
+    fac.all <- dplyr::bind_rows(list(fac.val, fac.val.tot)) %>%
       as.data.frame()
     fac.pct <- fac.val %>% 
       select(-one_of(by1, by2)) %>% 
