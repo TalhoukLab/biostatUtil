@@ -2,8 +2,8 @@
 % Please edit documentation in R/round_small.R
 \name{round_small}
 \alias{round_small}
-\alias{round_small.matrix}
 \alias{round_small.numeric}
+\alias{round_small.matrix}
 \title{Rounding of Small Numbers}
 \usage{
 round_small(x, digits = 3, sci = FALSE)
