@@ -1,3 +1,9 @@
+#' Collapse unique levels of variable into one string
+#' @noRd
+collapse_var <- function(x, collapse = " || ") {
+  return(paste(unique(x), collapse = collapse))
+}
+
 #' Print confidence interval wrapper
 #' @noRd
 printCI <- function(z) {
