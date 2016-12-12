@@ -45,11 +45,11 @@ results.no.ci <- binaryCMAsHTML(x, y, "Test", num.boot = 1000, show.ci =
 FALSE)
 htmlTable(results.no.ci)
 }
-\author{
-Samuel Leung, Derek Chiu
-}
 \seealso{
 Other confusion matrix functions: \code{\link{binaryCM}},
   \code{\link{multiClassCM}}
+}
+\author{
+Samuel Leung, Derek Chiu
 }
 

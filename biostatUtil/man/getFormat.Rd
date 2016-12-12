@@ -25,11 +25,11 @@ Get the POSIX standard date formats from character text formats.
 getFormat("12/09/1993", "MM.DD.YYYY")
 getFormat("2005-09-13", "YYYY.MM.DD")
 }
-\author{
-Derek Chiu
-}
 \seealso{
 Other date formatting functions: \code{\link{cleanDate}},
   \code{\link{formatDate}}, \code{\link{numericToDate}}
+}
+\author{
+Derek Chiu
 }
 

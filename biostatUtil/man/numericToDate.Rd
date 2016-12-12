@@ -21,11 +21,11 @@ Change a numeric value to a date object by specifying a date of origin.
 numericToDate(10)
 numericToDate(10, "2000-09-11")
 }
-\author{
-Samuel Leung
-}
 \seealso{
 Other date formatting functions: \code{\link{cleanDate}},
   \code{\link{formatDate}}, \code{\link{getFormat}}
+}
+\author{
+Samuel Leung
 }
 

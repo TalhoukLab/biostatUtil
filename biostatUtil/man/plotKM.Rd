@@ -68,10 +68,10 @@ comparisons). If \code{"none"}, then no test is show.}
 \description{
 KM plots with basic annotations.
 }
-\author{
-Samuel Leung
-}
 \seealso{
 \code{\link{plotKMDetail}}
+}
+\author{
+Samuel Leung
 }
 

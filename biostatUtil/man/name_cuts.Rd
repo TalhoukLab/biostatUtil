@@ -28,10 +28,10 @@ x <- sample(0:4, size = 1000, replace = TRUE)
 name_cuts(x, c(1, 4))
 name_cuts(x, c(2, 4))
 }
-\author{
-Derek Chiu
-}
 \seealso{
 \code{\link[Hmisc]{cut2}}, \code{\link{build_cuts}}
+}
+\author{
+Derek Chiu
 }
 

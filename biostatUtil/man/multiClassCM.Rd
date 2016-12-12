@@ -66,11 +66,11 @@ multiClassCM(x, y, num.boot = 500, conf.level = 0.90)
 ### Round to 2 digits
 multiClassCM(x, y, digits = 2)
 }
-\author{
-Aline Talhouk, Derek Chiu
-}
 \seealso{
 Other confusion matrix functions: \code{\link{binaryCMAsHTML}},
   \code{\link{binaryCM}}
+}
+\author{
+Aline Talhouk, Derek Chiu
 }
 
