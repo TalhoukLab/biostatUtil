@@ -53,14 +53,14 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
   if (!use.ggkm) {
     plotKM(input.d=temp.d, input.formula=formula.obj,
         line.name=line.name, line.color=shading.colors, line.pattern = line.pattern, 
-           main.text = paste0(var.description, " (", toupper(surv.type), ")"),
+           main.text = ifelse(is.na(var.description) | var.description=="","",paste0(var.description, " (", toupper(surv.type), ")")),
            show.test = km.plot.ref.group, single.test.type = single.test.type,
            ...)
   } else {	
     ggkm(sfit, sfit2 = NULL, table = show.risk, marks = TRUE,
          xlims = c(0, max(sfit$time)), ylims = c(0, 1),
          ystratalabs = line.name, ystrataname = NULL,  cox.ref.grp = cox.ref.group,
-         main = paste0(var.description, " (", toupper(surv.type), ")"),
+         main = ifelse(is.na(var.description) | var.description=="","",paste0(var.description, " (", toupper(surv.type), ")")),
          pval = TRUE, HR = HR, use.firth = use.firth, CI = CI, subs = NULL,
          legend = legend, line.pattern = line.pattern,
          shading.colors=shading.colors,...)	
