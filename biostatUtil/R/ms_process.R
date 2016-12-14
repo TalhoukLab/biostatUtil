@@ -10,6 +10,8 @@
 #'   that in the psm raw data.
 #' @param path file path to save processed peptide file
 #' @param save logical; should the peptide file be saved?
+#' @return A processed data frame to be used by \code{ms_analyze}.
+#' @author Derek Chiu
 #' @export
 ms_process <- function(psm, protein, g, sample.id, path, save = TRUE) {
   # Make raw data file column names into R column names

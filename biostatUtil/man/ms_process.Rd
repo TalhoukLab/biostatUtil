@@ -20,8 +20,14 @@ that in the psm raw data.}
 
 \item{save}{logical; should the peptide file be saved?}
 }
+\value{
+A processed data frame to be used by \code{ms_analyze}.
+}
 \description{
 Process mass spectrometry data for filtering out contaminant samples,
 manipulating variables, removing duplicates, and more.
+}
+\author{
+Derek Chiu
 }
 

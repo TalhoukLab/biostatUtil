@@ -6,8 +6,11 @@
 #' @param x data frame with expression values for both samples
 #' @param g vector of factor levels for samples
 #' @param col.names vector of column names for output data frame
-#' @param info.vars vector of column names containing metadata information.
+#' @param info.vars vector of column names containing metadata information. 
 #'   These variables are collapsed if not unique.
+#' @return A vector of statistics from analyzing mass spec data. Includes
+#'   t-values, Wald p-values, effect sizes, fold change, absolute fold change.
+#' @author Derek Chiu
 #' @export
 ms_analyze <- function(x, g, col.names,
                        info.vars = c("Accession", "Sequence",

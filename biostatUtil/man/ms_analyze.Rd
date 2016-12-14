@@ -15,11 +15,18 @@ ms_analyze(x, g, col.names, info.vars = c("Accession", "Sequence",
 
 \item{col.names}{vector of column names for output data frame}
 
-\item{info.vars}{vector of column names containing metadata information.
+\item{info.vars}{vector of column names containing metadata information. 
 These variables are collapsed if not unique.}
+}
+\value{
+A vector of statistics from analyzing mass spec data. Includes
+  t-values, Wald p-values, effect sizes, fold change, absolute fold change.
 }
 \description{
 Analyze mass spectrometry data for expression differences between sample 
 groups.
+}
+\author{
+Derek Chiu
 }
 
