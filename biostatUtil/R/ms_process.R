@@ -77,8 +77,14 @@ ms_process <- function(psm, protein, g, sample.id, path, save = TRUE) {
         !grepl("sp", quote(A), ignore.case = FALSE) &
         !grepl("ribosomal", quote(D)),  # Remove specific proteins (typically contaminants from other sources)
       D = quote(Descriptions), A = quote(Accession))))
-  
   if (save)
     readr::write_csv(pep.r, path = path)
-  return(pep.r)
+  
+  # Raw, log2, and vsn transformed expression data
+  raw <- pep.r[, sample.id]
+  l2 <- log2(raw) %>% 
+    set_colnames(paste("l2", names(.), sep = "_"))
+  vsn <- limma::normalizeVSN(raw, verbose = FALSE) %>% 
+    set_colnames(paste("vsn", colnames(.), sep = "_"))
+  return(list(pep = pep.r, raw = raw, l2 = l2, vsn = vsn))
 }
