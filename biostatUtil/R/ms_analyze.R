@@ -12,11 +12,12 @@
 #'   t-values, Wald p-values, effect sizes, fold change, absolute fold change.
 #' @author Derek Chiu
 #' @export
-ms_analyze <- function(x, g, col.names,
-                       info.vars = c("Accession", "Sequence",
-                                     "Annotated.Sequence", "Descriptions",
-                                     "Modifications",
-                                     "Reporter.Quan.Result.ID")) {
+ms_analyze <- function(x, g, col.names, info.vars = NULL) {
+  # Default info.vars
+  if (is.null(info.vars))
+    info.vars <- c("Accession", "Sequence", "Annotated.Sequence",
+                   "Descriptions", "Modifications", "Reporter.Quan.Result.ID")
+  
   # Create factor variable for different treatments in gene-specific data frame
   # Modify `mutate_()` call depending on variable coding
   adf <- tidyr::gather(data = x, key = "Sample", value = "tInt", matches("vsn")) %>% 

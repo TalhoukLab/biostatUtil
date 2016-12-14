@@ -4,9 +4,7 @@
 \alias{ms_analyze}
 \title{Analyze mass spectrometry data}
 \usage{
-ms_analyze(x, g, col.names, info.vars = c("Accession", "Sequence",
-  "Annotated.Sequence", "Descriptions", "Modifications",
-  "Reporter.Quan.Result.ID"))
+ms_analyze(x, g, col.names, info.vars = NULL)
 }
 \arguments{
 \item{x}{data frame with expression values for both samples}
