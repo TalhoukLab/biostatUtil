@@ -13,7 +13,7 @@
 ms_boxplot <- function(x, path, width = 8, height = 10) {
   title <- "Raw data values"
   pdf(file = path, width = width, height = height, useDingbats = FALSE)
-  Map(boxplot, x = dat[-1], main = c(title, paste0("log2(", title, ")"),
+  Map(boxplot, x = x[-1], main = c(title, paste0("log2(", title, ")"),
                                      paste0("vsn(", title, ")")))
   dev.off()
 }
