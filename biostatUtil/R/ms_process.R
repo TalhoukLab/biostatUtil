@@ -46,7 +46,7 @@ ms_process <- function(psm, protein, g, sample.id, path, save = TRUE) {
       MPA = quote(Master.Protein.Accessions)
     )))
   
-  pro <- pro %>% 
+  pro <- protein %>% 
     select_("Accession", "Description", "MW.in.kDa")
   
   # For each Reporter.Quan.Result.ID in pep, remove duplicates for 4 vars
