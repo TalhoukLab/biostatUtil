@@ -5,6 +5,7 @@
 #' 
 #' @param x data frame with expression values for both samples
 #' @param g vector of factor levels for samples
+#' @param level analysis is on the "Gene" level or "Peptide" level
 #' @param col.names vector of column names for output data frame
 #' @param info.vars vector of column names containing metadata information. 
 #'   These variables are collapsed if not unique.
@@ -12,8 +13,9 @@
 #'   t-values, Wald p-values, effect sizes, fold change, absolute fold change.
 #' @author Derek Chiu
 #' @export
-ms_analyze <- function(x, g, col.names, info.vars = NULL) {
-  # Default info.vars
+ms_analyze <- function(x, g, level = c("Gene", "Peptide"),
+                       col.names = NULL, info.vars = NULL) {
+  # NULL defaults
   if (is.null(info.vars))
     info.vars <- c("Accession", "Sequence", "Annotated.Sequence",
                    "Descriptions", "Modifications", "Reporter.Quan.Result.ID")
@@ -41,7 +43,9 @@ ms_analyze <- function(x, g, col.names, info.vars = NULL) {
   Trt_stats <- unlist(lapply(g[-1], treatment_stats, data = adf, mod = mod2))
   
   # Other information
-  Gene <- unique(adf$Gene)
+  Level <- switch(match.arg(level),
+                  Gene = unique(adf$Gene),
+                  Peptide = unique(adf$AGDSM))
   Omnibus_obj <- c(as.character(OmnibusTrt), "BHadj_OmnibusTrtPvalHere")
   Desc_obj <- adf %>%
     select(one_of(info.vars)) %>%
@@ -50,7 +54,7 @@ ms_analyze <- function(x, g, col.names, info.vars = NULL) {
     as.character()
   
   # Combine data objects and set column names
-  return(setNames(c(Gene, Omnibus_obj, Trt_stats, Desc_obj), col.names))
+  return(setNames(c(Level, Omnibus_obj, Trt_stats, Desc_obj), col.names))
 }
 
 #' Compute statistics for treatment-specific comparisons

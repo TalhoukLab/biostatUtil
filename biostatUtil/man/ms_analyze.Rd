@@ -4,12 +4,15 @@
 \alias{ms_analyze}
 \title{Analyze mass spectrometry data}
 \usage{
-ms_analyze(x, g, col.names, info.vars = NULL)
+ms_analyze(x, g, level = c("Gene", "Peptide"), col.names = NULL,
+  info.vars = NULL)
 }
 \arguments{
 \item{x}{data frame with expression values for both samples}
 
 \item{g}{vector of factor levels for samples}
+
+\item{level}{analysis is on the "Gene" level or "Peptide" level}
 
 \item{col.names}{vector of column names for output data frame}
 
