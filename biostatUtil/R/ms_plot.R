@@ -6,16 +6,19 @@
 #' @param path path to save boxplot to. Device is pdf.
 #' @param width width of plot
 #' @param height height of plot
+#' @param las angle of axis labels
 #' @return A pdf with three boxplots is saved to disk location specified by
 #'   \code{path}: the raw data values and the log2 and vsn transformed values.
 #' @author Derek Chiu
 #' @export
-ms_boxplot <- function(x, path, width = 8, height = 10) {
+ms_boxplot <- function(x, path, width = 8, height = 10, las = 0) {
   title <- "Raw data values"
   pdf(file = path, width = width, height = height, useDingbats = FALSE)
+  par(las = las)
   Map(boxplot, x = x[-1], main = c(title, paste0("log2(", title, ")"),
-                                     paste0("vsn(", title, ")")))
+                                   paste0("vsn(", title, ")")))
   dev.off()
+  par(las = 0)
 }
 
 #' Mean-Variance Relationship
