@@ -22,7 +22,8 @@ ms_analyze <- function(x, g, level = c("Gene", "Peptide"),
   
   # Create factor variable for different treatments in gene-specific data frame
   # Modify `mutate_()` call depending on variable coding
-  adf <- tidyr::gather(data = x, key = "Sample", value = "tInt", matches("vsn")) %>% 
+  adf <- tidyr::gather(data = x, key = "Sample", value = "tInt",
+                       matches("vsn")) %>% 
     mutate_(.dots = setNames(list(lazyeval::interp(
       ~factor(gsub("vsn_(.*)_.+", "\\1", var), levels = g),
       var = quote(Sample))), "Trtf"))
