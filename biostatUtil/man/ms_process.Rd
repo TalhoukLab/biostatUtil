@@ -4,27 +4,33 @@
 \alias{ms_process}
 \title{Process mass spectrometry data}
 \usage{
-ms_process(psm, protein, g, sample.id, path, save = TRUE)
+ms_process(psm, protein, treatment, sample.id, path, save = TRUE, ...)
 }
 \arguments{
 \item{psm}{PSM file}
 
 \item{protein}{Protein file}
 
-\item{g}{character vector of sample groups}
+\item{treatment}{character vector of treatment groups}
 
 \item{sample.id}{character vector for sample IDs. Other of samples must match
 that in the psm raw data.}
 
-\item{path}{file path to save processed peptide file}
+\item{path}{file path to save return element \code{pep}}
 
-\item{save}{logical; should the peptide file be saved?}
+\item{save}{logical; should the return element \code{pep} be saved?}
+
+\item{...}{additional arguments to \code{ms_condition}}
 }
 \value{
-A processed data frame to be used by \code{ms_analyze}.
+A list with the following elements
+\item{pep}{processed data frame to be used by \code{ms_analyze}}
+\item{raw}{raw data values}
+\item{l2}{log2 raw data values}
+\item{vsn}{vsn raw data values}
 }
 \description{
-Process mass spectrometry data for filtering out contaminant samples,
+Process mass spectrometry data for filtering out contaminant samples, 
 manipulating variables, removing duplicates, and more.
 }
 \author{

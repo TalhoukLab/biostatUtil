@@ -1,19 +1,25 @@
 #' Process mass spectrometry data
 #' 
-#' Process mass spectrometry data for filtering out contaminant samples,
+#' Process mass spectrometry data for filtering out contaminant samples, 
 #' manipulating variables, removing duplicates, and more.
 #' 
 #' @param psm PSM file
 #' @param protein Protein file
-#' @param g character vector of sample groups
+#' @param treatment character vector of treatment groups
 #' @param sample.id character vector for sample IDs. Other of samples must match
 #'   that in the psm raw data.
-#' @param path file path to save processed peptide file
-#' @param save logical; should the peptide file be saved?
-#' @return A processed data frame to be used by \code{ms_analyze}.
+#' @param path file path to save return element \code{pep}
+#' @param save logical; should the return element \code{pep} be saved?
+#' @param ... additional arguments to \code{ms_condition}
+#' @return A list with the following elements
+#' \item{pep}{processed data frame to be used by \code{ms_analyze}}
+#' \item{raw}{raw data values}
+#' \item{l2}{log2 raw data values}
+#' \item{vsn}{vsn raw data values}
 #' @author Derek Chiu
 #' @export
-ms_process <- function(psm, protein, g, sample.id, path, save = TRUE) {
+ms_process <- function(psm, protein, treatment, sample.id, path, save = TRUE,
+                       ...) {
   # Make raw data file column names into R column names
   psm <- psm %>% set_colnames(make.names(colnames(.)))
   protein <- protein %>% set_colnames(make.names(colnames(.)))
@@ -37,14 +43,11 @@ ms_process <- function(psm, protein, g, sample.id, path, save = TRUE) {
     select(one_of(psmKeepVars)) %>% 
     set_colnames(plyr::mapvalues(colnames(.), orig.sample.id, sample.id)) %>% 
     filter_(.dots = list(lazyeval::interp(
-      ~NOP == 1 & !grepl("NoQuanValues", QI) &
-        sapply(g, function(y) apply(.[, grep(y, names(.))], 1, function(x)
-          sum(!is.na(x)) >= 2)) %>% 
-        apply(., 1, function(z) ifelse(all(z), TRUE, FALSE)) &
-        (is.na(MPA) | MPA != "sp"),
+      ~NOP == 1 & !grepl("NoQuanValues", QI) & (is.na(MPA) | MPA != "sp"),
       NOP = quote(Number.of.Proteins), QI = quote(Quan.Info),
       MPA = quote(Master.Protein.Accessions)
-    )))
+    ))) %>% 
+    extract(ms_condition(., treatment = treatment, ...), )
   
   pro <- protein %>% 
     select_("Accession", "Description", "MW.in.kDa")
