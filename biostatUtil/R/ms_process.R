@@ -37,7 +37,7 @@ ms_process <- function(psm, protein, treatment, sample.id, path, save = TRUE,
   # Filter out: 
   #   - non-unique peptides
   #   - no quan values
-  #   - insufficient data: at least 2 trt values in each group
+  #   - insufficient data: use ms_condition()
   #   - Master Protein Accession missing or 'sp'
   pep <- psm %>%
     select(one_of(psmKeepVars)) %>% 
