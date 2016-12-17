@@ -32,11 +32,13 @@ ms_boxplot <- function(x, path, width = 8, height = 10, las = 0) {
 #'   transformed values and mean-sd plots for each treatment group.
 #' @author Derek Chiu
 #' @export
-ms_mean_var <- function(x, g, title, path, width = 8, height = 10) {
+ms_mean_var <- function(x, g, title, path, width = 8, height = 10, las = 0) {
   pdf(file = path, width = width, height = height, useDingbats = FALSE)
+  par(las = las)
   boxplot(x$vsn, main = "vsn(Raw data values)")
   capture.output(Map(function(g, t)
     vsn::meanSdPlot(x$vsn[, grep(g, colnames(x$vsn))], plot = FALSE)$gg +
       ggtitle(paste("vsn", t)), g = g, t = title))
   dev.off()
+  par(las = 0)
 }

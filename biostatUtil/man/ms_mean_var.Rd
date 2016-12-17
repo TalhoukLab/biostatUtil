@@ -4,7 +4,7 @@
 \alias{ms_mean_var}
 \title{Mean-Variance Relationship}
 \usage{
-ms_mean_var(x, g, title, path, width = 8, height = 10)
+ms_mean_var(x, g, title, path, width = 8, height = 10, las = 0)
 }
 \arguments{
 \item{x}{data object returned by \code{ms_process}}
@@ -18,6 +18,8 @@ ms_mean_var(x, g, title, path, width = 8, height = 10)
 \item{width}{width of plot}
 
 \item{height}{height of plot}
+
+\item{las}{angle of axis labels}
 }
 \value{
 A pdf is saved to disk location specified by \code{path}: the vsn
