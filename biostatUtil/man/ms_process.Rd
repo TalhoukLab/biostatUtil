@@ -33,6 +33,10 @@ A list with the following elements
 Process mass spectrometry data for filtering out contaminant samples, 
 manipulating variables, removing duplicates, and more.
 }
+\seealso{
+Other Mass Spectrometry: \code{\link{ms_analyze}},
+  \code{\link{ms_condition}}, \code{\link{ms_plot}}
+}
 \author{
 Derek Chiu
 }

@@ -16,6 +16,7 @@
 #' \item{raw}{raw data values}
 #' \item{l2}{log2 raw data values}
 #' \item{vsn}{vsn raw data values}
+#' @family Mass Spectrometry
 #' @author Derek Chiu
 #' @export
 ms_process <- function(psm, protein, treatment, sample.id, path, save = TRUE,

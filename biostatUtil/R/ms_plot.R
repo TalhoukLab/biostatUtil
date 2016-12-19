@@ -9,6 +9,8 @@
 #' @param las angle of axis labels
 #' @return A pdf with three boxplots is saved to disk location specified by
 #'   \code{path}: the raw data values and the log2 and vsn transformed values.
+#' @name ms_plot
+#' @family Mass Spectrometry
 #' @author Derek Chiu
 #' @export
 ms_boxplot <- function(x, path, width = 8, height = 10, las = 0) {
@@ -30,6 +32,8 @@ ms_boxplot <- function(x, path, width = 8, height = 10, las = 0) {
 #' @param title vector of titles for each treatment group
 #' @return A pdf is saved to disk location specified by \code{path}: the vsn
 #'   transformed values and mean-sd plots for each treatment group.
+#' @name ms_plot
+#' @family Mass Spectrometry
 #' @author Derek Chiu
 #' @export
 ms_mean_var <- function(x, g, title, path, width = 8, height = 10, las = 0) {
