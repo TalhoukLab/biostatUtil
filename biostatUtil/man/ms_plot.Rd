@@ -7,7 +7,7 @@
 \alias{ms_mean_var}
 \title{Boxplot of different MS expression data values}
 \usage{
-ms_boxplot(x, path, width = 8, height = 10, las = 0)
+ms_boxplot(x, path, width = 8, height = 10)
 
 ms_mean_var(x, g, title, path, width = 8, height = 10, las = 0)
 }
@@ -19,8 +19,6 @@ ms_mean_var(x, g, title, path, width = 8, height = 10, las = 0)
 \item{width}{width of plot}
 
 \item{height}{height of plot}
-
-\item{las}{angle of axis labels}
 
 \item{g}{vector of treatment groups}
 
