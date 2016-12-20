@@ -1,13 +1,17 @@
-#' Boxplot of different MS expression data values
+#' Plots for MS analyses
 #' 
-#' Generate boxplot for raw, log2, and vsn data values
+#' \code{ms_boxplot} shows boxplots of different MS expression data values. 
+#' \code{ms_mean_var} shows mean-sd plots for the VSN data values to analyze the
+#' mean-variance relationship.
 #' 
 #' @param x data object returned by \code{ms_process}
 #' @param path path to save boxplot to. Device is pdf.
 #' @param width width of plot
 #' @param height height of plot
-#' @return A pdf with three boxplots is saved to disk location specified by
-#'   \code{path}: the raw data values and the log2 and vsn transformed values.
+#' @return Both functions return a pdf saved to the file location specified by 
+#'   \code{path}. \code{ms_boxplot} shows three boxplots of expression values: 
+#'   raw data values, log2 and vsn transformed values. \code{ms_mean_var} shows 
+#'   the vsn transformed values and mean-sd plots for each treatment group.
 #' @name ms_plot
 #' @family Mass Spectrometry
 #' @author Derek Chiu
@@ -36,18 +40,10 @@ ms_gg_boxplot <- function(x, title) {
   return(p)
 }
 
-#' Mean-Variance Relationship
-#' 
-#' Generate mean-sd plots for the VSN data values.
-#' 
 #' @inheritParams ms_plot
 #' @param g vector of treatment groups
 #' @param title vector of titles for each treatment group
-#' @return A pdf is saved to disk location specified by \code{path}: the vsn
-#'   transformed values and mean-sd plots for each treatment group.
 #' @name ms_plot
-#' @family Mass Spectrometry
-#' @author Derek Chiu
 #' @export
 ms_mean_var <- function(x, g, title, path, width = 8, height = 10) {
   dat.plot <- gather(as.data.frame(x[["vsn"]]), key = Sample, value = Expression)

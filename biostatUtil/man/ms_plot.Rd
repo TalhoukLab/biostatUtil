@@ -5,7 +5,7 @@
 \alias{ms_boxplot}
 \alias{ms_plot}
 \alias{ms_mean_var}
-\title{Boxplot of different MS expression data values}
+\title{Plots for MS analyses}
 \usage{
 ms_boxplot(x, path, width = 8, height = 10)
 
@@ -25,27 +25,21 @@ ms_mean_var(x, g, title, path, width = 8, height = 10)
 \item{title}{vector of titles for each treatment group}
 }
 \value{
-A pdf with three boxplots is saved to disk location specified by
-  \code{path}: the raw data values and the log2 and vsn transformed values.
-
-A pdf is saved to disk location specified by \code{path}: the vsn
-  transformed values and mean-sd plots for each treatment group.
+Both functions return a pdf saved to the file location specified by 
+  \code{path}. \code{ms_boxplot} shows three boxplots of expression values: 
+  raw data values, log2 and vsn transformed values. \code{ms_mean_var} shows 
+  the vsn transformed values and mean-sd plots for each treatment group.
 }
 \description{
-Generate boxplot for raw, log2, and vsn data values
-
-Generate mean-sd plots for the VSN data values.
+\code{ms_boxplot} shows boxplots of different MS expression data values. 
+\code{ms_mean_var} shows mean-sd plots for the VSN data values to analyze the
+mean-variance relationship.
 }
 \seealso{
 Other Mass Spectrometry: \code{\link{ms_analyze}},
   \code{\link{ms_condition}}, \code{\link{ms_process}}
-
-Other Mass Spectrometry: \code{\link{ms_analyze}},
-  \code{\link{ms_condition}}, \code{\link{ms_process}}
 }
 \author{
-Derek Chiu
-
 Derek Chiu
 }
 
