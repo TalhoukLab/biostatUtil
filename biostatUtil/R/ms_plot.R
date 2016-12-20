@@ -18,7 +18,7 @@
 #' @export
 ms_boxplot <- function(x, path, width = 8, height = 10) {
   dat.plot <- lapply(x[c("raw", "l2", "vsn")], function(y)
-    gather(as.data.frame(y), key = Sample, value = Expression))
+    tidyr::gather(as.data.frame(y), key = "Sample", value = "Expression"))
   all.plots <- Map(ms_gg_boxplot, dat.plot,
                    c("Raw data values",
                      "log2(Raw data values)",
@@ -30,7 +30,7 @@ ms_boxplot <- function(x, path, width = 8, height = 10) {
 #' ggplot boxplot applied to each data source
 #' @noRd
 ms_gg_boxplot <- function(x, title) {
-  p <- ggplot(x, aes(x = Sample, y = Expression)) +
+  p <- ggplot(x, aes_(x = quote(Sample), y = quote(Expression))) +
     stat_boxplot(geom = "errorbar", width = 0.4) +
     geom_boxplot() +
     theme_linedraw() + 
@@ -46,7 +46,8 @@ ms_gg_boxplot <- function(x, title) {
 #' @name ms_plot
 #' @export
 ms_mean_var <- function(x, g, title, path, width = 8, height = 10) {
-  dat.plot <- gather(as.data.frame(x[["vsn"]]), key = Sample, value = Expression)
+  dat.plot <- tidyr::gather(as.data.frame(x[["vsn"]]),
+                            key = "Sample", value = "Expression")
   p1 <- ms_gg_boxplot(dat.plot, "vsn(Raw data values)")
   p23 <- Map(function(g, t)
     vsn::meanSdPlot(x$vsn[, grep(g, colnames(x$vsn))], plot = FALSE)$gg +
