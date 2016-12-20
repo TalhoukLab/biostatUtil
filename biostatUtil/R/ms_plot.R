@@ -19,7 +19,7 @@ ms_boxplot <- function(x, path, width = 8, height = 10) {
                    c("Raw data values",
                      "log2(Raw data values)",
                      "vsn(Raw data values)"))
-  plot <- gridExtra::marrangeGrob(all.plots, nrow = 1, ncol = 1)
+  plot <- gridExtra::marrangeGrob(all.plots, nrow = 1, ncol = 1, top = NULL)
   ggsave(filename = path, plot = plot, width = width, height = height)
 }
 
@@ -49,13 +49,13 @@ ms_gg_boxplot <- function(x, title) {
 #' @family Mass Spectrometry
 #' @author Derek Chiu
 #' @export
-ms_mean_var <- function(x, g, title, path, width = 8, height = 10, las = 0) {
-  pdf(file = path, width = width, height = height, useDingbats = FALSE)
-  par(las = las)
-  boxplot(x$vsn, main = "vsn(Raw data values)")
-  capture.output(Map(function(g, t)
+ms_mean_var <- function(x, g, title, path, width = 8, height = 10) {
+  dat.plot <- gather(as.data.frame(x[["vsn"]]), key = Sample, value = Expression)
+  p1 <- ms_gg_boxplot(dat.plot, "vsn(Raw data values)")
+  p23 <- Map(function(g, t)
     vsn::meanSdPlot(x$vsn[, grep(g, colnames(x$vsn))], plot = FALSE)$gg +
-      ggtitle(paste("vsn", t)), g = g, t = title))
-  dev.off()
-  par(las = 0)
+      ggtitle(paste("vsn", t)), g = g, t = title)
+  all.plots <- list(p1, p23[[1]], p23[[2]])
+  plot <- gridExtra::marrangeGrob(all.plots, nrow = 1, ncol = 1, top = NULL)
+  ggsave(filename = path, plot = plot, width = width, height = height)
 }

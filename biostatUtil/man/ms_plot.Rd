@@ -9,7 +9,7 @@
 \usage{
 ms_boxplot(x, path, width = 8, height = 10)
 
-ms_mean_var(x, g, title, path, width = 8, height = 10, las = 0)
+ms_mean_var(x, g, title, path, width = 8, height = 10)
 }
 \arguments{
 \item{x}{data object returned by \code{ms_process}}
