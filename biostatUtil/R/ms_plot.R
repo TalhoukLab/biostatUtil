@@ -34,8 +34,9 @@ ms_gg_boxplot <- function(x, title) {
     stat_boxplot(geom = "errorbar", width = 0.4) +
     geom_boxplot() +
     theme_linedraw() + 
-    theme(panel.grid = element_blank(),
-          plot.title = element_text(face = "bold")) +
+    theme(plot.title = element_text(face = "bold"),
+          panel.grid = element_blank(),
+          axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
     ggtitle(title)
   return(p)
 }
