@@ -7,22 +7,22 @@
 \alias{ms_mean_var}
 \title{Plots for MS analyses}
 \usage{
-ms_boxplot(x, path, width = 8, height = 10)
+ms_boxplot(x, width = 8, height = 10, path = NULL)
 
-ms_mean_var(x, g, title, path, width = 8, height = 10)
+ms_mean_var(x, g, title, width = 8, height = 10, path = NULL)
 }
 \arguments{
 \item{x}{data object returned by \code{ms_process}}
-
-\item{path}{path to save boxplot to. Device is pdf.}
 
 \item{width}{width of plot}
 
 \item{height}{height of plot}
 
+\item{path}{file path to save figure. Device is pdf.}
+
 \item{g}{vector of treatment groups}
 
-\item{title}{vector of titles for each treatment group}
+\item{title}{vector of titles for each \code{g}}
 }
 \value{
 Both functions return a pdf saved to the file location specified by 
