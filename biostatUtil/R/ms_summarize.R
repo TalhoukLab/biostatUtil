@@ -18,6 +18,7 @@
 ms_summarize <- function(x, g, level = c("Gene", "Peptide"), col.names = NULL,
                          info.vars = NULL, path = NULL) {
   level <- match.arg(level)
+  var.split <- switch(level, Gene = "Gene", Peptide = "AGDSM")
   res <- x %>% 
     extract(c("pep", "l2", "vsn")) %>% 
     unname() %>% 
@@ -33,7 +34,7 @@ ms_summarize <- function(x, g, level = c("Gene", "Peptide"), col.names = NULL,
       lazyeval::interp(~as.character(R), R = quote(Reporter.Quan.Result.ID))),
       c("AGD", "AGDSM", "Block"))) %>% 
     select(one_of(c(info.vars, "Block", colnames(x$vsn)))) %>% 
-    plyr::ddply(.variables = ~Gene, .fun = ms_analyze, .progress = "text",
+    plyr::ddply(.variables = var.split, .fun = ms_analyze, .progress = "text",
                 g = g, level = level, col.names = col.names,
                 info.vars = info.vars[-1]) %>% 
     mutate_at(.cols = vars(-one_of(info.vars), -matches("dir|adj")),
