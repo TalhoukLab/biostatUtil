@@ -22,7 +22,7 @@ These variables are collapsed if not unique.}
 \item{path}{file path to save result object}
 }
 \value{
-A vector of statistics from analyzing mass spec data. Includes
+A data frame of statistics from analyzing mass spec data. Includes
   t-values, Wald p-values, effect sizes, fold change, absolute fold change.
 }
 \description{

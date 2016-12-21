@@ -10,7 +10,7 @@
 #' @param info.vars vector of column names containing metadata information. 
 #'   These variables are collapsed if not unique.
 #' @param path file path to save result object
-#' @return A vector of statistics from analyzing mass spec data. Includes
+#' @return A data frame of statistics from analyzing mass spec data. Includes
 #'   t-values, Wald p-values, effect sizes, fold change, absolute fold change.
 #' @family Mass Spectrometry
 #' @author Derek Chiu
