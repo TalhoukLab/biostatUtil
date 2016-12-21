@@ -11,11 +11,11 @@
 #' @param path file path to save return element \code{pep}
 #' @param ... additional arguments to \code{ms_condition}
 #' @return A list with the following elements
-#' \item{pep}{processed data frame to be used by \code{ms_analyze}}
+#' \item{pep}{processed data frame to be used by \code{ms_summarize}}
 #' \item{raw}{raw data values}
 #' \item{l2}{log2 raw data values}
 #' \item{vsn}{vsn raw data values}
-#' @family Mass Spectrometry
+#' @family Mass Spectrometry functions
 #' @author Derek Chiu
 #' @export
 ms_process <- function(psm, protein, treatment, sample.id, path, ...) {

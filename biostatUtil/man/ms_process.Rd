@@ -22,7 +22,7 @@ that in the psm raw data.}
 }
 \value{
 A list with the following elements
-\item{pep}{processed data frame to be used by \code{ms_analyze}}
+\item{pep}{processed data frame to be used by \code{ms_summarize}}
 \item{raw}{raw data values}
 \item{l2}{log2 raw data values}
 \item{vsn}{vsn raw data values}
@@ -32,9 +32,8 @@ Process mass spectrometry data for filtering out contaminant samples,
 manipulating variables, removing duplicates, and more.
 }
 \seealso{
-Other Mass Spectrometry: \code{\link{ms_analyze}},
-  \code{\link{ms_condition}}, \code{\link{ms_plot}},
-  \code{\link{ms_summarize}}
+Other Mass Spectrometry functions: \code{\link{ms_condition}},
+  \code{\link{ms_plot}}, \code{\link{ms_summarize}}
 }
 \author{
 Derek Chiu

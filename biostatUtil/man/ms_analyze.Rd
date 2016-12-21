@@ -26,11 +26,6 @@ A vector of statistics from analyzing mass spec data. Includes
 Analyze mass spectrometry data for expression differences between sample 
 groups.
 }
-\seealso{
-Other Mass Spectrometry: \code{\link{ms_condition}},
-  \code{\link{ms_plot}}, \code{\link{ms_process}},
-  \code{\link{ms_summarize}}
-}
 \author{
 Derek Chiu
 }

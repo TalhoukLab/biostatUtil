@@ -25,7 +25,7 @@
 #' @return A logical vector of length equal to the number of rows in 
 #'   \code{data}, indicating which observations are kept and which are to be 
 #'   removed.
-#' @family Mass Spectrometry
+#' @family Mass Spectrometry functions
 #' @author Derek Chiu
 #' @export
 #' @examples 

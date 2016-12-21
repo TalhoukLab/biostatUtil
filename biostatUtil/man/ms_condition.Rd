@@ -60,9 +60,8 @@ ms_condition(A, treatment = c("_2", "_3"), control = "_1", condition = "MRC")
 ms_condition(A, treatment = c("_2", "_3"), control = "_1", condition = "MC")
 }
 \seealso{
-Other Mass Spectrometry: \code{\link{ms_analyze}},
-  \code{\link{ms_plot}}, \code{\link{ms_process}},
-  \code{\link{ms_summarize}}
+Other Mass Spectrometry functions: \code{\link{ms_plot}},
+  \code{\link{ms_process}}, \code{\link{ms_summarize}}
 }
 \author{
 Derek Chiu

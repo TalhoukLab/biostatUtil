@@ -12,7 +12,7 @@
 #' @param path file path to save result object
 #' @return A data frame of statistics from analyzing mass spec data. Includes
 #'   t-values, Wald p-values, effect sizes, fold change, absolute fold change.
-#' @family Mass Spectrometry
+#' @family Mass Spectrometry functions
 #' @author Derek Chiu
 #' @export
 ms_summarize <- function(x, g, level = c("Gene", "Peptide"), col.names = NULL,

@@ -30,9 +30,8 @@ Summarize mass spectrometry data for expression differences between sample
 groups. Apply Benjamini-Hochberg p-value adjustment.
 }
 \seealso{
-Other Mass Spectrometry: \code{\link{ms_analyze}},
-  \code{\link{ms_condition}}, \code{\link{ms_plot}},
-  \code{\link{ms_process}}
+Other Mass Spectrometry functions: \code{\link{ms_condition}},
+  \code{\link{ms_plot}}, \code{\link{ms_process}}
 }
 \author{
 Derek Chiu

@@ -13,7 +13,7 @@
 #'   raw data values, log2 and vsn transformed values. \code{ms_mean_var} shows 
 #'   the vsn transformed values and mean-sd plots for each treatment group.
 #' @name ms_plot
-#' @family Mass Spectrometry
+#' @family Mass Spectrometry functions
 #' @author Derek Chiu
 #' @export
 ms_boxplot <- function(x, width = 8, height = 10, path = NULL) {
