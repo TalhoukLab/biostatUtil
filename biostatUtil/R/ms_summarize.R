@@ -9,6 +9,7 @@
 #' @param col.names vector of column names for output data frame
 #' @param info.vars vector of column names containing metadata information. 
 #'   These variables are collapsed if not unique.
+#' @param path file path to save result object
 #' @return A vector of statistics from analyzing mass spec data. Includes
 #'   t-values, Wald p-values, effect sizes, fold change, absolute fold change.
 #' @family Mass Spectrometry
@@ -21,10 +22,16 @@ ms_summarize <- function(x, g, level = c("Gene", "Peptide"), col.names = NULL,
     extract(c("pep", "l2", "vsn")) %>% 
     unname() %>% 
     do.call(cbind, .) %>% 
-    mutate(AGD = paste(Accession, Gene, Description, sep = " || "),
-           AGDSM = paste(Accession, Gene, Descriptions,
-                         Sequence, Modifications, sep = " || "),
-           Block = as.character(Reporter.Quan.Result.ID)) %>% 
+    mutate_(.dots = setNames(list(
+      lazyeval::interp(~paste(A, G, D, sep = " || "),
+                       A = quote(Accession), G = quote(Gene),
+                       D = quote(Description)),
+      lazyeval::interp(~paste(A, G, D, S, M, sep = " || "),
+                       A = quote(Accession), G = quote(Gene),
+                       D = quote(Descriptions), S = quote(Sequence),
+                       M = quote(Modifications)),
+      lazyeval::interp(~as.character(R), R = quote(Reporter.Quan.Result.ID))),
+      c("AGD", "AGDSM", "Block"))) %>% 
     select(one_of(c(info.vars, "Block", colnames(x$vsn)))) %>% 
     plyr::ddply(.variables = ~Gene, .fun = ms_analyze, .progress = "text",
                 g = g, level = level, col.names = col.names,

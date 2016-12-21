@@ -18,6 +18,8 @@ ms_summarize(x, g, level = c("Gene", "Peptide"), col.names = NULL,
 
 \item{info.vars}{vector of column names containing metadata information. 
 These variables are collapsed if not unique.}
+
+\item{path}{file path to save result object}
 }
 \value{
 A vector of statistics from analyzing mass spec data. Includes
