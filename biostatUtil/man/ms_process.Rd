@@ -35,7 +35,8 @@ manipulating variables, removing duplicates, and more.
 }
 \seealso{
 Other Mass Spectrometry: \code{\link{ms_analyze}},
-  \code{\link{ms_condition}}, \code{\link{ms_plot}}
+  \code{\link{ms_condition}}, \code{\link{ms_plot}},
+  \code{\link{ms_summarize}}
 }
 \author{
 Derek Chiu
