@@ -9,7 +9,6 @@
 #' @param sample.id character vector for sample IDs. Other of samples must match
 #'   that in the psm raw data.
 #' @param path file path to save return element \code{pep}
-#' @param save logical; should the return element \code{pep} be saved?
 #' @param ... additional arguments to \code{ms_condition}
 #' @return A list with the following elements
 #' \item{pep}{processed data frame to be used by \code{ms_analyze}}
@@ -19,8 +18,7 @@
 #' @family Mass Spectrometry
 #' @author Derek Chiu
 #' @export
-ms_process <- function(psm, protein, treatment, sample.id, path, save = TRUE,
-                       ...) {
+ms_process <- function(psm, protein, treatment, sample.id, path, ...) {
   # Make raw data file column names into R column names
   psm <- psm %>% set_colnames(make.names(colnames(.)))
   protein <- protein %>% set_colnames(make.names(colnames(.)))
@@ -81,7 +79,7 @@ ms_process <- function(psm, protein, treatment, sample.id, path, save = TRUE,
         !grepl("sp", quote(A), ignore.case = FALSE) &
         !grepl("ribosomal", quote(D)),  # Remove specific proteins (typically contaminants from other sources)
       D = quote(Descriptions), A = quote(Accession))))
-  if (save)
+  if (!is.null(path))
     readr::write_csv(pep.r, path = path)
   
   # Raw, log2, and vsn transformed expression data

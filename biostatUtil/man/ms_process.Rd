@@ -4,7 +4,7 @@
 \alias{ms_process}
 \title{Process mass spectrometry data}
 \usage{
-ms_process(psm, protein, treatment, sample.id, path, save = TRUE, ...)
+ms_process(psm, protein, treatment, sample.id, path, ...)
 }
 \arguments{
 \item{psm}{PSM file}
@@ -17,8 +17,6 @@ ms_process(psm, protein, treatment, sample.id, path, save = TRUE, ...)
 that in the psm raw data.}
 
 \item{path}{file path to save return element \code{pep}}
-
-\item{save}{logical; should the return element \code{pep} be saved?}
 
 \item{...}{additional arguments to \code{ms_condition}}
 }
