@@ -3,6 +3,11 @@
 #' Summarize mass spectrometry data for expression differences between sample 
 #' groups. Apply Benjamini-Hochberg p-value adjustment.
 #' 
+#' Gene-level analysis is performed on the "Gene" variable. Peptide-level 
+#' analysis is performed on distinct combinations of the Accession, Gene, 
+#' Descriptions, Sequence, and Modifications variables. This combined variable
+#' is renamed to "AGDSM".
+#' 
 #' @param x data frame with expression values for both samples
 #' @param g vector of factor levels for samples
 #' @param level analysis is on the "Gene" level or "Peptide" level
@@ -10,7 +15,7 @@
 #' @param info.vars vector of column names containing metadata information. 
 #'   These variables are collapsed if not unique.
 #' @param path file path to save result object
-#' @return A data frame of statistics from analyzing mass spec data. Includes
+#' @return A data frame of statistics from analyzing mass spec data. Includes 
 #'   t-values, Wald p-values, effect sizes, fold change, absolute fold change.
 #' @family Mass Spectrometry functions
 #' @author Derek Chiu
@@ -89,7 +94,7 @@ ms_analyze <- function(x, g, level, col.names, info.vars) {
   # Extract F value, df (num), df (den), p-value from Omnibus test
   OmnibusTrt <- anova(mod1, mod2)[2, c("F", "Df", "Res.Df", "Pr(>F)")]
   
-  # Compute statistics for treatment levels
+  # Compute statistics for treatment levels (omit first group: reference)
   Trt_stats <- unlist(lapply(g[-1], treatment_stats, data = adf, mod = mod2))
   
   # Other information
@@ -109,14 +114,13 @@ ms_analyze <- function(x, g, level, col.names, info.vars) {
 
 #' Compute statistics for treatment-specific comparisons
 #' @param trt treatment level of grouping variable
-#' @param data data frame for gene-level analysis
+#' @param data data frame for per-level analysis
 #' @param mod model object; usually full or larger model
 #' @param alpha significance level; defaults to 0.05
 #' @noRd
 treatment_stats <- function(trt, data, mod, alpha = 0.05) {
   
-  # Set up contrasts: late vs early passage trt effect = 1, otherwise = 0
-  # Omit first group as it is reference
+  # Set up contrasts: trt effect = 1, otherwise = 0
   Trtf_idx <- grepl(paste0("Trtf", trt), names(stats::coef(mod)))
   ate_contr <- ifelse(Trtf_idx, 1, 0)
   

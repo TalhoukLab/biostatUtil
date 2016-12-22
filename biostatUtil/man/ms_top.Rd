@@ -14,15 +14,40 @@ ms_top(x, level = c("Gene", "Peptide"), alpha = 0.05, fc = 1.25,
 
 \item{alpha}{significance level}
 
-\item{fc}{absolute fold change}
+\item{fc}{minimum absolute fold change}
 
 \item{path}{file path to save result object}
 }
 \value{
-A data frame showing the top variables.
+A data frame showing the top variables. If \code{level = "Gene"}, the
+  return value is a 4 column data frame, showing the Gene, Accession, BH 
+  adjusted omnibus p-value, and absolute fold change columns from \code{x}. 
+  If \code{level = "Peptide"}, the return value is the same except the Gene 
+  and Accession columns are replaced with the AGDSM column from \code{x}.
 }
 \description{
-Show top genes/peptides defined by significance level and absolute fold change.
+Show top genes/peptides defined by significance level and absolute fold 
+change.
+}
+\details{
+The input \code{x} is the result matrix returned by \code{ms_summarize}. We 
+want to filter \code{x} such that only interesting variables remain: i.e. 
+those that show statistical significance in an overall test and a 
+scientifically relevant effect size. Variables of interest are summarized 
+either on the gene level or peptide level.
+
+By default, the level of statistical significance is set to 5\% for the 
+Benjamini-Hochberg adjusted omnibus test p-value. The minimum absolute fold 
+change for determining scientific relevance is 1.25 by default. These default
+values can be modified for different studies or projects, but offer a general
+measure of validity for users to start with.
+}
+\note{
+The fold change criterion only needs to be satisfied for \emph{one} 
+  comparison if the experiment has 3 or more sample groups. For example, 
+  suppose we have 1 control group and treatments A and B. We filter variables
+  on the fold change criterion where the absolute fold change is greater than
+  \code{fc} for \emph{either} A vs. control or B vs. control.
 }
 \seealso{
 Other Mass Spectrometry functions: \code{\link{ms_condition}},
