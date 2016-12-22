@@ -31,7 +31,8 @@ groups. Apply Benjamini-Hochberg p-value adjustment.
 }
 \seealso{
 Other Mass Spectrometry functions: \code{\link{ms_condition}},
-  \code{\link{ms_plot}}, \code{\link{ms_process}}
+  \code{\link{ms_plot}}, \code{\link{ms_process}},
+  \code{\link{ms_top}}
 }
 \author{
 Derek Chiu

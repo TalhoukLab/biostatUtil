@@ -18,7 +18,7 @@
 #' @family Mass Spectrometry functions
 #' @author Derek Chiu
 #' @export
-ms_process <- function(psm, protein, treatment, sample.id, path, ...) {
+ms_process <- function(psm, protein, treatment, sample.id, path = NULL, ...) {
   # Make raw data file column names into R column names
   psm <- psm %>% set_colnames(make.names(colnames(.)))
   protein <- protein %>% set_colnames(make.names(colnames(.)))

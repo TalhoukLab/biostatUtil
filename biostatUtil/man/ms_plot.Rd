@@ -37,7 +37,8 @@ mean-variance relationship.
 }
 \seealso{
 Other Mass Spectrometry functions: \code{\link{ms_condition}},
-  \code{\link{ms_process}}, \code{\link{ms_summarize}}
+  \code{\link{ms_process}}, \code{\link{ms_summarize}},
+  \code{\link{ms_top}}
 }
 \author{
 Derek Chiu

@@ -4,7 +4,7 @@
 \alias{ms_process}
 \title{Process mass spectrometry data}
 \usage{
-ms_process(psm, protein, treatment, sample.id, path, ...)
+ms_process(psm, protein, treatment, sample.id, path = NULL, ...)
 }
 \arguments{
 \item{psm}{PSM file}
@@ -33,7 +33,8 @@ manipulating variables, removing duplicates, and more.
 }
 \seealso{
 Other Mass Spectrometry functions: \code{\link{ms_condition}},
-  \code{\link{ms_plot}}, \code{\link{ms_summarize}}
+  \code{\link{ms_plot}}, \code{\link{ms_summarize}},
+  \code{\link{ms_top}}
 }
 \author{
 Derek Chiu
