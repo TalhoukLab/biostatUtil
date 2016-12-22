@@ -37,7 +37,7 @@ ms_process <- function(psm, protein, treatment, sample.id, path = NULL, ...) {
   #   - non-unique peptides
   #   - no quan values
   #   - insufficient data: use ms_condition()
-  #   - Master Protein Accession missing or 'sp'
+  #   - Master Protein Accession missing or "sp"
   pep <- psm %>%
     select(one_of(psmKeepVars)) %>% 
     set_colnames(plyr::mapvalues(colnames(.), orig.sample.id, sample.id)) %>% 
@@ -58,20 +58,20 @@ ms_process <- function(psm, protein, treatment, sample.id, path = NULL, ...) {
                        "Master.Protein.Accessions", "Protein.Accessions")))
   
   # Parse peptide accession and merge the protein descriptions with the peptide file
-  pep.r <- pep %>% 
+  pep <- pep %>% 
     mutate_(.dots = setNames(list(lazyeval::interp(
-      ~sapply(strsplit(as.character(MPA), ';'), '[', 1),
+      ~sapply(strsplit(as.character(MPA), ";"), "[", 1),
       MPA = quote(Master.Protein.Accessions))), "Accession")) %>% 
     mutate_(.dots = setNames(list(lazyeval::interp(
-      ~sapply(strsplit(as.character(A), ' | '), '[', 1),
+      ~sapply(strsplit(as.character(A), " | "), "[", 1),  # Strip on ";" and " | "
       A = quote(Accession))), "Accession")) %>% 
-    merge(pro, by = "Accession") %>% 
+    merge(pro, by = "Accession") %>%  # Merge with protein set on Accession
     mutate_(.dots = setNames(list(
       lazyeval::interp(~sub(".*?GN=(.*?)( .*|$)", "\\1", D),
-                       D = quote(Description)), # Get the gene name out
-      lazyeval::interp(~toupper(sub('.*?\\.(.*?)(\\..*|$)','\\1', AS)),
+                       D = quote(Description)),  # Get the gene name out
+      lazyeval::interp(~toupper(sub(".*?\\.(.*?)(\\..*|$)", "\\1", AS)),
                        AS = quote(Annotated.Sequence)),   # Parse the peptide column for amino acids
-      lazyeval::interp(~sub('(.*?)( OS=.*|$)','\\1', D),
+      lazyeval::interp(~sub("(.*?)( OS=.*|$)", "\\1", D),
                        D = quote(Description))),  # Filter information from Description
       c("Gene", "Sequence", "Descriptions"))) %>%    
     filter_(.dots = list(lazyeval::interp(
@@ -80,13 +80,13 @@ ms_process <- function(psm, protein, treatment, sample.id, path = NULL, ...) {
         !grepl("ribosomal", quote(D)),  # Remove specific proteins (typically contaminants from other sources)
       D = quote(Descriptions), A = quote(Accession))))
   if (!is.null(path))
-    readr::write_csv(pep.r, path = path)
+    readr::write_csv(pep, path = path)
   
   # Raw, log2, and vsn transformed expression data
-  raw <- pep.r[, sample.id]
+  raw <- pep[, sample.id]
   l2 <- log2(raw) %>% 
     set_colnames(paste("l2", names(.), sep = "_"))
   vsn <- limma::normalizeVSN(raw, verbose = FALSE) %>% 
     set_colnames(paste("vsn", colnames(.), sep = "_"))
-  return(list(pep = pep.r, raw = raw, l2 = l2, vsn = vsn))
+  return(list(pep = pep, raw = raw, l2 = l2, vsn = vsn))
 }

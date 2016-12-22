@@ -8,7 +8,7 @@ ms_summarize(x, g, level = c("Gene", "Peptide"), col.names = NULL,
   info.vars = NULL, path = NULL)
 }
 \arguments{
-\item{x}{data frame with expression values for both samples}
+\item{x}{data frame with expression values}
 
 \item{g}{vector of factor levels for samples}
 

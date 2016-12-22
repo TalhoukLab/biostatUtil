@@ -8,7 +8,7 @@
 #' Descriptions, Sequence, and Modifications variables. This combined variable
 #' is renamed to "AGDSM".
 #' 
-#' @param x data frame with expression values for both samples
+#' @param x data frame with expression values 
 #' @param g vector of factor levels for samples
 #' @param level analysis is on the "Gene" level or "Peptide" level
 #' @param col.names vector of column names for output data frame
@@ -22,6 +22,11 @@
 #' @export
 ms_summarize <- function(x, g, level = c("Gene", "Peptide"), col.names = NULL,
                          info.vars = NULL, path = NULL) {
+  # NULL defaults
+  if (is.null(info.vars))
+    info.vars <- c("Accession", "Sequence", "Annotated.Sequence",
+                   "Descriptions", "Modifications", "Reporter.Quan.Result.ID")
+  
   # Determine level of variable split
   level <- match.arg(level)
   var.split <- switch(level, Gene = "Gene", Peptide = "AGDSM")
@@ -69,11 +74,6 @@ ms_summarize <- function(x, g, level = c("Gene", "Peptide"), col.names = NULL,
 #' groups.
 #' @noRd
 ms_analyze <- function(x, g, level, col.names, info.vars) {
-  # NULL defaults
-  if (is.null(info.vars))
-    info.vars <- c("Accession", "Sequence", "Annotated.Sequence",
-                   "Descriptions", "Modifications", "Reporter.Quan.Result.ID")
-  
   # Create factor variable for different treatments in gene-specific data frame
   # Modify `mutate_()` call depending on variable coding
   adf <- tidyr::gather(data = x, key = "Sample", value = "tInt",
@@ -91,17 +91,19 @@ ms_analyze <- function(x, g, level, col.names, info.vars) {
     mod2 <- stats::lm(tInt ~ Trtf, data = adf)
   }
   
+  # Variable level
+  Level <- switch(level,
+                  Gene = unique(adf$Gene),
+                  Peptide = unique(adf$AGDSM))
+  
   # Extract F value, df (num), df (den), p-value from Omnibus test
   OmnibusTrt <- anova(mod1, mod2)[2, c("F", "Df", "Res.Df", "Pr(>F)")]
+  Omnibus_obj <- c(as.character(OmnibusTrt), "BHadj_OmnibusTrtPvalHere")
   
   # Compute statistics for treatment levels (omit first group: reference)
   Trt_stats <- unlist(lapply(g[-1], treatment_stats, data = adf, mod = mod2))
   
-  # Other information
-  Level <- switch(level,
-                  Gene = unique(adf$Gene),
-                  Peptide = unique(adf$AGDSM))
-  Omnibus_obj <- c(as.character(OmnibusTrt), "BHadj_OmnibusTrtPvalHere")
+  # Descriptive information
   Desc_obj <- adf %>%
     select(one_of(info.vars)) %>%
     mutate_all(funs(collapse_var)) %>%
@@ -131,18 +133,17 @@ treatment_stats <- function(trt, data, mod, alpha = 0.05) {
   }
   
   # Effect and standard error (from covariance matrix)
-  Effect_ate_contr <- ate_contr %*% stats::coef(mod)
-  Stdev_ate_contr <- sqrt(ate_contr %*% stats::vcov(mod) %*% ate_contr)
+  Effect <- ate_contr %*% stats::coef(mod)
+  Stdev <- sqrt(ate_contr %*% stats::vcov(mod) %*% ate_contr)
   
-  # Compute t value, (adj) p-values, abs (fold change),
-  tval <- stats::qt(1 - alpha / 2, df = mod$df.residual, lower.tail = TRUE)
-  tval_ate_contr <- Effect_ate_contr / Stdev_ate_contr 
-  Waldpval_ate_contr <- 2 * stats::pt(abs(tval_ate_contr), df = mod$df.residual,
-                                      lower.tail = FALSE)
-  Effect_obj <- Effect_ate_contr + c(-1:1) * tval * Stdev_ate_contr
-  FC_obj <- 2 ^ Effect_obj
-  Effect_pos <- rep(Effect_ate_contr > 0, 4)
-  AbsFC_obj <- ifelse(Effect_pos, c("Up", FC_obj), c("Down", 1 / rev(FC_obj)))
-  return(c(tval_ate_contr, Waldpval_ate_contr, "BHadj_WaldPvalHere",
-           Effect_obj, FC_obj, AbsFC_obj))
+  # Compute t value, (adj) p-values, (log2) effect, (absolute) fold change
+  tcrit <- stats::qt(1 - alpha / 2, df = mod$df.residual, lower.tail = TRUE)
+  tval <- Effect / Stdev 
+  Waldpval <- 2 * stats::pt(abs(tval), df = mod$df.residual, lower.tail = FALSE)
+  Effect_obj <- c(tval, Waldpval, "BHadj_WaldPvalHere")
+  Log2Effect_obj <- Effect + c(-1:1) * tcrit * Stdev
+  FC_obj <- 2 ^ Log2Effect_obj
+  Effect_dir <- rep(Effect > 0, 4)
+  AbsFC_obj <- ifelse(Effect_dir, c("Up", FC_obj), c("Down", 1 / rev(FC_obj)))
+  return(c(Effect_obj, Log2Effect_obj, FC_obj, AbsFC_obj))
 }
