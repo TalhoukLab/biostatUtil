@@ -17,8 +17,11 @@
 #' @export
 ms_summarize <- function(x, g, level = c("Gene", "Peptide"), col.names = NULL,
                          info.vars = NULL, path = NULL) {
+  # Determine level of variable split
   level <- match.arg(level)
   var.split <- switch(level, Gene = "Gene", Peptide = "AGDSM")
+  
+  # Combine values, add/select vars, per-level analyses, numeric coercion
   res <- x %>% 
     extract(c("pep", "l2", "vsn")) %>% 
     unname() %>% 
@@ -40,15 +43,18 @@ ms_summarize <- function(x, g, level = c("Gene", "Peptide"), col.names = NULL,
     mutate_at(.cols = vars(-one_of(info.vars), -matches("dir|adj")),
               .funs = as.numeric) 
   
+  # Data only with adjusted p-values (BH), synced column names
   adj <- res %>%
     mutate_at(.cols = vars(matches("p-*val"), -matches("adj")),
               .funs = funs(Temp = p.adjust(., method = "BH"))) %>%
     select(contains("Temp")) %>% 
     set_names(grep("adj", col.names, value = TRUE))
   
+  # Replace placeholder columns using new columns with adjusted p-values
   adj.ind <- match(names(adj), names(res))
   all.ind <- order(match(c(names(res), names(adj)), col.names))
   final <- cbind(res, adj)[, all.ind[!(all.ind %in% adj.ind)]]
+  
   if (!is.null(path))
     readr::write_csv(final, path)
   return(final)
