@@ -19,7 +19,6 @@
 #' @docType package
 #' @name biostatUtil
 #' @import dplyr htmltools ggplot2 survival
-#' @importFrom broom glance
 #' @importFrom coin lbl_test statistic pvalue
 #' @importFrom Deducer likelihood.test
 #' @importFrom graphics arrows barplot box boxplot hist legend lines mtext par
