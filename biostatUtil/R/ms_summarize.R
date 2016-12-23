@@ -132,9 +132,13 @@ treatment_stats <- function(trt, data, mod, alpha = 0.05) {
     ate_contr[Intn_idx] <- 1 / sum(Trtf_idx)
   }
   
-  # Effect and standard error (from covariance matrix)
-  Effect <- ate_contr %*% stats::coef(mod)
+  # Effect, means, and standard error (from covariance matrix)
+  coefs <- stats::coef(mod)
+  Effect <- ate_contr %*% coefs
+  Intcp <- coefs[grep("Intercept", names(coefs))]
+  Trtmt <- Intcp + coefs[grep("Intercept|Block", names(coefs), invert = TRUE)]
   Stdev <- sqrt(ate_contr %*% stats::vcov(mod) %*% ate_contr)
+  MeanVar_obj <- unname(c(Intcp, Trtmt, Stdev))
   
   # Compute t value, (adj) p-values, (log2) effect, (absolute) fold change
   tcrit <- stats::qt(1 - alpha / 2, df = mod$df.residual, lower.tail = TRUE)
@@ -145,5 +149,5 @@ treatment_stats <- function(trt, data, mod, alpha = 0.05) {
   FC_obj <- 2 ^ Log2Effect_obj
   Effect_dir <- rep(Effect > 0, 4)
   AbsFC_obj <- ifelse(Effect_dir, c("Up", FC_obj), c("Down", 1 / rev(FC_obj)))
-  return(c(Effect_obj, Log2Effect_obj, FC_obj, AbsFC_obj))
+  return(c(MeanVar_obj, Effect_obj, Log2Effect_obj, FC_obj, AbsFC_obj))
 }
