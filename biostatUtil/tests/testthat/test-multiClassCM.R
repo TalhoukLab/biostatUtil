@@ -17,3 +17,9 @@ z <- sample(letters[1:k], 100, replace=TRUE, prob=c(0.05, 0.4,0.65))
 expect_error(multiClassCM(y,z))
 })
 
+test_that("Results are equivalent to Caret",{
+  (p <- sample(1:2, 100, replace=TRUE, prob=c(0.15, 0.25)))
+  (q <- sample(1:2, 100, replace=TRUE, prob=c(0.05, 0.4)))
+  a <- multiClassCM(p,q)
+  b <- caret::confusionMatrix(p,q)
+  })
