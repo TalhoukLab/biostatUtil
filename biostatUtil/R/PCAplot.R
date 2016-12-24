@@ -14,7 +14,7 @@
 #' PCAplot(mtcars$gear, mtcars)
 PCAplot <- function(by, tdat) {
   PC1 <- PC2 <- PC3 <- var.name <- NULL
-  p <- prcomp(tdat, retx = TRUE, scale. = TRUE)
+  p <- stats::prcomp(tdat, retx = TRUE, scale. = TRUE)
   var3 <- round(((p$sdev ^ 2 / sum(p$sdev ^ 2)) * 100)[1:3], 2)
   df <- data.frame(var.name = factor(by),  p$x[, 1:3])
   PCA_geom <- stat_ellipse(geom = "polygon", level = 0.9, alpha = 0.1,

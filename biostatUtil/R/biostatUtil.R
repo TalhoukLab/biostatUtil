@@ -19,7 +19,6 @@
 #' @docType package
 #' @name biostatUtil
 #' @import dplyr htmltools ggplot2 survival
-#' @importFrom broom glance
 #' @importFrom coin lbl_test statistic pvalue
 #' @importFrom Deducer likelihood.test
 #' @importFrom graphics arrows barplot box boxplot hist legend lines mtext par
@@ -29,7 +28,7 @@
 #' @importFrom magrittr extract set_colnames set_rownames set_names use_series
 #' @importFrom stats addmargins aggregate AIC anova as.formula chisq.test
 #'   confint cor cor.test dnorm extractAIC fisher.test IQR kruskal.test logLik
-#'   median p.adjust prcomp qnorm quantile relevel sd setNames wilcox.test
+#'   median p.adjust qnorm quantile relevel sd setNames wilcox.test
 #'   var
 #' @importFrom utils as.roman capture.output combn read.table tail
 NULL

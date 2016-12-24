@@ -55,15 +55,23 @@ comparisons). If \code{"none"}, then no test is show.}
 \item{show.single.test.pos}{position to show single test; defaults to 0.5 if 
 \code{legend.pos = "top"}. Otherwise 0.1}
 
+\item{xlabs}{dummy param to match ggkm so they don't get passed to ...}
+
+\item{legend.xy}{dummy param to match ggkm so they don't get passed to ...}
+
+\item{ylabs}{dummy param to match ggkm so they don't get passed to ...}
+
+\item{timeby}{dummy param to match ggkm so they don't get passed to ...}
+
 \item{...}{additional arguments to \code{plotKMDetail}}
 }
 \description{
 KM plots with basic annotations.
 }
-\author{
-Samuel Leung
-}
 \seealso{
 \code{\link{plotKMDetail}}
+}
+\author{
+Samuel Leung
 }
 

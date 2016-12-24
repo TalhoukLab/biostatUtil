@@ -103,7 +103,7 @@ dcc <- doCohortCharacteristics( input.d = mtcars, marker.name = "cyl",
 marker.description = "cylinders", var.names = c("disp", "hp"),
 var.descriptions = c("displacement", "horsepower"), is.var.continuous =
 c(TRUE, TRUE), caption = "Some mtcars summaries") 
-htmlTable(dcc$result.table.html)
+htmlTable::htmlTable(dcc$result.table.html)
 }
 \author{
 Aline Talhouk

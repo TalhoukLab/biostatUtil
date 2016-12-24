@@ -26,10 +26,10 @@ simpleCap("clear cell")
 simpleCap("high grade serous carcinoma")
 simpleCap("ovarian cancer", first.only = TRUE)
 }
-\author{
-Samuel Leung
-}
 \references{
 http://stackoverflow.com/questions/6364783/capitalize-the-first-letter-of-both-words-in-a-two-word-string
+}
+\author{
+Samuel Leung
 }
 

@@ -54,8 +54,9 @@ if variable entered is binary, it will automatically call binaryCM
 \examples{
 ### 95\% CI from 1000 bootstraped samples
 set.seed(23)
-(x <- sample(1:k, 100, replace=TRUE, prob=c(0.15, 0.25,0.6)))
-(y <- sample(1:k, 100, replace=TRUE, prob=c(0.05, 0.4,0.65)))
+k <- 3
+(x <- sample(1:k, 100, replace = TRUE, prob = c(0.15, 0.25, 0.6)))
+(y <- sample(1:k, 100, replace = TRUE, prob = c(0.05, 0.4, 0.65)))
 prop.table(table(y))
 multiClassCM(x, y)
 
@@ -65,11 +66,11 @@ multiClassCM(x, y, num.boot = 500, conf.level = 0.90)
 ### Round to 2 digits
 multiClassCM(x, y, digits = 2)
 }
-\author{
-Aline Talhouk, Derek Chiu
-}
 \seealso{
 Other confusion matrix functions: \code{\link{binaryCMAsHTML}},
   \code{\link{binaryCM}}
+}
+\author{
+Aline Talhouk, Derek Chiu
 }
 

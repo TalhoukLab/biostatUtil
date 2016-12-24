@@ -38,11 +38,11 @@ formatDate(8, 7, 2011, date.format = "YYYY.MM.DD")
 formatDate(8, 7, 2011, date.format = "DD.MM.YYYY", sep = "-")
 formatDate(10, 1, 2015, date.format = "MMM.DD.YYYY", sep = "-")
 }
-\author{
-Samuel Leung, Derek Chiu
-}
 \seealso{
 Other date formatting functions: \code{\link{cleanDate}},
   \code{\link{getFormat}}, \code{\link{numericToDate}}
+}
+\author{
+Samuel Leung, Derek Chiu
 }
 

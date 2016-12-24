@@ -33,11 +33,11 @@ cleanDate("09/11/1991", original.format = "MM.DD.YYYY", preferred.format = "DD.M
 cleanDate(11091991, original.format = "DD.MM.YYYY", preferred.format = "YYYY.MMM.DD")
 cleanDate(11091991, original.format = "DD.MM.YYYY", preferred.format = "YYYY.MMM.DD", sep = "-")
 }
-\author{
-Samuel Leung, Derek Chiu
-}
 \seealso{
 Other date formatting functions: \code{\link{formatDate}},
   \code{\link{getFormat}}, \code{\link{numericToDate}}
+}
+\author{
+Samuel Leung, Derek Chiu
 }
 

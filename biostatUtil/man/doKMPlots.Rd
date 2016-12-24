@@ -24,6 +24,8 @@ doKMPlots(input.d, time, status, var.name, var.description, line.name = NULL,
 
 \item{line.name}{names for each survival curve}
 
+\item{shading.colors}{colors for survival curves}
+
 \item{line.pattern}{line type for survival curves}
 
 \item{cox.ref.group}{specify reference group for cox model i.e. hazard ratio(s)}
@@ -49,8 +51,6 @@ at each time of death beneath the plot}
 \item{use.ggkm}{if \code{TRUE}, will use function \code{ggkm} for plotting}
 
 \item{...}{additional arguments to other functions and methods}
-
-\item{line.color}{colors for survival curves}
 }
 \value{
 A Kaplan-Meier plot for the specified survival outcome split on the desired

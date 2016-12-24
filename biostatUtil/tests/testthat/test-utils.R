@@ -1,6 +1,12 @@
 
 context("Utility functions")
 
+test_that("collapse_var combines unique elements of string", {
+  x <- c("A", "A", "B", "C", "C")
+  expect_equal(nchar(collapse_var(x)), 11)
+  expect_equal(nchar(collapse_var(x, collapse = " ; ")), 9)
+})
+
 test_that("n_missing counts number of missing elements", {
   x <- c(1, 3, NA, 5)
   expect_equal(1, n_missing(x))

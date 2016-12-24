@@ -48,10 +48,10 @@ freqTable(x, plot = TRUE)
 # Treat vowels as missing
 freqTable(x, missing = c("a", "e", "i", "o", "u"), round = 2)
 }
-\author{
-Derek Chiu
-}
 \seealso{
 \code{\link{freq}}
+}
+\author{
+Derek Chiu
 }
 

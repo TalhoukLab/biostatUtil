@@ -5,7 +5,7 @@ library(htmlTable)
 mtcars$vs <- as.factor(mtcars$vs)
 
 test_that("defaults can be changed and output is a length 4 list", {
-  dcc <- doCohortCharacteristics(
+  dcc <- suppressWarnings(doCohortCharacteristics(
     input.d = mtcars,
     marker.name = "vs",
     marker.description = "cylinders",
@@ -16,7 +16,7 @@ test_that("defaults can be changed and output is a length 4 list", {
     caption = "Some mtcars summaries",
     custom.total.label = "TOTAL",
     custom.marker.labels = c("TOTAL", "Cylinders = 0", "Cylinders = 1"),
-    stat.tests = c("spearman", "kruskal", "wilcox", "chisq"))
+    stat.tests = c("spearman", "kruskal", "wilcox", "chisq")))
   expect_length(dcc, 4)
   expect_is(dcc$result.table, "matrix")
   expect_length(dcc$stat.tests.results, 3)
@@ -25,11 +25,11 @@ test_that("defaults can be changed and output is a length 4 list", {
 })
 
 test_that("statistical tests for categorical variables work", {
-  dcc_kendall <- doCohortCharacteristics(
+  dcc_kendall <- suppressWarnings(doCohortCharacteristics(
     input.d = mtcars, marker.name = "vs", marker.description = "cylinders",
     var.names = c("am"), var.descriptions = c("transmission"),
     is.var.continuous = c(FALSE), caption = "Some mtcars summaries",
-    stat.tests = "kendall")
+    stat.tests = "kendall"))
   dcc_chisq <- doCohortCharacteristics(
     input.d = mtcars, marker.name = "vs", marker.description = "cylinders",
     var.names = c("am"), var.descriptions = c("transmission"),
@@ -40,6 +40,9 @@ test_that("statistical tests for categorical variables work", {
     var.names = c("am"), var.descriptions = c("transmission"),
     is.var.continuous = c(FALSE), caption = "Some mtcars summaries",
     stat.tests = "fisher")
+  
+  mtcars$vs <- as.factor(mtcars$vs)
+  mtcars$am <- as.factor(mtcars$am)
   dcc_cm_marker <- doCohortCharacteristics(
     input.d = mtcars, marker.name = "vs", marker.description = "cylinders",
     var.names = c("am"), var.descriptions = c("transmission"),
@@ -53,8 +56,8 @@ test_that("statistical tests for categorical variables work", {
   expect_length(dcc_kendall$stat.tests.results, 1)
   expect_length(dcc_chisq$stat.tests.results, 1)
   expect_length(dcc_fisher$stat.tests.results, 1)
-  expect_error(htmlTable(dcc_cm_marker$stat.tests.results), NA)
-  expect_error(htmlTable(dcc_cm_var$stat.tests.results), NA)
+  expect_error(dcc_cm_marker$stat.tests.results, NA)
+  expect_error(dcc_cm_var$stat.tests.results, NA)
 })
 
 test_that("percentages can be for marginal rows or columns only", {

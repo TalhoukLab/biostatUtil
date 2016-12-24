@@ -63,13 +63,13 @@ comparisons). If \code{"none"}, then no test is show.}
 \description{
 KM plots with details of event counts.
 }
-\author{
-Samuel Leung
-}
 \references{
 http://courses.nus.edu.sg/course/stacar/internet/st3242/handouts/notes2.pdf
 }
 \seealso{
 \code{\link{plotKM}}
+}
+\author{
+Samuel Leung
 }
 

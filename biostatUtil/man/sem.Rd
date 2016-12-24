@@ -19,10 +19,10 @@ The standard error of the mean of \code{x}
 \description{
 Standard error of the mean
 }
-\author{
-Samuel Leung
-}
 \references{
 http://en.wikipedia.org/wiki/Standard_error
+}
+\author{
+Samuel Leung
 }
 

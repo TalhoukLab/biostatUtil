@@ -1,7 +1,7 @@
 
 context("Principal component scatterplots and multiple plotting")
 
-library(ggplot2)
+suppressPackageStartupMessages(library(ggplot2))
 
 test_that("PCAplot works", {
   expect_error(PCAplot(mtcars$cyl, mtcars), NA)

@@ -55,7 +55,7 @@
 #' marker.description = "cylinders", var.names = c("disp", "hp"),
 #' var.descriptions = c("displacement", "horsepower"), is.var.continuous =
 #' c(TRUE, TRUE), caption = "Some mtcars summaries") 
-#' htmlTable(dcc$result.table.html)
+#' htmlTable::htmlTable(dcc$result.table.html)
 doCohortCharacteristics <- function(input.d, marker.name, marker.description,
                                     var.names, is.var.continuous, 
                                     var.descriptions,

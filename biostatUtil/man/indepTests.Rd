@@ -41,10 +41,10 @@ B <- rbinom(100, 4, 0.8)
 ct <- CrossTable(A, B)
 indepTests(ct)
 }
-\author{
-Derek Chiu
-}
 \seealso{
 \code{\link[descr]{CrossTable}}
+}
+\author{
+Derek Chiu
 }
 

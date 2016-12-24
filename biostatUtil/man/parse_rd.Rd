@@ -26,8 +26,10 @@ The function requires that the working directory is set to the package's root
 directory.
 }
 \examples{
+\dontrun{
 tab <- parse_rd()
 str(tab)
+}
 }
 \author{
 Derek Chiu

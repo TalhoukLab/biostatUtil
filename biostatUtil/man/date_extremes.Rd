@@ -3,8 +3,8 @@
 \name{date_extremes}
 \alias{date_extremes}
 \alias{maxDate}
-\alias{maxDateArray}
 \alias{minDate}
+\alias{maxDateArray}
 \alias{minDateArray}
 \title{Latest and Earliest Dates}
 \usage{
