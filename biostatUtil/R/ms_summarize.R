@@ -100,6 +100,23 @@ ms_analyze <- function(x, g, level, col.names, info.vars) {
   OmnibusTrt <- anova(mod1, mod2)[2, c("F", "Df", "Res.Df", "Pr(>F)")]
   Omnibus_obj <- c(as.character(OmnibusTrt), "BHadj_OmnibusTrtPvalHere")
   
+  # Fitted means and standard error
+  # Set up contrasts: trt effect = 1, otherwise = 0
+  Trtf_idx <- grepl(paste0("Trtf", g[2]), names(stats::coef(mod2)))
+  ate_contr <- ifelse(Trtf_idx, 1, 0)
+  
+  # Transform any interaction coefficient contrasts to 1 / # of Trt coefs
+  if (any(Trtf_idx)) {
+    Intn_idx <- grepl(paste0(":Trtf", g[2]), names(stats::coef(mod2)))
+    ate_contr[Intn_idx] <- 1 / sum(Trtf_idx)
+  }
+  
+  coefs <- stats::coef(mod2)
+  Intcp <- coefs[grep("Intercept", names(coefs))]
+  Trtmt <- Intcp + coefs[grep("Intercept|Block", names(coefs), invert = TRUE)]
+  Stdev <- sqrt(ate_contr %*% stats::vcov(mod2) %*% ate_contr)
+  MeanVar_obj <- unname(c(Intcp, Trtmt, Stdev))
+  
   # Compute statistics for treatment levels (omit first group: reference)
   Trt_stats <- unlist(lapply(g[-1], treatment_stats, data = adf, mod = mod2))
   
@@ -111,7 +128,8 @@ ms_analyze <- function(x, g, level, col.names, info.vars) {
     as.character()
   
   # Combine data objects and set column names
-  return(setNames(c(Level, Omnibus_obj, Trt_stats, Desc_obj), col.names))
+  return(setNames(c(Level, Omnibus_obj, MeanVar_obj, Trt_stats, Desc_obj),
+                  col.names))
 }
 
 #' Compute statistics for treatment-specific comparisons
@@ -133,12 +151,8 @@ treatment_stats <- function(trt, data, mod, alpha = 0.05) {
   }
   
   # Effect, means, and standard error (from covariance matrix)
-  coefs <- stats::coef(mod)
-  Effect <- ate_contr %*% coefs
-  Intcp <- coefs[grep("Intercept", names(coefs))]
-  Trtmt <- Intcp + coefs[grep("Intercept|Block", names(coefs), invert = TRUE)]
+  Effect <- ate_contr %*% stats::coef(mod)
   Stdev <- sqrt(ate_contr %*% stats::vcov(mod) %*% ate_contr)
-  MeanVar_obj <- unname(c(Intcp, Trtmt, Stdev))
   
   # Compute t value, (adj) p-values, (log2) effect, (absolute) fold change
   tcrit <- stats::qt(1 - alpha / 2, df = mod$df.residual, lower.tail = TRUE)
@@ -149,5 +163,5 @@ treatment_stats <- function(trt, data, mod, alpha = 0.05) {
   FC_obj <- 2 ^ Log2Effect_obj
   Effect_dir <- rep(Effect > 0, 4)
   AbsFC_obj <- ifelse(Effect_dir, c("Up", FC_obj), c("Down", 1 / rev(FC_obj)))
-  return(c(MeanVar_obj, Effect_obj, Log2Effect_obj, FC_obj, AbsFC_obj))
+  return(c(Effect_obj, Log2Effect_obj, FC_obj, AbsFC_obj))
 }
