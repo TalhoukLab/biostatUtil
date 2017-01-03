@@ -48,14 +48,16 @@ ms_gg_boxplot <- function(x, title) {
 #' @param title vector of titles for each \code{g}
 #' @name ms_plot
 #' @export
-ms_mean_var <- function(x, g, title, width = 8, height = 10, path = NULL) {
+ms_mean_var <- function(x, g, title = NULL, width = 8, height = 10,
+                        path = NULL) {
+  if (is.null(title)) title <- g
   dat.plot <- tidyr::gather(as.data.frame(x[["vsn"]]),
                             key = "Sample", value = "Expression")
-  p1 <- ms_gg_boxplot(dat.plot, "vsn(Raw data values)")
-  p23 <- Map(function(g, t)
+  bp <- ms_gg_boxplot(dat.plot, "vsn(Raw data values)")
+  msdp <- Map(function(g, t)
     vsn::meanSdPlot(x$vsn[, grep(g, colnames(x$vsn))], plot = FALSE)$gg +
       ggtitle(paste("vsn", t)), g = g, t = title)
-  all.plots <- list(p1, p23[[1]], p23[[2]])
+  all.plots <- append(list(bp), unname(msdp))
   plot <- gridExtra::marrangeGrob(all.plots, nrow = 1, ncol = 1, top = NULL)
   if (!is.null(path))
     ggsave(filename = path, plot = plot, width = width, height = height)
