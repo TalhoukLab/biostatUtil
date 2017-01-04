@@ -22,14 +22,15 @@
 #' @export
 ms_summarize <- function(x, g, level = c("Gene", "Peptide"), col.names = NULL,
                          info.vars = NULL, path = NULL) {
-  # NULL defaults
-  if (is.null(info.vars))
-    info.vars <- c("Accession", "Sequence", "Annotated.Sequence",
-                   "Descriptions", "Modifications", "Reporter.Quan.Result.ID")
   
   # Determine level of variable split
   level <- match.arg(level)
   var.split <- switch(level, Gene = "Gene", Peptide = "AGDSM")
+  
+  # NULL defaults
+  if (is.null(info.vars))
+    info.vars <- c(var.split, "Accession", "Sequence", "Annotated.Sequence",
+                   "Descriptions", "Modifications", "Reporter.Quan.Result.ID")
   
   # Combine values, add/select vars, per-level analyses, numeric coercion
   res <- x %>% 
