@@ -30,6 +30,6 @@ The formula must be univariable.
   ~ x} is fine.
 }
 \author{
-Samuel Leung
+Samuel Leung, Derek Chiu
 }
 
