@@ -28,9 +28,7 @@ plotSchoenfeld <- function(input.d, input.formula, vars.to.plot = NULL,
 	    return(ifelse(var.name == x, x, sub(var.name, "", x)))
 	  })
 	}
-	cat("1")
 	fit.zph <- survival::cox.zph(fit)
-	cat("2")
 	# determine which variable to plot
 	if (is.null(vars.to.plot)) {
 	  plot(fit.zph, main = ifelse(is.null(main), "", main)) # plot all
