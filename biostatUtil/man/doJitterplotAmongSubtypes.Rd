@@ -39,6 +39,10 @@ Generates stripchart (jitter plot) of a biomarker split on a categorical subtype
 Expects subtype variable to be a factor. Also, biomarker and subtype variables
 have missing cases as \code{NA}.
 }
+\examples{
+doJitterplotAmongSubtypes(mtcars, "Boxplot of qsec vs. vs", "qsec", "QSEC",
+"vs", "VS")
+}
 \author{
 Samuel Leung
 }

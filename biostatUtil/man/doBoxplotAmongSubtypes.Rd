@@ -13,7 +13,8 @@ doBoxplotAmongSubtypes(input.d, data.description, biomarker.var.name,
 
 \item{data.description}{boxplot title description}
 
-\item{biomarker.var.name}{biomarker variable name in \code{input.d} to graph on}
+\item{biomarker.var.name}{biomarker variable name in \code{input.d} to graph
+on}
 
 \item{biomarker.name}{boxplot y-axis label}
 
@@ -33,12 +34,16 @@ doBoxplotAmongSubtypes(input.d, data.description, biomarker.var.name,
 a boxplot of biomarker values across different subtypes
 }
 \description{
-A stripchart (jitter plot) of a biomarker and some categorical subtype
-is superimposed on top of the boxplot
+A stripchart (jitter plot) of a biomarker and some categorical subtype is
+superimposed on top of the boxplot
 }
 \note{
-Expects subtype variable to be a factor. Also expects biomarker
-and subtype variable missing values to be \code{NA}
+Expects subtype variable to be a factor. Also expects biomarker and
+  subtype variable missing values to be \code{NA}
+}
+\examples{
+doBoxplotAmongSubtypes(mtcars, "Boxplot of qsec vs. gear", "qsec", "QSEC",
+"gear", "GEAR")
 }
 \author{
 Samuel Leung
