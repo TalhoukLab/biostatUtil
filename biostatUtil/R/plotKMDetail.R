@@ -56,8 +56,8 @@ plotKMDetail <- function(input.data, surv.formula, main.text, xlab.text,
     # do not generate a file if "no.file" is specified
     file.name.len <- nchar(file.name)
     if (file.name.len > 4) {
-      file.name.extension <- tolower(substr(file.name,
-                                            file.name.len - 2, file.name.len))
+      file.name.extension <- tolower(substr(
+        file.name, file.name.len - 2, file.name.len))
       if (file.name.extension == "pdf") {
         cairo_pdf(filename = file.name, width = file.width, height = file.height)  # good for unicode character in e.g. line.name
       } else if (file.name.extension %in% c("wmf", "emf", "wmz", "emz")) {
@@ -70,91 +70,55 @@ plotKMDetail <- function(input.data, surv.formula, main.text, xlab.text,
       }
     }
   }
-  which.strata.have.cases <- table(input.data[, var.name]) > 0 # in case some strata do not have any cases
+  # in case some strata do not have any cases
+  which.strata.have.cases <- table(input.data[, var.name]) > 0
+  # default line width
+  if (is.null(line.width)) {
+    line.width <- 1
+  }
   if (grey.scale) {
     # gray scale plot
     if (is.null(line.pattern)) {
       line.pattern <- c(1:length(line.name))[which.strata.have.cases]
     }
-    if (is.null(line.width)) {
-      line.width <- 1
-    }
     plot(fit, lty = line.pattern, lwd = line.width, main = main.text,
          xlab = xlab.text, ylab = ylab.text, ...)
-    if (legend.pos == "top") {
-      l1 <- legend(x = (max(fit$time, na.rm = TRUE) -
-                          min(fit$time, na.rm = TRUE)) / 2, y = 0.99, # i.e. top 1% ... since survival plot always starts at 100% survival
-                   legend = line.name,
-                   lty = line.pattern,
-                   lwd = line.width,
-                   box.lty = 0,
-                   cex = 0.8)
-    } else {
-      l1 <- legend(legend.pos,
-                   legend = line.name,
-                   lty = line.pattern,
-                   lwd = line.width,
-                   box.lty = 0,
-                   cex = 0.8)
-    }
   } else {
     # color plot
     if (is.null(line.pattern)) {
       line.pattern <- 1
     }
-    if (is.null(line.width)) {
-      line.width <- 1
-    }
-    plot(fit,
-         col = line.color[which.strata.have.cases],
-         lty = line.pattern,
-         lwd = line.width,
-         main = main.text,
-         xlab = xlab.text,
-         ylab = ylab.text, ...
-    )
-    if (legend.pos == "top") {
-      l1 <- legend(x = (max(fit$time, na.rm = TRUE) -
-                          min(fit$time, na.rm = TRUE)) / 2, y = 0.99, # i.e. top 1% ... since survival plot always start at 100% survival
-                   legend = line.name,
-                   lty = line.pattern,
-                   lwd = line.width,
-                   col = line.color,
-                   box.lty = 0,
-                   cex = 0.8)   
-    } else {
-      l1 <- legend(legend.pos,
-                   legend = line.name,
-                   lty = line.pattern,
-                   lwd = line.width,
-                   col = line.color,
-                   box.lty = 0,
-                   cex = 0.8)
-    }
+    plot(fit, col = line.color[which.strata.have.cases],
+         lty = line.pattern, lwd = line.width, main = main.text,
+         xlab = xlab.text, ylab = ylab.text, ...)
   }
+  # Legend 1
+  if (legend.pos == "top") {
+    x.pos <- diff(range(fit$time, na.rm = TRUE)) / 2 
+    y.pos <- 0.99   # top 1% ... since survival plot always starts at 100% survival
+  } else {
+    x.pos <- legend.pos
+    y.pos <- NULL
+  }
+  l1 <- legend(x = x.pos, y = y.pos, legend = line.name,
+               lty = line.pattern, lwd = line.width, box.lty = 0, cex = 0.8)
+  
   # there seems to be need for the y-axis adjustment depending on the file.height ...
   dy <- 0.02 * (file.height - 7) / (12 - 7) # determined empirically
-  y.pos <- l1$rect$h - dy
   if (legend.pos == "top") {
     y.pos <- l1$rect$top + dy	   
+  } else {
+    y.pos <- l1$rect$h - dy
   }
-  l2 <- legend(
-    x = l1$rect$w + l1$rect$left,
-    y = y.pos,
-    legend = ten.years.surv.95CI,
-    title = paste0(obs.survyrs, "yr 95% CI"),
-    title.col = 1,
-    box.lty = 0,
-    cex = 0.8)
-  
-  l3 <- legend(
-    x = l1$rect$w + l1$rect$left + l2$rect$w,
-    y = y.pos,
-    legend = event.count,
-    title = "Events/N",
-    title.col = 1,
-    box.lty = 0,
-    cex = 0.8)
+  # Legend 2 & 3
+  l2 <- legend(x = l1$rect$w + l1$rect$left, y = y.pos,
+               legend = ten.years.surv.95CI,
+               title = paste0(obs.survyrs, "yr 95% CI"), title.col = 1,
+               box.lty = 0, cex = 0.8)
+  l3 <- legend(x = l1$rect$w + l1$rect$left + l2$rect$w, y = y.pos,
+               legend = event.count,
+               title = "Events/N", title.col = 1,
+               box.lty = 0, cex = 0.8)
   box()
   if (show.test == "single") {
     log.rank.test     <- survival::survdiff(surv.formula, data = input.data,
