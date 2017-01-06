@@ -27,8 +27,8 @@ test_that("doHist works with or without title", {
   expect_error(doHist(mtcars, "mpg", show.title = FALSE), NA)
 })
 
-test_that("doJitterplotAmongSubtypes works", {
-  expect_error(doJitterplotAmongSubtypes(mtcars, "Boxplot of qsec vs. vs",
-                                         "qsec", "QSEC",
-                                         "vs", "VS"), NA)
+test_that("doJitterplotAmongSubtypes works albeit p-value warning", {
+  expect_warning(doJitterplotAmongSubtypes(mtcars, "Boxplot of qsec vs. vs",
+                                           "qsec", "QSEC",
+                                           "vs", "VS"))
 })
