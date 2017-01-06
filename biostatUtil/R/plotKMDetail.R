@@ -33,8 +33,9 @@
 #'   http://courses.nus.edu.sg/course/stacar/internet/st3242/handouts/notes2.pdf
 #' @seealso \code{\link{plotKM}}
 #' @export
-plotKMDetail <- function(input.data, surv.formula, main.text, xlab.text,
-                         ylab.text, line.name, line.color, line.pattern = NULL,
+plotKMDetail <- function(input.data, surv.formula,
+                         main.text = "", xlab.text = "", ylab.text = "",
+                         line.name, line.color, line.pattern = NULL,
                          line.width = NULL, show.test = "single",
                          single.test.type = "logrank",
                          round.digits.p.value = 4,

@@ -4,9 +4,9 @@
 \alias{plotKMDetail}
 \title{Plot detailed Kaplan-Meier curves}
 \usage{
-plotKMDetail(input.data, surv.formula, main.text, xlab.text, ylab.text,
-  line.name, line.color, line.pattern = NULL, line.width = NULL,
-  show.test = "single", single.test.type = "logrank",
+plotKMDetail(input.data, surv.formula, main.text = "", xlab.text = "",
+  ylab.text = "", line.name, line.color, line.pattern = NULL,
+  line.width = NULL, show.test = "single", single.test.type = "logrank",
   round.digits.p.value = 4, obs.survyrs, ten.years.surv.95CI, event.count,
   legend.pos = "bottomleft", file.name = "no.file", file.width = 7,
   file.height = 7, grey.scale = FALSE, show.single.test.pos, ...)
