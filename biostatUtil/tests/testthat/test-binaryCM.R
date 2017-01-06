@@ -64,13 +64,13 @@ expect_binaryCM_success <- function(x, y, pcond) {
 }
 
 test_that("binaryCM works for numeric values (0/1)", {
-  expect_binaryCM_success(x, y, pcond = 1)
+  expect_error(expect_binaryCM_success(x, y, pcond = 1), NA)
 })
 
 test_that("binaryCM works with factors and labels", {
-  expect_binaryCM_success(xf, yf, pcond = "positive")  
+  expect_error(expect_binaryCM_success(xf, yf, pcond = "positive"), NA)
 })
 
 test_that("outputs can print to console", {
-  invisible(capture.output(binaryCM(x, y, verbose = TRUE)))
+  expect_output(binaryCM(x, y, verbose = TRUE))
 })

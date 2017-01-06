@@ -16,5 +16,5 @@ test_that("scientific notation works", {
 })
 
 test_that("NA doesn't affect rounding", {
-  round_small(c(2e-05, 3e-04, NA, 4e-02))
+  expect_error(round_small(c(2e-05, 3e-04, NA, 4e-02)), NA)
 })
