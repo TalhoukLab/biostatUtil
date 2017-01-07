@@ -29,23 +29,23 @@
 #' @author Samuel Leung, Derek Chiu
 #' @export
 doKMPlots <- function(input.d, time, status, var.name, var.description,
-                      surv.type = "os",
+                      surv.type = c("os", "dss", "pfs"),
                       shading.colors = c("blue2", "red2", "deepskyblue",
                                          "indianred3"),
-                      line.name = NULL, line.pattern = NULL,
-                      legend = FALSE, cox.ref.group = NULL, use.firth = -1,
-                      CI = TRUE, HR = TRUE, show.risk = TRUE,
-                      km.plot.ref.group = "single",
+                      line.name = NULL, line.pattern = NULL, legend = FALSE,
+                      cox.ref.group = NULL, use.firth = -1, CI = TRUE,
+                      HR = TRUE, show.risk = TRUE, km.plot.ref.group = "single",
                       single.test.type = "logrank", use.ggkm = FALSE, ...) {
+  levs <- names(table(input.d[, var.name])) 
   if (is.null(line.name))
-    line.name <- names(table(input.d[, var.name])) 
+    line.name <- levs
   if (is.null(shading.colors))
-    shading.colors <- c(1:length(names(table(input.d[, var.name]))))
+    shading.colors <- seq_along(levs)
   input.d[var.name] <- droplevels(input.d[var.name])
   input.d[, time] <- as.numeric(input.d[, time])
   formula.obj <- as.formula(paste0("Surv(", time, ", ", status, ") ~ ", var.name))
   main <- ifelse(is.na(var.description) | var.description == "", "",
-                 paste0(var.description, " (", toupper(surv.type), ")"))
+                 paste0(var.description, " (", toupper(match.arg(surv.type)), ")"))
   
   if (use.ggkm) {
     pos <- 1
