@@ -4,12 +4,12 @@
 \alias{doKMPlots}
 \title{Make Kaplan-Meier plots}
 \usage{
-doKMPlots(input.d, time, status, var.name, var.description, line.name = NULL,
+doKMPlots(input.d, time, status, var.name, var.description, surv.type = "os",
   shading.colors = c("blue2", "red2", "deepskyblue", "indianred3"),
-  line.pattern = NULL, cox.ref.group = NULL, legend = FALSE,
-  km.plot.ref.group = "single", single.test.type = "logrank",
-  surv.type = "os", use.firth = -1, CI = TRUE, HR = TRUE,
-  show.risk = TRUE, use.ggkm = FALSE, ...)
+  line.name = NULL, line.pattern = NULL, legend = FALSE,
+  cox.ref.group = NULL, use.firth = -1, CI = TRUE, HR = TRUE,
+  show.risk = TRUE, km.plot.ref.group = "single",
+  single.test.type = "logrank", use.ggkm = FALSE, ...)
 }
 \arguments{
 \item{input.d}{\code{data.frame} containing data}
@@ -22,22 +22,19 @@ doKMPlots(input.d, time, status, var.name, var.description, line.name = NULL,
 
 \item{var.description}{description for \code{var.name}}
 
-\item{line.name}{names for each survival curve}
+\item{surv.type}{survival outcome. Either "os", "dss", or "pfs".}
 
 \item{shading.colors}{colors for survival curves}
 
+\item{line.name}{names for each survival curve}
+
 \item{line.pattern}{line type for survival curves}
 
-\item{cox.ref.group}{specify reference group for cox model i.e. hazard ratio(s)}
+\item{legend}{logical; if \code{TRUE}, the legend is overlaid on the graph
+(instead of on the side).}
 
-\item{legend}{logical; if \code{TRUE}, the legend is overlaid on the graph (instead of on the side).}
-
-\item{km.plot.ref.group}{specify KM plot reference group; "single" means a lump
-log-rank statistic}
-
-\item{single.test.type}{test to use for survival curves. Defaults to "logrank".}
-
-\item{surv.type}{survival outcome. Either "os", "dss", or "pfs".}
+\item{cox.ref.group}{specify reference group for cox model i.e. hazard
+ratio(s)}
 
 \item{use.firth}{Whether to use Firth's correction for plotting the curves}
 
@@ -45,16 +42,22 @@ log-rank statistic}
 
 \item{HR}{logical; if \code{TRUE}, will show hazard ratios}
 
-\item{show.risk}{logical; if \code{TRUE}, will show the number of people at risk
-at each time of death beneath the plot}
+\item{show.risk}{logical; if \code{TRUE}, will show the number of people at
+risk at each time of death beneath the plot}
+
+\item{km.plot.ref.group}{specify KM plot reference group; "single" means a 
+lump log-rank statistic}
+
+\item{single.test.type}{test to use for survival curves. Defaults to
+"logrank".}
 
 \item{use.ggkm}{if \code{TRUE}, will use function \code{ggkm} for plotting}
 
 \item{...}{additional arguments to other functions and methods}
 }
 \value{
-A Kaplan-Meier plot for the specified survival outcome split on the desired
-variable.
+A Kaplan-Meier plot for the specified survival outcome split on the
+  desired variable.
 }
 \description{
 Make Kaplan-Meier plots
