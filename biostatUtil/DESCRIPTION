@@ -46,6 +46,7 @@ Imports:
     stringr,
     survival,
     tidyr,
+    tools,
     vsn
 Suggests:
     logistf,

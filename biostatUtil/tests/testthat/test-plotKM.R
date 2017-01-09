@@ -14,6 +14,11 @@ test_that("factor variable drops unused levels", {
   expect_error(doKMPlots(lung, "time", "status", "sex", "Sex"), NA)
 })
 
+test_that("unused factor levels are removed", {
+  lung$test <- factor(1:2, levels = 1:3)
+  expect_error(doKMPlots(lung, "time", "status", "test", "Test", use.ggkm = FALSE), NA)
+})
+
 test_that("other plotting options can be specified", {
   expect_error(doKMPlots(lung, "time", "status", "sex", "Sex", use.ggkm = FALSE,
                          grey.scale = TRUE, shading.colors = NULL,
@@ -22,7 +27,15 @@ test_that("other plotting options can be specified", {
                          show.risk = FALSE), NA)
 })
 
-test_that("unused factor levels are removed", {
-  lung$test <- factor(1:2, levels = 1:3)
-  expect_error(doKMPlots(lung, "time", "status", "test", "Test", use.ggkm = FALSE), NA)
+test_that("plot can be saved to file", {
+  expect_error(doKMPlots(lung, "time", "status", "sex", "Sex", use.ggkm = FALSE,
+                         file.name = "test.pdf"), NA)
+  expect_error(doKMPlots(lung, "time", "status", "sex", "Sex", use.ggkm = FALSE,
+                         file.name = "test.odf"))
+  file.remove(list.files(pattern = "test\\."))
+})
+
+test_that("plot statistics indicated by reference group", {
+  expect_error(doKMPlots(lung, "time", "status", "sex", "Sex", use.ggkm = FALSE,
+                         km.plot.ref.group = "2"), NA)
 })

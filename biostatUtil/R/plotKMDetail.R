@@ -53,22 +53,17 @@ plotKMDetail <- function(input.data, surv.formula,
   tarone.ware.p.values <- c()
   
   fit <- survival::survfit(surv.formula, data = input.data)
-  if (file.name != "no.file") {
-    # do not generate a file if "no.file" is specified
-    file.name.len <- nchar(file.name)
-    if (file.name.len > 4) {
-      file.name.extension <- tolower(substr(
-        file.name, file.name.len - 2, file.name.len))
-      if (file.name.extension == "pdf") {
-        cairo_pdf(filename = file.name, width = file.width, height = file.height)  # good for unicode character in e.g. line.name
-      } else if (file.name.extension %in% c("wmf", "emf", "wmz", "emz")) {
-        png(filename = file.name, width = file.width, height = file.height)	
-      } else if (file.name.extension %in% c("tif")) {  # does not with with tiff since only check last three character!!!
-        tiff(filename = file.name, width = file.width * 100, height = file.height * 100)
-      } else {
-        # unknown extension ... do nothing
-        file.name <- "no.file"
-      }
+  # do not generate a file if "no.file" is specified
+  if (file.name != "no.file" & nchar(file.name) > 4) {
+    file.ext <- tools::file_ext(file.name)
+    if (file.ext == "pdf") {
+      cairo_pdf(filename = file.name, width = file.width, height = file.height)  # good for unicode character in e.g. line.name
+    } else if (file.ext %in% c("wmf", "emf", "wmz", "emz")) {
+      png(filename = file.name, width = file.width, height = file.height)	
+    } else if (file.ext == "tiff") { 
+      tiff(filename = file.name, width = file.width * 100, height = file.height * 100)
+    } else {
+      stop("Extension must be one of 'pdf', 'wmf', 'emf', 'wmz', 'emz', and 'tiff'.")
     }
   }
   # in case some strata do not have any cases
