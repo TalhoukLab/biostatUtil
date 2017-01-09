@@ -44,51 +44,19 @@ plotKM <- function(input.d, input.formula,
                    xlabs = NULL, legend.xy = NULL, ylabs = NULL, timeby = NULL,
                    ...) {
   
-  # calculate "obs.survyrs"-yrs survival
-  summary.surv.fit <- summary(survfit(input.formula, data = input.d),
-                              time = obs.survyrs, extend = TRUE)
-  
-  n.cases <- table(input.d[, deparse(input.formula[[3]])]) # number of cases in each group variable = deparse(input.formula[[3]])
-  decrement.count <- 0 # the number we need to take away from "i" because if n.cases[i]==0, length(summary.surv.fit) < length(line.name)
-  
-  ten.yrs.surv <- NULL
-  for (i in 1:length(line.name)) {
-    if (n.cases[i] == 0) {
-      # there must be no cases in this category
-      ten.yrs.surv <- c(ten.yrs.surv, "NA")
-      decrement.count <- decrement.count + 1
-    } else {
-      ten.yrs.surv <- c(ten.yrs.surv,
-                        paste0(format(summary.surv.fit$surv * 100,
-                                      digits = 3)[i - decrement.count], "% (",
-                              format(summary.surv.fit$lower * 100,
-                                     digits = 3)[i - decrement.count], "% - ",
-                              format(summary.surv.fit$upper * 100,
-                                     digits = 3)[i - decrement.count], "%)"))
-    }
-  }                   
-  
-  # summary of survival object to end of followup
+  # Calculate "obs.survyrs"-yrs survival
   fit.obj <- survfit(input.formula, data = input.d)		
-  summary.surv.fit.all <- summary(fit.obj)[['table']]
+  summary.surv.fit <- summary(fit.obj, time = obs.survyrs, extend = TRUE)
+  surv.time <- lapply(summary.surv.fit[c("surv", "lower", "upper")],
+                      function(x) format(x * 100, digits = 3))
+  ten.yrs.surv <- mapply(function(s, l, u) paste0(s, "% (", l, "% - ", u, "%)"),
+                         s = surv.time$surv, l = surv.time$lower,
+                         u = surv.time$upper)
   
-  # NEED TO RESET decrement.count!!!!
-  decrement.count <- 0 # the number we need to take away from "i" because if n.cases[i]==0, length(summary.surv.fit) < length(line.name)
-  
-  event.count <- NULL
-  for (i in 1:length(line.name)) {
-    if (n.cases[i] == 0) {
-      # there must be no cases in this category
-      event.count <- c(event.count, "NA")
-      decrement.count <- decrement.count + 1
-    } else {
-      event.count <- c(event.count,
-                       paste0(summary.surv.fit.all[i - decrement.count,
-                                                  'events'], "/",
-                             summary.surv.fit.all[i - decrement.count,
-                                                  'records']))
-    }
-  }
+  # Summary of survival object to end of followup to calculate event count
+  summary.surv.fit.all <- summary.surv.fit[["table"]]
+  event.count <- apply(summary.surv.fit.all[, c("events", "records")], 1,
+                       paste, collapse = "/")
   
   # determine show.single.test.pos
   if (show.single.test.pos == "default") {
