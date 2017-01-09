@@ -36,13 +36,14 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
                       cox.ref.group = NULL, use.firth = -1, CI = TRUE,
                       HR = TRUE, show.risk = TRUE, km.plot.ref.group = "single",
                       single.test.type = "logrank", use.ggkm = FALSE, ...) {
-  levs <- names(table(input.d[, var.name])) 
+  
+  input.d[var.name] <- droplevels(input.d[var.name])
+  input.d[, time] <- as.numeric(input.d[, time])
+  levs <- names(table(input.d[, var.name]))
   if (is.null(line.name))
     line.name <- levs
   if (is.null(shading.colors))
     shading.colors <- seq_along(levs)
-  input.d[var.name] <- droplevels(input.d[var.name])
-  input.d[, time] <- as.numeric(input.d[, time])
   formula.obj <- as.formula(paste0("Surv(", time, ", ", status, ") ~ ", var.name))
   main <- ifelse(is.na(var.description) | var.description == "", "",
                  paste0(var.description, " (", toupper(match.arg(surv.type)), ")"))

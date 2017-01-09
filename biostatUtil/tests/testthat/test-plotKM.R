@@ -21,3 +21,8 @@ test_that("other plotting options can be specified", {
   expect_error(doKMPlots(lung, "time", "status", "sex", "Sex", use.ggkm = TRUE,
                          show.risk = FALSE), NA)
 })
+
+test_that("unused factor levels are removed", {
+  lung$test <- factor(1:2, levels = 1:3)
+  expect_error(doKMPlots(lung, "time", "status", "test", "Test", use.ggkm = FALSE), NA)
+})
