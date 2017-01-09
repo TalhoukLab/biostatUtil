@@ -40,7 +40,7 @@ plotKM <- function(input.d, input.formula,
                    single.test.type = "logrank", digits = 3,
                    obs.survyrs = 3, legend.pos = "bottomleft",
                    file.name = "no.file", file.width = 7, file.height = 7,
-                   grey.scale = FALSE, show.single.test.pos = "default",
+                   grey.scale = FALSE, show.single.test.pos = 0.1,
                    xlabs = NULL, legend.xy = NULL, ylabs = NULL, timeby = NULL,
                    ...) {
   
@@ -49,46 +49,33 @@ plotKM <- function(input.d, input.formula,
   summary.surv.fit <- summary(fit.obj, time = obs.survyrs, extend = TRUE)
   surv.time <- lapply(summary.surv.fit[c("surv", "lower", "upper")],
                       function(x) format(x * 100, digits = 3))
-  ten.yrs.surv <- mapply(function(s, l, u) paste0(s, "% (", l, "% - ", u, "%)"),
-                         s = surv.time$surv, l = surv.time$lower,
-                         u = surv.time$upper)
+  ten.years.surv.95CI <- mapply(function(s, l, u)
+    paste0(s, "% (", l, "% - ", u, "%)"),
+    s = surv.time$surv, l = surv.time$lower, u = surv.time$upper)
   
   # Summary of survival object to end of followup to calculate event count
   summary.surv.fit.all <- summary.surv.fit[["table"]]
   event.count <- apply(summary.surv.fit.all[, c("events", "records")], 1,
                        paste, collapse = "/")
   
-  # determine show.single.test.pos
-  if (show.single.test.pos == "default") {
-    show.single.test.pos <- 0.1
-    if (legend.pos == "top") {
-      show.single.test.pos <- 0.5
-    }
+  # If legend is on top, the test position is at halfway point of plot
+  if (legend.pos == "top") {
+    show.single.test.pos <- 0.5
   }
-  # plot km
-  output <- plotKMDetail(input.data = input.d,
-                         surv.formula = input.formula,
-                         main.text = main.text,
-                         xlab.text = xlab.text,
-                         ylab.text = ylab.text,
-                         line.name = line.name,
-                         line.color = line.color,
-                         line.pattern = line.pattern,
-                         line.width = line.width,
-                         show.test = show.test,
-                         single.test.type = single.test.type,
-                         round.digits.p.value = digits,
-                         obs.survyrs = obs.survyrs,
-                         ten.years.surv.95CI = ten.yrs.surv,
-                         event.count = event.count,
-                         legend.pos = legend.pos,
-                         file.name = file.name,
-                         file.width = file.width,
-                         file.height = file.height,
-                         grey.scale = grey.scale,
-                         show.single.test.pos = show.single.test.pos,
-                         mark.time = TRUE, # for plot.survfit to show censor time point
-                         ...)
+  
+  # Plot km
+  output <- plotKMDetail(
+    input.data = input.d, surv.formula = input.formula,
+    main.text = main.text, xlab.text = xlab.text, ylab.text = ylab.text,
+    line.name = line.name, line.color = line.color, line.pattern = line.pattern,
+    line.width = line.width, show.test = show.test,
+    single.test.type = single.test.type, round.digits.p.value = digits,
+    obs.survyrs = obs.survyrs, ten.years.surv.95CI = ten.years.surv.95CI,
+    event.count = event.count, legend.pos = legend.pos,
+    file.name = file.name, file.width = file.width, file.height = file.height,
+    grey.scale = grey.scale, show.single.test.pos = show.single.test.pos,
+    mark.time = TRUE, # for plot.survfit to show censor time point
+    ...)
   return(list("log.rank.p.values" = output$log.rank.p.values,
               "wilcox.p.values" = output$wilcox.p.values,
               "n" = sum(fit.obj$n),
