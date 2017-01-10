@@ -58,7 +58,7 @@ prettyCoxph <- function(input.formula, input.d, ref.grp = NULL, use.firth = 1,
 	  for (var.name in names(ref.grp)) {
 		  if (var.name %in% terms.in.formula) {
 		    # if var.name not in formula, just silently ignore it
-		    input.d[, var.name] <- relevel(input.d[, var.name], ref = ref.grp[var.name])
+		    input.d[, var.name] <- relevel(factor(input.d[, var.name]), ref = ref.grp[var.name])
 		  }
  	  }
   }	

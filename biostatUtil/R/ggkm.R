@@ -98,7 +98,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
   times <- seq(0, max(sfit$time), by = timeby)
   if (!is.null(cox.ref.grp)) {
     # very ugly ... hope this will work for most cases!
-    names(cox.ref.grp) <- strsplit(names(sfit$strata)[1],"=")[[1]][1]
+    names(cox.ref.grp) <- strsplit(names(sfit$strata)[1], "=")[[1]][1]
   }
   
   .df <- data.frame(                      # data to be used in the survival plot

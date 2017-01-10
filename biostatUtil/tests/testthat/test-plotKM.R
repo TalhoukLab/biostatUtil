@@ -24,7 +24,8 @@ test_that("other plotting options can be specified", {
                          grey.scale = TRUE, shading.colors = NULL,
                          legend.pos = "top"), NA)
   expect_error(doKMPlots(lung, "time", "status", "sex", "Sex", use.ggkm = TRUE,
-                         show.risk = FALSE), NA)
+                         cox.ref.group = "2", show.risk = FALSE,
+                         use.firth = 0.8), NA)
 })
 
 test_that("plot can be saved to file", {
@@ -38,4 +39,13 @@ test_that("plot can be saved to file", {
 test_that("plot statistics indicated by reference group", {
   expect_error(doKMPlots(lung, "time", "status", "sex", "Sex", use.ggkm = FALSE,
                          km.plot.ref.group = "2"), NA)
+})
+
+test_that("survival fits can be compared", {
+  p1 <- doKMPlots(lung, "time", "status", "sex", "Sex", use.ggkm = TRUE,
+                  use.firth = 0.8, cox.ref.group = "2")
+  p2 <- doKMPlots(lung, "time", "status", "sex", "Sex", use.ggkm = TRUE,
+                  use.firth = 0.8, cox.ref.group = "2",
+                  sfit2 = survfit(Surv(time, status) ~ age, lung))
+  expect_false(identical(p1, p2))
 })
