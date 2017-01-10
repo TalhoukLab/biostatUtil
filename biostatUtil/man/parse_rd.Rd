@@ -4,15 +4,13 @@
 \alias{parse_rd}
 \title{Parse all Rd files in package}
 \usage{
-parse_rd(path, tags = c("name", "title", "desc", "details"), save = FALSE)
+parse_rd(path = NULL, tags = c("name", "title", "desc", "details"))
 }
 \arguments{
 \item{path}{file path to save table}
 
 \item{tags}{sections to extract from Rd files. Missing entries labelled as
 \code{NA}}
-
-\item{save}{if \code{TRUE}, the table is saved as a csv}
 }
 \value{
 a table with information on a package's documented objects (functions

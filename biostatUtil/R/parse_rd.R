@@ -8,7 +8,6 @@
 #' @param path file path to save table
 #' @param tags sections to extract from Rd files. Missing entries labelled as
 #'   \code{NA}
-#' @param save if \code{TRUE}, the table is saved as a csv
 #'   
 #' @return a table with information on a package's documented objects (functions
 #'   and data). Rows are objects, and columns are tags.
@@ -20,8 +19,8 @@
 #' tab <- parse_rd()
 #' str(tab)
 #' }
-parse_rd <- function(path, tags = c("name", "title", "desc", "details"),
-                     save = FALSE) {
+parse_rd <- function(path = NULL, tags = c("name", "title", "desc",
+                                           "details")) {
   rd.files <- list.files("man", full.names = TRUE)
   rd.parsed <- sapply(rd.files, Rd2roxygen::parse_file)
   info.table <- sapply(rd.parsed, function(x) as.list(x[tags])) %>% 
@@ -29,6 +28,6 @@ parse_rd <- function(path, tags = c("name", "title", "desc", "details"),
     t() %>% 
     as.data.frame() %>% 
     dplyr::mutate_all(unlist)
-  if (save) readr::write_csv(info.table, path = path)
+  if (!is.null(path)) readr::write_csv(info.table, path = path)
   return(info.table)
 }
