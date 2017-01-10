@@ -23,11 +23,12 @@ parse_rd <- function(path = NULL, tags = c("name", "title", "desc",
                                            "details")) {
   rd.files <- list.files("man", full.names = TRUE)
   rd.parsed <- sapply(rd.files, Rd2roxygen::parse_file)
-  info.table <- sapply(rd.parsed, function(x) as.list(x[tags])) %>% 
-    magrittr::inset(sapply(., is.null), NA) %>% 
-    t() %>% 
-    as.data.frame() %>% 
-    dplyr::mutate_all(unlist)
+  info.table <- sapply(rd.parsed, function(x)
+    replace(x[tags], sapply(x[tags], is.null), "")) %>% 
+    t() %>%
+    data.frame() %>%
+    sapply(unlist) %>%
+    data.frame(stringsAsFactors = FALSE)
   if (!is.null(path)) readr::write_csv(info.table, path = path)
   return(info.table)
 }
