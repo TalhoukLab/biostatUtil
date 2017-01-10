@@ -37,7 +37,8 @@ fit_coxph <- coxph(Surv(time, status) ~ x + strata(sex), test1)
 test_that("prettyCoxph returns values from survival::coxph when use==FALSE",
           expect_equal(fit_coxph$n,
                        prettyCoxph(Surv(time, status) ~ x + strata(sex), 
-                                   data.frame(test1), use = FALSE)$n)
+                                   data.frame(test1), use = FALSE,
+                                   check.ph = TRUE)$n)
 )
 
 # clean up ---------------------------------------------------------------------
