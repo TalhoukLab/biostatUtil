@@ -47,5 +47,9 @@ test_that("survival fits can be compared", {
   p2 <- doKMPlots(lung, "time", "status", "sex", "Sex", use.ggkm = TRUE,
                   use.firth = 0.8, cox.ref.group = "2",
                   sfit2 = survfit(Surv(time, status) ~ age, lung))
+  p3 <- doKMPlots(lung, "time", "status", "sex", "Sex", use.ggkm = TRUE,
+                  use.firth = -1, cox.ref.group = "2",
+                  sfit2 = survfit(Surv(time, status) ~ age, lung))
   expect_false(identical(p1, p2))
+  expect_false(identical(p2, p3))
 })
