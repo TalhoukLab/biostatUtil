@@ -10,20 +10,20 @@ test_that("doCoxphGeneric works", {
                         var.descriptions = "Sex",
                         var.names.surv.time = "time",
                         var.names.surv.status = "status",
-                        event.codes.surv = "1",
-                        surv.descriptions = "Male",
+                        event.codes.surv = "2",
+                        surv.descriptions = "OS",
                         caption = "")
   expect_length(res, 3)
 })
 
-test_that("doCoxphMultivariable works", {
+test_that("doCoxphMultivariable works for univariable case", {
   res <- doCoxphMultivariable(input.d = lung,
                               var.names = "sex",
                               var.descriptions = "Sex",
                               var.names.surv.time = "time",
                               var.names.surv.status = "status",
-                              event.codes.surv = "1",
-                              surv.descriptions = "Male",
+                              event.codes.surv = "2",
+                              surv.descriptions = "OS",
                               caption = "")
   expect_length(res, 4)
 })
