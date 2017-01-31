@@ -6,7 +6,8 @@
 #' @param psm PSM file
 #' @param protein Protein file
 #' @param treatment character vector of treatment groups
-#' @param sample.id character vector for sample IDs. Other of samples must match
+#' @param samples character vector of sample names to keep
+#' @param sample.id character vector for sample IDs. Order of samples must match
 #'   that in the psm raw data.
 #' @param path file path to save return element \code{pep}
 #' @param ... additional arguments to \code{ms_condition}
@@ -18,18 +19,26 @@
 #' @family Mass Spectrometry functions
 #' @author Derek Chiu
 #' @export
-ms_process <- function(psm, protein, treatment, sample.id, path = NULL, ...) {
+ms_process <- function(psm, protein, treatment, samples = NULL,
+                       sample.id = NULL, path = NULL, ...) {
   # Make raw data file column names into R column names
   psm <- psm %>% set_colnames(make.names(colnames(.)))
   protein <- protein %>% set_colnames(make.names(colnames(.)))
   
   # Variables to keep
-  orig.sample.id <- grep("^X[0-9]", names(psm), value = TRUE)
+  if (is.null(samples)) {
+    samples <- grep("^X[0-9]", names(psm), value = TRUE)
+  }
+  if (is.null(sample.id)) {
+    ns <- seq_along(samples)
+    sample.id <- paste0("X", ceiling(ns * 2 / max(ns)),
+                        "_", seq_len(max(ns) / 2))
+  }
   psmKeepVars <-
     c("Annotated.Sequence", "Modifications", "Number.of.Protein.Groups",
       "Number.of.Proteins", "Master.Protein.Accessions", "Protein.Accessions",
       "Confidence", "Reporter.Quan.Result.ID", "Quan.Info", "PSM.Ambiguity",
-      orig.sample.id)
+      samples)
   
   # Select relevant columns for analysis
   # Rename original sample labels to reflect sample grouping
@@ -40,7 +49,7 @@ ms_process <- function(psm, protein, treatment, sample.id, path = NULL, ...) {
   #   - Master Protein Accession missing or "sp"
   pep <- psm %>%
     select(one_of(psmKeepVars)) %>% 
-    set_colnames(plyr::mapvalues(colnames(.), orig.sample.id, sample.id)) %>% 
+    set_colnames(plyr::mapvalues(colnames(.), samples, sample.id)) %>% 
     filter_(.dots = list(lazyeval::interp(
       ~NOP == 1 & !grepl("NoQuanValues", QI) & (is.na(MPA) | MPA != "sp"),
       NOP = quote(Number.of.Proteins), QI = quote(Quan.Info),

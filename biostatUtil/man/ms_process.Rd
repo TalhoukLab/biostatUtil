@@ -4,7 +4,8 @@
 \alias{ms_process}
 \title{Process mass spectrometry data}
 \usage{
-ms_process(psm, protein, treatment, sample.id, path = NULL, ...)
+ms_process(psm, protein, treatment, samples = NULL, sample.id = NULL,
+  path = NULL, ...)
 }
 \arguments{
 \item{psm}{PSM file}
@@ -13,7 +14,9 @@ ms_process(psm, protein, treatment, sample.id, path = NULL, ...)
 
 \item{treatment}{character vector of treatment groups}
 
-\item{sample.id}{character vector for sample IDs. Other of samples must match
+\item{samples}{character vector of sample names to keep}
+
+\item{sample.id}{character vector for sample IDs. Order of samples must match
 that in the psm raw data.}
 
 \item{path}{file path to save return element \code{pep}}
@@ -39,4 +42,3 @@ Other Mass Spectrometry functions: \code{\link{ms_condition}},
 \author{
 Derek Chiu
 }
-
