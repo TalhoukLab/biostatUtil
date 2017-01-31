@@ -86,4 +86,3 @@ A + B + C
 \author{
 Samuel Leung
 }
-

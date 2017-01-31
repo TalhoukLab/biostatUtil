@@ -41,4 +41,3 @@ logistfPrint(fit)
 \author{
 Samuel Leung, Derek Chiu
 }
-

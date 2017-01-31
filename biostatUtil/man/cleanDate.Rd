@@ -40,4 +40,3 @@ Other date formatting functions: \code{\link{formatDate}},
 \author{
 Samuel Leung, Derek Chiu
 }
-

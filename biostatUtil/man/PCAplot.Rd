@@ -26,4 +26,3 @@ PCAplot(mtcars$gear, mtcars)
 \author{
 Aline Talhouk, Derek Chiu
 }
-

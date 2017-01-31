@@ -24,4 +24,3 @@ Make Kaplan-Meier plots for POLE
 \author{
 Samuel Leung
 }
-

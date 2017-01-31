@@ -12,4 +12,3 @@ pro
 Data for analysis of CLK1 protein between N-Flagged and Untagged Samples
 }
 \keyword{datasets}
-

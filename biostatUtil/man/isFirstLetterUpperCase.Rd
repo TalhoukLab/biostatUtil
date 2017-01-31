@@ -29,4 +29,3 @@ isFirstLetterUpperCase("")
 \author{
 Samuel Leung, Derek Chiu
 }
-

@@ -64,4 +64,3 @@ lifetable(obj, ntimes = 4, times = c(200, 500, 800, 1000))
 \author{
 Derek Chiu
 }
-

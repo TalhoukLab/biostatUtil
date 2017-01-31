@@ -74,4 +74,3 @@ KM plots with basic annotations.
 \author{
 Samuel Leung
 }
-

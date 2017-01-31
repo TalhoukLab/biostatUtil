@@ -29,4 +29,3 @@ formatNA(y)
 \author{
 Aline Talhouk, Derek Chiu
 }
-

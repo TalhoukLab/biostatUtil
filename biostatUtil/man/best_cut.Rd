@@ -60,4 +60,3 @@ cut a variable into anywhere from 2 to 5 groups.
 \author{
 Derek Chiu
 }
-

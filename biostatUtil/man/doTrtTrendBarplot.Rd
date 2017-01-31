@@ -24,4 +24,3 @@ Treatment trend barplots
 \author{
 Samuel Leung
 }
-

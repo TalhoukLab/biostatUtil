@@ -51,4 +51,3 @@ Xunivcoxph(mod)
 \author{
 Aline Talhouk, Derek Chiu
 }
-

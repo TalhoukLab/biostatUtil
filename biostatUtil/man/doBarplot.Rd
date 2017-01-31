@@ -42,4 +42,3 @@ doBarplot(mtcars, "cyl", "Cylinders", title = "Number of cylinders")
 \author{
 Samuel Leung, Derek Chiu
 }
-

@@ -79,4 +79,3 @@ Other confusion matrix functions: \code{\link{binaryCMAsHTML}},
 \author{
 Aline Talhouk, Derek Chiu
 }
-

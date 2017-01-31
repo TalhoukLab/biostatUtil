@@ -14,4 +14,3 @@ setupKnitr(fw = 8, fh = 6)
 \description{
 Setup knitr
 }
-

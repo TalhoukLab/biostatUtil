@@ -24,4 +24,3 @@ htmlTable(summaryAsHTML(x))
 \author{
 Samuel Leung, Derek Chiu
 }
-

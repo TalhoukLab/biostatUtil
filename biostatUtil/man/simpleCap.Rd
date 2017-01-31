@@ -32,4 +32,3 @@ http://stackoverflow.com/questions/6364783/capitalize-the-first-letter-of-both-w
 \author{
 Samuel Leung
 }
-

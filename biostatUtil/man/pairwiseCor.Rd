@@ -24,4 +24,3 @@ pairwiseCor(x)
 \author{
 Aline Talhouk, Derek Chiu
 }
-

@@ -46,4 +46,3 @@ doJitterplotAmongSubtypes(mtcars, "Boxplot of qsec vs. vs", "qsec", "QSEC",
 \author{
 Samuel Leung
 }
-

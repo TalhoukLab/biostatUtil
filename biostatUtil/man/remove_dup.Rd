@@ -35,4 +35,3 @@ performed within each group of unique protein IDs (e.g.
 \author{
 Derek Chiu
 }
-

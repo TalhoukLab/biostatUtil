@@ -47,4 +47,3 @@ round_small(x, digits = 1)
 \author{
 Derek Chiu
 }
-

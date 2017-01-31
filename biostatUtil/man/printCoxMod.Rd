@@ -18,4 +18,3 @@ Prints a Cox model output in a nice HTML table
 \author{
 Aline Talhouk
 }
-

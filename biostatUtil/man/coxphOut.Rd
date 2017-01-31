@@ -55,4 +55,3 @@ coxphOut(mod2, coefnames = c("x", "gender"))
 \author{
 Aline Talhouk, Derek Chiu
 }
-

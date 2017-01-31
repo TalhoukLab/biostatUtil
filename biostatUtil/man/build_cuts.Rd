@@ -38,4 +38,3 @@ str(build_cuts(x, n = "qd", list = TRUE))
 \author{
 Derek Chiu
 }
-

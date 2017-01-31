@@ -111,4 +111,3 @@ banded.rows = TRUE, col.odd = "yellow", col.even = "green", caption =
 \author{
 Aline Talhouk, Samuel Leung, Derek Chiu
 }
-

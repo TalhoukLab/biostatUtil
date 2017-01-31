@@ -24,4 +24,3 @@ Grade trend barplot
 \author{
 Samuel Leung
 }
-

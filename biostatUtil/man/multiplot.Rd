@@ -30,4 +30,3 @@ right, and 3 will go all the way across the bottom.
 \author{
 Aline Talhouk
 }
-

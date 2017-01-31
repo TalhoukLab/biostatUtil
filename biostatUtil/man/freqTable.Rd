@@ -54,4 +54,3 @@ freqTable(x, missing = c("a", "e", "i", "o", "u"), round = 2)
 \author{
 Derek Chiu
 }
-

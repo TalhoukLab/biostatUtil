@@ -24,4 +24,3 @@ Make Kaplan-Meier plots with initial treatment
 \author{
 Samuel Leung
 }
-

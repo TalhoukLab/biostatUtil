@@ -26,4 +26,3 @@ medianCtr(x)
 \author{
 Samuel Leung
 }
-

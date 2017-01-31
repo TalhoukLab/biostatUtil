@@ -47,4 +47,3 @@ bootMean(s, na.rm = TRUE)
 \author{
 Aline Talhouk, Derek Chiu
 }
-

@@ -92,4 +92,3 @@ compareDate("01-22-1949", "04-13-1950", date.format = "MM.DD.YYYY", sep = "-")
 \author{
 Samuel Leung, Derek Chiu
 }
-

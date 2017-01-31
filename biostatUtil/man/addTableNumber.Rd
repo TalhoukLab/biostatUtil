@@ -28,4 +28,3 @@ addTableNumber("Correlation Heatmap", table.counter.str.default = "Figure \%s: "
 \author{
 Samuel Leung
 }
-

@@ -53,4 +53,3 @@ SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("mpg"))
 \author{
 Aline Talhouk, Derek Chiu
 }
-

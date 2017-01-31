@@ -32,4 +32,3 @@ geoMean(y, na.rm = TRUE)
 \author{
 Samuel Leung, Derek Chiu
 }
-

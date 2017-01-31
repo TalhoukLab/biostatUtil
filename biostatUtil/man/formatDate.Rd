@@ -45,4 +45,3 @@ Other date formatting functions: \code{\link{cleanDate}},
 \author{
 Samuel Leung, Derek Chiu
 }
-

@@ -32,4 +32,3 @@ Other date formatting functions: \code{\link{cleanDate}},
 \author{
 Derek Chiu
 }
-

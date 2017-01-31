@@ -65,4 +65,3 @@ Make Kaplan-Meier plots
 \author{
 Samuel Leung, Derek Chiu
 }
-

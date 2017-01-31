@@ -25,4 +25,3 @@ http://en.wikipedia.org/wiki/Standard_error
 \author{
 Samuel Leung
 }
-

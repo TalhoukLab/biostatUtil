@@ -74,4 +74,3 @@ minDateArray(ties.dates, sep = "-")
 \author{
 Samuel Leung, Derek Chiu
 }
-

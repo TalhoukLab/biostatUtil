@@ -40,4 +40,3 @@ assessSurvTime(starts, ends, statuses)
 \author{
 Samuel Leung
 }
-

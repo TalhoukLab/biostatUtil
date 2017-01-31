@@ -31,4 +31,3 @@ plotSchoenfeld(test1, Surv(time, status) ~ x + strata(sex), "x")
 \author{
 Samuel Leung
 }
-

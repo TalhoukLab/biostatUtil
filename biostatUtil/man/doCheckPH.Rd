@@ -30,4 +30,3 @@ Use Schoenfeld residuals to test the Cox proportional hazards assumption in a
 \author{
 Samuel Leung
 }
-

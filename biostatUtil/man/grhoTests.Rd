@@ -34,4 +34,3 @@ grhoTests(Surv(futime, fustat) ~ rx, data = ovarian)
 \author{
 Derek Chiu
 }
-

@@ -23,4 +23,3 @@ Functions can be categorized into one of the following: \itemize{
 \item Miscellaneous functions
 }
 }
-

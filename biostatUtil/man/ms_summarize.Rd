@@ -43,4 +43,3 @@ Other Mass Spectrometry functions: \code{\link{ms_condition}},
 \author{
 Derek Chiu
 }
-

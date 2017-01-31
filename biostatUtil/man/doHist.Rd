@@ -45,4 +45,3 @@ doHist(mtcars, "mpg", title = "Distribution of MPG")
 \author{
 Samuel Leung, Derek Chiu
 }
-

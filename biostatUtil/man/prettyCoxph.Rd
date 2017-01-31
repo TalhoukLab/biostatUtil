@@ -66,4 +66,3 @@ prettyCoxph(Surv(time, status) ~ x + strata(sex), test1)
 \author{
 Samuel Leung, Derek Chiu
 }
-

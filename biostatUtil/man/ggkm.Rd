@@ -92,4 +92,3 @@ e.g. <0.0001, otherwise the exact p-value will be shown}
 \description{
 Produce nicely annotated KM plots using ggplot.
 }
-

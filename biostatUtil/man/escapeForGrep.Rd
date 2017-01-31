@@ -23,4 +23,3 @@ escapeForGrep("(parentheses)")
 \author{
 Samuel Leung
 }
-

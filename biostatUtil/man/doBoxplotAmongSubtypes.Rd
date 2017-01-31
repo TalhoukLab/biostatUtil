@@ -48,4 +48,3 @@ doBoxplotAmongSubtypes(mtcars, "Boxplot of qsec vs. gear", "qsec", "QSEC",
 \author{
 Samuel Leung
 }
-

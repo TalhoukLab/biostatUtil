@@ -18,4 +18,3 @@ Given a ggplot object, generates a legend
 \author{
 Aline Talhouk
 }
-

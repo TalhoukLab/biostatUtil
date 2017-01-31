@@ -45,4 +45,3 @@ kappaBootCI(a, b, 5)
 \author{
 Aline Talhouk, Derek Chiu
 }
-

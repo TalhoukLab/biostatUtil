@@ -37,4 +37,3 @@ Survival trend barplot
 \author{
 Samuel Leung
 }
-

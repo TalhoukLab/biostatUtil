@@ -72,4 +72,3 @@ http://courses.nus.edu.sg/course/stacar/internet/st3242/handouts/notes2.pdf
 \author{
 Samuel Leung
 }
-

@@ -47,4 +47,3 @@ indepTests(ct)
 \author{
 Derek Chiu
 }
-

@@ -29,7 +29,7 @@ The formula must be univariable.
   \code{Surv(time, status) ~ x + age} won't work but \code{Surv(time, status)
   ~ x} is fine.
 }
+
 \author{
 Samuel Leung, Derek Chiu
 }
-

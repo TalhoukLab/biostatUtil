@@ -34,4 +34,3 @@ name_cuts(x, c(2, 4))
 \author{
 Derek Chiu
 }
-

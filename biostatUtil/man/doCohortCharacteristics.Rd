@@ -108,4 +108,3 @@ htmlTable::htmlTable(dcc$result.table.html)
 \author{
 Aline Talhouk
 }
-

@@ -43,4 +43,3 @@ htmlTable(tableAsHTML(A, banded.rows = TRUE))
 \author{
 Samuel Leung, Derek Chiu
 }
-

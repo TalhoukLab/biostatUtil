@@ -21,4 +21,3 @@ file.remove("DataSummary.pdf")
 \author{
 Aline Talhouk
 }
-

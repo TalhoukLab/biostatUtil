@@ -25,4 +25,3 @@ Print intereraction test results for different models
 \author{
 Aline Talhouk
 }
-

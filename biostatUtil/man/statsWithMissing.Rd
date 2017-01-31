@@ -65,4 +65,3 @@ prodWithMissing(z, c(1:10), return.missing.value = "all missing")
 \author{
 Samuel Leung, Derek Chiu
 }
-

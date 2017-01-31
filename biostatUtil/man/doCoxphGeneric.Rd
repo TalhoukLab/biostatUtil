@@ -97,4 +97,3 @@ categories).
 \author{
 Samuel Leung, Aline Talhouk, Derek Chiu
 }
-

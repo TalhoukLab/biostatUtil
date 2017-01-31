@@ -37,4 +37,3 @@ indexOf("Animals", "a", ignore.case = TRUE)
 \author{
 Samuel Leung
 }
-

@@ -19,4 +19,3 @@ Function to provide a boxplot annotated with a 5 point summary.
 \author{
 Aline Talhouk
 }
-

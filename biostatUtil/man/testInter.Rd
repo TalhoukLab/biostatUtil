@@ -26,4 +26,3 @@ Testing for interaction in survival models
 \author{
 Aline Talhouk
 }
-

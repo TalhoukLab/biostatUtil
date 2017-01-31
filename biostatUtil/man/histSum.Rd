@@ -23,4 +23,3 @@ Function to create an annotated histogram, with density plot
 \author{
 Aline Talhouk
 }
-
