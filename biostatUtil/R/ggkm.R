@@ -21,7 +21,6 @@
 #' @param xlims horizontal limits for plot
 #' @param ylims vertical limits for plot
 #' @param ystratalabs labels for the strata being compared in \code{survfit}
-#' @param ystrataname name of the strata
 #' @param cox.ref.grp indicates reference group for the variable of interest in
 #'   the cox model.  this parameter will be ignored if not applicable, e.g. for 
 #'   continuous variable
@@ -57,7 +56,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                  main = "Kaplan-Meier Plot",
                  xlabs = "Time", ylabs = "Survival Probability",
                  xlims = c(0, max(sfit$time)), ylims = c(0, 1),
-                 ystratalabs = NULL, ystrataname = NULL, cox.ref.grp = NULL,
+                 ystratalabs = NULL, cox.ref.grp = NULL,
                  timeby = 5, pval = TRUE, HR = TRUE,
                  use.firth = 1, subs = NULL, 
                  legend = FALSE, legend.xy = c("x" = 0.8, "y" = 0.88),
@@ -81,25 +80,21 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
         ssvar <- paste0("(?=.*\\b=", subs[i], "\\b)")
     }
     subs1 <- which(regexpr(ssvar, levels(summary(sfit)$strata),
-                           perl = T) != -1)
+                           perl = TRUE) != -1)
     subs2 <- which(regexpr(ssvar, summary(sfit, censored = TRUE)$strata,
-                           perl = T) != -1)
+                           perl = TRUE) != -1)
     subs3 <- which(regexpr(ssvar, summary(sfit, times = times,
                                           extend = TRUE)$strata,
-                           perl = T) != -1)
+                           perl = TRUE) != -1)
   }
   if (!is.null(subs))
     pval <- FALSE
   if (is.null(ystratalabs))
-    ystratalabs <- as.character(sub("group=*", "", names(sfit$strata))) 
-  if (is.null(ystrataname))
-    ystrataname <- "Strata"
+    ystratalabs <- gsub(".*=(.)", "\\1", names(sfit$strata))
   m <- max(nchar(ystratalabs))
   times <- seq(0, max(sfit$time), by = timeby)
-  if (!is.null(cox.ref.grp)) {
-    # very ugly ... hope this will work for most cases!
-    names(cox.ref.grp) <- strsplit(names(sfit$strata)[1], "=")[[1]][1]
-  }
+  if (!is.null(cox.ref.grp))
+    names(cox.ref.grp) <- all.vars(sfit$call)[3]  # works for two-sided formulas
   
   .df <- data.frame(                      # data to be used in the survival plot
     time = sfit$time[subs2],

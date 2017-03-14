@@ -8,11 +8,10 @@ ggkm(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
   CI = TRUE, line.pattern = NULL, shading.colors = c("blue2", "red2",
   "deepskyblue", "indianred3"), main = "Kaplan-Meier Plot", xlabs = "Time",
   ylabs = "Survival Probability", xlims = c(0, max(sfit$time)),
-  ylims = c(0, 1), ystratalabs = NULL, ystrataname = NULL,
-  cox.ref.grp = NULL, timeby = 5, pval = TRUE, HR = TRUE,
-  use.firth = 1, subs = NULL, legend = FALSE, legend.xy = c(x = 0.8, y =
-  0.88), legend.direction = "horizontal", line.y.increment = 0.05,
-  digits = 3, min.p.value = 1e-04, ...)
+  ylims = c(0, 1), ystratalabs = NULL, cox.ref.grp = NULL, timeby = 5,
+  pval = TRUE, HR = TRUE, use.firth = 1, subs = NULL, legend = FALSE,
+  legend.xy = c(x = 0.8, y = 0.88), legend.direction = "horizontal",
+  line.y.increment = 0.05, digits = 3, min.p.value = 1e-04, ...)
 }
 \arguments{
 \item{sfit}{an object of class \code{survfit} containing one or more survival
@@ -47,8 +46,6 @@ survival curves}
 \item{ylims}{vertical limits for plot}
 
 \item{ystratalabs}{labels for the strata being compared in \code{survfit}}
-
-\item{ystrataname}{name of the strata}
 
 \item{cox.ref.grp}{indicates reference group for the variable of interest in
 the cox model.  this parameter will be ignored if not applicable, e.g. for 

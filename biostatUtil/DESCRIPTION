@@ -1,8 +1,8 @@
 Package: biostatUtil
 Type: Package
 Title: Utility Functions Used in Biostatistics Projects
-Version: 0.3.0.9070
-Date: 2017-01-10
+Version: 0.3.0.9071
+Date: 2017-03-14
 Authors@R: c(person("Derek", "Chiu", email = "dchiu@bccrc.ca", role = c("aut", "cre")),
     person("Aline", "Talhouk", email = "atalhouk@bccrc.ca", role = "aut"),
     person("Samuel", "Leung", email = "Samuel.Leung@vch.ca", role = "aut"))
@@ -53,5 +53,5 @@ Suggests:
     meta,
     testthat
 License: GPL-2
-RoxygenNote: 5.0.1.9000
+RoxygenNote: 6.0.1
 LazyData: FALSE
