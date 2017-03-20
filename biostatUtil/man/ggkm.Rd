@@ -29,7 +29,7 @@ time of death is shown as a table underneath the plot}
 survival curves}
 
 \item{CI}{logical; if \code{TRUE} (default), confidence bands are drawn for
-survival curves}
+survival curves the using cumulative hazard, or log(survival).}
 
 \item{line.pattern}{linetype for survival curves}
 
@@ -88,4 +88,7 @@ e.g. <0.0001, otherwise the exact p-value will be shown}
 }
 \description{
 Produce nicely annotated KM plots using ggplot.
+}
+\author{
+Samuel Leung, Derek Chiu
 }

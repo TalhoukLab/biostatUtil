@@ -47,6 +47,8 @@
 #' @param min.p.value the min. p-value below which the p-value will be shown as
 #'   e.g. <0.0001, otherwise the exact p-value will be shown
 #' @param ... additional arguments to other methods
+#' 
+#' @author Samuel Leung, Derek Chiu
 #' @export
 ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                  marks = TRUE, CI = TRUE,
@@ -63,7 +65,8 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                  legend.direction = "horizontal",
                  line.y.increment = 0.05, digits = 3, min.p.value = 0.0001,
                  ...) {
-  time <- surv <- lower <- upper <- n.censor <- n.risk <- NULL
+  time <- surv <- lower <- upper <- n.censor <- n.risk <- n.event <- 
+    estimate <- conf.high <- conf.low <- NULL
   times <- seq.int(0, max(sfit$time), by = timeby)
   s1 <- levels(summary(sfit)$strata)
   s2 <- summary(sfit, censored = TRUE)$strata
@@ -104,12 +107,11 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                       strata = factor(ystratalabs, levels = levels(.df$strata)),
                       upper = 1, lower = 1)
   .df <- bind_rows(zeros, .df)
-  d <- length(levels(.df$strata))
-  
-  # Specifying plot parameteres etc
+
+  # Specifying plot parameters etc
   names(shading.colors) <- ystratalabs
   if (is.null(line.pattern) | length(line.pattern) == 1)
-    line.pattern <- setNames(rep(1, d), ystratalabs)
+    line.pattern <- setNames(rep(1, nlevels(.df$strata)), ystratalabs)
   p <- ggplot(.df , aes(time, surv, color = strata, fill = strata,
                         linetype = strata)) +
     geom_step(size = .7) + 
@@ -133,12 +135,13 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
     theme(legend.direction = "horizontal")
   else
     p <- p + theme(legend.position = "none")
+  
   if (CI == TRUE)  # Confidence Bands
-  p <- p + geom_ribbon(data = .df, aes(ymin = lower, ymax = upper),
-                       alpha = 0.05, linetype = 0) 
+    p <- p + geom_ribbon(data = .df, aes(ymin = lower, ymax = upper),
+                         alpha = 0.05, linetype = 0) 
   if (marks == TRUE)  # Censor Marks
-  p <- p + geom_point(data = subset(.df, n.censor >= 1), 
-                      aes(x = time, y = surv), shape = "/", size = 4)
+    p <- p + geom_point(data = subset(.df, n.censor >= 1), 
+                        aes(x = time, y = surv), shape = "/", size = 4)
   # Statistics placement
   if (is.null(sfit2))
     fit <- sfit
@@ -207,15 +210,16 @@ left_margin <- function(labels) {
 summarize_km <- function(fit, p, pval, min.p.value, digits, HR, cox.ref.grp,
                          use.firth, ystratalabs, line.y.increment) {
   if (pval) {
-    sdiff <- survdiff(eval(fit$call$formula), data = eval(fit$call$data))
-    pval <- pchisq(sdiff$chisq, length(sdiff$n) - 1, lower.tail = FALSE)
-    pvaltxt <- ifelse(pval < min.p.value,
-                      paste("Log Rank p <", format(min.p.value,
-                                                   scientific = FALSE)),
-                      paste("Log Rank p =", signif(pval, digits)))
+    f <- eval(fit$call$formula)
+    d <- eval(fit$call$data)
+    pvalue <- survdiff(f, d) %>% 
+      getPval() %>% 
+      round_small(method = "signif", digits = digits)
+    pvalsep <- ifelse(is.numeric(pvalue), " = ", " ")
+    pvaltxt <- paste("Log Rank p", pvalue, sep = pvalsep)
     if (HR) {
-      pretty.coxph.obj <- prettyCoxph(eval(fit$call$formula),
-                                      input.d = eval(fit$call$data),
+      pretty.coxph.obj <- prettyCoxph(input.formula = f,
+                                      input.d = d,
                                       ref.grp = cox.ref.grp,
                                       use.firth = use.firth)
       if (pretty.coxph.obj$used.firth) {
@@ -224,7 +228,6 @@ summarize_km <- function(fit, p, pval, min.p.value, digits, HR, cox.ref.grp,
         coxm <- pretty.coxph.obj$fit
       }
       HRtxts <- Xunivcoxph(coxm, digits = digits)
-      show.ref.group <- length(HRtxts) > 1
       cox.strata.labs <- ystratalabs
       if (!is.null(cox.ref.grp)) {
         cox.strata.labs <- c(cox.ref.grp,
@@ -232,7 +235,7 @@ summarize_km <- function(fit, p, pval, min.p.value, digits, HR, cox.ref.grp,
       }
       for (i in seq_along(HRtxts)) {
         HRtxt <- HRtxts[i]
-        if (show.ref.group) {
+        if (length(HRtxts) > 1) {
           HRtxt <- paste0(HRtxt, " ~ ", cox.strata.labs[i + 1],
                           " vs. ", cox.strata.labs[1])
         }
