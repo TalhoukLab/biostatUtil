@@ -139,86 +139,15 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
   if (marks == TRUE)  # Censor Marks
   p <- p + geom_point(data = subset(.df, n.censor >= 1), 
                       aes(x = time, y = surv), shape = "/", size = 4)
-  # p-value placement (depends on whether there is a sfit2)
-  if (is.null(sfit2)) {
-    if (pval) {
-      sdiff <- survdiff(eval(sfit$call$formula), data = eval(sfit$call$data))
-      pval <- pchisq(sdiff$chisq, length(sdiff$n) - 1, lower.tail = FALSE)
-      pvaltxt <- ifelse(pval < min.p.value,
-                        paste("Log Rank p <", format(min.p.value,
-                                                     scientific = FALSE)),
-                        paste("Log Rank p =", signif(pval, digits)))
-      if (HR) {
-        pretty.coxph.obj <- prettyCoxph(eval(sfit$call$formula),
-                                        input.d = eval(sfit$call$data),
-                                        ref.grp = cox.ref.grp,
-                                        use.firth = use.firth)
-        if (pretty.coxph.obj$used.firth) {
-          coxm <- pretty.coxph.obj$fit.firth
-        } else {
-          coxm <- pretty.coxph.obj$fit
-        }
-        HRtxts <- Xunivcoxph(coxm, digits = digits)
-        show.ref.group <- length(HRtxts) > 1
-        cox.strata.labs <- ystratalabs
-        if (!is.null(cox.ref.grp)) {
-          cox.strata.labs <- c(cox.ref.grp,
-                               ystratalabs[ystratalabs != cox.ref.grp])
-        }
-        for (i in seq_along(HRtxts)) {
-          HRtxt <- HRtxts[i]
-          if (show.ref.group) {
-            HRtxt <- paste0(HRtxt, " ~ ", cox.strata.labs[i + 1],
-                            " vs. ", cox.strata.labs[1])
-          }
-          p <- p + annotate("text", x = 0.2 * max(sfit$time), hjust = 0,
-                            y = 0.01 + line.y.increment * i, label = HRtxt,
-                            size = 3)					
-        }
-      }
-    }
-    p <- p + annotate("text", x = 0.2 * max(sfit$time), hjust = 0, y = 0.01,
-                      label = ifelse(pval, pvaltxt, ""), size = 3)
-  } else {
-    if (pval) {
-      sdiff <- survdiff(eval(sfit2$call$formula), data = eval(sfit2$call$data))
-      pval <- pchisq(sdiff$chisq, length(sdiff$n) - 1, lower.tail = FALSE)
-      pvaltxt <- ifelse(pval < min.p.value,
-                        paste("Log Rank p <", format(min.p.value,
-                                                     scientific = FALSE)),
-                        paste("Log Rank p =", signif(pval, digits)))
-      if (HR) {
-        pretty.coxph.obj <- prettyCoxph(eval(sfit2$call$formula),
-                                        input.d = eval(sfit2$call$data),
-                                        ref.grp = cox.ref.grp,
-                                        use.firth = use.firth)
-        if (pretty.coxph.obj$used.firth) {
-          coxm <- pretty.coxph.obj$fit.firth
-        } else {
-          coxm <- pretty.coxph.obj$fit
-        }
-        HRtxts <- Xunivcoxph(coxm, digits = digits)
-        show.ref.group <- length(HRtxts) > 1
-        cox.strata.labs <- ystratalabs
-        if (!is.null(cox.ref.grp)) {
-          cox.strata.labs <- c(cox.ref.grp,
-                               ystratalabs[ystratalabs != cox.ref.grp])
-        }
-        for (i in seq_along(HRtxts)) {
-          HRtxt <- HRtxts[i]
-          if (show.ref.group) {
-            HRtxt <- paste0(HRtxt, " ~ ", cox.strata.labs[i + 1],
-                            " vs. ", cox.strata.labs[1])
-          }
-          p <- p + annotate("text", x = 0.2 * max(sfit2$time), hjust = 0,
-                            y = 0.01 + line.y.increment * i, label = HRtxt,
-                            size = 3)					
-        }
-      }
-    }
-    p <- p + annotate("text", x = 0.2 * max(sfit2$time), hjust = 0, y = 0.01,
-                      label = ifelse(pval, pvaltxt, ""), size = 3)
-  }
+  # Statistics placement
+  if (is.null(sfit2))
+    fit <- sfit
+  else
+    fit <- sfit2
+  p <- summarize_km(fit = fit, p = p, pval = pval, min.p.value = min.p.value,
+                    digits = digits, HR = HR, cox.ref.grp = cox.ref.grp,
+                    use.firth = use.firth, ystratalabs = ystratalabs,
+                    line.y.increment = line.y.increment)
   
   # Create table graphic to include at-risk numbers, keep at-risk numbers 
   # same order as appears in HR (do not reverse levels)
@@ -253,6 +182,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
 }
 
 #' Get left margin distances for km plot and risk table
+#' @noRd
 left_margin <- function(labels) {
   max.nc <- max(nchar(labels))
   if (max.nc <= 4) {
@@ -270,4 +200,48 @@ left_margin <- function(labels) {
   }
   return(list(margin.km = mleft.km,
               margin.rt = mleft.rt))
+}
+
+#' Numerical summaries of km fit: HR (95\% CI), Log rank test p-value
+#' @noRd
+summarize_km <- function(fit, p, pval, min.p.value, digits, HR, cox.ref.grp,
+                         use.firth, ystratalabs, line.y.increment) {
+  if (pval) {
+    sdiff <- survdiff(eval(fit$call$formula), data = eval(fit$call$data))
+    pval <- pchisq(sdiff$chisq, length(sdiff$n) - 1, lower.tail = FALSE)
+    pvaltxt <- ifelse(pval < min.p.value,
+                      paste("Log Rank p <", format(min.p.value,
+                                                   scientific = FALSE)),
+                      paste("Log Rank p =", signif(pval, digits)))
+    if (HR) {
+      pretty.coxph.obj <- prettyCoxph(eval(fit$call$formula),
+                                      input.d = eval(fit$call$data),
+                                      ref.grp = cox.ref.grp,
+                                      use.firth = use.firth)
+      if (pretty.coxph.obj$used.firth) {
+        coxm <- pretty.coxph.obj$fit.firth
+      } else {
+        coxm <- pretty.coxph.obj$fit
+      }
+      HRtxts <- Xunivcoxph(coxm, digits = digits)
+      show.ref.group <- length(HRtxts) > 1
+      cox.strata.labs <- ystratalabs
+      if (!is.null(cox.ref.grp)) {
+        cox.strata.labs <- c(cox.ref.grp,
+                             ystratalabs[ystratalabs != cox.ref.grp])
+      }
+      for (i in seq_along(HRtxts)) {
+        HRtxt <- HRtxts[i]
+        if (show.ref.group) {
+          HRtxt <- paste0(HRtxt, " ~ ", cox.strata.labs[i + 1],
+                          " vs. ", cox.strata.labs[1])
+        }
+        p <- p + annotate("text", x = 0.2 * max(fit$time), hjust = 0,
+                          y = 0.01 + line.y.increment * i, label = HRtxt,
+                          size = 3)					
+      }
+    }
+  }
+  p <- p + annotate("text", x = 0.2 * max(fit$time), hjust = 0, y = 0.01,
+                    label = ifelse(pval, pvaltxt, ""), size = 3)
 }
