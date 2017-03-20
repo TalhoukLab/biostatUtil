@@ -144,11 +144,13 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
                         aes(x = time, y = surv), shape = "/", size = 4)
   
   # HR statistic (95% CI), log rank test p-value for sfit (or sfit2, if exists)
-  fit <- sfit2 %||% sfit
-  p <- summarize_km(fit = fit, p = p, pval = pval, digits = digits, HR = HR,
-                    cox.ref.grp = cox.ref.grp, use.firth = use.firth,
-                    ystratalabs = ystratalabs,
-                    line.y.increment = line.y.increment)
+  if (pval) {
+    fit <- sfit2 %||% sfit
+    p <- summarize_km(fit = fit, p = p, digits = digits, HR = HR,
+                      cox.ref.grp = cox.ref.grp, use.firth = use.firth,
+                      ystratalabs = ystratalabs,
+                      line.y.increment = line.y.increment)
+  }
   
   # Create table graphic to include at-risk numbers, keep at-risk numbers 
   # same order as appears in HR (do not reverse levels)
@@ -205,44 +207,42 @@ left_margin <- function(labels) {
 
 #' Numerical summaries of km fit: HR (95\% CI), Log rank test p-value
 #' @noRd
-summarize_km <- function(fit, p, pval, digits, HR, cox.ref.grp,
+summarize_km <- function(fit, p, digits, HR, cox.ref.grp,
                          use.firth, ystratalabs, line.y.increment) {
-  if (pval) {
-    f <- eval(fit$call$formula)
-    d <- eval(fit$call$data)
-    pvalue <- survdiff(f, d) %>% 
-      getPval() %>% 
-      round_small(method = "signif", digits = digits)
-    pvalsep <- ifelse(is.numeric(pvalue), " = ", " ")
-    pvaltxt <- paste("Log Rank p", pvalue, sep = pvalsep)
-    if (HR) {
-      pretty.coxph.obj <- prettyCoxph(input.formula = f,
-                                      input.d = d,
-                                      ref.grp = cox.ref.grp,
-                                      use.firth = use.firth)
-      if (pretty.coxph.obj$used.firth) {
-        coxm <- pretty.coxph.obj$fit.firth
-      } else {
-        coxm <- pretty.coxph.obj$fit
+  f <- eval(fit$call$formula)
+  d <- eval(fit$call$data)
+  pvalue <- survdiff(f, d) %>% 
+    getPval() %>% 
+    round_small(method = "signif", digits = digits)
+  pvalsep <- ifelse(is.numeric(pvalue), " = ", " ")
+  pvaltxt <- paste("Log Rank p", pvalue, sep = pvalsep)
+  if (HR) {
+    pretty.coxph.obj <- prettyCoxph(input.formula = f,
+                                    input.d = d,
+                                    ref.grp = cox.ref.grp,
+                                    use.firth = use.firth)
+    if (pretty.coxph.obj$used.firth) {
+      coxm <- pretty.coxph.obj$fit.firth
+    } else {
+      coxm <- pretty.coxph.obj$fit
+    }
+    HRtxts <- Xunivcoxph(coxm, digits = digits)
+    cox.strata.labs <- ystratalabs
+    if (!is.null(cox.ref.grp)) {
+      cox.strata.labs <- c(cox.ref.grp,
+                           ystratalabs[ystratalabs != cox.ref.grp])
+    }
+    for (i in seq_along(HRtxts)) {
+      HRtxt <- HRtxts[i]
+      if (length(HRtxts) > 1) {
+        HRtxt <- paste0(HRtxt, " ~ ", cox.strata.labs[i + 1],
+                        " vs. ", cox.strata.labs[1])
       }
-      HRtxts <- Xunivcoxph(coxm, digits = digits)
-      cox.strata.labs <- ystratalabs
-      if (!is.null(cox.ref.grp)) {
-        cox.strata.labs <- c(cox.ref.grp,
-                             ystratalabs[ystratalabs != cox.ref.grp])
-      }
-      for (i in seq_along(HRtxts)) {
-        HRtxt <- HRtxts[i]
-        if (length(HRtxts) > 1) {
-          HRtxt <- paste0(HRtxt, " ~ ", cox.strata.labs[i + 1],
-                          " vs. ", cox.strata.labs[1])
-        }
-        p <- p + annotate("text", x = 0.2 * max(fit$time), hjust = 0,
-                          y = 0.01 + line.y.increment * i, label = HRtxt,
-                          size = 3)					
-      }
+      p <- p + annotate("text", x = 0.2 * max(fit$time), hjust = 0,
+                        y = 0.01 + line.y.increment * i, label = HRtxt,
+                        size = 3)					
     }
   }
   p <- p + annotate("text", x = 0.2 * max(fit$time), hjust = 0, y = 0.01,
-                    label = ifelse(pval, pvaltxt, ""), size = 3)
+                    label = pvaltxt, size = 3)
 }
