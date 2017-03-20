@@ -44,8 +44,6 @@
 #' @param digits number of digits to round: p-values digits=nunber of
 #'   significant digits, HR digits=number of digits after decimal point NOT
 #'   significant digits
-#' @param min.p.value the min. p-value below which the p-value will be shown as
-#'   e.g. <0.0001, otherwise the exact p-value will be shown
 #' @param ... additional arguments to other methods
 #' 
 #' @author Samuel Leung, Derek Chiu
@@ -63,8 +61,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                  use.firth = 1, subs = NULL, 
                  legend = FALSE, legend.xy = c("x" = 0.8, "y" = 0.88),
                  legend.direction = "horizontal",
-                 line.y.increment = 0.05, digits = 3, min.p.value = 0.0001,
-                 ...) {
+                 line.y.increment = 0.05, digits = 3, ...) {
   time <- surv <- lower <- upper <- n.censor <- n.risk <- n.event <- 
     estimate <- conf.high <- conf.low <- NULL
   times <- seq.int(0, max(sfit$time), by = timeby)
@@ -102,12 +99,12 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
     broom::tidy() %>% 
     select(time, n.risk, n.event, n.censor, surv = estimate,
            strata, upper = conf.high, lower = conf.low) %>% 
-    mutate(strata = factor(s2, labels = ystratalabs))
-  zeros <- data.frame(time = 0, surv = 1,
-                      strata = factor(ystratalabs, levels = levels(.df$strata)),
-                      upper = 1, lower = 1)
-  .df <- bind_rows(zeros, .df)
-
+    mutate(strata = factor(s2, labels = ystratalabs)) %>% 
+    bind_rows(
+      data.frame(time = 0, surv = 1,
+                 strata = factor(ystratalabs, levels = levels(.$strata)),
+                 upper = 1, lower = 1), .)
+  
   # Specifying plot parameters etc
   names(shading.colors) <- ystratalabs
   if (is.null(line.pattern) | length(line.pattern) == 1)
@@ -129,7 +126,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                                    list(NULL, NULL, NULL, NULL))) +
     ggtitle(main)
   if (legend == TRUE)  # Legend
-  p <- p + theme(legend.position = legend.xy[c("x", "y")]) +
+    p <- p + theme(legend.position = legend.xy[c("x", "y")]) +
     theme(legend.key = element_rect(colour = NA)) +
     theme(legend.title = element_blank()) +
     theme(legend.direction = "horizontal")
@@ -147,9 +144,9 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
     fit <- sfit
   else
     fit <- sfit2
-  p <- summarize_km(fit = fit, p = p, pval = pval, min.p.value = min.p.value,
-                    digits = digits, HR = HR, cox.ref.grp = cox.ref.grp,
-                    use.firth = use.firth, ystratalabs = ystratalabs,
+  p <- summarize_km(fit = fit, p = p, pval = pval, digits = digits, HR = HR,
+                    cox.ref.grp = cox.ref.grp, use.firth = use.firth,
+                    ystratalabs = ystratalabs,
                     line.y.increment = line.y.increment)
   
   # Create table graphic to include at-risk numbers, keep at-risk numbers 
@@ -207,7 +204,7 @@ left_margin <- function(labels) {
 
 #' Numerical summaries of km fit: HR (95\% CI), Log rank test p-value
 #' @noRd
-summarize_km <- function(fit, p, pval, min.p.value, digits, HR, cox.ref.grp,
+summarize_km <- function(fit, p, pval, digits, HR, cox.ref.grp,
                          use.firth, ystratalabs, line.y.increment) {
   if (pval) {
     f <- eval(fit$call$formula)

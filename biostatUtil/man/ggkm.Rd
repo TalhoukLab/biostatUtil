@@ -11,7 +11,7 @@ ggkm(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
   ylims = c(0, 1), ystratalabs = NULL, cox.ref.grp = NULL, timeby = 5,
   pval = TRUE, HR = TRUE, use.firth = 1, subs = NULL, legend = FALSE,
   legend.xy = c(x = 0.8, y = 0.88), legend.direction = "horizontal",
-  line.y.increment = 0.05, digits = 3, min.p.value = 1e-04, ...)
+  line.y.increment = 0.05, digits = 3, ...)
 }
 \arguments{
 \item{sfit}{an object of class \code{survfit} containing one or more survival
@@ -80,9 +80,6 @@ is always used.}
 \item{digits}{number of digits to round: p-values digits=nunber of
 significant digits, HR digits=number of digits after decimal point NOT
 significant digits}
-
-\item{min.p.value}{the min. p-value below which the p-value will be shown as
-e.g. <0.0001, otherwise the exact p-value will be shown}
 
 \item{...}{additional arguments to other methods}
 }
