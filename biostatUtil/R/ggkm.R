@@ -1,17 +1,17 @@
 #' Kaplan-Meier Plots using ggplot
 #' 
-#' Produce nicely annotated KM plots using ggplot.
+#' Produce nicely annotated KM plots using ggplot style.
 #' 
 #' @param sfit an object of class \code{survfit} containing one or more survival
 #'   curves
-#' @param sfit2 an (optional) second object of class \code{survfit} to compare
+#' @param sfit2 an (optional) second object of class \code{survfit} to compare 
 #'   with \code{sfit}
-#' @param table logical; if \code{TRUE} (default), the numbers at risk at each
+#' @param table logical; if \code{TRUE} (default), the numbers at risk at each 
 #'   time of death is shown as a table underneath the plot
 #' @param returns logical; if \code{TRUE} the plot is returned
-#' @param marks logical; if \code{TRUE} (default), censoring marks are shown on
+#' @param marks logical; if \code{TRUE} (default), censoring marks are shown on 
 #'   survival curves
-#' @param CI logical; if \code{TRUE} (default), confidence bands are drawn for
+#' @param CI logical; if \code{TRUE} (default), confidence bands are drawn for 
 #'   survival curves the using cumulative hazard, or log(survival).
 #' @param line.pattern linetype for survival curves
 #' @param shading.colors vector of colours for each survival curve
@@ -21,45 +21,42 @@
 #' @param xlims horizontal limits for plot
 #' @param ylims vertical limits for plot
 #' @param ystratalabs labels for the strata being compared in \code{survfit}
-#' @param cox.ref.grp indicates reference group for the variable of interest in
+#' @param cox.ref.grp indicates reference group for the variable of interest in 
 #'   the cox model.  this parameter will be ignored if not applicable, e.g. for 
 #'   continuous variable
-#' @param timeby length of time between consecutive time points spanning the
+#' @param timeby length of time between consecutive time points spanning the 
 #'   entire range of follow-up. Defaults to 5.
-#' @param pval logical; if \code{TRUE} (default), the logrank test p-value is
+#' @param pval logical; if \code{TRUE} (default), the logrank test p-value is 
 #'   shown on the plot
-#' @param HR logical; if \code{TRUE} (default), the estimated hazard ratio and
+#' @param HR logical; if \code{TRUE} (default), the estimated hazard ratio and 
 #'   its 95\% confidence interval will be shown
-#' @param use.firth Firth's method for Cox regression is used if the percentage
-#'   of censored cases exceeds \code{use.firth}. Setting \code{use.firth = 1}
-#'   (default) means Firth is never used, and \code{use.firth = -1} means Firth
+#' @param use.firth Firth's method for Cox regression is used if the percentage 
+#'   of censored cases exceeds \code{use.firth}. Setting \code{use.firth = 1} 
+#'   (default) means Firth is never used, and \code{use.firth = -1} means Firth 
 #'   is always used.
 #' @param subs use of subsetting
-#' @param legend logical; if \code{TRUE}, the legend is overlaid on the graph
+#' @param legend logical; if \code{TRUE}, the legend is overlaid on the graph 
 #'   (instead of on the side).
 #' @param legend.xy named vector specifying the x/y position of the legend
 #' @param legend.direction layout of items in legends ("horizontal" (default) or
 #'   "vertical")
 #' @param line.y.increment how much y should be incremented for each line
-#' @param digits number of digits to round: p-values digits=nunber of
-#'   significant digits, HR digits=number of digits after decimal point NOT
+#' @param digits number of digits to round: p-values digits=nunber of 
+#'   significant digits, HR digits=number of digits after decimal point NOT 
 #'   significant digits
 #' @param ... additional arguments to other methods
-#' 
+#' @return A kaplan-meier plot with optional annotations for hazard ratios, log 
+#'   rank test p-values, and risk table counts for each stratum.
+#'   
 #' @author Samuel Leung, Derek Chiu
 #' @export
-ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
-                 marks = TRUE, CI = TRUE,
-                 line.pattern = NULL,
-                 shading.colors = c("blue2", "red2",
-                                    "deepskyblue", "indianred3"),
-                 main = "Kaplan-Meier Plot",
-                 xlabs = "Time", ylabs = "Survival Probability",
-                 xlims = c(0, max(sfit$time)), ylims = c(0, 1),
-                 ystratalabs = NULL, cox.ref.grp = NULL,
-                 timeby = 5, pval = TRUE, HR = TRUE,
-                 use.firth = 1, subs = NULL, 
-                 legend = FALSE, legend.xy = c("x" = 0.8, "y" = 0.88),
+ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
+                 CI = TRUE, line.pattern = NULL, shading.colors = NULL,
+                 main = "Kaplan-Meier Plot", xlabs = "Time",
+                 ylabs = "Survival Probability", xlims = NULL, ylims = NULL,
+                 ystratalabs = NULL, cox.ref.grp = NULL, timeby = 5,
+                 pval = TRUE, HR = TRUE, use.firth = 1, subs = NULL,
+                 legend = FALSE, legend.xy = NULL,
                  legend.direction = "horizontal",
                  line.y.increment = 0.05, digits = 3, ...) {
   time <- surv <- lower <- upper <- n.censor <- n.risk <- n.event <- 
@@ -87,15 +84,29 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
     subs2 <- which(regexpr(ssvar, s2, perl = TRUE) != -1)
     subs3 <- which(regexpr(ssvar, s3, perl = TRUE) != -1)
   }
+  # Specifying plot parameter defaults
+  if (is.null(xlims))
+    xlims <- c(0, max(sfit$time))
+  if (is.null(ylims))
+    ylims <- c(0, 1)
+  if (is.null(line.pattern) | length(line.pattern) == 1)
+    line.pattern <- setNames(rep(1, length(sfit$strata)), ystratalabs)
   if (!is.null(cox.ref.grp))
     names(cox.ref.grp) <- all.vars(sfit$call)[3]  # works for two-sided formulas
   if (!is.null(subs))
     pval <- FALSE
   if (is.null(ystratalabs))
     ystratalabs <- gsub(".*=(.)", "\\1", names(sfit$strata))
-  mleft <- left_margin(ystratalabs)  # left margins for km plot and risk table
+  if (is.null(shading.colors))
+    shading.colors <- c("blue2", "red2", "deepskyblue", "indianred3")
+  if (is.null(legend.xy))
+    legend.xy <- c(0.8, 0.88)
   
-  .df <- sfit %>%   # data to be used in the survival plot
+  # Left margins for km plot and risk table
+  mleft <- left_margin(ystratalabs)
+  
+  # Data for KM plot
+  .df <- sfit %>% 
     broom::tidy() %>% 
     select(time, n.risk, n.event, n.censor, surv = estimate,
            strata, upper = conf.high, lower = conf.low) %>% 
@@ -105,10 +116,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
                  strata = factor(ystratalabs, levels = levels(.$strata)),
                  upper = 1, lower = 1), .)
   
-  # Specifying plot parameters etc
-  names(shading.colors) <- ystratalabs
-  if (is.null(line.pattern) | length(line.pattern) == 1)
-    line.pattern <- setNames(rep(1, nlevels(.df$strata)), ystratalabs)
+  # KM plot
   p <- ggplot(.df , aes(time, surv, color = strata, fill = strata,
                         linetype = strata)) +
     geom_step(size = .7) + 
@@ -123,24 +131,23 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
           panel.grid = element_blank(),
           plot.margin = grid::unit(c(0, 1, .5, mleft$margin.km),
                                    c("lines", "lines", "lines", "in"),
-                                   list(NULL, NULL, NULL, NULL))) +
+                                   list(NULL, NULL, NULL, NULL)),
+          legend.position = "none") +
     ggtitle(main)
-  if (legend == TRUE)  # Legend
-    p <- p + theme(legend.position = legend.xy[c("x", "y")]) +
-    theme(legend.key = element_rect(colour = NA)) +
-    theme(legend.title = element_blank()) +
-    theme(legend.direction = "horizontal")
-  else
-    p <- p + theme(legend.position = "none")
-  
-  if (CI == TRUE)  # Confidence Bands
+  if (legend)  # Legend
+    p <- p + theme(legend.position = legend.xy,
+                   legend.key = element_rect(colour = NA),
+                   legend.title = element_blank(),
+                   legend.direction = legend.direction)
+  if (CI)  # Confidence Bands
     p <- p + geom_ribbon(data = .df, aes(ymin = lower, ymax = upper),
                          alpha = 0.05, linetype = 0) 
-  if (marks == TRUE)  # Censor Marks
+  if (marks)  # Censor Marks
     p <- p + geom_point(data = subset(.df, n.censor >= 1), 
                         aes(x = time, y = surv), shape = "/", size = 4)
-  # Statistics placement
-  if (is.null(sfit2))
+  
+  # HR statistic (95% CI), log rank test p-value for sfit (or sfit2, if exists)
+  if (is.null(sfit2)) 
     fit <- sfit
   else
     fit <- sfit2
@@ -166,7 +173,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
             panel.border = element_blank(),
             axis.ticks = element_blank(),
             axis.text.x = element_blank(),
-            axis.text.y = element_text(color = shading.colors[ystratalabs],
+            axis.text.y = element_text(color = shading.colors,
                                        face = "bold", hjust = 1),
             axis.title.x = element_text(size = 12, vjust = 1),
             legend.position = "none",
