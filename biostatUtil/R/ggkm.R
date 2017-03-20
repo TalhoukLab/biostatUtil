@@ -49,6 +49,7 @@
 #'   rank test p-values, and risk table counts for each stratum.
 #'   
 #' @author Samuel Leung, Derek Chiu
+#' @importFrom purrr %||%
 #' @export
 ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
                  CI = TRUE, line.pattern = NULL, shading.colors = NULL,
@@ -85,22 +86,18 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
     subs3 <- which(regexpr(ssvar, s3, perl = TRUE) != -1)
   }
   # Specifying plot parameter defaults
-  if (is.null(xlims))
-    xlims <- c(0, max(sfit$time))
-  if (is.null(ylims))
-    ylims <- c(0, 1)
+  shading.colors <- shading.colors %||% c("blue2", "red2",
+                                          "deepskyblue", "indianred3")
+  xlims <- xlims %||% c(0, max(sfit$time))
+  ylims <- ylims %||% c(0, 1)
+  legend.xy <- legend.xy %||% c(0.8, 0.88)
+  ystratalabs <- ystratalabs %||% gsub(".*=(.)", "\\1", names(sfit$strata))
   if (is.null(line.pattern) | length(line.pattern) == 1)
     line.pattern <- setNames(rep(1, length(sfit$strata)), ystratalabs)
   if (!is.null(cox.ref.grp))
     names(cox.ref.grp) <- all.vars(sfit$call)[3]  # works for two-sided formulas
   if (!is.null(subs))
     pval <- FALSE
-  if (is.null(ystratalabs))
-    ystratalabs <- gsub(".*=(.)", "\\1", names(sfit$strata))
-  if (is.null(shading.colors))
-    shading.colors <- c("blue2", "red2", "deepskyblue", "indianred3")
-  if (is.null(legend.xy))
-    legend.xy <- c(0.8, 0.88)
   
   # Left margins for km plot and risk table
   mleft <- left_margin(ystratalabs)
@@ -147,10 +144,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
                         aes(x = time, y = surv), shape = "/", size = 4)
   
   # HR statistic (95% CI), log rank test p-value for sfit (or sfit2, if exists)
-  if (is.null(sfit2)) 
-    fit <- sfit
-  else
-    fit <- sfit2
+  fit <- sfit2 %||% sfit
   p <- summarize_km(fit = fit, p = p, pval = pval, digits = digits, HR = HR,
                     cox.ref.grp = cox.ref.grp, use.firth = use.firth,
                     ystratalabs = ystratalabs,
@@ -183,7 +177,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
     if (returns)
       gridExtra::grid.arrange(p, data.table, clip = FALSE, nrow = 2, ncol = 1,
                               heights = grid::unit(c(2, .5), "null"))
-   } else {
+  } else {
     return(p)
   }
 }
