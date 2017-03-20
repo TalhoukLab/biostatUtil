@@ -35,7 +35,7 @@
 indepTests <- function(x, digits = 3) {
   . <- `P-Value` <- Test <- Value <- df <- NULL
   Pearson <- x$CST
-  if (is.na(Pearson)) {
+  if (any(is.na(Pearson))) {
     Pearson.obj <- rep(NA, 3)
   } else {
     if (any(Pearson$expected < 1) | mean(Pearson$expected < 5) > 0.2) {
@@ -94,7 +94,7 @@ indepTests <- function(x, digits = 3) {
                              "Linear-by-Linear Association")) %>% 
     mutate(Test = rownames(.)) %>% 
     mutate_each(funs(round(., digits)), 1:2) %>%
-    mutate(`P-Value` = round_small(`P-Value`, digits)) %>%
+    mutate(`P-Value` = round_small(`P-Value`, digits = digits)) %>%
     select(Test, Value, df, `P-Value`) %>% 
     rbind(., c("N of Valid Cases", x$gt, "", ""))
   return(res)
