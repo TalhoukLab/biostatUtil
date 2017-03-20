@@ -2,18 +2,15 @@
 % Please edit documentation in R/round_small.R
 \name{round_small}
 \alias{round_small}
-\alias{round_small.numeric}
-\alias{round_small.matrix}
 \title{Rounding of Small Numbers}
 \usage{
-round_small(x, digits = 3, sci = FALSE)
-
-\method{round_small}{numeric}(x, digits = 3, sci = FALSE)
-
-\method{round_small}{matrix}(x, digits = 3, sci = FALSE)
+round_small(x, method = c("round", "signif"), digits = 3, sci = FALSE)
 }
 \arguments{
 \item{x}{a numeric vector or matrix}
+
+\item{method}{use either \code{\link{round}} or \code{\link{signif}} as 
+rounding method}
 
 \item{digits}{integer indicating number of decimal places to round to}
 
@@ -21,7 +18,7 @@ round_small(x, digits = 3, sci = FALSE)
 }
 \value{
 If precision of number is larger than desired rounding, the default 
-  \code{round} is used. Otherwise, we provide an upper bound instead of
+  \code{round} is used. Otherwise, we provide an upper bound instead of 
   coercion to 0.
 }
 \description{
@@ -31,7 +28,7 @@ Rounding of a number smaller than specified precision doesn't coerce to 0.
 This function is useful when we have small p-values and don't want to show
 the scientific notation, or coercion to 0. Instead we show an upper bound.
 For example, if a p-value is 2e-05 and we want to round to 3 digits, the
-function will return "<0.001".
+function will return "< 0.001".
 }
 \examples{
 # Vector inputs
