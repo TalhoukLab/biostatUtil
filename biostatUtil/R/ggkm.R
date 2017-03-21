@@ -52,6 +52,7 @@
 #' @importFrom purrr %||%
 #' @export
 #' @examples 
+#' library(survival)
 #' sfit <- survfit(Surv(time, status) ~ sex, lung)
 #' ggkm(sfit, timeby = 200, main = "Survival curves by sex")
 ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
