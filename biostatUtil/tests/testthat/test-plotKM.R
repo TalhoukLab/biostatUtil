@@ -53,3 +53,21 @@ test_that("survival fits can be compared", {
   expect_false(identical(p1, p2))
   expect_false(identical(p2, p3))
 })
+
+test_that("margin widths adapt to length of predictor variable labels", {
+  lung$gender <- factor(lung$sex, levels = c(1, 2), labels = c("Male", "Female"))
+  lung$gender2 <- factor(lung$sex, levels = c(1, 2), labels = c("Male", "Femal"))
+  p4 <- doKMPlots(lung, "time", "status", "gender", "Sex", use.ggkm = TRUE,
+                  use.firth = 0.8, cox.ref.group = "2")
+  p5 <- doKMPlots(lung, "time", "status", "gender2", "Sex", use.ggkm = TRUE,
+                  use.firth = 0.8, cox.ref.group = "2")
+  expect_error(p4, NA)
+  expect_error(p5, NA)
+})
+
+test_that("HR is shown for all levels of multilevel predictor", {
+  lung$ph.ecog.f <- factor(lung$ph.ecog)
+  p6 <- doKMPlots(lung, "time", "status", "ph.ecog.f", "PH.ECOG", use.ggkm = TRUE,
+                  use.firth = 0.8, cox.ref.group = "0")
+  expect_error(p6, NA)
+})
