@@ -51,6 +51,9 @@
 #' @author Samuel Leung, Derek Chiu
 #' @importFrom purrr %||%
 #' @export
+#' @examples 
+#' sfit <- survfit(Surv(time, status) ~ sex, lung)
+#' ggkm(sfit, timeby = 200, main = "Survival curves by sex")
 ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
                  CI = TRUE, line.pattern = NULL, shading.colors = NULL,
                  main = "Kaplan-Meier Plot", xlabs = "Time",

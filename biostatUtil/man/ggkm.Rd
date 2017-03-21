@@ -90,6 +90,10 @@ A kaplan-meier plot with optional annotations for hazard ratios, log
 \description{
 Produce nicely annotated KM plots using ggplot style.
 }
+\examples{
+sfit <- survfit(Surv(time, status) ~ sex, lung)
+ggkm(sfit, timeby = 200, main = "Survival curves by sex")
+}
 \author{
 Samuel Leung, Derek Chiu
 }
