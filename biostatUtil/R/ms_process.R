@@ -33,6 +33,8 @@ ms_process <- function(psm, protein, treatment, samples = NULL,
     ns <- seq_along(samples)
     sample.id <- paste0("X", ceiling(ns * 2 / max(ns)),
                         "_", seq_len(max(ns) / 2))
+    assertthat::assert_that(all(purrr::map_lgl(treatment,
+                                               ~ any(grepl(.x, sample.id)))))
   }
   psmKeepVars <-
     c("Annotated.Sequence", "Modifications", "Number.of.Protein.Groups",

@@ -10,10 +10,13 @@ dat2 <- ms_process(psm = psm, protein = pro, treatment = c("EMPTY", "N-FLAG", "U
                    condition = "MRC",
                    sample.id = c("CLK1_N-FLAG_r1", "CLK1_UNTAGGED_r1", "FLAG_EMPTY_r1",
                                  "CLK1_N-FLAG_r2", "CLK1_UNTAGGED_r2", "FLAG_EMPTY_r2"))
+dat3 <- ms_process(psm = psm, protein = pro, treatment = c("1", "2", "3"),
+                   condition = "VC")
 
-test_that("ms_process works with or without control", {
+test_that("ms_process works with/without controls and sample ids", {
   expect_error(dat1, NA)
   expect_error(dat2, NA)
+  expect_error(dat3, NA)
 })
 
 test_that("ms_boxplot shows boxplots of vsn values across samples", {
