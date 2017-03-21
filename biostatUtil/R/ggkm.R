@@ -126,9 +126,8 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
     theme(axis.title.x = element_text(vjust = 0.5),
           panel.background = element_blank(),
           panel.grid = element_blank(),
-          plot.margin = grid::unit(c(0, 1, .5, mleft$margin.km),
-                                   c("lines", "lines", "lines", "in"),
-                                   list(NULL, NULL, NULL, NULL)),
+          plot.margin = grid::unit(c(0.5, 1, .5, mleft$margin.km),
+                                   c("lines", "lines", "lines", "in")),
           legend.position = "none") +
     ggtitle(main)
   if (legend)  # Legend
