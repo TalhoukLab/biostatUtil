@@ -5,27 +5,29 @@
 \title{Nicer outputs from coxph model fits}
 \usage{
 prettyCoxph(input.formula, input.d, ref.grp = NULL, use.firth = 1,
-  check.ph = FALSE, ph.test.plot.filename = "no.file", ...)
+  check.ph = FALSE, plot.ph = TRUE, ph.test.plot.filename = NULL, ...)
 }
 \arguments{
-\item{input.formula}{a formula object, with the response on the left of a
-\code{~} operator, and the terms on the right. The response must be a
+\item{input.formula}{a formula object, with the response on the left of a 
+\code{~} operator, and the terms on the right. The response must be a 
 survival object as returned by the \code{Surv} function.}
 
 \item{input.d}{data.frame containing the variables in \code{input.formula}}
 
 \item{ref.grp}{a named array indicating reference group(s) for any variables 
-in the cox model.  this parameter will be ignored if not applicable, e.g. for 
-continuous variable}
+in the cox model.  this parameter will be ignored if not applicable, e.g.
+for continuous variable}
 
-\item{use.firth}{if set to -1, Firth's correction is applied using
+\item{use.firth}{if set to -1, Firth's correction is applied using 
 \code{coxphf}. The default value is 1, which uses \code{coxph}.}
 
 \item{check.ph}{if \code{TRUE}, checks the proportional hazard assumption.}
 
-\item{ph.test.plot.filename}{filename of residual plot. If set to
-\code{no.file} (default), plots to console. If \code{NA}, no plot will be
-generated.}
+\item{plot.ph}{if \code{TRUE} (default), the PH residual plot is graphed.}
+
+\item{ph.test.plot.filename}{character string for filename of residual plot,
+including file extension. If \code{NULL} (default), plots to console.
+Otherwise plot is saved to disk.}
 
 \item{...}{additional arguments to \code{coxph} or \code{coxphf}}
 }
@@ -47,9 +49,9 @@ using \code{coxphf}}
 Formats the coxph (or coxphf) model outputs into a prettier display.
 }
 \details{
-The original fit call is returned, along with other useful statistics.
-If Firth is called, we first determine if the percentage of
-censored cases is large enough to use Firth.
+The original fit call is returned, along with other useful statistics. If
+Firth is called, we first determine if the percentage of censored cases is
+large enough to use Firth.
 }
 \examples{
 library(survival)
@@ -70,6 +72,9 @@ prettyCoxph(Surv(time, status) ~ x + strata(sex), test1)
 # Releveled reference group
 prettyCoxph(Surv(time, status) ~ x + strata(sex), test1, ref.grp =
 setNames("2", "x"))
+
+# Use Firth's correction
+prettyCoxph(Surv(time, status) ~ x + strata(sex), test1, use.firth = -1)
 }
 \author{
 Samuel Leung, Derek Chiu
