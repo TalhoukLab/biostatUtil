@@ -62,6 +62,14 @@ coxph(Surv(time, status) ~ x + strata(sex), test1)
 
 # Pretty output
 prettyCoxph(Surv(time, status) ~ x + strata(sex), test1) 
+
+# x is now a factor
+test1$x <- factor(test1$x)
+prettyCoxph(Surv(time, status) ~ x + strata(sex), test1)
+
+# Releveled reference group
+prettyCoxph(Surv(time, status) ~ x + strata(sex), test1, ref.grp =
+setNames("2", "x"))
 }
 \author{
 Samuel Leung, Derek Chiu

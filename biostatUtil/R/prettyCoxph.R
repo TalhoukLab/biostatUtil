@@ -45,6 +45,14 @@
 #' 
 #' # Pretty output
 #' prettyCoxph(Surv(time, status) ~ x + strata(sex), test1) 
+#' 
+#' # x is now a factor
+#' test1$x <- factor(test1$x)
+#' prettyCoxph(Surv(time, status) ~ x + strata(sex), test1)
+#' 
+#' # Releveled reference group
+#' prettyCoxph(Surv(time, status) ~ x + strata(sex), test1, ref.grp =
+#' setNames("2", "x"))
 prettyCoxph <- function(input.formula, input.d, ref.grp = NULL, use.firth = 1,
                         check.ph = FALSE,
                         ph.test.plot.filename = "no.file", ...) {
@@ -52,15 +60,15 @@ prettyCoxph <- function(input.formula, input.d, ref.grp = NULL, use.firth = 1,
   assign(".my.formula", as.formula(
     paste0("survival::", paste(deparse(input.formula), collapse = ""))),
     envir = as.environment(pos))
-  # modify input.d if ref.grp is defined!
-  if (length(ref.grp) > 0) {
-	  terms.in.formula <- all.vars(input.formula[[3]])
+  # Modify input.d if ref.grp is defined
+  if (!is.null(ref.grp)) {
 	  for (var.name in names(ref.grp)) {
-		  if (var.name %in% terms.in.formula) {
-		    # if var.name not in formula, just silently ignore it
-		    input.d[, var.name] <- relevel(factor(input.d[, var.name]), ref = ref.grp[var.name])
+		  if (var.name %in% all.vars(input.formula[[3]])) {
+		    # Only relevel if var.name in formula
+		    input.d[[var.name]] <- relevel(factor(input.d[[var.name]]),
+		                                   ref = ref.grp[var.name])
 		  }
- 	  }
+	  }
   }	
   
   assign(".my.data", input.d, envir = as.environment(pos))

@@ -41,6 +41,15 @@ test_that("prettyCoxph returns values from survival::coxph when use==FALSE",
                                    check.ph = TRUE)$n)
 )
 
+test_that("reference group can be redefined", {
+  test1$x <- factor(test1$x)
+  pc1 <- prettyCoxph(Surv(time, status) ~ x + strata(sex), test1)
+  pc2 <- prettyCoxph(Surv(time, status) ~ x + strata(sex), test1, ref.grp =
+                       setNames("2", "x"))
+  expect_equal(names(pc1$fit$coefficients), c("x1", "x2"))
+  expect_equal(names(pc2$fit$coefficients), c("x0", "x1"))
+})
+
 # clean up ---------------------------------------------------------------------
 if (exists("BAK.TEST.D")) {
   test.d <- BAK.TEST.D
