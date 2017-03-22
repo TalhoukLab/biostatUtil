@@ -10,29 +10,31 @@ build_cuts(x, n = c("b", "t", "qd", "qn"), var.prefix = NULL,
 \arguments{
 \item{x}{vector to split by certain cutpoints}
 
-\item{n}{either "b" for binarization (2 groups), "t" for trinarization (3 groups),
-"q" for quads (4 groups), or "qn" for quints (5 groups)}
+\item{n}{either "b" for binarization (2 groups), "t" for trinarization (3
+groups), "q" for quads (4 groups), or "qn" for quints (5 groups)}
 
 \item{var.prefix}{variable name prefix}
 
 \item{list}{if \code{TRUE}, the variables are returned as a list.}
 }
 \value{
-By default, a data frame of cutpoint variables built from a categorical biomarker. The
-number of columns correspond to all the ways the biomarker could be cut into \code{n}
-bins. Each column name starts with a "b", "t", "qd", or "qn" for "binarization", "trinarization",
-"quads", or "quints", respectively, with the levels being compared separated by "v". If \code{list = FALSE},
-each cutpoint variable is an element of a list.
+By default, a tibble of cutpoint variables built from a categorical
+  biomarker. The number of columns correspond to all the ways the biomarker
+  could be cut into \code{n} bins. Each column name starts with a "b", "t",
+  "qd", or "qn" for "binarization", "trinarization", "quads", or "quints",
+  respectively, with the levels being compared separated by "v". If 
+  \code{list = FALSE}, each cutpoint variable is an element of a list.
 }
 \description{
-Transforms an ordinal variable into anywhere from two to five groups for cutpoint analysis.
+Transforms an ordinal variable into anywhere from two to five groups for
+cutpoint analysis.
 }
 \examples{
 set.seed(1108)
 x <- sample(0:4, size = 1000, replace = TRUE)
-head(build_cuts(x, n = "b"))
-head(build_cuts(x, n = "t"))
-head(build_cuts(x, n = "t", var.prefix = "PHGDH"))
+build_cuts(x, n = "b")
+build_cuts(x, n = "t")
+build_cuts(x, n = "t", var.prefix = "PHGDH")
 str(build_cuts(x, n = "qd", list = TRUE))
 }
 \author{
