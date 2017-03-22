@@ -57,6 +57,11 @@ test_that("PH residual plot can be saved", {
   file.remove("PH.pdf")
 })
 
+test_that("Firth's correction can be used", {
+  expect_true(prettyCoxph(Surv(time, status) ~ x + strata(sex), test1,
+                          use.firth = -1)$used.firth)
+})
+
 # clean up ---------------------------------------------------------------------
 if (exists("BAK.TEST.D")) {
   test.d <- BAK.TEST.D
