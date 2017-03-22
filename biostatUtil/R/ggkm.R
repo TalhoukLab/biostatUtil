@@ -49,7 +49,6 @@
 #'   rank test p-values, and risk table counts for each stratum.
 #'   
 #' @author Samuel Leung, Derek Chiu
-#' @importFrom purrr %||%
 #' @export
 #' @examples 
 #' library(survival)
