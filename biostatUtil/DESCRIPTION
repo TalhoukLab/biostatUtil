@@ -1,8 +1,8 @@
 Package: biostatUtil
 Type: Package
 Title: Utility Functions Used in Biostatistics Projects
-Version: 0.3.0.9072
-Date: 2017-03-20
+Version: 0.3.0.9073
+Date: 2017-03-22
 Authors@R: c(person("Derek", "Chiu", email = "dchiu@bccrc.ca", role = c("aut", "cre")),
     person("Aline", "Talhouk", email = "atalhouk@bccrc.ca", role = "aut"),
     person("Samuel", "Leung", email = "Samuel.Leung@vch.ca", role = "aut"))
