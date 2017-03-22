@@ -50,6 +50,13 @@ test_that("reference group can be redefined", {
   expect_equal(names(pc2$fit$coefficients), c("x0", "x1"))
 })
 
+test_that("PH residual plot can be saved", {
+  expect_error(prettyCoxph(Surv(time, status) ~ x + strata(sex), test1,
+                           ph.test.plot.filename = "PH.pdf", check.ph = TRUE),
+               NA)
+  file.remove("PH.pdf")
+})
+
 # clean up ---------------------------------------------------------------------
 if (exists("BAK.TEST.D")) {
   test.d <- BAK.TEST.D

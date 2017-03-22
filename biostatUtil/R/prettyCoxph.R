@@ -78,7 +78,7 @@ prettyCoxph <- function(input.formula, input.d, ref.grp = NULL, use.firth = 1,
       if (is.factor(.my.data[, var.name])) {
         fit <- survfit(as.formula(paste(deparse(.my.formula[[2]]),
                                         "~", var.name)), data = .my.data)
-        for (i in 1:nrow(fit)) {
+        for (i in seq_len(nrow(fit))) {
           if (sum(fit[i]$n.censor) / fit[i]$n > use.firth) {
             ok.to.use.firth <- TRUE
             break
@@ -96,12 +96,12 @@ prettyCoxph <- function(input.formula, input.d, ref.grp = NULL, use.firth = 1,
   if (ok.to.use.firth) {
     .my.data <- .my.data[apply(.my.data[, all.vars(.my.formula)], 1,
                                function(x) !any(is.na(x))), ]
-    fit.firth <- coxphf::coxphf(.my.formula, .my.data, ...)	
+    fit.firth <- coxphf::coxphf(.my.formula, .my.data, ...)
     fit.firth$nevent <- sum(fit.firth$y[, "status"])
-	# if lower/upper ci becomes NaN, change to NA for better display 
-	# e.g. in KM plot "NA" would be easier to understand compared to "NaN"
-	fit.firth$ci.lower[is.nan(fit.firth$ci.lower)] <- NA
-	fit.firth$ci.upper[is.nan(fit.firth$ci.upper)] <- NA
+    # if lower/upper ci becomes NaN, change to NA for better display 
+    # e.g. in KM plot "NA" would be easier to understand compared to "NaN"
+    fit.firth$ci.lower[is.nan(fit.firth$ci.lower)] <- NA
+    fit.firth$ci.upper[is.nan(fit.firth$ci.upper)] <- NA
   } else {
     fit.firth <- NA
   }
