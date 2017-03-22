@@ -31,7 +31,8 @@ test_that("prettyCoxph returns values from survival::coxph when use.firth==1",
 test1 <- list(time = c(4, 3, 1, 1, 2, 2, 3), 
               status = c(1, 1, 1, 0, 1, 1, 0), 
               x = c(0, 2, 1, 1, 1, 0, 0), 
-              sex = c(0, 0, 0, 0, 1, 1, 1))  
+              sex = c(0, 0, 0, 0, 1, 1, 1))
+test1$x <- factor(test1$x)
 fit_coxph <- coxph(Surv(time, status) ~ x + strata(sex), test1) 
 
 test_that("prettyCoxph returns values from survival::coxph when use==FALSE",
@@ -42,7 +43,6 @@ test_that("prettyCoxph returns values from survival::coxph when use==FALSE",
 )
 
 test_that("reference group can be redefined", {
-  test1$x <- factor(test1$x)
   pc1 <- prettyCoxph(Surv(time, status) ~ x + strata(sex), test1)
   pc2 <- prettyCoxph(Surv(time, status) ~ x + strata(sex), test1, ref.grp =
                        setNames("2", "x"))
@@ -59,7 +59,7 @@ test_that("PH residual plot can be saved", {
 
 test_that("Firth's correction can be used", {
   expect_true(prettyCoxph(Surv(time, status) ~ x + strata(sex), test1,
-                          use.firth = -1)$used.firth)
+                          use.firth = 0.2)$used.firth)
 })
 
 # clean up ---------------------------------------------------------------------
