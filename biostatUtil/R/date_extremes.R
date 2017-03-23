@@ -64,13 +64,12 @@ maxDateArray <- function(t.arr, date.format = "MM.DD.YYYY",
     t.arr <- t.arr[!(t.arr %in% existing.missing.codes)]
   if (length(t.arr) == 0)
     return(return.missing.code)
-  max.index <- which.max(sapply(t.arr, function(x) {
-    as.Date(
-      cleanDate(x, date.format, date.format,
-                existing.missing.codes = existing.missing.codes,
-                return.missing.code = return.missing.code, ...),
-      format = getFormat(x, date.format), origin = DATE.ORIGIN)
-  }, USE.NAMES = FALSE))
+  max.index <- purrr::map(t.arr, ~ as.Date(
+    cleanDate(.x, date.format, date.format,
+              existing.missing.codes = existing.missing.codes,
+              return.missing.code = return.missing.code, ...),
+    format = getFormat(.x, date.format), origin = DATE.ORIGIN)) %>% 
+    which.max()
   return(t.arr[max.index])
 }
 
@@ -84,12 +83,11 @@ minDateArray <- function(t.arr, date.format = "MM.DD.YYYY",
     t.arr <- t.arr[!(t.arr %in% existing.missing.codes)]
   if (length(t.arr) == 0)
     return(return.missing.code)
-  min.index <- which.min(sapply(t.arr, function(x) {
-    as.Date(
-      cleanDate(x, date.format, date.format,
-                existing.missing.codes = existing.missing.codes,
-                return.missing.code = return.missing.code, ...),
-      format = getFormat(x, date.format), origin = DATE.ORIGIN)
-  }, USE.NAMES = FALSE))
+  min.index <- purrr::map(t.arr, ~ as.Date(
+    cleanDate(.x, date.format, date.format,
+              existing.missing.codes = existing.missing.codes,
+              return.missing.code = return.missing.code, ...),
+    format = getFormat(.x, date.format), origin = DATE.ORIGIN)) %>% 
+    which.max()
   return(t.arr[min.index])
 }

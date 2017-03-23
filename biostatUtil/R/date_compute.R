@@ -56,26 +56,27 @@ addToDate <- function(org.date, delta, date.format = "MM.DD.YYYY",
                       units = c("days", "weeks", "months", "years"),
                       existing.missing.codes = NA, return.missing.code = NA,
                       sep = "/") {
-  if (is.na(org.date) | is.na(delta)) 
-    return(NA)
+  if (is.na(org.date) | is.na(delta)) return(NA)
   if (length(unique(existing.missing.codes
                     [!is.na(existing.missing.codes)])) > 0 &
       (org.date %in% existing.missing.codes |
        delta %in% existing.missing.codes))
     return(return.missing.code)
-  delta <- as.numeric(delta)
-  delta.time <- switch(match.arg(units),
-                       days = delta,
-                       weeks = delta * 7,
-                       months = delta * NUM.DAYS.IN.MONTH,
-                       years = delta * NUM.DAYS.IN.YEAR)
-  return(format(as.Date(as.Date(
-    cleanDate(org.date, date.format, date.format,
-              existing.missing.codes = existing.missing.codes,
-              return.missing.code = return.missing.code, sep = sep),
-    format = getFormat(org.date, date.format), origin = DATE.ORIGIN) +
-      delta.time, origin = DATE.ORIGIN),
-    format = getFormat(org.date, date.format)))
+  delta.time <- delta %>% 
+    as.numeric() %>% 
+    switch(match.arg(units),
+           days = .,
+           weeks = . * 7,
+           months = . * NUM.DAYS.IN.MONTH,
+           years = . * NUM.DAYS.IN.YEAR)
+  result <- cleanDate(org.date, date.format, date.format,
+                      existing.missing.codes = existing.missing.codes,
+                      return.missing.code = return.missing.code, sep = sep) %>% 
+    as.Date(format = getFormat(org.date, date.format), origin = DATE.ORIGIN) %>% 
+    magrittr::add(delta.time) %>% 
+    as.Date(origin = DATE.ORIGIN) %>% 
+    format(format = getFormat(org.date, date.format))
+  return(result)
 }
 
 #' @param d1 later date
@@ -90,20 +91,19 @@ diffDate <- function(d1, d2, date.format = "MM.DD.YYYY",
                      units = c("days", "weeks", "months", "years"),
                      existing.missing.codes = NA, return.missing.code = NA,
                      sep = "/") {
-  d1 <- unname(d1)
-  d2 <- unname(d2)
   if (is.na(d1) | is.na(d2)) return(NA)
   if (n_distinct(existing.missing.codes, na.rm = TRUE) > 0 &
       any(c(d1, d2) %in% existing.missing.codes))
     return(return.missing.code)
-  dates <- lapply(
-    c(d1, d2), function(x)
-      strptime(cleanDate(x, date.format, date.format,
-                         existing.missing.codes = existing.missing.codes,
-                         return.missing.code = return.missing.code, sep = sep),
-               format = getFormat(x, date.format))
-  )
-  result <- as.numeric(do.call(difftime, dates))
+  result <- c(d1, d2) %>% 
+    unname() %>% 
+    purrr::map(~ strptime(
+      cleanDate(.x, date.format, date.format,
+                existing.missing.codes = existing.missing.codes,
+                return.missing.code = return.missing.code, sep = sep),
+      format = getFormat(.x, date.format))) %>% 
+    purrr::invoke(difftime, .) %>% 
+    as.numeric()
   switch(match.arg(units),
          days = result,
          weeks = result / 7,
