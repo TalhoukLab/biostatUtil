@@ -34,7 +34,7 @@ bootMean <- function(x, num.boot = 1000, conf.level = 0.95, seed = 12, ...) {
   obs.mean <- mean(x, ...)
   ci <- replicate(num.boot, mean(sample(x, replace = TRUE), ...)) %>% 
     sort() %>% 
-    magrittr::extract(c(floor(num.boot * (1 - conf.level) / 2),
-                        ceiling(num.boot * (1 - (1 - conf.level) / 2))))
+    extract(c(floor(num.boot * (1 - conf.level) / 2),
+              ceiling(num.boot * (1 - (1 - conf.level) / 2))))
   return(list(obs.mean = obs.mean, ci = ci, n = length(x)))
 }
