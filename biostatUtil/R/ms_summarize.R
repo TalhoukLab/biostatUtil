@@ -33,10 +33,10 @@ ms_summarize <- function(x, g, level = c("Gene", "Peptide"), col.names = NULL,
                    "Descriptions", "Modifications", "Reporter.Quan.Result.ID")
   
   # Combine values, add/select vars, per-level analyses, numeric coercion
-  res <- x %>% 
-    extract(c("pep", "l2", "vsn")) %>% 
+  expr <- x %>% 
+    magrittr::extract(c("pep", "l2", "vsn")) %>% 
     unname() %>% 
-    do.call(cbind, .) %>% 
+    purrr::invoke(cbind, .) %>% 
     mutate_(.dots = setNames(list(
       lazyeval::interp(~paste(A, G, D, sep = " || "),
                        A = quote(Accession), G = quote(Gene),
@@ -47,12 +47,15 @@ ms_summarize <- function(x, g, level = c("Gene", "Peptide"), col.names = NULL,
                        M = quote(Modifications)),
       lazyeval::interp(~as.character(R), R = quote(Reporter.Quan.Result.ID))),
       c("AGD", "AGDSM", "Block"))) %>% 
-    select(one_of(c(info.vars, "Block", colnames(x$vsn)))) %>% 
-    plyr::ddply(.variables = var.split, .fun = ms_analyze, .progress = "text",
-                g = g, level = level, col.names = col.names,
-                info.vars = info.vars[-1]) %>% 
-    mutate_at(.cols = vars(-one_of(info.vars), -matches("dir|adj")),
-              .funs = as.numeric) 
+    select(one_of(c(info.vars, "Block", colnames(x$vsn))))
+  res <- purrr::map(sort(unique(expr[[var.split]])), ~ 
+                      ms_analyze(expr[expr[[var.split]] == .x, ], g = g,
+                                 level = level, col.names = col.names,
+                                 info.vars = info.vars[-1])) %>% 
+    purrr::invoke(rbind, .) %>% 
+    as.data.frame(stringsAsFactors = FALSE) %>% 
+    mutate_at(.cols = vars(-one_of(info.vars), matches("dir|adj")),
+              .funs = as.numeric)
   
   # Data only with adjusted p-values (BH), synced column names
   adj <- res %>%

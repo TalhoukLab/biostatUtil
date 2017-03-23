@@ -46,33 +46,30 @@ lifetable <- function(obj, ntimes = 3, times = NULL, nround = 3,
                       summary = FALSE) {
   nevent <- nlost <- nsubs <- plost <- NULL
   cuts <- cumsum(obj$strata)
-  if (is.null(times)) {
-    times <- round(quantile(obj$time, 1 / ntimes * rep(1:ntimes)))
-  }
+  times <- times %||% round(quantile(obj$time, 1 / ntimes * seq_len(ntimes)))
   if (ntimes > 1) {
-    ind <- sapply(split_pos(obj$time, cuts), function(x) {
-      mat <- abs(sapply(times, "-", x)) %>% 
-        apply(., 2, which.min)
-      return(mat)
-    })
-    ind[ntimes, ] <- obj$strata
-    ind <- as.list(as.data.frame(ind))
+    ind <- purrr::map(split_pos(obj$time, cuts),
+                      ~ purrr::map_int(times, function(.y)
+                        which.min(abs(.y - .x)))) %>%
+      purrr::map2(.y = obj$strata, ~ magrittr::inset(.x, ntimes, .y))
   } else {
     ind <- obj$strata
   }
-  cs <- mapply(function(x, ind) sapply(split_pos(x, ind), sum)[-(length(ind) + 1)],
-               split_pos(obj$n.censor, cuts), ind, SIMPLIFY = FALSE)
-  es <- mapply(function(x, ind) sapply(split_pos(x, ind), sum)[-(length(ind) + 1)],
-               split_pos(obj$n.event, cuts), ind, SIMPLIFY = FALSE)
+  cs <- purrr::map2(split_pos(obj$n.censor, cuts), ind,
+                    ~ purrr::map_dbl(split_pos(.x, .y), sum))
+  es <- purrr::map2(split_pos(obj$n.event, cuts), ind,
+                    ~ purrr::map_dbl(split_pos(.x, .y), sum))
   if (show.strata)
     strata <- names(obj$strata)
   else
     strata <- gsub(".+=", "\\1", names(obj$strata))
-  tab <- mapply(function(n, c, e) KMsurv::lifetab(c(0, times), n, c, e),
-                obj$n, cs, es, SIMPLIFY = FALSE) %>% 
-    lapply(round, nround) %>% 
-    plyr::ldply(function(.) cbind(times = rownames(.), .)) %>% 
-    cbind(strata = rep(strata, each = ntimes), .)
+  tab <- purrr::pmap(list(obj$n, cs, es), KMsurv::lifetab,
+                     tis = c(0, times)) %>%
+    purrr::map(round, nround) %>%
+    purrr::map(~ cbind(times = rownames(.x), .)) %>%
+    purrr::invoke(rbind, .) %>%
+    cbind(strata = rep(strata, each = ntimes), .) %>% 
+    set_rownames(NULL)
   if (summary) {
     tab <- tab %>% 
       select(strata, nsubs, nevent, nlost) %>%

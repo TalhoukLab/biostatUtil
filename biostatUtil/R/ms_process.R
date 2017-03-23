@@ -26,9 +26,7 @@ ms_process <- function(psm, protein, treatment, samples = NULL,
   protein <- protein %>% set_colnames(make.names(colnames(.)))
   
   # Variables to keep
-  if (is.null(samples)) {
-    samples <- grep("^X[0-9]", names(psm), value = TRUE)
-  }
+  samples <- samples %||% grep("^X[0-9]", names(psm), value = TRUE)
   if (is.null(sample.id)) {
     ns <- seq_along(samples)
     sample.id <- paste0("X", ceiling(ns * 2 / max(ns)),
@@ -51,7 +49,7 @@ ms_process <- function(psm, protein, treatment, samples = NULL,
   #   - Master Protein Accession missing or "sp"
   pep <- psm %>%
     select(one_of(psmKeepVars)) %>% 
-    set_colnames(plyr::mapvalues(colnames(.), samples, sample.id)) %>% 
+    rename_(.dots = setNames(samples, sample.id)) %>% 
     filter_(.dots = list(lazyeval::interp(
       ~NOP == 1 & !grepl("NoQuanValues", QI) & (is.na(MPA) | MPA != "sp"),
       NOP = quote(Number.of.Proteins), QI = quote(Quan.Info),
