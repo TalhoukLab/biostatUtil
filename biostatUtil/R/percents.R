@@ -38,10 +38,8 @@ colPercent <- function(t, pretty.text = FALSE, keep = TRUE, digits = 4) {
   if (keep) {
     pcts <- gdata::interleave(t, pcts)
     rownames(pcts) <- paste0(rownames(pcts), rep(c("", " Col %"), nrow(t)))
-    return(pcts)
-  } else {
-    return(pcts)
   }
+  return(pcts)
 }
 
 #' @rdname percents
@@ -57,10 +55,8 @@ rowPercent <- function(t, pretty.text = FALSE, keep = TRUE, digits = 4) {
   if (keep) {
     pcts <- gdata::interleave(t, pcts)
     rownames(pcts) <- paste0(rownames(pcts), rep(c("", " Row %"), nrow(t)))
-    return(pcts)
-  } else {
-    return(pcts)  
   }
+  return(pcts)
 }
 
 #' @rdname percents
