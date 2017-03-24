@@ -44,51 +44,52 @@ best_cut <- function(f, d, n = c("b", "t", "qd", "qn"), AIC.range = 3,
   pos <- 1
   assign("f", f, envir = as.environment(pos))
   assign("d", d, envir = as.environment(pos))
+  
+  # Build cutpoints, cox and km fits, summarize results
   bins <- build_cuts(d[, all.vars(f)[3]], n = n, list = TRUE) 
-  cuts <- stringr::str_extract_all(names(bins), ".v", simplify = TRUE) %>% 
-    apply(., 1, paste, collapse = ", ") %>% 
-    gsub("v", "", .)
-  coxs <- lapply(bins, function(bin)
-    coxph(as.formula(paste(deparse(f[[2]]), "~ bin")), d))
-  diffs <- lapply(bins, function(bin)
-    survfit(as.formula(paste(deparse(f[[2]]), "~ bin")), d))
-  results <- coxs %>% 
-    sapply(., broom::glance) %>% 
-    rbind(cutpoints = cuts, .) %>% 
-    t() %>%
-    data.frame() %>% 
-    dplyr::select(cutpoints, p.value.log, logLik, AIC)
-  p.vals <- signif(unlist(results$p.value.log), nround)
-  AIC.vals <- round(unlist(results$AIC), nround)
+  cuts <- stringr::str_extract_all(names(bins), ".v") %>% 
+    purrr::map_chr(~ paste(gsub("v", "", .x), collapse = ", "))
+  coxs <- purrr::map(bins, ~
+    coxph(as.formula(paste(deparse(f[[2]]), "~ .x")), d))
+  diffs <- purrr::map(bins, ~
+    survfit(as.formula(paste(deparse(f[[2]]), "~ .x")), d))
+  results <- coxs %>%
+    purrr::map_df(broom::glance, .id = "bin.names") %>%
+    set_rownames(.$bin.names) %>%
+    dplyr::select(p.value.log, logLik, AIC) %>%
+    cbind(cutpoints = cuts, .)
+  p.vals <- signif(results$p.value.log, nround)
+  AIC.vals <- round(results$AIC, nround)
 
   # Check for flat likelihood issue using range of AIC
   if (diff(range(results$AIC)) < AIC.range) {
-    opt.ind <- sapply(diffs, function(x) summary(x)$table[, "events"]) %>%
-      prop.table(2) %>% 
-      apply(., 2, prod) %>% 
-      which.max()  # Cutpoint that halves the group size and number of events best
+    # Cutpoint that distributes the group size and number of events most evenly
+    opt.ind <- purrr::map_dbl(diffs, ~ prod(summary(.x)$table[, "events"] / 
+                                              sum(summary(.x)$n.event))) %>% 
+      which.max()
     flat.lik <- TRUE
   } else {
     opt.ind <- which.min(results$AIC)
     flat.lik <- FALSE
   }
+  # Add annotation to title indicating best cutpoint
   opt.cut <- results$cutpoints[[opt.ind]]
   best.ind <- rep("", length(cuts)) %>% 
-    magrittr::inset(opt.ind, "(Best)")
-  titles <- paste(title, names(bins), best.ind)
+    magrittr::inset(opt.ind, " (Best)")
+  titles <- paste0(title, " ", names(bins), best.ind)
   
-  # Plot survival curves for every cutpoint in PNG file
+  # Plot survival curves for every cutpoint in console/PNG file
   if (plot) {
-    if (!is.null(filename)) {
-      png(filename, width = 8.5, height = 11, units = "in", res = 300)
+    if (is.null(filename)) {
       par(mfrow = c(nrow, ncol))
-      mapply(best_cut_plot, diffs, titles, p.vals, AIC.vals, MoreArgs = list(...))
+      purrr::pwalk(list(diffs, titles, p.vals, AIC.vals), best_cut_plot, ...)
+      par(mfrow = c(1, 1))
+    } else {
+      png(filename, width = 8.5, height = 11, units = "in", res = 300)
+      par(mfrow = c(nrow %||% 2, ncol %||% 2))
+      purrr::pwalk(list(diffs, titles, p.vals, AIC.vals), best_cut_plot, ...)
       par(mfrow = c(1, 1))
       dev.off()
-    } else {
-      par(mfrow = c(nrow, ncol))
-      mapply(best_cut_plot, diffs, titles, p.vals, AIC.vals, MoreArgs = list(...))
-      par(mfrow = c(1, 1))
     }
   }
   return(list(cuts = cuts, fits = coxs, results = results, opt.cut = opt.cut,
@@ -97,12 +98,16 @@ best_cut <- function(f, d, n = c("b", "t", "qd", "qn"), AIC.range = 3,
 
 #' Plotting function for best_cut
 #' @noRd
-best_cut_plot <- function(x, title, pval = NULL, aic = NULL, lwd = 1, cex = 0.75, ...) {
-  plot(x, main = title, col = 1:length(x$strata), lwd = lwd, ...)
+best_cut_plot <- function(x, title, pval = NULL, aic = NULL, lwd = 1,
+                          cex = 0.75, ...) {
+  plot(x, main = title, col = seq_along(x$strata), lwd = lwd, ...)
   legend("bottomleft", legend = stringr::str_split_fixed(
-    names(x$strata), "=", 2)[, 2], col = 1:length(x$strata), lwd = lwd, cex = cex)
+    names(x$strata), "=", 2)[, 2], col = seq_along(x$strata),
+    lwd = lwd, cex = cex)
   if (!is.null(pval))
-    mtext(paste("P =", pval), side = 1, line = -2, at = max(x$time), adj = 1, cex = cex)
+    mtext(paste("P =", pval), side = 1, line = -2, at = max(x$time),
+          adj = 1, cex = cex)
   if (!is.null(aic))
-    mtext(paste("AIC:", aic), side = 1, line = -1, at = max(x$time), adj = 1, cex = cex)
+    mtext(paste("AIC:", aic), side = 1, line = -1, at = max(x$time),
+          adj = 1, cex = cex)
 }
