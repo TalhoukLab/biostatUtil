@@ -4,10 +4,10 @@
 \alias{pairwiseCor}
 \title{Pairwise Correlations}
 \usage{
-pairwiseCor(dataframe)
+pairwiseCor(x)
 }
 \arguments{
-\item{dataframe}{A data frame containing numeric variables of interest.}
+\item{x}{A data frame containing numeric variables of interest.}
 }
 \value{
 all pairwise absolute correlations, correlations, Pval, Adj P val by 
