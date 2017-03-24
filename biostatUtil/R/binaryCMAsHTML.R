@@ -28,7 +28,7 @@
 #' results.no.ci <- binaryCMAsHTML(x, y, "Test", num.boot = 1000, show.ci =
 #' FALSE)
 #' htmlTable(results.no.ci)
-binaryCMAsHTML <- function(x, y, ref.description, digits = 4, seed = 20,
+binaryCMAsHTML <- function(x, y, ref.description = NULL, digits = 4, seed = 20,
                            num.boot = 1000, conf.level = 0.95, show.ci = TRUE) {
   td.right <- "text-align: right; white-space: nowrap;"
   td.left <- "text-align: left; white-space: nowrap;"
@@ -36,18 +36,17 @@ binaryCMAsHTML <- function(x, y, ref.description, digits = 4, seed = 20,
   conf.result <- binaryCM(x = as.factor(x), y = as.factor(y), digits = digits,
                           seed = seed, num.boot = num.boot,
                           conf.level = conf.level)
-  conf.stats <- subset(conf.result, sapply(conf.result, length) == 3)
+  conf.stats <- subset(conf.result, purrr::map_int(conf.result, length) == 3)
   result <- paste0(tags$table(HTML(paste0(
     tags$tr(HTML(paste0(
       tags$td(style = td.right, "Reference:"),
-      tags$td(style = td.left, ref.description)
+      tags$td(style = td.left, ref.description %||% "")
     ))),
-    paste(mapply(function(x, n) 
+    paste(purrr::map2(conf.stats, names(conf.stats), ~
       paste(tags$tr(HTML(paste0(
-        tags$td(style = td.right, paste0(n, ci.label)),
-        tags$td(style = td.left, ifelse(show.ci, printCI(x), x[1]))
-      )))),
-      x = conf.stats, n = names(conf.stats), SIMPLIFY = FALSE), collapse = "")
+        tags$td(style = td.right, paste0(.y, ci.label)),
+        tags$td(style = td.left, ifelse(show.ci, printCI(.x), .x[1]))
+      ))))), collapse = "")
   ))))
   return(result)
 }
