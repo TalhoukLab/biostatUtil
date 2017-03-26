@@ -13,21 +13,21 @@
 #' PCAplot(mtcars$cyl, mtcars)
 #' PCAplot(mtcars$gear, mtcars)
 PCAplot <- function(by, tdat) {
-  PC1 <- PC2 <- PC3 <- var.name <- NULL
+  var.name <- NULL
   p <- stats::prcomp(tdat, retx = TRUE, scale. = TRUE)
-  var3 <- round(((p$sdev ^ 2 / sum(p$sdev ^ 2)) * 100)[1:3], 2)
-  df <- data.frame(var.name = factor(by),  p$x[, 1:3])
-  PCA_geom <- stat_ellipse(geom = "polygon", level = 0.9, alpha = 0.1,
-                           size = 0.05, aes(fill = var.name))
-  PCA_theme <- theme_bw() + theme(legend.title = element_blank())
-  PCA_labs <- sapply(1:3, function(x) paste0("PC", x, " (", var3[x], "% Var)"))
-  
-  pc1.2 <- qplot(x = PC1, y = PC2, data = df, colour = var.name) +
-    PCA_geom + PCA_theme + xlab(PCA_labs[1]) + ylab(PCA_labs[2])
-  pc1.3 <- qplot(x = PC1, y = PC3, data = df, colour = var.name) + 
-    PCA_geom + PCA_theme + xlab(PCA_labs[1]) + ylab(PCA_labs[3])
-  pc2.3 <- qplot(x = PC2, y = PC3, data = df, colour = var.name) + 
-    PCA_geom + PCA_theme + xlab(PCA_labs[2]) + ylab(PCA_labs[3])
-  
-  multiplot(pc1.2, pc1.3, pc2.3, cols = 1)
+  var3 <- round(((p$sdev ^ 2 / sum(p$sdev ^ 2)) * 100)[seq_len(3)], 2)
+  df <- data.frame(p$x[, seq_len(3)], var.name = factor(by))
+  PCA_labs <- purrr::map_chr(seq_len(3),
+                             ~ paste0("PC", .x, " (", var3[.x], "% Var)"))
+  PCA_list <- purrr::map2(c(1, 1, 2), c(2, 3, 3),
+                          ~ ggplot(df, aes(df[, .x], df[, .y],
+                                           colour = var.name)) + 
+                            geom_point() +
+                            stat_ellipse(geom = "polygon", level = 0.9,
+                                         alpha = 0.1, size = 0.05,
+                                         aes(fill = var.name)) + 
+                            theme_bw() +
+                            theme(legend.title = element_blank()) + 
+                            labs(x = PCA_labs[.x], y = PCA_labs[.y]))
+  multiplot(plotlist = PCA_list, cols = 1)
 }
