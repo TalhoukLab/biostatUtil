@@ -4,7 +4,7 @@
 \alias{binaryCMAsHTML}
 \title{Confusion matrix results in HTML}
 \usage{
-binaryCMAsHTML(x, y, ref.description, digits = 4, seed = 20,
+binaryCMAsHTML(x, y, ref.description = NULL, digits = 4, seed = 20,
   num.boot = 1000, conf.level = 0.95, show.ci = TRUE)
 }
 \arguments{
