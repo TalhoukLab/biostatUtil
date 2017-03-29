@@ -88,6 +88,6 @@ minDateArray <- function(t.arr, date.format = "MM.DD.YYYY",
               existing.missing.codes = existing.missing.codes,
               return.missing.code = return.missing.code, ...),
     format = getFormat(.x, date.format), origin = DATE.ORIGIN)) %>% 
-    which.max()
+    which.min()
   return(t.arr[min.index])
 }

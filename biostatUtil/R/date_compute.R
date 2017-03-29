@@ -62,9 +62,10 @@ addToDate <- function(org.date, delta, date.format = "MM.DD.YYYY",
       (org.date %in% existing.missing.codes |
        delta %in% existing.missing.codes))
     return(return.missing.code)
+  units <- match.arg(units)
   delta.time <- delta %>% 
     as.numeric() %>% 
-    switch(match.arg(units),
+    switch(units,
            days = .,
            weeks = . * 7,
            months = . * NUM.DAYS.IN.MONTH,

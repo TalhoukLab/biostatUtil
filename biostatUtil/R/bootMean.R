@@ -32,7 +32,7 @@
 bootMean <- function(x, num.boot = 1000, conf.level = 0.95, seed = 12, ...) {
   set.seed(seed)
   obs.mean <- mean(x, ...)
-  ci <- replicate(num.boot, mean(sample(x, replace = TRUE), ...)) %>% 
+  ci <- replicate(num.boot, mean(sample(x, replace = TRUE), na.rm = TRUE)) %>% 
     sort() %>% 
     extract(c(floor(num.boot * (1 - conf.level) / 2),
               ceiling(num.boot * (1 - (1 - conf.level) / 2))))
