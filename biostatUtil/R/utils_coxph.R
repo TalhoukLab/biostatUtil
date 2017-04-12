@@ -94,17 +94,17 @@ coxphOut <- function(object, coefnames = NULL, conf.level = 0.95,
 #' Xunivcoxph(mod)
 Xunivcoxph <- function(mod, digits = 3) {
   model_type <- as.character(mod$call[1])
+  sprintf_str <- paste0("%.",digits,"f")
   if (endsWith(model_type,"coxph")) {
     mod.summ <- round(summary(mod)$conf.int, digits)
     HR <- mod.summ[, 1, drop = FALSE]
-    CI <- paste(mod.summ[, 3], mod.summ[, 4], sep = "-")
-    res <- paste0("HR ", HR, " (95% CI, ", CI, ")")
+    CI <- paste(sprintf(sprintf_str,mod.summ[, 3]), sprintf(sprintf_str,mod.summ[, 4]), sep = "-")
+    res <- paste0("HR ", sprintf(sprintf_str,HR), " (95% CI: ", CI, ")")
     return(res)
   } else if (endsWith(model_type,"coxphf")) {
     HR <- round(exp(mod$coefficients), digits)
-    CI <- paste(round(mod$ci.lower, digits), round(mod$ci.upper, digits),
-                sep = "-")
-    res <- paste0("HR(F) ", HR, " (95% CI, ", CI, ")")
+    CI <- paste(sprintf(sprintf_str,round(mod$ci.lower, digits)), sprintf(sprintf_str,round(mod$ci.upper, digits)),sep = "-")
+    res <- paste0("HR(F) ", sprintf(sprintf_str,HR), " (95% CI: ", CI, ")")
     return(res)
   } else {
     stop("'mod' must an object of class 'coxph' or 'coxphf'.")

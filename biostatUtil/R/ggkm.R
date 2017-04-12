@@ -216,7 +216,15 @@ summarize_km <- function(fit, p, digits, HR, cox.ref.grp,
   pvalue <- survdiff(f, d) %>% 
     getPval() %>% 
     round_small(method = "signif", digits = digits)
-  pvalsep <- ifelse(is.numeric(pvalue), " = ", " ")
+  #pvalsep <- ifelse(is.numeric(pvalue), " = ", " ")
+  if (is.numeric(pvalue)) {
+    pvalsep <- " = "
+    # the following line tries to figure out how to print p-values with specified digits
+    # e.g. digits=2 -> "0.20" NOT "0.2"
+    pvalue <- sprintf(paste0("%.",(max(digits, min(grep("[1-9]",strsplit(as.character(pvalue),"")[[1]])-3+digits))),"f"),pvalue)
+  } else {
+    pvalsep <- " "
+  }
   pvaltxt <- paste("Log Rank p", pvalue, sep = pvalsep)
   if (HR) {
     pretty.coxph.obj <- prettyCoxph(input.formula = f,
