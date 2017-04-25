@@ -133,10 +133,20 @@ prettyCoxph <- function(input.formula, input.d, ref.grp = NULL, use.firth = 1,
     result <- cbind(exp(fit.firth$coefficients), fit.firth$ci.lower,
                     fit.firth$ci.upper, fit.firth$prob, ph.check)
   } else {
-    result <- cbind(summary(fit)$conf.int[, c("exp(coef)", "lower .95",
+    summary_fit <- summary(fit)
+    if (nrow(summary_fit$conf.int)==1) {
+      result <- matrix(c(
+          "exp(coef)"=summary_fit$conf.int[,"exp(coef)"], 
+          "lower .95"=summary_fit$conf.int[,"lower .95"],
+          "upper .95"=summary_fit$conf.int[,"upper .95"],
+          "Pr(>|z|)"=summary_fit$coefficients[, "Pr(>|z|)"],
+          "ph.check"=ph.check),nrow=1)
+    } else {
+      result <- cbind(summary_fit$conf.int[, c("exp(coef)", "lower .95",
                                               "upper .95")],
-                    "Pr(>|z|)" = summary(fit)$coefficients[, "Pr(>|z|)"],
+                    "Pr(>|z|)" = summary_fit$coefficients[, "Pr(>|z|)"],
                     ph.check)
+              }
   }
   return.obj <- list(output = result, fit = fit, fit.firth = fit.firth,
                      n = fit$n, nevent = fit$nevent, ph.test = ph.test,
