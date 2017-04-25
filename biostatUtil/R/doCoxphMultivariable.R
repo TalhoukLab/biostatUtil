@@ -236,8 +236,9 @@ doCoxphMultivariable <- function(
     }
     rownames(result.table.bamboo)[result.table.bamboo.base.index] <- paste0("**", surv.descriptions[i], "**")
     rownames(result.table.bamboo)[result.table.bamboo.base.index + c(1:num.var)] <- paste0(var.descriptions,
-                                                                                           ifelse(rep(show.var.detail, length(var.ref.groups)),
-                                                                                                  paste0(" (reference group: ", var.ref.groups, ")"), ""))
+      ifelse(
+        rep(show.var.detail, length(var.ref.groups)) * !is.na(var.ref.groups), # do not show ref group if no ref group to show
+        paste0(" (reference group: ", var.ref.groups, ")"), ""))
     # want to show # of events only once for each surv endpoint
     result.table.bamboo[result.table.bamboo.base.index, 1] <- result.table.bamboo[result.table.bamboo.base.index + 1, 1]
     result.table.bamboo[result.table.bamboo.base.index + c(1:num.var), 1] <- ""
