@@ -59,7 +59,7 @@
 #' prettyCoxph(Surv(time, status) ~ x + strata(sex), test1, use.firth = -1)
 prettyCoxph <- function(input.formula, input.d, ref.grp = NULL, use.firth = 1,
                         check.ph = FALSE, plot.ph = TRUE,
-                        ph.test.plot.filename = NULL,...) {
+                        ph.test.plot.filename = NULL, ...) {
   pos <- 1
   assign(".my.formula", as.formula(
     paste0("survival::", paste(deparse(input.formula), collapse = ""))),
@@ -130,26 +130,18 @@ prettyCoxph <- function(input.formula, input.d, ref.grp = NULL, use.firth = 1,
   }
   
   if (ok.to.use.firth) {
-    result <- cbind(exp(fit.firth$coefficients), fit.firth$ci.lower,
-                    fit.firth$ci.upper, fit.firth$prob, ph.check)
+    result <- fit.firth %>% 
+      magrittr::extract(c("coefficients", "ci.lower", "ci.upper", "prob")) %>% 
+      purrr::set_names(c("estimate", "conf.low", "conf.high", "p.value")) %>% 
+      purrr::map_at("estimate", exp) %>% 
+      as.data.frame()
   } else {
-    summary_fit <- summary(fit)
-    if (nrow(summary_fit$conf.int)==1) {
-      result <- matrix(c(
-          "exp(coef)"=summary_fit$conf.int[,"exp(coef)"], 
-          "lower .95"=summary_fit$conf.int[,"lower .95"],
-          "upper .95"=summary_fit$conf.int[,"upper .95"],
-          "Pr(>|z|)"=summary_fit$coefficients[, "Pr(>|z|)"],
-          "ph.check"=ph.check),nrow=1)
-    } else {
-      result <- cbind(summary_fit$conf.int[, c("exp(coef)", "lower .95",
-                                              "upper .95")],
-                    "Pr(>|z|)" = summary_fit$coefficients[, "Pr(>|z|)"],
-                    ph.check)
-              }
+    result <- fit %>% 
+      broom::tidy(exponentiate = TRUE) %>% 
+      magrittr::set_rownames(.[["term"]]) %>% 
+      magrittr::extract(c("estimate", "conf.low", "conf.high", "p.value"))
   }
-  return.obj <- list(output = result, fit = fit, fit.firth = fit.firth,
-                     n = fit$n, nevent = fit$nevent, ph.test = ph.test,
-                     used.firth = ok.to.use.firth)
-  return(return.obj)
+  result <- cbind(result, ph.check)
+  list(output = result, fit = fit, fit.firth = fit.firth, n = fit$n, 
+       nevent = fit$nevent, ph.test = ph.test, used.firth = ok.to.use.firth)
 }

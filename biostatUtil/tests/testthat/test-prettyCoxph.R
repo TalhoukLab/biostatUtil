@@ -37,7 +37,7 @@ fit_coxph <- coxph(Surv(time, status) ~ x + strata(sex), test1)
 
 test_that("prettyCoxph returns values from survival::coxph when use==FALSE",
           expect_equal(fit_coxph$n,
-                       prettyCoxph(Surv(time, status) ~ x + strata(sex), 
+                       prettyCoxph(Surv(time, status) ~ x + sex, 
                                    data.frame(test1), use = FALSE,
                                    check.ph = TRUE)$n)
 )
@@ -60,6 +60,10 @@ test_that("PH residual plot can be saved", {
 test_that("Firth's correction can be used", {
   expect_true(prettyCoxph(Surv(time, status) ~ x + strata(sex), test1,
                           use.firth = 0.2)$used.firth)
+})
+
+test_that("Univariable model has no formatting issues", {
+  expect_error(prettyCoxph(Surv(time, status) ~ sex, test1), NA)
 })
 
 # clean up ---------------------------------------------------------------------
