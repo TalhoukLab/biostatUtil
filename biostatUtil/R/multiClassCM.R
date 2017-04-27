@@ -49,16 +49,12 @@
 #' 
 #' ### Round to 2 digits
 #' multiClassCM(x, y, digits = 2)
-multiClassCM <- function(x, y, seed = 20, num.boot = 1000,
-                         conf.level = 0.95, digits = 2,
-                         method = "wilson") {
-  CM <- table(Reference = as.character(x), Prediction = as.character(y))
-  CMu <- addmargins(CM)
-  
-  #if(dim(CM)[1]<3){stop("This function only works for multi-class variables!")}
+multiClassCM <- function(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
+                         digits = 2, method = "wilson") {
   if (!all(unique(x) %in% unique(y))) {
-    stop("levels should be the same in the prediction and reference class!")
+    stop("levels should be the same in the reference and predicted classes")
   }
+  CM <- table(Reference = x, Prediction = y)
   clm <- colSums(CM)
   rwm <- rowSums(CM)
   N <-  sum(CM)
@@ -66,56 +62,37 @@ multiClassCM <- function(x, y, seed = 20, num.boot = 1000,
   FP <- clm - TP
   FN <- rwm - TP
   TN <- N - (TP + FP + FN)
-  
-  # Overall----
-  cc <- round(caret::confusionMatrix(y, x)$overall, digits = digits)
-  ckappa <- round(kappaBootCI(x, y, seed, num.boot, conf.level), digits)
-  
-  # By class----
-  stats <- purrr::map2(list(TP + TN, TP, TN, TP, TN, clm, TP, rwm),
-                       list(N, clm, N - clm, rwm, N - rwm, N, N, N),
-                       Hmisc::binconf, alpha = 1 - conf.level,
-                       method = method) %>% 
-    purrr::map(round, digits) %>% 
-    purrr::set_names(c("Accuracy", "Sensitivity", "Specificity", "PPV", "NPV",
-                       "Prevalence", "Detection", "DetectionPrev"))
-  
-  acc <- (TP + TN) / N
   sens <- TP / clm
   spec <- TN / (N - clm)
-  ppv <- TP / rwm
-  npv <- TN / (N - rwm)
-  prev <- clm / N
-  detect <- TP / N
-  detectPrev <- rwm / N
   BA <- (sens + spec) / 2
-  
-  overall <- 
-    rbind("Overall Accuracy" = printCI(c(cc[1], cc[3], cc[4])),
-          "Cohen's kappa" = printCI(ckappa),
-          "No Information Rate" = cc[5],         
-          "P-Value [Acc > NIR]" = cc[6]) %>% 
+  # Overall
+  cc <- round(caret::confusionMatrix(y, x)$overall, digits)
+  ckappa <- round(kappaBootCI(x, y, seed, num.boot, conf.level), digits)
+  overall <- rbind(printCI(cc[c("Accuracy", "AccuracyLower", "AccuracyUpper")]),
+                   printCI(ckappa),
+                   cc["AccuracyNull"],         
+                   cc["AccuracyPValue"]) %>% 
+    set_rownames(c("Overall Accuracy", "Cohen's kappa", "No Information Rate",
+                   "P-Value [Acc > NIR]")) %>% 
     set_colnames("Overall Concordance Statistics")
+  # By class
+  successes <- list(TP, TN, TP, TN, clm, TP, rwm, TP + TN)
+  observations <- list(clm, N - clm, rwm, N - rwm, N, N, N, N)
+  stats <- purrr::map2(successes, observations, Hmisc::binconf,
+                       alpha = 1 - conf.level, method = method) %>% 
+    purrr::map(round, digits) %>% 
+    purrr::set_names(c("Sensitivity", "Specificity", "Pos Pred Value",
+                       "Neg Pred Value", "Prevalence", "Detection Rate",
+                       "Detection Prevalence", "Accuracy"))
+  # Result table
+  Average <- purrr::map(stats, ~ .x[, "PointEst"]) %>% 
+    c(list(`Balanced Accuracy` = BA)) %>% 
+    purrr::map_dbl(~ round(mean(.x), digits = digits))
+  ByClass <- purrr::map_df(stats, apply, 1, printCI) %>% 
+    mutate(`Balanced Accuracy` = round(BA, digits = digits)) %>% 
+    t() %>% 
+    set_colnames(colnames(CM))
+  table <- cbind(Average, ByClass)
   
-  table <- rbind("Sensitivity" = c(round(mean(sens),digits),
-                                   apply(stats$Sensitivity, 1, printCI)),
-                 "Specificity" = c(round(mean(spec),digits), 
-                                   apply(stats$Specificity, 1, printCI)),
-                 "Pos Pred Value" = c(round(mean(ppv), digits),
-                                      apply(stats$PPV, 1, printCI)),
-                 "Neg Pred Value" = c(round(mean(npv), digits),
-                                      apply(stats$NPV, 1, printCI)),
-                 "Prevalence" = c(round(mean(prev), digits),
-                                  apply(stats$Prevalence, 1, printCI)),
-                 "Detection Rate" = c(round(mean(detect), digits),
-                                      apply(stats$Detection, 1, printCI)),
-                 "Detection Prevalence" = c(round(mean(detectPrev), digits),
-                                            apply(stats$DetectionPrev, 1, printCI)),
-                 "Accuracy" = c(round(mean(acc),digits),
-                                apply(stats$Accuracy, 1, printCI)),
-                 "Balanced Accuracy" = c(round(mean(BA), digits),
-                                         round(BA, digits = digits))) %>% 
-    set_colnames(c("Average", colnames(CM)))
-  
-  return(list(CM = CMu, overall = overall, table = table))
+  list(CM = addmargins(CM), overall = overall, table = table)
 }
