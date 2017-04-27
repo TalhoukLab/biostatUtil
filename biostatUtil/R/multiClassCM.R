@@ -51,7 +51,7 @@
 #' multiClassCM(x, y, digits = 2)
 multiClassCM <- function(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
                          digits = 2, method = "wilson") {
-  if (!all(unique(x) %in% unique(y))) {
+  if (!identical(sort(unique(x)), sort(unique(y)))) {
     stop("levels should be the same in the reference and predicted classes")
   }
   CM <- table(Reference = x, Prediction = y)
