@@ -86,13 +86,12 @@ multiClassCM <- function(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
                        "Detection Prevalence", "Accuracy"))
   # Result table
   Average <- purrr::map(stats, ~ .x[, "PointEst"]) %>% 
-    c(list(`Balanced Accuracy` = BA)) %>% 
     purrr::map_dbl(~ round(mean(.x), digits = digits))
   ByClass <- purrr::map_df(stats, apply, 1, printCI) %>% 
-    mutate(`Balanced Accuracy` = round(BA, digits = digits)) %>% 
     t() %>% 
     set_colnames(colnames(CM))
-  table <- cbind(Average, ByClass)
+  table <- cbind(Average, ByClass) %>% 
+    rbind(`Balanced Accuracy` = round(c(mean(BA), BA), digits))
   
   list(CM = addmargins(CM), overall = overall, table = table)
 }
