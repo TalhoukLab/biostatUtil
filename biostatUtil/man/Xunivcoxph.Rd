@@ -16,7 +16,8 @@ Xunivcoxph(mod, digits = 3)
 Hazard ratio and 95/% confidence interval
 }
 \description{
-Univariate cox proprtional hazards model
+Concatenates hazard ratios and confidence limits for every covariate in a Cox
+model.
 }
 \examples{
 library(survival)

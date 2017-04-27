@@ -57,6 +57,9 @@ coxphOut <- function(object, coefnames = NULL, conf.level = 0.95,
 
 #' Univariate cox proprtional hazards model
 #' 
+#' Concatenates hazard ratios and confidence limits for every covariate in a Cox
+#' model.
+#' 
 #' @param mod model fit object, returned from either \code{coxph} or
 #'   \code{coxphf}.
 #' @param digits number of digits to round
@@ -93,31 +96,39 @@ coxphOut <- function(object, coefnames = NULL, conf.level = 0.95,
 #' data = test2)
 #' Xunivcoxph(mod)
 Xunivcoxph <- function(mod, digits = 3) {
-  model_type <- as.character(mod$call[1])
-  sprintf_str <- paste0("%.", digits, "f")
-  if (endsWith(model_type, "coxph")) {
-    res <- mod %>%
-      broom::tidy(exponentiate = TRUE) %>%
-      magrittr::extract(c("estimate", "conf.low", "conf.high")) %>%
-      purrr::map(round, digits) %>%
-      purrr::map(sprintf, fmt = sprintf_str) %>% 
-      purrr::pmap_chr(function(estimate, conf.low, conf.high) {
-        paste0("HR ", estimate, " (95% CI: ", conf.low, "-", conf.high, ")")
-      })
-    return(res)
-  } else if (endsWith(model_type, "coxphf")) {
-    res <- mod %>% 
-      magrittr::extract(c("coefficients", "ci.lower", "ci.upper")) %>% 
-      purrr::map_at("coefficients", exp) %>% 
-      purrr::map(round, digits) %>% 
-      purrr::map(sprintf, fmt = sprintf_str) %>% 
-      purrr::pmap_chr(function(coefficients, ci.lower, ci.upper) {
-        paste0("HR(F) ", coefficients, " (95% CI: ", ci.lower, "-", ci.upper, ")")
-      })
-    return(res)
-  } else {
-    stop("'mod' must an object of class 'coxph' or 'coxphf'.")
-  }
+  UseMethod("Xunivcoxph")
+}
+
+#' @export
+Xunivcoxph.coxph <- function(mod, digits = 3) {
+  mod %>%
+    broom::tidy(exponentiate = TRUE) %>%
+    magrittr::extract(c("estimate", "conf.low", "conf.high")) %>%
+    format_hr_ci(digits) %>% 
+    paste("HR", .)
+}
+
+#' @export
+Xunivcoxph.coxphf <- function(mod, digits = 3) {
+  mod %>%
+    magrittr::extract(c("coefficients", "ci.lower", "ci.upper")) %>%
+    purrr::map_at("coefficients", exp) %>%
+    format_hr_ci(digits) %>% 
+    paste("HR(F)", .)
+}
+
+#' @noRd
+format_hr_ci <- function(stats, digits) {
+  stats %>% 
+    purrr::map(round, digits) %>%
+    purrr::map(sprintf, fmt = paste0("%.", digits, "f")) %>%
+    unname() %>%
+    purrr::pmap_chr(paste_hr_ci)
+}
+
+#' @noRd
+paste_hr_ci <- function(hr, ci.lo, ci.hi) {
+  paste0(hr, " (95% CI: ", ci.lo, "-", ci.hi, ")")
 }
 
 #' Print Cox model output
