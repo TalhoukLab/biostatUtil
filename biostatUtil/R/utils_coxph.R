@@ -94,17 +94,26 @@ coxphOut <- function(object, coefnames = NULL, conf.level = 0.95,
 #' Xunivcoxph(mod)
 Xunivcoxph <- function(mod, digits = 3) {
   model_type <- as.character(mod$call[1])
-  sprintf_str <- paste0("%.",digits,"f")
-  if (endsWith(model_type,"coxph")) {
-    mod.summ <- round(summary(mod)$conf.int, digits)
-    HR <- mod.summ[, 1, drop = FALSE]
-    CI <- paste(sprintf(sprintf_str,mod.summ[, 3]), sprintf(sprintf_str,mod.summ[, 4]), sep = "-")
-    res <- paste0("HR ", sprintf(sprintf_str,HR), " (95% CI: ", CI, ")")
+  sprintf_str <- paste0("%.", digits, "f")
+  if (endsWith(model_type, "coxph")) {
+    res <- mod %>%
+      broom::tidy(exponentiate = TRUE) %>%
+      magrittr::extract(c("estimate", "conf.low", "conf.high")) %>%
+      purrr::map(round, digits) %>%
+      purrr::map(sprintf, fmt = sprintf_str) %>% 
+      purrr::pmap_chr(function(estimate, conf.low, conf.high) {
+        paste0("HR ", estimate, " (95% CI: ", conf.low, "-", conf.high, ")")
+      })
     return(res)
-  } else if (endsWith(model_type,"coxphf")) {
-    HR <- round(exp(mod$coefficients), digits)
-    CI <- paste(sprintf(sprintf_str,round(mod$ci.lower, digits)), sprintf(sprintf_str,round(mod$ci.upper, digits)),sep = "-")
-    res <- paste0("HR(F) ", sprintf(sprintf_str,HR), " (95% CI: ", CI, ")")
+  } else if (endsWith(model_type, "coxphf")) {
+    res <- mod %>% 
+      magrittr::extract(c("coefficients", "ci.lower", "ci.upper")) %>% 
+      purrr::map_at("coefficients", exp) %>% 
+      purrr::map(round, digits) %>% 
+      purrr::map(sprintf, fmt = sprintf_str) %>% 
+      purrr::pmap_chr(function(coefficients, ci.lower, ci.upper) {
+        paste0("HR(F) ", coefficients, " (95% CI: ", ci.lower, "-", ci.upper, ")")
+      })
     return(res)
   } else {
     stop("'mod' must an object of class 'coxph' or 'coxphf'.")
