@@ -108,9 +108,6 @@ multiClassCM <- function(x, y, seed = 20, num.boot = 1000,
     c(paste0((1 - conf.level) / 2 * 100, "%"),
       paste0((1 - (1 - conf.level) / 2) * 100, "%"))
   
-  printCI <- function(z) {
-    paste0(z[1], " (", z[2], " - ", z[3], ")")}
-  
   overall <- 
     rbind("Overall Accuracy" = printCI(c(cc[1], cc[3], cc[4])),
           "Cohen's kappa" = printCI(ckappa),
