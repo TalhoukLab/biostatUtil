@@ -10,7 +10,7 @@ multiClassCM(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
 \arguments{
 \item{x}{a vector of reference classes}
 
-\item{y}{a vector of prediction classes}
+\item{y}{a vector of predicted classes}
 
 \item{seed}{a random seed for bootstrapping}
 

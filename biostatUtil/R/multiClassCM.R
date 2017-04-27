@@ -10,7 +10,7 @@
 #' if variable entered is binary, it will automatically call binaryCM
 #' 
 #' @param x a vector of reference classes
-#' @param y a vector of prediction classes
+#' @param y a vector of predicted classes
 #' @param seed a random seed for bootstrapping
 #' @param num.boot the number of times to bootstrap. Defaults to 1000.
 #' @param conf.level the confidence level. Defaults to 95\%.
@@ -68,36 +68,35 @@ multiClassCM <- function(x, y, seed = 20, num.boot = 1000,
   TN <- N - (TP + FP + FN)
   
   # Overall----
-  cc <- round(caret::confusionMatrix(x,y)$overall,digits = digits)
-  ckappa <- round(kappaBootCI(x, y, seed, num.boot, conf.level),
-                  digits)
+  cc <- round(caret::confusionMatrix(y, x)$overall, digits = digits)
+  ckappa <- round(kappaBootCI(x, y, seed, num.boot, conf.level), digits)
   
   # By class----
-  acc <- (TP + TN)/N
+  acc <- (TP + TN) / N
   Accuracy <- round(Hmisc::binconf(TP + TN, N, alpha = 1 - conf.level,
                                    method = method), digits)  
-  sens <- TP/clm
+  sens <- TP / clm
   Sensitivity <- round(Hmisc::binconf(TP, clm, alpha = 1 - conf.level,
                                       method = method), digits)
   
-  spec <- TN/(N - clm)
+  spec <- TN / (N - clm)
   Specificity <- round(Hmisc::binconf(TN, (N - clm), alpha = 1 - conf.level,
                                       method = method), digits)
   
-  ppv <- TP/rwm
+  ppv <- TP / rwm
   PPV <- round(Hmisc::binconf(TP, rwm, alpha = 1 - conf.level,
                               method = method), digits)
   
-  npv <- TN/(N - rwm)
+  npv <- TN / (N - rwm)
   NPV <- round(Hmisc::binconf(TN, (N - rwm), alpha = 1 - conf.level,
                               method = method), digits)
-  prev <- clm/N
+  prev <- clm / N
   Prevalence <- round(Hmisc::binconf(clm, N, alpha = 1 - conf.level,
                                      method = method), digits)
-  detect <- TP/N
+  detect <- TP / N
   Detection <- round(Hmisc::binconf(TP, N, alpha = 1 - conf.level,
                                     method = method), digits)
-  detectPrev <- rwm/N
+  detectPrev <- rwm / N
   DetectionPrev <- round(Hmisc::binconf(rwm, N, alpha = 1 - conf.level,
                                         method = method), digits)
   
