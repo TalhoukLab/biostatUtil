@@ -42,15 +42,14 @@ bootPerf <- function(dat0, var.names, time.var, event.ind,
   local.envir <- environment()
   boot.mod <- lapply(boots$boot.tr, function(x){
     if (count.warning) {
-      result <- NA
       tryCatch(
-        result <- survPlus::doCox(mod.form, data = x, firth = firth),
+        return(survPlus::doCox(mod.form, data = x, firth = firth)),
         warning=function(x){
           assign("warning.count",get("warning.count",envir=local.envir)+1,envir=local.envir)
           warning(x)
         }
       )
-      return(result)
+      return(NA) # if here, means warning message encountered
     } else {
       return(survPlus::doCox(mod.form, data = x, firth = firth))
     }
