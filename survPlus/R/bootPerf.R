@@ -10,6 +10,7 @@
 #' @param B is the number of bootstrap iterations defaults to 1000
 #' @param seed is a random number generator seed set to 2014
 #' @param firth whether or not to perform a firth correction set to TRUE
+#' @param count.warning whether to count warning message from cox model fit, if set to TRUE will count warning messages and ignore all cox model fits with warning.
 #' @return
 #' \item{apparent}{the apparent fit: testing the model on the full training
 #' data}
@@ -20,7 +21,7 @@
 #' @author Aline Talhouk
 #' @export
 bootPerf <- function(dat0, var.names, time.var, event.ind,
-                     B = 1000, seed = 2014, firth = TRUE) {
+                     B = 1000, seed = 2014, firth = TRUE, count.warning = FALSE) {
   set.seed(seed)
 
   #Select relevant variables and remove variables with missing observations
@@ -37,22 +38,38 @@ bootPerf <- function(dat0, var.names, time.var, event.ind,
   perf.app <- survPlus::Cindex(app.mod.fit, dat)
 
   #Bootstrap fit
-  boot.mod <- lapply(boots$boot.tr, function(x)
-    survPlus::doCox(mod.form, data = x, firth = firth))
-
+  warning.count<-ifelse(count.warning,0,NA)
+  local.envir <- environment()
+  boot.mod <- lapply(boots$boot.tr, function(x){
+    if (count.warning) {
+      result <- NA
+      tryCatch(
+        result <- survPlus::doCox(mod.form, data = x, firth = firth),
+        warning=function(x){
+          assign("warning.count",get("warning.count",envir=local.envir)+1,envir=local.envir)
+          warning(x)
+        }
+      )
+      return(result)
+    } else {
+      return(survPlus::doCox(mod.form, data = x, firth = firth))
+    }
+  })
+  
   ## Standard bootstrap (test the model on the bootstrapped training data)
   perf.boot <- mapply(function(X, Y) {
-    Cindex(X, newdat0 = Y)
+    ifelse(is.na(X),X,Cindex(X, newdat0 = Y))
   },
   X = boot.mod, Y = boots$boot.tr, SIMPLIFY = FALSE)
 
   ## .632 bootstrap (test the model on the bootstrapped test data)
   perf.632 <- mapply(function(X, Y) {
-    Cindex(X, newdat = Y)
+    ifelse(is.na(X),X,Cindex(X, newdat = Y))
   },
   X = boot.mod, Y = boots$boot.te, SIMPLIFY = FALSE)
 
   return(list(apparent = perf.app,
               boot = unlist(perf.boot),
-              boot632 = unlist(perf.632)))
+              boot632 = unlist(perf.632),
+              warning.count=warning.count))
 }
