@@ -89,8 +89,9 @@ all_vars <-
     "Reporter.Quan.Result.ID")
 info_vars <- c("Gene", "Accession", "Sequence", "Annotated.Sequence",
                "Descriptions", "Modifications", "Reporter.Quan.Result.ID")
-resMat <- ms_summarize(dat1, g = c("FLAG_EMPTY", "CLK1_N-FLAG", "CLK1_UNTAGGED"),
-                       level = "Gene", col.names = all_vars, info.vars = info_vars)
+resMat <- suppressWarnings(
+  ms_summarize(dat1, g = c("FLAG_EMPTY", "CLK1_N-FLAG", "CLK1_UNTAGGED"),
+               level = "Gene", col.names = all_vars, info.vars = info_vars))
 
 test_that("ms_summarize works", {
   expect_error(resMat, NA)
