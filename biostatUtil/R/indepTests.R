@@ -46,7 +46,7 @@ indepTests <- function(x, digits = 3) {
   }
   
   CC <- x$chisq.corr
-  if (is.na(CC)) {
+  if (all(is.na(CC))) {
     CC.obj <- rep(NA, 3)
   } else {
     if (!all(is.na(CC)) & !all(is.na(Pearson.obj))) {
@@ -65,14 +65,10 @@ indepTests <- function(x, digits = 3) {
   }
   
   Fisher <- x$fisher.ts
-  if (is.na(Fisher)) {
+  if (all(is.na(Fisher))) {
     Fisher.obj <- rep(NA, 3)
   } else {
-    if (!any(is.na(Fisher))) {
-      Fisher.obj <- c(NA, NA, Fisher$p.value)
-    } else {
-      Fisher.obj <- rep(NA, 3)
-    }
+    Fisher.obj <- c(NA, NA, Fisher$p.value)
   }
   
   LBL <- tryCatch(coin::lbl_test(x$tab),
