@@ -27,3 +27,15 @@ test_that("doCoxphMultivariable works for univariable case", {
                               caption = "")
   expect_length(res, 4)
 })
+
+test_that("doInteractionCox works", {
+  res <- doInteractionCox(input.d = lung,
+                          var.names = "sex",
+                          var.descriptions = "Sex",
+                          var.names.surv.time = "time",
+                          var.names.surv.status = "status",
+                          event.codes.surv = "2",
+                          surv.descriptions = "OS",
+                          caption = "")
+  expect_length(res, 4)
+})
