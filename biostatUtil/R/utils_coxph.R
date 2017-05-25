@@ -128,6 +128,7 @@ format_hr_ci <- function(stats, digits) {
 
 #' @noRd
 paste_hr_ci <- function(hr, ci.lo, ci.hi) {
+  if (as.numeric(ci.hi) > 1000) ci.hi <- "Inf"
   paste0(hr, " (95% CI: ", ci.lo, "-", ci.hi, ")")
 }
 
