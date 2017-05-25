@@ -65,65 +65,66 @@ doCoxphGeneric <- function(
   caption = NA, html.table.border = 0, banded.rows = FALSE,
   css.class.name.odd = "odd", css.class.name.even = "even",
   split.table = 300, ...) {
-  . <- NULL
-  kLocalConstantHrSepFlag <- "kLocalConstantHrSepFlag" # separates the hazard ratio estimates 
+  
+  # Constants
+  kLocalConstantHrSepFlag <- "kLocalConstantHrSepFlag" # separates HR estimates 
   col.th.style <- COL.TH.STYLE
   row.th.style <- ROW.TH.STYLE
   
-  # remove all variables not used in analysis from input.d 
-  input.d <- dplyr::select(input.d,match(c(var.names,var.names.surv.time,var.names.surv.status),names(input.d)))
-  
-  input.d <- droplevels(input.d)
+  # Initial assertion checks
   num.surv.endpoints <- length(var.names.surv.time)
   assertthat::assert_that(num.surv.endpoints == length(var.names.surv.status),
                           num.surv.endpoints == length(event.codes.surv),
                           num.surv.endpoints == length(surv.descriptions))
   
-  for (var in var.names.surv.time) {
-    input.d[, var] <- as.numeric(input.d[, var])
-  }
+  # Remove all variables not used in analysis, ensure survival times are numeric
+  input.d <- input.d %>% 
+    dplyr::select(dplyr::one_of(c(var.names, var.names.surv.time,
+                                  var.names.surv.status))) %>% 
+    droplevels() %>% 
+    dplyr::mutate_at(var.names.surv.time, as.numeric)
   
-  if (is.null(var.ref.groups)) {
-    var.ref.groups <- rep(NA, length(var.names))
-  }
+  # Set default for variable reference groups
+  var.ref.groups <- var.ref.groups %||% rep(NA, length(var.names))
+  
   result.table <- c()
-  for (i in 1:length(var.names)) {
+  for (i in seq_along(var.names)) {
     var.name <- var.names[i]
-    temp.d <- input.d %>% 
-      filter(!is.na(.[, var.name]) &
-               !(as.character(.[, var.name]) %in% missing.codes)) # remove any cases with NA's or missing values
+    temp.d <- input.d %>%  # remove any cases with NA's or missing values
+      dplyr::filter(!is.na(.[, var.name]) & !(.[, var.name] %in% missing.codes))
     if (is.factor(temp.d[, var.name]) & is.na(var.ref.groups[i])) {  # automatically set ref.group to lowest group if not specified
       var.ref.groups[i] <- names(table(temp.d[, var.name]))[1]
     }
     if (is.na(var.ref.groups[i])) {
       temp.d[, var.name] <- as.numeric(temp.d[, var.name])
-      var.levels <- c(0, 1) # dummy levels ... used to build result.table
     } else {
       # assume ref group exist!!!
       temp.d[, var.name] <- relevel(temp.d[, var.name], var.ref.groups[i])
     }
-    
-    for (j in 1:num.surv.endpoints) {
+
+    for (j in seq_len(num.surv.endpoints)) {
       surv.formula <- as.formula(paste0("Surv(", var.names.surv.time[j], ", ",
                                         var.names.surv.status[j], "=='",
                                         event.codes.surv[j], "'  ) ~",
                                         var.name))
-      temp.d.no.missing.survival <- temp.d[!is.na(temp.d[, var.names.surv.status[j]]) &
-                                             !is.na(temp.d[, var.names.surv.time[j]]), ]
-      cox.stats  <- prettyCoxph(surv.formula, 
-                                input.d = temp.d.no.missing.survival, use.firth = use.firth)
+      temp.d.no.missing.survival <- temp.d %>% 
+        dplyr::filter(!is.na(.[, var.names.surv.status[[j]]] &
+                               !is.na(.[, var.names.surv.time[[j]]])))
+      cox.stats <- prettyCoxph(surv.formula, 
+                               input.d = temp.d.no.missing.survival,
+                               use.firth = use.firth)
       result.table <- rbind(
         result.table,
-        "DUMMY_ROW_NAME" = c(
-          paste(cox.stats$nevent, cox.stats$n, sep = " / "),
+        c(paste(cox.stats$nevent, cox.stats$n, sep = " / "),
           paste(paste0(
             sprintf("%.2f", round(as.numeric(cox.stats$output[, 1]), 2)), " (",
             sprintf("%.2f", round(as.numeric(cox.stats$output[, 2]), 2)), "-",
-            sapply(as.numeric(cox.stats$output[, 3]),function(x){
+            vapply(as.numeric(cox.stats$output[, 3]), function(x) {
               # ugly code!!! if number is very large, display scientific notation
-              return(ifelse(x > 1000, format(x, digits = 3, scientific = TRUE),
-                            sprintf("%.2f", round(x, 2)))) 
-            }), ")",
+              ifelse(x > 1000,
+                     format(x, digits = 3, scientific = TRUE),
+                     sprintf("%.2f", round(x, 2)))
+            }, character(nrow(cox.stats$output))), ")",
             ifelse(cox.stats$used.firth, firth.caption, "")),
             collapse = kLocalConstantHrSepFlag),
           if (round.small) {
@@ -142,7 +143,7 @@ doCoxphGeneric <- function(
                 as.numeric(summary(cox.stats$fit)[[stat.test]]["pvalue"]), # waldtest for Wald test, logtest for likelihood ratio test
                 digits <- round.digits.p.value
               )
-            ) 
+            )
           }
         )
       )
@@ -152,9 +153,9 @@ doCoxphGeneric <- function(
                               paste0(ifelse(stat.test == "logtest", "LRT ", ""),
                                      "P-value"))
   result.table <- result.table %>% 
-    set_colnames(result.table.col.names) %>% 
-    set_rownames(paste(rep(var.names, each = num.surv.endpoints),
-                       surv.descriptions, sep = "-"))
+    magrittr::set_colnames(result.table.col.names) %>% 
+    magrittr::set_rownames(paste(rep(var.names, each = num.surv.endpoints),
+                                 surv.descriptions, sep = "-"))
   
   ### generate html table ... ###
   result.table.html <- paste0("<table border=", html.table.border, ">",
