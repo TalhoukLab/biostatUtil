@@ -97,24 +97,22 @@ doCoxphGeneric <- function(
                              paste0(ifelse(stat.test == "logtest", "LRT ", ""),
                                     "P-value"))))
   for (i in seq_along(var.names)) {
-    var.name <- var.names[i]
+    x <- var.names[i]
     temp.d <- input.d %>%  # remove any cases with NA's or missing values
-      dplyr::filter(!is.na(.[, var.name]) & !(.[, var.name] %in% missing.codes))
-    if (is.factor(temp.d[, var.name]) & is.na(var.ref.groups[i])) {  # automatically set ref.group to lowest group if not specified
-      var.ref.groups[i] <- names(table(temp.d[, var.name]))[1]
+      dplyr::filter(!is.na(.[, x]) & !(.[, x] %in% missing.codes))
+    if (is.factor(temp.d[, x]) & is.na(var.ref.groups[i])) {  # automatically set ref.group to lowest group if not specified
+      var.ref.groups[i] <- names(table(temp.d[, x]))[1]
     }
     if (is.na(var.ref.groups[i])) {
-      temp.d[, var.name] <- as.numeric(temp.d[, var.name])
+      temp.d[, x] <- as.numeric(temp.d[, x])
     } else {
-      # assume ref group exist!!!
-      temp.d[, var.name] <- relevel(temp.d[, var.name], var.ref.groups[i])
+      temp.d[, x] <- relevel(as.factor(temp.d[, x]), var.ref.groups[i])
     }
     
     for (j in seq_len(num.surv.endpoints)) {
       surv.formula <- as.formula(paste0("Surv(", var.names.surv.time[j], ", ",
                                         var.names.surv.status[j], "=='",
-                                        event.codes.surv[j], "'  ) ~",
-                                        var.name))
+                                        event.codes.surv[j], "'  ) ~", x))
       temp.d.no.missing.survival <- temp.d %>% 
         dplyr::filter(!is.na(.[, var.names.surv.status[[j]]] &
                                !is.na(.[, var.names.surv.time[[j]]])))
@@ -155,7 +153,7 @@ doCoxphGeneric <- function(
                               "<tr><th style='", col.th.style,
                               "' colspan=2></th><th style='", col.th.style,
                               "'>",
-                              paste(result.table.col.names,
+                              paste(colnames(result.table),
                                     collapse = paste0("</th><th style='",
                                                       col.th.style, "'>")),
                               "</th></tr>")
@@ -203,7 +201,7 @@ doCoxphGeneric <- function(
   result.table.ncol <- ncol(result.table)
   result.table.bamboo.base.indexes <- c() # base indexes for each variable in result.table.bamboo
   # want to add empty rows for var description
-  for (var.count in 1:length(var.names)) {  
+  for (var.count in seq_along(var.names)) {  
     result.table.bamboo.base.index <- 1 + (var.count - 1) * (length(surv.descriptions) + 1)
     if (var.count == 1) {
       result.table.bamboo <- rbind(rep("", result.table.ncol), result.table.bamboo)
@@ -227,14 +225,14 @@ doCoxphGeneric <- function(
     result.table.bamboo <- cbind(result.table.bamboo[, 1], "", result.table.bamboo[, 2:3])
     colnames(result.table.bamboo)[1] <- first.col.name
     hr.col.index <- 3 # column with the hazard ratios
-    for (var.count in 1:length(var.names)) {  
+    for (var.count in seq_along(var.names)) {  
       if (!is.na(var.ref.groups[var.count])) {
         ref.group <- var.ref.groups[var.count]
         other.groups <- names(table(input.d[, var.names[var.count]]))
         other.groups <- other.groups[other.groups != ref.group & !(other.groups %in% missing.codes)]
         num.other.groups <- length(other.groups)
         result.table.bamboo.base.index <- result.table.bamboo.base.indexes[var.count]
-        for (i in 1:num.surv.endpoints) { # for each survival end points e.g. os, dss, rfs
+        for (i in seq_len(num.surv.endpoints)) { # for each survival end points e.g. os, dss, rfs
           curr.base.index <- result.table.bamboo.base.index + (i - 1) * num.other.groups + 1
           if (num.other.groups > 1) {
             for (j in 1:(num.other.groups - 1)) {
@@ -274,23 +272,19 @@ doCoxphGeneric <- function(
     }
   }
     
-  ## subscript syntax for pandoc
-  result.table.bamboo <- gsub(x = result.table.bamboo, pattern = "<sup>|</sup>", replacement = "^")
+  # subscript ("<sup>|</sup>") and line break ("<br>") syntax for pandoc
   options("table_counter" = options()$table_counter - 1)
-  result.table.bamboo <- pander::pandoc.table.return(
-    result.table.bamboo, caption = caption,
-    emphasize.rownames = FALSE, split.table = split.table, ...)
-  result.table.bamboo <- gsub(kLocalConstantHrSepFlag, "; ", result.table.bamboo)
-  
-  ## line break syntax for pandoc
-  result.table.bamboo <- gsub(x = result.table.bamboo, pattern = "<br>", replacement = "\\\\\n")
+  result.table.bamboo <- result.table.bamboo %>% 
+    gsub(pattern = "<sup>|</sup>", replacement = "^", .) %>% 
+    pander::pandoc.table.return(
+      result.table.bamboo, caption = caption,
+      emphasize.rownames = FALSE, split.table = split.table, ...) %>% 
+    gsub(pattern = kLocalConstantHrSepFlag, replacement = "; ", .) %>% 
+    gsub(pattern = "<br>", replacement = "\\\\\n", .)
   ### end of result.table.bamboo ###
 
   ### clean result.table ###
   result.table <- gsub(kLocalConstantHrSepFlag, ", ", result.table)
   ### end of clean result.table ###
-  
-  return(list("result.table" = result.table,
-              "result.table.bamboo" = result.table.bamboo,
-              "result.table.html" = result.table.html))
+  dplyr::lst(result.table, result.table.bamboo, result.table.html)
 }
