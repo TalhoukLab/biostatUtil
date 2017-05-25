@@ -244,10 +244,8 @@ summarize_km <- function(fit, p, digits, HR, cox.ref.grp,
     }
     for (i in seq_along(HRtxts)) {
       HRtxt <- HRtxts[i]
-      if (length(HRtxts) > 1) {
-        HRtxt <- paste0(HRtxt, " ~ ", cox.strata.labs[i + 1],
+      HRtxt <- paste0(HRtxt, " ~ ", cox.strata.labs[i + 1],
                         " vs. ", cox.strata.labs[1])
-      }
       p <- p + annotate("text", x = 0.2 * max(fit$time), hjust = 0,
                         y = 0.01 + line.y.increment * i, label = HRtxt,
                         size = 3)					
