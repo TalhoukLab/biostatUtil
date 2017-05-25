@@ -1,3 +1,6 @@
+# magrittr placeholder
+globalVariables(".")
+
 #' Collapse unique levels of variable into one string
 #' @noRd
 collapse_var <- function(x, collapse = " || ") {
