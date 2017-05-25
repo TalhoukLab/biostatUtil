@@ -29,7 +29,8 @@ grhoTests <- function(formula, data, digits = 4) {
   }) %>% 
     purrr::invoke(rbind, .) %>% 
     signif(digits) %>% 
-    set_rownames(c("Log Rank (Mantel-Cox)", "Breslow (Generalized Wilcoxon)")) %>% 
-    set_colnames(c("Chi-Square", "df", "Sig."))
+    magrittr::set_rownames(c("Log Rank (Mantel-Cox)",
+                             "Breslow (Generalized Wilcoxon)")) %>% 
+    magrittr::set_colnames(c("Chi-Square", "df", "Sig."))
   return(tab)
 }

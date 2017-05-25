@@ -62,7 +62,7 @@ ms_summarize <- function(x, g, level = c("Gene", "Peptide"), col.names = NULL,
     mutate_at(.cols = vars(matches("p-*val"), -matches("adj")),
               .funs = funs(Temp = p.adjust(., method = "BH"))) %>%
     select(contains("Temp")) %>% 
-    set_names(grep("adj", col.names, value = TRUE))
+    magrittr::set_names(grep("adj", col.names, value = TRUE))
   
   # Replace placeholder columns using new columns with adjusted p-values
   adj.ind <- match(names(adj), names(res))

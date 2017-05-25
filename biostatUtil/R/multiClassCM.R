@@ -72,9 +72,9 @@ multiClassCM <- function(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
                    printCI(ckappa),
                    cc["AccuracyNull"],         
                    cc["AccuracyPValue"]) %>% 
-    set_rownames(c("Overall Accuracy", "Cohen's kappa", "No Information Rate",
-                   "P-Value [Acc > NIR]")) %>% 
-    set_colnames("Overall Concordance Statistics")
+    magrittr::set_rownames(c("Overall Accuracy", "Cohen's kappa",
+                             "No Information Rate", "P-Value [Acc > NIR]")) %>% 
+    magrittr::set_colnames("Overall Concordance Statistics")
   # By class
   successes <- list(TP, TN, TP, TN, clm, TP, rwm, TP + TN)
   observations <- list(clm, N - clm, rwm, N - rwm, N, N, N, N)
@@ -89,7 +89,7 @@ multiClassCM <- function(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
     purrr::map_dbl(~ round(mean(.x), digits = digits))
   ByClass <- purrr::map_df(stats, apply, 1, printCI) %>% 
     t() %>% 
-    set_colnames(colnames(CM))
+    magrittr::set_colnames(colnames(CM))
   table <- cbind(Average, ByClass) %>% 
     rbind(`Balanced Accuracy` = round(c(mean(BA), BA), digits))
   

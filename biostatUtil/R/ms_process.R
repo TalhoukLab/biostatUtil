@@ -22,8 +22,8 @@
 ms_process <- function(psm, protein, treatment, samples = NULL,
                        sample.id = NULL, path = NULL, ...) {
   # Make raw data file column names into R column names
-  psm <- psm %>% set_colnames(make.names(colnames(.)))
-  protein <- protein %>% set_colnames(make.names(colnames(.)))
+  psm <- psm %>% magrittr::set_colnames(make.names(colnames(.)))
+  protein <- protein %>% magrittr::set_colnames(make.names(colnames(.)))
   
   # Variables to keep
   samples <- samples %||% grep("^X[0-9]", names(psm), value = TRUE)
@@ -55,7 +55,7 @@ ms_process <- function(psm, protein, treatment, samples = NULL,
       NOP = quote(Number.of.Proteins), QI = quote(Quan.Info),
       MPA = quote(Master.Protein.Accessions)
     ))) %>% 
-    extract(ms_condition(., treatment = treatment, ...), )
+    magrittr::extract(ms_condition(., treatment = treatment, ...), )
   
   pro <- protein %>% 
     select_("Accession", "Description", "MW.in.kDa")
@@ -94,8 +94,8 @@ ms_process <- function(psm, protein, treatment, samples = NULL,
   # Raw, log2, and vsn transformed expression data
   raw <- pep[, sample.id]
   l2 <- log2(raw) %>% 
-    set_colnames(paste("l2", names(.), sep = "_"))
+    magrittr::set_colnames(paste("l2", names(.), sep = "_"))
   vsn <- limma::normalizeVSN(raw, verbose = FALSE) %>% 
-    set_colnames(paste("vsn", colnames(.), sep = "_"))
+    magrittr::set_colnames(paste("vsn", colnames(.), sep = "_"))
   return(list(pep = pep, raw = raw, l2 = l2, vsn = vsn))
 }

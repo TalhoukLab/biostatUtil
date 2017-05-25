@@ -71,10 +71,10 @@ rowColPercent <- function(t, keep = TRUE, ...) {
   col.p <- colPercent(t, keep = !keep, ...)
   if (keep) {
     result <- as.matrix(gdata::interleave(t, row.p, col.p)) %>% 
-      set_rownames(paste0(rownames(.), rep(c("", " Row %", " Col %"), nrow(t))))
+      magrittr::set_rownames(paste0(rownames(.), rep(c("", " Row %", " Col %"), nrow(t))))
   } else {
     result <- as.matrix(gdata::interleave(row.p, col.p)) %>% 
-      extract(grep("%", rownames(.)), )
+      magrittr::extract(grep("%", rownames(.)), )
   }
   return(result)
 }

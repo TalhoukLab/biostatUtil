@@ -55,7 +55,7 @@ best_cut <- function(f, d, n = c("b", "t", "qd", "qn"), AIC.range = 3,
     survfit(as.formula(paste(deparse(f[[2]]), "~ .x")), d))
   results <- coxs %>%
     purrr::map_df(broom::glance, .id = "bin.names") %>%
-    set_rownames(.$bin.names) %>%
+    magrittr::set_rownames(.$bin.names) %>%
     dplyr::select(p.value.log, logLik, AIC) %>%
     cbind(cutpoints = cuts, .)
   p.vals <- signif(results$p.value.log, nround)

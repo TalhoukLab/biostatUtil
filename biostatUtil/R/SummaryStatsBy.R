@@ -97,10 +97,11 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
                                       col.names)) %>% 
       rbind(matrix("", nrow = length(num.var), ncol = nrow(num.all),
                    dimnames = list(num.var))) %>% 
-      extract(num.ord, ) %>% 
-      set_rownames(num.ord %>%
-                     ifelse(!grepl("\\.", .), paste0("**", ., "**"), .) %>%
-                     gsub(".+\\.", "\\1", .))
+      magrittr::extract(num.ord, ) %>% 
+      magrittr::set_rownames(num.ord %>%
+                               ifelse(!grepl("\\.", .),
+                                      paste0("**", ., "**"), .) %>%
+                               gsub(".+\\.", "\\1", .))
   } else {
     num.res <- num.long <- NULL
   }
@@ -115,13 +116,13 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
       as.formula(paste(x, "~", paste(by1, by2, sep = " + ")))) %>%
       lapply(function(y) as.matrix(aggregate(y, fac.dat, summary))) %>% 
       Reduce(merge, .) %>% 
-      set_colnames(c(by1, by2, grep("\\.", fac.ord, value = TRUE))) %>% 
+      magrittr::set_colnames(c(by1, by2, grep("\\.", fac.ord, value = TRUE))) %>% 
       as.data.frame()
     fac.val.tot <- sapply(fac.var, function(x)
       as.formula(paste(x, "~", paste(by1, sep = " + ")))) %>%
       lapply(function(y) as.matrix(aggregate(y, fac.dat, summary))) %>% 
       Reduce(merge, .) %>% 
-      set_colnames(c(by1, grep("\\.", fac.ord, value = TRUE))) %>% 
+      magrittr::set_colnames(c(by1, grep("\\.", fac.ord, value = TRUE))) %>% 
       as.data.frame()
     fac.all <- dplyr::bind_rows(list(fac.val, fac.val.tot)) %>%
       as.data.frame()
@@ -132,8 +133,8 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
       mutate(grp = stringr::str_split_fixed(rownames(.), "\\.", 2)[, 1]) %>% 
       group_by(grp) %>% 
       do(vars = rowColPercent(.[, -ncol(.)])) %>%
-      extract(order(match(.$grp, fac.var)), ) %>% 
-      use_series(vars) %>% 
+      magrittr::extract(order(match(.$grp, fac.var)), ) %>% 
+      magrittr::use_series(vars) %>% 
       lapply(function(x) x %>% 
                cbind(lev = rep(letters[1:(nrow(x) / 3)], each = 3)) %>% 
                as.data.frame() %>% 
@@ -161,15 +162,15 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
                do.call(rbind, .)) %>% 
       do.call(rbind, .)
     fac.res <- cbind(fac.pct, fac.pct.tot) %>% 
-      set_rownames(tail(names(fac.val), -2)) %>%
+      magrittr::set_rownames(tail(names(fac.val), -2)) %>%
       rbind(matrix(rep("", nrow(fac.all) * length(fac.var)),
                    nrow = length(fac.var), dimnames = list(fac.var, NULL))) %>%
-      extract(fac.ord, order(fac.all[, by1])) %>% 
-      set_rownames(stringr::str_replace_all(
+      magrittr::extract(fac.ord, order(fac.all[, by1])) %>% 
+      magrittr::set_rownames(stringr::str_replace_all(
         rownames(.),
         c(setNames(c(rep("", length(fac.var))), paste0(fac.var, ".")),
           setNames(paste0("**", fac.var, "**"), fac.var)))) %>% 
-      set_colnames(col.names)
+      magrittr::set_colnames(col.names)
     fac.long <- fac.all %>% 
       tidyr::gather(stat, value, -match(c(by1, by2), colnames(.))) %>% 
       tidyr::separate(stat, c("var", "stat"), "\\.") %>%
@@ -183,13 +184,13 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
   ind <- grep("\\*", rownames(final.res))
   org.ord <- gsub("\\*\\*", "", rownames(final.res)[ind])
   final.reord <- final.res %>% 
-    extract(order(unlist(mapply(rep, match(org.ord, var.names),
-                   diff(c(ind, nrow(.) + 1))))), )
+    magrittr::extract(order(unlist(mapply(rep, match(org.ord, var.names),
+                                          diff(c(ind, nrow(.) + 1))))), )
   final.html <- final.res %>% 
-    set_rownames(stringr::str_replace_all(
+    magrittr::set_rownames(stringr::str_replace_all(
       rownames(.), c("^\\*\\*" = "<b>", "\\*\\*$" = "</b>")))
   final.long <- rbind(num.long, fac.long) %>% 
-    extract(order(match(.$var, var.names)), )
+    magrittr::extract(order(match(.$var, var.names)), )
   final.return <- switch(match.arg(format),
                          raw = final.reord,
                          pandoc = pander::pandoc.table.return(
@@ -224,7 +225,7 @@ contSumFunc <- function(x, digits, stats = c("mean", "sd", "median", "IQR",
       as.character() %>% 
       ifelse(length(.) > 1, paste(., collapse = "-"), .)
   }) %>%
-    set_names(stats)
+    magrittr::set_names(stats)
   if (all(c("mean", "sd") %in% stats)) {
     all.stats["mean"] <- paste(all.stats[c("mean", "sd")],
                                collapse = " &#177; ")

@@ -61,7 +61,7 @@ freqTable <- function(x, levels = sort(unique(as.character(x))),
     mutate_each(funs(round(., 1)), contains("Percent"))
   if (is.null(missing)) {
     tab <- tab %>% 
-      extract(-which(.$Class == "Total"), ) %>% 
+      magrittr::extract(-which(.$Class == "Total"), ) %>% 
       select(-matches("Class|Valid Percent"))
   }
   if (!is.null(description)) {

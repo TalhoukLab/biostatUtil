@@ -180,8 +180,8 @@ doCoxphMultivariable <- function(
   result.table.col.names <- c("# of events / n", "Hazard Ratio (95% CI)",
                               paste0(ifelse(stat.test == "logtest", "LRT ", ""), "P-value"))
   result.table <- result.table %>% 
-    set_colnames(result.table.col.names) %>% 
-    set_rownames(paste(var.names, rep(surv.descriptions, each = length(var.names)), sep = "-"))
+    magrittr::set_colnames(result.table.col.names) %>% 
+    magrittr::set_rownames(paste(var.names, rep(surv.descriptions, each = length(var.names)), sep = "-"))
   
   ### generate html table ###
   result.table.html <- paste0("<table border=", html.table.border, ">",
