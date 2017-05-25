@@ -1,5 +1,4 @@
-
-context("Cox model: generic and multivariable")
+context("Cox model generic")
 
 library(survival)
 data(lung)
@@ -45,7 +44,7 @@ test_that("doCoxphGeneric can fit multiple univariable models", {
   expect_equal(nrow(res$result.table), 2)
 })
 
-test_that("rounding of small p-values works", {
+test_that("doCoxphGeneric rounding of small p-values works", {
   res <- doCoxphGeneric(input.d = lung,
                         var.names = c("sex", "ph.ecog"),
                         var.descriptions = c("Sex", "ECOG score"),
@@ -59,7 +58,7 @@ test_that("rounding of small p-values works", {
   expect_equal(nrow(res$result.table), 2)
 })
 
-test_that("factor covariates use lowest group if no reference specified", {
+test_that("doCoxphGeneric factors use lowest group if no reference specified", {
   lung2 <- lung
   lung2$sex <- as.factor(lung2$sex)
   res1 <- doCoxphGeneric(input.d = lung,
@@ -83,6 +82,9 @@ test_that("factor covariates use lowest group if no reference specified", {
   expect_identical(res1$result.table, res2$result.table)
 })
 
+
+context("Cox model multivariable")
+
 test_that("doCoxphMultivariable works for univariable case", {
   res <- doCoxphMultivariable(input.d = lung,
                               var.names = "sex",
@@ -93,6 +95,80 @@ test_that("doCoxphMultivariable works for univariable case", {
                               surv.descriptions = "OS",
                               caption = "")
   expect_length(res, 4)
+})
+
+test_that("doCoxphMultivariable fits multivariable models", {
+  res <- doCoxphMultivariable(input.d = lung,
+                              var.names = c("sex", "ph.ecog"),
+                              var.descriptions = c("Sex", "ECOG score"),
+                              show.var.detail = TRUE,
+                              var.names.surv.time = "time",
+                              var.names.surv.status = "status",
+                              event.codes.surv = "2",
+                              surv.descriptions = "OS",
+                              caption = "",
+                              stat.test = "logtest",
+                              var.ref.groups = c("2", "0"),
+                              round.small = TRUE)
+  expect_length(res, 4)
+})
+
+test_that("doCoxphMultivariable rounding of small p-values works", {
+  res <- doCoxphMultivariable(input.d = lung,
+                              var.names = c("sex", "ph.ecog"),
+                              var.descriptions = c("Sex", "ECOG score"),
+                              show.var.detail = TRUE,
+                              var.names.surv.time = "time",
+                              var.names.surv.status = "status",
+                              event.codes.surv = "2",
+                              surv.descriptions = "OS",
+                              caption = "",
+                              stat.test = "logtest",
+                              var.ref.groups = c("2", "0"),
+                              round.small = TRUE,
+                              round.digits.p.value = 2)
+  expect_length(res, 4)
+})
+
+test_that("doCoxphMultivariable factors use lowest group if no reference
+          specified", {
+  lung2 <- lung
+  lung2$sex <- as.factor(lung2$sex)
+  res1 <- doCoxphMultivariable(input.d = lung,
+                               var.names = c("sex", "ph.ecog"),
+                               var.descriptions = c("Sex", "ECOG score"),
+                               show.var.detail = TRUE,
+                               var.names.surv.time = "time",
+                               var.names.surv.status = "status",
+                               event.codes.surv = "2",
+                               surv.descriptions = "OS",
+                               caption = "")
+  res2 <- doCoxphMultivariable(input.d = lung2,
+                               var.names = c("sex", "ph.ecog"),
+                               var.descriptions = c("Sex", "ECOG score"),
+                               show.var.detail = TRUE,
+                               var.names.surv.time = "time",
+                               var.names.surv.status = "status",
+                               event.codes.surv = "2",
+                               surv.descriptions = "OS",
+                               caption = "")
+  expect_identical(res1$result.table, res2$result.table)
+})
+
+test_that("doCoxphMultivariable multiple survival outcomes works", {
+  set.seed(1)
+  lung$time2 <- sample(lung$time, replace = TRUE)
+  lung$status2 <- sample(lung$status, replace = TRUE)
+  res <- doCoxphMultivariable(input.d = lung,
+                              var.names = c("sex", "ph.ecog"),
+                              var.descriptions = c("Sex", "ECOG score"),
+                              show.var.detail = TRUE,
+                              var.names.surv.time = c("time", "time2"),
+                              var.names.surv.status = c("status", "status2"),
+                              event.codes.surv = c("2", "2"),
+                              surv.descriptions = c("OS", "OS2"),
+                              caption = "")
+  expect_equal(nrow(res$result.table), 4)
 })
 
 test_that("doInteractionCox works", {
