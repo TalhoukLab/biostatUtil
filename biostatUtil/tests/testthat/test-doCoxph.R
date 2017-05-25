@@ -2,6 +2,9 @@ context("Cox model generic")
 
 library(survival)
 data(lung)
+set.seed(1)
+lung$time2 <- sample(lung$time, replace = TRUE)
+lung$status2 <- sample(lung$status, replace = TRUE)
 
 test_that("doCoxphGeneric HRs are different when reference group changes", {
   res1 <- doCoxphGeneric(input.d = lung,
@@ -130,8 +133,7 @@ test_that("doCoxphMultivariable rounding of small p-values works", {
   expect_length(res, 4)
 })
 
-test_that("doCoxphMultivariable factors use lowest group if no reference
-          specified", {
+test_that("doCoxphMultivariable factors use lowest group if no reference specified", {
   lung2 <- lung
   lung2$sex <- as.factor(lung2$sex)
   res1 <- doCoxphMultivariable(input.d = lung,
@@ -156,9 +158,6 @@ test_that("doCoxphMultivariable factors use lowest group if no reference
 })
 
 test_that("doCoxphMultivariable multiple survival outcomes works", {
-  set.seed(1)
-  lung$time2 <- sample(lung$time, replace = TRUE)
-  lung$status2 <- sample(lung$status, replace = TRUE)
   res <- doCoxphMultivariable(input.d = lung,
                               var.names = c("sex", "ph.ecog"),
                               var.descriptions = c("Sex", "ECOG score"),
@@ -171,7 +170,24 @@ test_that("doCoxphMultivariable multiple survival outcomes works", {
   expect_equal(nrow(res$result.table), 4)
 })
 
+
+context("Cox model testing interaction")
+
 test_that("doInteractionCox works", {
+  res <- doInteractionCox(input.d = lung,
+                          var.names = "ph.ecog",
+                          var.descriptions = "ECOG score",
+                          var.names.surv.time = c("time", "time2"),
+                          var.names.surv.status = c("status", "status2"),
+                          event.codes.surv = c("2", "2"),
+                          surv.descriptions = c("OS", "OS2"),
+                          var.ref.groups = "0",
+                          caption = "")
+  expect_length(res, 4)
+})
+
+test_that("doInteractionCox factors use lowest group if no reference specified", {
+  lung$sex <- as.factor(lung$sex)
   res <- doInteractionCox(input.d = lung,
                           var.names = "sex",
                           var.descriptions = "Sex",
