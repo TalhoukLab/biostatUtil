@@ -102,7 +102,7 @@ doCoxphMultivariable <- function(
       var.levels <- c(0, 1) # dummy levels ... used to build result.table
     } else {
       # assume ref group exist!!!
-      input.d[, var.name] <- relevel(input.d[, var.name], var.ref.groups[i])
+      input.d[, var.name] <- relevel(as.factor(input.d[, var.name]), var.ref.groups[i])
     }
   }
   
@@ -159,7 +159,8 @@ doCoxphMultivariable <- function(
             ifelse(cox.stats$used.firth, firth.caption, "")
           ), collapse = kLocalConstantHrSepFlag),
           if (round.small) {
-            p <- round_small(as.numeric(p.value), round.digits.p.value, sci = scientific)
+            p <- round_small(as.numeric(p.value), method = "round",
+                             round.digits.p.value, sci = scientific)
             if (grepl("<", p)) {
               p
             } else {
