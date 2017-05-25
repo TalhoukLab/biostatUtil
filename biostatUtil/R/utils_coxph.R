@@ -118,18 +118,25 @@ Xunivcoxph.coxphf <- function(mod, digits = 3) {
 }
 
 #' @noRd
-format_hr_ci <- function(stats, digits) {
+format_hr_ci <- function(stats, digits, labels = TRUE, method = c("Inf", "Sci")
+                         ) {
   stats %>% 
     purrr::map(round, digits) %>%
     purrr::map(sprintf, fmt = paste0("%.", digits, "f")) %>%
     unname() %>%
-    purrr::pmap_chr(paste_hr_ci)
+    purrr::pmap_chr(paste_hr_ci, labels = labels, method = method)
 }
 
 #' @noRd
-paste_hr_ci <- function(hr, ci.lo, ci.hi) {
-  if (as.numeric(ci.hi) > 1000) ci.hi <- "Inf"
-  paste0(hr, " (95% CI: ", ci.lo, "-", ci.hi, ")")
+paste_hr_ci <- function(hr, ci.lo, ci.hi, labels = TRUE,
+                        method = c("Inf", "Sci")) {
+  method <- match.arg(method)
+  ci.hi.n <- as.numeric(ci.hi)
+  if (ci.hi.n > 1000)
+    ci.hi <- switch(method,
+                    `Inf` = "Inf",
+                    Sci = format(ci.hi.n, digits = 3, scientific = TRUE))
+  paste0(hr, ifelse(labels, " (95% CI: ", " ("), ci.lo, "-", ci.hi, ")")
 }
 
 #' Print Cox model output

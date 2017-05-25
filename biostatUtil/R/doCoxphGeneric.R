@@ -32,9 +32,10 @@
 #'   Cox regression. If \code{use.firth = 1} (default), Firth is never used and
 #'   if \code{use.firth = -1} Firth is always used.
 #' @param firth.caption subscript in html table output indicating Firth was used
-#' @param stat.test the overall model test to perform on the Cox regression
-#'   model. Can be any of "waldtest", "logtest", or "sctest". If Firth is used,
-#'   only "logtest" can be performed.
+#' @param stat.test the overall model test to perform on the Cox regression 
+#'   model. Can be any of "waldtest", "logtest", or "sctest". If Firth is used, 
+#'   only "logtest" can be performed. Test p-values are never Firth corrected ( 
+#'   per instruction from Aline 2015-04-14,15).
 #' @param round.digits.p.value number of digits for p-value
 #' @param round.small if \code{TRUE}, uses small number rounding via
 #'   \code{round_small}
@@ -84,10 +85,17 @@ doCoxphGeneric <- function(
     droplevels() %>% 
     dplyr::mutate_at(var.names.surv.time, as.numeric)
   
-  # Set default for variable reference groups
+  # Setup default for variable reference groups and result matrix
   var.ref.groups <- var.ref.groups %||% rep(NA, length(var.names))
-  
-  result.table <- c()
+  result.table <- matrix(NA_character_,
+                         nrow = length(var.names) * num.surv.endpoints,
+                         ncol = 3,
+                         dimnames = list(
+                           paste(rep(var.names, each = num.surv.endpoints),
+                                 surv.descriptions, sep = "-"),
+                           c("# of events / n", "Hazard Ratio (95% CI)",
+                             paste0(ifelse(stat.test == "logtest", "LRT ", ""),
+                                    "P-value"))))
   for (i in seq_along(var.names)) {
     var.name <- var.names[i]
     temp.d <- input.d %>%  # remove any cases with NA's or missing values
@@ -101,7 +109,7 @@ doCoxphGeneric <- function(
       # assume ref group exist!!!
       temp.d[, var.name] <- relevel(temp.d[, var.name], var.ref.groups[i])
     }
-
+    
     for (j in seq_len(num.surv.endpoints)) {
       surv.formula <- as.formula(paste0("Surv(", var.names.surv.time[j], ", ",
                                         var.names.surv.status[j], "=='",
@@ -113,49 +121,29 @@ doCoxphGeneric <- function(
       cox.stats <- prettyCoxph(surv.formula, 
                                input.d = temp.d.no.missing.survival,
                                use.firth = use.firth)
-      result.table <- rbind(
-        result.table,
-        c(paste(cox.stats$nevent, cox.stats$n, sep = " / "),
-          paste(paste0(
-            sprintf("%.2f", round(as.numeric(cox.stats$output[, 1]), 2)), " (",
-            sprintf("%.2f", round(as.numeric(cox.stats$output[, 2]), 2)), "-",
-            vapply(as.numeric(cox.stats$output[, 3]), function(x) {
-              # ugly code!!! if number is very large, display scientific notation
-              ifelse(x > 1000,
-                     format(x, digits = 3, scientific = TRUE),
-                     sprintf("%.2f", round(x, 2)))
-            }, character(nrow(cox.stats$output))), ")",
-            ifelse(cox.stats$used.firth, firth.caption, "")),
-            collapse = kLocalConstantHrSepFlag),
-          if (round.small) {
-            p <- round_small(as.numeric(summary(cox.stats$fit)[[stat.test]]["pvalue"]),
-                             round.digits.p.value, sci = scientific)
-            if (grepl("<", p)) {
-              p
-            } else {
-              sprintf(paste0("%.", round.digits.p.value, "f"), p)
-            }
+      pval <- summary(cox.stats$fit)[[stat.test]][["pvalue"]]
+      result.table[num.surv.endpoints * (i - 1) + j, ] <- c(
+        paste(cox.stats$nevent, cox.stats$n, sep = " / "),
+        paste(cox.stats$output[c("estimate", "conf.low", "conf.high")] %>% 
+                format_hr_ci(digits = 2, labels = FALSE, method = "Sci") %>% 
+                paste0(ifelse(cox.stats$used.firth, firth.caption, "")),
+              collapse = kLocalConstantHrSepFlag),
+        if (round.small) {
+          p <- round_small(pval, method = "round", round.digits.p.value,
+                           sci = scientific)
+          if (grepl("<", p)) {
+            p
           } else {
-            sprintf(
-              paste0("%.", round.digits.p.value, "f"),
-              round(
-                # per instruction from Aline 2015-04-14,15 ... for p-value, ALWAYS use coxph
-                as.numeric(summary(cox.stats$fit)[[stat.test]]["pvalue"]), # waldtest for Wald test, logtest for likelihood ratio test
-                digits <- round.digits.p.value
-              )
-            )
+            sprintf(paste0("%.", round.digits.p.value, "f"), p)
           }
-        )
+        } else {
+          sprintf(paste0("%.", round.digits.p.value, "f"),
+                  round(pval, digits = round.digits.p.value)
+          )
+        }
       )
     }
   }
-  result.table.col.names <- c("# of events / n", "Hazard Ratio (95% CI)",
-                              paste0(ifelse(stat.test == "logtest", "LRT ", ""),
-                                     "P-value"))
-  result.table <- result.table %>% 
-    magrittr::set_colnames(result.table.col.names) %>% 
-    magrittr::set_rownames(paste(rep(var.names, each = num.surv.endpoints),
-                                 surv.descriptions, sep = "-"))
   
   ### generate html table ... ###
   result.table.html <- paste0("<table border=", html.table.border, ">",
