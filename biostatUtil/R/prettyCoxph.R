@@ -62,7 +62,7 @@ prettyCoxph <- function(input.formula, input.d, ref.grp = NULL, use.firth = 1,
                         ph.test.plot.filename = NULL, ...) {
   pos <- 1
   assign(".my.formula", as.formula(
-    paste0("survival::", paste(deparse(input.formula), collapse = ""))),
+    paste0(paste(deparse(input.formula), collapse = ""))),
     envir = as.environment(pos))
   # Modify input.d if ref.grp is defined
   if (!is.null(ref.grp)) {
