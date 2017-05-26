@@ -69,8 +69,20 @@ doCoxphGeneric <- function(
   
   # Constants
   kLocalConstantHrSepFlag <- "kLocalConstantHrSepFlag" # separates HR estimates 
-  col.th.style <- COL.TH.STYLE
-  row.th.style <- ROW.TH.STYLE
+  if (!exists("FIRTH.CAPTION")) {
+    # html text to be placed beside the p-value to indicate that the Cox model used Firth
+    FIRTH.CAPTION <- "<sup>(F)</sup>" 
+  }
+  
+  # the following constants are defined in misc_helpers.R ... define it again
+  # if its not defined already ... in case misc_helpers.R did not get source'd
+  if (!exists("COL.TH.STYLE")) {COL.TH.STYLE <- "border-bottom: 1px solid grey; border-top: 4px double grey; text-align: center; padding-right:10px; padding-right:10px;"}
+  if (!exists("ROW.TH.STYLE")) {ROW.TH.STYLE <- "text-align: center; padding-right:10px; padding-right:10px;"}
+  if (!exists("ROW.TD.STYLE.FOR.MULTI.COX")){ROW.TD.STYLE.FOR.MULTI.COX <- "border-bottom: 1px solid grey; text-align: center; padding-right:10px; padding-right:10px;"}
+  if (!exists("ROW.TD.STYLE.FOR.MULTI.COX.ALIGN.TOP")){ROW.TD.STYLE.FOR.MULTI.COX.ALIGN.TOP <- "border-bottom: 1px solid grey; text-align: center; vertical-align: text-top; padding-right:10px; padding-right:10px;"}
+  if (!exists("TABLE.CAPTION.STYLE")){TABLE.CAPTION.STYLE <- "display: table-caption; text-align: left;"}
+   col.th.style <- COL.TH.STYLE 
+    row.th.style <- ROW.TH.STYLE
   
   # Initial assertion checks
   num.surv.endpoints <- length(var.names.surv.time)
@@ -114,8 +126,9 @@ doCoxphGeneric <- function(
                                         var.names.surv.status[j], "=='",
                                         event.codes.surv[j], "'  ) ~", x))
       temp.d.no.missing.survival <- temp.d %>% 
-        dplyr::filter(!is.na(.[, var.names.surv.status[[j]]] &
-                               !is.na(.[, var.names.surv.time[[j]]])))
+        dplyr::filter(!is.na(.[, var.names.surv.status[[j]]]) &
+                               !is.na(.[, var.names.surv.time[[j]]]))
+      
       cox.stats <- prettyCoxph(surv.formula, 
                                input.d = temp.d.no.missing.survival,
                                use.firth = use.firth)
