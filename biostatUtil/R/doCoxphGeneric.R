@@ -69,8 +69,8 @@ doCoxphGeneric <- function(
   
   # Constants
   kLocalConstantHrSepFlag <- "kLocalConstantHrSepFlag" # separates HR estimates 
-   col.th.style <- COL.TH.STYLE 
-    row.th.style <- ROW.TH.STYLE
+  col.th.style <- COL.TH.STYLE 
+  row.th.style <- ROW.TH.STYLE
   
   # Initial assertion checks
   num.surv.endpoints <- length(var.names.surv.time)
@@ -115,18 +115,18 @@ doCoxphGeneric <- function(
                                    event.codes.surv[j], x)
       temp.d.no.missing.survival <- temp.d %>% 
         dplyr::filter(!is.na(.[, var.names.surv.status[[j]]]) &
-                               !is.na(.[, var.names.surv.time[[j]]]))
-      
+                        !is.na(.[, var.names.surv.time[[j]]]))
       cox.stats <- prettyCoxph(surv.formula, 
                                input.d = temp.d.no.missing.survival,
                                use.firth = use.firth)
       pval <- summary(cox.stats$fit)[[stat.test]][["pvalue"]]
       result.table[num.surv.endpoints * (i - 1) + j, ] <- c(
         paste(cox.stats$nevent, "/", cox.stats$n),
-        paste(cox.stats$output[c("estimate", "conf.low", "conf.high")] %>% 
-                format_hr_ci(digits = 2, labels = FALSE, method = "Sci") %>% 
-                paste0(ifelse(cox.stats$used.firth, firth.caption, "")),
-              collapse = kLocalConstantHrSepFlag),
+        cox.stats$output %>% 
+          magrittr::extract(c("estimate", "conf.low", "conf.high")) %>% 
+          format_hr_ci(digits = 2, labels = FALSE, method = "Sci") %>% 
+          paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>% 
+          paste(collapse = kLocalConstantHrSepFlag),
         if (round.small) {
           p <- round_small(pval, method = "round", round.digits.p.value,
                            sci = scientific)
