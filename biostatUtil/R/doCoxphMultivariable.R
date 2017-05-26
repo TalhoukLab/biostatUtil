@@ -72,57 +72,58 @@ doCoxphMultivariable <- function(
   row.td.style.for.multi.cox <- ROW.TD.STYLE.FOR.MULTI.COX
   row.td.style.for.multi.cox.align.top <- ROW.TD.STYLE.FOR.MULTI.COX.ALIGN.TOP
   
-  # remove all variables not used in analysis from input.d 
-  input.d <- dplyr::select(input.d,match(c(var.names,var.names.surv.time,var.names.surv.status),names(input.d)))
-  
-  input.d <- droplevels(input.d)
+  # Initial assertion checks
   num.surv.endpoints <- length(var.names.surv.time)
   assertthat::assert_that(num.surv.endpoints == length(var.names.surv.status),
                           num.surv.endpoints == length(event.codes.surv),
                           num.surv.endpoints == length(surv.descriptions))
   
-  for (var in var.names.surv.time) {
-    input.d[, var] <- as.numeric(input.d[, var])
-  }
+  # Remove all variables not used in analysis, ensure survival times are numeric
+  input.d <- input.d %>% 
+    dplyr::select(dplyr::one_of(c(var.names, var.names.surv.time,
+                                  var.names.surv.status))) %>% 
+    droplevels() %>% 
+    dplyr::mutate_at(var.names.surv.time, as.numeric)
   
-  if (is.null(var.ref.groups)) {
-    var.ref.groups <- rep(NA, length(var.names))
-  }
-  result.table <- c()
-  for (i in 1:length(var.names)) {
-    var.name <- var.names[i]
-    input.d <- input.d %>% 
-      filter(!is.na(.[, var.name]) &
-               !(as.character(.[, var.name]) %in% missing.codes)) # remove any cases with NA's or missing values
-    if (is.factor(input.d[, var.name]) & is.na(var.ref.groups[i])) {     # automatically set ref.group to lowest group if not specified
-      var.ref.groups[i] <- names(table(input.d[, var.name]))[1]
+  # Setup default for variable reference groups and result matrix
+  var.ref.groups <- var.ref.groups %||% rep(NA, length(var.names))
+  result.table <- matrix(NA_character_,
+                         nrow = length(var.names) * num.surv.endpoints,
+                         ncol = 3,
+                         dimnames = list(
+                           paste(var.names,
+                                 rep(surv.descriptions,
+                                     each = length(var.names)), sep = "-"),
+                           c("# of events / n", "Hazard Ratio (95% CI)",
+                             paste0(ifelse(stat.test == "logtest", "LRT ", ""),
+                                    "P-value"))))
+  for (i in seq_along(var.names)) {
+    x <- var.names[i]
+    input.d <- input.d %>%  # remove any cases with NA's or missing values
+      dplyr::filter(!is.na(.[, x]) & !(.[, x] %in% missing.codes))
+    if (is.factor(input.d[, x]) & is.na(var.ref.groups[i])) {  # automatically set ref.group to lowest group if not specified
+      var.ref.groups[i] <- names(table(input.d[, x]))[1]
     }
     if (is.na(var.ref.groups[i])) {
-      input.d[, var.name] <- as.numeric(input.d[, var.name]) # numeric
-      var.levels <- c(0, 1) # dummy levels ... used to build result.table
+      input.d[, x] <- as.numeric(input.d[, x])
     } else {
-      # assume ref group exist!!!
-      input.d[, var.name] <- relevel(as.factor(input.d[, var.name]), var.ref.groups[i])
+      input.d[, x] <- relevel(as.factor(input.d[, x]), var.ref.groups[i])
     }
   }
   
   cox.stats.output <- list()
-  for (j in 1:num.surv.endpoints) {
-    temp.d <- input.d[!is.na(input.d[, var.names.surv.status[j]]) &
-                        !is.na(input.d[, var.names.surv.time[j]]), ]
-    full.model.formula <- as.formula(paste0("Surv(", var.names.surv.time[j], ", ",
-                                            var.names.surv.status[j], "=='",
-                                            event.codes.surv[j], "'  ) ~",
-                                            paste(var.names, collapse = "+")))
-    cox.stats  <- prettyCoxph(full.model.formula, input.d = temp.d,
-                              use.firth = use.firth)
+  for (j in seq_len(num.surv.endpoints)) {
+    surv.formula <- surv_formula(var.names.surv.time[j],
+                                 var.names.surv.status[j], event.codes.surv[j],
+                                 var.names)
+    temp.d <- input.d %>% 
+      dplyr::filter(!is.na(.[, var.names.surv.status[[j]]]) &
+                      !is.na(.[, var.names.surv.time[[j]]]))
+    
+    cox.stats <- prettyCoxph(surv.formula, input.d = temp.d,
+                             use.firth = use.firth)
     cox.stats.output.indexes <- c(0)
-    if (stat.test=="logtest") {
-      # need to do coxph one more time since annova cannot access the formula object 
-      # within coxph object returned from prettyCoxph
-      coxph.full.fit <- coxph(full.model.formula, temp.d)
-    }
-    for (i in 1:length(var.names)) {
+    for (i in seq_along(var.names)) {
       var.name <- var.names[i]
       cox.stats.output.indexes <- max(cox.stats.output.indexes) + 1
       if (!is.na(var.ref.groups[i])) {
@@ -130,64 +131,52 @@ doCoxphMultivariable <- function(
                                                                   length(names(table(temp.d[, var.name]))) - 1 - 1))
       }
       
-      p.value <- NA
-      switch(stat.test, 
-             logtest = {
-               # calculate likelihood ratio test by nested model
-               cox.exclude.var <- coxph(as.formula(paste0("Surv(", var.names.surv.time[j], ", ",
-                                                          var.names.surv.status[j], "=='",
-                                                          event.codes.surv[j], "'  ) ~",
-                                                          paste(var.names[-i], collapse = "+"))), temp.d)	
-               p.value <- anova(coxph.full.fit, cox.exclude.var)[[4]][2] # always the second one, since its comparing only two nested model
-             },
-             waldtest = {
-               p.value <- anova(rms::cph(as.formula(paste0("Surv(", var.names.surv.time[j], ", ",
-                                                           var.names.surv.status[j], "=='",
-                                                           event.codes.surv[j], "'  ) ~",
-                                                           paste(var.names, collapse = "+"))), temp.d))[i, "P"]
-             }
+      p.value <- switch(
+        stat.test, 
+        logtest = {# calculate LRT by nested model
+          cox.exclude.var <- coxph(surv_formula(var.names.surv.time[j],
+                                                var.names.surv.status[j],
+                                                event.codes.surv[j],
+                                                var.names[-i]), temp.d)
+          anova(cox.stats$fit, cox.exclude.var)[["P(>|Chi|)"]][2]
+        },
+        waldtest = {
+          anova(rms::cph(surv_formula(var.names.surv.time[j],
+                                      var.names.surv.status[j],
+                                      event.codes.surv[j],
+                                      var.names), temp.d))[i, "P"]
+        }
       )
-      
-      result.table <- rbind(
-        result.table,
-        "DUMMY_ROW_NAME" = c(
-          paste(cox.stats$nevent, "/", cox.stats$n),
-          paste(paste0(
-            sprintf("%.2f", round(as.numeric(cox.stats$output[cox.stats.output.indexes, 1]), 2)), " (",
-            sprintf("%.2f", round(as.numeric(cox.stats$output[cox.stats.output.indexes, 2]), 2)), "-",
-            sprintf("%.2f", round(as.numeric(cox.stats$output[cox.stats.output.indexes, 3]), 2)), ")",
-            ifelse(cox.stats$used.firth, firth.caption, "")
-          ), collapse = kLocalConstantHrSepFlag),
-          if (round.small) {
-            p <- round_small(as.numeric(p.value), method = "round",
-                             round.digits.p.value, sci = scientific)
-            if (grepl("<", p)) {
-              p
-            } else {
-              sprintf(paste0("%.", round.digits.p.value, "f"), p)
-            }
+      result.table[num.surv.endpoints * (j - 1) + i, ] <- c(
+        paste(cox.stats$nevent, "/", cox.stats$n),
+        cox.stats$output %>% 
+          magrittr::extract(cox.stats.output.indexes,
+                            c("estimate", "conf.low", "conf.high")) %>% 
+          format_hr_ci(digits = 2, labels = FALSE, method = "Sci") %>% 
+          paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>% 
+          paste(collapse = kLocalConstantHrSepFlag),
+        if (round.small) {
+          p <- round_small(p.value, method = "round", round.digits.p.value,
+                           sci = scientific)
+          if (grepl("<", p)) {
+            p
           } else {
-            sprintf(
-              paste0("%.", round.digits.p.value, "f"),
-              round(as.numeric(p.value), digits = round.digits.p.value)) 
+            sprintf(paste0("%.", round.digits.p.value, "f"), p)
           }
-        )
+        } else {
+          sprintf(paste0("%.", round.digits.p.value, "f"),
+                  round(p.value, digits = round.digits.p.value)) 
+        }
       )
       cox.stats.output[[surv.descriptions[j]]] <- cox.stats
     }
   }
   
-  result.table.col.names <- c("# of events / n", "Hazard Ratio (95% CI)",
-                              paste0(ifelse(stat.test == "logtest", "LRT ", ""), "P-value"))
-  result.table <- result.table %>% 
-    magrittr::set_colnames(result.table.col.names) %>% 
-    magrittr::set_rownames(paste(var.names, rep(surv.descriptions, each = length(var.names)), sep = "-"))
-  
   ### generate html table ###
   result.table.html <- paste0("<table border=", html.table.border, ">",
                               ifelse(is.na(caption), "", paste0("<caption style='", TABLE.CAPTION.STYLE, "'>", caption, "</caption>")),
                               "<tr><th style='", col.th.style, "' colspan=2></th><th style='", col.th.style, "'>",
-                              paste(result.table.col.names, collapse = paste0("</th><th style='", col.th.style, "'>")), "</th></tr>")
+                              paste(colnames(result.table), collapse = paste0("</th><th style='", col.th.style, "'>")), "</th></tr>")
   # print values
   i <- 1
   num.row.per.surv.type <- length(var.names)
