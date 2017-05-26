@@ -40,7 +40,7 @@
 best_cut <- function(f, d, n = c("b", "t", "qd", "qn"), AIC.range = 3,
                      nround = 3, plot = TRUE, filename = NULL,
                      nrow = NULL, ncol = NULL, title = "", ...) {
-  . <- cutpoints <- p.value.log <- NULL
+  cutpoints <- p.value.log <- NULL
   pos <- 1
   assign("f", f, envir = as.environment(pos))
   assign("d", d, envir = as.environment(pos))
