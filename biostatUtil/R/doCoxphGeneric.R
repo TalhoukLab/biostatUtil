@@ -69,8 +69,8 @@ doCoxphGeneric <- function(
   
   # Constants
   kLocalConstantHrSepFlag <- "kLocalConstantHrSepFlag" # separates HR estimates 
-  col.th.style <- COL.TH.STYLE
-  row.th.style <- ROW.TH.STYLE
+ # col.th.style <- COL.TH.STYLE #what is this?
+#  row.th.style <- ROW.TH.STYLE
   
   # Initial assertion checks
   num.surv.endpoints <- length(var.names.surv.time)
@@ -114,8 +114,9 @@ doCoxphGeneric <- function(
                                         var.names.surv.status[j], "=='",
                                         event.codes.surv[j], "'  ) ~", x))
       temp.d.no.missing.survival <- temp.d %>% 
-        dplyr::filter(!is.na(.[, var.names.surv.status[[j]]] &
-                               !is.na(.[, var.names.surv.time[[j]]])))
+        dplyr::filter(!is.na(.[, var.names.surv.status[[j]]]) &
+                               !is.na(.[, var.names.surv.time[[j]]]))
+      
       cox.stats <- prettyCoxph(surv.formula, 
                                input.d = temp.d.no.missing.survival,
                                use.firth = use.firth)
