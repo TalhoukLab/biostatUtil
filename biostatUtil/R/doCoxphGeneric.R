@@ -122,9 +122,9 @@ doCoxphGeneric <- function(
     }
     
     for (j in seq_len(num.surv.endpoints)) {
-      surv.formula <- as.formula(paste0("Surv(", var.names.surv.time[j], ", ",
-                                        var.names.surv.status[j], "=='",
-                                        event.codes.surv[j], "'  ) ~", x))
+      surv.formula <- surv_formula(var.names.surv.time[j],
+                                   var.names.surv.status[j],
+                                   event.codes.surv[j], x)
       temp.d.no.missing.survival <- temp.d %>% 
         dplyr::filter(!is.na(.[, var.names.surv.status[[j]]]) &
                                !is.na(.[, var.names.surv.time[[j]]]))
@@ -134,7 +134,7 @@ doCoxphGeneric <- function(
                                use.firth = use.firth)
       pval <- summary(cox.stats$fit)[[stat.test]][["pvalue"]]
       result.table[num.surv.endpoints * (i - 1) + j, ] <- c(
-        paste(cox.stats$nevent, cox.stats$n, sep = " / "),
+        paste(cox.stats$nevent, "/", cox.stats$n),
         paste(cox.stats$output[c("estimate", "conf.low", "conf.high")] %>% 
                 format_hr_ci(digits = 2, labels = FALSE, method = "Sci") %>% 
                 paste0(ifelse(cox.stats$used.firth, firth.caption, "")),
