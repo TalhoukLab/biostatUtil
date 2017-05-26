@@ -30,5 +30,5 @@
 #'   confint cor cor.test dnorm extractAIC fisher.test IQR kruskal.test logLik
 #'   median p.adjust qnorm quantile relevel sd setNames wilcox.test
 #'   var
-#' @importFrom utils as.roman capture.output combn read.table tail
+#' @importFrom utils capture.output combn read.table tail
 NULL
