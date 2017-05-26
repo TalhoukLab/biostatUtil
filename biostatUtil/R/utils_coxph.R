@@ -154,3 +154,10 @@ printCoxMod <- function(cox, Capt) {
                               ctable = TRUE)
   pander::pander(TAB, style = 'rmarkdown')
 }
+
+#' Create a survival formula from time, status, event code and terms strings
+#' @noRd
+surv_formula <- function(time, status, event, terms) {
+  as.formula(paste0("Surv(", time, ", ", status, " == '", event, "') ~ ",
+                    paste(terms, collapse = " + ")))
+}
