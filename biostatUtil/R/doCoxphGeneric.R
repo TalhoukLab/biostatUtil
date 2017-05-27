@@ -86,16 +86,14 @@ doCoxphGeneric <- function(
     dplyr::mutate_at(var.names.surv.time, as.numeric)
   
   # Setup default for variable reference groups and result matrix
-  var.ref.groups <- var.ref.groups %||% rep(NA, length(var.names))
-  result.table <- matrix(NA_character_,
-                         nrow = length(var.names) * num.surv.endpoints,
-                         ncol = 3,
-                         dimnames = list(
-                           paste(rep(var.names, each = num.surv.endpoints),
-                                 surv.descriptions, sep = "-"),
-                           c("# of events / n", "Hazard Ratio (95% CI)",
-                             paste0(ifelse(stat.test == "logtest", "LRT ", ""),
-                                    "P-value"))))
+  nvar <- length(var.names)
+  var.ref.groups <- var.ref.groups %||% rep(NA, nvar)
+  rn <- paste(rep(var.names, each = num.surv.endpoints), surv.descriptions,
+              sep = "-")
+  cn <- c("# of events / n", "Hazard Ratio (95% CI)",
+          paste0(ifelse(stat.test == "logtest", "LRT ", ""), "P-value"))
+  result.table <- matrix(NA_character_, nrow = nvar * num.surv.endpoints,
+                         ncol = 3, dimnames = list(rn, cn))
   for (i in seq_along(var.names)) {
     x <- var.names[i]
     temp.d <- input.d %>%  # remove any cases with NA's or missing values
@@ -119,28 +117,16 @@ doCoxphGeneric <- function(
       cox.stats <- prettyCoxph(surv.formula, 
                                input.d = temp.d.no.missing.survival,
                                use.firth = use.firth)
-      pval <- summary(cox.stats$fit)[[stat.test]][["pvalue"]]
-      result.table[num.surv.endpoints * (i - 1) + j, ] <- c(
-        paste(cox.stats$nevent, "/", cox.stats$n),
-        cox.stats$output %>% 
-          magrittr::extract(c("estimate", "conf.low", "conf.high")) %>% 
-          format_hr_ci(digits = 2, labels = FALSE, method = "Sci") %>% 
-          paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>% 
-          paste(collapse = kLocalConstantHrSepFlag),
-        if (round.small) {
-          p <- round_small(pval, method = "round", round.digits.p.value,
-                           sci = scientific)
-          if (grepl("<", p)) {
-            p
-          } else {
-            sprintf(paste0("%.", round.digits.p.value, "f"), p)
-          }
-        } else {
-          sprintf(paste0("%.", round.digits.p.value, "f"),
-                  round(pval, digits = round.digits.p.value)
-          )
-        }
-      )
+      e.n <- paste(cox.stats$nevent, "/", cox.stats$n)
+      hr.ci <- cox.stats$output %>% 
+        magrittr::extract(c("estimate", "conf.low", "conf.high")) %>% 
+        format_hr_ci(digits = 2, labels = FALSE, method = "Sci") %>% 
+        paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>% 
+        paste(collapse = kLocalConstantHrSepFlag)
+      pval <- summary(cox.stats$fit)[[stat.test]][["pvalue"]] %>% 
+        round_pval(round.small = round.small, scientific = scientific,
+                   digits = round.digits.p.value)
+      result.table[num.surv.endpoints * (i - 1) + j, ] <- c(e.n, hr.ci, pval)
     }
   }
   
@@ -260,8 +246,8 @@ doCoxphGeneric <- function(
         }	
       
         # need to update result.table.bamboo.base.indexes since we've added rows!!!
-        if (var.count < length(var.names)) {
-          result.table.bamboo.base.indexes[(var.count + 1):length(var.names)] <- result.table.bamboo.base.indexes[(var.count + 1):length(var.names)] +
+        if (var.count < nvar) {
+          result.table.bamboo.base.indexes[(var.count + 1):nvar] <- result.table.bamboo.base.indexes[(var.count + 1):nvar] +
             (num.other.groups - 1) * num.surv.endpoints
         }
       }

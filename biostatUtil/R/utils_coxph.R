@@ -161,3 +161,20 @@ surv_formula <- function(time, status, event, terms) {
   as.formula(paste0("Surv(", time, ", ", status, " == '", event, "') ~ ",
                     paste(terms, collapse = " + ")))
 }
+
+#' Round p-values according to specifications for coxph summaries
+#' @noRd
+round_pval <- function(pvalue, round.small = TRUE, scientific = FALSE,
+                       digits = 4) {
+  if (round.small) {
+    p <- round_small(pvalue, method = "round", digits = digits,
+                     sci = scientific)
+    if (grepl("<", p)) {
+      p
+    } else {
+      sprintf(paste0("%.", digits, "f"), p)
+    }
+  } else {
+    sprintf(paste0("%.", digits, "f"), round(pval, digits = digits))
+  }
+}

@@ -65,8 +65,9 @@ doCoxphMultivariable <- function(
   caption = NA, html.table.border = 0, banded.rows = FALSE,
   css.class.name.odd = "odd", css.class.name.even = "even",
   split.table = 300, ...) {
-  . <- NULL
-  kLocalConstantHrSepFlag <- "kLocalConstantHrSepFlag" # separates the hazard ratio estimates
+  
+  # Constants
+  kLocalConstantHrSepFlag <- "kLocalConstantHrSepFlag" # separates HR estimates
   col.th.style <- COL.TH.STYLE
   row.th.style <- ROW.TH.STYLE
   row.td.style.for.multi.cox <- ROW.TD.STYLE.FOR.MULTI.COX
@@ -86,17 +87,13 @@ doCoxphMultivariable <- function(
     dplyr::mutate_at(var.names.surv.time, as.numeric)
   
   # Setup default for variable reference groups and result matrix
-  var.ref.groups <- var.ref.groups %||% rep(NA, length(var.names))
-  result.table <- matrix(NA_character_,
-                         nrow = length(var.names) * num.surv.endpoints,
-                         ncol = 3,
-                         dimnames = list(
-                           paste(var.names,
-                                 rep(surv.descriptions,
-                                     each = length(var.names)), sep = "-"),
-                           c("# of events / n", "Hazard Ratio (95% CI)",
-                             paste0(ifelse(stat.test == "logtest", "LRT ", ""),
-                                    "P-value"))))
+  nvar <- length(var.names)
+  var.ref.groups <- var.ref.groups %||% rep(NA, nvar)
+  rn <- paste(var.names, rep(surv.descriptions, each = nvar), sep = "-")
+  cn <- c("# of events / n", "Hazard Ratio (95% CI)",
+          paste0(ifelse(stat.test == "logtest", "LRT ", ""), "P-value"))
+  result.table <- matrix(NA_character_, nrow = nvar * num.surv.endpoints,
+                         ncol = 3, dimnames = list(rn, cn))
   for (i in seq_along(var.names)) {
     x <- var.names[i]
     input.d <- input.d %>%  # remove any cases with NA's or missing values
@@ -119,21 +116,23 @@ doCoxphMultivariable <- function(
     temp.d <- input.d %>% 
       dplyr::filter(!is.na(.[, var.names.surv.status[[j]]]) &
                       !is.na(.[, var.names.surv.time[[j]]]))
-    
     cox.stats <- prettyCoxph(surv.formula, input.d = temp.d,
                              use.firth = use.firth)
-    cox.stats.output.indexes <- c(0)
+    var.idx <- 0
     for (i in seq_along(var.names)) {
       var.name <- var.names[i]
-      cox.stats.output.indexes <- max(cox.stats.output.indexes) + 1
-      if (!is.na(var.ref.groups[i])) {
-        cox.stats.output.indexes <- c(cox.stats.output.indexes:(cox.stats.output.indexes +
-                                                                  length(names(table(temp.d[, var.name]))) - 1 - 1))
-      }
-      
+      var.idx <- max(var.idx) + 1
+      if (!is.na(var.ref.groups[i]))
+        var.idx <- var.idx:(var.idx + dplyr::n_distinct(temp.d[, var.name]) - 2)
+      e.n <- paste(cox.stats$nevent, "/", cox.stats$n)
+      hr.ci <- cox.stats$output %>% 
+        magrittr::extract(var.idx, c("estimate", "conf.low", "conf.high")) %>% 
+        format_hr_ci(digits = 2, labels = FALSE, method = "Sci") %>% 
+        paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>% 
+        paste(collapse = kLocalConstantHrSepFlag)
       p.value <- switch(
         stat.test, 
-        logtest = {# calculate LRT by nested model
+        logtest = {
           cox.exclude.var <- coxph(surv_formula(var.names.surv.time[j],
                                                 var.names.surv.status[j],
                                                 event.codes.surv[j],
@@ -146,28 +145,10 @@ doCoxphMultivariable <- function(
                                       event.codes.surv[j],
                                       var.names), temp.d))[i, "P"]
         }
-      )
-      result.table[num.surv.endpoints * (j - 1) + i, ] <- c(
-        paste(cox.stats$nevent, "/", cox.stats$n),
-        cox.stats$output %>% 
-          magrittr::extract(cox.stats.output.indexes,
-                            c("estimate", "conf.low", "conf.high")) %>% 
-          format_hr_ci(digits = 2, labels = FALSE, method = "Sci") %>% 
-          paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>% 
-          paste(collapse = kLocalConstantHrSepFlag),
-        if (round.small) {
-          p <- round_small(p.value, method = "round", round.digits.p.value,
-                           sci = scientific)
-          if (grepl("<", p)) {
-            p
-          } else {
-            sprintf(paste0("%.", round.digits.p.value, "f"), p)
-          }
-        } else {
-          sprintf(paste0("%.", round.digits.p.value, "f"),
-                  round(p.value, digits = round.digits.p.value)) 
-        }
-      )
+      ) %>% 
+        round_pval(round.small = round.small, scientific = scientific,
+                   digits = round.digits.p.value)
+      result.table[num.surv.endpoints * (j - 1) + i, ] <- c(e.n, hr.ci, p.value)
       cox.stats.output[[surv.descriptions[j]]] <- cox.stats
     }
   }
@@ -179,14 +160,14 @@ doCoxphMultivariable <- function(
                               paste(colnames(result.table), collapse = paste0("</th><th style='", col.th.style, "'>")), "</th></tr>")
   # print values
   i <- 1
-  num.row.per.surv.type <- length(var.names)
+  nvar <- length(var.names)
   while (i <= nrow(result.table)) {
     is.first.row <- TRUE
-    tr.class <- ifelse(banded.rows, paste0(" class='", ifelse((floor(i / num.row.per.surv.type) + 1) %% 2 == 0,
+    tr.class <- ifelse(banded.rows, paste0(" class='", ifelse((floor(i / nvar) + 1) %% 2 == 0,
                                                              css.class.name.even, css.class.name.odd), "'"), "")
     result.table.html <- paste0(result.table.html, "<tr", tr.class, "><th style='", row.td.style.for.multi.cox.align.top, "' rowspan=",
-                                num.row.per.surv.type, ">", surv.descriptions[floor((i - 1) / num.row.per.surv.type) + 1], "</th>")
-    for (j in 1:length(var.names)) {
+                                nvar, ">", surv.descriptions[floor((i - 1) / nvar) + 1], "</th>")
+    for (j in seq_along(var.names)) {
       result.table.html <- paste0(
         result.table.html,
         ifelse(is.first.row, "", paste0("<tr", tr.class, ">")),
@@ -195,7 +176,7 @@ doCoxphMultivariable <- function(
         #"</th><td style='",row.td.style.for.multi.cox,"'>",paste(result.table[i,],collapse=paste("</td><td style='",row.td.style.for.multi.cox,"'>"),sep=""),"</td></tr>",
         ifelse(is.first.row,
                paste0("</th><td style='", row.td.style.for.multi.cox.align.top,
-                      "' rowspan=", num.row.per.surv.type, ">",
+                      "' rowspan=", nvar, ">",
                       result.table[i, 1]),
                ""),
         "</td><td style='", row.td.style.for.multi.cox, "'>",
@@ -214,7 +195,7 @@ doCoxphMultivariable <- function(
   result.table.bamboo.base.indexes <- c() # base indexes for each survival end point in result.table.bamboo
   num.surv <- length(surv.descriptions) # number of survival end points
   num.var <- length(var.descriptions) # number of variables
-  for (i in 1:num.surv) {
+  for (i in seq_len(num.surv)) {
     result.table.bamboo.base.index <- 1 + (i - 1) * (num.var + 1)
     if (i == 1) {
       result.table.bamboo <- rbind(rep("", result.table.ncol), result.table.bamboo)
@@ -241,10 +222,10 @@ doCoxphMultivariable <- function(
     result.table.bamboo <- cbind(result.table.bamboo[, 1], "", result.table.bamboo[, 2:3])
     colnames(result.table.bamboo)[1] <- first.col.name
     hr.col.index <- 3 # column with the hazard ratios
-    for (i in 1:num.surv) {
+    for (i in seq_len(num.surv)) {
       result.table.bamboo.base.index <- result.table.bamboo.base.indexes[i]
       rows.added <- 0
-      for (var.count in 1:length(var.names)) {  
+      for (var.count in seq_along(var.names)) {  
         if (!is.na(var.ref.groups[var.count])) {
           ref.group <- var.ref.groups[var.count]
           other.groups <- names(table(input.d[, var.names[var.count]]))
@@ -252,7 +233,7 @@ doCoxphMultivariable <- function(
           num.other.groups <- length(other.groups)
           curr.base.index <- result.table.bamboo.base.index + (var.count - 1) + rows.added + 1
           if (num.other.groups > 1) {
-            for (j in 1:(num.other.groups - 1)) {
+            for (j in seq_len(num.other.groups - 1)) {
               if (curr.base.index < nrow(result.table.bamboo)) {
                 last.row.name <- rownames(result.table.bamboo)[nrow(result.table.bamboo)]
                 result.table.bamboo <- rbind(
