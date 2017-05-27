@@ -175,6 +175,6 @@ round_pval <- function(pvalue, round.small = TRUE, scientific = FALSE,
       sprintf(paste0("%.", digits, "f"), p)
     }
   } else {
-    sprintf(paste0("%.", digits, "f"), round(pval, digits = digits))
+    sprintf(paste0("%.", digits, "f"), round(pvalue, digits = digits))
   }
 }
