@@ -155,10 +155,18 @@ doCoxphMultivariable <- function(
   
   ### generate html table ###
   result.table.html <- paste0("<table border=", html.table.border, ">",
-                              ifelse(is.na(caption), "", paste0("<caption style='", TABLE.CAPTION.STYLE, "'>", caption, "</caption>")),
-                              "<tr><th style='", col.th.style, "' colspan=2></th><th style='", col.th.style, "'>",
-                              paste(colnames(result.table), collapse = paste0("</th><th style='", col.th.style, "'>")), "</th></tr>")
-  # print values
+                              ifelse(is.na(caption), "",
+                                     paste0("<caption style='",
+                                            TABLE.CAPTION.STYLE, "'>", caption,
+                                            "</caption>")),
+                              "<tr><th style='", col.th.style,
+                              "' colspan=2></th><th style='", col.th.style,
+                              "'>",
+                              paste(colnames(result.table),
+                                    collapse = paste0("</th><th style='",
+                                                      col.th.style, "'>")),
+                              "</th></tr>")
+  # print value
   i <- 1
   nvar <- length(var.names)
   while (i <= nrow(result.table)) {
@@ -264,24 +272,24 @@ doCoxphMultivariable <- function(
       }
     }
   }
-  ## subscript syntax for pandoc
-  result.table.bamboo <- gsub(result.table.bamboo, pattern = "<sup>|</sup>", replacement = "^")
-  options("table_counter" = options()$table_counter - 1)
-  result.table.bamboo <- pander::pandoc.table.return(
-      result.table.bamboo, caption = caption,
-      emphasize.rownames = FALSE, split.table = split.table, ...)
-  result.table.bamboo <- gsub(kLocalConstantHrSepFlag, "; ", result.table.bamboo)
   
-  ## line break syntax for pandoc
-  result.table.bamboo <- gsub(x = result.table.bamboo, pattern = "<br>", replacement = "\\\\\n")
+  # subscript ("<sup>|</sup>") and line break ("<br>") syntax for pandoc
+  options("table_counter" = options()$table_counter - 1)
+  result.table.bamboo <- result.table.bamboo %>% 
+    gsub(pattern = "<sup>|</sup>", replacement = "^", .) %>% 
+    pander::pandoc.table.return(., caption = caption,
+                                emphasize.rownames = FALSE,
+                                split.table = split.table, ...) %>% 
+    gsub(pattern = kLocalConstantHrSepFlag, replacement = "; ", .) %>% 
+    gsub(pattern = "<br>", replacement = "\\\\\n", .)
   ### end of result.table.bamboo ###  
 
   ### clean result.table ###
   result.table <- gsub(kLocalConstantHrSepFlag, ", ", result.table)
   ### end of clean result.table ###
   
-  return(list("result.table" = result.table,
-              "result.table.html" = result.table.html,
-              "result.table.bamboo" = result.table.bamboo,
-              "cox.stats" = cox.stats.output))
+  list("result.table" = result.table,
+       "result.table.html" = result.table.html,
+       "result.table.bamboo" = result.table.bamboo,
+       "cox.stats" = cox.stats.output)
 }

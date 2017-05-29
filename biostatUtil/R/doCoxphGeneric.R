@@ -134,8 +134,7 @@ doCoxphGeneric <- function(
   result.table.html <- paste0("<table border=", html.table.border, ">",
                               ifelse(is.na(caption), "",
                                      paste0("<caption style='",
-                                            TABLE.CAPTION.STYLE, "'>",
-                                            caption,
+                                            TABLE.CAPTION.STYLE, "'>", caption,
                                             "</caption>")),
                               "<tr><th style='", col.th.style,
                               "' colspan=2></th><th style='", col.th.style,
@@ -263,9 +262,9 @@ doCoxphGeneric <- function(
   options("table_counter" = options()$table_counter - 1)
   result.table.bamboo <- result.table.bamboo %>% 
     gsub(pattern = "<sup>|</sup>", replacement = "^", .) %>% 
-    pander::pandoc.table.return(
-      result.table.bamboo, caption = caption,
-      emphasize.rownames = FALSE, split.table = split.table, ...) %>% 
+    pander::pandoc.table.return(., caption = caption,
+                                emphasize.rownames = FALSE,
+                                split.table = split.table, ...) %>% 
     gsub(pattern = kLocalConstantHrSepFlag, replacement = "; ", .) %>% 
     gsub(pattern = "<br>", replacement = "\\\\\n", .)
   ### end of result.table.bamboo ###
