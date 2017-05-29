@@ -9,14 +9,7 @@
 #' specificity, positive predictive value (PPV), negative predictive value (NPV).
 #' if variable entered is binary, it will automatically call binaryCM
 #' 
-#' @param x a vector of reference classes
-#' @param y a vector of predicted classes
-#' @param seed a random seed for bootstrapping
-#' @param num.boot the number of times to bootstrap. Defaults to 1000.
-#' @param conf.level the confidence level. Defaults to 95\%.
-#' @param digits the number of digits to round summaries to
-#' @param method the method for obtaining confidence intervals for binomial 
-#'   probabilities. See \code{Hmisc::binconf} for details.
+#' @inheritParams binaryCM
 #' @return A confusion matrix for the predicted and reference classes. Then the 
 #'   estimated statistics along with bootstrapped confidence intervals. A
 #' list with the following elements

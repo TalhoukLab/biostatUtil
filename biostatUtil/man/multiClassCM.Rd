@@ -12,15 +12,15 @@ multiClassCM(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
 
 \item{y}{a vector of predicted classes}
 
-\item{seed}{a random seed for bootstrapping}
+\item{seed}{random seed for bootstrapping}
 
-\item{num.boot}{the number of times to bootstrap. Defaults to 1000.}
+\item{num.boot}{number of times to bootstrap. Defaults to 1000.}
 
-\item{conf.level}{the confidence level. Defaults to 95\%.}
+\item{conf.level}{confidence level. Defaults to 95\%.}
 
-\item{digits}{the number of digits to round summaries to}
+\item{digits}{number of digits to round summaries to}
 
-\item{method}{the method for obtaining confidence intervals for binomial 
+\item{method}{method for obtaining confidence intervals for binomial
 probabilities. See \code{Hmisc::binconf} for details.}
 }
 \value{
