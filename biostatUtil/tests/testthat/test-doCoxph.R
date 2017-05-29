@@ -175,13 +175,13 @@ context("Cox model testing interaction")
 
 test_that("doInteractionCox works", {
   res <- doInteractionCox(input.d = lung,
-                          var.names = "ph.ecog",
-                          var.descriptions = "ECOG score",
+                          var.names = c("sex", "ph.ecog"),
+                          var.descriptions = c("Sex", "ECOG score"),
                           var.names.surv.time = c("time", "time2"),
                           var.names.surv.status = c("status", "status2"),
                           event.codes.surv = c("2", "2"),
                           surv.descriptions = c("OS", "OS2"),
-                          var.ref.groups = "0",
+                          var.ref.groups = c("2", "0"),
                           caption = "")
   expect_length(res, 4)
 })
@@ -189,8 +189,8 @@ test_that("doInteractionCox works", {
 test_that("doInteractionCox factors use lowest group if no reference specified", {
   lung$sex <- as.factor(lung$sex)
   res <- doInteractionCox(input.d = lung,
-                          var.names = "sex",
-                          var.descriptions = "Sex",
+                          var.names = c("sex", "ph.ecog"),
+                          var.descriptions = c("Sex", "ECOG score"),
                           var.names.surv.time = "time",
                           var.names.surv.status = "status",
                           event.codes.surv = "2",

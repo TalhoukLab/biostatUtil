@@ -1,41 +1,15 @@
 #' Do interaction test with cox model
 #' likelihood ratio test only - two terms only
-#'  
-#' @param input.d The \code{data.frame} containing the data
-#' @param var.names variables to include as univariable predictors
-#' @param var.descriptions vector of strings to describe the variables as they are to appear in the table
-#' @param show.var.detail logical. If \code{TRUE}, details such as categories and the reference group for
-#' categorical variables are shown.
-#' @param show.group.name.for.bin.var logical. If \code{TRUE}, the non-reference group name is shown beside
-#' the hazard ratio for dichotomized variables.
-#' @param var.ref.groups a vector of reference groups. If \code{NULL}, assume all variables are binary/continuous.
-#' If an item in the vector is \code{NA}, assume that particular marker is binary or continuous
-#' (i.e., treat it as a numeric variable)
-#' @param var.names.surv.time variable names of survival time
-#' @param var.names.surv.status variable names of survival status
-#' @param event.codes.surv event coding of survival status variable
-#' @param surv.descriptions names abbreviated survival endpoints in returned output
-#' @param missing.codes character strings of missing values used in \code{input.d}
-#' @param use.firth percentage of censored cases before using Firth's method for Cox regression.
-#' If \code{use.firth = 1} (default), Firth is never used and if \code{use.firth = -1} Firth is
-#' always used.
-#' @param firth.caption subscript in html table output indicating Firth was used
-# @param stat.test (2015-08-12: only support LRT) TODO: add penalized LRT?
-#' @param round.digits.p.value number of digits for p-value
-#' @param caption caption for returned object
-#' @param html.table.border the border type to use for html tables
-#' @param banded.rows logical. If \code{TRUE}, rows have alternating shading colour
-#' @param css.class.name.odd Used to set the row colour for odd rows
-#' @param css.class.name.even Used to set the row colour for even rows
-#' @param split.table number of characters per row before splitting the table. Applies to
-#' the pandoc table output.
-#' @param ... additional arguments to \code{pandoc.table.return}
+#'
+#' Only a LRT can be performed (2015-08-12). TODO: add penalized LRT?
+#'
+#' @inheritParams doCoxphGeneric
 #' @return A list with the following elements
-#' @note the order of variable names in var.names dictates when will the 
-#' term added in stepwise likelihood ratio test of nested models i.e. 
-#' given \code{var.names = c("A", "B", "C")}, likelihood ratio test of nested model 
-#' will be:
-#'  
+#' @note the order of variable names in var.names dictates when will the term
+#'   added in stepwise likelihood ratio test of nested models i.e. given
+#'   \code{var.names = c("A", "B", "C")}, likelihood ratio test of nested model 
+#'   will be:
+#'   
 #' A
 #' A + B
 #' A + B + C
@@ -51,116 +25,112 @@ doInteractionCox <- function(
     surv.descriptions = c("OS", "DSS", "PFS"),
     missing.codes = c("N/A", "", "Unk"),
     use.firth = 1, firth.caption = FIRTH.CAPTION,
-    round.digits.p.value = 4,
+    round.digits.p.value = 4, round.small = FALSE, scientific = FALSE,
     caption = NA, html.table.border = 0, banded.rows = FALSE,
     css.class.name.odd = "odd", css.class.name.even = "even",
     split.table = 300, ...) {
   
-  kLocalConstantHrSepFlag <- "kLocalConstantHrSepFlag" # separates the hazard ratio estimates
+  # Constants
+  kLocalConstantHrSepFlag <- "kLocalConstantHrSepFlag" # separates HR estimates
   col.th.style <- COL.TH.STYLE
   row.th.style <- ROW.TH.STYLE
   row.td.style.for.multi.cox <- ROW.TD.STYLE.FOR.MULTI.COX
   row.td.style.for.multi.cox.align.top <- ROW.TD.STYLE.FOR.MULTI.COX.ALIGN.TOP
+  
+  # Initial assertion checks
+  num.surv.endpoints <- length(var.names.surv.time)
+  assertthat::assert_that(num.surv.endpoints == length(var.names.surv.status),
+                          num.surv.endpoints == length(event.codes.surv),
+                          num.surv.endpoints == length(surv.descriptions))
+  
+  # Check interactions
   for (var.name in var.names) {
-    if (length(grep(":",var.name)) == 0) {
-      if (is.factor(input.d[,var.name]))
-        input.d[,var.name] <- droplevels(input.d[, var.name])
+    if (!grepl(":", var.name)) {
+      if (is.factor(input.d[, var.name]))
+        input.d[, var.name] <- droplevels(input.d[, var.name])
     } else {
       # this must be an interaction term ... separate them and droplevels on 
       # individual variables
-      for (main.effect.var.name in sapply(strsplit(var.name, ":")[[1]],
-                                          stringr::str_trim, USE.NAMES = FALSE)) {
-        input.d[, main.effect.var.name] <- droplevels(input.d[, main.effect.var.name]) 
-        # print warning message if main effect not included in model
-        if (!main.effect.var.name %in% var.names) {
-          cat("WARNING: main effect not in model: ", main.effect.var.name, "\n")
+      me.vars <- vapply(strsplit(var.name, ":")[[1]], stringr::str_trim,
+                        FUN.VALUE = character(length(var.names)),
+                        USE.NAMES = FALSE)
+      for (me.var in me.vars) {
+        input.d[, me.var] <- droplevels(input.d[, me.var]) 
+        if (!me.var %in% var.names) {
+          warning("main effect not in model: ", me.var)
         }
       }
     } 
   }
-  num.surv.endpoints <- length(var.names.surv.time)
-  # qc ... make sure length of var.names.surv.time=var.names.surv.status=event.codes.surv=surv.descriptions
-  if (length(var.names.surv.time) != length(var.names.surv.status) | 
-      length(var.names.surv.time) != length(event.codes.surv) |
-      length(var.names.surv.time) != length(surv.descriptions)) {
-    cat("ERROR IN do.coxph.generic!!!! input error ... please double check\n")
-  }
-  for (i in 1:num.surv.endpoints) {
-    input.d[, var.names.surv.time[i]] <- as.numeric(input.d[, var.names.surv.time[i]])
-  }
-  if (is.null(var.ref.groups))
-    var.ref.groups <- rep(NA, length(var.names))
-  result.table <- c()
-  for (i in 1:length(var.names)) {
-    var.name <- var.names[i]
-    if (length(grep(":", var.name)) == 0) {
-      input.d <- input.d[!sapply(input.d[, var.name], as.character) %in% missing.codes, ]
-      input.d <- input.d[!is.na(input.d[, var.name]), ]
+  # Ensure survival times are numeric
+  input.d <- input.d %>% 
+    dplyr::mutate_at(var.names.surv.time, as.numeric)
+  
+  # Setup default for variable reference groups and result matrix
+  nvar <- length(var.names)
+  var.ref.groups <- var.ref.groups %||% rep(NA, nvar)
+  rn <- paste(var.names, rep(surv.descriptions, each = nvar), sep = "-")
+  cn <- c("# of events / n", "Hazard Ratio (95% CI)", "LRT P-value")
+  result.table <- matrix(NA_character_, nrow = nvar * num.surv.endpoints,
+                         ncol = 3, dimnames = list(rn, cn))
+  for (i in seq_along(var.names)) {
+    x <- var.names[i]
+    if (!grepl(":", x)) {
+      input.d <- input.d %>%  # remove any cases with NA's or missing values
+        dplyr::filter(!is.na(.[, x]) & !(.[, x] %in% missing.codes))
       # automatically set ref.group to lowest group if not specified
-      if (is.factor(input.d[,var.name])) {
-        input.d[, var.name] <- droplevels(input.d[, var.name])
+      if (is.factor(input.d[, x])) {
+        input.d[, x] <- droplevels(input.d[, x])
         if (is.na(var.ref.groups[i]))
-          var.ref.groups[i] <- names(table(input.d[, var.name]))[1]
+          var.ref.groups[i] <- names(table(input.d[, x]))[1]
       }
       if (is.na(var.ref.groups[i])) {
-        input.d[,var.name] <- as.numeric(input.d[, var.name]) # numeric
-        var.levels <- c(0, 1) # dummy levels ... used to build result.table
+        input.d[, x] <- as.numeric(input.d[, x])
       } else {
-        # assume ref group exist!!!
-        var.levels <- names(table(input.d[, var.name]))
-        var.levels <- c(var.ref.groups[i], var.levels[-which(var.levels == var.ref.groups[i])])
-        input.d[, var.name] <- factor(input.d[, var.name], levels = var.levels)
+        var.levels <- names(table(input.d[, x]))
+        var.levels <- c(var.ref.groups[i], var.levels[-which(
+          var.levels == var.ref.groups[i])])
+        input.d[, x] <- factor(input.d[, x], levels = var.levels)
       }
     }
   }
   
   cox.stats.output <- list()
-  for (j in 1:num.surv.endpoints) {
-    temp.d <- input.d[!is.na(input.d[, var.names.surv.status[j]]) & !is.na(input.d[, var.names.surv.time[j]]), ]
-    formula.surv <- paste0("Surv(", var.names.surv.time[j], ", ", var.names.surv.status[j], "=='", event.codes.surv[j], "'  ) ~")
-    curr.var.names <- c() 
-    cox.stats.output.indexes <- c(0)
-    for (i in 1:length(var.names)) {
-      curr.var.names <- c(curr.var.names,var.names[i])
-      cox.stats.output.indexes <- max(cox.stats.output.indexes) + 1
+  for (j in seq_len(num.surv.endpoints)) {
+    temp.d <- input.d %>% 
+      dplyr::filter(!is.na(.[, var.names.surv.status[[j]]]) &
+                      !is.na(.[, var.names.surv.time[[j]]]))
+    surv.formula <- paste0("Surv(", var.names.surv.time[j], ", ", var.names.surv.status[j], "=='", event.codes.surv[j], "'  ) ~")
+    curr.var.names <- c()
+    var.idx <- 0
+    for (i in seq_along(var.names)) {
+      curr.var.names <- c(curr.var.names, var.names[i])
+      var.idx <- max(var.idx) + 1
       if (!is.na(var.ref.groups[i]))
-        cox.stats.output.indexes <- c(cox.stats.output.indexes:(cox.stats.output.indexes + length(names(table(temp.d[, var.names[i]]))) - 1 - 1))
-      cox.stats <- prettyCoxph(as.formula(paste(formula.surv, paste(curr.var.names, collapse = "+"))), input.d = temp.d, use.firth = use.firth)
+        var.idx <- c(var.idx:(var.idx + dplyr::n_distinct(temp.d[, var.names[i]]) - 2))
+      cox.stats <- prettyCoxph(as.formula(paste(surv.formula, paste(curr.var.names, collapse = "+"))),
+                               input.d = temp.d, use.firth = use.firth)
+      e.n <- paste(cox.stats$nevent, "/", cox.stats$n)
+      hr.ci <- cox.stats$output %>%
+        magrittr::extract(var.idx, c("estimate", "conf.low", "conf.high")) %>%
+        format_hr_ci(digits = 2, labels = FALSE, method = "Sci") %>%
+        paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>%
+        paste(collapse = kLocalConstantHrSepFlag)
       if (length(curr.var.names) == 1) {
-        p.value <- anova(cox.stats$fit)[[4]][2]
+        p.value <- anova(cox.stats$fit)[2, "Pr(>|Chi|)"]
       } else {
         p.value <- anova(
-          coxph(as.formula(paste(formula.surv, paste(curr.var.names[-length(curr.var.names)], collapse = "+"))), data = temp.d),
-          cox.stats$fit)[[4]][2]
+          coxph(as.formula(paste(surv.formula, paste(curr.var.names[-length(curr.var.names)], collapse = "+"))), data = temp.d),
+          cox.stats$fit)[2, "P(>|Chi|)"]
       }
-          
-      result.table <- rbind(
-        result.table,
-        "DUMMY_ROW_NAME" = c(
-            paste(cox.stats$nevent, "/", cox.stats$n),
-            paste(paste0(
-              sprintf("%.2f", round(as.numeric(cox.stats$output[cox.stats.output.indexes, 1]), 2)), " (",
-              sprintf("%.2f", round(as.numeric(cox.stats$output[cox.stats.output.indexes, 2]), 2)), "-",
-              sprintf("%.2f", round(as.numeric(cox.stats$output[cox.stats.output.indexes, 3]), 2)), ")",
-              ifelse(cox.stats$used.firth, firth.caption, "")
-            ), collapse = kLocalConstantHrSepFlag),
-            sprintf(paste0("%.", round.digits.p.value, "f"),
-                    round(as.numeric(p.value),
-                          digits = round.digits.p.value))) # waldtest for Wald test, logtest for likelihood ratio test
-      )
+      p.value <- round_pval(p.value, round.small = round.small,
+                            scientific = scientific,
+                            digits = round.digits.p.value)
+      result.table[num.surv.endpoints * (j - 1) + i, ] <- c(e.n, hr.ci, p.value)
     }
     cox.stats.output[[surv.descriptions[j]]] <- cox.stats # only capture the full model i.e. the last one
   }
-  
-  result.table.col.names <- c("# of events / n", "Hazard Ratio (95% CI)", "LRT P-value")
-  colnames(result.table) <- result.table.col.names
-  result.table.row.names <- c()
-  for (i in 1:num.surv.endpoints) {
-    result.table.row.names <- c(result.table.row.names,
-                                paste0(var.names, paste0("-", surv.descriptions[i])))
-  }
-  rownames(result.table) <- result.table.row.names
-    
+
   ### generate word-friendly table via pander i.e. result.table.bamboo ... ###
   result.table.bamboo <- result.table
   result.table.ncol <- ncol(result.table)
@@ -233,17 +203,16 @@ doInteractionCox <- function(
       }
     }
   }
-  ## subscript syntax for pandoc
-  result.table.bamboo <- gsub(result.table.bamboo, pattern = "<sup>|</sup>", replacement = "^")
   
+  # subscript ("<sup>|</sup>") and line break ("<br>") syntax for pandoc
   options("table_counter" = options()$table_counter - 1)
-  result.table.bamboo <- pander::pandoc.table.return(
-      result.table.bamboo, caption = ifelse(is.na(caption), "", paste0("*", addTableNumber(caption), "*")),
-      emphasize.rownames = FALSE, split.table = split.table, ...)
-  result.table.bamboo <- gsub(kLocalConstantHrSepFlag, "; ", result.table.bamboo)
-  
-  ## line break syntax for pandoc
-  result.table.bamboo <- gsub(x = result.table.bamboo, pattern = "<br>", replacement = "\\\\\n")
+  result.table.bamboo <- result.table.bamboo %>% 
+    gsub(pattern = "<sup>|</sup>", replacement = "^", .) %>% 
+    pander::pandoc.table.return(., caption = ifelse(is.na(caption), "", paste0("*", addTableNumber(caption), "*")),
+                                emphasize.rownames = FALSE,
+                                split.table = split.table, ...) %>% 
+    gsub(pattern = kLocalConstantHrSepFlag, replacement = "; ", .) %>% 
+    gsub(pattern = "<br>", replacement = "\\\\\n", .)
   ### end of result.table.bamboo ### 
   
   ### generate html table ... ###
