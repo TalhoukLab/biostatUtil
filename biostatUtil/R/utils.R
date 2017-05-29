@@ -85,9 +85,6 @@ sem <- function(x, missing.value = NA, return.missing.value = NA) {
                 sqrt(var(x) / length(x))))
 }
 
-# magrittr placeholder
-globalVariables(".")
-
 ## CONSTANTS ##
 # Dates
 MM.DD.YYYY <- "%m/%d/%Y"
