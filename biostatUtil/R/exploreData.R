@@ -11,15 +11,15 @@
 #' exploreData(mtcars)
 #' file.remove("DataSummary.pdf")
 exploreData <- function(datmat) {
-  types <- unname(sapply(datmat, class))
+  types <- unname(purrr::map_chr(datmat, class))
   fd <- datmat[, types %in% c("factor", "numeric", "integer")]
-  type.fd <- unname(sapply(fd, class))
+  type.fd <- unname(purrr::map_chr(fd, class))
   num.ind <- type.fd %in% c("numeric", "integer")
   fac.ind <- type.fd %in% c("factor")
   catvars <- colnames(fd)[fac.ind]
   pdf("DataSummary.pdf")
   
-  for (i in 1:length(catvars)) {
+  for (i in seq_along(catvars)) {
     x <-  fd[, catvars[i]]
     tx <-  table(x, useNA = "ifany")
     par(mfrow = c(2, 1), mar = c(3.1, 9.5, 4.1, 2.1))
@@ -28,13 +28,13 @@ exploreData <- function(datmat) {
     colnames(mat) <- c("Freq", "%")
     rownames(mat)[is.na(rownames(mat))] <- "Missing"
     tmat <- rbind(mat, apply(mat[, 1:2], 2, sum))
-    PerformanceAnalytics::textplot(tmat, wrap = F)
+    PerformanceAnalytics::textplot(tmat, wrap = FALSE)
   }
   
   numvars <- colnames(fd)[num.ind]
-  for (i in 1:length(numvars)) {
+  for (i in seq_along(numvars)) {
     par(mfrow = c(2, 1))
-    x = fd[, numvars[i]]
+    x <- fd[, numvars[i]]
     boxplotSum(x, numvars[i])
     histSum(x)
   }

@@ -24,22 +24,19 @@ plotSchoenfeld <- function(input.d, input.formula, vars.to.plot = NULL,
 	fit <- coxph(get(".my.formula"), get(".my.data"))
 	var.names <- all.vars(input.formula[[3]])  # there may be > 1 terms in formula
 	for (var.name in var.names) {
-	  names(fit$coefficients) <- sapply(names(fit$coefficients), function(x) {
-	    return(ifelse(var.name == x, x, sub(var.name, "", x)))
-	  })
+	  names(fit$coefficients) <- names(fit$coefficients) %>% 
+	    purrr::map_chr(~ ifelse(var.name == .x, .x, sub(var.name, "", .x)))
 	}
 	fit.zph <- survival::cox.zph(fit)
 	# determine which variable to plot
 	if (is.null(vars.to.plot)) {
 	  plot(fit.zph, main = ifelse(is.null(main), "", main)) # plot all
 	} else {
-	  for (i in 1:length(vars.to.plot)) {
-	    plot(
-	      fit.zph,
-	      var = which(names(fit$coefficients) == vars.to.plot[i]),
-	      main = ifelse(is.null(main), "", main[min(length(main), i)])
-	    )
+	  for (i in seq_along(vars.to.plot)) {
+	    plot(fit.zph,
+	         var = which(names(fit$coefficients) == vars.to.plot[i]),
+	         main = ifelse(is.null(main), "", main[min(length(main), i)]))
 	  }
 	}
-	return(list("fit" = fit, "fit.zph" = fit.zph))
+	dplyr::lst(fit, fit.zph)
 }

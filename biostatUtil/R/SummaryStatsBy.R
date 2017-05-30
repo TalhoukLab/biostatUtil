@@ -37,18 +37,18 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
                            stats = c("mean", "sd", "median", "IQR", "range",
                                      "missing"), digits = 3,
                            format = c("raw", "pandoc", "html", "long")) {
-  . <- stat <- value <- grp <- vars <- lev <- NULL
+  stat <- value <- grp <- vars <- lev <- NULL
   stats <- match.arg(stats, c("mean", "sd", "median", "IQR", "range",
                               "missing"), several.ok = TRUE)
   var.dat <- data[, var.names, drop = FALSE]
-  types <- sapply(var.dat, class)
+  types <- purrr::map_chr(var.dat, class)
   num.ind <- types %in% c("numeric", "integer")
   fac.ind <- types %in% c("factor", "character")
   if (!(num.ind || fac.ind)) {
     stop('Variables must be numeric, integer, factor, or character.')
   }
-  assertthat::assert_that(n_distinct(data[, by1]) >= 2 &
-                            n_distinct(data[, by2]) >= 2)
+  assertthat::assert_that(n_distinct(data[, by1]) >= 2,
+                          n_distinct(data[, by2]) >= 2)
   if (sum(num.ind) > 0) {
     num.var <- var.names[num.ind]
     num.dat <- structure(data.frame(var.dat[num.var], data[, c(by1, by2)]),
@@ -67,8 +67,8 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
     rbind(matrix(c(unique(data[, by1]), rep(NA, n_distinct(data[, by1]))),
                  ncol = 2, dimnames = list(NULL, c(by1, by2)))) %>% 
     arrange_(by1, by2) %>%
-    mapply(function(x, y) paste(x, y, sep = "="), names(.), .) %>% 
-    apply(., 1, paste, collapse = ", ") %>% 
+    purrr::map2(names(.), ., ~ paste(.x, .y, sep = "=")) %>% 
+    purrr::pmap_chr(paste, sep = ", ") %>% 
     ifelse(grepl("NA", .), stringr::str_split_fixed(., ", ", 2)[, 1], .)
   
   # Compute numerical summaries
@@ -108,24 +108,23 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
   
   # Compute factor summaries
   if (!is.null(fac.var)) {
-    fac.ord <- mapply(function(x, y) paste0(x, c("", paste0(".", levels(y)))),
-                      fac.var, fac.dat[, fac.var, drop = FALSE]) %>% 
-      c() %>% 
+    fac.ord <- purrr::map2(fac.var, fac.dat[, fac.var, drop = FALSE],
+                            ~ paste0(.x, c("", paste0(".", levels(.y))))) %>% 
       unlist()
-    fac.val <- sapply(fac.var, function(x)
-      as.formula(paste(x, "~", paste(by1, by2, sep = " + ")))) %>%
-      lapply(function(y) as.matrix(aggregate(y, fac.dat, summary))) %>% 
+    fac.val <- fac.var %>% 
+      purrr::map(~ as.formula(paste(.x, "~", paste(by1, by2, sep = " + ")))) %>%
+      purrr::map(~ as.matrix(aggregate(.x, fac.dat, summary))) %>% 
       Reduce(merge, .) %>% 
-      magrittr::set_colnames(c(by1, by2, grep("\\.", fac.ord, value = TRUE))) %>% 
+      magrittr::set_colnames(c(by1, by2, grep("\\.", fac.ord,
+                                              value = TRUE))) %>% 
       as.data.frame()
-    fac.val.tot <- sapply(fac.var, function(x)
-      as.formula(paste(x, "~", paste(by1, sep = " + ")))) %>%
-      lapply(function(y) as.matrix(aggregate(y, fac.dat, summary))) %>% 
+    fac.val.tot <- fac.var %>% 
+      purrr::map(~ as.formula(paste(.x, "~", paste(by1, sep = " + ")))) %>%
+      purrr::map(~ as.matrix(aggregate(.x, fac.dat, summary))) %>% 
       Reduce(merge, .) %>% 
       magrittr::set_colnames(c(by1, grep("\\.", fac.ord, value = TRUE))) %>% 
       as.data.frame()
-    fac.all <- dplyr::bind_rows(list(fac.val, fac.val.tot)) %>%
-      as.data.frame()
+    fac.all <- dplyr::bind_rows(list(fac.val, fac.val.tot))    
     fac.pct <- fac.val %>% 
       select(-one_of(by1, by2)) %>% 
       t() %>% 
@@ -219,8 +218,8 @@ contSumFunc <- function(x, digits, stats = c("mean", "sd", "median", "IQR",
   funs.arg <- match.arg(stats, stats.choices, several.ok = TRUE)
   if ("missing" %in% stats)
     funs.arg[match("missing", funs.arg)] <- "n_missing"
-  all.stats <- sapply(funs.arg, function(f) {
-    match_fun_null(x = x, f, na.rm = TRUE) %>% 
+  all.stats <- purrr::map_chr(funs.arg, ~ {
+    match_fun_null(x = x, .x, na.rm = TRUE) %>% 
       round(., digits = digits) %>% 
       as.character() %>% 
       ifelse(length(.) > 1, paste(., collapse = "-"), .)

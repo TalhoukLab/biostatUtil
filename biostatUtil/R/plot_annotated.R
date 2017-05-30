@@ -8,16 +8,15 @@
 #' @export
 barplotSum <- function(tx, ttl = "") {
   wr.lap <- wrap.labels(names(tx), 35)
-  barplot(prop.table(tx) * 100, border = "white",
-          horiz = TRUE, las = 2, names.arg = wr.lap, offset = 0,
-          main = ttl, xlab = "%", cex.names = 0.5, col = "lightblue")
+  barplot(prop.table(tx) * 100, border = "white", horiz = TRUE, las = 2,
+          names.arg = wr.lap, offset = 0, main = ttl, xlab = "%",
+          cex.names = 0.5, col = "lightblue")
 }
 
 #' Wrap labels
 #' @noRd
 wrap.labels <- function(x, len) {
-  return(sapply(x, function(y) paste(strwrap(y, len), collapse = "\n"),
-                USE.NAMES = FALSE))
+  purrr::map_chr(x, ~ paste(strwrap(.x, len), collapse = "\n"))
 }
 
 #' Annotated Boxplot
@@ -28,15 +27,12 @@ wrap.labels <- function(x, len) {
 #' @param digit the number of digits used for rounding (defaults to 1)
 #' @author Aline Talhouk
 #' @export
-boxplotSum <- function(var, ttl, digit = 1) {
+boxplotSum <- function(var, ttl = "", digit = 1) {
   bxp <- boxplot(var, col = "lightgrey", border = "darkgrey",
                  horizontal = TRUE, axes = FALSE, main = ttl)
-  mtext(c("", "Q1", "Med", "Q3", ""), side = 3, at = bxp$stats,
-        line = -2, cex = 0.8)
-  mtext(c(round(bxp$stats[1], digit), round(bxp$stats[2], digit),
-          round(bxp$stats[3], digit), round(bxp$stats[4], digit),
-          round(bxp$stats[5], digit)), side = 3, at = bxp$stats,
-        line = -8, cex = 0.8)
+  mtext(c("", "Q1", "Med", "Q3", ""), side = 3, at = bxp$stats, line = -2,
+        cex = 0.8)
+  mtext(round(bxp$stats, digit), side = 3, at = bxp$stats, line = -8, cex = 0.8)
 }
 
 #' Summary histogram
@@ -52,10 +48,12 @@ boxplotSum <- function(var, ttl, digit = 1) {
 histSum <- function(var, xlab = "", txt = "", sub = "", digit = 1) {
   h <- hist(var, main = paste("Mean", round(mean(var, na.rm = TRUE), digit),
                               "SD", round(sd(var, na.rm = TRUE), digit),
-                              "Missing", sum(is.na(var))), prob = F, xlab = xlab,
-            col = "white", border = "grey", sub = sub, cex = 0.8)
+                              "Missing", sum(is.na(var))),
+            prob = FALSE, xlab = xlab, col = "white", border = "grey",
+            sub = sub, cex = 0.8)
   xfit <- seq(min(var, na.rm = TRUE), max(var, na.rm = TRUE), length = 50)
-  yfit <- dnorm(xfit, mean = mean(var, na.rm = TRUE), sd = sd(var, na.rm = TRUE))
+  yfit <- dnorm(xfit, mean = mean(var, na.rm = TRUE),
+                sd = sd(var, na.rm = TRUE))
   yfit <- yfit * diff(h$mids[1:2]) * length(var)
   lines(xfit, yfit, col = "blue", lwd = 2)
   mtext(txt, side = 3, outer = TRUE, line = -3)

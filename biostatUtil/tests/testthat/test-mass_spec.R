@@ -37,7 +37,7 @@ test_that("ms_mean_var shows mean variance relationship", {
 
 test_that("ms_mean_var takes title from g if none provided", {
   mv_no_title <- ms_mean_var(dat1, g = g)
-  expect_equal(sapply(mv_no_title, function(x) x$labels$title),
+  expect_equal(purrr::map_chr(mv_no_title, c("labels", "title")),
                c("vsn(Raw data values)", paste("vsn", g)))
 })
 

@@ -69,10 +69,10 @@ ms_process <- function(psm, protein, treatment, samples = NULL,
   # Parse peptide accession and merge the protein descriptions with the peptide file
   pep <- pep %>% 
     mutate_(.dots = setNames(list(lazyeval::interp(
-      ~sapply(strsplit(as.character(MPA), ";"), "[", 1),
+      ~purrr::map_chr(strsplit(as.character(MPA), ";"), `[`, 1),  # Strip ";"
       MPA = quote(Master.Protein.Accessions))), "Accession")) %>% 
     mutate_(.dots = setNames(list(lazyeval::interp(
-      ~sapply(strsplit(as.character(A), " | "), "[", 1),  # Strip on ";" and " | "
+      ~purrr::map_chr(strsplit(as.character(A), " | "), `[`, 1),  # Strip " | "
       A = quote(Accession))), "Accession")) %>% 
     merge(pro, by = "Accession") %>%  # Merge with protein set on Accession
     mutate_(.dots = setNames(list(

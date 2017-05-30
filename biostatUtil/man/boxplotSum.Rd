@@ -4,7 +4,7 @@
 \alias{boxplotSum}
 \title{Annotated Boxplot}
 \usage{
-boxplotSum(var, ttl, digit = 1)
+boxplotSum(var, ttl = "", digit = 1)
 }
 \arguments{
 \item{var}{the variable to be plotted (must be numerical)}

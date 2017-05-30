@@ -22,13 +22,13 @@
 parse_rd <- function(path = NULL, tags = c("name", "title", "desc",
                                            "details")) {
   rd.files <- list.files("man", full.names = TRUE)
-  rd.parsed <- sapply(rd.files, Rd2roxygen::parse_file)
-  info.table <- sapply(rd.parsed, function(x)
-    replace(x[tags], sapply(x[tags], is.null), "")) %>% 
-    t() %>%
-    data.frame() %>%
-    sapply(unlist) %>%
+  info.table <- rd.files %>%
+    purrr::set_names() %>%
+    purrr::map(Rd2roxygen::parse_file) %>% 
+    purrr::map(~ replace(.x[tags], purrr::map_lgl(.x[tags], is.null), "")) %>% 
+    purrr::transpose() %>% 
+    purrr::map(unlist) %>% 
     data.frame(stringsAsFactors = FALSE)
   if (!is.null(path)) readr::write_csv(info.table, path = path)
-  return(info.table)
+  info.table
 }

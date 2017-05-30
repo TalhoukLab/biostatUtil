@@ -78,9 +78,8 @@ doBoxplotAmongSubtypes <- function(input.d, data.description,
   }
   
   boxplot(biomarker ~ subtype,
-          names = paste0(
-            paste0(names(xbar), rep("\nn=",length(xbar))),
-            sapply(xbar, function(x) (x$n), USE.NAMES = FALSE)),
+          names = paste0(paste0(names(xbar), rep("\nn=",length(xbar))),
+                         purrr::map_int(xbar, "n")),
           ylab = biomarker.name, xlab = subtype.name,
           main = paste0(data.description, "\n", test.name, " test P=",
                         format(p.value, digits = digits)),
@@ -180,13 +179,12 @@ doJitterplotAmongSubtypes <- function(input.d, data.description,
              pch = pch, cex.axis = cex.axis, vert = TRUE,
              group.names = paste0(
                paste0(names(xbar), rep("\nn=", length(xbar))),
-               sapply(xbar, function(x) x$n, USE.NAMES = FALSE)),
+               purrr::map_int(xbar, "n")),
              ylab = biomarker.name, xlab = subtype.name,
              main = paste0(data.description, "\n", test.name, " test P=",
                            format(p.value, digits = digits)))
-  arrows(1:length(xbar), sapply(xbar, function(x) x$ci[1], USE.NAMES = FALSE),
-         1:length(xbar), sapply(xbar, function(x) x$ci[2], USE.NAMES = FALSE),
+  arrows(seq_along(xbar), purrr::map_dbl(xbar, c(2, 1)),
+         seq_along(xbar), purrr::map_dbl(xbar, c(2, 2)),
          angle = 90, code = 3, length = 0.1)
-  points(sapply(xbar, function(x) x$obs.mean, USE.NAMES = FALSE),
-         pch = 4, type = "p", cex = 2)
+  points(purrr::map_dbl(xbar, "obs.mean"), pch = 4, type = "p", cex = 2)
 }

@@ -63,7 +63,7 @@ ms_condition <- function(data, treatment, control = NULL,
 ms_condition_indicator <- function(data, cols,
                                    condition = c("VC", "MRC", "MC")) {
   cond <- match.arg(condition)
-  dat <- sapply(cols, n_notNA, data = data)
+  dat <- vapply(cols, n_notNA, data = data, double(nrow(data)))
   ind <- apply(dat, 1, ms_condition_choice, cond = cond)
   return(ind)
 }
