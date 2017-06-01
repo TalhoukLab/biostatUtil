@@ -46,8 +46,10 @@ tidy version of \code{raw}.
 }
 \examples{
 mtcars$vs <- as.factor(mtcars$vs); mtcars$am <- as.factor(mtcars$am)
-SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("mpg", "vs", "qsec", "am"))
-SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("vs", "qsec"))
+SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("mpg", "vs",
+"qsec", "am"))
+SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("vs",
+"qsec"))
 SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("mpg"))
 }
 \author{
