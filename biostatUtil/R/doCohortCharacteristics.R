@@ -22,6 +22,8 @@
 #'   do test for all variables, \code{NA} indicates do not do test for specified
 #'   variable. Tests: chisq, fisher, ttest, wilcox, kendall, spearman, pearson,
 #'   kruskal, confusionMarkerAsRef, confusionVarAsRef
+#' @param chisq.test.simulate.p.value Whether to simulate p-value for chi-square test.  
+#'   this parameter is ignored if chi-square is not used.  Default value=FALSE
 #' @param stat.test.column.header The name to show on the header defaults to
 #'   "association/correlation test"
 #' @param round.digits.p.value The number of digits to round the P values
@@ -63,7 +65,9 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
                                     show.missing = TRUE,
                                     show.missing.continuous = TRUE,
                                     do.droplevels = TRUE, 
-                                    show.percent = "both", stat.tests = NULL,
+                                    show.percent = "both", 
+                                    stat.tests = NULL,
+                                    chisq.test.simulate.p.value = FALSE,
                                     stat.test.column.header = 
                                       "association/correlation test", 
                                     round.digits.p.value = 4,
@@ -300,7 +304,7 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
                                                   round(kendall.result$p.value, digits = round.digits.p.value)))
                },
                chisq = {chisq.result <- chisq.test(table(input.d.no.missing.var[, var.name],
-                                                         input.d.no.missing.var[, marker.name]))
+                                                         input.d.no.missing.var[, marker.name]),simulate.p.value=chisq.test.simulate.p.value)
                stat.test.result <- paste0("Chi-square test", kLocalConstantStatTestBeginFlag,
                                           "P = ", sprintf(paste0("%.", round.digits.p.value, "f"),
                                                           round(chisq.result$p.value, digits = round.digits.p.value)))
