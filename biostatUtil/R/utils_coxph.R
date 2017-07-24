@@ -132,7 +132,7 @@ paste_hr_ci <- function(hr, ci.lo, ci.hi, labels = TRUE,
                         method = c("Inf", "Sci")) {
   method <- match.arg(method)
   ci.hi.n <- as.numeric(ci.hi)
-  if (ci.hi.n > 1000)
+  if (is.na(ci.hi.n) || ci.hi.n > 1000)
     ci.hi <- switch(method,
                     `Inf` = "Inf",
                     Sci = format(ci.hi.n, digits = 3, scientific = TRUE))
