@@ -8,6 +8,7 @@ doCohortCharacteristics(input.d, marker.name, marker.description, var.names,
   is.var.continuous, var.descriptions, marker.value.labels.tolower = TRUE,
   show.missing = TRUE, show.missing.continuous = TRUE,
   do.droplevels = TRUE, show.percent = "both", stat.tests = NULL,
+  chisq.test.simulate.p.value = FALSE,
   stat.test.column.header = "association/correlation test",
   round.digits.p.value = 4, num.boot = 1000,
   missing.codes.highlight = NULL, missing.codes = c("N/A", "", "Unk"),
@@ -51,6 +52,9 @@ other possible values: "column", "row".}
 do test for all variables, \code{NA} indicates do not do test for specified
 variable. Tests: chisq, fisher, ttest, wilcox, kendall, spearman, pearson,
 kruskal, confusionMarkerAsRef, confusionVarAsRef}
+
+\item{chisq.test.simulate.p.value}{Whether to simulate p-value for chi-square test.
+this parameter is ignored if chi-square is not used.  Default value=FALSE}
 
 \item{stat.test.column.header}{The name to show on the header defaults to
 "association/correlation test"}
