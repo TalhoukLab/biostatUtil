@@ -34,7 +34,9 @@ test_that("Order of input/output variables match", {
 })
 
 test_that("Error if input isn't num, int, fac, char", {
-  expect_error(SummaryStatsBy(matrix(TRUE, nrow = 10), by1 = "cyl", by2 = "gear"))
+  mtcars$logical_var <- TRUE
+  expect_error(SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear",
+                              var.names = "logical_var"))
 })
 
 test_that("Error thrown if argument names misspelled", {
