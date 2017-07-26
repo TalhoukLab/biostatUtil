@@ -34,7 +34,6 @@
 #'   of censored cases exceeds \code{use.firth}. Setting \code{use.firth = 1} 
 #'   (default) means Firth is never used, and \code{use.firth = -1} means Firth 
 #'   is always used.
-#' @param subs use of subsetting
 #' @param legend logical; if \code{TRUE}, the legend is overlaid on the graph 
 #'   (instead of on the side).
 #' @param legend.xy named vector specifying the x/y position of the legend
@@ -59,9 +58,8 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
                  main = "Kaplan-Meier Plot", xlabs = "Time",
                  ylabs = "Survival Probability", xlims = NULL, ylims = NULL,
                  ystratalabs = NULL, cox.ref.grp = NULL, timeby = 5,
-                 pval = TRUE, HR = TRUE, use.firth = 1, subs = NULL,
-                 legend = FALSE, legend.xy = NULL,
-                 legend.direction = "horizontal",
+                 pval = TRUE, HR = TRUE, use.firth = 1, legend = FALSE,
+                 legend.xy = NULL, legend.direction = "horizontal",
                  line.y.increment = 0.05, digits = 3, ...) {
   time <- surv <- lower <- upper <- n.censor <- n.risk <- n.event <- 
     estimate <- conf.high <- conf.low <- NULL
@@ -69,25 +67,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
   s1 <- levels(summary(sfit)$strata)
   s2 <- summary(sfit, censored = TRUE)$strata
   s3 <- summary(sfit, times = times, extend = TRUE)$strata
-  if (is.null(subs)) {
-    subs1 <- seq_along(s1)
-    subs2 <- seq_along(s2)
-    subs3 <- seq_along(s3)
-  } else {
-    for (i in seq_along(subs)) {
-      if (i == 1)
-        ssvar <- paste0("(?=.*\\b=", subs[i])
-      if (i == length(subs))
-        ssvar <- paste0(ssvar, "\\b)(?=.*\\b=", subs[i], "\\b)")	
-      if (!i %in% c(1, length(subs)))
-        ssvar <- paste0(ssvar, "\\b)(?=.*\\b=", subs[i])	
-      if (i == 1 & i == length(subs))
-        ssvar <- paste0("(?=.*\\b=", subs[i], "\\b)")
-    }
-    subs1 <- which(regexpr(ssvar, s1, perl = TRUE) != -1)
-    subs2 <- which(regexpr(ssvar, s2, perl = TRUE) != -1)
-    subs3 <- which(regexpr(ssvar, s3, perl = TRUE) != -1)
-  }
+
   # Specifying plot parameter defaults
   shading.colors <- shading.colors %||% c("blue2", "red2",
                                           "deepskyblue", "indianred3")
@@ -99,8 +79,6 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
     line.pattern <- setNames(rep(1, length(sfit$strata)), ystratalabs)
   if (!is.null(cox.ref.grp))
     names(cox.ref.grp) <- all.vars(sfit$call)[3]  # works for two-sided formulas
-  if (!is.null(subs))
-    pval <- FALSE
   
   # Left margins for km plot and risk table
   mleft <- left_margin(ystratalabs)

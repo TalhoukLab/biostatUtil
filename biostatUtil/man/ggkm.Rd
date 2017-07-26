@@ -9,9 +9,9 @@ ggkm(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
   main = "Kaplan-Meier Plot", xlabs = "Time",
   ylabs = "Survival Probability", xlims = NULL, ylims = NULL,
   ystratalabs = NULL, cox.ref.grp = NULL, timeby = 5, pval = TRUE,
-  HR = TRUE, use.firth = 1, subs = NULL, legend = FALSE,
-  legend.xy = NULL, legend.direction = "horizontal",
-  line.y.increment = 0.05, digits = 3, ...)
+  HR = TRUE, use.firth = 1, legend = FALSE, legend.xy = NULL,
+  legend.direction = "horizontal", line.y.increment = 0.05, digits = 3,
+  ...)
 }
 \arguments{
 \item{sfit}{an object of class \code{survfit} containing one or more survival
@@ -64,8 +64,6 @@ its 95\% confidence interval will be shown}
 of censored cases exceeds \code{use.firth}. Setting \code{use.firth = 1} 
 (default) means Firth is never used, and \code{use.firth = -1} means Firth 
 is always used.}
-
-\item{subs}{use of subsetting}
 
 \item{legend}{logical; if \code{TRUE}, the legend is overlaid on the graph 
 (instead of on the side).}
