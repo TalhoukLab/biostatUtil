@@ -21,3 +21,8 @@ test_that("error if no variation in explanatory variable", {
   lung$dummy <- 1
   expect_error(findCutpointByCoxph(lung, Surv(time, status) ~ dummy))
 })
+
+test_that("unexpected error is thrown when there's numerical difficulty", {
+  lung$time2 <- Inf
+  expect_output(findCutpointByCoxph(lung, Surv(time2, status) ~ sex))
+})
