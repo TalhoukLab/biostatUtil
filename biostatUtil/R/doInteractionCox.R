@@ -126,7 +126,7 @@ doInteractionCox <- function(
       p.value <- round_pval(p.value, round.small = round.small,
                             scientific = scientific,
                             digits = round.digits.p.value)
-      result.table[num.surv.endpoints * (j - 1) + i, ] <- c(e.n, hr.ci, p.value)
+      result.table[nvar * (j - 1) + i, ] <- c(e.n, hr.ci, p.value)
     }
     cox.stats.output[[surv.descriptions[j]]] <- cox.stats # only capture the full model i.e. the last one
   }
