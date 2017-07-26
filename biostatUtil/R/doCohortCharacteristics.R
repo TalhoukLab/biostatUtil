@@ -134,7 +134,6 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
     } else if (result.table.col.names.length < (custom.marker.labels.length + 1)) {
       result.table.col.names[2:result.table.col.names.length] <- custom.marker.labels[c(1:(result.table.col.names.length - 1))]
     } else {
-      # length(marker.categories) > length(custom.marker.labels)
       result.table.col.names[2:result.table.col.names.length] <- custom.marker.labels[
         rep(c(1:custom.marker.labels.length), floor(result.table.col.names.length / custom.marker.labels.length)),
         c(1:(result.table.col.names.length %% custom.marker.labels.length))]

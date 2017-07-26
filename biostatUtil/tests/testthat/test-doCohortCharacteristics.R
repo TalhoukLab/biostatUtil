@@ -15,7 +15,7 @@ test_that("defaults can be changed and output is a length 4 list", {
     do.droplevels = TRUE,
     caption = "Some mtcars summaries",
     custom.total.label = "TOTAL",
-    custom.marker.labels = c("TOTAL", "Cylinders = 0", "Cylinders = 1"),
+    custom.marker.labels = c("Cylinders = 0", "Cylinders = 1"),
     stat.tests = c("spearman", "kruskal", "wilcox", "chisq")))
   expect_length(dcc, 4)
   expect_is(dcc$result.table, "matrix")
@@ -75,6 +75,7 @@ test_that("percentages can be for marginal rows or columns only", {
     marker.description = "weight",
     var.names = c("disp", "hp", "am"),
     var.descriptions = c("displacement", "horsepower", "transmission"),
+    marker.value.labels.tolower = FALSE,
     is.var.continuous = c(TRUE, TRUE, FALSE),
     show.percent = "column")
   expect_error(dcc_row, NA)
