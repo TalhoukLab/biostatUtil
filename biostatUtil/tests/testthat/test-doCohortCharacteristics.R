@@ -8,15 +8,15 @@ test_that("defaults can be changed and output is a length 4 list", {
   dcc <- suppressWarnings(doCohortCharacteristics(
     input.d = mtcars,
     marker.name = "vs",
-    marker.description = "cylinders",
-    var.names = c("disp", "hp", "am"),
-    var.descriptions = c("displacement", "horsepower", "transmission"),
-    is.var.continuous = c(TRUE, TRUE, FALSE),
+    marker.description = "V/S",
+    var.names = c("disp", "hp", "qsec"),
+    var.descriptions = c("displacement", "horsepower", "1/4 mile time"),
+    is.var.continuous = c(TRUE, TRUE, TRUE),
     do.droplevels = TRUE,
     caption = "Some mtcars summaries",
     custom.total.label = "TOTAL",
-    custom.marker.labels = c("Cylinders = 0", "Cylinders = 1"),
-    stat.tests = c("spearman", "kruskal", "wilcox", "chisq")))
+    custom.marker.labels = c("V/S = 0", "V/S = 1"),
+    stat.tests = c("spearman", "kruskal", "wilcox")))
   expect_length(dcc, 4)
   expect_is(dcc$result.table, "matrix")
   expect_length(dcc$stat.tests.results, 3)
@@ -27,18 +27,18 @@ test_that("defaults can be changed and output is a length 4 list", {
 test_that("statistical tests for categorical variables work", {
   dcc_kendall <- suppressWarnings(doCohortCharacteristics(
     input.d = mtcars, marker.name = "vs", marker.description = "cylinders",
-    var.names = c("am"), var.descriptions = c("transmission"),
-    is.var.continuous = c(FALSE), caption = "Some mtcars summaries",
+    var.names = "am", var.descriptions = c("transmission"),
+    is.var.continuous = FALSE, caption = "Some mtcars summaries",
     stat.tests = "kendall"))
   dcc_chisq <- doCohortCharacteristics(
     input.d = mtcars, marker.name = "vs", marker.description = "cylinders",
-    var.names = c("am"), var.descriptions = c("transmission"),
-    is.var.continuous = c(FALSE), caption = "Some mtcars summaries",
+    var.names = "am", var.descriptions = c("transmission"),
+    is.var.continuous = FALSE, caption = "Some mtcars summaries",
     stat.tests = "chisq")
   dcc_fisher <- doCohortCharacteristics(
     input.d = mtcars, marker.name = "vs", marker.description = "cylinders",
-    var.names = c("am"), var.descriptions = c("transmission"),
-    is.var.continuous = c(FALSE), caption = "Some mtcars summaries",
+    var.names = "am", var.descriptions = c("transmission"),
+    is.var.continuous = FALSE, caption = "Some mtcars summaries",
     stat.tests = "fisher")
   
   mtcars$vs <- as.factor(mtcars$vs)
