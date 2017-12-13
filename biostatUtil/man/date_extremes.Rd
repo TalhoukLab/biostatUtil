@@ -13,10 +13,10 @@ maxDate(dates, na.rm = TRUE)
 minDate(dates, na.rm = TRUE)
 
 maxDateArray(t.arr, date.format = "MM.DD.YYYY", existing.missing.codes = NA,
-  return.missing.code = NA, ...)
+  return.missing.code = NA, sep = "/")
 
 minDateArray(t.arr, date.format = "MM.DD.YYYY", existing.missing.codes = NA,
-  return.missing.code = NA, ...)
+  return.missing.code = NA, sep = "/")
 }
 \arguments{
 \item{dates}{vector of dates}
@@ -30,6 +30,8 @@ minDateArray(t.arr, date.format = "MM.DD.YYYY", existing.missing.codes = NA,
 \item{existing.missing.codes}{missing dates}
 
 \item{return.missing.code}{what to return if there is a missing input}
+
+\item{sep}{date separator. Defaults to "/"}
 
 \item{...}{additional arguments to \code{formatDate}}
 }

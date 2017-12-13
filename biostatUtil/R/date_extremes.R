@@ -40,6 +40,7 @@ minDate <- function(dates, na.rm = TRUE) {
 #' @param existing.missing.codes missing dates
 #' @param return.missing.code what to return if there is a missing input
 #' @param ... additional arguments to \code{formatDate}
+#' @param sep date separator. Defaults to "/"
 #' @rdname date_extremes
 #' @export
 #' @examples 
@@ -58,16 +59,16 @@ minDate <- function(dates, na.rm = TRUE) {
 #' minDateArray(ties.dates, sep = "-")
 maxDateArray <- function(t.arr, date.format = "MM.DD.YYYY",
                          existing.missing.codes = NA,
-                         return.missing.code = NA, ...) {
+                         return.missing.code = NA, sep = "/") {
   t.arr <- t.arr[!is.na(t.arr)]
   if (n_distinct(existing.missing.codes, na.rm = TRUE) > 0)
     t.arr <- t.arr[!(t.arr %in% existing.missing.codes)]
   if (length(t.arr) == 0)
     return(return.missing.code)
   max.index <- purrr::map(t.arr, ~ as.Date(
-    cleanDate(.x, date.format, date.format,
+    cleanDate(.x, original.format = date.format, preferred.format = date.format,
               existing.missing.codes = existing.missing.codes,
-              return.missing.code = return.missing.code, ...),
+              return.missing.code = return.missing.code, sep = sep),
     format = getFormat(.x, date.format), origin = DATE.ORIGIN)) %>% 
     which.max()
   return(t.arr[max.index])
@@ -77,16 +78,16 @@ maxDateArray <- function(t.arr, date.format = "MM.DD.YYYY",
 #' @export
 minDateArray <- function(t.arr, date.format = "MM.DD.YYYY",
                          existing.missing.codes = NA,
-                         return.missing.code = NA, ...) {
+                         return.missing.code = NA, sep = "/") {
   t.arr <- t.arr[!is.na(t.arr)]
   if (n_distinct(existing.missing.codes, na.rm = TRUE) > 0)
     t.arr <- t.arr[!(t.arr %in% existing.missing.codes)]
   if (length(t.arr) == 0)
     return(return.missing.code)
   min.index <- purrr::map(t.arr, ~ as.Date(
-    cleanDate(.x, date.format, date.format,
+    cleanDate(.x, original.format = date.format, preferred.format = date.format,
               existing.missing.codes = existing.missing.codes,
-              return.missing.code = return.missing.code, ...),
+              return.missing.code = return.missing.code, sep = sep),
     format = getFormat(.x, date.format), origin = DATE.ORIGIN)) %>% 
     which.min()
   return(t.arr[min.index])

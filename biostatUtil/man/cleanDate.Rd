@@ -5,7 +5,7 @@
 \title{Clean dates}
 \usage{
 cleanDate(x, original.format, preferred.format, existing.missing.codes = "",
-  return.missing.code = NA, ...)
+  return.missing.code = NA, sep = "/")
 }
 \arguments{
 \item{x}{a date string or a numeric representation of a date
@@ -19,7 +19,7 @@ cleanDate(x, original.format, preferred.format, existing.missing.codes = "",
 
 \item{return.missing.code}{what to return if there is a missing input}
 
-\item{...}{additional arguments to \code{\link{formatDate}}}
+\item{sep}{date separator. Defaults to "/"}
 }
 \value{
 A date string cleaned and formatted from the original (unformatted)
