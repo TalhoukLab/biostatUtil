@@ -75,7 +75,7 @@ lifetable <- function(obj, ntimes = 3, times = NULL, nround = 3,
       select(strata, nsubs, nevent, nlost) %>%
       mutate(strata = as.character(strata)) %>%
       rbind(c("Overall", colSums(.[-1]))) %>%
-      mutate_each_(funs(as.numeric), names(.)[-1]) %>%
+      mutate_at(vars(names(.)[-1]), as.numeric) %>%
       mutate(plost = paste0(sprintf("%.1f", nlost / nsubs * 100), "%")) %>%
       dplyr::rename(`Total N` = nsubs, `N of Events` = nevent,
                     `N of Censored` = nlost, `Percent Censored` = plost)
