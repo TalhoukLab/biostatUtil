@@ -190,15 +190,18 @@ test_that("doInteractionCox works with an interaction term", {
   lung[["ph.karno:pat.karno"]] <- lung$ph.karno * lung$pat.karno
   lung$ph.karno <- factor(lung$ph.karno)
   lung$pat.karno <- factor(lung$pat.karno)
-  res <- doInteractionCox(input.d = lung,
-                          var.names = "ph.karno:pat.karno",
-                          var.descriptions = "karnos",
-                          var.names.surv.time = c("time", "time2"),
-                          var.names.surv.status = c("status", "status2"),
-                          event.codes.surv = c("2", "2"),
-                          surv.descriptions = c("OS", "OS2"),
-                          var.ref.groups = c("2", "0"),
-                          caption = "")
+  res <- suppressWarnings(
+    doInteractionCox(input.d = lung,
+                     var.names = "ph.karno:pat.karno",
+                     var.descriptions = "karnos",
+                     var.names.surv.time = c("time", "time2"),
+                     var.names.surv.status = c("status", "status2"),
+                     event.codes.surv = c("2", "2"),
+                     surv.descriptions = c("OS", "OS2"),
+                     var.ref.groups = c("2", "0"),
+                     caption = "")
+  )
+  expect_length(res, 4)
 })
 
 test_that("doInteractionCox factors use lowest group if no reference specified", {
