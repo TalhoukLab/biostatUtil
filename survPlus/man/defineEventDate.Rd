@@ -51,4 +51,3 @@ defineEventDate(ed, cutoffDate, cutoff.date.format = "\%m/\%d/\%Y", event = "DSS
 \author{
 Samuel Leung, Aline Talhouk
 }
-

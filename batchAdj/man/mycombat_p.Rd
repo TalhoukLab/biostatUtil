@@ -20,4 +20,3 @@ Based on combat_p function from package \code{ber}
 \author{
 Marco Giordan, Aline Talhouk
 }
-

@@ -32,4 +32,3 @@ scattermat(dat, batches)
 \author{
 Aline Talhouk
 }
-

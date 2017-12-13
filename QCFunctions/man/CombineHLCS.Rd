@@ -35,4 +35,3 @@ CombineHLCS(ds1, ds2, ds3)
 \author{
 Aline Talhouk, Derek Chiu
 }
-

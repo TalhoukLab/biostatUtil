@@ -36,4 +36,3 @@ doCox(Surv(time, status) ~ x + strata(sex), data=dat)
 \author{
 Aline Talhouk
 }
-

@@ -9,4 +9,3 @@ predictCox(mod, newdata)
 \description{
 A function to make prediction in cox model (works for both coxph and coxphf)
 }
-

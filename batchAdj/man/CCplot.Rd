@@ -67,4 +67,3 @@ CCplot(a1, a6, Ptype = "MAplot", "X", "Y", "Measurement Error", subtitle = lette
 \author{
 Aline Talhouk
 }
-

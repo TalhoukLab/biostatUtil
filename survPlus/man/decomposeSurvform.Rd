@@ -25,4 +25,3 @@ An internal function that decomposes a survival formula
 \author{
 Aline Talhouk (adapted from an existing function)
 }
-

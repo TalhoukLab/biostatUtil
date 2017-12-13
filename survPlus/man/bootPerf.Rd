@@ -5,7 +5,7 @@
 \title{Assess Performance of a survival model}
 \usage{
 bootPerf(dat0, var.names, time.var, event.ind, B = 1000, seed = 2014,
-  firth = TRUE)
+  firth = TRUE, count.warning = FALSE)
 }
 \arguments{
 \item{dat0}{is the training data}
@@ -19,6 +19,8 @@ bootPerf(dat0, var.names, time.var, event.ind, B = 1000, seed = 2014,
 \item{seed}{is a random number generator seed set to 2014}
 
 \item{firth}{whether or not to perform a firth correction set to TRUE}
+
+\item{count.warning}{whether to count warning message from cox model fit, if set to TRUE will count warning messages and ignore all cox model fits with warning.}
 
 \item{is}{the time variable}
 }
@@ -37,4 +39,3 @@ Validation)
 \author{
 Aline Talhouk
 }
-

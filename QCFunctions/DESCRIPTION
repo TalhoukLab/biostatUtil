@@ -17,4 +17,4 @@ License: GPL
 LazyData: true
 Suggests:
     otta
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

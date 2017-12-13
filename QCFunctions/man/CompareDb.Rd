@@ -49,4 +49,3 @@ CompareDb(g, h, "id", possible.na.strings = c())
 \author{
 Samuel Leung
 }
-

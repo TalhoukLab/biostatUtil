@@ -53,4 +53,3 @@ STD(A, B)
 \author{
 Aline Talhouk
 }
-

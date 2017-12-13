@@ -31,4 +31,3 @@ CombineOVCS(cs1, cs2)
 \author{
 Aline Talhouk, Derek Chiu
 }
-

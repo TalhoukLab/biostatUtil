@@ -4,9 +4,12 @@
 \alias{Cindex}
 \title{Compute the Cindex}
 \usage{
-Cindex(mod, newdat0)
+Cindex(mod, newdat0, digits = 3)
+}
+\arguments{
+\item{digits}{to round the Cindex; if digits=NULL, do not round
+Produce metrics to evaluate a survival model}
 }
 \description{
-Produce metrics to evaluate a survival model
+Compute the Cindex
 }
-

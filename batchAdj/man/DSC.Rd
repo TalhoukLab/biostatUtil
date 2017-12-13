@@ -43,4 +43,3 @@ DSC(dat, batches, permut = 1000)
 \author{
 Aline Talhouk
 }
-

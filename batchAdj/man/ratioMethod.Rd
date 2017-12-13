@@ -29,4 +29,3 @@ ratioMethod(A, B, C)
 \author{
 Aline Talhouk
 }
-
