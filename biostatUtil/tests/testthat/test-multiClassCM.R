@@ -3,8 +3,8 @@ context("Multiclass confusion matrices")
 
 set.seed(23)
 k <- 3
-(x <- sample(1:k, 100, replace = TRUE, prob = c(0.15, 0.25, 0.6)))
-(y <- sample(1:k, 100, replace = TRUE, prob = c(0.05, 0.4, 0.65)))
+(x <- factor(sample(1:k, 100, replace = TRUE, prob = c(0.15, 0.25, 0.6))))
+(y <- factor(sample(1:k, 100, replace = TRUE, prob = c(0.05, 0.4, 0.65))))
 prop.table(table(y))
 
 test_that("Same results obtained whether fed a character, a numeric or a factor", {
