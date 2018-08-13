@@ -5,8 +5,8 @@
 \title{Do a boxplot among subtypes}
 \usage{
 doBoxplotAmongSubtypes(input.d, data.description, biomarker.var.name,
-  biomarker.name, subtype.var.name, subtype.name, pch = 4, jitter = 0.1,
-  digits = 2, ...)
+  biomarker.name, subtype.var.name, subtype.name, pch = 4,
+  jitter = 0.1, digits = 2, ...)
 }
 \arguments{
 \item{input.d}{input data.frame}

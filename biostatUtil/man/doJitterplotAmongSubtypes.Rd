@@ -5,8 +5,8 @@
 \title{Do a jitterplot among subtypes}
 \usage{
 doJitterplotAmongSubtypes(input.d, data.description, biomarker.var.name,
-  biomarker.name, subtype.var.name, subtype.name, pch = ".", jitter = 0.05,
-  digits = 3, cex.axis = 0.9)
+  biomarker.name, subtype.var.name, subtype.name, pch = ".",
+  jitter = 0.05, digits = 3, cex.axis = 0.9)
 }
 \arguments{
 \item{input.d}{input \code{data.frame}}

@@ -7,16 +7,16 @@
 \alias{compareDate}
 \title{Date computations}
 \usage{
-addToDate(org.date, delta, date.format = "MM.DD.YYYY", units = c("days",
-  "weeks", "months", "years"), existing.missing.codes = NA,
-  return.missing.code = NA, sep = "/")
+addToDate(org.date, delta, date.format = "MM.DD.YYYY",
+  units = c("days", "weeks", "months", "years"),
+  existing.missing.codes = NA, return.missing.code = NA, sep = "/")
 
 diffDate(d1, d2, date.format = "MM.DD.YYYY", units = c("days", "weeks",
-  "months", "years"), existing.missing.codes = NA, return.missing.code = NA,
-  sep = "/")
-
-compareDate(d1, d2, date.format = "MM.DD.YYYY", existing.missing.codes = NA,
+  "months", "years"), existing.missing.codes = NA,
   return.missing.code = NA, sep = "/")
+
+compareDate(d1, d2, date.format = "MM.DD.YYYY",
+  existing.missing.codes = NA, return.missing.code = NA, sep = "/")
 }
 \arguments{
 \item{org.date}{original date}
@@ -92,3 +92,4 @@ compareDate("01-22-1949", "04-13-1950", date.format = "MM.DD.YYYY", sep = "-")
 \author{
 Samuel Leung, Derek Chiu
 }
+\concept{date computation functions}

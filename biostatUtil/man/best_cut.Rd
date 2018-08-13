@@ -4,9 +4,9 @@
 \alias{best_cut}
 \title{Find the best cutpoint for a covariate}
 \usage{
-best_cut(f, d, n = c("b", "t", "qd", "qn"), AIC.range = 3, nround = 3,
-  plot = TRUE, filename = NULL, nrow = NULL, ncol = NULL, title = "",
-  ...)
+best_cut(f, d, n = c("b", "t", "qd", "qn"), AIC.range = 3,
+  nround = 3, plot = TRUE, filename = NULL, nrow = NULL,
+  ncol = NULL, title = "", ...)
 }
 \arguments{
 \item{f}{formula object}

@@ -4,18 +4,19 @@
 \alias{doCohortCharacteristics}
 \title{Generate cohort characteristics}
 \usage{
-doCohortCharacteristics(input.d, marker.name, marker.description, var.names,
-  is.var.continuous, var.descriptions, marker.value.labels.tolower = TRUE,
-  show.missing = TRUE, show.missing.continuous = TRUE,
-  do.droplevels = TRUE, show.percent = "both", stat.tests = NULL,
+doCohortCharacteristics(input.d, marker.name, marker.description,
+  var.names, is.var.continuous, var.descriptions,
+  marker.value.labels.tolower = TRUE, show.missing = TRUE,
+  show.missing.continuous = TRUE, do.droplevels = TRUE,
+  show.percent = "both", stat.tests = NULL,
   chisq.test.simulate.p.value = FALSE,
   stat.test.column.header = "association/correlation test",
   round.digits.p.value = 4, num.boot = 1000,
   missing.codes.highlight = NULL, missing.codes = c("N/A", "", "Unk"),
-  decimal = 0, caption = NA, html.table.border = 0, banded.rows = FALSE,
-  css.class.name.odd = "odd", css.class.name.even = "even",
-  custom.marker.labels = NULL, custom.total.label = NULL,
-  split.table = 200, ...)
+  decimal = 0, caption = NA, html.table.border = 0,
+  banded.rows = FALSE, css.class.name.odd = "odd",
+  css.class.name.even = "even", custom.marker.labels = NULL,
+  custom.total.label = NULL, split.table = 200, ...)
 }
 \arguments{
 \item{input.d}{The \code{data.frame} containing the data}

@@ -52,3 +52,4 @@ Other confusion matrix functions: \code{\link{binaryCM}},
 \author{
 Samuel Leung, Derek Chiu
 }
+\concept{confusion matrix functions}

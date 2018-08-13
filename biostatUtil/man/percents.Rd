@@ -16,17 +16,19 @@ rowPercent(t, pretty.text = FALSE, keep = TRUE, digits = 4)
 
 rowColPercent(t, keep = TRUE, ...)
 
-colPercentAsHTML(t, keep = TRUE, row.names = NULL, column.names = NULL,
-  html.table.border = 0, banded.rows = FALSE, col.odd = "none",
-  col.even = "lightgrey", caption = NA, transpose = FALSE, ...)
+colPercentAsHTML(t, keep = TRUE, row.names = NULL,
+  column.names = NULL, html.table.border = 0, banded.rows = FALSE,
+  col.odd = "none", col.even = "lightgrey", caption = NA,
+  transpose = FALSE, ...)
 
-rowPercentAsHTML(t, keep = TRUE, row.names = NULL, column.names = NULL,
-  html.table.border = 0, banded.rows = FALSE, col.odd = "none",
-  col.even = "lightgrey", caption = NA, transpose = FALSE, ...)
+rowPercentAsHTML(t, keep = TRUE, row.names = NULL,
+  column.names = NULL, html.table.border = 0, banded.rows = FALSE,
+  col.odd = "none", col.even = "lightgrey", caption = NA,
+  transpose = FALSE, ...)
 
-rowColPercentAsHTML(t, keep = TRUE, row.names = NULL, column.names = NULL,
-  html.table.border = 0, banded.rows = FALSE, col.odd = "none",
-  col.even = "lightgrey", caption = NA, ...)
+rowColPercentAsHTML(t, keep = TRUE, row.names = NULL,
+  column.names = NULL, html.table.border = 0, banded.rows = FALSE,
+  col.odd = "none", col.even = "lightgrey", caption = NA, ...)
 }
 \arguments{
 \item{t}{a matrix}
@@ -73,9 +75,6 @@ HTML-based functions return the code used to generate a table that
 Calculate percentages in a table. \code{rowPercent} gives row percentages, 
 \code{colPercent} gives column percentages, and \code{rowColPercent} gives 
 both row and column percentages.
-
-Functions ending in \code{AsHTML} output a character string that can be 
-parsed as HTML using functions such as \code{\link[htmlTable]{htmlTable}}
 }
 \details{
 Generates a table of row and/or column percentages given table \code{t}. 

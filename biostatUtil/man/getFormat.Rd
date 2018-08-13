@@ -4,8 +4,8 @@
 \alias{getFormat}
 \title{Get date format from character text}
 \usage{
-getFormat(date, char.format = c("MM.DD.YYYY", "MMM.DD.YYYY", "DD.MM.YYYY",
-  "DD.MMM.YYYY", "YYYY.MM.DD", "YYYY.MMM.DD"), sep = "")
+getFormat(date, char.format = c("MM.DD.YYYY", "MMM.DD.YYYY",
+  "DD.MM.YYYY", "DD.MMM.YYYY", "YYYY.MM.DD", "YYYY.MMM.DD"), sep = "")
 }
 \arguments{
 \item{date}{character string of date}
@@ -32,3 +32,4 @@ Other date formatting functions: \code{\link{cleanDate}},
 \author{
 Derek Chiu
 }
+\concept{date formatting functions}

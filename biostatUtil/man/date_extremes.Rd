@@ -12,11 +12,11 @@ maxDate(dates, na.rm = TRUE)
 
 minDate(dates, na.rm = TRUE)
 
-maxDateArray(t.arr, date.format = "MM.DD.YYYY", existing.missing.codes = NA,
-  return.missing.code = NA, sep = "/")
+maxDateArray(t.arr, date.format = "MM.DD.YYYY",
+  existing.missing.codes = NA, return.missing.code = NA, sep = "/")
 
-minDateArray(t.arr, date.format = "MM.DD.YYYY", existing.missing.codes = NA,
-  return.missing.code = NA, sep = "/")
+minDateArray(t.arr, date.format = "MM.DD.YYYY",
+  existing.missing.codes = NA, return.missing.code = NA, sep = "/")
 }
 \arguments{
 \item{dates}{vector of dates}

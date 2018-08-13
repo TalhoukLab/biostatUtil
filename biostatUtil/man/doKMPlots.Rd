@@ -5,11 +5,12 @@
 \title{Make Kaplan-Meier plots}
 \usage{
 doKMPlots(input.d, time, status, var.name, var.description,
-  surv.type = c("os", "dss", "pfs"), shading.colors = c("blue2", "red2",
-  "deepskyblue", "indianred3"), line.name = NULL, line.pattern = NULL,
-  legend = FALSE, cox.ref.group = NULL, use.firth = -1, CI = TRUE,
-  HR = TRUE, show.risk = TRUE, km.plot.ref.group = "single",
-  single.test.type = "logrank", use.ggkm = FALSE, ...)
+  surv.type = c("os", "dss", "pfs"), shading.colors = c("blue2",
+  "red2", "deepskyblue", "indianred3"), line.name = NULL,
+  line.pattern = NULL, legend = FALSE, cox.ref.group = NULL,
+  use.firth = -1, CI = TRUE, HR = TRUE, show.risk = TRUE,
+  km.plot.ref.group = "single", single.test.type = "logrank",
+  use.ggkm = FALSE, ...)
 }
 \arguments{
 \item{input.d}{\code{data.frame} containing data}

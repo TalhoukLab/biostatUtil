@@ -4,8 +4,8 @@
 \alias{lifetable}
 \title{Generate lifetables for multiclass variables}
 \usage{
-lifetable(obj, ntimes = 3, times = NULL, nround = 3, show.strata = TRUE,
-  strata.name = "strata", summary = FALSE)
+lifetable(obj, ntimes = 3, times = NULL, nround = 3,
+  show.strata = TRUE, strata.name = "strata", summary = FALSE)
 }
 \arguments{
 \item{obj}{An object of class \code{survfit}}

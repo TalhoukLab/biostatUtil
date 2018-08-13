@@ -4,9 +4,9 @@
 \alias{SummaryStatsBy}
 \title{Generate summary statistics}
 \usage{
-SummaryStatsBy(data, by1, by2, var.names, stats = c("mean", "sd", "median",
-  "IQR", "range", "missing"), digits = 3, format = c("raw", "pandoc",
-  "html", "long"))
+SummaryStatsBy(data, by1, by2, var.names, stats = c("mean", "sd",
+  "median", "IQR", "range", "missing"), digits = 3, format = c("raw",
+  "pandoc", "html", "long"))
 }
 \arguments{
 \item{data}{The \code{data.frame} containing the data}

@@ -57,3 +57,4 @@ Other Mass Spectrometry functions: \code{\link{ms_condition}},
 \author{
 Derek Chiu
 }
+\concept{Mass Spectrometry functions}

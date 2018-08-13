@@ -9,12 +9,13 @@ doCoxphMultivariable(input.d, var.names, var.descriptions,
   var.ref.groups = NULL, var.names.surv.time = c("os.yrs", "dss.yrs",
   "rfs.yrs"), var.names.surv.status = c("os.sts", "dss.sts", "rfs.sts"),
   event.codes.surv = c("os.event", "dss.event", "rfs.event"),
-  surv.descriptions = c("OS", "DSS", "PFS"), missing.codes = c("N/A", "",
-  "Unk"), use.firth = 1, firth.caption = FIRTH.CAPTION,
-  stat.test = "waldtest", round.digits.p.value = 4, round.small = FALSE,
-  scientific = FALSE, caption = NA, html.table.border = 0,
-  banded.rows = FALSE, css.class.name.odd = "odd",
-  css.class.name.even = "even", split.table = 300, ...)
+  surv.descriptions = c("OS", "DSS", "PFS"), missing.codes = c("N/A",
+  "", "Unk"), use.firth = 1, firth.caption = FIRTH.CAPTION,
+  stat.test = "waldtest", round.digits.p.value = 4,
+  round.small = FALSE, scientific = FALSE, caption = NA,
+  html.table.border = 0, banded.rows = FALSE,
+  css.class.name.odd = "odd", css.class.name.even = "even",
+  split.table = 300, ...)
 }
 \arguments{
 \item{input.d}{The \code{data.frame} containing the data}

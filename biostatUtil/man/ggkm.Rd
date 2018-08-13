@@ -4,14 +4,14 @@
 \alias{ggkm}
 \title{Kaplan-Meier Plots using ggplot}
 \usage{
-ggkm(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
-  CI = TRUE, line.pattern = NULL, shading.colors = NULL,
-  main = "Kaplan-Meier Plot", xlabs = "Time",
+ggkm(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
+  marks = TRUE, CI = TRUE, line.pattern = NULL,
+  shading.colors = NULL, main = "Kaplan-Meier Plot", xlabs = "Time",
   ylabs = "Survival Probability", xlims = NULL, ylims = NULL,
   ystratalabs = NULL, cox.ref.grp = NULL, timeby = 5, pval = TRUE,
   HR = TRUE, use.firth = 1, legend = FALSE, legend.xy = NULL,
-  legend.direction = "horizontal", line.y.increment = 0.05, digits = 3,
-  ...)
+  legend.direction = "horizontal", line.y.increment = 0.05,
+  digits = 3, ...)
 }
 \arguments{
 \item{sfit}{an object of class \code{survfit} containing one or more survival

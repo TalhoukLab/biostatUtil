@@ -28,3 +28,4 @@ Other date formatting functions: \code{\link{cleanDate}},
 \author{
 Samuel Leung
 }
+\concept{date formatting functions}

@@ -4,8 +4,9 @@
 \alias{binaryCM}
 \title{Confusion matrix summaries}
 \usage{
-binaryCM(x, y, seed = 20, num.boot = 1000, pcond = 1, conf.level = 0.95,
-  digits = 4, method = "wilson", verbose = FALSE)
+binaryCM(x, y, seed = 20, num.boot = 1000, pcond = 1,
+  conf.level = 0.95, digits = 4, method = "wilson",
+  verbose = FALSE)
 }
 \arguments{
 \item{x}{a vector of reference classes}
@@ -83,3 +84,4 @@ Other confusion matrix functions: \code{\link{binaryCMAsHTML}},
 \author{
 Aline Talhouk, Derek Chiu
 }
+\concept{confusion matrix functions}

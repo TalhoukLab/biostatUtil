@@ -4,7 +4,8 @@
 \alias{round_small}
 \title{Rounding of Small Numbers}
 \usage{
-round_small(x, method = c("round", "signif"), digits = 3, sci = FALSE)
+round_small(x, method = c("round", "signif"), digits = 3,
+  sci = FALSE)
 }
 \arguments{
 \item{x}{a numeric vector or matrix}

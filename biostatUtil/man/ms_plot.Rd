@@ -3,13 +3,13 @@
 \name{ms_plot}
 \alias{ms_plot}
 \alias{ms_boxplot}
-\alias{ms_plot}
 \alias{ms_mean_var}
 \title{Plots for MS analyses}
 \usage{
 ms_boxplot(x, width = 8, height = 10, path = NULL)
 
-ms_mean_var(x, g, title = NULL, width = 8, height = 10, path = NULL)
+ms_mean_var(x, g, title = NULL, width = 8, height = 10,
+  path = NULL)
 }
 \arguments{
 \item{x}{data object returned by \code{ms_process}}
@@ -43,3 +43,4 @@ Other Mass Spectrometry functions: \code{\link{ms_condition}},
 \author{
 Derek Chiu
 }
+\concept{Mass Spectrometry functions}

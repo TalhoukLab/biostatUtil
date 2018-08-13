@@ -4,8 +4,8 @@
 \alias{cleanDate}
 \title{Clean dates}
 \usage{
-cleanDate(x, original.format, preferred.format, existing.missing.codes = "",
-  return.missing.code = NA, sep = "/")
+cleanDate(x, original.format, preferred.format,
+  existing.missing.codes = "", return.missing.code = NA, sep = "/")
 }
 \arguments{
 \item{x}{a date string or a numeric representation of a date
@@ -40,3 +40,4 @@ Other date formatting functions: \code{\link{formatDate}},
 \author{
 Samuel Leung, Derek Chiu
 }
+\concept{date formatting functions}
