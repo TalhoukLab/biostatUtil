@@ -7,20 +7,6 @@ k <- 3
 (y <- factor(sample(1:k, 100, replace = TRUE, prob = c(0.05, 0.4, 0.65))))
 prop.table(table(y))
 
-test_that("Same results obtained whether fed a character, a numeric or a factor", {
-  expect_equal(
-    multiClassCM(as.character(x), as.character(y))$table,
-    multiClassCM(as.factor(x), as.factor(y))$table
-  )
-  expect_equal(
-    multiClassCM(as.numeric(x), as.numeric(y))$table,
-    multiClassCM(as.factor(x), as.factor(y))$table
-  )
-  expect_equal(
-    multiClassCM(as.character(x), as.character(y))$table,
-    multiClassCM(as.factor(x), as.factor(y))$table)
-})
-
 test_that("Results based on same confusion matrix as Caret", {
   (p <- factor(sample(1:2, 100, replace = TRUE, prob = c(0.15, 0.25))))
   (q <- factor(sample(1:2, 100, replace = TRUE, prob = c(0.05, 0.4))))
