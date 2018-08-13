@@ -22,8 +22,8 @@ test_that("Same results obtained whether fed a character, a numeric or a factor"
 })
 
 test_that("Results based on same confusion matrix as Caret", {
-  (p <- sample(1:2, 100, replace = TRUE, prob = c(0.15, 0.25)))
-  (q <- sample(1:2, 100, replace = TRUE, prob = c(0.05, 0.4)))
+  (p <- factor(sample(1:2, 100, replace = TRUE, prob = c(0.15, 0.25))))
+  (q <- factor(sample(1:2, 100, replace = TRUE, prob = c(0.05, 0.4))))
   a <- multiClassCM(p, q)
   b <- caret::confusionMatrix(p, q)
   expect_identical(unname(a$CM), unname(addmargins(b$table)))
