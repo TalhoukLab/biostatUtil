@@ -138,6 +138,7 @@ prettyCoxph <- function(input.formula, input.d, ref.grp = NULL, use.firth = 1,
   } else {
     result <- fit %>% 
       broom::tidy(exponentiate = TRUE) %>% 
+      as.data.frame() %>% 
       magrittr::set_rownames(.[["term"]]) %>% 
       magrittr::extract(c("estimate", "conf.low", "conf.high", "p.value"))
   }
