@@ -4,10 +4,10 @@
 #' 
 #' @param x a vector. Matrices are allowed.
 #' @param na.rm logical; should NA values be removed?
-#' @return If \code{x} has any \code{NA} values then \code{geoMean} will return
-#'   \code{NA} just like \code{mean} unless \code{na.rm = TRUE} is specified.
-#'   Otherwise, the geometric mean of \code{x} is returned. If the input only
-#'   has \code{NA} values then \code{NA} is returned as well.
+#' @return If `x` has any `NA` values then `geoMean` will return
+#'   `NA` just like `mean` unless `na.rm = TRUE` is specified.
+#'   Otherwise, the geometric mean of `x` is returned. If the input only
+#'   has `NA` values then `NA` is returned as well.
 #' @author Samuel Leung, Derek Chiu
 #' @export
 #' @examples

@@ -1,12 +1,12 @@
 #' Print summaries from logistf
 #' 
-#' Print nice summaries from objects returned by \code{logistf}.
+#' Print nice summaries from objects returned by `logistf`.
 #' 
-#' There is a lot of raw output from \code{logistf}, and it is not
+#' There is a lot of raw output from `logistf`, and it is not
 #' easy to extract the coefficient table. This function provides
-#' a convenient wrapper to return summaries from \code{logistf}.
+#' a convenient wrapper to return summaries from `logistf`.
 #' 
-#' @param fit a fit object returned by \code{logistf}
+#' @param fit a fit object returned by `logistf`
 #' @param digits number of digits to round to
 #' @return A data frame with a row for each predictor and the
 #' following columns 

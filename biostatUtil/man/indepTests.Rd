@@ -13,12 +13,12 @@ table}
 \item{digits}{number of digits to round to}
 }
 \value{
-A table with method name, test statistic, degrees of freedom, and 
-  p-value reported for each Chi-squared test.
+A table with method name, test statistic, degrees of freedom, and
+p-value reported for each Chi-squared test.
 }
 \description{
-The Pearson's Chi-Squared test, likelihood ratio (G test) of independence, 
-Fisher's Exact test, and linear-by-linear association test are performed on 
+The Pearson's Chi-Squared test, likelihood ratio (G test) of independence,
+Fisher's Exact test, and linear-by-linear association test are performed on
 the data matrix.
 }
 \details{
@@ -42,7 +42,7 @@ ct <- CrossTable(A, B)
 indepTests(ct)
 }
 \seealso{
-\code{\link[descr]{CrossTable}}
+\code{\link[descr:CrossTable]{descr::CrossTable()}}
 }
 \author{
 Derek Chiu

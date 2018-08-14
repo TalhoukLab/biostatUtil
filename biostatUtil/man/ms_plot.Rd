@@ -25,13 +25,13 @@ ms_mean_var(x, g, title = NULL, width = 8, height = 10,
 \item{title}{vector of titles for each \code{g}}
 }
 \value{
-Both functions return a pdf saved to the file location specified by 
-  \code{path}. \code{ms_boxplot} shows three boxplots of expression values: 
-  raw data values, log2 and vsn transformed values. \code{ms_mean_var} shows 
-  the vsn transformed values and mean-sd plots for each treatment group.
+Both functions return a pdf saved to the file location specified by
+\code{path}. \code{ms_boxplot} shows three boxplots of expression values:
+raw data values, log2 and vsn transformed values. \code{ms_mean_var} shows
+the vsn transformed values and mean-sd plots for each treatment group.
 }
 \description{
-\code{ms_boxplot} shows boxplots of different MS expression data values. 
+\code{ms_boxplot} shows boxplots of different MS expression data values.
 \code{ms_mean_var} shows mean-sd plots for the VSN data values to analyze the
 mean-variance relationship.
 }

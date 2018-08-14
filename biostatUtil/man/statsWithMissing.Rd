@@ -30,12 +30,12 @@ ratioWithMissing(x, y, missing.value = -1, return.missing.value = -1)
 \item{return.missing.value}{character to return for missing values}
 }
 \description{
-Returns various statistics, with the ability to specify which values are 
+Returns various statistics, with the ability to specify which values are
 missing.
 }
 \details{
-The statistics supported include \code{min, max, mean, sum, prod}, as 
-indicated by each function's prefix. In addition, \code{ratioWithMissing} 
+The statistics supported include \code{min, max, mean, sum, prod}, as
+indicated by each function's prefix. In addition, \code{ratioWithMissing}
 calculates the ratio \code{x / y}.
 }
 \note{

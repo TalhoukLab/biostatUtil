@@ -9,17 +9,17 @@ prettyCoxph(input.formula, input.d, ref.grp = NULL, use.firth = 1,
   ...)
 }
 \arguments{
-\item{input.formula}{a formula object, with the response on the left of a 
-\code{~} operator, and the terms on the right. The response must be a 
+\item{input.formula}{a formula object, with the response on the left of a
+\code{~} operator, and the terms on the right. The response must be a
 survival object as returned by the \code{Surv} function.}
 
 \item{input.d}{data.frame containing the variables in \code{input.formula}}
 
-\item{ref.grp}{a named array indicating reference group(s) for any variables 
+\item{ref.grp}{a named array indicating reference group(s) for any variables
 in the cox model.  this parameter will be ignored if not applicable, e.g.
 for continuous variable}
 
-\item{use.firth}{if set to -1, Firth's correction is applied using 
+\item{use.firth}{if set to -1, Firth's correction is applied using
 \code{coxphf}. The default value is 1, which uses \code{coxph}.}
 
 \item{check.ph}{if \code{TRUE}, checks the proportional hazard assumption.}

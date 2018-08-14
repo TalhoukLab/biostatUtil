@@ -3,37 +3,37 @@
 #' Specify vector of time endpoints and create a cohort life table for two or 
 #' more strata
 #' 
-#' Essentially a wrapper around \code{\link[KMsurv]{lifetab}} that allows the
-#' user to input a \code{survfit} object instead of vectors of raw values.
+#' Essentially a wrapper around [KMsurv::lifetab()] that allows the
+#' user to input a `survfit` object instead of vectors of raw values.
 #' 
-#' @param obj An object of class \code{survfit}
+#' @param obj An object of class `survfit`
 #' @param ntimes number of time intervals
 #' @param times A vector of endpoints of time intervals to show life table 
-#'   calculations. By default, these are \code{ntimes} evenly spaced out 
+#'   calculations. By default, these are `ntimes` evenly spaced out 
 #'   endpoints based on the full range of survival times.
 #' @param nround number of digits to round table values
-#' @param show.strata logical; if \code{TRUE} (default), the variable name is 
-#'   appended to the beginning of each stratum in the lifetable's \code{strata} 
+#' @param show.strata logical; if `TRUE` (default), the variable name is 
+#'   appended to the beginning of each stratum in the lifetable's `strata` 
 #'   column
 #' @param strata.name column name for the different strata
-#' @param summary logical; if \code{TRUE}, a case processing summary is shown 
+#' @param summary logical; if `TRUE`, a case processing summary is shown 
 #'   with number of subjects, events, censored, and percent censored per 
 #'   stratum.
 #' @return A table with the following columns:
 #' \item{strata}{name of specific group in variable}
 #' \item{times}{time interval}
-#' \item{nsubs}{See \code{\link[KMsurv]{lifetab}}}
-#' \item{nlost}{See \code{\link[KMsurv]{lifetab}}}
-#' \item{nrisk}{See \code{\link[KMsurv]{lifetab}}}
-#' \item{nevent}{See \code{\link[KMsurv]{lifetab}}}
-#' \item{surv}{See \code{\link[KMsurv]{lifetab}}}
-#' \item{pdf}{See \code{\link[KMsurv]{lifetab}}}
-#' \item{hazard}{See \code{\link[KMsurv]{lifetab}}}
-#' \item{se.surv}{See \code{\link[KMsurv]{lifetab}}}
-#' \item{se.pdf}{See \code{\link[KMsurv]{lifetab}}}
-#' \item{se.hazard}{See \code{\link[KMsurv]{lifetab}}}
+#' \item{nsubs}{See [KMsurv::lifetab()]}
+#' \item{nlost}{See [KMsurv::lifetab()]}
+#' \item{nrisk}{See [KMsurv::lifetab()]}
+#' \item{nevent}{See [KMsurv::lifetab()]}
+#' \item{surv}{See [KMsurv::lifetab()]}
+#' \item{pdf}{See [KMsurv::lifetab()]}
+#' \item{hazard}{See [KMsurv::lifetab()]}
+#' \item{se.surv}{See [KMsurv::lifetab()]}
+#' \item{se.pdf}{See [KMsurv::lifetab()]}
+#' \item{se.hazard}{See [KMsurv::lifetab()]}
 #' @author Derek Chiu
-#' @seealso \code{\link[KMsurv]{lifetab}}
+#' @seealso [KMsurv::lifetab()]
 #' @export
 #' @examples
 #' library(survival)

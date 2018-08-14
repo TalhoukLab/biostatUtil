@@ -39,13 +39,13 @@ minDateArray(t.arr, date.format = "MM.DD.YYYY",
 The latest or earliest date from a vector of dates.
 }
 \description{
-Finds the latest (max) and earliest (min) date given a vector of dates. The 
+Finds the latest (max) and earliest (min) date given a vector of dates. The
 functions ending in \code{Array} find the extremes for an array of dates as
 opposed to a vector.
 }
 \details{
-The input vector should have dates formatted as YYYY-MM-DD. If \code{na.rm} 
-is not set to the default (\code{TRUE}) and \code{dates} has \code{NA} 
+The input vector should have dates formatted as YYYY-MM-DD. If \code{na.rm}
+is not set to the default (\code{TRUE}) and \code{dates} has \code{NA}
 values, then the function will also return \code{NA}.
 }
 \examples{

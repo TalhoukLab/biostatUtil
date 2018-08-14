@@ -16,7 +16,7 @@ formatNA(y, type = c("cat", "cont"), codes = c("", "Unk", "N/A"))
 }
 \value{
 A categorical or numerical vector with all missing formatted as
-  \code{NA}.
+\code{NA}.
 }
 \description{
 Takes a numeric vector and replaces all missing codes with NA and returns a

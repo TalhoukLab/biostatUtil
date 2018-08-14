@@ -7,7 +7,7 @@
 getPval(x)
 }
 \arguments{
-\item{x}{an object from \code{\link[survival]{survdiff}}}
+\item{x}{an object from \code{\link[survival:survdiff]{survival::survdiff()}}}
 }
 \value{
 the Chi-squared p-value
@@ -17,5 +17,5 @@ Get the p-value
 }
 \references{
 Christos Hatzis
-  (https://stat.ethz.ch/pipermail/r-help/2007-April/130676.html)
+(https://stat.ethz.ch/pipermail/r-help/2007-April/130676.html)
 }

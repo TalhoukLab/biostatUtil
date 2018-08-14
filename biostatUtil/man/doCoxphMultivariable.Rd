@@ -54,9 +54,9 @@ if \code{use.firth = -1} Firth is always used.}
 
 \item{firth.caption}{subscript in html table output indicating Firth was used}
 
-\item{stat.test}{the overall model test to perform on the Cox regression 
-model. Can be any of "waldtest", "logtest", or "sctest". If Firth is used, 
-only "logtest" can be performed. Test p-values are never Firth corrected ( 
+\item{stat.test}{the overall model test to perform on the Cox regression
+model. Can be any of "waldtest", "logtest", or "sctest". If Firth is used,
+only "logtest" can be performed. Test p-values are never Firth corrected (
 per instruction from Aline 2015-04-14,15).}
 
 \item{round.digits.p.value}{number of digits for p-value}

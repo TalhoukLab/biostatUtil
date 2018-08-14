@@ -1,14 +1,14 @@
 #' Nice output from Cox regression object
 #' 
-#' Nicely formatted output from a Cox regression object, either \code{coxph} or
-#' \code{coxphf}.
+#' Nicely formatted output from a Cox regression object, either `coxph` or
+#' `coxphf`.
 #' 
-#' For objects of class \code{coxphf}, the calculation of the number of events
+#' For objects of class `coxphf`, the calculation of the number of events
 #' used in the fit is slightly different.
 #' 
-#' @param object a model fit object returned from \code{coxph} or \code{coxphf}
+#' @param object a model fit object returned from `coxph` or `coxphf`
 #' @param coefnames a vector of labels for the coefficient names returned by the
-#'   fit. \code{NULL} by default, uses original coefficient names.
+#'   fit. `NULL` by default, uses original coefficient names.
 #' @param conf.level confidence level for hazard ratio. Defaults to 95\%.
 #' @param digits number of digits to round to
 #' @return A matrix with a row for each coefficient, and a column for each of
@@ -16,12 +16,12 @@
 #' \item{n}{the number of observations used in the fit.}
 #' \item{events}{the number of events used in the fit.}
 #' \item{coef}{log hazard ratio}
-#' \item{se}{standard error of \code{coef}}
+#' \item{se}{standard error of `coef`}
 #' \item{Z-Score}{Wald test statistic}
-#' \item{P-value}{p-value for \code{Z-Score}}
+#' \item{P-value}{p-value for `Z-Score`}
 #' \item{HR}{hazard ratio}
-#' \item{Lower CI Limit}{Defaults to \code{2.5 \%}}
-#' \item{Upper CI Limit}{Defaults to \code{97.5 \%}}
+#' \item{Lower CI Limit}{Defaults to `2.5 \%`}
+#' \item{Upper CI Limit}{Defaults to `97.5 \%`}
 #' @author Aline Talhouk, Derek Chiu
 #' @export
 #' @examples
@@ -60,8 +60,8 @@ coxphOut <- function(object, coefnames = NULL, conf.level = 0.95,
 #' Concatenates hazard ratios and confidence limits for every covariate in a Cox
 #' model.
 #' 
-#' @param mod model fit object, returned from either \code{coxph} or
-#'   \code{coxphf}.
+#' @param mod model fit object, returned from either `coxph` or
+#'   `coxphf`.
 #' @param digits number of digits to round
 #' @return Hazard ratio and 95/% confidence interval
 #' @author Aline Talhouk, Derek Chiu
@@ -142,8 +142,8 @@ paste_hr_ci <- function(hr, ci.lo, ci.hi, labels = TRUE,
 #' Print Cox model output
 #' 
 #' Prints a Cox model output in a nice HTML table
-#' @param cox is the matrix \code{summary(x)$coef}, where x is an object of
-#'   class \code{coxph}
+#' @param cox is the matrix `summary(x)$coef`, where x is an object of
+#'   class `coxph`
 #' @param Capt a caption
 #' @author Aline Talhouk
 #' @export

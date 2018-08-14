@@ -11,22 +11,22 @@ ms_condition(data, treatment, control = NULL, condition = c("VC",
 \item{data}{The data matrix with rows as observations, columns as variables}
 
 \item{treatment}{A character vector indicating how different treatment groups
-are coded. Regular expression is used on the column names to find all 
+are coded. Regular expression is used on the column names to find all
 relevant treatment variables.}
 
-\item{control}{Optionally specify a character string indicating the control 
-group if it exists. Regular expression is used on the column names to find 
+\item{control}{Optionally specify a character string indicating the control
+group if it exists. Regular expression is used on the column names to find
 all relevant control variables.}
 
 \item{condition}{Either one of "VC" (default), "MRC", or "MC". See details.}
 }
 \value{
-A logical vector of length equal to the number of rows in 
-  \code{data}, indicating which observations are kept and which are to be 
-  removed.
+A logical vector of length equal to the number of rows in
+\code{data}, indicating which observations are kept and which are to be
+removed.
 }
 \description{
-The number of non-missing samples per treatment group determine whether it 
+The number of non-missing samples per treatment group determine whether it
 can be used in subsequent analyses.
 }
 \details{

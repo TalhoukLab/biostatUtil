@@ -7,14 +7,14 @@
 #' A Pearson's Chi-Squared test Yate's Continuity Correction is applied in the
 #' case of 2 by 2 tables.
 #' 
-#' @param x an object of class \code{CrossTable} containing the contingency
+#' @param x an object of class `CrossTable` containing the contingency
 #'   table
 #' @param digits number of digits to round to
 #'   
 #' @return A table with method name, test statistic, degrees of freedom, and 
 #'   p-value reported for each Chi-squared test.
 #' @author Derek Chiu
-#' @seealso \code{\link[descr]{CrossTable}}
+#' @seealso [descr::CrossTable()]
 #' @export
 #' 
 #' @examples

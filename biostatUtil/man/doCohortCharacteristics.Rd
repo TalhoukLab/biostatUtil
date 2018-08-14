@@ -39,8 +39,7 @@ value labels to lower case}
 
 \item{show.missing}{an indicator to whether to show missing values}
 
-\item{show.missing.continuous}{if set to \code{FALSE} and \code{show.missing
-== FALSE}, will not show the number of missing cases for continuous
+\item{show.missing.continuous}{if set to \code{FALSE} and \code{show.missing == FALSE}, will not show the number of missing cases for continuous
 variables. Otherwise, it shows the number of missing for continuous
 variables even if \code{show.missing == FALSE}.}
 
@@ -95,10 +94,10 @@ means show "Total"}
 \item{...}{additional arguments to \code{pander}}
 }
 \value{
-A table with statistics reported for multiple variables, such as 
-  mean, median, and range for continuous variables and proportions and 
-  percentages for categorical variables. Relevant association and correlation
-  tests are performed as well.
+A table with statistics reported for multiple variables, such as
+mean, median, and range for continuous variables and proportions and
+percentages for categorical variables. Relevant association and correlation
+tests are performed as well.
 }
 \description{
 Generate cohort characteristics

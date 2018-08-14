@@ -11,10 +11,10 @@ escapeForGrep(x)
 }
 \value{
 A character vector with opening and closing square brackets and
-  parentheses escaped for use in \code{grep}.
+parentheses escaped for use in \code{grep}.
 }
 \description{
-Escape [, ], (, and ) for use in \code{grep}.
+Escape \link{, }, (, and ) for use in \code{grep}.
 }
 \examples{
 escapeForGrep("[index]")

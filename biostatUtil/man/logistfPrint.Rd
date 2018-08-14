@@ -13,7 +13,7 @@ logistfPrint(fit, digits = 3)
 }
 \value{
 A data frame with a row for each predictor and the
-following columns 
+following columns
 \item{coef}{log odds ratio}
 \item{exp(coef)}{odds ratio}
 \item{lower}{lower confidence bound of odds ratio for specified level}

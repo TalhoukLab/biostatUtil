@@ -1,9 +1,9 @@
 #' Escape string for regular expression
 #' 
-#' Escape [, ], (, and ) for use in \code{grep}.
+#' Escape [, ], (, and ) for use in `grep`.
 #' @param x a character vector
 #' @return A character vector with opening and closing square brackets and
-#'   parentheses escaped for use in \code{grep}.
+#'   parentheses escaped for use in `grep`.
 #' @author Samuel Leung
 #' @export
 #' @examples
@@ -23,17 +23,17 @@ escapeForGrep <- function(x){
 #' 
 #' Returns a vector of the indices where a string occurs in another string
 #' 
-#' If \code{b} is longer than \code{a}, \code{indexOf} returns \code{NA}, since 
+#' If `b` is longer than `a`, `indexOf` returns `NA`, since 
 #' it is not possible for a longer string to occur in a shorter string.
 #' 
 #' @param a string to be checked against
 #' @param b string to check
-#' @param ignore.case logical; if \code{TRUE}, case is ignored when performing 
+#' @param ignore.case logical; if `TRUE`, case is ignored when performing 
 #'   the check
-#' @return Indices where \code{b} occurs in \code{a}. Returns \code{NA} if there
+#' @return Indices where `b` occurs in `a`. Returns `NA` if there
 #'   are no occurences.
 #' @author Samuel Leung
-#' @seealso \code{\link[stringr]{str_locate_all}}
+#' @seealso [stringr::str_locate_all()]
 #' @export
 #' @examples 
 #' indexOf("derek", "e")
@@ -70,10 +70,10 @@ indexOf <- function(a, b, ignore.case = FALSE) {
 #' Returns a logical indicating whether the first letter of a character string
 #' is uppercase.
 #' 
-#' If the input is an empty string, the function returns \code{TRUE}.
+#' If the input is an empty string, the function returns `TRUE`.
 #' 
 #' @param x character string
-#' @return logical; if \code{TRUE}, the first letter of the input string is
+#' @return logical; if `TRUE`, the first letter of the input string is
 #'   uppercase.
 #' @author Samuel Leung, Derek Chiu
 #' @export
@@ -90,10 +90,10 @@ isFirstLetterUpperCase <- function(x) {
 #' 
 #' Capitalize the first letter of every word in a character string.
 #' 
-#' To capitalize only the first word, use \code{first.only = TRUE}.
+#' To capitalize only the first word, use `first.only = TRUE`.
 #' 
 #' @param x character string
-#' @param first.only logical; if \code{TRUE}, only the first word will be 
+#' @param first.only logical; if `TRUE`, only the first word will be 
 #'   capitalized
 #' @return A character string with every word's first letter capitalized.
 #' @author Samuel Leung

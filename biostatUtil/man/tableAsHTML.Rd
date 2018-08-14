@@ -15,22 +15,22 @@ tableAsHTML(t, row.names = NULL, column.names = NULL,
 
 \item{column.names}{(optional) vector of column names in table}
 
-\item{html.table.border}{border type for the table. Defaults to 0 in HTML 
+\item{html.table.border}{border type for the table. Defaults to 0 in HTML
 syntax.}
 
-\item{banded.rows}{logical; if \code{TRUE}, alternating rows will have 
+\item{banded.rows}{logical; if \code{TRUE}, alternating rows will have
 different shaded colours.}
 
 \item{col.odd}{colour to use for odd numbered rows}
 
 \item{col.even}{colour to use for even numbered rows}
 
-\item{caption}{table caption. Uses \code{\link{addTableNumber}} to increment 
+\item{caption}{table caption. Uses \code{\link[=addTableNumber]{addTableNumber()}} to increment
 table number}
 }
 \value{
 A character string that can be parsed as HTML code to produce a nicer
-  table output.
+table output.
 }
 \description{
 Generate HTML code for a table output. Assumes table has more than one row.

@@ -16,22 +16,22 @@ ms_summarize(x, g, level = c("Gene", "Peptide"), col.names = NULL,
 
 \item{col.names}{vector of column names for output data frame}
 
-\item{info.vars}{vector of column names containing metadata information. 
+\item{info.vars}{vector of column names containing metadata information.
 These variables are collapsed if not unique.}
 
 \item{path}{file path to save result object}
 }
 \value{
-A data frame of statistics from analyzing mass spec data. Includes 
-  t-values, Wald p-values, effect sizes, fold change, absolute fold change.
+A data frame of statistics from analyzing mass spec data. Includes
+t-values, Wald p-values, effect sizes, fold change, absolute fold change.
 }
 \description{
-Summarize mass spectrometry data for expression differences between sample 
+Summarize mass spectrometry data for expression differences between sample
 groups. Apply Benjamini-Hochberg p-value adjustment.
 }
 \details{
-Gene-level analysis is performed on the "Gene" variable. Peptide-level 
-analysis is performed on distinct combinations of the Accession, Gene, 
+Gene-level analysis is performed on the "Gene" variable. Peptide-level
+analysis is performed on distinct combinations of the Accession, Gene,
 Descriptions, Sequence, and Modifications variables. This combined variable
 is renamed to "AGDSM".
 }

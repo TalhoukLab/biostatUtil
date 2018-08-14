@@ -33,10 +33,10 @@ rowColPercentAsHTML(t, keep = TRUE, row.names = NULL,
 \arguments{
 \item{t}{a matrix}
 
-\item{pretty.text}{logical; if \code{TRUE}, will format the table into nice 
+\item{pretty.text}{logical; if \code{TRUE}, will format the table into nice
 display}
 
-\item{keep}{logical; if \code{TRUE}, the original table counts will be kept 
+\item{keep}{logical; if \code{TRUE}, the original table counts will be kept
 along with the percentages}
 
 \item{digits}{number of digits to round to}
@@ -49,44 +49,44 @@ to HTML functions.}
 
 \item{column.names}{(optional) vector of column names in table}
 
-\item{html.table.border}{border type for the table. Defaults to 0 in HTML 
+\item{html.table.border}{border type for the table. Defaults to 0 in HTML
 syntax.}
 
-\item{banded.rows}{logical; if \code{TRUE}, alternating rows will have 
+\item{banded.rows}{logical; if \code{TRUE}, alternating rows will have
 different shaded colours.}
 
 \item{col.odd}{colour to use for odd numbered rows}
 
 \item{col.even}{colour to use for even numbered rows}
 
-\item{caption}{table caption. Uses \code{\link{addTableNumber}} to increment 
+\item{caption}{table caption. Uses \code{\link[=addTableNumber]{addTableNumber()}} to increment
 table number}
 
 \item{transpose}{logical; if \code{TRUE}, the table is transposed.}
 }
 \value{
-A table with row-wise/column-wise percentages added. The percentages 
-  sum to 1 per row/column.
+A table with row-wise/column-wise percentages added. The percentages
+sum to 1 per row/column.
 
-HTML-based functions return the code used to generate a table that 
-  shows row and/or column percentages.
+HTML-based functions return the code used to generate a table that
+shows row and/or column percentages.
 }
 \description{
-Calculate percentages in a table. \code{rowPercent} gives row percentages, 
-\code{colPercent} gives column percentages, and \code{rowColPercent} gives 
+Calculate percentages in a table. \code{rowPercent} gives row percentages,
+\code{colPercent} gives column percentages, and \code{rowColPercent} gives
 both row and column percentages.
 }
 \details{
-Generates a table of row and/or column percentages given table \code{t}. 
+Generates a table of row and/or column percentages given table \code{t}.
 Using \code{pretty.text = TRUE} will add the \% sign to the percentages.
 
-Row and column names can be replaced by \code{row.names} and 
+Row and column names can be replaced by \code{row.names} and
 \code{column.names}. Higher values of \code{html.table.border} make the table
-borders thicker and even look 3D. \code{col.odd} and \code{col.even} are 
+borders thicker and even look 3D. \code{col.odd} and \code{col.even} are
 ignored when \code{banded.rows = FALSE}.
 
-Transposing is useful if there are many columns in a single row or vice 
-versa. Note that the percentages are unchanged, only the orientation of the 
+Transposing is useful if there are many columns in a single row or vice
+versa. Note that the percentages are unchanged, only the orientation of the
 table.
 }
 \examples{

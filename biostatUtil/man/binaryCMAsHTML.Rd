@@ -25,11 +25,11 @@ binaryCMAsHTML(x, y, ref.description = NULL, digits = 4, seed = 20,
 \item{show.ci}{if \code{TRUE} (default), the confidence intervals are shown.}
 }
 \value{
-A character string that can be parsed as HTML code to display a nice 
-  confusion matrix summary.
+A character string that can be parsed as HTML code to display a nice
+confusion matrix summary.
 }
 \description{
-Prints results from \code{\link{binaryCM}} into a nice HTML table format.
+Prints results from \code{\link[=binaryCM]{binaryCM()}} into a nice HTML table format.
 }
 \examples{
 # 95\% CI from 5 bootstraped samples

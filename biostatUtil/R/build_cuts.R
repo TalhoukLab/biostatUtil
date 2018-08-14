@@ -7,14 +7,14 @@
 #' @param n either "b" for binarization (2 groups), "t" for trinarization (3
 #'   groups), "q" for quads (4 groups), or "qn" for quints (5 groups)
 #' @param var.prefix variable name prefix
-#' @param list if \code{TRUE}, the variables are returned as a list.
+#' @param list if `TRUE`, the variables are returned as a list.
 #'   
 #' @return By default, a tibble of cutpoint variables built from a categorical
 #'   biomarker. The number of columns correspond to all the ways the biomarker
-#'   could be cut into \code{n} bins. Each column name starts with a "b", "t",
+#'   could be cut into `n` bins. Each column name starts with a "b", "t",
 #'   "qd", or "qn" for "binarization", "trinarization", "quads", or "quints",
 #'   respectively, with the levels being compared separated by "v". If 
-#'   \code{list = FALSE}, each cutpoint variable is an element of a list.
+#'   `list = FALSE`, each cutpoint variable is an element of a list.
 #'   
 #' @author Derek Chiu
 #' @export

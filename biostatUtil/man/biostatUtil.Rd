@@ -6,13 +6,13 @@
 \alias{biostatUtil-package}
 \title{biostatUtil: utility functions for biostatistical projects}
 \description{
-biostatUtil provides a wide variety of data analysis, visualization, and 
+biostatUtil provides a wide variety of data analysis, visualization, and
 presentation functions used in biostatistical projects.
 }
 \details{
-This package is currently in development stage while still lacking 
-comprehensive documentation and testing. The goal is to ultimately separate 
-biostatUtil into smaller, more cohesive packages each with better defined 
+This package is currently in development stage while still lacking
+comprehensive documentation and testing. The goal is to ultimately separate
+biostatUtil into smaller, more cohesive packages each with better defined
 purposes.
 
 Functions can be categorized into one of the following: \itemize{

@@ -15,8 +15,8 @@ getFormat(date, char.format = c("MM.DD.YYYY", "MMM.DD.YYYY",
 \item{sep}{character string separating \code{date}}
 }
 \value{
-A character string representing the POSIX standard date format 
-  equivalent of the string in \code{char.format}.
+A character string representing the POSIX standard date format
+equivalent of the string in \code{char.format}.
 }
 \description{
 Get the POSIX standard date formats from character text formats.

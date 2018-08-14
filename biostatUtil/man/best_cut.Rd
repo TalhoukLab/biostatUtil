@@ -13,10 +13,10 @@ best_cut(f, d, n = c("b", "t", "qd", "qn"), AIC.range = 3,
 
 \item{d}{data frame}
 
-\item{n}{number of groups to transform variable into. Options are "b" (two), 
+\item{n}{number of groups to transform variable into. Options are "b" (two),
 "t" (three), "qd" (four), and "qn" (five)}
 
-\item{AIC.range}{If range of AIC is within \code{AIC.range} units, the 
+\item{AIC.range}{If range of AIC is within \code{AIC.range} units, the
 likelihood is too flat. We choose the best cutpoint using the alternative
 method.}
 
@@ -40,10 +40,10 @@ A list with the following elements
 \item{cuts}{vector of cutpoints considered}
 \item{fits}{A list of \code{coxph} objects run for each cutpoint}
 \item{results}{A table showing the likelihood ratio test p-value,
-  log likelihood, and AIC for each cutpoint}
+log likelihood, and AIC for each cutpoint}
 \item{opt.cut}{optimal cutpoint value}
 \item{flat.lik}{If \code{TRUE}, the likelihood was too flat and the
-  alternative method was used}
+alternative method was used}
 Additionally, if \code{plot = TRUE}, the function also returns KM survival
 curves for each possible cutpoint.
 }
@@ -54,7 +54,7 @@ PH model. Also plots survival curves for each cutpoint.
 \details{
 Takes the cutpoint resulting in the lowest AIC. If the range of AIC values is
 within \code{AIC.range} units, take the cutpoint that results in the two
-groups having the most similar numbers of events and cases. The function can 
+groups having the most similar numbers of events and cases. The function can
 cut a variable into anywhere from 2 to 5 groups.
 }
 \author{

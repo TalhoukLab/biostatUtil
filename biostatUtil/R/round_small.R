@@ -8,13 +8,13 @@
 #' function will return "< 0.001".
 #' 
 #' @param x a numeric vector or matrix
-#' @param method use either \code{\link{round}} or \code{\link{signif}} as 
+#' @param method use either [round()] or [signif()] as 
 #'   rounding method
 #' @param digits integer indicating number of decimal places to round to
-#' @param sci if \code{TRUE}, scientific notation is used
+#' @param sci if `TRUE`, scientific notation is used
 #'   
 #' @return If precision of number is larger than desired rounding, the default 
-#'   \code{round} is used. Otherwise, we provide an upper bound instead of 
+#'   `round` is used. Otherwise, we provide an upper bound instead of 
 #'   coercion to 0.
 #' @author Derek Chiu
 #' @export

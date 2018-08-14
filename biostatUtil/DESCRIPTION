@@ -3,13 +3,23 @@ Package: biostatUtil
 Title: Utility Functions Used in Biostatistics Projects
 Version: 0.0.0.9082
 Date: 2018-08-13
-Authors@R: c(person("Derek", "Chiu", email = "dchiu@bccrc.ca", role = c("aut", "cre")),
-    person("Aline", "Talhouk", email = "atalhouk@bccrc.ca", role = "aut"),
-    person("Samuel", "Leung", email = "Samuel.Leung@vch.ca", role = "aut"))
-Description: Provides some commonly used utility functions used in
-    biostatistics, such as row and column percentages in a table,
-    date formatting, survival functions, confusion matrices,
-    contingency tables, plotting functions, and more.
+Authors@R: 
+    c(person(given = "Derek",
+             family = "Chiu",
+             role = c("aut", "cre"),
+             email = "dchiu@bccrc.ca"),
+      person(given = "Aline",
+             family = "Talhouk",
+             role = "aut",
+             email = "atalhouk@bccrc.ca"),
+      person(given = "Samuel",
+             family = "Leung",
+             role = "aut",
+             email = "Samuel.Leung@vch.ca"))
+Description: Provides some commonly used utility functions used
+    in biostatistics, such as row and column percentages in a table, date
+    formatting, survival functions, confusion matrices, contingency
+    tables, plotting functions, and more.
 License: GPL-2
 Depends: 
     R (>= 3.2.0)
@@ -55,4 +65,5 @@ Suggests:
     testthat
 Encoding: UTF-8
 LazyData: FALSE
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.0

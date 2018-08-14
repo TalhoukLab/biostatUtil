@@ -6,14 +6,14 @@
 #' The formula must be univariable.
 #' 
 #' @param input.d input data, typically a matrix or data frame
-#' @param surv.formula a formula of type \code{Surv(time, status) ~ x}, where 
-#'   \code{x} is the variable of interest.
-#' @return best cutpoint as determined by different metrics. Returns \code{NA} 
-#'   if \code{surv.formula} is not univariable, the variable is not numeric, or 
+#' @param surv.formula a formula of type `Surv(time, status) ~ x`, where 
+#'   `x` is the variable of interest.
+#' @return best cutpoint as determined by different metrics. Returns `NA` 
+#'   if `surv.formula` is not univariable, the variable is not numeric, or 
 #'   there is no variation in the variable of interest.
-#' @section Warning: \code{surv.formula} cannot be multivariable. For example,
-#'   \code{Surv(time, status) ~ x + age} won't work but \code{Surv(time, status)
-#'   ~ x} is fine.
+#' @section Warning: `surv.formula` cannot be multivariable. For example,
+#'   `Surv(time, status) ~ x + age` won't work but `Surv(time, status)
+#'   ~ x` is fine.
 #' @author Samuel Leung, Derek Chiu
 #' @export
 findCutpointByCoxph <- function(input.d, surv.formula) {

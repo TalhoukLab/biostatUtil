@@ -4,8 +4,8 @@
 #' time-related summary statistics
 #' 
 #' The observation time is defined as the median time in days between all 
-#' \code{T1} and \code{T2}. Censoring time is the median time in days between 
-#' all \code{T1} and \code{T2} for events only.
+#' `T1` and `T2`. Censoring time is the median time in days between 
+#' all `T1` and `T2` for events only.
 #' 
 #' @param T1 vector of start dates
 #' @param T2 vector of end dates

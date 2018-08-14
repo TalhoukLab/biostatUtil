@@ -19,11 +19,11 @@ groups), "q" for quads (4 groups), or "qn" for quints (5 groups)}
 }
 \value{
 By default, a tibble of cutpoint variables built from a categorical
-  biomarker. The number of columns correspond to all the ways the biomarker
-  could be cut into \code{n} bins. Each column name starts with a "b", "t",
-  "qd", or "qn" for "binarization", "trinarization", "quads", or "quints",
-  respectively, with the levels being compared separated by "v". If 
-  \code{list = FALSE}, each cutpoint variable is an element of a list.
+biomarker. The number of columns correspond to all the ways the biomarker
+could be cut into \code{n} bins. Each column name starts with a "b", "t",
+"qd", or "qn" for "binarization", "trinarization", "quads", or "quints",
+respectively, with the levels being compared separated by "v". If
+\code{list = FALSE}, each cutpoint variable is an element of a list.
 }
 \description{
 Transforms an ordinal variable into anywhere from two to five groups for

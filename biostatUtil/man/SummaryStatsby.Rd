@@ -26,22 +26,22 @@ and PDF), "html", or "long" format for graphing and data manipulation using
 raw values.}
 }
 \description{
-Splits the data by two variables, computing relevant statistics for each 
+Splits the data by two variables, computing relevant statistics for each
 variable.
 }
 \details{
-The \code{data} is split by two variables, \code{by1} and \code{by2}, and 
-statistics are computed for continuous variables. Statistics currently 
-supported include \code{ mean, sd, median, IQR, range}, and the number of 
-missing cases. For factor variables, the counts, column and row percentages 
+The \code{data} is split by two variables, \code{by1} and \code{by2}, and
+statistics are computed for continuous variables. Statistics currently
+supported include \code{mean, sd, median, IQR, range}, and the number of
+missing cases. For factor variables, the counts, column and row percentages
 are shown for each of the variable levels.
 
-Note that marginal statistics are also shown for \code{by1}, so the order in 
+Note that marginal statistics are also shown for \code{by1}, so the order in
 which you split \code{data} matters.
 
 There are four print options for the output: \code{raw} gives the output as a
-character matrix, \code{pandoc} gives a Pandoc-friendly output for Word and 
-PDF reports, \code{html} gives HTML supported output, and \code{long} is a 
+character matrix, \code{pandoc} gives a Pandoc-friendly output for Word and
+PDF reports, \code{html} gives HTML supported output, and \code{long} is a
 tidy version of \code{raw}.
 }
 \examples{

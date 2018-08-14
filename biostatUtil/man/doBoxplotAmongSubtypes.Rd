@@ -39,7 +39,7 @@ superimposed on top of the boxplot
 }
 \note{
 Expects subtype variable to be a factor. Also expects biomarker and
-  subtype variable missing values to be \code{NA}
+subtype variable missing values to be \code{NA}
 }
 \examples{
 doBoxplotAmongSubtypes(mtcars, "Boxplot of qsec vs. gear", "qsec", "QSEC",

@@ -15,12 +15,12 @@ name_cuts(x, cuts)
 A character string representing the cutpoint variable name.
 }
 \description{
-Create a name for cutpoint variables based on location of cut and number of 
+Create a name for cutpoint variables based on location of cut and number of
 groups.
 }
 \details{
-The naming system is based on how \code{\link[Hmisc]{cut2}} cuts variables. Used in 
-\code{\link{build_cuts}} for naming the new cutpoint variables.
+The naming system is based on how \code{\link[Hmisc:cut2]{Hmisc::cut2()}} cuts variables. Used in
+\code{\link[=build_cuts]{build_cuts()}} for naming the new cutpoint variables.
 }
 \examples{
 set.seed(1108)
@@ -29,7 +29,7 @@ name_cuts(x, c(1, 4))
 name_cuts(x, c(2, 4))
 }
 \seealso{
-\code{\link[Hmisc]{cut2}}, \code{\link{build_cuts}}
+\code{\link[Hmisc:cut2]{Hmisc::cut2()}}, \code{\link[=build_cuts]{build_cuts()}}
 }
 \author{
 Derek Chiu

@@ -46,7 +46,7 @@ ratio(s)}
 \item{show.risk}{logical; if \code{TRUE}, will show the number of people at
 risk at each time of death beneath the plot}
 
-\item{km.plot.ref.group}{specify KM plot reference group; "single" means a 
+\item{km.plot.ref.group}{specify KM plot reference group; "single" means a
 lump log-rank statistic}
 
 \item{single.test.type}{test to use for survival curves. Defaults to
@@ -58,7 +58,7 @@ lump log-rank statistic}
 }
 \value{
 A Kaplan-Meier plot for the specified survival outcome split on the
-  desired variable.
+desired variable.
 }
 \description{
 Make Kaplan-Meier plots

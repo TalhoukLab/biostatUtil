@@ -31,7 +31,7 @@ A list with the following elements
 \item{vsn}{vsn raw data values}
 }
 \description{
-Process mass spectrometry data for filtering out contaminant samples, 
+Process mass spectrometry data for filtering out contaminant samples,
 manipulating variables, removing duplicates, and more.
 }
 \seealso{

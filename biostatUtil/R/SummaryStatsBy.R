@@ -3,21 +3,21 @@
 #' Splits the data by two variables, computing relevant statistics for each 
 #' variable.
 #' 
-#' The \code{data} is split by two variables, \code{by1} and \code{by2}, and 
+#' The `data` is split by two variables, `by1` and `by2`, and 
 #' statistics are computed for continuous variables. Statistics currently 
-#' supported include \code{ mean, sd, median, IQR, range}, and the number of 
+#' supported include `mean, sd, median, IQR, range`, and the number of 
 #' missing cases. For factor variables, the counts, column and row percentages 
 #' are shown for each of the variable levels.
 #' 
-#' Note that marginal statistics are also shown for \code{by1}, so the order in 
-#' which you split \code{data} matters.
+#' Note that marginal statistics are also shown for `by1`, so the order in 
+#' which you split `data` matters.
 #' 
-#' There are four print options for the output: \code{raw} gives the output as a
-#' character matrix, \code{pandoc} gives a Pandoc-friendly output for Word and 
-#' PDF reports, \code{html} gives HTML supported output, and \code{long} is a 
-#' tidy version of \code{raw}.
+#' There are four print options for the output: `raw` gives the output as a
+#' character matrix, `pandoc` gives a Pandoc-friendly output for Word and 
+#' PDF reports, `html` gives HTML supported output, and `long` is a 
+#' tidy version of `raw`.
 #' 
-#' @param data The \code{data.frame} containing the data
+#' @param data The `data.frame` containing the data
 #' @param by1 character string of splitting variable 1
 #' @param by2 character string of splitting variable 2
 #' @param var.names character vector of variables to compute statistics for

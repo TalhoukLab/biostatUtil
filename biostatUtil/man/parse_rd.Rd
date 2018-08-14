@@ -14,7 +14,7 @@ parse_rd(path = NULL, tags = c("name", "title", "desc", "details"))
 }
 \value{
 a table with information on a package's documented objects (functions
-  and data). Rows are objects, and columns are tags.
+and data). Rows are objects, and columns are tags.
 }
 \description{
 Parse all Rd files in a package and return metadata as a data frame.

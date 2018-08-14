@@ -3,8 +3,8 @@
 #' Fits multivariable Cox models for each specified endpoints.
 #' 
 #' Please note the following assumptions. 1) Marker can be binary, continuous or
-#' categorical. 2) Missing survival time/status variables are coded as \code{NA}
-#' (i.e. will only be checked by \code{is.na()}). 3) Survival time/status
+#' categorical. 2) Missing survival time/status variables are coded as `NA`
+#' (i.e. will only be checked by `is.na()`). 3) Survival time/status
 #' variable name specified in the following order: "os", "dss", "rfs". 4) Coding
 #' of survival status is binary only (i.e. cannot take survival status of > 2
 #' categories).

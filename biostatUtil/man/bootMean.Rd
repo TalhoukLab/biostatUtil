@@ -27,8 +27,8 @@ A list with elements
 Finds mean of a vector, with bootstrapped confidence bounds.
 }
 \details{
-Takes a numeric vector and resamples with replacement \code{num.boot} times. 
-If the input vector has any \code{NA} entries, include the argument 
+Takes a numeric vector and resamples with replacement \code{num.boot} times.
+If the input vector has any \code{NA} entries, include the argument
 \code{na.rm = TRUE} from \code{mean}.
 }
 \examples{

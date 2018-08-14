@@ -18,7 +18,7 @@ fit. \code{NULL} by default, uses original coefficient names.}
 }
 \value{
 A matrix with a row for each coefficient, and a column for each of
-  the following elements
+the following elements
 \item{n}{the number of observations used in the fit.}
 \item{events}{the number of events used in the fit.}
 \item{coef}{log hazard ratio}
@@ -26,8 +26,8 @@ A matrix with a row for each coefficient, and a column for each of
 \item{Z-Score}{Wald test statistic}
 \item{P-value}{p-value for \code{Z-Score}}
 \item{HR}{hazard ratio}
-\item{Lower CI Limit}{Defaults to \code{2.5 \%}}
-\item{Upper CI Limit}{Defaults to \code{97.5 \%}}
+\item{Lower CI Limit}{Defaults to \code{2.5 \\\%}}
+\item{Upper CI Limit}{Defaults to \code{97.5 \\\%}}
 }
 \description{
 Nicely formatted output from a Cox regression object, either \code{coxph} or

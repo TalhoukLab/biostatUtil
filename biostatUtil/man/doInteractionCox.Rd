@@ -85,10 +85,10 @@ Only a LRT can be performed (2015-08-12). TODO: add penalized LRT?
 }
 \note{
 the order of variable names in var.names dictates when will the term
-  added in stepwise likelihood ratio test of nested models i.e. given
-  \code{var.names = c("A", "B", "C")}, likelihood ratio test of nested model 
-  will be:
-  
+added in stepwise likelihood ratio test of nested models i.e. given
+\code{var.names = c("A", "B", "C")}, likelihood ratio test of nested model
+will be:
+
 A
 A + B
 A + B + C

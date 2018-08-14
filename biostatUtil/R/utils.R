@@ -25,11 +25,11 @@ n_missing <- function(x, na.rm = FALSE) {
 #' factor if the variable is categorical or a numeric variable if it's numeric.
 #' 
 #' @param y a vector.
-#' @param type whether the variable is \code{"cat"} (categorical) or
-#'   \code{"cont"} (continuous). Defaults to \code{"cat"}.
-#' @param codes vector of missing codes to replace with \code{NA}
+#' @param type whether the variable is `"cat"` (categorical) or
+#'   `"cont"` (continuous). Defaults to `"cat"`.
+#' @param codes vector of missing codes to replace with `NA`
 #' @return A categorical or numerical vector with all missing formatted as
-#'   \code{NA}.
+#'   `NA`.
 #' @author Aline Talhouk, Derek Chiu
 #' @export
 #' 
@@ -58,7 +58,7 @@ g_legend <- function(a.gplot) {
 }
 
 #' Get the p-value
-#' @param x an object from \code{\link[survival]{survdiff}}
+#' @param x an object from [survival::survdiff()]
 #' @return the Chi-squared p-value
 #' @references Christos Hatzis
 #'   (https://stat.ethz.ch/pipermail/r-help/2007-April/130676.html)
@@ -73,7 +73,7 @@ getPval <- function(x) {
 #' @param x input vector
 #' @param missing.value values that are missing
 #' @param return.missing.value the value to return where there are missing values
-#' @return The standard error of the mean of \code{x}
+#' @return The standard error of the mean of `x`
 #' @author Samuel Leung
 #' @references http://en.wikipedia.org/wiki/Standard_error
 #' @export

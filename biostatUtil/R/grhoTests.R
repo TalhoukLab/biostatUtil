@@ -3,13 +3,13 @@
 #' Runs the log-rank test and Breslow test to test for difference between two or
 #' more survival curves.
 #' 
-#' The log-rank test corresponds to \code{rho = 0} and the Breslow test 
-#' corresponds to \code{rho = 1} in \code{survdiff}. This function emulates the 
+#' The log-rank test corresponds to `rho = 0` and the Breslow test 
+#' corresponds to `rho = 1` in `survdiff`. This function emulates the 
 #' "Overall Comparisons" table output from SPSS.
 #' 
-#' @param formula formula expression of the form \code{Surv(time, status) ~ 
-#'   predictors}
-#' @param data data frame where variables from \code{formula} originate
+#' @param formula formula expression of the form `Surv(time, status) ~ 
+#'   predictors`
+#' @param data data frame where variables from `formula` originate
 #' @param digits number of significant digits to retain
 #' @return The Chi-Square statistic, degrees of freedom, and p-value are given 
 #'   for both G-rho tests.

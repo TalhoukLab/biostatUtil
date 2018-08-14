@@ -1,5 +1,5 @@
 #' Generate cohort characteristics
-#' @param input.d The \code{data.frame} containing the data
+#' @param input.d The `data.frame` containing the data
 #' @param marker.name The variable that you want to split into different columns
 #' @param marker.description The description for the variable(s) to split
 #' @param var.names The variables that you want the statistics for
@@ -11,15 +11,15 @@
 #' @param marker.value.labels.tolower Indicator as to whether to put marker
 #'   value labels to lower case
 #' @param show.missing an indicator to whether to show missing values
-#' @param show.missing.continuous if set to \code{FALSE} and \code{show.missing
-#'   == FALSE}, will not show the number of missing cases for continuous
+#' @param show.missing.continuous if set to `FALSE` and `show.missing
+#'   == FALSE`, will not show the number of missing cases for continuous
 #'   variables. Otherwise, it shows the number of missing for continuous
-#'   variables even if \code{show.missing == FALSE}.
-#' @param do.droplevels drop categories of unobserved levels set to \code{TRUE}
+#'   variables even if `show.missing == FALSE`.
+#' @param do.droplevels drop categories of unobserved levels set to `TRUE`
 #' @param show.percent defaults to "both" which shows both rows and columns
 #'   other possible values: "column", "row".
-#' @param stat.tests statistical test to perform. \code{NULL} indicates do not
-#'   do test for all variables, \code{NA} indicates do not do test for specified
+#' @param stat.tests statistical test to perform. `NULL` indicates do not
+#'   do test for all variables, `NA` indicates do not do test for specified
 #'   variable. Tests: chisq, fisher, ttest, wilcox, kendall, spearman, pearson,
 #'   kruskal, confusionMarkerAsRef, confusionVarAsRef
 #' @param chisq.test.simulate.p.value Whether to simulate p-value for chi-square test.  
@@ -29,23 +29,23 @@
 #' @param round.digits.p.value The number of digits to round the P values
 #' @param num.boot the number of bootstrap samples for any bootstrap method that
 #'   may be used
-#' @param missing.codes.highlight default to \code{NULL} this indicates whether
+#' @param missing.codes.highlight default to `NULL` this indicates whether
 #'   we wanted the missing values broken down down or lumped together.
 #' @param missing.codes a vector to indicate how missing values are coded,
-#'   default is \code{c("N/A", "", "Unk")}
+#'   default is `c("N/A", "", "Unk")`
 #' @param decimal number of decimal places to show for aggregate numbers such as
 #'   proportions or averages; default to 0
 #' @param caption caption to use for the Table
 #' @param html.table.border the border type to use for html tables
-#' @param banded.rows If \code{TRUE}, rows have alternating shading colour
+#' @param banded.rows If `TRUE`, rows have alternating shading colour
 #' @param css.class.name.odd Used to set the row colour for odd rows
 #' @param css.class.name.even Used to set the row colour for even rows
-#' @param custom.marker.labels labels of marker to show; default \code{NULL}
+#' @param custom.marker.labels labels of marker to show; default `NULL`
 #'   means using existing value label of the marker
-#' @param custom.total.label label of the "Total" column; default \code{NULL}
+#' @param custom.total.label label of the "Total" column; default `NULL`
 #'   means show "Total"
 #' @param split.table number of chars per row before table is split.
-#' @param ... additional arguments to \code{pander}
+#' @param ... additional arguments to `pander`
 #' @return A table with statistics reported for multiple variables, such as 
 #'   mean, median, and range for continuous variables and proportions and 
 #'   percentages for categorical variables. Relevant association and correlation

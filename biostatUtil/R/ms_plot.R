@@ -1,16 +1,16 @@
 #' Plots for MS analyses
 #' 
-#' \code{ms_boxplot} shows boxplots of different MS expression data values. 
-#' \code{ms_mean_var} shows mean-sd plots for the VSN data values to analyze the
+#' `ms_boxplot` shows boxplots of different MS expression data values. 
+#' `ms_mean_var` shows mean-sd plots for the VSN data values to analyze the
 #' mean-variance relationship.
 #' 
-#' @param x data object returned by \code{ms_process}
+#' @param x data object returned by `ms_process`
 #' @param width width of plot
 #' @param height height of plot
 #' @param path file path to save figure. Device is pdf.
 #' @return Both functions return a pdf saved to the file location specified by 
-#'   \code{path}. \code{ms_boxplot} shows three boxplots of expression values: 
-#'   raw data values, log2 and vsn transformed values. \code{ms_mean_var} shows 
+#'   `path`. `ms_boxplot` shows three boxplots of expression values: 
+#'   raw data values, log2 and vsn transformed values. `ms_mean_var` shows 
 #'   the vsn transformed values and mean-sd plots for each treatment group.
 #' @name ms_plot
 #' @family Mass Spectrometry functions
@@ -45,7 +45,7 @@ ms_gg_boxplot <- function(x, title) {
 
 #' @inheritParams ms_plot
 #' @param g vector of treatment groups
-#' @param title vector of titles for each \code{g}
+#' @param title vector of titles for each `g`
 #' @name ms_plot
 #' @export
 ms_mean_var <- function(x, g, title = NULL, width = 8, height = 10,

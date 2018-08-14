@@ -4,7 +4,7 @@
 #' PH model. Also plots survival curves for each cutpoint.
 #' 
 #' Takes the cutpoint resulting in the lowest AIC. If the range of AIC values is
-#' within \code{AIC.range} units, take the cutpoint that results in the two
+#' within `AIC.range` units, take the cutpoint that results in the two
 #' groups having the most similar numbers of events and cases. The function can 
 #' cut a variable into anywhere from 2 to 5 groups.
 #' 
@@ -12,27 +12,27 @@
 #' @param d data frame
 #' @param n number of groups to transform variable into. Options are "b" (two), 
 #'   "t" (three), "qd" (four), and "qn" (five)
-#' @param AIC.range If range of AIC is within \code{AIC.range} units, the 
+#' @param AIC.range If range of AIC is within `AIC.range` units, the 
 #'   likelihood is too flat. We choose the best cutpoint using the alternative
 #'   method.
 #' @param nround number of digits to round AIC and p-value on plots
-#' @param plot logical; If \code{TRUE}, shows the survival curves for each
+#' @param plot logical; If `TRUE`, shows the survival curves for each
 #'   cutpoint in a facetted figure
 #' @param filename file name for saving a png image of figure
 #' @param nrow number of rows in facetted plot
 #' @param ncol number of columns in facetted plot
 #' @param title title for plot
-#' @param ... additional arguments for \code{plot}
+#' @param ... additional arguments for `plot`
 #'   
 #' @return A list with the following elements
 #' \item{cuts}{vector of cutpoints considered}
-#' \item{fits}{A list of \code{coxph} objects run for each cutpoint}
+#' \item{fits}{A list of `coxph` objects run for each cutpoint}
 #' \item{results}{A table showing the likelihood ratio test p-value,
 #'   log likelihood, and AIC for each cutpoint}
 #' \item{opt.cut}{optimal cutpoint value}
-#' \item{flat.lik}{If \code{TRUE}, the likelihood was too flat and the
+#' \item{flat.lik}{If `TRUE`, the likelihood was too flat and the
 #'   alternative method was used}
-#' Additionally, if \code{plot = TRUE}, the function also returns KM survival
+#' Additionally, if `plot = TRUE`, the function also returns KM survival
 #' curves for each possible cutpoint.
 #' 
 #' @author Derek Chiu

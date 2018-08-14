@@ -34,8 +34,7 @@ plotKMDetail(input.data, surv.formula, main.text = "", xlab.text = "",
 \item{show.test}{show single or the reference group value (for pairwise
 comparisons). If \code{"none"}, then no test is show.}
 
-\item{single.test.type}{test to show if specified \code{show.test =
-"single"}. Possible choices are \code{"logrank"} (default),
+\item{single.test.type}{test to show if specified \code{show.test = "single"}. Possible choices are \code{"logrank"} (default),
 \code{"wilcoxon"}, \code{"taroneware"}, or \code{"all"}.}
 
 \item{round.digits.p.value}{number of digits for p-value}
@@ -56,7 +55,7 @@ comparisons). If \code{"none"}, then no test is show.}
 
 \item{grey.scale}{logical. If \code{TRUE}, the plot will be in grey scale.}
 
-\item{show.single.test.pos}{position to show single test; defaults to 0.5 if 
+\item{show.single.test.pos}{position to show single test; defaults to 0.5 if
 \code{legend.pos = "top"}. Otherwise 0.1}
 
 \item{...}{additional arguments to \code{plot}}
@@ -68,7 +67,7 @@ KM plots with details of event counts.
 http://courses.nus.edu.sg/course/stacar/internet/st3242/handouts/notes2.pdf
 }
 \seealso{
-\code{\link{plotKM}}
+\code{\link[=plotKM]{plotKM()}}
 }
 \author{
 Samuel Leung

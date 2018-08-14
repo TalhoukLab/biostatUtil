@@ -31,11 +31,10 @@ plotKM(input.d, input.formula, main.text = "", xlab.text = "",
 
 \item{line.width}{line width of survival curves}
 
-\item{show.test}{show single or the reference group value (for pairwise 
+\item{show.test}{show single or the reference group value (for pairwise
 comparisons). If \code{"none"}, then no test is show.}
 
-\item{single.test.type}{test to show if specified \code{show.test = 
-"single"}. Possible choices are \code{"logrank"} (default), 
+\item{single.test.type}{test to show if specified \code{show.test = "single"}. Possible choices are \code{"logrank"} (default),
 \code{"wilcoxon"}, \code{"taroneware"}, or \code{"all"}.}
 
 \item{digits}{number of digits for p-value}
@@ -52,7 +51,7 @@ comparisons). If \code{"none"}, then no test is show.}
 
 \item{grey.scale}{logical. If \code{TRUE}, the plot will be in grey scale.}
 
-\item{show.single.test.pos}{position to show single test; defaults to 0.5 if 
+\item{show.single.test.pos}{position to show single test; defaults to 0.5 if
 \code{legend.pos = "top"}. Otherwise 0.1}
 
 \item{xlabs}{dummy param to match ggkm so they don't get passed to ...}
@@ -69,7 +68,7 @@ comparisons). If \code{"none"}, then no test is show.}
 KM plots with basic annotations.
 }
 \seealso{
-\code{\link{plotKMDetail}}
+\code{\link[=plotKMDetail]{plotKMDetail()}}
 }
 \author{
 Samuel Leung

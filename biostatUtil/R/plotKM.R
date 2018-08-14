@@ -2,8 +2,8 @@
 #' 
 #' KM plots with basic annotations.
 #' 
-#' @param input.d input \code{data.frame}
-#' @param input.formula survival formula to \code{Surv}
+#' @param input.d input `data.frame`
+#' @param input.formula survival formula to `Surv`
 #' @param main.text plot title
 #' @param xlab.text x-axis label
 #' @param ylab.text y-axis label
@@ -12,26 +12,26 @@
 #' @param line.pattern line pattern of survival curves
 #' @param line.width line width of survival curves
 #' @param show.test show single or the reference group value (for pairwise 
-#'   comparisons). If \code{"none"}, then no test is show.
-#' @param single.test.type test to show if specified \code{show.test = 
-#'   "single"}. Possible choices are \code{"logrank"} (default), 
-#'   \code{"wilcoxon"}, \code{"taroneware"}, or \code{"all"}.
+#'   comparisons). If `"none"`, then no test is show.
+#' @param single.test.type test to show if specified `show.test = 
+#'   "single"`. Possible choices are `"logrank"` (default), 
+#'   `"wilcoxon"`, `"taroneware"`, or `"all"`.
 #' @param digits number of digits for p-value
 #' @param obs.survyrs show the observed survival years survival rate on KM plot
 #' @param legend.pos legend position keyword
 #' @param file.name name of file to save plot to
 #' @param file.width width of figure in saved file
 #' @param file.height height of figure in saved file
-#' @param grey.scale logical. If \code{TRUE}, the plot will be in grey scale.
+#' @param grey.scale logical. If `TRUE`, the plot will be in grey scale.
 #' @param show.single.test.pos position to show single test; defaults to 0.5 if 
-#'   \code{legend.pos = "top"}. Otherwise 0.1
+#'   `legend.pos = "top"`. Otherwise 0.1
 #' @param xlabs dummy param to match ggkm so they don't get passed to ...
 #' @param legend.xy dummy param to match ggkm so they don't get passed to ...
 #' @param ylabs dummy param to match ggkm so they don't get passed to ...
 #' @param timeby dummy param to match ggkm so they don't get passed to ...
-#' @param ... additional arguments to \code{plotKMDetail}
+#' @param ... additional arguments to `plotKMDetail`
 #' @author Samuel Leung
-#' @seealso \code{\link{plotKMDetail}}
+#' @seealso [plotKMDetail()]
 #' @export
 plotKM <- function(input.d, input.formula, 
                    main.text = "", xlab.text = "", ylab.text = "",

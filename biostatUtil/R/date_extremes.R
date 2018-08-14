@@ -1,12 +1,12 @@
 #' Latest and Earliest Dates
 #' 
 #' Finds the latest (max) and earliest (min) date given a vector of dates. The 
-#' functions ending in \code{Array} find the extremes for an array of dates as
+#' functions ending in `Array` find the extremes for an array of dates as
 #' opposed to a vector.
 #' 
-#' The input vector should have dates formatted as YYYY-MM-DD. If \code{na.rm} 
-#' is not set to the default (\code{TRUE}) and \code{dates} has \code{NA} 
-#' values, then the function will also return \code{NA}.
+#' The input vector should have dates formatted as YYYY-MM-DD. If `na.rm` 
+#' is not set to the default (`TRUE`) and `dates` has `NA` 
+#' values, then the function will also return `NA`.
 #' 
 #' @param dates vector of dates
 #' @param na.rm logical. Should NAs be removed?
@@ -39,7 +39,7 @@ minDate <- function(dates, na.rm = TRUE) {
 #' @param date.format format of the array of dates
 #' @param existing.missing.codes missing dates
 #' @param return.missing.code what to return if there is a missing input
-#' @param ... additional arguments to \code{formatDate}
+#' @param ... additional arguments to `formatDate`
 #' @param sep date separator. Defaults to "/"
 #' @rdname date_extremes
 #' @export

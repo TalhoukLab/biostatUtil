@@ -25,8 +25,8 @@ compareDate(d1, d2, date.format = "MM.DD.YYYY",
 
 \item{date.format}{how to format the resulting date}
 
-\item{units}{for \code{addToDate}, the unit of time for \code{delta}; for 
-\code{diffDate}, the unit of time for which to take the difference. 
+\item{units}{for \code{addToDate}, the unit of time for \code{delta}; for
+\code{diffDate}, the unit of time for which to take the difference.
 Defaults to "days".}
 
 \item{existing.missing.codes}{missing dates}
@@ -41,29 +41,28 @@ Defaults to "days".}
 }
 \value{
 \code{addDate} returns the new date after adding \code{delta} to
-  \code{org.date}.
+\code{org.date}.
 
-\code{diffDate} returns the difference between two dates \code{d1 -
-  d2} in the specified unit of time.
+\code{diffDate} returns the difference between two dates \code{d1 - d2} in the specified unit of time.
 
 \code{compareDate} returns 1 if \code{d1 > d2}, -1 if \code{d1 < d2},
-  and 0 if \code{d1 == d2}.
+and 0 if \code{d1 == d2}.
 }
 \description{
-\code{addToDate} adds a period of time to a date string and returns a new 
-date string. \code{diffDate} takes the difference between two dates and 
-returns in the specified unit of time. \code{compareDate} compares the 
+\code{addToDate} adds a period of time to a date string and returns a new
+date string. \code{diffDate} takes the difference between two dates and
+returns in the specified unit of time. \code{compareDate} compares the
 difference between two dates.
 }
 \details{
-If \code{delta} is negative, then the returned date will be earlier than 
-\code{org.date}. The output date format will be the same as the input date 
+If \code{delta} is negative, then the returned date will be earlier than
+\code{org.date}. The output date format will be the same as the input date
 format.
 
-The unit of time to add to or return in can be in \code{"days"}, 
-\code{"weeks"}, \code{"months"}, or \code{"years"}. \code{compareDate} calls 
-\code{diffDate} and returns integer values specifying which date is earlier 
-(or if they are the same). \code{d1} should be later than \code{d2} so the 
+The unit of time to add to or return in can be in \code{"days"},
+\code{"weeks"}, \code{"months"}, or \code{"years"}. \code{compareDate} calls
+\code{diffDate} and returns integer values specifying which date is earlier
+(or if they are the same). \code{d1} should be later than \code{d2} so the
 function returns nonnegative values.
 }
 \examples{

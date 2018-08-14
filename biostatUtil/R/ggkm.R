@@ -2,16 +2,16 @@
 #' 
 #' Produce nicely annotated KM plots using ggplot style.
 #' 
-#' @param sfit an object of class \code{survfit} containing one or more survival
+#' @param sfit an object of class `survfit` containing one or more survival
 #'   curves
-#' @param sfit2 an (optional) second object of class \code{survfit} to compare 
-#'   with \code{sfit}
-#' @param table logical; if \code{TRUE} (default), the numbers at risk at each 
+#' @param sfit2 an (optional) second object of class `survfit` to compare 
+#'   with `sfit`
+#' @param table logical; if `TRUE` (default), the numbers at risk at each 
 #'   time of death is shown as a table underneath the plot
-#' @param returns logical; if \code{TRUE} the plot is returned
-#' @param marks logical; if \code{TRUE} (default), censoring marks are shown on 
+#' @param returns logical; if `TRUE` the plot is returned
+#' @param marks logical; if `TRUE` (default), censoring marks are shown on 
 #'   survival curves
-#' @param CI logical; if \code{TRUE} (default), confidence bands are drawn for 
+#' @param CI logical; if `TRUE` (default), confidence bands are drawn for 
 #'   survival curves the using cumulative hazard, or log(survival).
 #' @param line.pattern linetype for survival curves
 #' @param shading.colors vector of colours for each survival curve
@@ -20,21 +20,21 @@
 #' @param ylabs vertical axis label
 #' @param xlims horizontal limits for plot
 #' @param ylims vertical limits for plot
-#' @param ystratalabs labels for the strata being compared in \code{survfit}
+#' @param ystratalabs labels for the strata being compared in `survfit`
 #' @param cox.ref.grp indicates reference group for the variable of interest in 
 #'   the cox model.  this parameter will be ignored if not applicable, e.g. for 
 #'   continuous variable
 #' @param timeby length of time between consecutive time points spanning the 
 #'   entire range of follow-up. Defaults to 5.
-#' @param pval logical; if \code{TRUE} (default), the logrank test p-value is 
+#' @param pval logical; if `TRUE` (default), the logrank test p-value is 
 #'   shown on the plot
-#' @param HR logical; if \code{TRUE} (default), the estimated hazard ratio and 
+#' @param HR logical; if `TRUE` (default), the estimated hazard ratio and 
 #'   its 95\% confidence interval will be shown
 #' @param use.firth Firth's method for Cox regression is used if the percentage 
-#'   of censored cases exceeds \code{use.firth}. Setting \code{use.firth = 1} 
-#'   (default) means Firth is never used, and \code{use.firth = -1} means Firth 
+#'   of censored cases exceeds `use.firth`. Setting `use.firth = 1` 
+#'   (default) means Firth is never used, and `use.firth = -1` means Firth 
 #'   is always used.
-#' @param legend logical; if \code{TRUE}, the legend is overlaid on the graph 
+#' @param legend logical; if `TRUE`, the legend is overlaid on the graph 
 #'   (instead of on the side).
 #' @param legend.xy named vector specifying the x/y position of the legend
 #' @param legend.direction layout of items in legends ("horizontal" (default) or

@@ -7,14 +7,14 @@
 #' and percentage in the barplot title.
 #' 
 #' @param data data.frame with column names
-#' @param var string of variable in \code{data} to graph on
+#' @param var string of variable in `data` to graph on
 #' @param xlab x-axis label
 #' @param ylab y-axis label
 #' @param title barplot title
 #' @param digits number of digits to round to
 #' @return Barplot of frequencies for each group
 #' @author Samuel Leung, Derek Chiu
-#' @note Function expects missing to be \code{NA}. Do not filter out missing data
+#' @note Function expects missing to be `NA`. Do not filter out missing data
 #' as this function reports missing data frequencies.
 #' @export
 #' @examples 
@@ -40,18 +40,18 @@ doBarplot <- function(data, var, xlab = var, ylab = "Frequency", title = NULL,
 #' superimposed on top of the boxplot
 #' @param input.d input data.frame
 #' @param data.description boxplot title description
-#' @param biomarker.var.name biomarker variable name in \code{input.d} to graph
+#' @param biomarker.var.name biomarker variable name in `input.d` to graph
 #'   on
 #' @param biomarker.name boxplot y-axis label
-#' @param subtype.var.name subtype variable name in \code{input.d} to graph on
+#' @param subtype.var.name subtype variable name in `input.d` to graph on
 #' @param subtype.name boxplot x-axis label
 #' @param pch stripchart plot style
 #' @param jitter amount of jitter in stripchart
 #' @param digits number of digits to round to
-#' @param ... additional arguments to \code{boxplot}
+#' @param ... additional arguments to `boxplot`
 #' @return a boxplot of biomarker values across different subtypes
 #' @note Expects subtype variable to be a factor. Also expects biomarker and
-#'   subtype variable missing values to be \code{NA}
+#'   subtype variable missing values to be `NA`
 #' @author Samuel Leung
 #' @export
 #' @examples
@@ -92,19 +92,19 @@ doBoxplotAmongSubtypes <- function(input.d, data.description,
 #' 
 #' Plot a histogram with the median, first quartile, and third quartile reported.
 #' 
-#' Expects missing to be \code{NA}. Do not filter out missing data
+#' Expects missing to be `NA`. Do not filter out missing data
 #' as this function reports missing data counts.
 #' 
 #' @param data data.frame with column names
-#' @param var string of variable in \code{data} to graph on
+#' @param var string of variable in `data` to graph on
 #' @param xlab x-axis label
 #' @param title histogram title
-#' @param show.title logical. If \code{TRUE} (default), the title is shown
+#' @param show.title logical. If `TRUE` (default), the title is shown
 #' @param br breaks in histogram. By default, the number of bins is taking as
-#' the ceiling of the square root of the number of rows in \code{data}
+#' the ceiling of the square root of the number of rows in `data`
 #' @param digits number of digits to round for median, Q1, Q3
 #' @param score.lab label for non-missing cases
-#' @param ... additional arguments to \code{hist}
+#' @param ... additional arguments to `hist`
 #' @return A histogram with some annotated values.
 #' @author Samuel Leung, Derek Chiu
 #' @export
@@ -139,9 +139,9 @@ doHist <- function(data, var, xlab = var, title = NULL, show.title = TRUE,
 #' Generates stripchart (jitter plot) of a biomarker split on a categorical subtype.
 #' 
 #' Expects subtype variable to be a factor. Also, biomarker and subtype variables
-#' have missing cases as \code{NA}.
+#' have missing cases as `NA`.
 #' 
-#' @param input.d input \code{data.frame}
+#' @param input.d input `data.frame`
 #' @param data.description title description
 #' @param biomarker.var.name variable name of biomarker to plot
 #' @param biomarker.name x-axis label for biomarker name

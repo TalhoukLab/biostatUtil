@@ -2,7 +2,7 @@
 #' 
 #' Change a numeric value to a date object by specifying a date of origin.
 #' 
-#' @param x a number that represents the number of days after \code{date.origin}
+#' @param x a number that represents the number of days after `date.origin`
 #' @param date.origin the date from which we count the number of days passed
 #' @return A date object, converted from a numeric object.
 #' @family date formatting functions
@@ -21,9 +21,9 @@ numericToDate <- function(x, date.origin = DATE.ORIGIN) {
 #' 
 #' @param date character string of date
 #' @param char.format character text format of date
-#' @param sep character string separating \code{date}
+#' @param sep character string separating `date`
 #' @return A character string representing the POSIX standard date format 
-#'   equivalent of the string in \code{char.format}.
+#'   equivalent of the string in `char.format`.
 #' @family date formatting functions
 #' @author Derek Chiu
 #' @export
@@ -57,7 +57,7 @@ getFormat <- function(date, char.format = c("MM.DD.YYYY", "MMM.DD.YYYY",
 #' 
 #' Given the day, month, and year of a date, returns the date in a specific 
 #' format. The order and separating string can be modified using 
-#' \code{date.format} and \code{sep} respectively. Take note the order of the 
+#' `date.format` and `sep` respectively. Take note the order of the 
 #' arguments: day, month, and year. Only accepts "MM.DD.YYYY", "MMM.DD.YYYY", 
 #' "DD.MM.YYYY", "DD.MMM.YYYY", "YYYY.MM.DD", "YYYY.MMM.DD".
 #' 
@@ -65,7 +65,7 @@ getFormat <- function(date, char.format = c("MM.DD.YYYY", "MMM.DD.YYYY",
 #' @param m month of the year (1-12)
 #' @param y year of date
 #' @param date.format how to format the date. Defaults to "month/day/year".
-#' @param sep string used to separate \code{d}, \code{m}, and \code{y}. Defaults
+#' @param sep string used to separate `d`, `m`, and `y`. Defaults
 #'   to "/".
 #' @return A character string of a formatted date.
 #' @family date formatting functions
@@ -98,8 +98,8 @@ formatDate <- function(d, m, y, date.format = c("MM.DD.YYYY", "MMM.DD.YYYY",
 #' 
 #' @param x a date string or a numeric representation of a date
 #' (e.g. January 13th, 1991 would be 19910113)
-#' @param original.format format of input \code{x}
-#' @param preferred.format format to change \code{x} to
+#' @param original.format format of input `x`
+#' @param preferred.format format to change `x` to
 #' @param existing.missing.codes missing dates
 #' @param return.missing.code what to return if there is a missing input
 #' @param sep date separator. Defaults to "/"

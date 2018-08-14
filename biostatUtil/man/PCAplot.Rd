@@ -12,7 +12,7 @@ PCAplot(by, tdat)
 \item{tdat}{data matrix to compute principal components}
 }
 \value{
-PCA plots for every combination of PC1, PC2, and PC3. The 
+PCA plots for every combination of PC1, PC2, and PC3. The
 percentage of variation contribution is shown in the axes labels.
 }
 \description{

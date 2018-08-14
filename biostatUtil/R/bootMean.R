@@ -2,15 +2,15 @@
 #' 
 #' Finds mean of a vector, with bootstrapped confidence bounds.
 #' 
-#' Takes a numeric vector and resamples with replacement \code{num.boot} times. 
-#' If the input vector has any \code{NA} entries, include the argument 
-#' \code{na.rm = TRUE} from \code{mean}.
+#' Takes a numeric vector and resamples with replacement `num.boot` times. 
+#' If the input vector has any `NA` entries, include the argument 
+#' `na.rm = TRUE` from `mean`.
 #' 
 #' @param x a vector (or matrix)
 #' @param num.boot number of bootstrap samples. Defaults to 1000.
 #' @param conf.level confidence level.
 #' @param seed random seed for resampling
-#' @param ... additional arguments to \code{mean}
+#' @param ... additional arguments to `mean`
 #' @return A list with elements
 #' \item{obs.mean}{mean}
 #' \item{ci}{bootstraped confidence interval}

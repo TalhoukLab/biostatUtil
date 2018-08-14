@@ -2,7 +2,7 @@
 #' 
 #' Generate summary table as an HTML table
 #' 
-#' @param d assume \code{d} is an array of numbers
+#' @param d assume `d` is an array of numbers
 #' @return summary table with annotated HTML code
 #' @author Samuel Leung, Derek Chiu
 #' @export

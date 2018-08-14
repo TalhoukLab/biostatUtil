@@ -3,7 +3,7 @@
 #' Prepends a table counter label to a table caption.
 #' 
 #' The table counter automatically increments based on the number of existing
-#' tables that have already called  using \code{addTableNumber}.
+#' tables that have already called  using `addTableNumber`.
 #' 
 #' @param caption table caption
 #' @param table.counter.str.default the default string preceding the table count

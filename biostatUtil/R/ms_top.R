@@ -3,8 +3,8 @@
 #' Show top genes/peptides defined by significance level and absolute fold 
 #' change.
 #' 
-#' The input \code{x} is the result matrix returned by \code{ms_summarize}. We 
-#' want to filter \code{x} such that only interesting variables remain: i.e. 
+#' The input `x` is the result matrix returned by `ms_summarize`. We 
+#' want to filter `x` such that only interesting variables remain: i.e. 
 #' those that show statistical significance in an overall test and a 
 #' scientifically relevant effect size. Variables of interest are summarized 
 #' either on the gene level or peptide level.
@@ -15,21 +15,21 @@
 #' values can be modified for different studies or projects, but offer a general
 #' measure of validity for users to start with.
 #' 
-#' @param x data frame object returned by \code{ms_summarize}
+#' @param x data frame object returned by `ms_summarize`
 #' @param alpha significance level
 #' @param fc minimum absolute fold change
 #' @inheritParams ms_summarize
 #'   
-#' @return A data frame showing the top variables. If \code{level = "Gene"}, the
+#' @return A data frame showing the top variables. If `level = "Gene"`, the
 #'   return value is a 4 column data frame, showing the Gene, Accession, BH 
-#'   adjusted omnibus p-value, and absolute fold change columns from \code{x}. 
-#'   If \code{level = "Peptide"}, the return value is the same except the Gene 
-#'   and Accession columns are replaced with the AGDSM column from \code{x}.
-#' @note The fold change criterion only needs to be satisfied for \emph{one} 
+#'   adjusted omnibus p-value, and absolute fold change columns from `x`. 
+#'   If `level = "Peptide"`, the return value is the same except the Gene 
+#'   and Accession columns are replaced with the AGDSM column from `x`.
+#' @note The fold change criterion only needs to be satisfied for *one* 
 #'   comparison if the experiment has 3 or more sample groups. For example, 
 #'   suppose we have 1 control group and treatments A and B. We filter variables
 #'   on the fold change criterion where the absolute fold change is greater than
-#'   \code{fc} for \emph{either} A vs. control or B vs. control.
+#'   `fc` for *either* A vs. control or B vs. control.
 #' @family Mass Spectrometry functions
 #' @author Derek Chiu
 #' @export

@@ -11,7 +11,7 @@ isFirstLetterUpperCase(x)
 }
 \value{
 logical; if \code{TRUE}, the first letter of the input string is
-  uppercase.
+uppercase.
 }
 \description{
 Returns a logical indicating whether the first letter of a character string

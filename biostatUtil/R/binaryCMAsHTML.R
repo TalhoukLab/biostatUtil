@@ -1,6 +1,6 @@
 #' Confusion matrix results in HTML
 #' 
-#' Prints results from \code{\link{binaryCM}} into a nice HTML table format.
+#' Prints results from [binaryCM()] into a nice HTML table format.
 #' 
 #' @param x vector of reference classes
 #' @param y vector of predicted classes
@@ -9,7 +9,7 @@
 #' @param seed random seed for bootstrap resampling
 #' @param num.boot number of bootstrap confidence intervals
 #' @param conf.level confidence level. Defaults to 95\%.
-#' @param show.ci if \code{TRUE} (default), the confidence intervals are shown.
+#' @param show.ci if `TRUE` (default), the confidence intervals are shown.
 #' @return A character string that can be parsed as HTML code to display a nice 
 #'   confusion matrix summary.
 #' @family confusion matrix functions

@@ -1,7 +1,7 @@
 #' Do Schoenfeld residual plot
 #' 
-#' @param input.d input \code{data.frame}
-#' @param input.formula survival formula to \code{Surv}
+#' @param input.d input `data.frame`
+#' @param input.formula survival formula to `Surv`
 #' @param vars.to.plot variable(s) to plot
 #' @param main title for each variable (i.e. main can be an array)
 #' @author Samuel Leung

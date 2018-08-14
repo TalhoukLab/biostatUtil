@@ -9,7 +9,7 @@ simpleCap(x, first.only = FALSE)
 \arguments{
 \item{x}{character string}
 
-\item{first.only}{logical; if \code{TRUE}, only the first word will be 
+\item{first.only}{logical; if \code{TRUE}, only the first word will be
 capitalized}
 }
 \value{

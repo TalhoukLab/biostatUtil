@@ -17,18 +17,18 @@ ggkm(sfit, sfit2 = NULL, table = TRUE, returns = TRUE,
 \item{sfit}{an object of class \code{survfit} containing one or more survival
 curves}
 
-\item{sfit2}{an (optional) second object of class \code{survfit} to compare 
+\item{sfit2}{an (optional) second object of class \code{survfit} to compare
 with \code{sfit}}
 
-\item{table}{logical; if \code{TRUE} (default), the numbers at risk at each 
+\item{table}{logical; if \code{TRUE} (default), the numbers at risk at each
 time of death is shown as a table underneath the plot}
 
 \item{returns}{logical; if \code{TRUE} the plot is returned}
 
-\item{marks}{logical; if \code{TRUE} (default), censoring marks are shown on 
+\item{marks}{logical; if \code{TRUE} (default), censoring marks are shown on
 survival curves}
 
-\item{CI}{logical; if \code{TRUE} (default), confidence bands are drawn for 
+\item{CI}{logical; if \code{TRUE} (default), confidence bands are drawn for
 survival curves the using cumulative hazard, or log(survival).}
 
 \item{line.pattern}{linetype for survival curves}
@@ -47,25 +47,25 @@ survival curves the using cumulative hazard, or log(survival).}
 
 \item{ystratalabs}{labels for the strata being compared in \code{survfit}}
 
-\item{cox.ref.grp}{indicates reference group for the variable of interest in 
-the cox model.  this parameter will be ignored if not applicable, e.g. for 
+\item{cox.ref.grp}{indicates reference group for the variable of interest in
+the cox model.  this parameter will be ignored if not applicable, e.g. for
 continuous variable}
 
-\item{timeby}{length of time between consecutive time points spanning the 
+\item{timeby}{length of time between consecutive time points spanning the
 entire range of follow-up. Defaults to 5.}
 
-\item{pval}{logical; if \code{TRUE} (default), the logrank test p-value is 
+\item{pval}{logical; if \code{TRUE} (default), the logrank test p-value is
 shown on the plot}
 
-\item{HR}{logical; if \code{TRUE} (default), the estimated hazard ratio and 
+\item{HR}{logical; if \code{TRUE} (default), the estimated hazard ratio and
 its 95\% confidence interval will be shown}
 
-\item{use.firth}{Firth's method for Cox regression is used if the percentage 
-of censored cases exceeds \code{use.firth}. Setting \code{use.firth = 1} 
-(default) means Firth is never used, and \code{use.firth = -1} means Firth 
+\item{use.firth}{Firth's method for Cox regression is used if the percentage
+of censored cases exceeds \code{use.firth}. Setting \code{use.firth = 1}
+(default) means Firth is never used, and \code{use.firth = -1} means Firth
 is always used.}
 
-\item{legend}{logical; if \code{TRUE}, the legend is overlaid on the graph 
+\item{legend}{logical; if \code{TRUE}, the legend is overlaid on the graph
 (instead of on the side).}
 
 \item{legend.xy}{named vector specifying the x/y position of the legend}
@@ -75,15 +75,15 @@ is always used.}
 
 \item{line.y.increment}{how much y should be incremented for each line}
 
-\item{digits}{number of digits to round: p-values digits=nunber of 
-significant digits, HR digits=number of digits after decimal point NOT 
+\item{digits}{number of digits to round: p-values digits=nunber of
+significant digits, HR digits=number of digits after decimal point NOT
 significant digits}
 
 \item{...}{additional arguments to other methods}
 }
 \value{
-A kaplan-meier plot with optional annotations for hazard ratios, log 
-  rank test p-values, and risk table counts for each stratum.
+A kaplan-meier plot with optional annotations for hazard ratios, log
+rank test p-values, and risk table counts for each stratum.
 }
 \description{
 Produce nicely annotated KM plots using ggplot style.

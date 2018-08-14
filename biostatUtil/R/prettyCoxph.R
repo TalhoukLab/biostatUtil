@@ -7,32 +7,32 @@
 #' large enough to use Firth.
 #' 
 #' @param input.formula a formula object, with the response on the left of a 
-#'   \code{~} operator, and the terms on the right. The response must be a 
-#'   survival object as returned by the \code{Surv} function.
-#' @param input.d data.frame containing the variables in \code{input.formula}
+#'   `~` operator, and the terms on the right. The response must be a 
+#'   survival object as returned by the `Surv` function.
+#' @param input.d data.frame containing the variables in `input.formula`
 #' @param ref.grp a named array indicating reference group(s) for any variables 
 #'   in the cox model.  this parameter will be ignored if not applicable, e.g.
 #'   for continuous variable
 #' @param use.firth if set to -1, Firth's correction is applied using 
-#' \code{coxphf}. The default value is 1, which uses \code{coxph}.
-#' @param check.ph if \code{TRUE}, checks the proportional hazard assumption.
-#' @param plot.ph if \code{TRUE} (default), the PH residual plot is graphed.
+#' `coxphf`. The default value is 1, which uses `coxph`.
+#' @param check.ph if `TRUE`, checks the proportional hazard assumption.
+#' @param plot.ph if `TRUE` (default), the PH residual plot is graphed.
 #' @param ph.test.plot.filename character string for filename of residual plot,
-#'   including file extension. If \code{NULL} (default), plots to console.
+#'   including file extension. If `NULL` (default), plots to console.
 #'   Otherwise plot is saved to disk.
-#' @param ... additional arguments to \code{coxph} or \code{coxphf}
+#' @param ... additional arguments to `coxph` or `coxphf`
 #' @return A list with elements
 #' \item{output}{A character matrix showing the hazard ratio, confidence bounds,
-#' and p-value for each coefficient. If \code{check.ph = TRUE}, the last column
+#' and p-value for each coefficient. If `check.ph = TRUE`, the last column
 #' shows the results of the PH test, otherwise it reads "NOT CALCULATED" for
 #' every coefficient.}
-#' \item{fit}{The fit output call returned from \code{coxph} or \code{coxphf}}
+#' \item{fit}{The fit output call returned from `coxph` or `coxphf`}
 #' \item{n}{The number of observations used in the fit}
 #' \item{nevent}{The number of events used in the fit}
 #' \item{ph.test}{The rho, Chi-squared statistic, and p-value for each coefficient.
-#' Not shown if \code{check.ph = FALSE}}
-#' \item{used.firth}{logical; if \code{TRUE}, Firth's correction was applied
-#' using \code{coxphf}}
+#' Not shown if `check.ph = FALSE`}
+#' \item{used.firth}{logical; if `TRUE`, Firth's correction was applied
+#' using `coxphf`}
 #' @author Samuel Leung, Derek Chiu
 #' @export
 #' @examples 

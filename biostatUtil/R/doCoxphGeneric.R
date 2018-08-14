@@ -1,24 +1,24 @@
 #' Fit a generic Cox regression model
 #' 
-#' Fits \code{coxph} for all univariable markers on all survival endpoints.
+#' Fits `coxph` for all univariable markers on all survival endpoints.
 #' 
 #' Please note the following assumptions. 1) Marker can be binary, continuous or
-#' categorical. 2) Missing survival time/status variables are coded as \code{NA}
-#' (i.e. will only be checked by \code{is.na()}). 3) Survival time/status
+#' categorical. 2) Missing survival time/status variables are coded as `NA`
+#' (i.e. will only be checked by `is.na()`). 3) Survival time/status
 #' variable name specified in the following order: "os", "dss", "rfs". 4) Coding
 #' of survival status is binary only (i.e. cannot take survival status of > 2
 #' categories).
 #' 
-#' @param input.d The \code{data.frame} containing the data
+#' @param input.d The `data.frame` containing the data
 #' @param var.names variables to include as univariable predictors
 #' @param var.descriptions vector of strings to describe the variables as they
 #'   are to appear in the table
-#' @param show.var.detail logical. If \code{TRUE}, details such as categories
+#' @param show.var.detail logical. If `TRUE`, details such as categories
 #'   and the reference group for categorical variables are shown.
-#' @param show.group.name.for.bin.var logical. If \code{TRUE}, the non-reference
+#' @param show.group.name.for.bin.var logical. If `TRUE`, the non-reference
 #'   group name is shown beside the hazard ratio for dichotomized variables.
-#' @param var.ref.groups a vector of reference groups. If \code{NULL}, assume
-#'   all variables are binary/continuous. If an item in the vector is \code{NA},
+#' @param var.ref.groups a vector of reference groups. If `NULL`, assume
+#'   all variables are binary/continuous. If an item in the vector is `NA`,
 #'   assume that particular marker is binary or continuous (i.e., treat it as a
 #'   numeric variable)
 #' @param var.names.surv.time variable names of survival time
@@ -27,28 +27,28 @@
 #' @param surv.descriptions names abbreviated survival endpoints in returned
 #'   output
 #' @param missing.codes character strings of missing values used in
-#'   \code{input.d}
+#'   `input.d`
 #' @param use.firth percentage of censored cases before using Firth's method for
-#'   Cox regression. If \code{use.firth = 1} (default), Firth is never used and
-#'   if \code{use.firth = -1} Firth is always used.
+#'   Cox regression. If `use.firth = 1` (default), Firth is never used and
+#'   if `use.firth = -1` Firth is always used.
 #' @param firth.caption subscript in html table output indicating Firth was used
 #' @param stat.test the overall model test to perform on the Cox regression 
 #'   model. Can be any of "waldtest", "logtest", or "sctest". If Firth is used, 
 #'   only "logtest" can be performed. Test p-values are never Firth corrected ( 
 #'   per instruction from Aline 2015-04-14,15).
 #' @param round.digits.p.value number of digits for p-value
-#' @param round.small if \code{TRUE}, uses small number rounding via
-#'   \code{round_small}
-#' @param scientific if \code{TRUE}, uses scientific notation when rounding
+#' @param round.small if `TRUE`, uses small number rounding via
+#'   `round_small`
+#' @param scientific if `TRUE`, uses scientific notation when rounding
 #' @param caption caption for returned object
 #' @param html.table.border the border type to use for html tables
-#' @param banded.rows logical. If \code{TRUE}, rows have alternating shading
+#' @param banded.rows logical. If `TRUE`, rows have alternating shading
 #'   colour
 #' @param css.class.name.odd Used to set the row colour for odd rows
 #' @param css.class.name.even Used to set the row colour for even rows
 #' @param split.table number of characters per row before splitting the table.
 #'   Applies to the pandoc table output.
-#' @param ... additional arguments to \code{pandoc.table.return}
+#' @param ... additional arguments to `pandoc.table.return`
 #' @return A list with the following elements
 #' @author Samuel Leung, Aline Talhouk, Derek Chiu
 #' @export

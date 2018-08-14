@@ -10,7 +10,7 @@ round_small(x, method = c("round", "signif"), digits = 3,
 \arguments{
 \item{x}{a numeric vector or matrix}
 
-\item{method}{use either \code{\link{round}} or \code{\link{signif}} as 
+\item{method}{use either \code{\link[=round]{round()}} or \code{\link[=signif]{signif()}} as
 rounding method}
 
 \item{digits}{integer indicating number of decimal places to round to}
@@ -18,9 +18,9 @@ rounding method}
 \item{sci}{if \code{TRUE}, scientific notation is used}
 }
 \value{
-If precision of number is larger than desired rounding, the default 
-  \code{round} is used. Otherwise, we provide an upper bound instead of 
-  coercion to 0.
+If precision of number is larger than desired rounding, the default
+\code{round} is used. Otherwise, we provide an upper bound instead of
+coercion to 0.
 }
 \description{
 Rounding of a number smaller than specified precision doesn't coerce to 0.

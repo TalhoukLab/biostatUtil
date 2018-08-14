@@ -1,31 +1,31 @@
 #' Date computations
 #' 
-#' \code{addToDate} adds a period of time to a date string and returns a new 
-#' date string. \code{diffDate} takes the difference between two dates and 
-#' returns in the specified unit of time. \code{compareDate} compares the 
+#' `addToDate` adds a period of time to a date string and returns a new 
+#' date string. `diffDate` takes the difference between two dates and 
+#' returns in the specified unit of time. `compareDate` compares the 
 #' difference between two dates.
 #' 
-#' If \code{delta} is negative, then the returned date will be earlier than 
-#' \code{org.date}. The output date format will be the same as the input date 
+#' If `delta` is negative, then the returned date will be earlier than 
+#' `org.date`. The output date format will be the same as the input date 
 #' format.
 #' 
-#' The unit of time to add to or return in can be in \code{"days"}, 
-#' \code{"weeks"}, \code{"months"}, or \code{"years"}. \code{compareDate} calls 
-#' \code{diffDate} and returns integer values specifying which date is earlier 
-#' (or if they are the same). \code{d1} should be later than \code{d2} so the 
+#' The unit of time to add to or return in can be in `"days"`, 
+#' `"weeks"`, `"months"`, or `"years"`. `compareDate` calls 
+#' `diffDate` and returns integer values specifying which date is earlier 
+#' (or if they are the same). `d1` should be later than `d2` so the 
 #' function returns nonnegative values.
 #' 
 #' @param org.date original date
-#' @param delta amount of time to add to \code{org.date}
+#' @param delta amount of time to add to `org.date`
 #' @param date.format how to format the resulting date
-#' @param units for \code{addToDate}, the unit of time for \code{delta}; for 
-#'   \code{diffDate}, the unit of time for which to take the difference. 
+#' @param units for `addToDate`, the unit of time for `delta`; for 
+#'   `diffDate`, the unit of time for which to take the difference. 
 #'   Defaults to "days".
 #' @param existing.missing.codes missing dates
 #' @param return.missing.code what to return if there is a missing input
 #' @param sep date separator string
-#' @return \code{addDate} returns the new date after adding \code{delta} to
-#'   \code{org.date}.
+#' @return `addDate` returns the new date after adding `delta` to
+#'   `org.date`.
 #' @name date_compute
 #' @family date computation functions
 #' @author Samuel Leung, Derek Chiu
@@ -83,8 +83,8 @@ addToDate <- function(org.date, delta, date.format = "MM.DD.YYYY",
 #' @param d1 later date
 #' @param d2 earlier date
 #' @inheritParams addToDate
-#' @return \code{diffDate} returns the difference between two dates \code{d1 -
-#'   d2} in the specified unit of time.
+#' @return `diffDate` returns the difference between two dates `d1 -
+#'   d2` in the specified unit of time.
 #' @rdname date_compute
 #' @family date computation functions
 #' @export
@@ -113,8 +113,8 @@ diffDate <- function(d1, d2, date.format = "MM.DD.YYYY",
 }
 
 #' @inheritParams diffDate
-#' @return \code{compareDate} returns 1 if \code{d1 > d2}, -1 if \code{d1 < d2},
-#'   and 0 if \code{d1 == d2}.
+#' @return `compareDate` returns 1 if `d1 > d2`, -1 if `d1 < d2`,
+#'   and 0 if `d1 == d2`.
 #' @rdname date_compute
 #' @family date computation functions
 #' @export

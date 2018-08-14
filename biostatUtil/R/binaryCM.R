@@ -9,7 +9,7 @@
 #' (NPV), and the kappa statistic, along with their bootstrapped confidence
 #' intervals are returned.
 #' 
-#' Note that the classes given in \code{x} and \code{y} must be binary.
+#' Note that the classes given in `x` and `y` must be binary.
 #'
 #' @param x a vector of reference classes
 #' @param y a vector of predicted classes
@@ -20,8 +20,8 @@
 #' @param conf.level confidence level. Defaults to 95\%.
 #' @param digits number of digits to round summaries to
 #' @param method method for obtaining confidence intervals for binomial
-#'   probabilities. See \code{Hmisc::binconf} for details.
-#' @param verbose logical; if \code{TRUE}, outputs are printed to the screen
+#'   probabilities. See `Hmisc::binconf` for details.
+#' @param verbose logical; if `TRUE`, outputs are printed to the screen
 #' @return A confusion matrix for the predicted and reference classes. Then
 #' the estimated statistics along with bootstrapped confidence intervals. A
 #' list with the following elements

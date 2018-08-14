@@ -7,7 +7,7 @@
 #' @return A list with the following elements
 #' @note the order of variable names in var.names dictates when will the term
 #'   added in stepwise likelihood ratio test of nested models i.e. given
-#'   \code{var.names = c("A", "B", "C")}, likelihood ratio test of nested model 
+#'   `var.names = c("A", "B", "C")`, likelihood ratio test of nested model 
 #'   will be:
 #'   
 #' A

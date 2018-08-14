@@ -9,10 +9,10 @@
 #' @param samples character vector of sample names to keep
 #' @param sample.id character vector for sample IDs. Order of samples must match
 #'   that in the psm raw data.
-#' @param path file path to save return element \code{pep}
-#' @param ... additional arguments to \code{ms_condition}
+#' @param path file path to save return element `pep`
+#' @param ... additional arguments to `ms_condition`
 #' @return A list with the following elements
-#' \item{pep}{processed data frame to be used by \code{ms_summarize}}
+#' \item{pep}{processed data frame to be used by `ms_summarize`}
 #' \item{raw}{raw data values}
 #' \item{l2}{log2 raw data values}
 #' \item{vsn}{vsn raw data values}

@@ -1,10 +1,10 @@
-#' Functions ending in \code{AsHTML} output a character string that can be 
-#' parsed as HTML using functions such as \code{\link[htmlTable]{htmlTable}}
+#' Functions ending in `AsHTML` output a character string that can be 
+#' parsed as HTML using functions such as [htmlTable::htmlTable()]
 #' 
-#' @details Row and column names can be replaced by \code{row.names} and 
-#' \code{column.names}. Higher values of \code{html.table.border} make the table
-#' borders thicker and even look 3D. \code{col.odd} and \code{col.even} are 
-#' ignored when \code{banded.rows = FALSE}.
+#' @details Row and column names can be replaced by `row.names` and 
+#' `column.names`. Higher values of `html.table.border` make the table
+#' borders thicker and even look 3D. `col.odd` and `col.even` are 
+#' ignored when `banded.rows = FALSE`.
 #' 
 #' @details Transposing is useful if there are many columns in a single row or vice 
 #' versa. Note that the percentages are unchanged, only the orientation of the 
@@ -14,13 +14,13 @@
 #' @param column.names (optional) vector of column names in table
 #' @param html.table.border border type for the table. Defaults to 0 in HTML 
 #'   syntax.
-#' @param banded.rows logical; if \code{TRUE}, alternating rows will have 
+#' @param banded.rows logical; if `TRUE`, alternating rows will have 
 #'   different shaded colours.
 #' @param col.odd colour to use for odd numbered rows
 #' @param col.even colour to use for even numbered rows
-#' @param caption table caption. Uses \code{\link{addTableNumber}} to increment 
+#' @param caption table caption. Uses [addTableNumber()] to increment 
 #'   table number
-#' @param transpose logical; if \code{TRUE}, the table is transposed.
+#' @param transpose logical; if `TRUE`, the table is transposed.
 #' @return HTML-based functions return the code used to generate a table that 
 #'   shows row and/or column percentages.
 #' @rdname percents

@@ -13,7 +13,7 @@ multiplot(..., plotlist = NULL, cols = 1, layout = NULL)
 
 \item{cols}{number of columns in layout}
 
-\item{layout}{a matrix specifying the layout. If present, \code{cols} is 
+\item{layout}{a matrix specifying the layout. If present, \code{cols} is
 ignored.}
 }
 \value{
@@ -23,8 +23,7 @@ A grid object made up of multiple ggplots
 Place multiple ggplot objects on the same figure space
 }
 \details{
-If the \code{layout} is something like \code{matrix(c(1, 2, 3, 3), nrow = 2, 
-byrow = TRUE)}, then plot 1 will go in the upper left, 2 will go in the upper
+If the \code{layout} is something like \code{matrix(c(1, 2, 3, 3), nrow = 2, byrow = TRUE)}, then plot 1 will go in the upper left, 2 will go in the upper
 right, and 3 will go all the way across the bottom.
 }
 \author{

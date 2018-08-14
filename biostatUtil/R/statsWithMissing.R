@@ -3,15 +3,15 @@
 #' Returns various statistics, with the ability to specify which values are 
 #' missing.
 #' 
-#' The statistics supported include \code{min, max, mean, sum, prod}, as 
-#' indicated by each function's prefix. In addition, \code{ratioWithMissing} 
-#' calculates the ratio \code{x / y}.
+#' The statistics supported include `min, max, mean, sum, prod`, as 
+#' indicated by each function's prefix. In addition, `ratioWithMissing` 
+#' calculates the ratio `x / y`.
 #' 
 #' @param x,y input vector
-#' @param missing.value missing values in \code{x}
+#' @param missing.value missing values in `x`
 #' @param return.missing.value character to return for missing values
 #' @name statsWithMissing
-#' @note \code{NAs} are ignored.
+#' @note `NAs` are ignored.
 #' @author Samuel Leung, Derek Chiu
 #' @examples 
 #' x <- c(10:1)

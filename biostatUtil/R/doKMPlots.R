@@ -1,28 +1,28 @@
 #' Make Kaplan-Meier plots
 #' 
-#' @param input.d \code{data.frame} containing data
+#' @param input.d `data.frame` containing data
 #' @param time follow up time
 #' @param status status indicator
 #' @param var.name name of variable to make Kaplan-Meier plots on
-#' @param var.description description for \code{var.name}
+#' @param var.description description for `var.name`
 #' @param surv.type survival outcome. Either "os", "dss", or "pfs".
 #' @param shading.colors colors for survival curves
 #' @param line.name names for each survival curve
 #' @param line.pattern line type for survival curves
-#' @param legend logical; if \code{TRUE}, the legend is overlaid on the graph
+#' @param legend logical; if `TRUE`, the legend is overlaid on the graph
 #'   (instead of on the side).
 #' @param cox.ref.group specify reference group for cox model i.e. hazard
 #'   ratio(s)
 #' @param use.firth Whether to use Firth's correction for plotting the curves
-#' @param CI logical; if \code{TRUE}, will plot confidence bands
-#' @param HR logical; if \code{TRUE}, will show hazard ratios
-#' @param show.risk logical; if \code{TRUE}, will show the number of people at
+#' @param CI logical; if `TRUE`, will plot confidence bands
+#' @param HR logical; if `TRUE`, will show hazard ratios
+#' @param show.risk logical; if `TRUE`, will show the number of people at
 #'   risk at each time of death beneath the plot
 #' @param km.plot.ref.group specify KM plot reference group; "single" means a 
 #'   lump log-rank statistic
 #' @param single.test.type test to use for survival curves. Defaults to
 #'   "logrank".
-#' @param use.ggkm if \code{TRUE}, will use function \code{ggkm} for plotting
+#' @param use.ggkm if `TRUE`, will use function `ggkm` for plotting
 #' @param ... additional arguments to other functions and methods
 #' @return A Kaplan-Meier plot for the specified survival outcome split on the
 #'   desired variable.

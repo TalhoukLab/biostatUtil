@@ -12,7 +12,7 @@
 #' @param num.boot number of times to bootstrap. Defaults to 1000.
 #' @param conf.level confidence level. Defaults to 95\%.
 #' @param method statistic to calculate bootstrap estimate
-#' @param type method setting for \code{method = "krippendorff"}
+#' @param type method setting for `method = "krippendorff"`
 #' @return bootstraped confidence interval for Cohen's kappa.
 #' @author Aline Talhouk, Derek Chiu
 #' @export

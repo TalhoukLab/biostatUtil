@@ -3,15 +3,15 @@
 #' Create a name for cutpoint variables based on location of cut and number of 
 #' groups.
 #' 
-#' The naming system is based on how \code{\link[Hmisc]{cut2}} cuts variables. Used in 
-#' \code{\link{build_cuts}} for naming the new cutpoint variables.
+#' The naming system is based on how [Hmisc::cut2()] cuts variables. Used in 
+#' [build_cuts()] for naming the new cutpoint variables.
 #' 
 #' @param x vector to split by certain cutpoints
-#' @param cuts where to cut \code{x}
+#' @param cuts where to cut `x`
 #'   
 #' @return A character string representing the cutpoint variable name.
 #' @author Derek Chiu
-#' @seealso \code{\link[Hmisc]{cut2}}, \code{\link{build_cuts}}
+#' @seealso [Hmisc::cut2()], [build_cuts()]
 #' @export
 #' 
 #' @examples

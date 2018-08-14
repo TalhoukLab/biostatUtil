@@ -7,7 +7,7 @@
 #' 
 #' @param path file path to save table
 #' @param tags sections to extract from Rd files. Missing entries labelled as
-#'   \code{NA}
+#'   `NA`
 #'   
 #' @return a table with information on a package's documented objects (functions
 #'   and data). Rows are objects, and columns are tags.

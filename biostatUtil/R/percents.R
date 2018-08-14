@@ -1,16 +1,16 @@
 #' Row and Column Percentages
 #' 
-#' Calculate percentages in a table. \code{rowPercent} gives row percentages, 
-#' \code{colPercent} gives column percentages, and \code{rowColPercent} gives 
+#' Calculate percentages in a table. `rowPercent` gives row percentages, 
+#' `colPercent` gives column percentages, and `rowColPercent` gives 
 #' both row and column percentages.
 #' 
-#' Generates a table of row and/or column percentages given table \code{t}. 
-#' Using \code{pretty.text = TRUE} will add the \% sign to the percentages.
+#' Generates a table of row and/or column percentages given table `t`. 
+#' Using `pretty.text = TRUE` will add the \% sign to the percentages.
 #' 
 #' @param t a matrix
-#' @param pretty.text logical; if \code{TRUE}, will format the table into nice 
+#' @param pretty.text logical; if `TRUE`, will format the table into nice 
 #'   display
-#' @param keep logical; if \code{TRUE}, the original table counts will be kept 
+#' @param keep logical; if `TRUE`, the original table counts will be kept 
 #'   along with the percentages
 #' @param digits number of digits to round to
 #' @return A table with row-wise/column-wise percentages added. The percentages 
@@ -60,8 +60,8 @@ rowPercent <- function(t, pretty.text = FALSE, keep = TRUE, digits = 4) {
 }
 
 #' @rdname percents
-#' @param ... additional arguments from \code{colPercent} and \code{rowPercent}
-#' for \code{rowColPercent}, or additional arguments from non-HTML functions
+#' @param ... additional arguments from `colPercent` and `rowPercent`
+#' for `rowColPercent`, or additional arguments from non-HTML functions
 #' to HTML functions.
 #' @export
 rowColPercent <- function(t, keep = TRUE, ...) {
