@@ -1,8 +1,8 @@
-Package: biostatUtil
 Type: Package
+Package: biostatUtil
 Title: Utility Functions Used in Biostatistics Projects
-Version: 0.0.0.9081
-Date: 2017-12-12
+Version: 0.0.0.9082
+Date: 2018-08-13
 Authors@R: c(person("Derek", "Chiu", email = "dchiu@bccrc.ca", role = c("aut", "cre")),
     person("Aline", "Talhouk", email = "atalhouk@bccrc.ca", role = "aut"),
     person("Samuel", "Leung", email = "Samuel.Leung@vch.ca", role = "aut"))
@@ -10,17 +10,18 @@ Description: Provides some commonly used utility functions used in
     biostatistics, such as row and column percentages in a table,
     date formatting, survival functions, confusion matrices,
     contingency tables, plotting functions, and more.
-Depends:
+License: GPL-2
+Depends: 
     R (>= 3.2.0)
-Imports:
+Imports: 
     assertthat,
     boot,
     broom,
     caret,
     coin,
     coxphf,
-    descr,
     Deducer,
+    descr,
     doBy,
     dplyr,
     gdata,
@@ -28,8 +29,8 @@ Imports:
     grid,
     gridExtra,
     Hmisc,
-    htmltools,
     htmlTable,
+    htmltools,
     irr,
     KMsurv,
     knitr,
@@ -48,11 +49,10 @@ Imports:
     tidyr,
     tools,
     vsn
-Suggests:
+Suggests: 
     logistf,
     meta,
     testthat
-License: GPL-2
-RoxygenNote: 6.1.0
-LazyData: FALSE
 Encoding: UTF-8
+LazyData: FALSE
+RoxygenNote: 6.1.0
