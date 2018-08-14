@@ -5,7 +5,7 @@
 #' @author Aline Talhouk
 #' @importFrom grDevices pdf
 #' @export
-#' @examples 
+#' @examples
 #' mtcars$vs <- as.factor(mtcars$vs)
 #' mtcars$am <- as.factor(mtcars$am)
 #' exploreData(mtcars)
@@ -18,7 +18,7 @@ exploreData <- function(datmat) {
   fac.ind <- type.fd %in% c("factor")
   catvars <- colnames(fd)[fac.ind]
   pdf("DataSummary.pdf")
-  
+
   for (i in seq_along(catvars)) {
     x <-  fd[, catvars[i]]
     tx <-  table(x, useNA = "ifany")
@@ -30,7 +30,7 @@ exploreData <- function(datmat) {
     tmat <- rbind(mat, apply(mat[, 1:2], 2, sum))
     PerformanceAnalytics::textplot(tmat, wrap = FALSE)
   }
-  
+
   numvars <- colnames(fd)[num.ind]
   for (i in seq_along(numvars)) {
     par(mfrow = c(2, 1))
