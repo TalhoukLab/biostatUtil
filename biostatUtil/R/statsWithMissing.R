@@ -1,19 +1,19 @@
 #' Calculates statistics with specifying missing values
-#' 
-#' Returns various statistics, with the ability to specify which values are 
+#'
+#' Returns various statistics, with the ability to specify which values are
 #' missing.
-#' 
-#' The statistics supported include `min, max, mean, sum, prod`, as 
-#' indicated by each function's prefix. In addition, `ratioWithMissing` 
+#'
+#' The statistics supported include `min, max, mean, sum, prod`, as
+#' indicated by each function's prefix. In addition, `ratioWithMissing`
 #' calculates the ratio `x / y`.
-#' 
+#'
 #' @param x,y input vector
 #' @param missing.value missing values in `x`
 #' @param return.missing.value character to return for missing values
 #' @name statsWithMissing
 #' @note `NAs` are ignored.
 #' @author Samuel Leung, Derek Chiu
-#' @examples 
+#' @examples
 #' x <- c(10:1)
 #' y <- c(1:10)
 #' z <- c(10:1)
@@ -23,7 +23,7 @@
 #' sumWithMissing(z, c(9, 10))
 #' prodWithMissing(z, c(9, 10))
 #' ratioWithMissing(x, y, c(1:2))
-#' 
+#'
 #' ## All missing
 #' minWithMissing(z, c(1:10))
 #' minWithMissing(z, c(1:10), return.missing.value = "all missing")

@@ -1,14 +1,14 @@
 #' Change numeric to date
-#' 
+#'
 #' Change a numeric value to a date object by specifying a date of origin.
-#' 
+#'
 #' @param x a number that represents the number of days after `date.origin`
 #' @param date.origin the date from which we count the number of days passed
 #' @return A date object, converted from a numeric object.
 #' @family date formatting functions
 #' @author Samuel Leung
 #' @export
-#' @examples 
+#' @examples
 #' numericToDate(10)
 #' numericToDate(10, "2000-09-11")
 numericToDate <- function(x, date.origin = DATE.ORIGIN) {
@@ -16,18 +16,18 @@ numericToDate <- function(x, date.origin = DATE.ORIGIN) {
 }
 
 #' Get date format from character text
-#' 
+#'
 #' Get the POSIX standard date formats from character text formats.
-#' 
+#'
 #' @param date character string of date
 #' @param char.format character text format of date
 #' @param sep character string separating `date`
-#' @return A character string representing the POSIX standard date format 
+#' @return A character string representing the POSIX standard date format
 #'   equivalent of the string in `char.format`.
 #' @family date formatting functions
 #' @author Derek Chiu
 #' @export
-#' @examples 
+#' @examples
 #' getFormat("12/09/1993", "MM.DD.YYYY")
 #' getFormat("2005-09-13", "YYYY.MM.DD")
 getFormat <- function(date, char.format = c("MM.DD.YYYY", "MMM.DD.YYYY",
@@ -52,15 +52,15 @@ getFormat <- function(date, char.format = c("MM.DD.YYYY", "MMM.DD.YYYY",
 }
 
 #' Format a date.
-#' 
+#'
 #' Prints a date into a pretty format.
-#' 
-#' Given the day, month, and year of a date, returns the date in a specific 
-#' format. The order and separating string can be modified using 
-#' `date.format` and `sep` respectively. Take note the order of the 
-#' arguments: day, month, and year. Only accepts "MM.DD.YYYY", "MMM.DD.YYYY", 
+#'
+#' Given the day, month, and year of a date, returns the date in a specific
+#' format. The order and separating string can be modified using
+#' `date.format` and `sep` respectively. Take note the order of the
+#' arguments: day, month, and year. Only accepts "MM.DD.YYYY", "MMM.DD.YYYY",
 #' "DD.MM.YYYY", "DD.MMM.YYYY", "YYYY.MM.DD", "YYYY.MMM.DD".
-#' 
+#'
 #' @param d day of the month (1-31)
 #' @param m month of the year (1-12)
 #' @param y year of date
@@ -83,19 +83,21 @@ formatDate <- function(d, m, y, date.format = c("MM.DD.YYYY", "MMM.DD.YYYY",
   d <- as.numeric(d)
   m <- as.numeric(m)
   y <- as.numeric(y)
-  switch(match.arg(date.format),
-         MM.DD.YYYY = paste(sprintf("%02d", m), sprintf("%02d", d), y, sep = sep),
-         MMM.DD.YYYY = paste(month.abb[m], sprintf("%02d", d), y, sep = sep),
-         DD.MM.YYYY = paste(sprintf("%02d", d), sprintf("%02d", m), y, sep = sep),
-         DD.MMM.YYYY = paste(sprintf("%02d", d), month.abb[m], y, sep = sep),
-         YYYY.MM.DD = paste(y, sprintf("%02d", m), sprintf("%02d", d), sep = sep),
-         YYYY.MMM.DD = paste(y, month.abb[m], sprintf("%02d", d), sep = sep))
+  switch(
+    match.arg(date.format),
+    MM.DD.YYYY = paste(sprintf("%02d", m), sprintf("%02d", d), y, sep = sep),
+    MMM.DD.YYYY = paste(month.abb[m], sprintf("%02d", d), y, sep = sep),
+    DD.MM.YYYY = paste(sprintf("%02d", d), sprintf("%02d", m), y, sep = sep),
+    DD.MMM.YYYY = paste(sprintf("%02d", d), month.abb[m], y, sep = sep),
+    YYYY.MM.DD = paste(y, sprintf("%02d", m), sprintf("%02d", d), sep = sep),
+    YYYY.MMM.DD = paste(y, month.abb[m], sprintf("%02d", d), sep = sep)
+  )
 }
 
 #' Clean dates
-#' 
+#'
 #' Clean a date and reformat it to another style.
-#' 
+#'
 #' @param x a date string or a numeric representation of a date
 #' (e.g. January 13th, 1991 would be 19910113)
 #' @param original.format format of input `x`
@@ -108,7 +110,7 @@ formatDate <- function(d, m, y, date.format = c("MM.DD.YYYY", "MMM.DD.YYYY",
 #' @family date formatting functions
 #' @author Samuel Leung, Derek Chiu
 #' @export
-#' @examples 
+#' @examples
 #' cleanDate("09/11/1991", original.format = "MM.DD.YYYY", preferred.format = "DD.MM.YYYY")
 #' cleanDate(11091991, original.format = "DD.MM.YYYY", preferred.format = "YYYY.MMM.DD")
 #' cleanDate(11091991, original.format = "DD.MM.YYYY", preferred.format = "YYYY.MMM.DD", sep = "-")
@@ -161,7 +163,7 @@ cleanDate <- function(x, original.format, preferred.format,
         return(formatDate(date.comp[1], date.comp[2], date.comp[3],
                           date.format = preferred.format, sep = sep))
       } else {
-        stop('ERROR (cleanDate): unknown original.format specified: ',
+        stop("ERROR (cleanDate): unknown original.format specified: ",
              original.format)
       }
     }

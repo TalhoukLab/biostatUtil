@@ -1,14 +1,14 @@
 #' Fit a multivariable Cox model
-#' 
+#'
 #' Fits multivariable Cox models for each specified endpoints.
-#' 
+#'
 #' Please note the following assumptions. 1) Marker can be binary, continuous or
 #' categorical. 2) Missing survival time/status variables are coded as `NA`
 #' (i.e. will only be checked by `is.na()`). 3) Survival time/status
 #' variable name specified in the following order: "os", "dss", "rfs". 4) Coding
 #' of survival status is binary only (i.e. cannot take survival status of > 2
 #' categories).
-#' 
+#'
 #' @inheritParams doCoxphGeneric
 #' @return A list with the following elements
 #' @author Samuel Leung, Aline Talhouk, Derek Chiu
@@ -27,27 +27,27 @@ doCoxphMultivariable <- function(
   caption = NA, html.table.border = 0, banded.rows = FALSE,
   css.class.name.odd = "odd", css.class.name.even = "even",
   split.table = 300, ...) {
-  
+
   # Constants
   kLocalConstantHrSepFlag <- "kLocalConstantHrSepFlag" # separates HR estimates
   col.th.style <- COL.TH.STYLE
   row.th.style <- ROW.TH.STYLE
   row.td.style.for.multi.cox <- ROW.TD.STYLE.FOR.MULTI.COX
   row.td.style.for.multi.cox.align.top <- ROW.TD.STYLE.FOR.MULTI.COX.ALIGN.TOP
-  
+
   # Initial assertion checks
   num.surv.endpoints <- length(var.names.surv.time)
   assertthat::assert_that(num.surv.endpoints == length(var.names.surv.status),
                           num.surv.endpoints == length(event.codes.surv),
                           num.surv.endpoints == length(surv.descriptions))
-  
+
   # Remove all variables not used in analysis, ensure survival times are numeric
-  input.d <- input.d %>% 
+  input.d <- input.d %>%
     dplyr::select(dplyr::one_of(c(var.names, var.names.surv.time,
-                                  var.names.surv.status))) %>% 
-    droplevels() %>% 
+                                  var.names.surv.status))) %>%
+    droplevels() %>%
     dplyr::mutate_at(var.names.surv.time, as.numeric)
-  
+
   # Setup default for variable reference groups and result matrix
   nvar <- length(var.names)
   var.ref.groups <- var.ref.groups %||% rep(NA, nvar)
@@ -69,13 +69,13 @@ doCoxphMultivariable <- function(
       input.d[, x] <- relevel(as.factor(input.d[, x]), var.ref.groups[i])
     }
   }
-  
+
   cox.stats.output <- list()
   for (j in seq_len(num.surv.endpoints)) {
     surv.formula <- surv_formula(var.names.surv.time[j],
                                  var.names.surv.status[j], event.codes.surv[j],
                                  var.names)
-    temp.d <- input.d %>% 
+    temp.d <- input.d %>%
       dplyr::filter(!is.na(.[, var.names.surv.status[[j]]]) &
                       !is.na(.[, var.names.surv.time[[j]]]))
     cox.stats <- prettyCoxph(surv.formula, input.d = temp.d,
@@ -87,13 +87,13 @@ doCoxphMultivariable <- function(
       if (!is.na(var.ref.groups[i]))
         var.idx <- var.idx:(var.idx + dplyr::n_distinct(temp.d[, var.name]) - 2)
       e.n <- paste(cox.stats$nevent, "/", cox.stats$n)
-      hr.ci <- cox.stats$output %>% 
-        magrittr::extract(var.idx, c("estimate", "conf.low", "conf.high")) %>% 
-        format_hr_ci(digits = 2, labels = FALSE, method = "Sci") %>% 
-        paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>% 
+      hr.ci <- cox.stats$output %>%
+        magrittr::extract(var.idx, c("estimate", "conf.low", "conf.high")) %>%
+        format_hr_ci(digits = 2, labels = FALSE, method = "Sci") %>%
+        paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>%
         paste(collapse = kLocalConstantHrSepFlag)
       p.value <- switch(
-        stat.test, 
+        stat.test,
         logtest = {
           cox.exclude.var <- coxph(surv_formula(var.names.surv.time[j],
                                                 var.names.surv.status[j],
@@ -107,14 +107,14 @@ doCoxphMultivariable <- function(
                                       event.codes.surv[j],
                                       var.names), temp.d))[i, "P"]
         }
-      ) %>% 
+      ) %>%
         round_pval(round.small = round.small, scientific = scientific,
                    digits = round.digits.p.value)
       result.table[nvar * (j - 1) + i, ] <- c(e.n, hr.ci, p.value)
       cox.stats.output[[surv.descriptions[j]]] <- cox.stats
     }
   }
-  
+
   ### generate html table ###
   result.table.html <- paste0("<table border=", html.table.border, ">",
                               ifelse(is.na(caption), "",
@@ -185,7 +185,7 @@ doCoxphMultivariable <- function(
     result.table.bamboo[result.table.bamboo.base.index + c(1:num.var), 1] <- ""
     result.table.bamboo.base.indexes <- c(result.table.bamboo.base.indexes, result.table.bamboo.base.index)
   }
-  # want to add a column to describe different factor level for categorical 
+  # want to add a column to describe different factor level for categorical
   # whenever reference group is specified
   if (sum(is.na(var.ref.groups)) != length(var.ref.groups)) {
     first.col.name <- colnames(result.table.bamboo)[1]
@@ -195,7 +195,7 @@ doCoxphMultivariable <- function(
     for (i in seq_len(num.surv)) {
       result.table.bamboo.base.index <- result.table.bamboo.base.indexes[i]
       rows.added <- 0
-      for (var.count in seq_along(var.names)) {  
+      for (var.count in seq_along(var.names)) {
         if (!is.na(var.ref.groups[var.count])) {
           ref.group <- var.ref.groups[var.count]
           other.groups <- names(table(input.d[, var.names[var.count]]))
@@ -221,35 +221,35 @@ doCoxphMultivariable <- function(
             }
           }
           if (num.other.groups > 1 | show.group.name.for.bin.var) {
-            result.table.bamboo[curr.base.index:(curr.base.index + num.other.groups - 1), hr.col.index] <- 
+            result.table.bamboo[curr.base.index:(curr.base.index + num.other.groups - 1), hr.col.index] <-
               strsplit(result.table.bamboo[curr.base.index,hr.col.index], kLocalConstantHrSepFlag)[[1]]
             result.table.bamboo[curr.base.index:(curr.base.index + num.other.groups - 1), hr.col.index - 1] <- other.groups
           }
         }
       }
-      
+
       # need to update result.table.bamboo.base.indexes since we've added rows!!!
       if (i < num.surv) {
         result.table.bamboo.base.indexes[(i + 1):num.surv] <- result.table.bamboo.base.indexes[(i + 1):num.surv] + rows.added
       }
     }
   }
-  
+
   # subscript ("<sup>|</sup>") and line break ("<br>") syntax for pandoc
   options("table_counter" = options()$table_counter - 1)
-  result.table.bamboo <- result.table.bamboo %>% 
-    gsub(pattern = "<sup>|</sup>", replacement = "^", .) %>% 
+  result.table.bamboo <- result.table.bamboo %>%
+    gsub(pattern = "<sup>|</sup>", replacement = "^", .) %>%
     pander::pandoc.table.return(., caption = caption,
                                 emphasize.rownames = FALSE,
-                                split.table = split.table, ...) %>% 
-    gsub(pattern = kLocalConstantHrSepFlag, replacement = "; ", .) %>% 
+                                split.table = split.table, ...) %>%
+    gsub(pattern = kLocalConstantHrSepFlag, replacement = "; ", .) %>%
     gsub(pattern = "<br>", replacement = "\\\\\n", .)
-  ### end of result.table.bamboo ###  
+  ### end of result.table.bamboo ###
 
   ### clean result.table ###
   result.table <- gsub(kLocalConstantHrSepFlag, ", ", result.table)
   ### end of clean result.table ###
-  
+
   list("result.table" = result.table,
        "result.table.html" = result.table.html,
        "result.table.bamboo" = result.table.bamboo,

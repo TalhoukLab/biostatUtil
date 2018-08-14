@@ -1,7 +1,7 @@
 #' Geometric mean
-#' 
+#'
 #' Calculates the geometric mean
-#' 
+#'
 #' @param x a vector. Matrices are allowed.
 #' @param na.rm logical; should NA values be removed?
 #' @return If `x` has any `NA` values then `geoMean` will return

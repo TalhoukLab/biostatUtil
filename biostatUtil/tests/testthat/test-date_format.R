@@ -18,7 +18,7 @@ test_that("Any date format works with any separator", {
   expect_identical("%d-%b-%Y", getFormat(x1, "DD.MMM.YYYY"))
   expect_identical("%Y-%m-%d", getFormat(x1, "YYYY.MM.DD"))
   expect_identical("%Y-%b-%d", getFormat(x1, "YYYY.MMM.DD"))
-  
+
   expect_identical("%m/%d/%Y", getFormat(x2, "MM.DD.YYYY"))
   expect_identical("%b/%d/%Y", getFormat(x2, "MMM.DD.YYYY"))
   expect_identical("%d/%m/%Y", getFormat(x2, "DD.MM.YYYY"))

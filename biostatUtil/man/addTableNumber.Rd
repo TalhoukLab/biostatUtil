@@ -23,7 +23,8 @@ tables that have already called  using \code{addTableNumber}.
 }
 \examples{
 addTableNumber("Overall Survival Hazard Ratios")
-addTableNumber("Correlation Heatmap", table.counter.str.default = "Figure \%s: ")
+addTableNumber("Correlation Heatmap", table.counter.str.default = "Figure \%s:
+")
 }
 \author{
 Samuel Leung

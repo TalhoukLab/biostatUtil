@@ -1,4 +1,3 @@
-
 context("Plot KM")
 
 library(survival)

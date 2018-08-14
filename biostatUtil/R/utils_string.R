@@ -1,5 +1,5 @@
 #' Escape string for regular expression
-#' 
+#'
 #' Escape [, ], (, and ) for use in `grep`.
 #' @param x a character vector
 #' @return A character vector with opening and closing square brackets and
@@ -20,22 +20,22 @@ escapeForGrep <- function(x){
 }
 
 #' Find occurences of string within another string
-#' 
+#'
 #' Returns a vector of the indices where a string occurs in another string
-#' 
-#' If `b` is longer than `a`, `indexOf` returns `NA`, since 
+#'
+#' If `b` is longer than `a`, `indexOf` returns `NA`, since
 #' it is not possible for a longer string to occur in a shorter string.
-#' 
+#'
 #' @param a string to be checked against
 #' @param b string to check
-#' @param ignore.case logical; if `TRUE`, case is ignored when performing 
+#' @param ignore.case logical; if `TRUE`, case is ignored when performing
 #'   the check
 #' @return Indices where `b` occurs in `a`. Returns `NA` if there
 #'   are no occurences.
 #' @author Samuel Leung
 #' @seealso [stringr::str_locate_all()]
 #' @export
-#' @examples 
+#' @examples
 #' indexOf("derek", "e")
 #' indexOf("Animals", "a")
 #' indexOf("Animals", "A")
@@ -66,18 +66,18 @@ indexOf <- function(a, b, ignore.case = FALSE) {
 }
 
 #' Is the first letter uppercase?
-#' 
+#'
 #' Returns a logical indicating whether the first letter of a character string
 #' is uppercase.
-#' 
+#'
 #' If the input is an empty string, the function returns `TRUE`.
-#' 
+#'
 #' @param x character string
 #' @return logical; if `TRUE`, the first letter of the input string is
 #'   uppercase.
 #' @author Samuel Leung, Derek Chiu
 #' @export
-#' @examples 
+#' @examples
 #' isFirstLetterUpperCase("peanut butter")
 #' isFirstLetterUpperCase("peanut Butter")
 #' isFirstLetterUpperCase("Samuel butter")
@@ -87,21 +87,21 @@ isFirstLetterUpperCase <- function(x) {
 }
 
 #' Simple capitalization
-#' 
+#'
 #' Capitalize the first letter of every word in a character string.
-#' 
+#'
 #' To capitalize only the first word, use `first.only = TRUE`.
-#' 
+#'
 #' @param x character string
-#' @param first.only logical; if `TRUE`, only the first word will be 
+#' @param first.only logical; if `TRUE`, only the first word will be
 #'   capitalized
 #' @return A character string with every word's first letter capitalized.
 #' @author Samuel Leung
 #' @references
 #'   http://stackoverflow.com/questions/6364783/capitalize-the-first-letter-of-both-words-in-a-two-word-string
-#'   
+#'
 #' @export
-#' @examples 
+#' @examples
 #' simpleCap("clear cell")
 #' simpleCap("high grade serous carcinoma")
 #' simpleCap("ovarian cancer", first.only = TRUE)

@@ -1,19 +1,19 @@
 #' Row and Column Percentages
-#' 
-#' Calculate percentages in a table. `rowPercent` gives row percentages, 
-#' `colPercent` gives column percentages, and `rowColPercent` gives 
+#'
+#' Calculate percentages in a table. `rowPercent` gives row percentages,
+#' `colPercent` gives column percentages, and `rowColPercent` gives
 #' both row and column percentages.
-#' 
-#' Generates a table of row and/or column percentages given table `t`. 
+#'
+#' Generates a table of row and/or column percentages given table `t`.
 #' Using `pretty.text = TRUE` will add the \% sign to the percentages.
-#' 
+#'
 #' @param t a matrix
-#' @param pretty.text logical; if `TRUE`, will format the table into nice 
+#' @param pretty.text logical; if `TRUE`, will format the table into nice
 #'   display
-#' @param keep logical; if `TRUE`, the original table counts will be kept 
+#' @param keep logical; if `TRUE`, the original table counts will be kept
 #'   along with the percentages
 #' @param digits number of digits to round to
-#' @return A table with row-wise/column-wise percentages added. The percentages 
+#' @return A table with row-wise/column-wise percentages added. The percentages
 #'   sum to 1 per row/column.
 #' @author Aline Talhouk, Samuel Leung, Derek Chiu
 #' @name percents
@@ -70,10 +70,10 @@ rowColPercent <- function(t, keep = TRUE, ...) {
   row.p <- rowPercent(t, keep = !keep, ...)
   col.p <- colPercent(t, keep = !keep, ...)
   if (keep) {
-    result <- as.matrix(gdata::interleave(t, row.p, col.p)) %>% 
+    result <- as.matrix(gdata::interleave(t, row.p, col.p)) %>%
       magrittr::set_rownames(paste0(rownames(.), rep(c("", " Row %", " Col %"), nrow(t))))
   } else {
-    result <- as.matrix(gdata::interleave(row.p, col.p)) %>% 
+    result <- as.matrix(gdata::interleave(row.p, col.p)) %>%
       magrittr::extract(grep("%", rownames(.)), )
   }
   return(result)

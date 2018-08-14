@@ -1,22 +1,22 @@
 #' Generate summary statistics
-#' 
-#' Splits the data by two variables, computing relevant statistics for each 
+#'
+#' Splits the data by two variables, computing relevant statistics for each
 #' variable.
-#' 
-#' The `data` is split by two variables, `by1` and `by2`, and 
-#' statistics are computed for continuous variables. Statistics currently 
-#' supported include `mean, sd, median, IQR, range`, and the number of 
-#' missing cases. For factor variables, the counts, column and row percentages 
+#'
+#' The `data` is split by two variables, `by1` and `by2`, and
+#' statistics are computed for continuous variables. Statistics currently
+#' supported include `mean, sd, median, IQR, range`, and the number of
+#' missing cases. For factor variables, the counts, column and row percentages
 #' are shown for each of the variable levels.
-#' 
-#' Note that marginal statistics are also shown for `by1`, so the order in 
+#'
+#' Note that marginal statistics are also shown for `by1`, so the order in
 #' which you split `data` matters.
-#' 
+#'
 #' There are four print options for the output: `raw` gives the output as a
-#' character matrix, `pandoc` gives a Pandoc-friendly output for Word and 
-#' PDF reports, `html` gives HTML supported output, and `long` is a 
+#' character matrix, `pandoc` gives a Pandoc-friendly output for Word and
+#' PDF reports, `html` gives HTML supported output, and `long` is a
 #' tidy version of `raw`.
-#' 
+#'
 #' @param data The `data.frame` containing the data
 #' @param by1 character string of splitting variable 1
 #' @param by2 character string of splitting variable 2
@@ -28,7 +28,7 @@
 #'   raw values.
 #' @author Aline Talhouk, Derek Chiu
 #' @export
-#' @examples 
+#' @examples
 #' mtcars$vs <- as.factor(mtcars$vs); mtcars$am <- as.factor(mtcars$am)
 #' SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = c("mpg", "vs",
 #' "qsec", "am"))
@@ -52,65 +52,65 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
   }
   num.long <- num.res <- fac.long <- fac.res <- NULL
   col.names <- data[, bys] %>%
-    unique() %>% 
+    unique() %>%
     rbind(matrix(c(unique(data[, by1]), rep(NA, n_distinct(data[, by1]))),
-                 ncol = 2, dimnames = list(NULL, bys))) %>% 
+                 ncol = 2, dimnames = list(NULL, bys))) %>%
     arrange_(by1, by2) %>%
-    purrr::map2(names(.), ., paste, sep = "=") %>% 
-    purrr::pmap_chr(paste, sep = ", ") %>% 
+    purrr::map2(names(.), ., paste, sep = "=") %>%
+    purrr::pmap_chr(paste, sep = ", ") %>%
     ifelse(grepl("NA", .), gsub(",.*", "\\1", .), .)
-  
+
   # Compute numerical summaries
   if (sum(num.ind) > 0) {
     num.var <- var.names[num.ind]
     num.dat <- data[, c(num.var, bys)]
-    num.ord <- purrr::map(num.var, ~ paste0(.x, c("", paste0(".", stats)))) %>% 
+    num.ord <- purrr::map(num.var, ~ paste0(.x, c("", paste0(".", stats)))) %>%
       unlist()
     if (all(c("mean", "sd") %in% stats)) {
       num.ord <- num.ord[-grep("sd", num.ord)]
     }
-    num.val <- paste_formula(num.var, bys) %>% 
+    num.val <- paste_formula(num.var, bys) %>%
       doBy::summaryBy(num.dat, FUN = contSumFunc, digits = digits,
-                      stats = stats) %>% 
+                      stats = stats) %>%
       mutate_all(funs(as.character))
-    num.val.tot <- paste_formula(num.var, by1) %>% 
+    num.val.tot <- paste_formula(num.var, by1) %>%
       doBy::summaryBy(num.dat, FUN = contSumFunc, digits = digits,
-                      stats = stats) %>% 
+                      stats = stats) %>%
       mutate_all(funs(as.character))
     num.all <- list(num.val, num.val.tot)
-    num.long <- num.all %>% 
-      dplyr::bind_rows() %>% 
+    num.long <- num.all %>%
+      dplyr::bind_rows() %>%
       wtl(by1, by2)
     nnum <- n_distinct(num.long[, bys])
     num.res <- matrix(num.long$value, ncol = nnum,
                       dimnames = list(grep(collapse_var(num.var, "|"),
                                            names(num.val), value = TRUE),
-                                      col.names)) %>% 
+                                      col.names)) %>%
       rbind(matrix("", nrow = length(num.var), ncol = nnum,
-                   dimnames = list(num.var))) %>% 
-      magrittr::extract(num.ord, ) %>% 
+                   dimnames = list(num.var))) %>%
+      magrittr::extract(num.ord, ) %>%
       magrittr::set_rownames(num.ord %>%
                                ifelse(!grepl("\\.", .),
                                       paste0("**", ., "**"), .) %>%
                                gsub(".+\\.", "\\1", .))
   }
-  
+
   # Compute factor summaries
   if (sum(fac.ind) > 0) {
     fac.var <- var.names[fac.ind]
     fac.dat <- data[, c(fac.var, bys)]
     fac.ord <- purrr::map2(fac.var, fac.dat[, fac.var, drop = FALSE],
-                           ~ paste0(.x, c("", paste0(".", levels(.y))))) %>% 
+                           ~ paste0(.x, c("", paste0(".", levels(.y))))) %>%
       unlist()
-    fac.val <- fac.var %>% 
-      purrr::map(~ paste_formula(.x, bys)) %>% 
-      purrr::map(~ as.matrix(aggregate(.x, fac.dat, summary))) %>% 
-      Reduce(merge, .) %>% 
+    fac.val <- fac.var %>%
+      purrr::map(~ paste_formula(.x, bys)) %>%
+      purrr::map(~ as.matrix(aggregate(.x, fac.dat, summary))) %>%
+      Reduce(merge, .) %>%
       as.data.frame()
-    fac.val.tot <- fac.var %>% 
+    fac.val.tot <- fac.var %>%
       purrr::map(~ paste_formula(.x, by1)) %>%
-      purrr::map(~ as.matrix(aggregate(.x, fac.dat, summary))) %>% 
-      Reduce(merge, .) %>% 
+      purrr::map(~ as.matrix(aggregate(.x, fac.dat, summary))) %>%
+      Reduce(merge, .) %>%
       as.data.frame()
     fac.all <- dplyr::bind_rows(list(fac.val, fac.val.tot))
     fac.long <- wtl(fac.all, by1, by2)
@@ -121,44 +121,44 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
       split(factor(gsub("\\..*", "\\1", rownames(.)), levels = fac.var)) %>%
       purrr::map(rowColPercent) %>%
       purrr::map_df(split_pcts, n = 3)
-    fac.pct.tot <- fac.val.tot %>% 
-      split(.[, by1]) %>% 
-      purrr::map(~ .x %>% 
-                   select(-matches(by1)) %>% 
-                   t() %>% 
-                   as.data.frame() %>% 
-                   split(rep(seq_len(nrow(.) / 2), each = 2)) %>% 
-                   purrr::map(colPercent) %>% 
-                   do.call(rbind, .)) %>% 
-      do.call(rbind, .) %>% 
-      split(factor(gsub("\\..*", "\\1", rownames(.)), levels = fac.var)) %>% 
+    fac.pct.tot <- fac.val.tot %>%
+      split(.[, by1]) %>%
+      purrr::map(~ .x %>%
+                   select(-matches(by1)) %>%
+                   t() %>%
+                   as.data.frame() %>%
+                   split(rep(seq_len(nrow(.) / 2), each = 2)) %>%
+                   purrr::map(colPercent) %>%
+                   do.call(rbind, .)) %>%
+      do.call(rbind, .) %>%
+      split(factor(gsub("\\..*", "\\1", rownames(.)), levels = fac.var)) %>%
       purrr::map_df(~ split_pcts(matrix(.x, nrow = 4), n = 2))
-    fac.res <- cbind(fac.pct, fac.pct.tot) %>% 
-      as.matrix() %>% 
+    fac.res <- cbind(fac.pct, fac.pct.tot) %>%
+      as.matrix() %>%
       magrittr::set_rownames(tail(names(fac.val), -2)) %>%
       rbind(matrix("", nrow = length(fac.var), ncol = nrow(fac.all),
                    dimnames = list(fac.var, NULL))) %>%
-      magrittr::extract(fac.ord, order(fac.all[, by1])) %>% 
+      magrittr::extract(fac.ord, order(fac.all[, by1])) %>%
       magrittr::set_rownames(stringr::str_replace_all(
         rownames(.),
         c(setNames(c(rep("", length(fac.var))), paste0(fac.var, ".")),
-          setNames(paste0("**", fac.var, "**"), fac.var)))) %>% 
+          setNames(paste0("**", fac.var, "**"), fac.var)))) %>%
       magrittr::set_colnames(col.names)
   }
-  
+
   # Final results in each format
   final.res <- rbind(num.res, fac.res)
   ind <- grep("\\*", rownames(final.res))
   org.ord <- gsub("\\*\\*", "", rownames(final.res)[ind])
-  final.reord <- final.res %>% 
+  final.reord <- final.res %>%
     magrittr::extract(order(unlist(
       purrr::map2(match(org.ord, var.names),
                   diff(c(ind, nrow(final.res) + 1)),
                   rep))), )
-  final.html <- final.res %>% 
+  final.html <- final.res %>%
     magrittr::set_rownames(stringr::str_replace_all(
       rownames(.), c("^\\*\\*" = "<b>", "\\*\\*$" = "</b>")))
-  final.long <- rbind(num.long, fac.long) %>% 
+  final.long <- rbind(num.long, fac.long) %>%
     magrittr::extract(order(match(.$var, var.names)), )
   switch(match.arg(format),
          raw = final.reord,
@@ -196,9 +196,9 @@ contSumFunc <- function(x, digits, stats = c("mean", "sd", "median", "IQR",
   funs.arg <- match.arg(stats, stats.choices, several.ok = TRUE)
   if ("missing" %in% stats) funs.arg[match("missing", funs.arg)] <- "n_missing"
   all.stats <- purrr::map_chr(funs.arg, ~ {
-    match_fun_null(x = x, .x, na.rm = TRUE) %>% 
-      round(., digits = digits) %>% 
-      as.character() %>% 
+    match_fun_null(x = x, .x, na.rm = TRUE) %>%
+      round(., digits = digits) %>%
+      as.character() %>%
       ifelse(length(.) > 1, collapse_var(., "-"), .)
   }) %>%
     magrittr::set_names(stats)
@@ -228,7 +228,7 @@ wtl <- function(data, by1, by2) {
   data %>%
     tidyr::gather_("stat", "value",
                    grep(collapse_var(c(by1, by2), "|"), names(.),
-                        invert = TRUE, value = TRUE)) %>% 
+                        invert = TRUE, value = TRUE)) %>%
     tidyr::separate_("stat", c("var", "stat"), "\\.") %>%
     arrange_(by1, by2)
 }

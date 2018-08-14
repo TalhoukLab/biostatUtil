@@ -20,10 +20,10 @@ n_missing <- function(x, na.rm = FALSE) {
 }
 
 #' Missing Value Formatting
-#' 
+#'
 #' Takes a numeric vector and replaces all missing codes with NA and returns a
 #' factor if the variable is categorical or a numeric variable if it's numeric.
-#' 
+#'
 #' @param y a vector.
 #' @param type whether the variable is `"cat"` (categorical) or
 #'   `"cont"` (continuous). Defaults to `"cat"`.
@@ -32,8 +32,8 @@ n_missing <- function(x, na.rm = FALSE) {
 #'   `NA`.
 #' @author Aline Talhouk, Derek Chiu
 #' @export
-#' 
-#' @examples 
+#'
+#' @examples
 #' y <- c(1:10, "Unk", 12)
 #' formatNA(y)
 formatNA <- function(y, type = c("cat", "cont"), codes = c("", "Unk", "N/A")) {
@@ -43,9 +43,9 @@ formatNA <- function(y, type = c("cat", "cont"), codes = c("", "Unk", "N/A")) {
 }
 
 #' Generate a legend
-#' 
+#'
 #' Given a ggplot object, generates a legend
-#' 
+#'
 #' @param a.gplot ggplot object
 #' @return ggplot object with legend
 #' @author Aline Talhouk
@@ -64,12 +64,12 @@ g_legend <- function(a.gplot) {
 #'   (https://stat.ethz.ch/pipermail/r-help/2007-April/130676.html)
 #' @importFrom stats pchisq
 #' @export
-getPval <- function(x) { 
+getPval <- function(x) {
   return(pchisq(x$chisq, length(x$n) - 1, lower.tail = FALSE))
 }
 
 #' Standard error of the mean
-#' 
+#'
 #' @param x input vector
 #' @param missing.value values that are missing
 #' @param return.missing.value the value to return where there are missing values

@@ -53,9 +53,9 @@ PH model. Also plots survival curves for each cutpoint.
 }
 \details{
 Takes the cutpoint resulting in the lowest AIC. If the range of AIC values is
-within \code{AIC.range} units, take the cutpoint that results in the two
-groups having the most similar numbers of events and cases. The function can
-cut a variable into anywhere from 2 to 5 groups.
+within \code{AIC.range} units, take the cutpoint that results in the two groups
+having the most similar numbers of events and cases. The function can cut a
+variable into anywhere from 2 to 5 groups.
 }
 \author{
 Derek Chiu

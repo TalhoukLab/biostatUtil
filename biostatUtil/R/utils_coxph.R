@@ -1,11 +1,11 @@
 #' Nice output from Cox regression object
-#' 
+#'
 #' Nicely formatted output from a Cox regression object, either `coxph` or
 #' `coxphf`.
-#' 
+#'
 #' For objects of class `coxphf`, the calculation of the number of events
 #' used in the fit is slightly different.
-#' 
+#'
 #' @param object a model fit object returned from `coxph` or `coxphf`
 #' @param coefnames a vector of labels for the coefficient names returned by the
 #'   fit. `NULL` by default, uses original coefficient names.
@@ -26,17 +26,17 @@
 #' @export
 #' @examples
 #' library(survival)
-#' test1 <- list(time = c(4, 3, 1, 1, 2, 2, 3), 
-#' status = c(1, 1, 1, 0, 1, 1, 0), 
-#' x = c(0, 2, 1, 1, 1, 0, 0), 
-#' sex = c(0, 0, 0, 0, 1, 1, 1)) 
-#' 
+#' test1 <- list(time = c(4, 3, 1, 1, 2, 2, 3),
+#' status = c(1, 1, 1, 0, 1, 1, 0),
+#' x = c(0, 2, 1, 1, 1, 0, 0),
+#' sex = c(0, 0, 0, 0, 1, 1, 1))
+#'
 #' # Stratified
-#' mod1 <- coxph(Surv(time, status) ~ x + strata(sex), test1) 
+#' mod1 <- coxph(Surv(time, status) ~ x + strata(sex), test1)
 #' coxphOut(mod1)
-#' 
+#'
 #' # Not stratified
-#' mod2 <- coxph(Surv(time, status) ~ x + sex, test1) 
+#' mod2 <- coxph(Surv(time, status) ~ x + sex, test1)
 #' coxphOut(mod2, coefnames = c("x", "gender"))
 coxphOut <- function(object, coefnames = NULL, conf.level = 0.95,
                      digits = 2) {
@@ -52,14 +52,14 @@ coxphOut <- function(object, coefnames = NULL, conf.level = 0.95,
   tmp <- cbind(n, events, coef, se, "Z-Score" = z, "P-value" = p, HR, CI)
   if (!is.null(coefnames))
     rownames(tmp) <- coefnames
-  return(round(tmp, digits))  
+  return(round(tmp, digits))
 }
 
 #' Univariate cox proprtional hazards model
-#' 
+#'
 #' Concatenates hazard ratios and confidence limits for every covariate in a Cox
 #' model.
-#' 
+#'
 #' @param mod model fit object, returned from either `coxph` or
 #'   `coxphf`.
 #' @param digits number of digits to round
@@ -78,13 +78,13 @@ coxphOut <- function(object, coefnames = NULL, conf.level = 0.95,
 #' )
 #' mod <- coxph(Surv(time, status) ~ x + strata(sex), test1)
 #' Xunivcoxph(mod)
-#' 
+#'
 #' # Multiple predictors
-#' bladder1 <- bladder[bladder$enum < 5, ] 
-#' mod <- coxph(Surv(stop, event) ~ (rx + size + number) * strata(enum) + 
+#' bladder1 <- bladder[bladder$enum < 5, ]
+#' mod <- coxph(Surv(stop, event) ~ (rx + size + number) * strata(enum) +
 #' cluster(id), bladder1)
 #' Xunivcoxph(mod, digits = 2)
-#' 
+#'
 #' # Firth's correction
 #' test2 <- data.frame(list(
 #'   start = c(1, 2, 5, 2, 1, 7, 3, 4, 8, 8),
@@ -104,7 +104,7 @@ Xunivcoxph.coxph <- function(mod, digits = 3) {
   mod %>%
     broom::tidy(exponentiate = TRUE) %>%
     magrittr::extract(c("estimate", "conf.low", "conf.high")) %>%
-    format_hr_ci(digits) %>% 
+    format_hr_ci(digits) %>%
     paste("HR", .)
 }
 
@@ -113,14 +113,14 @@ Xunivcoxph.coxphf <- function(mod, digits = 3) {
   mod %>%
     magrittr::extract(c("coefficients", "ci.lower", "ci.upper")) %>%
     purrr::map_at("coefficients", exp) %>%
-    format_hr_ci(digits) %>% 
+    format_hr_ci(digits) %>%
     paste("HR(F)", .)
 }
 
 #' @noRd
 format_hr_ci <- function(stats, digits, labels = TRUE, method = c("Inf", "Sci")
                          ) {
-  stats %>% 
+  stats %>%
     purrr::map(round, digits) %>%
     purrr::map(sprintf, fmt = paste0("%.", digits, "f")) %>%
     unname() %>%
@@ -140,7 +140,7 @@ paste_hr_ci <- function(hr, ci.lo, ci.hi, labels = TRUE,
 }
 
 #' Print Cox model output
-#' 
+#'
 #' Prints a Cox model output in a nice HTML table
 #' @param cox is the matrix `summary(x)$coef`, where x is an object of
 #'   class `coxph`
@@ -148,9 +148,9 @@ paste_hr_ci <- function(hr, ci.lo, ci.hi, labels = TRUE,
 #' @author Aline Talhouk
 #' @export
 printCoxMod <- function(cox, Capt) {
-  TAB <- htmlTable::htmlTable(cox, 
-                              rowlabel = "Predictors", 
-                              caption = Capt, 
+  TAB <- htmlTable::htmlTable(cox,
+                              rowlabel = "Predictors",
+                              caption = Capt,
                               ctable = TRUE)
   pander::pander(TAB, style = 'rmarkdown')
 }

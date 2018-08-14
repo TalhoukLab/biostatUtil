@@ -1,16 +1,16 @@
 #' Plots for MS analyses
-#' 
-#' `ms_boxplot` shows boxplots of different MS expression data values. 
+#'
+#' `ms_boxplot` shows boxplots of different MS expression data values.
 #' `ms_mean_var` shows mean-sd plots for the VSN data values to analyze the
 #' mean-variance relationship.
-#' 
+#'
 #' @param x data object returned by `ms_process`
 #' @param width width of plot
 #' @param height height of plot
 #' @param path file path to save figure. Device is pdf.
-#' @return Both functions return a pdf saved to the file location specified by 
-#'   `path`. `ms_boxplot` shows three boxplots of expression values: 
-#'   raw data values, log2 and vsn transformed values. `ms_mean_var` shows 
+#' @return Both functions return a pdf saved to the file location specified by
+#'   `path`. `ms_boxplot` shows three boxplots of expression values:
+#'   raw data values, log2 and vsn transformed values. `ms_mean_var` shows
 #'   the vsn transformed values and mean-sd plots for each treatment group.
 #' @name ms_plot
 #' @family Mass Spectrometry functions
@@ -35,7 +35,7 @@ ms_gg_boxplot <- function(x, title) {
   p <- ggplot(x, aes_(x = quote(Sample), y = quote(Expression))) +
     stat_boxplot(geom = "errorbar", width = 0.4) +
     geom_boxplot() +
-    theme_linedraw() + 
+    theme_linedraw() +
     theme(plot.title = element_text(face = "bold"),
           panel.grid = element_blank(),
           axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +

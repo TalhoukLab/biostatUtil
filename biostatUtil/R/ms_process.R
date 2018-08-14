@@ -1,8 +1,8 @@
 #' Process mass spectrometry data
-#' 
-#' Process mass spectrometry data for filtering out contaminant samples, 
+#'
+#' Process mass spectrometry data for filtering out contaminant samples,
 #' manipulating variables, removing duplicates, and more.
-#' 
+#'
 #' @param psm PSM file
 #' @param protein Protein file
 #' @param treatment character vector of treatment groups
@@ -24,7 +24,7 @@ ms_process <- function(psm, protein, treatment, samples = NULL,
   # Make raw data file column names into R column names
   psm <- psm %>% magrittr::set_colnames(make.names(colnames(.)))
   protein <- protein %>% magrittr::set_colnames(make.names(colnames(.)))
-  
+
   # Variables to keep
   samples <- samples %||% grep("^X[0-9]", names(psm), value = TRUE)
   if (is.null(sample.id)) {
@@ -39,41 +39,41 @@ ms_process <- function(psm, protein, treatment, samples = NULL,
       "Number.of.Proteins", "Master.Protein.Accessions", "Protein.Accessions",
       "Confidence", "Reporter.Quan.Result.ID", "Quan.Info", "PSM.Ambiguity",
       samples)
-  
+
   # Select relevant columns for analysis
   # Rename original sample labels to reflect sample grouping
-  # Filter out: 
+  # Filter out:
   #   - non-unique peptides
   #   - no quan values
   #   - insufficient data: use ms_condition()
   #   - Master Protein Accession missing or "sp"
   pep <- psm %>%
-    select(one_of(psmKeepVars)) %>% 
-    rename_(.dots = setNames(samples, sample.id)) %>% 
+    select(one_of(psmKeepVars)) %>%
+    rename_(.dots = setNames(samples, sample.id)) %>%
     filter_(.dots = list(lazyeval::interp(
       ~NOP == 1 & !grepl("NoQuanValues", QI) & (is.na(MPA) | MPA != "sp"),
       NOP = quote(Number.of.Proteins), QI = quote(Quan.Info),
       MPA = quote(Master.Protein.Accessions)
-    ))) %>% 
+    ))) %>%
     magrittr::extract(ms_condition(., treatment = treatment, ...), )
-  
-  pro <- protein %>% 
+
+  pro <- protein %>%
     select_("Accession", "Description", "MW.in.kDa")
-  
+
   # For each Reporter.Quan.Result.ID in pep, remove duplicates for 4 vars
-  pep <- pep %>% 
-    group_by_("Reporter.Quan.Result.ID") %>% 
+  pep <- pep %>%
+    group_by_("Reporter.Quan.Result.ID") %>%
     do(remove_dup(., c("Annotated.Sequence", "Modifications",
                        "Master.Protein.Accessions", "Protein.Accessions")))
-  
+
   # Parse peptide accession and merge the protein descriptions with the peptide file
-  pep <- pep %>% 
+  pep <- pep %>%
     mutate_(.dots = setNames(list(lazyeval::interp(
       ~purrr::map_chr(strsplit(as.character(MPA), ";"), `[`, 1),  # Strip ";"
-      MPA = quote(Master.Protein.Accessions))), "Accession")) %>% 
+      MPA = quote(Master.Protein.Accessions))), "Accession")) %>%
     mutate_(.dots = setNames(list(lazyeval::interp(
       ~purrr::map_chr(strsplit(as.character(A), " | "), `[`, 1),  # Strip " | "
-      A = quote(Accession))), "Accession")) %>% 
+      A = quote(Accession))), "Accession")) %>%
     merge(pro, by = "Accession") %>%  # Merge with protein set on Accession
     mutate_(.dots = setNames(list(
       lazyeval::interp(~sub(".*?GN=(.*?)( .*|$)", "\\1", D),
@@ -82,7 +82,7 @@ ms_process <- function(psm, protein, treatment, samples = NULL,
                        AS = quote(Annotated.Sequence)),   # Parse the peptide column for amino acids
       lazyeval::interp(~sub("(.*?)( OS=.*|$)", "\\1", D),
                        D = quote(Description))),  # Filter information from Description
-      c("Gene", "Sequence", "Descriptions"))) %>%    
+      c("Gene", "Sequence", "Descriptions"))) %>%
     filter_(.dots = list(lazyeval::interp(
       ~!grepl("Keratin", quote(D)) &
         !grepl("sp", quote(A), ignore.case = FALSE) &
@@ -90,12 +90,12 @@ ms_process <- function(psm, protein, treatment, samples = NULL,
       D = quote(Descriptions), A = quote(Accession))))
   if (!is.null(path))
     readr::write_csv(pep, path = path)
-  
+
   # Raw, log2, and vsn transformed expression data
   raw <- pep[, sample.id]
-  l2 <- log2(raw) %>% 
+  l2 <- log2(raw) %>%
     magrittr::set_colnames(paste("l2", names(.), sep = "_"))
-  vsn <- limma::normalizeVSN(raw, verbose = FALSE) %>% 
+  vsn <- limma::normalizeVSN(raw, verbose = FALSE) %>%
     magrittr::set_colnames(paste("vsn", colnames(.), sep = "_"))
   return(list(pep = pep, raw = raw, l2 = l2, vsn = vsn))
 }

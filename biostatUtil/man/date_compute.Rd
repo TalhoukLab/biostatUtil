@@ -86,7 +86,8 @@ diffDate("2003-03-21", "1992-01-27", date.format = "YYYY.MM.DD", sep = "-")
 compareDate("01/22/1949", "04/13/1950", date.format = "MM.DD.YYYY")
 compareDate("04/13/1950", "04/13/1950", date.format = "MM.DD.YYYY")
 compareDate("04/13/1959", "04/13/1950", date.format = "MM.DD.YYYY")
-compareDate("01-22-1949", "04-13-1950", date.format = "MM.DD.YYYY", sep = "-")
+compareDate("01-22-1949", "04-13-1950", date.format = "MM.DD.YYYY", sep =
+"-")
 }
 \author{
 Samuel Leung, Derek Chiu

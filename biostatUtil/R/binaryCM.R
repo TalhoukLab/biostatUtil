@@ -8,7 +8,7 @@
 #' specificity, positive predictive value (PPV), negative predictive value
 #' (NPV), and the kappa statistic, along with their bootstrapped confidence
 #' intervals are returned.
-#' 
+#'
 #' Note that the classes given in `x` and `y` must be binary.
 #'
 #' @param x a vector of reference classes
@@ -88,23 +88,23 @@ binaryCM <- function(x, y, seed = 20, num.boot = 1000, pcond = 1,
   ci.lo <- paste0((1 - conf.level) / 2 * 100, "%")
   ci.hi <- paste0((1 - (1 - conf.level) / 2) * 100, "%")
   stats <- purrr::map2(successes, observations, Hmisc::binconf,
-                       alpha = 1 - conf.level, method = method) %>% 
-    c(list(matrix(kappa, nrow = 1, dimnames = list("")))) %>% 
-    purrr::map(round, digits) %>% 
+                       alpha = 1 - conf.level, method = method) %>%
+    c(list(matrix(kappa, nrow = 1, dimnames = list("")))) %>%
+    purrr::map(round, digits) %>%
     purrr::set_names(c("Accuracy", "Sensitivity", "Specificity", "PPV", "NPV",
-                       "kappa")) %>% 
+                       "kappa")) %>%
     purrr::map(~ .x %>% magrittr::set_colnames(c("PointEst", ci.lo, ci.hi)))
   # Optionally print stats to screen
   if (verbose) {
     purrr::map2_chr(names(stats), stats,
-                    ~ paste0("\n", .x, ": ", printCI(.y))) %>% 
-      c("\n\n") %>% 
+                    ~ paste0("\n", .x, ": ", printCI(.y))) %>%
+      c("\n\n") %>%
       cat()
   }
   # Result table
-  table <- stats %>% 
-    purrr::invoke(rbind, .) %>% 
-    magrittr::set_rownames(names(stats)) %>% 
+  table <- stats %>%
+    purrr::invoke(rbind, .) %>%
+    magrittr::set_rownames(names(stats)) %>%
     magrittr::set_colnames(c("Point Estimate", "Lower CI", "Upper CI"))
   c(dplyr::lst(CM), stats, dplyr::lst(table))
 }

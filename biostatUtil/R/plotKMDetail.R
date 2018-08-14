@@ -1,7 +1,7 @@
 #' Plot detailed Kaplan-Meier curves
-#' 
+#'
 #' KM plots with details of event counts.
-#' 
+#'
 #' @param input.data input `data.frame`
 #' @param surv.formula survival formula to `Surv`
 #' @param main.text plot title
@@ -25,7 +25,7 @@
 #' @param file.width width of figure in saved file
 #' @param file.height height of figure in saved file
 #' @param grey.scale logical. If `TRUE`, the plot will be in grey scale.
-#' @param show.single.test.pos position to show single test; defaults to 0.5 if 
+#' @param show.single.test.pos position to show single test; defaults to 0.5 if
 #'   `legend.pos = "top"`. Otherwise 0.1
 #' @param ... additional arguments to `plot`
 #' @author Samuel Leung
@@ -42,16 +42,16 @@ plotKMDetail <- function(input.data, surv.formula,
                          obs.survyrs, ten.years.surv.95CI, event.count,
                          legend.pos = "bottomleft",
                          file.name = "no.file",
-                         file.width = 7, file.height = 7, 
+                         file.width = 7, file.height = 7,
                          grey.scale = FALSE, show.single.test.pos, ...) {
-  
+
   var.name <- deparse(surv.formula[[3]]) # this should be the biomarker name
   # the deparse() function is used to make sure var.name is a string
 
   log.rank.p.values    <- c()
-  wilcox.p.values      <- c()		
+  wilcox.p.values      <- c()
   tarone.ware.p.values <- c()
-  
+
   fit <- survival::survfit(surv.formula, data = input.data)
   # do not generate a file if "no.file" is specified
   if (file.name != "no.file" & nchar(file.name) > 4) {
@@ -59,8 +59,8 @@ plotKMDetail <- function(input.data, surv.formula,
     if (file.ext == "pdf") {
       cairo_pdf(filename = file.name, width = file.width, height = file.height)  # good for unicode character in e.g. line.name
     } else if (file.ext %in% c("wmf", "emf", "wmz", "emz")) {
-      png(filename = file.name, width = file.width, height = file.height)	
-    } else if (file.ext == "tiff") { 
+      png(filename = file.name, width = file.width, height = file.height)
+    } else if (file.ext == "tiff") {
       tiff(filename = file.name, width = file.width * 100, height = file.height * 100)
     } else {
       stop("Extension must be one of 'pdf', 'wmf', 'emf', 'wmz', 'emz', and 'tiff'.")
@@ -90,7 +90,7 @@ plotKMDetail <- function(input.data, surv.formula,
   }
   # Legend 1
   if (legend.pos == "top") {
-    x.pos <- diff(range(fit$time, na.rm = TRUE)) / 2 
+    x.pos <- diff(range(fit$time, na.rm = TRUE)) / 2
     y.pos <- 0.99   # top 1% ... since survival plot always starts at 100% survival
   } else {
     x.pos <- legend.pos
@@ -98,11 +98,11 @@ plotKMDetail <- function(input.data, surv.formula,
   }
   l1 <- legend(x = x.pos, y = y.pos, legend = line.name,
                lty = line.pattern, lwd = line.width, box.lty = 0, cex = 0.8)
-  
+
   # there seems to be need for the y-axis adjustment depending on the file.height ...
   dy <- 0.02 * (file.height - 7) / (12 - 7) # determined empirically
   if (legend.pos == "top") {
-    y.pos <- l1$rect$top + dy	   
+    y.pos <- l1$rect$top + dy
   } else {
     y.pos <- l1$rect$h - dy
   }
@@ -137,7 +137,7 @@ plotKMDetail <- function(input.data, surv.formula,
       y = show.single.test.pos, # position of the test statistics on plot
       paste0(
         ifelse(sum(single.test.type %in% c("logrank",   "all")) >= 1,
-               paste0("Log-Rank p=",  
+               paste0("Log-Rank p=",
                       sprintf(paste0("%.",round.digits.p.value,"f"),
                               p.value             ), "\n"), ""),
         ifelse(sum(single.test.type %in% c("wilcoxon",  "all")) >= 1,
@@ -164,7 +164,7 @@ plotKMDetail <- function(input.data, surv.formula,
                                input.data[, var.name] == value.name, ]
         if (sum(input.data[, var.name] == value.name, na.rm = TRUE) == 0) {
           # no case in this group
-          p.value <- NA 
+          p.value <- NA
           w.p.value <- NA
           t.p.value <- NA
         } else {
@@ -172,11 +172,11 @@ plotKMDetail <- function(input.data, surv.formula,
           p.value   <- getPval(survival::survdiff(surv.formula, data = temp.d, rho = 0))
           log.rank.p.values    <- c(log.rank.p.values,    p.value)
           p.value   <- round(p.value,  digits = round.digits.p.value)
-          
+
           w.p.value <- getPval(survival::survdiff(surv.formula, data = temp.d, rho = 1))
           wilcox.p.values      <- c(wilcox.p.values,      w.p.value)
           w.p.value <- round(w.p.value, digits = round.digits.p.value)
-          
+
           t.p.value <- getPval(survival::survdiff(surv.formula, data = temp.d, rho = 0.5))
           tarone.ware.p.values <- c(tarone.ware.p.values, t.p.value)
           t.p.value <- round(t.p.value, digits = round.digits.p.value)
@@ -191,7 +191,7 @@ plotKMDetail <- function(input.data, surv.formula,
         legend.txt <- c(legend.txt, new.txt)
       }
     }
-    
+
     legend.title <- paste0(
       ifelse("logrank"    %in% single.test.type, "Log-Rank / ",  ""),
       ifelse("wilcoxon"   %in% single.test.type, "Wilcoxon / ",  ""),
@@ -200,7 +200,7 @@ plotKMDetail <- function(input.data, surv.formula,
       legend.title <- substr(legend.title, 0, nchar(legend.title) - 2)
     }
     legend.title <- paste0(legend.title, "P-values")
-    
+
     l4 <- legend(x = l1$rect$w + l2$rect$w + l3$rect$w, y = y.pos,#y=l1$rect$h,
                  legend = legend.txt,
                  #text.col=line.color,
@@ -216,5 +216,5 @@ plotKMDetail <- function(input.data, surv.formula,
   return(list(
     "log.rank.p.values" = log.rank.p.values,
     "wilcox.p.values" = wilcox.p.values
-  ))	
+  ))
 }

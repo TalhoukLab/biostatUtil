@@ -1,12 +1,12 @@
 #' Summary table in HTML format
-#' 
+#'
 #' Generate summary table as an HTML table
-#' 
+#'
 #' @param d assume `d` is an array of numbers
 #' @return summary table with annotated HTML code
 #' @author Samuel Leung, Derek Chiu
 #' @export
-#' @examples 
+#' @examples
 #' library(htmlTable)
 #' set.seed(1)
 #' x <- rnorm(100)

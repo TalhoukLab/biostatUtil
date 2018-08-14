@@ -34,8 +34,9 @@ plotKM(input.d, input.formula, main.text = "", xlab.text = "",
 \item{show.test}{show single or the reference group value (for pairwise
 comparisons). If \code{"none"}, then no test is show.}
 
-\item{single.test.type}{test to show if specified \code{show.test = "single"}. Possible choices are \code{"logrank"} (default),
-\code{"wilcoxon"}, \code{"taroneware"}, or \code{"all"}.}
+\item{single.test.type}{test to show if specified \code{show.test = "single"}.
+Possible choices are \code{"logrank"} (default), \code{"wilcoxon"}, \code{"taroneware"},
+or \code{"all"}.}
 
 \item{digits}{number of digits for p-value}
 

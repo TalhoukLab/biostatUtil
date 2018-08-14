@@ -1,23 +1,23 @@
 #' Generate lifetables for multiclass variables
-#' 
-#' Specify vector of time endpoints and create a cohort life table for two or 
+#'
+#' Specify vector of time endpoints and create a cohort life table for two or
 #' more strata
-#' 
+#'
 #' Essentially a wrapper around [KMsurv::lifetab()] that allows the
 #' user to input a `survfit` object instead of vectors of raw values.
-#' 
+#'
 #' @param obj An object of class `survfit`
 #' @param ntimes number of time intervals
-#' @param times A vector of endpoints of time intervals to show life table 
-#'   calculations. By default, these are `ntimes` evenly spaced out 
+#' @param times A vector of endpoints of time intervals to show life table
+#'   calculations. By default, these are `ntimes` evenly spaced out
 #'   endpoints based on the full range of survival times.
 #' @param nround number of digits to round table values
-#' @param show.strata logical; if `TRUE` (default), the variable name is 
-#'   appended to the beginning of each stratum in the lifetable's `strata` 
+#' @param show.strata logical; if `TRUE` (default), the variable name is
+#'   appended to the beginning of each stratum in the lifetable's `strata`
 #'   column
 #' @param strata.name column name for the different strata
-#' @param summary logical; if `TRUE`, a case processing summary is shown 
-#'   with number of subjects, events, censored, and percent censored per 
+#' @param summary logical; if `TRUE`, a case processing summary is shown
+#'   with number of subjects, events, censored, and percent censored per
 #'   stratum.
 #' @return A table with the following columns:
 #' \item{strata}{name of specific group in variable}
@@ -68,10 +68,10 @@ lifetable <- function(obj, ntimes = 3, times = NULL, nround = 3,
     purrr::map(round, nround) %>%
     purrr::map(~ cbind(times = rownames(.x), .)) %>%
     purrr::invoke(rbind, .) %>%
-    cbind(strata = rep(strata, each = ntimes), .) %>% 
+    cbind(strata = rep(strata, each = ntimes), .) %>%
     magrittr::set_rownames(NULL)
   if (summary) {
-    tab <- tab %>% 
+    tab <- tab %>%
       select(strata, nsubs, nevent, nlost) %>%
       mutate(strata = as.character(strata)) %>%
       rbind(c("Overall", colSums(.[-1]))) %>%

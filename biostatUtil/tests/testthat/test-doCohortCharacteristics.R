@@ -40,7 +40,7 @@ test_that("statistical tests for categorical variables work", {
     var.names = "am", var.descriptions = c("transmission"),
     is.var.continuous = FALSE, caption = "Some mtcars summaries",
     stat.tests = "fisher")
-  
+
   mtcars$vs <- as.factor(mtcars$vs)
   mtcars$am <- as.factor(mtcars$am)
   dcc_cm_marker <- doCohortCharacteristics(

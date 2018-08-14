@@ -33,7 +33,7 @@ ct <- CrossTable(esoph$alcgp, esoph$agegp, expected = TRUE,
                  chisq = FALSE, prop.chisq = FALSE,
                  dnn = c("Alcohol consumption", "Tobacco consumption"))
 indepTests(ct)
-                 
+
 # Better example
 set.seed(1108)
 A <- rbinom(100, 3, 0.2)

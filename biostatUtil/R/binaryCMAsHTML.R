@@ -1,7 +1,7 @@
 #' Confusion matrix results in HTML
-#' 
+#'
 #' Prints results from [binaryCM()] into a nice HTML table format.
-#' 
+#'
 #' @param x vector of reference classes
 #' @param y vector of predicted classes
 #' @param ref.description description of classes
@@ -10,12 +10,12 @@
 #' @param num.boot number of bootstrap confidence intervals
 #' @param conf.level confidence level. Defaults to 95\%.
 #' @param show.ci if `TRUE` (default), the confidence intervals are shown.
-#' @return A character string that can be parsed as HTML code to display a nice 
+#' @return A character string that can be parsed as HTML code to display a nice
 #'   confusion matrix summary.
 #' @family confusion matrix functions
 #' @author Samuel Leung, Derek Chiu
 #' @export
-#' @examples 
+#' @examples
 #' # 95% CI from 5 bootstraped samples
 #' library(htmlTable)
 #' set.seed(547)
@@ -24,7 +24,7 @@
 #' y <- rbinom(n, size = 1, prob = 0.4)
 #' results <- binaryCMAsHTML(x, y, "Test", num.boot = 1000)
 #' htmlTable(results)
-#' 
+#'
 #' results.no.ci <- binaryCMAsHTML(x, y, "Test", num.boot = 1000, show.ci =
 #' FALSE)
 #' htmlTable(results.no.ci)

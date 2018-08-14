@@ -1,13 +1,13 @@
 #' Table as HTML format
-#' 
+#'
 #' Generate HTML code for a table output. Assumes table has more than one row.
-#' 
+#'
 #' @inheritParams rowPercentAsHTML
 #' @return A character string that can be parsed as HTML code to produce a nicer
 #'   table output.
 #' @author Samuel Leung, Derek Chiu
 #' @export
-#' @examples 
+#' @examples
 #' library(htmlTable)
 #' A <- matrix(c(2, 3, 5, 10), nrow = 2, dimnames = list(c("Row1", "Row2"), c("Col1", "Col2")))
 #' htmlTable(tableAsHTML(A, banded.rows = TRUE))
@@ -15,7 +15,7 @@ tableAsHTML <- function(
   t, row.names = NULL, column.names = NULL,
   html.table.border = 0, banded.rows = FALSE,
   col.odd = "none", col.even = "lightgrey", caption = NA) {
-  
+
   th.style <- COL.TH.STYLE
   if (!is.null(row.names)) {
     rownames(t) <- row.names

@@ -1,27 +1,27 @@
-#' Functions ending in `AsHTML` output a character string that can be 
+#' Functions ending in `AsHTML` output a character string that can be
 #' parsed as HTML using functions such as [htmlTable::htmlTable()]
-#' 
-#' @details Row and column names can be replaced by `row.names` and 
+#'
+#' @details Row and column names can be replaced by `row.names` and
 #' `column.names`. Higher values of `html.table.border` make the table
-#' borders thicker and even look 3D. `col.odd` and `col.even` are 
+#' borders thicker and even look 3D. `col.odd` and `col.even` are
 #' ignored when `banded.rows = FALSE`.
-#' 
-#' @details Transposing is useful if there are many columns in a single row or vice 
-#' versa. Note that the percentages are unchanged, only the orientation of the 
+#'
+#' @details Transposing is useful if there are many columns in a single row or vice
+#' versa. Note that the percentages are unchanged, only the orientation of the
 #' table.
-#' 
+#'
 #' @param row.names (optional) vector of row names in table
 #' @param column.names (optional) vector of column names in table
-#' @param html.table.border border type for the table. Defaults to 0 in HTML 
+#' @param html.table.border border type for the table. Defaults to 0 in HTML
 #'   syntax.
-#' @param banded.rows logical; if `TRUE`, alternating rows will have 
+#' @param banded.rows logical; if `TRUE`, alternating rows will have
 #'   different shaded colours.
 #' @param col.odd colour to use for odd numbered rows
 #' @param col.even colour to use for even numbered rows
-#' @param caption table caption. Uses [addTableNumber()] to increment 
+#' @param caption table caption. Uses [addTableNumber()] to increment
 #'   table number
 #' @param transpose logical; if `TRUE`, the table is transposed.
-#' @return HTML-based functions return the code used to generate a table that 
+#' @return HTML-based functions return the code used to generate a table that
 #'   shows row and/or column percentages.
 #' @rdname percents
 #' @export
@@ -30,7 +30,7 @@ colPercentAsHTML <- function(
   column.names = NULL, html.table.border = 0,
   banded.rows = FALSE, col.odd = "none", col.even = "lightgrey",
   caption = NA, transpose = FALSE, ...) {
-  
+
   col.th.style <- COL.TH.STYLE
   row.th.style <- ROW.TH.STYLE
   if (transpose) {
@@ -57,7 +57,7 @@ colPercentAsHTML <- function(
   } else {
     row.col <- rep("", nrow(table.values))
   }
-  
+
   result <- paste0(HTML(paste0(
     tags$caption(style = TABLE.CAPTION.STYLE,
                  ifelse(is.na(caption), "", addTableNumber(caption))),
@@ -66,7 +66,7 @@ colPercentAsHTML <- function(
       paste(unlist(lapply(column.names, function(x)
         paste(tags$th(style = col.th.style, x)))), collapse = ""))))
   )))
-  
+
   if (keep) {
     i <- 1
     while (i <= nrow(table.values)) {
@@ -116,7 +116,7 @@ rowPercentAsHTML <- function(
   column.names = NULL, html.table.border = 0,
   banded.rows = FALSE, col.odd = "none", col.even = "lightgrey",
   caption = NA, transpose = FALSE, ...) {
-  
+
   col.th.style <- COL.TH.STYLE
   row.th.style <- ROW.TH.STYLE
   if (transpose) {
@@ -143,7 +143,7 @@ rowPercentAsHTML <- function(
   } else {
     row.col <- rep("", nrow(table.values))
   }
-  
+
   result <- paste0(HTML(paste0(
     tags$caption(style = TABLE.CAPTION.STYLE,
                  ifelse(is.na(caption), "", addTableNumber(caption))),
@@ -152,7 +152,7 @@ rowPercentAsHTML <- function(
       paste(unlist(lapply(column.names, function(x)
         paste(tags$th(style = col.th.style, x)))), collapse = ""))))
   )))
-  
+
   if (keep) {
     i <- 1
     while (i <= nrow(table.values)) {
@@ -197,8 +197,8 @@ rowPercentAsHTML <- function(
 
 #' @rdname percents
 #' @export
-#' @examples 
-#' 
+#' @examples
+#'
 #' # HTML outputs
 #' library(htmlTable)
 #' set.seed(13)
@@ -211,11 +211,11 @@ rowColPercentAsHTML <- function(
   t, keep = TRUE, row.names = NULL, column.names = NULL,
   html.table.border = 0, banded.rows = FALSE,
   col.odd = "none", col.even = "lightgrey", caption = NA, ...) {
-  
+
   col.th.style <- COL.TH.STYLE
   row.th.style <- ROW.TH.STYLE
   table.values <- rowColPercent(t, keep = keep, ...)
-  
+
   if (!is.null(column.names)) {
     colnames(table.values) <- column.names
   } else {
@@ -235,7 +235,7 @@ rowColPercentAsHTML <- function(
   } else {
     row.col <- rep("", nrow(table.values))
   }
-  
+
   result <- paste0(HTML(paste0(
     tags$caption(style = TABLE.CAPTION.STYLE,
                  ifelse(is.na(caption), "", addTableNumber(caption))),
@@ -244,7 +244,7 @@ rowColPercentAsHTML <- function(
       paste(unlist(lapply(column.names, function(x)
         paste(tags$th(style = col.th.style, x)))), collapse = ""))))
   )))
-  
+
   if (keep) {
     i <- 1
     while (i <= nrow(table.values)) {

@@ -33,8 +33,8 @@ mod <- coxph(Surv(time, status) ~ x + strata(sex), test1)
 Xunivcoxph(mod)
 
 # Multiple predictors
-bladder1 <- bladder[bladder$enum < 5, ] 
-mod <- coxph(Surv(stop, event) ~ (rx + size + number) * strata(enum) + 
+bladder1 <- bladder[bladder$enum < 5, ]
+mod <- coxph(Surv(stop, event) ~ (rx + size + number) * strata(enum) +
 cluster(id), bladder1)
 Xunivcoxph(mod, digits = 2)
 

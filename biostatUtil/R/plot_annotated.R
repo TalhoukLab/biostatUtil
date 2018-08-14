@@ -1,5 +1,5 @@
 #' Annotated Barplot
-#' 
+#'
 #' Function to provide a barplot from a table of categorical variable with
 #' labels wrapped
 #' @param tx table of a categorical variable
@@ -36,7 +36,7 @@ boxplotSum <- function(var, ttl = "", digit = 1) {
 }
 
 #' Summary histogram
-#' 
+#'
 #' Function to create an annotated histogram, with density plot
 #' @param var  a variable to be plotted
 #' @param xlab X axis label

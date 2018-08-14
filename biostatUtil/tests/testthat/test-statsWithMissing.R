@@ -12,7 +12,7 @@ test_that("Computations with missing codes work", {
   expect_equal(mean(c(1:2, 8:10)), meanWithMissing(z, 3:7))
   expect_equal(sum(1:8), sumWithMissing(z, c(9, 10)))
   expect_equal(prod(1:8), prodWithMissing(z, c(9, 10)))
-  
+
   r <- x / y
   r[(x %in% 1:2 | y %in% 1:2)] <- -1
   expect_equal(r, ratioWithMissing(x, y, 1:2))

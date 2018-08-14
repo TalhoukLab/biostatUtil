@@ -1,17 +1,17 @@
 #' Kaplan-Meier Plots using ggplot
-#' 
+#'
 #' Produce nicely annotated KM plots using ggplot style.
-#' 
+#'
 #' @param sfit an object of class `survfit` containing one or more survival
 #'   curves
-#' @param sfit2 an (optional) second object of class `survfit` to compare 
+#' @param sfit2 an (optional) second object of class `survfit` to compare
 #'   with `sfit`
-#' @param table logical; if `TRUE` (default), the numbers at risk at each 
+#' @param table logical; if `TRUE` (default), the numbers at risk at each
 #'   time of death is shown as a table underneath the plot
 #' @param returns logical; if `TRUE` the plot is returned
-#' @param marks logical; if `TRUE` (default), censoring marks are shown on 
+#' @param marks logical; if `TRUE` (default), censoring marks are shown on
 #'   survival curves
-#' @param CI logical; if `TRUE` (default), confidence bands are drawn for 
+#' @param CI logical; if `TRUE` (default), confidence bands are drawn for
 #'   survival curves the using cumulative hazard, or log(survival).
 #' @param line.pattern linetype for survival curves
 #' @param shading.colors vector of colours for each survival curve
@@ -21,35 +21,35 @@
 #' @param xlims horizontal limits for plot
 #' @param ylims vertical limits for plot
 #' @param ystratalabs labels for the strata being compared in `survfit`
-#' @param cox.ref.grp indicates reference group for the variable of interest in 
-#'   the cox model.  this parameter will be ignored if not applicable, e.g. for 
+#' @param cox.ref.grp indicates reference group for the variable of interest in
+#'   the cox model.  this parameter will be ignored if not applicable, e.g. for
 #'   continuous variable
-#' @param timeby length of time between consecutive time points spanning the 
+#' @param timeby length of time between consecutive time points spanning the
 #'   entire range of follow-up. Defaults to 5.
-#' @param pval logical; if `TRUE` (default), the logrank test p-value is 
+#' @param pval logical; if `TRUE` (default), the logrank test p-value is
 #'   shown on the plot
-#' @param HR logical; if `TRUE` (default), the estimated hazard ratio and 
+#' @param HR logical; if `TRUE` (default), the estimated hazard ratio and
 #'   its 95\% confidence interval will be shown
-#' @param use.firth Firth's method for Cox regression is used if the percentage 
-#'   of censored cases exceeds `use.firth`. Setting `use.firth = 1` 
-#'   (default) means Firth is never used, and `use.firth = -1` means Firth 
+#' @param use.firth Firth's method for Cox regression is used if the percentage
+#'   of censored cases exceeds `use.firth`. Setting `use.firth = 1`
+#'   (default) means Firth is never used, and `use.firth = -1` means Firth
 #'   is always used.
-#' @param legend logical; if `TRUE`, the legend is overlaid on the graph 
+#' @param legend logical; if `TRUE`, the legend is overlaid on the graph
 #'   (instead of on the side).
 #' @param legend.xy named vector specifying the x/y position of the legend
 #' @param legend.direction layout of items in legends ("horizontal" (default) or
 #'   "vertical")
 #' @param line.y.increment how much y should be incremented for each line
-#' @param digits number of digits to round: p-values digits=nunber of 
-#'   significant digits, HR digits=number of digits after decimal point NOT 
+#' @param digits number of digits to round: p-values digits=nunber of
+#'   significant digits, HR digits=number of digits after decimal point NOT
 #'   significant digits
 #' @param ... additional arguments to other methods
-#' @return A kaplan-meier plot with optional annotations for hazard ratios, log 
+#' @return A kaplan-meier plot with optional annotations for hazard ratios, log
 #'   rank test p-values, and risk table counts for each stratum.
-#'   
+#'
 #' @author Samuel Leung, Derek Chiu
 #' @export
-#' @examples 
+#' @examples
 #' library(survival)
 #' sfit <- survfit(Surv(time, status) ~ sex, lung)
 #' ggkm(sfit, timeby = 200, main = "Survival curves by sex")
@@ -61,7 +61,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
                  pval = TRUE, HR = TRUE, use.firth = 1, legend = FALSE,
                  legend.xy = NULL, legend.direction = "horizontal",
                  line.y.increment = 0.05, digits = 3, ...) {
-  time <- surv <- lower <- upper <- n.censor <- n.risk <- n.event <- 
+  time <- surv <- lower <- upper <- n.censor <- n.risk <- n.event <-
     estimate <- conf.high <- conf.low <- NULL
   times <- seq.int(0, max(sfit$time), by = timeby)
   s1 <- levels(summary(sfit)$strata)
@@ -79,30 +79,30 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
     line.pattern <- setNames(rep(1, length(sfit$strata)), ystratalabs)
   if (!is.null(cox.ref.grp))
     names(cox.ref.grp) <- all.vars(sfit$call)[3]  # works for two-sided formulas
-  
+
   # Left margins for km plot and risk table
   mleft <- left_margin(ystratalabs)
-  
+
   # Data for KM plot
-  .df <- sfit %>% 
-    broom::tidy() %>% 
+  .df <- sfit %>%
+    broom::tidy() %>%
     select(time, n.risk, n.event, n.censor, surv = estimate,
-           strata, upper = conf.high, lower = conf.low) %>% 
-    mutate(strata = factor(s2, labels = ystratalabs)) %>% 
+           strata, upper = conf.high, lower = conf.low) %>%
+    mutate(strata = factor(s2, labels = ystratalabs)) %>%
     bind_rows(
       data.frame(time = 0, surv = 1,
                  strata = factor(ystratalabs, levels = levels(.$strata)),
                  upper = 1, lower = 1), .)
-  
+
   # KM plot
   p <- ggplot(.df , aes(time, surv, color = strata, fill = strata,
                         linetype = strata)) +
-    geom_step(size = .7) + 
+    geom_step(size = .7) +
     scale_colour_manual(values = shading.colors) +
-    scale_fill_manual(values = shading.colors) + 
+    scale_fill_manual(values = shading.colors) +
     scale_linetype_manual(values = line.pattern) +
-    scale_x_continuous(xlabs, breaks = times, limits = xlims) + 
-    scale_y_continuous(ylabs, limits = ylims) + 
+    scale_x_continuous(xlabs, breaks = times, limits = xlims) +
+    scale_y_continuous(ylabs, limits = ylims) +
     theme_bw() +
     theme(axis.title.x = element_text(vjust = 0.5),
           panel.background = element_blank(),
@@ -118,11 +118,11 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
                    legend.direction = legend.direction)
   if (CI)  # Confidence Bands
     p <- p + geom_ribbon(data = .df, aes(ymin = lower, ymax = upper),
-                         alpha = 0.05, linetype = 0) 
+                         alpha = 0.05, linetype = 0)
   if (marks)  # Censor Marks
-    p <- p + geom_point(data = subset(.df, n.censor >= 1), 
+    p <- p + geom_point(data = subset(.df, n.censor >= 1),
                         aes(x = time, y = surv), shape = "/", size = 4)
-  
+
   # HR statistic (95% CI), log rank test p-value for sfit (or sfit2, if exists)
   if (pval) {
     fit <- sfit2 %||% sfit
@@ -131,13 +131,13 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
                       ystratalabs = ystratalabs,
                       line.y.increment = line.y.increment)
   }
-  
-  # Create table graphic to include at-risk numbers, keep at-risk numbers 
+
+  # Create table graphic to include at-risk numbers, keep at-risk numbers
   # same order as appears in HR (do not reverse levels)
   if (table) {
-    risk.data <- sfit %>% 
-      summary(times = times, extend = TRUE) %>% 
-      list() %>% 
+    risk.data <- sfit %>%
+      summary(times = times, extend = TRUE) %>%
+      list() %>%
       purrr::map_df(`[`, c("strata", "time", "n.risk"))
     data.table <- ggplot(risk.data, aes(x = time, y = strata,
                                         label = format(n.risk, nsmall = 0))) +
@@ -191,8 +191,8 @@ summarize_km <- function(fit, p, digits, HR, cox.ref.grp,
                          use.firth, ystratalabs, line.y.increment) {
   f <- eval(fit$call$formula)
   d <- eval(fit$call$data)
-  pvalue <- survdiff(f, d) %>% 
-    getPval() %>% 
+  pvalue <- survdiff(f, d) %>%
+    getPval() %>%
     round_small(method = "signif", digits = digits)
   #pvalsep <- ifelse(is.numeric(pvalue), " = ", " ")
   if (is.numeric(pvalue)) {
@@ -226,7 +226,7 @@ summarize_km <- function(fit, p, digits, HR, cox.ref.grp,
                         " vs. ", cox.strata.labs[1])
       p <- p + annotate("text", x = 0.2 * max(fit$time), hjust = 0,
                         y = 0.01 + line.y.increment * i, label = HRtxt,
-                        size = 3)					
+                        size = 3)
     }
   }
   p <- p + annotate("text", x = 0.2 * max(fit$time), hjust = 0, y = 0.01,

@@ -52,7 +52,7 @@ all_vars <-
     "Fitted Mean of N-Flagged group",
     "Fitted Mean of Untagged group",
     "Standard Error of full model",
-    
+
     "N-Flagged Average treatment effect t statistic value",
     "N-Flagged Average treatment effect t statistic Wald-based p-value",
     "N-Flagged Benjamini Hochberg adjusted Wald p-value for average treatment effect",
@@ -66,7 +66,7 @@ all_vars <-
     "N-Flagged Absolute fold change lower 95% confidence interval limit",
     "N-Flagged Absolute fold change (average treatment effect across peptides)",
     "N-Flagged Absolute fold change upper 95% confidence interval limit",
-    
+
     "Untagged Average treatment effect t statistic value",
     "Untagged Average treatment effect t statistic Wald-based p-value",
     "Untagged Benjamini Hochberg adjusted Wald p-value for average treatment effect",
@@ -80,7 +80,7 @@ all_vars <-
     "Untagged Absolute fold change lower 95% confidence interval limit",
     "Untagged Absolute fold change (average treatment effect across peptides)",
     "Untagged Absolute fold change upper 95% confidence interval limit",
-    
+
     "Accession",
     "Sequence",
     "Annotated.Sequence",

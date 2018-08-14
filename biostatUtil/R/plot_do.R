@@ -1,11 +1,11 @@
 #' Barplot with counts
-#' 
+#'
 #' Generates barplot on variables and shows counts per group.
-#' 
+#'
 #' The number of data points in each group is reported.
 #' The number of scorable and missing data are also reported by number
 #' and percentage in the barplot title.
-#' 
+#'
 #' @param data data.frame with column names
 #' @param var string of variable in `data` to graph on
 #' @param xlab x-axis label
@@ -17,7 +17,7 @@
 #' @note Function expects missing to be `NA`. Do not filter out missing data
 #' as this function reports missing data frequencies.
 #' @export
-#' @examples 
+#' @examples
 #' doBarplot(mtcars, "cyl", "title = Number of cylinders")
 #' doBarplot(mtcars, "cyl", "Cylinders", title = "Number of cylinders")
 doBarplot <- function(data, var, xlab = var, ylab = "Frequency", title = NULL,
@@ -35,7 +35,7 @@ doBarplot <- function(data, var, xlab = var, ylab = "Frequency", title = NULL,
 }
 
 #' Do a boxplot among subtypes
-#' 
+#'
 #' A stripchart (jitter plot) of a biomarker and some categorical subtype is
 #' superimposed on top of the boxplot
 #' @param input.d input data.frame
@@ -61,7 +61,7 @@ doBoxplotAmongSubtypes <- function(input.d, data.description,
                                    biomarker.var.name, biomarker.name,
                                    subtype.var.name, subtype.name, pch = 4,
                                    jitter = 0.1, digits = 2, ...) {
-  temp.d <- input.d[(!is.na(input.d[, biomarker.var.name])) & 
+  temp.d <- input.d[(!is.na(input.d[, biomarker.var.name])) &
                       (!is.na(input.d[, subtype.var.name])), ]
   biomarker <- temp.d[, biomarker.var.name]
   if (is.factor(temp.d[, subtype.var.name])) {
@@ -76,7 +76,7 @@ doBoxplotAmongSubtypes <- function(input.d, data.description,
     test.name <- "Wilcoxon Rank Sum"
     p.value <- wilcox.test(biomarker ~ subtype)$p.value
   }
-  
+
   boxplot(biomarker ~ subtype,
           names = paste0(paste0(names(xbar), rep("\nn=",length(xbar))),
                          purrr::map_int(xbar, "n")),
@@ -89,12 +89,12 @@ doBoxplotAmongSubtypes <- function(input.d, data.description,
 }
 
 #' Do histogram with median
-#' 
+#'
 #' Plot a histogram with the median, first quartile, and third quartile reported.
-#' 
+#'
 #' Expects missing to be `NA`. Do not filter out missing data
 #' as this function reports missing data counts.
-#' 
+#'
 #' @param data data.frame with column names
 #' @param var string of variable in `data` to graph on
 #' @param xlab x-axis label
@@ -108,7 +108,7 @@ doBoxplotAmongSubtypes <- function(input.d, data.description,
 #' @return A histogram with some annotated values.
 #' @author Samuel Leung, Derek Chiu
 #' @export
-#' @examples 
+#' @examples
 #' doHist(mtcars, "mpg")
 #' doHist(mtcars, "mpg", "MPG")
 #' doHist(mtcars, "mpg", title = "Distribution of MPG")
@@ -135,12 +135,12 @@ doHist <- function(data, var, xlab = var, title = NULL, show.title = TRUE,
 }
 
 #' Do a jitterplot among subtypes
-#' 
+#'
 #' Generates stripchart (jitter plot) of a biomarker split on a categorical subtype.
-#' 
+#'
 #' Expects subtype variable to be a factor. Also, biomarker and subtype variables
 #' have missing cases as `NA`.
-#' 
+#'
 #' @param input.d input `data.frame`
 #' @param data.description title description
 #' @param biomarker.var.name variable name of biomarker to plot
@@ -162,7 +162,7 @@ doJitterplotAmongSubtypes <- function(input.d, data.description,
                                       subtype.var.name, subtype.name,
                                       pch = ".", jitter = 0.05, digits = 3,
                                       cex.axis = 0.9) {
-  
+
   temp.d <- input.d[(!is.na(input.d[, biomarker.var.name])) &
                       (!is.na(input.d[, subtype.var.name])), ]
   biomarker <- temp.d[, biomarker.var.name]

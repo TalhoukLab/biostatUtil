@@ -53,8 +53,9 @@ do test for all variables, \code{NA} indicates do not do test for specified
 variable. Tests: chisq, fisher, ttest, wilcox, kendall, spearman, pearson,
 kruskal, confusionMarkerAsRef, confusionVarAsRef}
 
-\item{chisq.test.simulate.p.value}{Whether to simulate p-value for chi-square test.
-this parameter is ignored if chi-square is not used.  Default value=FALSE}
+\item{chisq.test.simulate.p.value}{Whether to simulate p-value for chi-square
+test. this parameter is ignored if chi-square is not used.  Default
+value=FALSE}
 
 \item{stat.test.column.header}{The name to show on the header defaults to
 "association/correlation test"}
@@ -106,7 +107,7 @@ Generate cohort characteristics
 dcc <- doCohortCharacteristics( input.d = mtcars, marker.name = "cyl",
 marker.description = "cylinders", var.names = c("disp", "hp"),
 var.descriptions = c("displacement", "horsepower"), is.var.continuous =
-c(TRUE, TRUE), caption = "Some mtcars summaries") 
+c(TRUE, TRUE), caption = "Some mtcars summaries")
 htmlTable::htmlTable(dcc$result.table.html)
 }
 \author{
