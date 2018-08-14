@@ -35,10 +35,10 @@ test1 <- list(time = c(4, 3, 1, 1, 2, 2, 3),
 test1$x <- factor(test1$x)
 fit_coxph <- coxph(Surv(time, status) ~ x + strata(sex), test1) 
 
-test_that("prettyCoxph returns values from survival::coxph when use==FALSE",
+test_that("prettyCoxph returns values from survival::coxph when use.firth==FALSE",
           expect_equal(fit_coxph$n,
                        prettyCoxph(Surv(time, status) ~ x + sex, 
-                                   data.frame(test1), use = FALSE,
+                                   data.frame(test1), use.firth = FALSE,
                                    check.ph = TRUE)$n)
 )
 

@@ -101,7 +101,7 @@ prettyCoxph <- function(input.formula, input.d, ref.grp = NULL, use.firth = 1,
       as.data.frame() %>% 
       magrittr::extract(apply(.[all.vars(.my.formula)], 1,
                               function(x) !any(is.na(x))), )
-    fit.firth <- coxphf::coxphf(.my.formula, .my.data, ...)
+    fit.firth <- coxphf::coxphf(.my.formula, .my.data, maxit = 100)
     fit.firth$nevent <- sum(fit.firth$y[, "status"])
     fit.firth$ci.lower[is.nan(fit.firth$ci.lower)] <- NA
     fit.firth$ci.upper[is.nan(fit.firth$ci.upper)] <- NA
