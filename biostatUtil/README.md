@@ -6,3 +6,4 @@ When updating R to a new version, there are several administrative tasks to perf
 2. Install any remaining dependencies from Bioconductor
 3. Run `devtools::check()` to see which packages to install from `DESCRIPTION` `Suggests` field
 4. Open Terminal and run `R CMD javareconf` to reconfigure Java paths and other configurations
+5. If `biostatUtil` fails to load, reinstall java-related package `JavaGD`
