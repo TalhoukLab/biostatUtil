@@ -8,11 +8,13 @@ test_that("build_cuts outputs correct data structure", {
   expect_is(build_cuts(x), "data.frame")
 })
 
-test_that("build_cuts gives choose(dplyr::n_distinct(x) - 1, n - 1) elements/columns", {
-  expect_equal(ncol(build_cuts(x, n = "t")), choose(4, 2))
-  expect_equal(ncol(build_cuts(x, n = "qd")), choose(4, 3))
-  expect_length(build_cuts(x, n = "qd", list = TRUE), choose(4, 3))
-})
+test_that(
+  "build_cuts gives choose(dplyr::n_distinct(x) - 1, n - 1) elements/columns", {
+    expect_equal(ncol(build_cuts(x, n = "t")), choose(4, 2))
+    expect_equal(ncol(build_cuts(x, n = "qd")), choose(4, 3))
+    expect_length(build_cuts(x, n = "qd", list = TRUE), choose(4, 3))
+  }
+)
 
 test_that("prefix added in variable name", {
   expect_true(all(grepl("gene1_", names(build_cuts(x, var.prefix = "gene1")))))

@@ -16,6 +16,20 @@ test_that("Min and max work for arrays", {
 test_that("Array versions handle missing values", {
   expect_equal(NA, maxDateArray(character(0)))
   expect_equal(NA, minDateArray(character(0)))
-  expect_identical("Missing", maxDateArray("09/11/2011", existing.missing.codes = "09/11/2011", return.missing.code = "Missing"))
-  expect_identical("Missing", minDateArray("09/11/2011", existing.missing.codes = "09/11/2011", return.missing.code = "Missing"))
+  expect_identical(
+    "Missing",
+    maxDateArray(
+      "09/11/2011",
+      existing.missing.codes = "09/11/2011",
+      return.missing.code = "Missing"
+    )
+  )
+  expect_identical(
+    "Missing",
+    minDateArray(
+      "09/11/2011",
+      existing.missing.codes = "09/11/2011",
+      return.missing.code = "Missing"
+    )
+  )
 })

@@ -29,6 +29,12 @@ test_that("first character empty string returns TRUE", {
 })
 
 test_that("First or all words capitalized", {
-  expect_identical("Ovarian Cancer", simpleCap("ovarian cancer", first.only = FALSE))
-  expect_identical("Ovarian cancer", simpleCap("ovarian cancer", first.only = TRUE))
+  expect_identical(
+    "Ovarian Cancer",
+    simpleCap("ovarian cancer", first.only = FALSE)
+  )
+  expect_identical(
+    "Ovarian cancer",
+    simpleCap("ovarian cancer", first.only = TRUE)
+  )
 })

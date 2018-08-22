@@ -8,6 +8,12 @@ test1 <- list(time = c(4, 3, 1, 1, 2, 2, 3),
               sex = c(0, 0, 0, 0, 1, 1, 1))
 
 test_that("Schoenfeld residual plot works whether variable to plot is given or not", {
-  expect_error(plotSchoenfeld(test1, Surv(time, status) ~ x + strata(sex), "x"), NA)
-  expect_error(plotSchoenfeld(test1, Surv(time, status) ~ x + strata(sex)), NA)
+  expect_error(
+    plotSchoenfeld(test1, Surv(time, status) ~ x + strata(sex), "x"),
+    NA
+  )
+  expect_error(
+    plotSchoenfeld(test1, Surv(time, status) ~ x + strata(sex)),
+    NA
+  )
 })

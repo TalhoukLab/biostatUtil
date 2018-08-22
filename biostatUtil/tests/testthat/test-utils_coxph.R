@@ -36,7 +36,9 @@ test_that("Xunivcoxph prints HR & CI for coxph/coxphf, but nothing else", {
   y2 <- Xunivcoxph(mod2, digits = 2)
   expect_identical(x2, y2)
 
-  expect_error(Xunivcoxph(survdiff(Surv(time, status) ~ x + strata(sex), test1)))
+  expect_error(
+    Xunivcoxph(survdiff(Surv(time, status) ~ x + strata(sex), test1))
+  )
 })
 
 test_that("printCoxMod prints HTML Cox model output", {

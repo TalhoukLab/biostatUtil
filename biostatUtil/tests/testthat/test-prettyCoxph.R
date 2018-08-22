@@ -20,9 +20,9 @@ test.d <- (function() {
 
 surv_formula_1 <- Surv(os.yrs, os.sts == "os.event") ~ age + grade
 fit_coxph <- coxph(surv_formula_1, data = test.d)
-fit_prettyCoxph <- prettyCoxph(surv_formula_1,test.d) # default not use firth
+fit_prettyCoxph <- prettyCoxph(surv_formula_1, test.d) # default not use firth
 test_that("prettyCoxph returns values from survival::coxph when use.firth==1",
-  expect_equal(fit_coxph$n,fit_prettyCoxph$n)
+  expect_equal(fit_coxph$n, fit_prettyCoxph$n)
 )
 # prettyCoxph should check its inputs for validity.
 # prettyCoxph executes clause "if (use.firth < 1 & use.firth > -1) "
@@ -35,11 +35,17 @@ test1 <- list(time = c(4, 3, 1, 1, 2, 2, 3),
 test1$x <- factor(test1$x)
 fit_coxph <- coxph(Surv(time, status) ~ x + strata(sex), test1)
 
-test_that("prettyCoxph returns values from survival::coxph when use.firth==FALSE",
-          expect_equal(fit_coxph$n,
-                       prettyCoxph(Surv(time, status) ~ x + sex,
-                                   data.frame(test1), use.firth = FALSE,
-                                   check.ph = TRUE)$n)
+test_that(
+  "prettyCoxph returns values from survival::coxph when use.firth==FALSE",
+  expect_equal(
+    fit_coxph$n,
+    prettyCoxph(
+      Surv(time, status) ~ x + sex,
+      data.frame(test1),
+      use.firth = FALSE,
+      check.ph = TRUE
+    )$n
+  )
 )
 
 test_that("reference group can be redefined", {

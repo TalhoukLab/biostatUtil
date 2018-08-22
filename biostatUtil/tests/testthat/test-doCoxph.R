@@ -133,29 +133,31 @@ test_that("doCoxphMultivariable rounding of small p-values works", {
   expect_length(res, 4)
 })
 
-test_that("doCoxphMultivariable factors use lowest group if no reference specified", {
-  lung2 <- lung
-  lung2$sex <- as.factor(lung2$sex)
-  res1 <- doCoxphMultivariable(input.d = lung,
-                               var.names = c("sex", "ph.ecog"),
-                               var.descriptions = c("Sex", "ECOG score"),
-                               show.var.detail = TRUE,
-                               var.names.surv.time = "time",
-                               var.names.surv.status = "status",
-                               event.codes.surv = "2",
-                               surv.descriptions = "OS",
-                               caption = "")
-  res2 <- doCoxphMultivariable(input.d = lung2,
-                               var.names = c("sex", "ph.ecog"),
-                               var.descriptions = c("Sex", "ECOG score"),
-                               show.var.detail = TRUE,
-                               var.names.surv.time = "time",
-                               var.names.surv.status = "status",
-                               event.codes.surv = "2",
-                               surv.descriptions = "OS",
-                               caption = "")
-  expect_identical(res1$result.table, res2$result.table)
-})
+test_that(
+  "doCoxphMultivariable factors use lowest group if no reference specified", {
+    lung2 <- lung
+    lung2$sex <- as.factor(lung2$sex)
+    res1 <- doCoxphMultivariable(input.d = lung,
+                                 var.names = c("sex", "ph.ecog"),
+                                 var.descriptions = c("Sex", "ECOG score"),
+                                 show.var.detail = TRUE,
+                                 var.names.surv.time = "time",
+                                 var.names.surv.status = "status",
+                                 event.codes.surv = "2",
+                                 surv.descriptions = "OS",
+                                 caption = "")
+    res2 <- doCoxphMultivariable(input.d = lung2,
+                                 var.names = c("sex", "ph.ecog"),
+                                 var.descriptions = c("Sex", "ECOG score"),
+                                 show.var.detail = TRUE,
+                                 var.names.surv.time = "time",
+                                 var.names.surv.status = "status",
+                                 event.codes.surv = "2",
+                                 surv.descriptions = "OS",
+                                 caption = "")
+    expect_identical(res1$result.table, res2$result.table)
+  }
+)
 
 test_that("doCoxphMultivariable multiple survival outcomes works", {
   res <- doCoxphMultivariable(input.d = lung,
@@ -204,15 +206,17 @@ test_that("doInteractionCox works with an interaction term", {
   expect_length(res, 4)
 })
 
-test_that("doInteractionCox factors use lowest group if no reference specified", {
-  lung$sex <- as.factor(lung$sex)
-  res <- doInteractionCox(input.d = lung,
-                          var.names = c("sex", "ph.ecog"),
-                          var.descriptions = c("Sex", "ECOG score"),
-                          var.names.surv.time = "time",
-                          var.names.surv.status = "status",
-                          event.codes.surv = "2",
-                          surv.descriptions = "OS",
-                          caption = "")
-  expect_length(res, 4)
-})
+test_that(
+  "doInteractionCox factors use lowest group if no reference specified", {
+    lung$sex <- as.factor(lung$sex)
+    res <- doInteractionCox(input.d = lung,
+                            var.names = c("sex", "ph.ecog"),
+                            var.descriptions = c("Sex", "ECOG score"),
+                            var.names.surv.time = "time",
+                            var.names.surv.status = "status",
+                            event.codes.surv = "2",
+                            surv.descriptions = "OS",
+                            caption = "")
+    expect_length(res, 4)
+  }
+)

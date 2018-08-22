@@ -12,14 +12,14 @@ yf <- factor(y, labels = c("negative", "positive"))
 
 expect_binaryCM_success <- function(x, y, pcond) {
   bcm <- binaryCM(x, y, pcond = pcond)
-  z <- apply(rmultinom(n , size = 1, prob = c(0.2, 0.4, 0.4)), 2,
+  z <- apply(rmultinom(n, size = 1, prob = c(0.2, 0.4, 0.4)), 2,
              function(x) which(x == 1))
 
-  test_that("entering a categorical variable with more than 2 categories will result in an error", {
+  test_that("categorical variable > 2 levels will result in an error", {
     expect_error(binaryCM(x, z))
   })
 
-  test_that("the confusion Matrix is such that positive condition is in the (1,1) position of the table", {
+  test_that("positive condition is in (1,1) position of confusion matrix", {
     expect_equal(sum(x == pcond & y == pcond), bcm$CM[1, 1])
   })
 
@@ -38,28 +38,38 @@ expect_binaryCM_success <- function(x, y, pcond) {
   })
 
   test_that("accuracy is sum of diagonal over total", {
-    expect_equal(bcm$Accuracy[, "PointEst"],
-                 (sum(x == pcond & y == pcond) + sum(x != pcond & y != pcond)) / length(x))
+    expect_equal(
+      bcm$Accuracy[, "PointEst"],
+      (sum(x == pcond & y == pcond) + sum(x != pcond & y != pcond)) / length(x)
+    )
   })
 
-  test_that("sensitivity is defined as sum of true positives / sum of true condition positive", {
-    expect_equal(bcm$Sensitivity[, "PointEst"],
-                 sum(x == pcond & y == pcond) / sum(x == pcond), tolerance = tol)
+  test_that("sens is sum of true positives / sum of true condition positive", {
+    expect_equal(
+      bcm$Sensitivity[, "PointEst"],
+      sum(x == pcond & y == pcond) / sum(x == pcond), tolerance = tol
+    )
   })
 
-  test_that("specificity is defined as sum of true negatives / sum of true condition negative", {
-    expect_equal(bcm$Specificity[, "PointEst"],
-                 sum(x != pcond & y != pcond) / sum(x != pcond), tolerance = tol)
+  test_that("spec is sum of true negatives / sum of true condition negative", {
+    expect_equal(
+      bcm$Specificity[, "PointEst"],
+      sum(x != pcond & y != pcond) / sum(x != pcond), tolerance = tol
+    )
   })
 
-  test_that("PPV is defined as sum of true positives / predicted positive", {
-    expect_equal(bcm$PPV[, "PointEst"],
-                 sum(x == pcond & y == pcond) / sum(y == pcond), tolerance = tol)
+  test_that("PPV is sum of true positives / predicted positive", {
+    expect_equal(
+      bcm$PPV[, "PointEst"],
+      sum(x == pcond & y == pcond) / sum(y == pcond), tolerance = tol
+    )
   })
 
-  test_that("NPV is defined as sum of true negatives / predicted negative", {
-    expect_equal(bcm$NPV[, "PointEst"],
-                 sum(x != pcond & y != pcond) / sum(y != pcond), tolerance = tol)
+  test_that("NPV is sum of true negatives / predicted negative", {
+    expect_equal(
+      bcm$NPV[, "PointEst"],
+      sum(x != pcond & y != pcond) / sum(y != pcond), tolerance = tol
+    )
   })
 }
 

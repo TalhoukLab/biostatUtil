@@ -4,9 +4,20 @@ library(survival)
 data(lung)
 
 test_that("doKMPlots calls ggkm or plotKM", {
-  expect_error(doKMPlots(lung, "time", "status", "sex", "Sex", use.ggkm = FALSE), NA)
-  expect_error(doKMPlots(lung, "time", "status", "sex", "Sex", use.ggkm = TRUE,
-                         timeby = 200), NA)
+  expect_error(
+    doKMPlots(lung, "time", "status", "sex", "Sex", use.ggkm = FALSE),
+    NA
+  )
+  expect_error(
+    doKMPlots(lung,
+              "time",
+              "status",
+              "sex",
+              "Sex",
+              use.ggkm = TRUE,
+              timeby = 200),
+    NA
+  )
 })
 
 test_that("factor variable drops unused levels", {
@@ -16,7 +27,10 @@ test_that("factor variable drops unused levels", {
 
 test_that("unused factor levels are removed", {
   lung$test <- factor(1:2, levels = 1:3)
-  expect_error(doKMPlots(lung, "time", "status", "test", "Test", use.ggkm = FALSE), NA)
+  expect_error(
+    doKMPlots(lung, "time", "status", "test", "Test", use.ggkm = FALSE),
+    NA
+  )
 })
 
 test_that("other plotting options can be specified", {
@@ -55,8 +69,14 @@ test_that("survival fits can be compared", {
 })
 
 test_that("margin widths adapt to length of predictor variable labels", {
-  lung$gender <- factor(lung$sex, levels = c(1, 2), labels = c("Male", "Female"))
-  lung$gender2 <- factor(lung$sex, levels = c(1, 2), labels = c("Male", "Femal"))
+  lung$gender <-
+    factor(lung$sex,
+           levels = c(1, 2),
+           labels = c("Male", "Female"))
+  lung$gender2 <-
+    factor(lung$sex,
+           levels = c(1, 2),
+           labels = c("Male", "Femal"))
   p4 <- doKMPlots(lung, "time", "status", "gender", "Sex", use.ggkm = TRUE,
                   timeby = 200, use.firth = 0.8, cox.ref.group = "2")
   p5 <- doKMPlots(lung, "time", "status", "gender2", "Sex", use.ggkm = TRUE,
@@ -67,7 +87,8 @@ test_that("margin widths adapt to length of predictor variable labels", {
 
 test_that("HR is shown for all levels of multilevel predictor", {
   lung$ph.ecog.f <- factor(lung$ph.ecog)
-  p6 <- doKMPlots(lung, "time", "status", "ph.ecog.f", "PH.ECOG", use.ggkm = TRUE,
-                  timeby = 200, use.firth = 0.8, cox.ref.group = "0")
+  p6 <- doKMPlots(lung, "time", "status", "ph.ecog.f", "PH.ECOG",
+                  use.ggkm = TRUE, timeby = 200, use.firth = 0.8,
+                  cox.ref.group = "0")
   expect_error(p6, NA)
 })

@@ -15,7 +15,7 @@ test_that("Continuity Correction only when Pearson is not NA", {
   A <- rbinom(100, 1, 0.2)
   B <- rbinom(100, 1, 0.8)
   expect_warning(indepTests(CrossTable(A, B)))
-  
+
   ct2 <- CrossTable(matrix(c(20, 25, 15, 30), nrow = 2))
   df <- indepTests(ct2)
   expect_false(anyNA(df[1:2, -1]))
