@@ -122,15 +122,31 @@ RFS.EVENT  <- "rfs.event"
 RFS.CENSOR <- "rfs.censor"
 
 # Missing codes
-MISSING.EXPLICIT <- "N/A" # missing value code for values that are explicitily indicated as missing from data source e.g. "X" in grade
-MISSING.UNK <- "Unk" # missing because values was not found (e.g. in data files) but the value must exist somewhere.
-MISSING...NOT.FOUND.IN.DATA.FILE <- "" # data point not mentioned in data file.
-MISSING.BIOMARKER.EXPLICIT <- MISSING.UNK # missing value code for values that are explicitily indicated as missing from data source e.g. "X" in grade
-MISSING.BIOMARKER...NOT.FOUND.IN.DATA.FILE <- "" # data point not mentioned in data file.
-ALL.MISSING.CODES <- unique(c(MISSING.EXPLICIT, MISSING...NOT.FOUND.IN.DATA.FILE, MISSING.UNK, MISSING.BIOMARKER.EXPLICIT, MISSING.BIOMARKER...NOT.FOUND.IN.DATA.FILE))
+
+# missing value code for values that are explicitily indicated as missing from
+# data source e.g. "X" in grade
+MISSING.EXPLICIT <- "N/A"
+# missing because values was not found (e.g. in data files) but the value must
+# exist somewhere.
+MISSING.UNK <- "Unk"
+# data point not mentioned in data file.
+MISSING...NOT.FOUND.IN.DATA.FILE <- ""
+# missing value code for values that are explicitily indicated as missing from
+# data source e.g. "X" in grade
+MISSING.BIOMARKER.EXPLICIT <- MISSING.UNK
+# data point not mentioned in data file.
+MISSING.BIOMARKER...NOT.FOUND.IN.DATA.FILE <- ""
+# combined missing codes
+ALL.MISSING.CODES <- unique(c(
+  MISSING.EXPLICIT,
+  MISSING...NOT.FOUND.IN.DATA.FILE,
+  MISSING.UNK,
+  MISSING.BIOMARKER.EXPLICIT,
+  MISSING.BIOMARKER...NOT.FOUND.IN.DATA.FILE
+))
 
 # Labels
-FIRTH.THRESHOLD <- 0.8 # percent of censor cases to use Firth correction in Cox model
+FIRTH.THRESHOLD <- 0.8 # percent of censor cases to use Firth in Cox model
 FIRTH.CAPTION <- "<sup>F</sup>" # text to indicate values are Firth corrected
 
 BCSS.TITLE <- "Breast cancer specific survival"
@@ -146,21 +162,21 @@ OS.XLAB <- DSS.XLAB
 OS.YLAB <- OS.TITLE
 
 RFS.TITLE <- "Any relapse-free survival"
-RFS.XLAB <- paste(RFS.TITLE,"time")
+RFS.XLAB <- paste(RFS.TITLE, "time")
 RFS.YLAB <- RFS.TITLE
 
 DRFS.TITLE <- "Distant relapse-free survival"
-DRFS.XLAB <- paste(DRFS.TITLE,"time")
+DRFS.XLAB <- paste(DRFS.TITLE, "time")
 DRFS.YLAB <- DRFS.TITLE
 
 LRFS.TITLE <- "Rocal relapse-free survival"
-LRFS.XLAB <- paste(LRFS.TITLE,"time")
+LRFS.XLAB <- paste(LRFS.TITLE, "time")
 LRFS.YLAB <- LRFS.TITLE
 
 RRFS.TITLE <- "regional relapse-free survival"
-RRFS.XLAB <- paste(RRFS.TITLE,"time")
+RRFS.XLAB <- paste(RRFS.TITLE, "time")
 RRFS.YLAB <- RRFS.TITLE
 
 LRRFS.TITLE <- "Locoregional relapse-free survival"
-LRRFS.XLAB <- paste(LRRFS.TITLE,"time")
+LRRFS.XLAB <- paste(LRRFS.TITLE, "time")
 LRRFS.YLAB <- LRRFS.TITLE
