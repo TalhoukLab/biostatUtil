@@ -1,6 +1,6 @@
 #' Escape string for regular expression
 #'
-#' Escape [, ], (, and ) for use in `grep`.
+#' Escape `[`, `]`, `(`, and `)` for use in `grep`.
 #' @param x a character vector
 #' @return A character vector with opening and closing square brackets and
 #'   parentheses escaped for use in `grep`.
