@@ -152,7 +152,7 @@ printCoxMod <- function(cox, Capt) {
                               rowlabel = "Predictors",
                               caption = Capt,
                               ctable = TRUE)
-  pander::pander(TAB, style = 'rmarkdown')
+  pander::pander(TAB, style = "rmarkdown")
 }
 
 #' Create a survival formula from time, status, event code and terms strings

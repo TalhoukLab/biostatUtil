@@ -98,7 +98,8 @@ doCoxphGeneric <- function(
     x <- var.names[i]
     temp.d <- input.d %>%  # remove any cases with NA's or missing values
       dplyr::filter(!is.na(.[, x]) & !(.[, x] %in% missing.codes))
-    if (is.factor(temp.d[, x]) & is.na(var.ref.groups[i])) {  # automatically set ref.group to lowest group if not specified
+    # automatically set ref.group to lowest group if not specified
+    if (is.factor(temp.d[, x]) & is.na(var.ref.groups[i])) {
       var.ref.groups[i] <- names(table(temp.d[, x]))[1]
     }
     if (is.na(var.ref.groups[i])) {
@@ -218,7 +219,8 @@ doCoxphGeneric <- function(
         other.groups <- other.groups[other.groups != ref.group & !(other.groups %in% missing.codes)]
         num.other.groups <- length(other.groups)
         result.table.bamboo.base.index <- result.table.bamboo.base.indexes[var.count]
-        for (i in seq_len(num.surv.endpoints)) { # for each survival end points e.g. os, dss, rfs
+        # for each survival end points e.g. os, dss, rfs
+        for (i in seq_len(num.surv.endpoints)) {
           curr.base.index <- result.table.bamboo.base.index + (i - 1) * num.other.groups + 1
           if (num.other.groups > 1) {
             for (j in 1:(num.other.groups - 1)) {

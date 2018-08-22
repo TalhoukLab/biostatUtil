@@ -138,16 +138,16 @@ plotKMDetail <- function(input.data, surv.formula,
       paste0(
         ifelse(sum(single.test.type %in% c("logrank",   "all")) >= 1,
                paste0("Log-Rank p=",
-                      sprintf(paste0("%.",round.digits.p.value,"f"),
-                              p.value             ), "\n"), ""),
+                      sprintf(paste0("%.", round.digits.p.value, "f"),
+                              p.value), "\n"), ""),
         ifelse(sum(single.test.type %in% c("wilcoxon",  "all")) >= 1,
                paste0("Wilcoxon p=",
                       sprintf(paste0("%.", round.digits.p.value, "f"),
                               gehan.wilcox.p.value), "\n"), ""),
-        ifelse(sum(single.test.type %in% c("taroneware","all")) >= 1,
+        ifelse(sum(single.test.type %in% c("taroneware", "all")) >= 1,
                paste0("Tarone-Ware p=",
                       sprintf(paste0("%.", round.digits.p.value, "f"),
-                              tarone.ware.p.value ), "\n"), "")),
+                              tarone.ware.p.value), "\n"), "")),
       adj = c(0, 0),
       cex = 0.8)
   } else if (show.test != "none") {
@@ -183,7 +183,7 @@ plotKMDetail <- function(input.data, surv.formula,
         }
         new.txt <- paste0(
           ifelse("logrank"    %in% single.test.type, paste0(p.value,  " / "), ""),
-          ifelse("wilcoxon"   %in% single.test.type, paste0(w.p.value," / "), ""),
+          ifelse("wilcoxon"   %in% single.test.type, paste0(w.p.value, " / "), ""),
           ifelse("taroneware" %in% single.test.type,       t.p.value,     ""))
         if (endsWith(new.txt, " / ")) {
           new.txt <- substr(new.txt, 0, nchar(new.txt) - 3)
@@ -201,7 +201,7 @@ plotKMDetail <- function(input.data, surv.formula,
     }
     legend.title <- paste0(legend.title, "P-values")
 
-    l4 <- legend(x = l1$rect$w + l2$rect$w + l3$rect$w, y = y.pos,#y=l1$rect$h,
+    l4 <- legend(x = l1$rect$w + l2$rect$w + l3$rect$w, y = y.pos, #y=l1$rect$h,
                  legend = legend.txt,
                  #text.col=line.color,
                  title = legend.title,

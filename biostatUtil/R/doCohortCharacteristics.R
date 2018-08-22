@@ -107,7 +107,7 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
   input.d.no.missing <- input.d[!is.na(input.d[, marker.name]) & !input.d[, marker.name] %in% missing.codes, ]
 
   # Droplevels
-  if (is.factor(input.d.no.missing[,marker.name]) & do.droplevels) {
+  if (is.factor(input.d.no.missing[, marker.name]) & do.droplevels) {
     input.d.no.missing[, marker.name] <- droplevels(input.d.no.missing[, marker.name])
   }
   # Formatting Labels
@@ -189,8 +189,8 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
     if (is.factor(input.d.no.missing.var[, marker.name]) & do.droplevels) {
       input.d.no.missing.var[, marker.name] <- droplevels(input.d.no.missing.var[, marker.name])
     }
-
-    if (is.var.continuous[i]) { # If continuous variable
+    # If continuous variable
+    if (is.var.continuous[i]) {
       input.d.no.missing.var.only[, var.name] <- as.numeric(input.d.no.missing.var.only[, var.name])
       input.d.no.missing.var[, var.name] <- as.numeric(input.d.no.missing.var[, var.name])
 
@@ -205,27 +205,30 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
       stat.test.result <- NA
       if (do.stats) {
         switch(stat.tests[i],
-               spearman = {spearman.result <- cor.test(input.d.no.missing.var[, var.name],
-                                                     as.numeric(input.d.no.missing.var[, marker.name]),
-                                                     method = "spearman")
-               stat.test.result <- paste0("Spearman correlation", kLocalConstantStatTestBeginFlag,
-                                          "rho = ", round(spearman.result$estimate, 2),
-                                          kLocalConstantNewLineFlag, "P = ",
-                                          sprintf(paste0("%.", round.digits.p.value, "f"),
-                                                  round(spearman.result$p.value, digits = round.digits.p.value)))
+               spearman = {
+                 spearman.result <- cor.test(input.d.no.missing.var[, var.name],
+                                             as.numeric(input.d.no.missing.var[, marker.name]),
+                                             method = "spearman")
+                 stat.test.result <- paste0("Spearman correlation", kLocalConstantStatTestBeginFlag,
+                                            "rho = ", round(spearman.result$estimate, 2),
+                                            kLocalConstantNewLineFlag, "P = ",
+                                            sprintf(paste0("%.", round.digits.p.value, "f"),
+                                                    round(spearman.result$p.value, digits = round.digits.p.value)))
                },
-               kruskal = {kruskal.result <- kruskal.test(input.d.no.missing.var[, var.name] ~
-                                                           as.numeric(input.d.no.missing.var[, marker.name]))
-               stat.test.result <- paste0("Kruskal-Wallis rank sum test",kLocalConstantStatTestBeginFlag,
-                                          kLocalConstantNewLineFlag,"P = ",
-                                          sprintf(paste0("%.", round.digits.p.value, "f"),
-                                                  round(kruskal.result$p.value, digits = round.digits.p.value)))
+               kruskal = {
+                 kruskal.result <- kruskal.test(input.d.no.missing.var[, var.name] ~
+                                                  as.numeric(input.d.no.missing.var[, marker.name]))
+                 stat.test.result <- paste0("Kruskal-Wallis rank sum test", kLocalConstantStatTestBeginFlag,
+                                            kLocalConstantNewLineFlag, "P = ",
+                                            sprintf(paste0("%.", round.digits.p.value, "f"),
+                                                    round(kruskal.result$p.value, digits = round.digits.p.value)))
                },
-               wilcox = {wilcox.result <- wilcox.test(input.d.no.missing.var[, var.name] ~
-                                                      as.numeric(input.d.no.missing.var[, marker.name]))
-               stat.test.result <- paste0("Wilcoxon rank sum test", kLocalConstantStatTestBeginFlag, "P = ",
-                                          sprintf(paste0("%.",round.digits.p.value, "f"),
-                                                  round(wilcox.result$p.value, digits = round.digits.p.value)))
+               wilcox = {
+                 wilcox.result <- wilcox.test(input.d.no.missing.var[, var.name] ~
+                                                as.numeric(input.d.no.missing.var[, marker.name]))
+                 stat.test.result <- paste0("Wilcoxon rank sum test", kLocalConstantStatTestBeginFlag, "P = ",
+                                            sprintf(paste0("%.", round.digits.p.value, "f"),
+                                                    round(wilcox.result$p.value, digits = round.digits.p.value)))
                }
         )
         stat.tests.results <- c(stat.tests.results, stat.test.result)
@@ -247,8 +250,8 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
             }
           })
         ),
-        c( # Add the median
-          format(round(median(input.d.no.missing.var.only[, var.name]), decimal), nsmall = decimal),
+        # Add the median
+        c(format(round(median(input.d.no.missing.var.only[, var.name]), decimal), nsmall = decimal),
           sapply(marker.categories, function(x) {
             temp.d <- input.d.no.missing.var[input.d.no.missing.var[, marker.name] == x, var.name]
             if (length(temp.d) == 0) {
@@ -258,8 +261,8 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
             }
           })
         ),
-        c( # Add inter quartile range
-          paste(format(round(quantile(input.d.no.missing.var.only[, var.name], c(0.25, 0.75)),
+        # Add inter quartile range
+        c(paste(format(round(quantile(input.d.no.missing.var.only[, var.name], c(0.25, 0.75)),
                              decimal), nsmall = decimal), collapse = " to "),
           sapply(marker.categories, function(x) {
             temp.d <- input.d.no.missing.var[input.d.no.missing.var[, marker.name] == x, var.name]
@@ -270,8 +273,8 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
             }
           })
         ),
-        c( # Add range
-          paste(format(round(range(input.d.no.missing.var.only[, var.name]),
+        # Add range
+        c(paste(format(round(range(input.d.no.missing.var.only[, var.name]),
                              decimal), nsmall = decimal), collapse = " to "),
           sapply(marker.categories, function(x) {
             temp.d <- input.d.no.missing.var[input.d.no.missing.var[, marker.name] == x, var.name]
@@ -283,7 +286,8 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
           })
         )
       )
-    } else {# If categorical variable
+      # If categorical variable
+    } else {
       var.categories <- names(table(input.d.no.missing.var.only[, var.name]))
       var.row.names <- var.categories
       if (show.missing) {
@@ -295,25 +299,28 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
       stat.test.result <- NA
       if (do.stats) {
         switch(stat.tests[i],
-               kendall = {kendall.result <- cor.test(as.numeric(input.d.no.missing.var[, var.name]),
-                                                     as.numeric(input.d.no.missing.var[, marker.name]), method = "kendall")
-               stat.test.result <- paste0("Kendall correlation", kLocalConstantStatTestBeginFlag,
-                                          "tau = ", round(kendall.result$estimate, 2),
-                                          kLocalConstantNewLineFlag, "P = ",
-                                          sprintf(paste0("%.", round.digits.p.value, "f"),
-                                                  round(kendall.result$p.value, digits = round.digits.p.value)))
+               kendall = {
+                 kendall.result <- cor.test(as.numeric(input.d.no.missing.var[, var.name]),
+                                            as.numeric(input.d.no.missing.var[, marker.name]), method = "kendall")
+                 stat.test.result <- paste0("Kendall correlation", kLocalConstantStatTestBeginFlag,
+                                            "tau = ", round(kendall.result$estimate, 2),
+                                            kLocalConstantNewLineFlag, "P = ",
+                                            sprintf(paste0("%.", round.digits.p.value, "f"),
+                                                    round(kendall.result$p.value, digits = round.digits.p.value)))
                },
-               chisq = {chisq.result <- chisq.test(table(input.d.no.missing.var[, var.name],
-                                                         input.d.no.missing.var[, marker.name]),simulate.p.value=chisq.test.simulate.p.value)
-               stat.test.result <- paste0("Chi-square test", kLocalConstantStatTestBeginFlag,
-                                          "P = ", sprintf(paste0("%.", round.digits.p.value, "f"),
-                                                          round(chisq.result$p.value, digits = round.digits.p.value)))
+               chisq = {
+                 chisq.result <- chisq.test(table(input.d.no.missing.var[, var.name],
+                                                  input.d.no.missing.var[, marker.name]), simulate.p.value = chisq.test.simulate.p.value)
+                 stat.test.result <- paste0("Chi-square test", kLocalConstantStatTestBeginFlag,
+                                            "P = ", sprintf(paste0("%.", round.digits.p.value, "f"),
+                                                            round(chisq.result$p.value, digits = round.digits.p.value)))
                },
-               fisher = {fisher.result <- fisher.test(table(input.d.no.missing.var[, var.name],
-                                                            input.d.no.missing.var[, marker.name]), workspace = 2e6)
-               stat.test.result <- paste0("Fisher's exact test", kLocalConstantStatTestBeginFlag, "P = ",
-                                          sprintf(paste0("%.", round.digits.p.value, "f"),
-                                                  round(fisher.result$p.value, digits = round.digits.p.value)))
+               fisher = {
+                 fisher.result <- fisher.test(table(input.d.no.missing.var[, var.name],
+                                                    input.d.no.missing.var[, marker.name]), workspace = 2e6)
+                 stat.test.result <- paste0("Fisher's exact test", kLocalConstantStatTestBeginFlag, "P = ",
+                                            sprintf(paste0("%.", round.digits.p.value, "f"),
+                                                    round(fisher.result$p.value, digits = round.digits.p.value)))
                },
                confusionMarkerAsRef = {
                  # confusion matrix, marker as the reference
@@ -352,42 +359,45 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
         result.table <- rbind(
           result.table,
           switch(show.percent,
-                 row = {c(total.value, sapply(marker.categories, function(x) {
-                   return(paste0(sum(input.d.no.missing.var[, var.name] == var.category &
-                                       input.d.no.missing.var[, marker.name] == x), " (",
-                                 ifelse(sum(input.d.no.missing.var[, var.name] == var.category) > 0,
-                                        format(round(sum(input.d.no.missing.var[, var.name] == var.category &
-                                                           input.d.no.missing.var[, marker.name] == x) /
-                                                       sum(input.d.no.missing.var[, var.name] == x) * 100, decimal), nsmall = decimal), 0),
-                                 "%)"))
-                 })
-                 )},
-                 column = {c(total.value, sapply(marker.categories, function(x) {
-                   return(paste0(sum(input.d.no.missing.var[, var.name] == var.category &
-                                       input.d.no.missing.var[, marker.name] == x), " (",
-                                 ifelse(sum(input.d.no.missing.var[, marker.name] == x) > 0,
-                                        format(round(sum(input.d.no.missing.var[, var.name] == var.category &
-                                                           input.d.no.missing.var[, marker.name] == x) /
-                                                       sum(input.d.no.missing.var[, marker.name] == x) * 100, decimal), nsmall = decimal), 0),
-                                 "%)"))
-                 })
-                 )},
-                 both = {c(total.value, sapply(marker.categories, function(x) {
-                   return(paste0(sum(input.d.no.missing.var[, var.name] == var.category &
-                                       input.d.no.missing.var[, marker.name] == x),
-                                 kLocalConstantRowColPercentBeginFlag,
-                                 ifelse(sum(input.d.no.missing.var[, var.name] == var.category) > 0,
-                                        format(round(sum(input.d.no.missing.var[, var.name] == var.category &
-                                                           input.d.no.missing.var[, marker.name] == x) /
-                                                       sum(input.d.no.missing.var[,var.name] == var.category) * 100, decimal), nsmall = decimal), 0),
-                                 "%",kLocalConstantRowColPercentSepFlag,
-                                 ifelse(sum(input.d.no.missing.var[, marker.name] == x) > 0,
-                                        format(round(sum(input.d.no.missing.var[, var.name] == var.category &
-                                                           input.d.no.missing.var[, marker.name] == x) /
-                                                       sum(input.d.no.missing.var[, marker.name] == x) * 100, decimal), nsmall = decimal), 0),
-                                 "%",kLocalConstantRowColPercentEndFlag))
-                 })
-                 )}
+                 row = {
+                   c(total.value, sapply(marker.categories, function(x) {
+                     return(paste0(sum(input.d.no.missing.var[, var.name] == var.category &
+                                         input.d.no.missing.var[, marker.name] == x), " (",
+                                   ifelse(sum(input.d.no.missing.var[, var.name] == var.category) > 0,
+                                          format(round(sum(input.d.no.missing.var[, var.name] == var.category &
+                                                             input.d.no.missing.var[, marker.name] == x) /
+                                                         sum(input.d.no.missing.var[, var.name] == x) * 100, decimal), nsmall = decimal), 0),
+                                   "%)"))
+                   }))
+                 },
+                 column = {
+                   c(total.value, sapply(marker.categories, function(x) {
+                     return(paste0(sum(input.d.no.missing.var[, var.name] == var.category &
+                                         input.d.no.missing.var[, marker.name] == x), " (",
+                                   ifelse(sum(input.d.no.missing.var[, marker.name] == x) > 0,
+                                          format(round(sum(input.d.no.missing.var[, var.name] == var.category &
+                                                             input.d.no.missing.var[, marker.name] == x) /
+                                                         sum(input.d.no.missing.var[, marker.name] == x) * 100, decimal), nsmall = decimal), 0),
+                                   "%)"))
+                   }))
+                 },
+                 both = {
+                   c(total.value, sapply(marker.categories, function(x) {
+                     return(paste0(sum(input.d.no.missing.var[, var.name] == var.category &
+                                         input.d.no.missing.var[, marker.name] == x),
+                                   kLocalConstantRowColPercentBeginFlag,
+                                   ifelse(sum(input.d.no.missing.var[, var.name] == var.category) > 0,
+                                          format(round(sum(input.d.no.missing.var[, var.name] == var.category &
+                                                             input.d.no.missing.var[, marker.name] == x) /
+                                                         sum(input.d.no.missing.var[, var.name] == var.category) * 100, decimal), nsmall = decimal), 0),
+                                   "%", kLocalConstantRowColPercentSepFlag,
+                                   ifelse(sum(input.d.no.missing.var[, marker.name] == x) > 0,
+                                          format(round(sum(input.d.no.missing.var[, var.name] == var.category &
+                                                             input.d.no.missing.var[, marker.name] == x) /
+                                                         sum(input.d.no.missing.var[, marker.name] == x) * 100, decimal), nsmall = decimal), 0),
+                                   "%", kLocalConstantRowColPercentEndFlag))
+                   }))
+                 }
           )
         )
       }
@@ -398,8 +408,7 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
         # there's some missing values we want to highlight ...
         for (missing.code in missing.codes.highlight[[var.name]]) {
           result.table <- rbind(result.table,
-                                c( # number of missing
-                                  sum(!is.na(input.d[, var.name]) & input.d[, var.name] == missing.code),
+                                c(sum(!is.na(input.d[, var.name]) & input.d[, var.name] == missing.code), # number of missing
                                   sapply(marker.categories, function(x) {
                                     temp.d <- input.d.no.missing[input.d.no.missing[, marker.name] == x, var.name]
                                     return(sum(!is.na(temp.d) & temp.d == missing.code))
@@ -409,8 +418,7 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
         }
       }
       result.table <- rbind(result.table,
-                            c( # number of missing
-                              sum(is.na(input.d[,var.name]) | input.d[,var.name] %in% missing.codes),
+                            c(sum(is.na(input.d[, var.name]) | input.d[, var.name] %in% missing.codes), # number of missing
                               sapply(marker.categories, function(x) {
                                 temp.d <- input.d.no.missing[input.d.no.missing[, marker.name] == x, var.name]
                                 return(sum(is.na(temp.d) | temp.d %in% missing.codes))
@@ -455,12 +463,13 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
       # this must be the start of a first category since row contains >1 empty cells (there will be 1 empty cell for any var with no stats test)
       var.header.row <- TRUE
       var.count <- var.count + 1
-      if (i > 1) { # varname not available for i==1 (the row for the total)
+      # varname not available for i==1 (the row for the total)
+      if (i > 1) {
         var.name <- var.names[var.count]
       }
       row.band.toggle <- !row.band.toggle
       tr.class <- ifelse(banded.rows, paste0(" class='",
-                                             ifelse(row.band.toggle, css.class.name.even, css.class.name.odd), "'"),"")
+                                             ifelse(row.band.toggle, css.class.name.even, css.class.name.odd), "'"), "")
       result.table.html <- paste0(
         result.table.html,
         "<tr", tr.class, "><th style='", row.th.style, "' colspan=", 2, ">", result.table.row.names[i], "</th>")
@@ -501,7 +510,7 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
                      is.factor(input.d.no.missing[, var.name]),
                      length(names(table(droplevels(input.d.no.missing.var.only[!is.na(input.d.no.missing.var.only[, var.name]) &
                                                                                  !input.d.no.missing.var.only[, var.name] %in%
-                                                                                 c(missing.codes,missing.codes.highlight[[var.name]]), var.name])))),
+                                                                                 c(missing.codes, missing.codes.highlight[[var.name]]), var.name])))),
                      length(names(table(input.d.no.missing.var.only[!is.na(input.d.no.missing.var.only[, var.name]) &
                                                                       !input.d.no.missing.var.only[, var.name] %in%
                                                                       c(missing.codes, missing.codes.highlight[[var.name]]), var.name])))
@@ -532,8 +541,9 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
     }
   }
   num.col.in.result.table.bamboo <- ncol(result.table.bamboo)
-  if (do.stats) { # add stat column
-    result.table.bamboo <- cbind(result.table.bamboo,"")
+  # add stat column
+  if (do.stats) {
+    result.table.bamboo <- cbind(result.table.bamboo, "")
     num.col.in.result.table.bamboo <- num.col.in.result.table.bamboo + 1
     colnames(result.table.bamboo)[num.col.in.result.table.bamboo] <- stat.test.column.header
   }
@@ -546,7 +556,7 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
       rownames(result.table.bamboo)[i] <- paste0("**", rownames(result.table)[i], "**") # make it bold
       if (i > 1) {
         if (do.stats) {
-          result.table.bamboo[i,num.col.in.result.table.bamboo] <-
+          result.table.bamboo[i, num.col.in.result.table.bamboo] <-
             gsub(kLocalConstantNewLineFlag, ", ",
                  gsub(kLocalConstantStatTestBeginFlag, ": ",
                       stat.tests.results[var.count]))
@@ -566,11 +576,11 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
   ##############################################################################
   for (i in 1:nrow(result.table)) {
     for (j in 1:ncol(result.table)) {
-      result.table[i,j] <- gsub(
-        kLocalConstantRowColPercentBeginFlag,"(",
-        gsub(kLocalConstantRowColPercentEndFlag,")",
-             gsub(kLocalConstantRowColPercentSepFlag,", ",
-                  result.table[i,j])))
+      result.table[i, j] <- gsub(
+        kLocalConstantRowColPercentBeginFlag, "(",
+        gsub(kLocalConstantRowColPercentEndFlag, ")",
+             gsub(kLocalConstantRowColPercentSepFlag, ", ",
+                  result.table[i, j])))
     }
   }
   for (i in 1:length(stat.tests.results)) {

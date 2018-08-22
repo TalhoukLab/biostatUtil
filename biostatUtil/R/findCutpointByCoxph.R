@@ -41,7 +41,8 @@ findCutpointByCoxph <- function(input.d, surv.formula) {
     }, error = function(e) {
       print(paste("ERROR (find.cut.point.by.coxph) unexpected error occured:", e))
     })
-    if (length(cox.model.fit) > 1) { # cox.model.fit must not be NA, otherwise, length(cox.model.fit) would be 1
+    # cox.model.fit must not be NA, otherwise, length(cox.model.fit) would be 1
+    if (length(cox.model.fit) > 1) {
       # cox model with no warning/error
       cut.points <- c(cut.points, cut.point)
       aics <- c(aics, extractAIC(cox.model.fit)[2])

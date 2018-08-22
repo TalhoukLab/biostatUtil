@@ -78,7 +78,7 @@ doBoxplotAmongSubtypes <- function(input.d, data.description,
   }
 
   boxplot(biomarker ~ subtype,
-          names = paste0(paste0(names(xbar), rep("\nn=",length(xbar))),
+          names = paste0(paste0(names(xbar), rep("\nn=", length(xbar))),
                          purrr::map_int(xbar, "n")),
           ylab = biomarker.name, xlab = subtype.name,
           main = paste0(data.description, "\n", test.name, " test P=",

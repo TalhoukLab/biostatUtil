@@ -126,7 +126,8 @@ cleanDate <- function(x, original.format, preferred.format,
   temp <- suppressWarnings(as.numeric(date.comp[1]))
   if (is.na(temp))
     return(return.missing.code)
-  if (temp > 1000000) {  # yyyymmdd or ddmmyyyy or mmddyyyy
+  # yyyymmdd or ddmmyyyy or mmddyyyy
+  if (temp > 1000000) {
     temp <- paste0(ifelse(temp < 10000000, "0", ""), temp)  # pad leading 0 for jan-sept; turn temp back to string
     if (original.format == "DD.MM.YYYY") {
       return(formatDate(substr(temp, 1, 2), substr(temp, 3, 4),
@@ -144,18 +145,23 @@ cleanDate <- function(x, original.format, preferred.format,
       stop('ERROR (cleanDate): original.format must be one of
            "DD.MM.YYYY", "MM.DD.YYYY", or "YYYY.MM.DD".')
     }
-    } else if (temp > 31) {  # must be YYYY/MM/DD
-      return(formatDate(date.comp[3], date.comp[2], date.comp[1],
-                        date.format = preferred.format, sep = sep))
-  } else if (temp > 12) {  # must be DD/MM/YYYY
+    # must be YYYY/MM/DD
+  } else if (temp > 31) {
+    return(formatDate(date.comp[3], date.comp[2], date.comp[1],
+                      date.format = preferred.format, sep = sep))
+    # must be DD/MM/YYYY
+  } else if (temp > 12) {
     return(formatDate(date.comp[1], date.comp[2], date.comp[3],
                       date.format = preferred.format, sep = sep))
-  } else {# first component <= 12 ... however, we are not sure if it refers to a day or month
+    # first component <= 12 ... however, we are not sure if it refers to a day or month
+  } else {
     temp <- as.numeric(date.comp[2]) # second component can either be a day or month
-    if (temp > 12) {   # must be MM/DD/YYYY
+    # must be MM/DD/YYYY
+    if (temp > 12) {
       return(formatDate(date.comp[2], date.comp[1], date.comp[3],
                         date.format = preferred.format, sep = sep))
-    } else {# BOTH first & second component <=12; assume original.format
+      # BOTH first & second component <=12; assume original.format
+    } else {
       if (original.format == "MM.DD.YYYY") {
         return(formatDate(date.comp[2], date.comp[1], date.comp[3],
                           date.format = preferred.format, sep = sep))

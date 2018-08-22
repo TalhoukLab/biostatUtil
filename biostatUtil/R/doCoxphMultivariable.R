@@ -60,7 +60,8 @@ doCoxphMultivariable <- function(
     x <- var.names[i]
     input.d <- input.d %>%  # remove any cases with NA's or missing values
       dplyr::filter(!is.na(.[, x]) & !(.[, x] %in% missing.codes))
-    if (is.factor(input.d[, x]) & is.na(var.ref.groups[i])) {  # automatically set ref.group to lowest group if not specified
+    # automatically set ref.group to lowest group if not specified
+    if (is.factor(input.d[, x]) & is.na(var.ref.groups[i])) {
       var.ref.groups[i] <- names(table(input.d[, x]))[1]
     }
     if (is.na(var.ref.groups[i])) {
@@ -222,7 +223,7 @@ doCoxphMultivariable <- function(
           }
           if (num.other.groups > 1 | show.group.name.for.bin.var) {
             result.table.bamboo[curr.base.index:(curr.base.index + num.other.groups - 1), hr.col.index] <-
-              strsplit(result.table.bamboo[curr.base.index,hr.col.index], kLocalConstantHrSepFlag)[[1]]
+              strsplit(result.table.bamboo[curr.base.index, hr.col.index], kLocalConstantHrSepFlag)[[1]]
             result.table.bamboo[curr.base.index:(curr.base.index + num.other.groups - 1), hr.col.index - 1] <- other.groups
           }
         }

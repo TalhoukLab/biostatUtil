@@ -66,13 +66,13 @@ prettyCoxph <- function(input.formula, input.d, ref.grp = NULL, use.firth = 1,
     envir = as.environment(pos))
   # Modify input.d if ref.grp is defined
   if (!is.null(ref.grp)) {
-	  for (var.name in names(ref.grp)) {
-		  if (var.name %in% all.vars(input.formula[[3]])) {
-		    # Only relevel if var.name in formula
-		    input.d[[var.name]] <- relevel(factor(input.d[[var.name]]),
-		                                   ref = ref.grp[var.name])
-		  }
-	  }
+    for (var.name in names(ref.grp)) {
+      if (var.name %in% all.vars(input.formula[[3]])) {
+        # Only relevel if var.name in formula
+        input.d[[var.name]] <- relevel(factor(input.d[[var.name]]),
+                                       ref = ref.grp[var.name])
+      }
+    }
   }
 
   assign(".my.data", input.d, envir = as.environment(pos))

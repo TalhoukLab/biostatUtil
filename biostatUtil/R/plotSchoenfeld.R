@@ -17,26 +17,29 @@
 #' plotSchoenfeld(test1, Surv(time, status) ~ x + strata(sex), "x")
 plotSchoenfeld <- function(input.d, input.formula, vars.to.plot = NULL,
                            main = NULL) {
-	pos <- 1
-	assign(".my.data", input.d, envir = as.environment(pos))
-	assign(".my.formula", as.formula(paste0("survival::", deparse(input.formula))),
-	       envir = as.environment(pos))
-	fit <- coxph(get(".my.formula"), get(".my.data"))
-	var.names <- all.vars(input.formula[[3]])  # there may be > 1 terms in formula
-	for (var.name in var.names) {
-	  names(fit$coefficients) <- names(fit$coefficients) %>%
-	    purrr::map_chr(~ ifelse(var.name == .x, .x, sub(var.name, "", .x)))
-	}
-	fit.zph <- survival::cox.zph(fit)
-	# determine which variable to plot
-	if (is.null(vars.to.plot)) {
-	  plot(fit.zph, main = ifelse(is.null(main), "", main)) # plot all
-	} else {
-	  for (i in seq_along(vars.to.plot)) {
-	    plot(fit.zph,
-	         var = which(names(fit$coefficients) == vars.to.plot[i]),
-	         main = ifelse(is.null(main), "", main[min(length(main), i)]))
-	  }
-	}
-	dplyr::lst(fit, fit.zph)
+  pos <- 1
+  assign(".my.data", input.d, envir = as.environment(pos))
+  assign(".my.formula", as.formula(paste0("survival::", deparse(input.formula))),
+         envir = as.environment(pos))
+  fit <- coxph(get(".my.formula"), get(".my.data"))
+  var.names <-
+    all.vars(input.formula[[3]])  # there may be > 1 terms in formula
+  for (var.name in var.names) {
+    names(fit$coefficients) <- names(fit$coefficients) %>%
+      purrr::map_chr(~ ifelse(var.name == .x, .x, sub(var.name, "", .x)))
+  }
+  fit.zph <- survival::cox.zph(fit)
+  # determine which variable to plot
+  if (is.null(vars.to.plot)) {
+    plot(fit.zph, main = ifelse(is.null(main), "", main)) # plot all
+  } else {
+    for (i in seq_along(vars.to.plot)) {
+      plot(
+        fit.zph,
+        var = which(names(fit$coefficients) == vars.to.plot[i]),
+        main = ifelse(is.null(main), "", main[min(length(main), i)])
+      )
+    }
+  }
+  dplyr::lst(fit, fit.zph)
 }

@@ -95,8 +95,8 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
                  upper = 1, lower = 1), .)
 
   # KM plot
-  p <- ggplot(.df , aes(time, surv, color = strata, fill = strata,
-                        linetype = strata)) +
+  p <- ggplot(.df, aes(time, surv, color = strata, fill = strata,
+                       linetype = strata)) +
     geom_step(size = .7) +
     scale_colour_manual(values = shading.colors) +
     scale_fill_manual(values = shading.colors) +
@@ -194,12 +194,11 @@ summarize_km <- function(fit, p, digits, HR, cox.ref.grp,
   pvalue <- survdiff(f, d) %>%
     getPval() %>%
     round_small(method = "signif", digits = digits)
-  #pvalsep <- ifelse(is.numeric(pvalue), " = ", " ")
   if (is.numeric(pvalue)) {
     pvalsep <- " = "
     # the following line tries to figure out how to print p-values with specified digits
     # e.g. digits=2 -> "0.20" NOT "0.2"
-    pvalue <- sprintf(paste0("%.",(max(digits, min(grep("[1-9]",strsplit(as.character(pvalue),"")[[1]])-3+digits))),"f"),pvalue)
+    pvalue <- sprintf(paste0("%.", (max(digits, min(grep("[1-9]", strsplit(as.character(pvalue), "")[[1]]) - 3 + digits))), "f"), pvalue)
   } else {
     pvalsep <- " "
   }
