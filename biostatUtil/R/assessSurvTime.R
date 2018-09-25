@@ -40,8 +40,8 @@ assessSurvTime <- function(T1, T2, status) {
   rev.status <- rep(1, length(status))
   rev.status[status] <- 0
   Ftime <- survfit(Surv(as.numeric(SurvTime), rev.status) ~ 1)
-  SumServ <- read.table(textConnection(capture.output(Ftime)),
-                        skip = 2, header = TRUE)
+  SumServ <- utils::read.table(textConnection(utils::capture.output(Ftime)),
+                               skip = 2, header = TRUE)
   MedianTime <- list(
     Otime = as.numeric(round(stats::median(Otime, na.rm = TRUE) /
                                NUM.DAYS.IN.YEAR, 2)),

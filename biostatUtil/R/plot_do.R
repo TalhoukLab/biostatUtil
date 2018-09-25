@@ -27,11 +27,13 @@ doBarplot <- function(data, var, xlab = var, ylab = "Frequency", title = NULL,
                   1, function(x) paste0(x, collapse = "\nn="))
   n.s <- sum(!is.na(dat.var))
   n.m <- sum(is.na(dat.var))
-  barplot(table(dat.var), names.arg = counts, xlab = xlab, ylab = ylab,
-          main = paste0(title, "\n# scorable, missing: ", n.s, "(",
-                        format(n.s / nrow(data) * 100, digits = digits), "%)",
-                        ", ", n.m, "(",
-                        format(n.m / nrow(data) * 100, digits = digits), "%)"))
+  graphics::barplot(
+    table(dat.var), names.arg = counts, xlab = xlab, ylab = ylab,
+    main = paste0(title, "\n# scorable, missing: ", n.s, "(",
+                  format(n.s / nrow(data) * 100, digits = digits), "%)",
+                  ", ", n.m, "(",
+                  format(n.m / nrow(data) * 100, digits = digits), "%)")
+  )
 }
 
 #' Do a boxplot among subtypes
@@ -77,15 +79,19 @@ doBoxplotAmongSubtypes <- function(input.d, data.description,
     p.value <- stats::wilcox.test(biomarker ~ subtype)$p.value
   }
 
-  boxplot(biomarker ~ subtype,
-          names = paste0(paste0(names(xbar), rep("\nn=", length(xbar))),
-                         purrr::map_int(xbar, "n")),
-          ylab = biomarker.name, xlab = subtype.name,
-          main = paste0(data.description, "\n", test.name, " test P=",
-                        format(p.value, digits = digits)),
-          outline = FALSE, ...)
-  stripchart(jitter(biomarker) ~ subtype, vertical = TRUE, method = "jitter",
-             pch = pch, add = TRUE, jitter = jitter)
+  graphics::boxplot(
+    biomarker ~ subtype,
+    names = paste0(paste0(names(xbar), rep("\nn=", length(xbar))),
+                   purrr::map_int(xbar, "n")),
+    ylab = biomarker.name, xlab = subtype.name,
+    main = paste0(data.description, "\n", test.name, " test P=",
+                  format(p.value, digits = digits)),
+    outline = FALSE, ...
+  )
+  graphics::stripchart(
+    jitter(biomarker) ~ subtype, vertical = TRUE, method = "jitter",
+    pch = pch, add = TRUE, jitter = jitter
+  )
 }
 
 #' Do histogram with median
@@ -131,7 +137,7 @@ doHist <- function(data, var, xlab = var, title = NULL, show.title = TRUE,
   } else {
     main <- ""
   }
-  hist(dat.var, br = br, xlab = xlab, main = main, ...)
+  graphics::hist(dat.var, br = br, xlab = xlab, main = main, ...)
 }
 
 #' Do a jitterplot among subtypes
@@ -174,17 +180,23 @@ doJitterplotAmongSubtypes <- function(input.d, data.description,
     test.name <- "Wilcoxon Rank Sum"
     p.value <- stats::wilcox.test(biomarker ~ subtype)$p.value
   }
-  par(mar = c(5.1, 4.1, 5.1, 2.1))
-  stripchart(biomarker ~ subtype, method = "jitter", jitter = jitter,
-             pch = pch, cex.axis = cex.axis, vert = TRUE,
-             group.names = paste0(
-               paste0(names(xbar), rep("\nn=", length(xbar))),
-               purrr::map_int(xbar, "n")),
-             ylab = biomarker.name, xlab = subtype.name,
-             main = paste0(data.description, "\n", test.name, " test P=",
-                           format(p.value, digits = digits)))
-  arrows(seq_along(xbar), purrr::map_dbl(xbar, c(2, 1)),
-         seq_along(xbar), purrr::map_dbl(xbar, c(2, 2)),
-         angle = 90, code = 3, length = 0.1)
-  points(purrr::map_dbl(xbar, "obs.mean"), pch = 4, type = "p", cex = 2)
+  graphics::par(mar = c(5.1, 4.1, 5.1, 2.1))
+  graphics::stripchart(
+    biomarker ~ subtype, method = "jitter", jitter = jitter,
+    pch = pch, cex.axis = cex.axis, vert = TRUE,
+    group.names = paste0(
+      paste0(names(xbar), rep("\nn=", length(xbar))),
+      purrr::map_int(xbar, "n")),
+    ylab = biomarker.name, xlab = subtype.name,
+    main = paste0(data.description, "\n", test.name, " test P=",
+                  format(p.value, digits = digits))
+  )
+  graphics::arrows(
+    seq_along(xbar), purrr::map_dbl(xbar, c(2, 1)),
+    seq_along(xbar), purrr::map_dbl(xbar, c(2, 2)),
+    angle = 90, code = 3, length = 0.1
+  )
+  graphics::points(
+    purrr::map_dbl(xbar, "obs.mean"), pch = 4, type = "p", cex = 2
+  )
 }

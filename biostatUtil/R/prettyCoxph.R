@@ -117,11 +117,11 @@ prettyCoxph <- function(input.formula, input.d, ref.grp = NULL, use.firth = 1,
       cbind("PH test" = .)
     if (plot.ph) {
       if (is.null(ph.test.plot.filename)) {
-        plot(ph.test)
+        graphics::plot(ph.test)
       } else {
-        pdf(ph.test.plot.filename)
-        plot(ph.test)
-        dev.off()
+        grDevices::pdf(ph.test.plot.filename)
+        graphics::plot(ph.test)
+        grDevices::dev.off()
       }
     }
   } else {

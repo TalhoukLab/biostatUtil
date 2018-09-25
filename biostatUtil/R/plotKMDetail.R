@@ -57,11 +57,11 @@ plotKMDetail <- function(input.data, surv.formula,
   if (file.name != "no.file" & nchar(file.name) > 4) {
     file.ext <- tools::file_ext(file.name)
     if (file.ext == "pdf") {
-      cairo_pdf(filename = file.name, width = file.width, height = file.height)  # good for unicode character in e.g. line.name
+      grDevices::cairo_pdf(filename = file.name, width = file.width, height = file.height)  # good for unicode character in e.g. line.name
     } else if (file.ext %in% c("wmf", "emf", "wmz", "emz")) {
-      png(filename = file.name, width = file.width, height = file.height)
+      grDevices::png(filename = file.name, width = file.width, height = file.height)
     } else if (file.ext == "tiff") {
-      tiff(filename = file.name, width = file.width * 100, height = file.height * 100)
+      grDevices::tiff(filename = file.name, width = file.width * 100, height = file.height * 100)
     } else {
       stop("Extension must be one of 'pdf', 'wmf', 'emf', 'wmz', 'emz', and 'tiff'.")
     }
@@ -77,16 +77,16 @@ plotKMDetail <- function(input.data, surv.formula,
     if (is.null(line.pattern)) {
       line.pattern <- c(1:length(line.name))[which.strata.have.cases]
     }
-    plot(fit, lty = line.pattern, lwd = line.width, main = main.text,
-         xlab = xlab.text, ylab = ylab.text, ...)
+    graphics::plot(fit, lty = line.pattern, lwd = line.width, main = main.text,
+                   xlab = xlab.text, ylab = ylab.text, ...)
   } else {
     # color plot
     if (is.null(line.pattern)) {
       line.pattern <- 1
     }
-    plot(fit, col = line.color[which.strata.have.cases],
-         lty = line.pattern, lwd = line.width, main = main.text,
-         xlab = xlab.text, ylab = ylab.text, ...)
+    graphics::plot(fit, col = line.color[which.strata.have.cases],
+                   lty = line.pattern, lwd = line.width, main = main.text,
+                   xlab = xlab.text, ylab = ylab.text, ...)
   }
   # Legend 1
   if (legend.pos == "top") {
@@ -96,8 +96,10 @@ plotKMDetail <- function(input.data, surv.formula,
     x.pos <- legend.pos
     y.pos <- NULL
   }
-  l1 <- legend(x = x.pos, y = y.pos, legend = line.name,
-               lty = line.pattern, lwd = line.width, box.lty = 0, cex = 0.8)
+  l1 <- graphics::legend(
+    x = x.pos, y = y.pos, legend = line.name,
+    lty = line.pattern, lwd = line.width, box.lty = 0, cex = 0.8
+  )
 
   # there seems to be need for the y-axis adjustment depending on the file.height ...
   dy <- 0.02 * (file.height - 7) / (12 - 7) # determined empirically
@@ -107,15 +109,19 @@ plotKMDetail <- function(input.data, surv.formula,
     y.pos <- l1$rect$h - dy
   }
   # Legend 2 & 3
-  l2 <- legend(x = l1$rect$w + l1$rect$left, y = y.pos,
-               legend = ten.years.surv.95CI,
-               title = paste0(obs.survyrs, "yr 95% CI"), title.col = 1,
-               box.lty = 0, cex = 0.8)
-  l3 <- legend(x = l1$rect$w + l1$rect$left + l2$rect$w, y = y.pos,
-               legend = event.count,
-               title = "Events/N", title.col = 1,
-               box.lty = 0, cex = 0.8)
-  box()
+  l2 <- graphics::legend(
+    x = l1$rect$w + l1$rect$left, y = y.pos,
+    legend = ten.years.surv.95CI,
+    title = paste0(obs.survyrs, "yr 95% CI"), title.col = 1,
+    box.lty = 0, cex = 0.8
+  )
+  l3 <- graphics::legend(
+    x = l1$rect$w + l1$rect$left + l2$rect$w, y = y.pos,
+    legend = event.count,
+    title = "Events/N", title.col = 1,
+    box.lty = 0, cex = 0.8
+  )
+  graphics::box()
   if (show.test == "single") {
     log.rank.test     <- survival::survdiff(surv.formula, data = input.data,
                                             rho = 0)
@@ -132,7 +138,7 @@ plotKMDetail <- function(input.data, surv.formula,
     tarone.ware.p.value <- getPval(tarone.ware.test)
     tarone.ware.p.values <- tarone.ware.p.value
     tarone.ware.p.value <- round(tarone.ware.p.value, digits = round.digits.p.value)
-    text(
+    graphics::text(
       x = l1$rect$w + l1$rect$left + l2$rect$w + 1.3 * l3$rect$w,
       y = show.single.test.pos, # position of the test statistics on plot
       paste0(
@@ -201,17 +207,19 @@ plotKMDetail <- function(input.data, surv.formula,
     }
     legend.title <- paste0(legend.title, "P-values")
 
-    l4 <- legend(x = l1$rect$w + l2$rect$w + l3$rect$w, y = y.pos, #y=l1$rect$h,
-                 legend = legend.txt,
-                 #text.col=line.color,
-                 title = legend.title,
-                 title.col = 1,
-                 box.lty = 0,
-                 cex = 0.8)
+    l4 <- graphics::legend(
+      x = l1$rect$w + l2$rect$w + l3$rect$w, y = y.pos, #y=l1$rect$h,
+      legend = legend.txt,
+      #text.col=line.color,
+      title = legend.title,
+      title.col = 1,
+      box.lty = 0,
+      cex = 0.8
+    )
   }
   if (file.name != "no.file") {
     # do not generate a file if "no.file" is specified
-    dev.off()
+    grDevices::dev.off()
   }
   return(list(
     "log.rank.p.values" = log.rank.p.values,

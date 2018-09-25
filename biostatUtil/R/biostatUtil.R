@@ -21,10 +21,6 @@
 #' @import dplyr htmltools ggplot2 survival
 #' @importFrom coin lbl_test statistic pvalue
 #' @importFrom Deducer likelihood.test
-#' @importFrom graphics arrows barplot box boxplot hist legend lines mtext par
-#'   plot points stripchart title text
-#' @importFrom grDevices cairo_pdf dev.off pdf png tiff
 #' @importFrom KMsurv lifetab
 #' @importFrom purrr %||%
-#' @importFrom utils capture.output combn read.table tail
 NULL

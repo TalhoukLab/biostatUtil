@@ -3,7 +3,6 @@
 #' Function to provide a graphical exploration of a dataset will print results to file.
 #' @param datmat the data frame (only categorical and numerical variables will be analysed)
 #' @author Aline Talhouk
-#' @importFrom grDevices pdf
 #' @export
 #' @examples
 #' mtcars$vs <- as.factor(mtcars$vs)
@@ -17,12 +16,12 @@ exploreData <- function(datmat) {
   num.ind <- type.fd %in% c("numeric", "integer")
   fac.ind <- type.fd %in% c("factor")
   catvars <- colnames(fd)[fac.ind]
-  pdf("DataSummary.pdf")
+  grDevices::pdf("DataSummary.pdf")
 
   for (i in seq_along(catvars)) {
     x <-  fd[, catvars[i]]
     tx <-  table(x, useNA = "ifany")
-    par(mfrow = c(2, 1), mar = c(3.1, 9.5, 4.1, 2.1))
+    graphics::par(mfrow = c(2, 1), mar = c(3.1, 9.5, 4.1, 2.1))
     barplotSum(tx, catvars[i])
     mat <- data.matrix(cbind(tx, round(prop.table(tx) * 100, 1)))
     colnames(mat) <- c("Freq", "%")
@@ -33,10 +32,10 @@ exploreData <- function(datmat) {
 
   numvars <- colnames(fd)[num.ind]
   for (i in seq_along(numvars)) {
-    par(mfrow = c(2, 1))
+    graphics::par(mfrow = c(2, 1))
     x <- fd[, numvars[i]]
     boxplotSum(x, numvars[i])
     histSum(x)
   }
-  dev.off()
+  grDevices::dev.off()
 }

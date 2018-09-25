@@ -135,7 +135,7 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
       purrr::map_df(~ split_pcts(matrix(.x, nrow = 4), n = 2))
     fac.res <- cbind(fac.pct, fac.pct.tot) %>%
       as.matrix() %>%
-      magrittr::set_rownames(tail(names(fac.val), -2)) %>%
+      magrittr::set_rownames(utils::tail(names(fac.val), -2)) %>%
       rbind(matrix("", nrow = length(fac.var), ncol = nrow(fac.all),
                    dimnames = list(fac.var, NULL))) %>%
       magrittr::extract(fac.ord, order(fac.all[, by1])) %>%

@@ -31,10 +31,10 @@ plotSchoenfeld <- function(input.d, input.formula, vars.to.plot = NULL,
   fit.zph <- survival::cox.zph(fit)
   # determine which variable to plot
   if (is.null(vars.to.plot)) {
-    plot(fit.zph, main = ifelse(is.null(main), "", main)) # plot all
+    graphics::plot(fit.zph, main = ifelse(is.null(main), "", main)) # plot all
   } else {
     for (i in seq_along(vars.to.plot)) {
-      plot(
+      graphics::plot(
         fit.zph,
         var = which(names(fit$coefficients) == vars.to.plot[i]),
         main = ifelse(is.null(main), "", main[min(length(main), i)])

@@ -31,7 +31,7 @@ build_cuts <- function(x, n = c("b", "t", "qd", "qn"), var.prefix = NULL,
   ulevs <- sort(unique(x[x > min(x, na.rm = TRUE)]))
   ng <- switch(match.arg(n), b = 2, t = 3, qd = 4, qn = 5)
   assertthat::assert_that(length(ulevs) >= ng - 1)
-  res <- combn(ulevs, ng - 1, simplify = FALSE) %>%
+  res <- utils::combn(ulevs, ng - 1, simplify = FALSE) %>%
     purrr::map(c, max(x, na.rm = TRUE)) %>%
     magrittr::set_names(purrr::map_chr(., name_cuts, x = x)) %>%
     purrr::map_df(Hmisc::cut2, x = x) %>%

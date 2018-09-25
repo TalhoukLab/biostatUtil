@@ -40,7 +40,7 @@
 best_cut <- function(f, d, n = c("b", "t", "qd", "qn"), AIC.range = 3,
                      nround = 3, plot = TRUE, filename = NULL,
                      nrow = NULL, ncol = NULL, title = "", ...) {
-  cutpoints <- p.value.log <- NULL
+  cutpoints <- p.value.log <- logLik <- AIC <- NULL
   pos <- 1
   assign("f", f, envir = as.environment(pos))
   assign("d", d, envir = as.environment(pos))
@@ -82,15 +82,15 @@ best_cut <- function(f, d, n = c("b", "t", "qd", "qn"), AIC.range = 3,
   # Plot survival curves for every cutpoint in console/PNG file
   if (plot) {
     if (is.null(filename)) {
-      par(mfrow = c(nrow, ncol))
+      graphics::par(mfrow = c(nrow, ncol))
       purrr::pwalk(list(diffs, titles, p.vals, AIC.vals), best_cut_plot, ...)
-      par(mfrow = c(1, 1))
+      graphics::par(mfrow = c(1, 1))
     } else {
-      png(filename, width = 8.5, height = 11, units = "in", res = 300)
-      par(mfrow = c(nrow %||% 2, ncol %||% 2))
+      grDevices::png(filename, width = 8.5, height = 11, units = "in", res = 300)
+      graphics::par(mfrow = c(nrow %||% 2, ncol %||% 2))
       purrr::pwalk(list(diffs, titles, p.vals, AIC.vals), best_cut_plot, ...)
-      par(mfrow = c(1, 1))
-      dev.off()
+      graphics::par(mfrow = c(1, 1))
+      grDevices::dev.off()
     }
   }
   return(list(cuts = cuts, fits = coxs, results = results, opt.cut = opt.cut,
@@ -101,14 +101,14 @@ best_cut <- function(f, d, n = c("b", "t", "qd", "qn"), AIC.range = 3,
 #' @noRd
 best_cut_plot <- function(x, title, pval = NULL, aic = NULL, lwd = 1,
                           cex = 0.75, ...) {
-  plot(x, main = title, col = seq_along(x$strata), lwd = lwd, ...)
-  legend("bottomleft", legend = stringr::str_split_fixed(
+  graphics::plot(x, main = title, col = seq_along(x$strata), lwd = lwd, ...)
+  graphics::legend("bottomleft", legend = stringr::str_split_fixed(
     names(x$strata), "=", 2)[, 2], col = seq_along(x$strata),
     lwd = lwd, cex = cex)
   if (!is.null(pval))
-    mtext(paste("P =", pval), side = 1, line = -2, at = max(x$time),
+    graphics::mtext(paste("P =", pval), side = 1, line = -2, at = max(x$time),
           adj = 1, cex = cex)
   if (!is.null(aic))
-    mtext(paste("AIC:", aic), side = 1, line = -1, at = max(x$time),
+    graphics::mtext(paste("AIC:", aic), side = 1, line = -1, at = max(x$time),
           adj = 1, cex = cex)
 }

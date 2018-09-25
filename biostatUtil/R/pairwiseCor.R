@@ -17,7 +17,7 @@ pairwiseCor <- function(x) {
   if (!all(purrr::map_lgl(x, is.numeric)))
     stop("All columns of data matrix must be numeric")
   Cor <- AbsCor <- Pval <- AdjP <- NULL
-  pairs <- combn(names(x), 2) %>%
+  pairs <- utils::combn(names(x), 2) %>%
     magrittr::set_rownames(paste0("Variable", 1:2))
   pairwiseCorDF <- data.frame(Cor = apply(pairs, 2, function(df)
     stats::cor(x[, df]))[2, ]) %>%
