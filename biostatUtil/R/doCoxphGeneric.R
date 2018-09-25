@@ -99,13 +99,13 @@ doCoxphGeneric <- function(
     temp.d <- input.d %>%  # remove any cases with NA's or missing values
       dplyr::filter(!is.na(.[, x]) & !(.[, x] %in% missing.codes))
     # automatically set ref.group to lowest group if not specified
-    if (is.factor(temp.d[, x]) & is.na(var.ref.groups[i])) {
-      var.ref.groups[i] <- names(table(temp.d[, x]))[1]
+    if (is.factor(temp.d[[x]]) & is.na(var.ref.groups[i])) {
+      var.ref.groups[i] <- names(table(temp.d[[x]]))[1]
     }
     if (is.na(var.ref.groups[i])) {
-      temp.d[, x] <- as.numeric(temp.d[, x])
+      temp.d[[x]] <- as.numeric(temp.d[[x]])
     } else {
-      temp.d[, x] <- relevel(as.factor(temp.d[, x]), var.ref.groups[i])
+      temp.d[[x]] <- relevel(as.factor(temp.d[[x]]), var.ref.groups[i])
     }
 
     for (j in seq_len(num.surv.endpoints)) {
