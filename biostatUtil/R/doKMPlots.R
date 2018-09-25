@@ -38,7 +38,7 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
                       single.test.type = "logrank", use.ggkm = FALSE, ...) {
 
   input.d[var.name] <- droplevels(input.d[var.name])
-  input.d[, time] <- as.numeric(input.d[, time])
+  input.d[[time]] <- as.numeric(input.d[[time]])
   levs <- names(table(input.d[, var.name]))
   if (is.null(line.name))
     line.name <- levs
