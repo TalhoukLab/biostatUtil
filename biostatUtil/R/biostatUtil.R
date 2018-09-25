@@ -19,8 +19,5 @@
 #' @docType package
 #' @name biostatUtil
 #' @import dplyr htmltools ggplot2 survival
-#' @importFrom coin lbl_test statistic pvalue
-#' @importFrom Deducer likelihood.test
-#' @importFrom KMsurv lifetab
 #' @importFrom purrr %||%
 NULL
