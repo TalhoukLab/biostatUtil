@@ -62,10 +62,9 @@ g_legend <- function(a.gplot) {
 #' @return the Chi-squared p-value
 #' @references Christos Hatzis
 #'   (https://stat.ethz.ch/pipermail/r-help/2007-April/130676.html)
-#' @importFrom stats pchisq
 #' @export
 getPval <- function(x) {
-  return(pchisq(x$chisq, length(x$n) - 1, lower.tail = FALSE))
+  return(stats::pchisq(x$chisq, length(x$n) - 1, lower.tail = FALSE))
 }
 
 #' Standard error of the mean
@@ -82,7 +81,7 @@ sem <- function(x, missing.value = NA, return.missing.value = NA) {
   if (!is.na(missing.value))
     x <- x[!x %in% missing.value]
   return(ifelse(length(x) == 0, return.missing.value,
-                sqrt(var(x) / length(x))))
+                sqrt(stats::var(x) / length(x))))
 }
 
 ## CONSTANTS ##

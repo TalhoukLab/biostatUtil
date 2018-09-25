@@ -67,7 +67,7 @@ doCoxphMultivariable <- function(
     if (is.na(var.ref.groups[i])) {
       input.d[, x] <- as.numeric(input.d[, x])
     } else {
-      input.d[, x] <- relevel(as.factor(input.d[, x]), var.ref.groups[i])
+      input.d[, x] <- stats::relevel(as.factor(input.d[, x]), var.ref.groups[i])
     }
   }
 
@@ -100,13 +100,13 @@ doCoxphMultivariable <- function(
                                                 var.names.surv.status[j],
                                                 event.codes.surv[j],
                                                 var.names[-i]), temp.d)
-          anova(cox.stats$fit, cox.exclude.var)[["P(>|Chi|)"]][2]
+          stats::anova(cox.stats$fit, cox.exclude.var)[["P(>|Chi|)"]][2]
         },
         waldtest = {
-          anova(rms::cph(surv_formula(var.names.surv.time[j],
-                                      var.names.surv.status[j],
-                                      event.codes.surv[j],
-                                      var.names), temp.d))[i, "P"]
+          stats::anova(rms::cph(surv_formula(var.names.surv.time[j],
+                                             var.names.surv.status[j],
+                                             event.codes.surv[j],
+                                             var.names), temp.d))[i, "P"]
         }
       ) %>%
         round_pval(round.small = round.small, scientific = scientific,

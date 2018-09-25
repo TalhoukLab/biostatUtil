@@ -71,10 +71,10 @@ doBoxplotAmongSubtypes <- function(input.d, data.description,
   }
   xbar <- tapply(biomarker, subtype, bootMean)
   test.name <- "Kruskal-Wallis"
-  p.value <- kruskal.test(biomarker ~ subtype)$p.value
+  p.value <- stats::kruskal.test(biomarker ~ subtype)$p.value
   if (length(names(table(subtype))) == 2) {
     test.name <- "Wilcoxon Rank Sum"
-    p.value <- wilcox.test(biomarker ~ subtype)$p.value
+    p.value <- stats::wilcox.test(biomarker ~ subtype)$p.value
   }
 
   boxplot(biomarker ~ subtype,
@@ -116,7 +116,7 @@ doHist <- function(data, var, xlab = var, title = NULL, show.title = TRUE,
                    br = ceiling(sqrt(nrow(data))), digits = 3,
                    score.lab = "scorable", ...) {
   dat.var <- data[, var]
-  qs <- quantile(dat.var, na.rm = TRUE)
+  qs <- stats::quantile(dat.var, na.rm = TRUE)
   n.s <- sum(!is.na(dat.var))
   n.m <- sum(is.na(dat.var))
   if (show.title) {
@@ -169,10 +169,10 @@ doJitterplotAmongSubtypes <- function(input.d, data.description,
   subtype <- temp.d[, subtype.var.name]
   xbar <- tapply(biomarker, subtype, bootMean)
   test.name <- "Kruskal-Wallis"
-  p.value <- kruskal.test(biomarker ~ subtype)$p.value
+  p.value <- stats::kruskal.test(biomarker ~ subtype)$p.value
   if (length(names(table(subtype))) == 2) {
     test.name <- "Wilcoxon Rank Sum"
-    p.value <- wilcox.test(biomarker ~ subtype)$p.value
+    p.value <- stats::wilcox.test(biomarker ~ subtype)$p.value
   }
   par(mar = c(5.1, 4.1, 5.1, 2.1))
   stripchart(biomarker ~ subtype, method = "jitter", jitter = jitter,

@@ -50,9 +50,9 @@ best_cut <- function(f, d, n = c("b", "t", "qd", "qn"), AIC.range = 3,
   cuts <- stringr::str_extract_all(names(bins), ".v") %>%
     purrr::map_chr(~ paste(gsub("v", "", .x), collapse = ", "))
   coxs <- purrr::map(bins, ~
-    coxph(as.formula(paste(deparse(f[[2]]), "~ .x")), d))
+    coxph(stats::as.formula(paste(deparse(f[[2]]), "~ .x")), d))
   diffs <- purrr::map(bins, ~
-    survfit(as.formula(paste(deparse(f[[2]]), "~ .x")), d))
+    survfit(stats::as.formula(paste(deparse(f[[2]]), "~ .x")), d))
   results <- coxs %>%
     purrr::map_df(broom::glance, .id = "bin.names") %>%
     as.data.frame() %>%

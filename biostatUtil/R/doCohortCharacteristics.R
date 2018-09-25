@@ -206,9 +206,9 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
       if (do.stats) {
         switch(stat.tests[i],
                spearman = {
-                 spearman.result <- cor.test(input.d.no.missing.var[, var.name],
-                                             as.numeric(input.d.no.missing.var[, marker.name]),
-                                             method = "spearman")
+                 spearman.result <- stats::cor.test(input.d.no.missing.var[, var.name],
+                                                    as.numeric(input.d.no.missing.var[, marker.name]),
+                                                    method = "spearman")
                  stat.test.result <- paste0("Spearman correlation", kLocalConstantStatTestBeginFlag,
                                             "rho = ", round(spearman.result$estimate, 2),
                                             kLocalConstantNewLineFlag, "P = ",
@@ -216,16 +216,16 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
                                                     round(spearman.result$p.value, digits = round.digits.p.value)))
                },
                kruskal = {
-                 kruskal.result <- kruskal.test(input.d.no.missing.var[, var.name] ~
-                                                  as.numeric(input.d.no.missing.var[, marker.name]))
+                 kruskal.result <- stats::kruskal.test(input.d.no.missing.var[, var.name] ~
+                                                         as.numeric(input.d.no.missing.var[, marker.name]))
                  stat.test.result <- paste0("Kruskal-Wallis rank sum test", kLocalConstantStatTestBeginFlag,
                                             kLocalConstantNewLineFlag, "P = ",
                                             sprintf(paste0("%.", round.digits.p.value, "f"),
                                                     round(kruskal.result$p.value, digits = round.digits.p.value)))
                },
                wilcox = {
-                 wilcox.result <- wilcox.test(input.d.no.missing.var[, var.name] ~
-                                                as.numeric(input.d.no.missing.var[, marker.name]))
+                 wilcox.result <- stats::wilcox.test(input.d.no.missing.var[, var.name] ~
+                                                       as.numeric(input.d.no.missing.var[, marker.name]))
                  stat.test.result <- paste0("Wilcoxon rank sum test", kLocalConstantStatTestBeginFlag, "P = ",
                                             sprintf(paste0("%.", round.digits.p.value, "f"),
                                                     round(wilcox.result$p.value, digits = round.digits.p.value)))
@@ -238,7 +238,7 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
       result.table <- rbind(
         result.table, # Add the mean
         c(paste0(format(round(mean(input.d.no.missing.var.only[, var.name]), decimal), nsmall = decimal),
-                " (", format(round(sd(input.d.no.missing.var.only[, var.name]), decimal), nsmall = decimal), ")"),
+                " (", format(round(stats::sd(input.d.no.missing.var.only[, var.name]), decimal), nsmall = decimal), ")"),
           sapply(marker.categories, function(x) {
             temp.d <- input.d.no.missing.var[input.d.no.missing.var[, marker.name] == x, var.name]
             if (length(temp.d) == 0) {
@@ -246,30 +246,30 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
             } else {
               return(paste0(
                 format(round(mean(temp.d), decimal), nsmall = decimal),
-                " (", format(round(sd(temp.d), decimal), nsmall = decimal), ")"))
+                " (", format(round(stats::sd(temp.d), decimal), nsmall = decimal), ")"))
             }
           })
         ),
         # Add the median
-        c(format(round(median(input.d.no.missing.var.only[, var.name]), decimal), nsmall = decimal),
+        c(format(round(stats::median(input.d.no.missing.var.only[, var.name]), decimal), nsmall = decimal),
           sapply(marker.categories, function(x) {
             temp.d <- input.d.no.missing.var[input.d.no.missing.var[, marker.name] == x, var.name]
             if (length(temp.d) == 0) {
               return(MISSING.EXPLICIT)
             } else {
-              return(format(round(median(temp.d), decimal), nsmall = decimal))
+              return(format(round(stats::median(temp.d), decimal), nsmall = decimal))
             }
           })
         ),
         # Add inter quartile range
-        c(paste(format(round(quantile(input.d.no.missing.var.only[, var.name], c(0.25, 0.75)),
+        c(paste(format(round(stats::quantile(input.d.no.missing.var.only[, var.name], c(0.25, 0.75)),
                              decimal), nsmall = decimal), collapse = " to "),
           sapply(marker.categories, function(x) {
             temp.d <- input.d.no.missing.var[input.d.no.missing.var[, marker.name] == x, var.name]
             if (length(temp.d) == 0) {
               return(MISSING.EXPLICIT)
             } else {
-              return(paste(format(round(quantile(temp.d, c(0.25, 0.75)), decimal), nsmall = decimal), collapse = " to "))
+              return(paste(format(round(stats::quantile(temp.d, c(0.25, 0.75)), decimal), nsmall = decimal), collapse = " to "))
             }
           })
         ),
@@ -300,8 +300,8 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
       if (do.stats) {
         switch(stat.tests[i],
                kendall = {
-                 kendall.result <- cor.test(as.numeric(input.d.no.missing.var[, var.name]),
-                                            as.numeric(input.d.no.missing.var[, marker.name]), method = "kendall")
+                 kendall.result <- stats::cor.test(as.numeric(input.d.no.missing.var[, var.name]),
+                                                   as.numeric(input.d.no.missing.var[, marker.name]), method = "kendall")
                  stat.test.result <- paste0("Kendall correlation", kLocalConstantStatTestBeginFlag,
                                             "tau = ", round(kendall.result$estimate, 2),
                                             kLocalConstantNewLineFlag, "P = ",
@@ -309,15 +309,15 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
                                                     round(kendall.result$p.value, digits = round.digits.p.value)))
                },
                chisq = {
-                 chisq.result <- chisq.test(table(input.d.no.missing.var[, var.name],
-                                                  input.d.no.missing.var[, marker.name]), simulate.p.value = chisq.test.simulate.p.value)
+                 chisq.result <- stats::chisq.test(table(input.d.no.missing.var[, var.name],
+                                                         input.d.no.missing.var[, marker.name]), simulate.p.value = chisq.test.simulate.p.value)
                  stat.test.result <- paste0("Chi-square test", kLocalConstantStatTestBeginFlag,
                                             "P = ", sprintf(paste0("%.", round.digits.p.value, "f"),
                                                             round(chisq.result$p.value, digits = round.digits.p.value)))
                },
                fisher = {
-                 fisher.result <- fisher.test(table(input.d.no.missing.var[, var.name],
-                                                    input.d.no.missing.var[, marker.name]), workspace = 2e6)
+                 fisher.result <- stats::fisher.test(table(input.d.no.missing.var[, var.name],
+                                                           input.d.no.missing.var[, marker.name]), workspace = 2e6)
                  stat.test.result <- paste0("Fisher's exact test", kLocalConstantStatTestBeginFlag, "P = ",
                                             sprintf(paste0("%.", round.digits.p.value, "f"),
                                                     round(fisher.result$p.value, digits = round.digits.p.value)))

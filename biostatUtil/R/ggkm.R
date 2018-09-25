@@ -76,7 +76,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
   legend.xy <- legend.xy %||% c(0.8, 0.88)
   ystratalabs <- ystratalabs %||% gsub(".*=(.)", "\\1", names(sfit$strata))
   if (is.null(line.pattern) | length(line.pattern) == 1)
-    line.pattern <- setNames(rep(1, length(sfit$strata)), ystratalabs)
+    line.pattern <- stats::setNames(rep(1, length(sfit$strata)), ystratalabs)
   if (!is.null(cox.ref.grp))
     names(cox.ref.grp) <- all.vars(sfit$call)[3]  # works for two-sided formulas
 

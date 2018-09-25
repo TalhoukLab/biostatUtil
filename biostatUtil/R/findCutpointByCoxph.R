@@ -37,7 +37,7 @@ findCutpointByCoxph <- function(input.d, surv.formula) {
   for (cut.point in possible.values[-1]) {
     cox.model.fit <- NA
     tryCatch({
-      cox.model.fit <- coxph(as.formula(paste(deparse(surv.formula), ">=", cut.point)), data = input.d)
+      cox.model.fit <- coxph(stats::as.formula(paste(deparse(surv.formula), ">=", cut.point)), data = input.d)
     }, error = function(e) {
       print(paste("ERROR (find.cut.point.by.coxph) unexpected error occured:", e))
     })
@@ -45,7 +45,7 @@ findCutpointByCoxph <- function(input.d, surv.formula) {
     if (length(cox.model.fit) > 1) {
       # cox model with no warning/error
       cut.points <- c(cut.points, cut.point)
-      aics <- c(aics, extractAIC(cox.model.fit)[2])
+      aics <- c(aics, stats::extractAIC(cox.model.fit)[2])
       hrs <- c(hrs, exp(cox.model.fit$coefficients[[1]]))
     }
   }

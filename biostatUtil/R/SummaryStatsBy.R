@@ -141,8 +141,8 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
       magrittr::extract(fac.ord, order(fac.all[, by1])) %>%
       magrittr::set_rownames(stringr::str_replace_all(
         rownames(.),
-        c(setNames(c(rep("", length(fac.var))), paste0(fac.var, ".")),
-          setNames(paste0("**", fac.var, "**"), fac.var)))) %>%
+        c(stats::setNames(c(rep("", length(fac.var))), paste0(fac.var, ".")),
+          stats::setNames(paste0("**", fac.var, "**"), fac.var)))) %>%
       magrittr::set_colnames(col.names)
   }
 
@@ -218,8 +218,8 @@ match_fun_null <- function(x, FUN, ...) {
 #' Construct formula object from character strings of response and terms
 #' @noRd
 paste_formula <- function(response, terms) {
-  as.formula(paste(collapse_var(response, " + "), "~",
-                   collapse_var(terms, " + ")))
+  stats::as.formula(paste(collapse_var(response, " + "), "~",
+                          collapse_var(terms, " + ")))
 }
 
 #' Munge data from Wide To Long format

@@ -105,7 +105,7 @@ doCoxphGeneric <- function(
     if (is.na(var.ref.groups[i])) {
       temp.d[[x]] <- as.numeric(temp.d[[x]])
     } else {
-      temp.d[[x]] <- relevel(as.factor(temp.d[[x]]), var.ref.groups[i])
+      temp.d[[x]] <- stats::relevel(as.factor(temp.d[[x]]), var.ref.groups[i])
     }
 
     for (j in seq_len(num.surv.endpoints)) {

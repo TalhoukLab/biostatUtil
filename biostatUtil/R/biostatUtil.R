@@ -26,9 +26,5 @@
 #' @importFrom grDevices cairo_pdf dev.off pdf png tiff
 #' @importFrom KMsurv lifetab
 #' @importFrom purrr %||%
-#' @importFrom stats addmargins aggregate AIC anova as.formula chisq.test
-#'   confint cor cor.test dnorm extractAIC fisher.test IQR kruskal.test logLik
-#'   median p.adjust qnorm quantile relevel sd setNames wilcox.test
-#'   var
 #' @importFrom utils capture.output combn read.table tail
 NULL

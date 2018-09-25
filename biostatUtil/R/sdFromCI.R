@@ -27,7 +27,7 @@
 #' metagen(effects, se_effects, studlab = studlab, sm = "HR", comb.fixed = TRUE)
 sdFromCI <- function(HR, lower.limit, upper.limit, alpha = 0.05) {
   sdlnHR <- sqrt(((log(upper.limit) - log(lower.limit)) /
-                    (2 * qnorm(1 - alpha / 2))) ^ 2)
-  estPval <- pchisq((log(HR) / sdlnHR) ^ 2, 1, lower.tail = FALSE)
+                    (2 * stats::qnorm(1 - alpha / 2))) ^ 2)
+  estPval <- stats::pchisq((log(HR) / sdlnHR) ^ 2, 1, lower.tail = FALSE)
   return(list(sd = sdlnHR, Pval = estPval))
 }

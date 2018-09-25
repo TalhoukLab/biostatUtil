@@ -46,7 +46,8 @@ lifetable <- function(obj, ntimes = 3, times = NULL, nround = 3,
                       summary = FALSE) {
   nevent <- nlost <- nsubs <- plost <- NULL
   cuts <- cumsum(obj$strata)
-  times <- times %||% round(quantile(obj$time, 1 / ntimes * seq_len(ntimes)))
+  times <-
+    times %||% round(stats::quantile(obj$time, 1 / ntimes * seq_len(ntimes)))
   if (ntimes > 1) {
     ind <- purrr::map(split_pos(obj$time, cuts),
                       ~ purrr::map_int(times, function(.y)

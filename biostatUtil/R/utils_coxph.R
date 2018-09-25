@@ -46,9 +46,9 @@ coxphOut <- function(object, coefnames = NULL, conf.level = 0.95,
   coef <- cox$coef
   se <- sqrt(diag(cox$var))
   z <- coef / se
-  p <- 1 - pchisq(z ^ 2, 1)
+  p <- 1 - stats::pchisq(z ^ 2, 1)
   HR <- exp(coef)
-  CI <- exp(confint(cox, level = conf.level))
+  CI <- exp(stats::confint(cox, level = conf.level))
   tmp <- cbind(n, events, coef, se, "Z-Score" = z, "P-value" = p, HR, CI)
   if (!is.null(coefnames))
     rownames(tmp) <- coefnames
@@ -158,8 +158,8 @@ printCoxMod <- function(cox, Capt) {
 #' Create a survival formula from time, status, event code and terms strings
 #' @noRd
 surv_formula <- function(time, status, event, terms) {
-  as.formula(paste0("Surv(", time, ", ", status, " == '", event, "') ~ ",
-                    paste(terms, collapse = " + ")))
+  stats::as.formula(paste0("Surv(", time, ", ", status, " == '", event, "') ~ ",
+                           paste(terms, collapse = " + ")))
 }
 
 #' Round p-values according to specifications for coxph summaries

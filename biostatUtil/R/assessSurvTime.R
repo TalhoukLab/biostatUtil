@@ -43,13 +43,13 @@ assessSurvTime <- function(T1, T2, status) {
   SumServ <- read.table(textConnection(capture.output(Ftime)),
                         skip = 2, header = TRUE)
   MedianTime <- list(
-    Otime = as.numeric(round(median(Otime, na.rm = TRUE) /
+    Otime = as.numeric(round(stats::median(Otime, na.rm = TRUE) /
                                NUM.DAYS.IN.YEAR, 2)),
-    Stime = as.numeric(round(median(Stime, na.rm = TRUE) /
+    Stime = as.numeric(round(stats::median(Stime, na.rm = TRUE) /
                                NUM.DAYS.IN.YEAR, 2)),
-    Etime = as.numeric(round(median(Etime, na.rm = TRUE) /
+    Etime = as.numeric(round(stats::median(Etime, na.rm = TRUE) /
                                NUM.DAYS.IN.YEAR, 2)),
-    KFT = as.numeric(round(median(KFT, na.rm = TRUE) /
+    KFT = as.numeric(round(stats::median(KFT, na.rm = TRUE) /
                              NUM.DAYS.IN.YEAR, 2)),
     RevKM = as.numeric(round(SumServ[, "median"] /
                                NUM.DAYS.IN.YEAR, 2)))

@@ -49,7 +49,7 @@ ms_process <- function(psm, protein, treatment, samples = NULL,
   #   - Master Protein Accession missing or "sp"
   pep <- psm %>%
     select(one_of(psmKeepVars)) %>%
-    rename_(.dots = setNames(samples, sample.id)) %>%
+    rename_(.dots = stats::setNames(samples, sample.id)) %>%
     filter_(.dots = list(lazyeval::interp(
       ~NOP == 1 & !grepl("NoQuanValues", QI) & (is.na(MPA) | MPA != "sp"),
       NOP = quote(Number.of.Proteins), QI = quote(Quan.Info),
@@ -68,14 +68,14 @@ ms_process <- function(psm, protein, treatment, samples = NULL,
 
   # Parse peptide accession and merge the protein descriptions with the peptide file
   pep <- pep %>%
-    mutate_(.dots = setNames(list(lazyeval::interp(
+    mutate_(.dots = stats::setNames(list(lazyeval::interp(
       ~purrr::map_chr(strsplit(as.character(MPA), ";"), `[`, 1),  # Strip ";"
       MPA = quote(Master.Protein.Accessions))), "Accession")) %>%
-    mutate_(.dots = setNames(list(lazyeval::interp(
+    mutate_(.dots = stats::setNames(list(lazyeval::interp(
       ~purrr::map_chr(strsplit(as.character(A), " | "), `[`, 1),  # Strip " | "
       A = quote(Accession))), "Accession")) %>%
     merge(pro, by = "Accession") %>%  # Merge with protein set on Accession
-    mutate_(.dots = setNames(list(
+    mutate_(.dots = stats::setNames(list(
       lazyeval::interp(~sub(".*?GN=(.*?)( .*|$)", "\\1", D),
                        D = quote(Description)),  # Get the gene name out
       lazyeval::interp(~toupper(sub(".*?\\.(.*?)(\\..*|$)", "\\1", AS)),

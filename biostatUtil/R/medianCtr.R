@@ -14,7 +14,7 @@
 #' medianCtr(x)
 medianCtr <- function(x) {
   annAll <- dimnames(x)
-  medians <- apply(x, 1, median, na.rm = TRUE)
+  medians <- apply(x, 1, stats::median, na.rm = TRUE)
   x <- t(scale(t(x), center = medians, scale = FALSE))
   dimnames(x) <- annAll
   return(x)

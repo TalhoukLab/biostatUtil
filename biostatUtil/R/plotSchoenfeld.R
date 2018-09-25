@@ -19,7 +19,7 @@ plotSchoenfeld <- function(input.d, input.formula, vars.to.plot = NULL,
                            main = NULL) {
   pos <- 1
   assign(".my.data", input.d, envir = as.environment(pos))
-  assign(".my.formula", as.formula(paste0("survival::", deparse(input.formula))),
+  assign(".my.formula", stats::as.formula(paste0("survival::", deparse(input.formula))),
          envir = as.environment(pos))
   fit <- coxph(get(".my.formula"), get(".my.data"))
   var.names <-

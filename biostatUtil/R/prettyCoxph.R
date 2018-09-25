@@ -61,7 +61,7 @@ prettyCoxph <- function(input.formula, input.d, ref.grp = NULL, use.firth = 1,
                         check.ph = FALSE, plot.ph = TRUE,
                         ph.test.plot.filename = NULL, ...) {
   pos <- 1
-  assign(".my.formula", as.formula(
+  assign(".my.formula", stats::as.formula(
     paste0(paste(deparse(input.formula), collapse = ""))),
     envir = as.environment(pos))
   # Modify input.d if ref.grp is defined
@@ -69,8 +69,8 @@ prettyCoxph <- function(input.formula, input.d, ref.grp = NULL, use.firth = 1,
     for (var.name in names(ref.grp)) {
       if (var.name %in% all.vars(input.formula[[3]])) {
         # Only relevel if var.name in formula
-        input.d[[var.name]] <- relevel(factor(input.d[[var.name]]),
-                                       ref = ref.grp[var.name])
+        input.d[[var.name]] <- stats::relevel(factor(input.d[[var.name]]),
+                                              ref = ref.grp[var.name])
       }
     }
   }
@@ -80,8 +80,8 @@ prettyCoxph <- function(input.formula, input.d, ref.grp = NULL, use.firth = 1,
   if (use.firth < 1 & use.firth > -1) {
     for (var.name in all.vars(.my.formula)[-c(1, 2)]) {
       if (is.factor(.my.data[[var.name]])) {
-        fit <- survfit(as.formula(paste(deparse(.my.formula[[2]]),
-                                        "~", var.name)), data = .my.data)
+        fit <- survfit(stats::as.formula(paste(deparse(.my.formula[[2]]),
+                                               "~", var.name)), data = .my.data)
         for (i in seq_len(nrow(fit))) {
           if (sum(fit[i]$n.censor) / fit[i]$n > use.firth) {
             ok.to.use.firth <- TRUE

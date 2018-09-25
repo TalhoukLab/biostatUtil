@@ -37,7 +37,7 @@ ms_summarize <- function(x, g, level = c("Gene", "Peptide"), col.names = NULL,
     magrittr::extract(c("pep", "l2", "vsn")) %>%
     unname() %>%
     purrr::invoke(cbind, .) %>%
-    mutate_(.dots = setNames(list(
+    mutate_(.dots = stats::setNames(list(
       lazyeval::interp(~paste(A, G, D, sep = " || "),
                        A = quote(Accession), G = quote(Gene),
                        D = quote(Description)),
@@ -60,7 +60,7 @@ ms_summarize <- function(x, g, level = c("Gene", "Peptide"), col.names = NULL,
   # Data only with adjusted p-values (BH), synced column names
   adj <- res %>%
     mutate_at(.cols = vars(matches("p-*val"), -matches("adj")),
-              .funs = funs(Temp = p.adjust(., method = "BH"))) %>%
+              .funs = funs(Temp = stats::p.adjust(., method = "BH"))) %>%
     select(contains("Temp")) %>%
     magrittr::set_names(grep("adj", col.names, value = TRUE))
 
@@ -82,7 +82,7 @@ ms_analyze <- function(x, g, level, col.names, info.vars) {
   # Modify `mutate_()` call depending on variable coding
   adf <- tidyr::gather(data = x, key = "Sample", value = "tInt",
                        matches("vsn")) %>%
-    mutate_(.dots = setNames(list(lazyeval::interp(
+    mutate_(.dots = stats::setNames(list(lazyeval::interp(
       ~factor(gsub("vsn_(.*)_.+", "\\1", var), levels = g),
       var = quote(Sample))), "Trtf"))
 
@@ -101,7 +101,7 @@ ms_analyze <- function(x, g, level, col.names, info.vars) {
                   Peptide = unique(adf$AGDSM))
 
   # Extract F value, df (num), df (den), p-value from Omnibus test
-  OmnibusTrt <- anova(mod1, mod2)[2, c("F", "Df", "Res.Df", "Pr(>F)")]
+  OmnibusTrt <- stats::anova(mod1, mod2)[2, c("F", "Df", "Res.Df", "Pr(>F)")]
   Omnibus_obj <- c(as.character(OmnibusTrt), "BHadj_OmnibusTrtPvalHere")
 
   # Fitted means and standard error
@@ -132,8 +132,8 @@ ms_analyze <- function(x, g, level, col.names, info.vars) {
     as.character()
 
   # Combine data objects and set column names
-  return(setNames(c(Level, Omnibus_obj, MeanVar_obj, Trt_stats, Desc_obj),
-                  col.names))
+  return(stats::setNames(c(Level, Omnibus_obj, MeanVar_obj, Trt_stats, Desc_obj),
+                         col.names))
 }
 
 #' Compute statistics for treatment-specific comparisons

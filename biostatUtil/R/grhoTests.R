@@ -24,7 +24,7 @@ grhoTests <- function(formula, data, digits = 4) {
     mod <- survdiff(formula, data, rho = .x)
     c <- mod$chisq
     d <- length(mod$n) - 1
-    p <- pchisq(c, d, lower.tail = FALSE)
+    p <- stats::pchisq(c, d, lower.tail = FALSE)
     data.frame(c, d, p)
   }) %>%
     purrr::invoke(rbind, .) %>%

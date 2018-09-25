@@ -86,5 +86,5 @@ multiClassCM <- function(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
   table <- cbind(Average, ByClass) %>%
     rbind(`Balanced Accuracy` = round(c(mean(BA), BA), digits))
 
-  list(CM = addmargins(CM), overall = overall, table = table)
+  list(CM = stats::addmargins(CM), overall = overall, table = table)
 }

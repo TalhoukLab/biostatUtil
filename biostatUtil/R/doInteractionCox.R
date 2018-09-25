@@ -108,7 +108,7 @@ doInteractionCox <- function(
       var.idx <- max(var.idx) + 1
       if (!is.na(var.ref.groups[i]))
         var.idx <- c(var.idx:(var.idx + dplyr::n_distinct(temp.d[, var.names[i]]) - 2))
-      cox.stats <- prettyCoxph(as.formula(paste(surv.formula, paste(curr.var.names, collapse = "+"))),
+      cox.stats <- prettyCoxph(stats::as.formula(paste(surv.formula, paste(curr.var.names, collapse = "+"))),
                                input.d = temp.d, use.firth = use.firth)
       e.n <- paste(cox.stats$nevent, "/", cox.stats$n)
       hr.ci <- cox.stats$output %>%
@@ -117,10 +117,10 @@ doInteractionCox <- function(
         paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>%
         paste(collapse = kLocalConstantHrSepFlag)
       if (length(curr.var.names) == 1) {
-        p.value <- anova(cox.stats$fit)[2, "Pr(>|Chi|)"]
+        p.value <- stats::anova(cox.stats$fit)[2, "Pr(>|Chi|)"]
       } else {
-        p.value <- anova(
-          coxph(as.formula(paste(surv.formula, paste(curr.var.names[-length(curr.var.names)], collapse = "+"))), data = temp.d),
+        p.value <- stats::anova(
+          coxph(stats::as.formula(paste(surv.formula, paste(curr.var.names[-length(curr.var.names)], collapse = "+"))), data = temp.d),
           cox.stats$fit)[2, "P(>|Chi|)"]
       }
       p.value <- round_pval(p.value, round.small = round.small,
