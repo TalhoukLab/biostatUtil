@@ -102,3 +102,22 @@ test_that("No errors for single continuous/categorical variable", {
     NA
   )
 })
+
+test_that("All formats work", {
+  expect_error(
+    SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = "mpg", format = "raw"),
+    NA
+  )
+  expect_error(
+    SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = "mpg", format = "pandoc"),
+    NA
+  )
+  expect_error(
+    SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = "mpg", format = "html"),
+    NA
+  )
+  expect_error(
+    SummaryStatsBy(mtcars, by1 = "cyl", by2 = "gear", var.names = "mpg", format = "long"),
+    NA
+  )
+})
