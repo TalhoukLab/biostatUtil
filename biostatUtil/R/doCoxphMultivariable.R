@@ -65,9 +65,9 @@ doCoxphMultivariable <- function(
       var.ref.groups[i] <- names(table(input.d[, x]))[1]
     }
     if (is.na(var.ref.groups[i])) {
-      input.d[, x] <- as.numeric(input.d[, x])
+      input.d[, x] <- as.numeric(input.d[[x]])
     } else {
-      input.d[, x] <- stats::relevel(as.factor(input.d[, x]), var.ref.groups[i])
+      input.d[, x] <- stats::relevel(as.factor(input.d[[x]]), var.ref.groups[i])
     }
   }
 
