@@ -61,8 +61,8 @@ doCoxphMultivariable <- function(
     input.d <- input.d %>%  # remove any cases with NA's or missing values
       dplyr::filter(!is.na(.[, x]) & !(.[, x] %in% missing.codes))
     # automatically set ref.group to lowest group if not specified
-    if (is.factor(input.d[, x]) & is.na(var.ref.groups[i])) {
-      var.ref.groups[i] <- names(table(input.d[, x]))[1]
+    if (is.factor(input.d[[x]]) & is.na(var.ref.groups[i])) {
+      var.ref.groups[i] <- names(table(input.d[[x]]))[1]
     }
     if (is.na(var.ref.groups[i])) {
       input.d[, x] <- as.numeric(input.d[[x]])
