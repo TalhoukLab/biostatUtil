@@ -131,12 +131,16 @@ format_hr_ci <- function(stats, digits, labels = TRUE, method = c("Inf", "Sci")
 paste_hr_ci <- function(hr, ci.lo, ci.hi, labels = TRUE,
                         method = c("Inf", "Sci")) {
   method <- match.arg(method)
-  ci.hi.n <- as.numeric(ci.hi)
-  if (is.na(ci.hi.n) || ci.hi.n > 1000)
-    ci.hi <- switch(method,
+  hr_ci <- list(hr, ci.lo, ci.hi) %>%
+    as.numeric() %>%
+    purrr::map_if(
+      .p = ~ is.na(.) || . > 1000,
+      .f = ~ switch(method,
                     `Inf` = "Inf",
-                    Sci = format(ci.hi.n, digits = 3, scientific = TRUE))
-  paste0(hr, ifelse(labels, " (95% CI: ", " ("), ci.lo, "-", ci.hi, ")")
+                    Sci = format(., digits = 3, scientific = TRUE))
+    )
+  paste0(hr_ci[[1]], ifelse(labels, " (95% CI: ", " ("),
+         hr_ci[[2]], "-", hr_ci[[3]], ")")
 }
 
 #' Print Cox model output
