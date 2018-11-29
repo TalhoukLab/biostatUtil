@@ -86,7 +86,7 @@ doCoxphMultivariable <- function(
       var.name <- var.names[i]
       var.idx <- max(var.idx) + 1
       if (!is.na(var.ref.groups[i]))
-        var.idx <- var.idx:(var.idx + dplyr::n_distinct(temp.d[, var.name]) - 2)
+        var.idx <- var.idx:(var.idx + nlevels(temp.d[[var.name]]) - 2)
       e.n <- paste(cox.stats$nevent, "/", cox.stats$n)
       hr.ci <- cox.stats$output %>%
         magrittr::extract(var.idx, c("estimate", "conf.low", "conf.high")) %>%
