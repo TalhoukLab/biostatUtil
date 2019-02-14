@@ -102,7 +102,7 @@ Xunivcoxph <- function(mod, digits = 3) {
 #' @export
 Xunivcoxph.coxph <- function(mod, digits = 3) {
   mod %>%
-    broom::tidy(exponentiate = TRUE) %>%
+    broom::tidy(exponentiate = TRUE, conf.int = TRUE) %>%
     magrittr::extract(c("estimate", "conf.low", "conf.high")) %>%
     format_hr_ci(digits) %>%
     paste("HR", .)
