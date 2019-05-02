@@ -20,7 +20,7 @@ doInteractionCox(input.d, var.names, var.descriptions,
 \arguments{
 \item{input.d}{The \code{data.frame} containing the data}
 
-\item{var.names}{variables to include as univariable predictors}
+\item{var.names}{variables to include as predictors}
 
 \item{var.descriptions}{vector of strings to describe the variables as they
 are to appear in the table}
@@ -75,7 +75,7 @@ colour}
 \item{split.table}{number of characters per row before splitting the table.
 Applies to the pandoc table output.}
 
-\item{...}{additional arguments to \code{pandoc.table.return}}
+\item{...}{additional arguments to \code{\link[pander:pandoc.table.return]{pander::pandoc.table.return()}}}
 }
 \value{
 A list with the following elements
