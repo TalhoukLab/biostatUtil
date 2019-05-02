@@ -172,7 +172,7 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
 #' @noRd
 split_pcts <- function(x, n) {
   x %>%
-    as_tibble() %>%
+    tibble::as_tibble() %>%
     split(rep(seq_len(nrow(.) / n), each = n)) %>%
     purrr::map_df(., . %>% purrr::map_df(pandoc_pcts))
 }
