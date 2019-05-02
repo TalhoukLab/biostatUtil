@@ -22,6 +22,10 @@
 #'   assume that particular marker is binary or continuous (i.e., treat it as a
 #'   numeric variable)
 #' @param var.names.surv.time variable names of survival time
+#' @param var.names.surv.time2 optional variable names for interval ending
+#'   times, used when survival is left-truncated. The interpretation of
+#'   `var.names.surv.time` becomes interval starting times when this argument is
+#'   not `NULL`.
 #' @param var.names.surv.status variable names of survival status
 #' @param event.codes.surv event coding of survival status variable
 #' @param surv.descriptions names abbreviated survival endpoints in returned
@@ -56,6 +60,7 @@ doCoxphGeneric <- function(
   input.d, var.names, var.descriptions, show.var.detail = FALSE,
   show.group.name.for.bin.var = FALSE, var.ref.groups = NULL,
   var.names.surv.time = c("os.yrs", "dss.yrs", "rfs.yrs"),
+  var.names.surv.time2 = NULL,
   var.names.surv.status = c("os.sts", "dss.sts", "rfs.sts"),
   event.codes.surv = c("os.event", "dss.event", "rfs.event"),
   surv.descriptions = c("OS", "DSS", "PFS"),
@@ -77,13 +82,20 @@ doCoxphGeneric <- function(
   assertthat::assert_that(num.surv.endpoints == length(var.names.surv.status),
                           num.surv.endpoints == length(event.codes.surv),
                           num.surv.endpoints == length(surv.descriptions))
+  if (!is.null(var.names.surv.time2)) {
+    assertthat::assert_that(num.surv.endpoints == length(var.names.surv.time2))
+  }
 
   # Remove all variables not used in analysis, ensure survival times are numeric
   input.d <- input.d %>%
-    dplyr::select(dplyr::one_of(c(var.names, var.names.surv.time,
-                                  var.names.surv.status))) %>%
+    dplyr::select(c(
+      var.names,
+      var.names.surv.time,
+      var.names.surv.time2,
+      var.names.surv.status
+    )) %>%
     droplevels() %>%
-    dplyr::mutate_at(var.names.surv.time, as.numeric)
+    dplyr::mutate_at(c(var.names.surv.time, var.names.surv.time2), as.numeric)
 
   # Setup default for variable reference groups and result matrix
   nvar <- length(var.names)
@@ -109,9 +121,13 @@ doCoxphGeneric <- function(
     }
 
     for (j in seq_len(num.surv.endpoints)) {
-      surv.formula <- surv_formula(var.names.surv.time[j],
-                                   var.names.surv.status[j],
-                                   event.codes.surv[j], x)
+      surv.formula <- surv_formula(
+        var.names.surv.time[j],
+        var.names.surv.status[j],
+        event.codes.surv[j],
+        x,
+        var.names.surv.time2[j]
+      )
       temp.d.no.missing.survival <- temp.d %>%
         dplyr::filter(!is.na(.[, var.names.surv.status[[j]]]) &
                         !is.na(.[, var.names.surv.time[[j]]]))

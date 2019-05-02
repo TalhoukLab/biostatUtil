@@ -7,7 +7,8 @@
 doCoxphMultivariable(input.d, var.names, var.descriptions,
   show.var.detail = FALSE, show.group.name.for.bin.var = FALSE,
   var.ref.groups = NULL, var.names.surv.time = c("os.yrs", "dss.yrs",
-  "rfs.yrs"), var.names.surv.status = c("os.sts", "dss.sts", "rfs.sts"),
+  "rfs.yrs"), var.names.surv.time2 = NULL,
+  var.names.surv.status = c("os.sts", "dss.sts", "rfs.sts"),
   event.codes.surv = c("os.event", "dss.event", "rfs.event"),
   surv.descriptions = c("OS", "DSS", "PFS"), missing.codes = c("N/A",
   "", "Unk"), use.firth = 1, firth.caption = FIRTH.CAPTION,
@@ -37,6 +38,11 @@ assume that particular marker is binary or continuous (i.e., treat it as a
 numeric variable)}
 
 \item{var.names.surv.time}{variable names of survival time}
+
+\item{var.names.surv.time2}{optional variable names for interval ending
+times, used when survival is left-truncated. The interpretation of
+\code{var.names.surv.time} becomes interval starting times when this argument is
+not \code{NULL}.}
 
 \item{var.names.surv.status}{variable names of survival status}
 
