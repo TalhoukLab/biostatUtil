@@ -49,45 +49,38 @@ ms_process <- function(psm, protein, treatment, samples = NULL,
   #   - Master Protein Accession missing or "sp"
   pep <- psm %>%
     select(one_of(psmKeepVars)) %>%
-    rename_(.dots = stats::setNames(samples, sample.id)) %>%
-    filter_(.dots = list(lazyeval::interp(
-      ~NOP == 1 & !grepl("NoQuanValues", QI) & (is.na(MPA) | MPA != "sp"),
-      NOP = quote(Number.of.Proteins), QI = quote(Quan.Info),
-      MPA = quote(Master.Protein.Accessions)
-    ))) %>%
+    rename_at(samples, ~ sample.id) %>%
+    dplyr::filter(
+      .data$Number.of.Proteins == 1,
+      !grepl("NoQuanValues", .data$Quan.Info),
+      is.na(.data$Master.Protein.Accessions) |
+        .data$Master.Protein.Accessions != "sp"
+    ) %>%
     magrittr::extract(ms_condition(., treatment = treatment, ...), )
 
-  pro <- protein %>%
-    select_("Accession", "Description", "MW.in.kDa")
+  pro <- protein[c("Accession", "Description", "MW.in.kDa")]
 
   # For each Reporter.Quan.Result.ID in pep, remove duplicates for 4 vars
   pep <- pep %>%
-    group_by_("Reporter.Quan.Result.ID") %>%
+    group_by(.data$Reporter.Quan.Result.ID) %>%
     do(remove_dup(., c("Annotated.Sequence", "Modifications",
                        "Master.Protein.Accessions", "Protein.Accessions")))
 
   # Parse peptide accession and merge the protein descriptions with the peptide file
   pep <- pep %>%
-    mutate_(.dots = stats::setNames(list(lazyeval::interp(
-      ~purrr::map_chr(strsplit(as.character(MPA), ";"), `[`, 1),  # Strip ";"
-      MPA = quote(Master.Protein.Accessions))), "Accession")) %>%
-    mutate_(.dots = stats::setNames(list(lazyeval::interp(
-      ~purrr::map_chr(strsplit(as.character(A), " | "), `[`, 1),  # Strip " | "
-      A = quote(Accession))), "Accession")) %>%
+    mutate(Accession = purrr::map_chr(strsplit(as.character(.data$Master.Protein.Accessions), ";"), `[`, 1)) %>%  # Strip ";"
+    mutate(Accession = purrr::map_chr(strsplit(as.character(.data$Accession), " | "), `[`, 1)) %>%  # Strip " | "
     merge(pro, by = "Accession") %>%  # Merge with protein set on Accession
-    mutate_(.dots = stats::setNames(list(
-      lazyeval::interp(~sub(".*?GN=(.*?)( .*|$)", "\\1", D),
-                       D = quote(Description)),  # Get the gene name out
-      lazyeval::interp(~toupper(sub(".*?\\.(.*?)(\\..*|$)", "\\1", AS)),
-                       AS = quote(Annotated.Sequence)),   # Parse the peptide column for amino acids
-      lazyeval::interp(~sub("(.*?)( OS=.*|$)", "\\1", D),
-                       D = quote(Description))),  # Filter information from Description
-      c("Gene", "Sequence", "Descriptions"))) %>%
-    filter_(.dots = list(lazyeval::interp(
-      ~!grepl("Keratin", quote(D)) &
-        !grepl("sp", quote(A), ignore.case = FALSE) &
-        !grepl("ribosomal", quote(D)),  # Remove specific proteins (typically contaminants from other sources)
-      D = quote(Descriptions), A = quote(Accession))))
+    mutate(
+      Gene = sub(".*?GN=(.*?)( .*|$)", "\\1", .data$Description),  # Get the gene name out
+      Sequence = toupper(sub(".*?\\.(.*?)(\\..*|$)", "\\1", .data$Annotated.Sequence)),  # Parse the peptide column for amino acids
+      Descriptions = sub("(.*?)( OS=.*|$)", "\\1", .data$Description)  # Filter information from Description
+    ) %>%
+    dplyr::filter(
+      !grepl("Keratin", .data$Descriptions),
+      !grepl("sp", .data$Accession, ignore.case = FALSE),
+      !grepl("ribosomal", .data$Descriptions)
+    )  # Remove specific proteins (typically contaminants from other sources)
   if (!is.null(path))
     readr::write_csv(pep, path = path)
 
@@ -97,5 +90,5 @@ ms_process <- function(psm, protein, treatment, samples = NULL,
     magrittr::set_colnames(paste("l2", names(.), sep = "_"))
   vsn <- limma::normalizeVSN(raw, verbose = FALSE) %>%
     magrittr::set_colnames(paste("vsn", colnames(.), sep = "_"))
-  return(list(pep = pep, raw = raw, l2 = l2, vsn = vsn))
+  tibble::lst(pep, raw, l2, vsn)
 }

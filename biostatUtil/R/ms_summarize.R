@@ -60,7 +60,7 @@ ms_summarize <- function(x, g, level = c("Gene", "Peptide"), col.names = NULL,
   # Data only with adjusted p-values (BH), synced column names
   adj <- res %>%
     mutate_at(.cols = vars(matches("p-*val"), -matches("adj")),
-              .funs = funs(Temp = stats::p.adjust(., method = "BH"))) %>%
+              .funs = list(Temp = ~stats::p.adjust(., method = "BH"))) %>%
     select(contains("Temp")) %>%
     magrittr::set_names(grep("adj", col.names, value = TRUE))
 
@@ -127,7 +127,7 @@ ms_analyze <- function(x, g, level, col.names, info.vars) {
   # Descriptive information
   Desc_obj <- adf %>%
     select(one_of(info.vars)) %>%
-    mutate_all(funs(collapse_var)) %>%
+    mutate_all(collapse_var) %>%
     unique() %>%
     as.character()
 

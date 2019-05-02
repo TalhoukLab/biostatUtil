@@ -55,7 +55,7 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
     unique() %>%
     rbind(matrix(c(unique(data[, by1]), rep(NA, n_distinct(data[, by1]))),
                  ncol = 2, dimnames = list(NULL, bys))) %>%
-    arrange_(by1, by2) %>%
+    arrange(.data[[by1]], .data[[by2]]) %>%
     purrr::map2(names(.), ., paste, sep = "=") %>%
     purrr::pmap_chr(paste, sep = ", ") %>%
     ifelse(grepl("NA", .), gsub(",.*", "\\1", .), .)
@@ -172,7 +172,7 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
 #' @noRd
 split_pcts <- function(x, n) {
   x %>%
-    as_data_frame() %>%
+    as_tibble() %>%
     split(rep(seq_len(nrow(.) / n), each = n)) %>%
     purrr::map_df(., . %>% purrr::map_df(pandoc_pcts))
 }
@@ -230,5 +230,5 @@ wtl <- function(data, by1, by2) {
                    grep(collapse_var(c(by1, by2), "|"), names(.),
                         invert = TRUE, value = TRUE)) %>%
     tidyr::separate_("stat", c("var", "stat"), "\\.") %>%
-    arrange_(by1, by2)
+    arrange(.data[[by1]], .data[[by2]])
 }
