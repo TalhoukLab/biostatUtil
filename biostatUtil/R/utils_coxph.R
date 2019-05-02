@@ -160,10 +160,18 @@ printCoxMod <- function(cox, Capt) {
 }
 
 #' Create a survival formula from time, status, event code and terms strings
+#' Left-truncated survival can be used by inserting a time2 arg
 #' @noRd
-surv_formula <- function(time, status, event, terms) {
-  stats::as.formula(paste0("Surv(", time, ", ", status, " == '", event, "') ~ ",
-                           paste(terms, collapse = " + ")))
+surv_formula <- function(time, status, event, terms, time2 = NULL) {
+  if (is.null(time2)) {
+    response <-
+      paste0("Surv(", time, ", ", status, " == '", event, "')")
+  } else {
+    response <-
+      paste0("Surv(", time, ", ", time2, ", ", status, " == '", event, "')")
+  }
+  covariates <- paste(terms, collapse = " + ")
+  stats::as.formula(paste(response, covariates, sep = " ~ "))
 }
 
 #' Round p-values according to specifications for coxph summaries
