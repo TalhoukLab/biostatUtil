@@ -25,16 +25,16 @@ doInteractionCox(input.d, var.names, var.descriptions,
 \item{var.descriptions}{vector of strings to describe the variables as they
 are to appear in the table}
 
-\item{show.var.detail}{logical. If \code{TRUE}, details such as categories
-and the reference group for categorical variables are shown.}
+\item{show.var.detail}{logical. If \code{TRUE}, details such as categories and the
+reference group for categorical variables are shown.}
 
 \item{show.group.name.for.bin.var}{logical. If \code{TRUE}, the non-reference
 group name is shown beside the hazard ratio for dichotomized variables.}
 
-\item{var.ref.groups}{a vector of reference groups. If \code{NULL}, assume
-all variables are binary/continuous. If an item in the vector is \code{NA},
-assume that particular marker is binary or continuous (i.e., treat it as a
-numeric variable)}
+\item{var.ref.groups}{a vector of reference groups. If \code{NULL}, assume all
+variables are binary/continuous. If an item in the vector is \code{NA}, assume
+that particular marker is binary or continuous (i.e., treat it as a numeric
+variable)}
 
 \item{var.names.surv.time}{variable names of survival time}
 
@@ -45,19 +45,17 @@ numeric variable)}
 \item{surv.descriptions}{names abbreviated survival endpoints in returned
 output}
 
-\item{missing.codes}{character strings of missing values used in
-\code{input.d}}
+\item{missing.codes}{character strings of missing values used in \code{input.d}}
 
 \item{use.firth}{percentage of censored cases before using Firth's method for
-Cox regression. If \code{use.firth = 1} (default), Firth is never used and
-if \code{use.firth = -1} Firth is always used.}
+Cox regression. If \code{use.firth = 1} (default), Firth is never used and if
+\code{use.firth = -1} Firth is always used.}
 
 \item{firth.caption}{subscript in html table output indicating Firth was used}
 
 \item{round.digits.p.value}{number of digits for p-value}
 
-\item{round.small}{if \code{TRUE}, uses small number rounding via
-\code{round_small}}
+\item{round.small}{if \code{TRUE}, uses small number rounding via \code{\link[=round_small]{round_small()}}}
 
 \item{scientific}{if \code{TRUE}, uses scientific notation when rounding}
 
@@ -65,8 +63,7 @@ if \code{use.firth = -1} Firth is always used.}
 
 \item{html.table.border}{the border type to use for html tables}
 
-\item{banded.rows}{logical. If \code{TRUE}, rows have alternating shading
-colour}
+\item{banded.rows}{logical. If \code{TRUE}, rows have alternating shading colour}
 
 \item{css.class.name.odd}{Used to set the row colour for odd rows}
 

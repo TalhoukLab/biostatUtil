@@ -65,6 +65,13 @@
 #' @name doCoxph
 #' @author Samuel Leung, Aline Talhouk, Derek Chiu
 #' @export
+#' @examples
+#' library(survival)
+#' data(lung)
+#' doCoxphGeneric(input.d = lung, var.names = "sex", var.descriptions = "Sex",
+#'                var.names.surv.time = "time",
+#'                var.names.surv.status = "status", event.codes.surv = "2",
+#'                surv.descriptions = "OS", caption = "")
 doCoxphGeneric <- function(
   input.d, var.names, var.descriptions, show.var.detail = FALSE,
   show.group.name.for.bin.var = FALSE, var.ref.groups = NULL,

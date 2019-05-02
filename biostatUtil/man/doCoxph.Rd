@@ -42,16 +42,16 @@ doCoxphMultivariable(input.d, var.names, var.descriptions,
 \item{var.descriptions}{vector of strings to describe the variables as they
 are to appear in the table}
 
-\item{show.var.detail}{logical. If \code{TRUE}, details such as categories
-and the reference group for categorical variables are shown.}
+\item{show.var.detail}{logical. If \code{TRUE}, details such as categories and the
+reference group for categorical variables are shown.}
 
 \item{show.group.name.for.bin.var}{logical. If \code{TRUE}, the non-reference
 group name is shown beside the hazard ratio for dichotomized variables.}
 
-\item{var.ref.groups}{a vector of reference groups. If \code{NULL}, assume
-all variables are binary/continuous. If an item in the vector is \code{NA},
-assume that particular marker is binary or continuous (i.e., treat it as a
-numeric variable)}
+\item{var.ref.groups}{a vector of reference groups. If \code{NULL}, assume all
+variables are binary/continuous. If an item in the vector is \code{NA}, assume
+that particular marker is binary or continuous (i.e., treat it as a numeric
+variable)}
 
 \item{var.names.surv.time}{variable names of survival time}
 
@@ -67,12 +67,11 @@ not \code{NULL}.}
 \item{surv.descriptions}{names abbreviated survival endpoints in returned
 output}
 
-\item{missing.codes}{character strings of missing values used in
-\code{input.d}}
+\item{missing.codes}{character strings of missing values used in \code{input.d}}
 
 \item{use.firth}{percentage of censored cases before using Firth's method for
-Cox regression. If \code{use.firth = 1} (default), Firth is never used and
-if \code{use.firth = -1} Firth is always used.}
+Cox regression. If \code{use.firth = 1} (default), Firth is never used and if
+\code{use.firth = -1} Firth is always used.}
 
 \item{firth.caption}{subscript in html table output indicating Firth was used}
 
@@ -83,8 +82,7 @@ per instruction from Aline 2015-04-14,15).}
 
 \item{round.digits.p.value}{number of digits for p-value}
 
-\item{round.small}{if \code{TRUE}, uses small number rounding via
-\code{round_small}}
+\item{round.small}{if \code{TRUE}, uses small number rounding via \code{\link[=round_small]{round_small()}}}
 
 \item{scientific}{if \code{TRUE}, uses scientific notation when rounding}
 
@@ -92,8 +90,7 @@ per instruction from Aline 2015-04-14,15).}
 
 \item{html.table.border}{the border type to use for html tables}
 
-\item{banded.rows}{logical. If \code{TRUE}, rows have alternating shading
-colour}
+\item{banded.rows}{logical. If \code{TRUE}, rows have alternating shading colour}
 
 \item{css.class.name.odd}{Used to set the row colour for odd rows}
 
@@ -108,9 +105,12 @@ Applies to the pandoc table output.}
 A list with the following elements
 \itemize{
 \item \code{result.table}: a data frame with the Cox model results.
-\item \code{result.table.bamboo}: results transformed into a pandoc-ready format. Display using \code{cat()}.
-\item \code{result.table.html}: results transformed into an HTML-ready format. Display using \code{\link[htmlTable:htmlTable]{htmlTable::htmlTable()}}.
-\item \code{cox.stats}: present for \code{doCoxphMultivariable()} only. A list of additional Cox model output statistics.
+\item \code{result.table.bamboo}: results transformed into a pandoc-ready format.
+Display using \code{cat()}.
+\item \code{result.table.html}: results transformed into an HTML-ready format. Display
+using \code{\link[htmlTable:htmlTable]{htmlTable::htmlTable()}}.
+\item \code{cox.stats}: present for \code{doCoxphMultivariable()} only. A list of
+additional Cox model output statistics.
 }
 }
 \description{
@@ -122,13 +122,21 @@ multivariable model for all variables together in \code{var.names}.
 Please note the following assumptions:
 \itemize{
 \item Marker can be binary, continuous or categorical.
-\item Missing survival time/status variables are coded as \code{NA} (i.e. will only
-be checked by \code{is.na()}).
-\item Survival time/status variable name specified in the following order:
-"os", "dss", "rfs".
-\item Coding of survival status is binary only (i.e. cannot take survival
-status of > 2 categories).
+\item Missing survival time/status variables are coded as \code{NA} (i.e. will only be
+checked by \code{is.na()}).
+\item Survival time/status variable name specified in the following order: "os",
+"dss", "rfs".
+\item Coding of survival status is binary only (i.e. cannot take survival status
+of > 2 categories).
 }
+}
+\examples{
+library(survival)
+data(lung)
+doCoxphGeneric(input.d = lung, var.names = "sex", var.descriptions = "Sex",
+               var.names.surv.time = "time",
+               var.names.surv.status = "status", event.codes.surv = "2",
+               surv.descriptions = "OS", caption = "")
 }
 \author{
 Samuel Leung, Aline Talhouk, Derek Chiu
