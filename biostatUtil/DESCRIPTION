@@ -1,8 +1,8 @@
 Type: Package
 Package: biostatUtil
 Title: Utility Functions Used in Biostatistics Projects
-Version: 0.0.0.9086
-Date: 2019-05-02
+Version: 0.0.0.9087
+Date: 2019-05-27
 Authors@R: 
     c(person(given = "Derek",
              family = "Chiu",
@@ -46,6 +46,7 @@ Imports:
     knitr,
     lazyeval,
     limma,
+    lubridate,
     magrittr,
     pander,
     PerformanceAnalytics,
