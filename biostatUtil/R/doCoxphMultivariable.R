@@ -1,6 +1,8 @@
 #' Fit a multivariable Cox model
 #'
 #' @inheritParams doCoxphGeneric
+#' @param format Either a "long" or "wide" format for the `result.table.bamboo`
+#'   result element
 #' @name doCoxph
 #' @export
 doCoxphMultivariable <- function(
@@ -17,7 +19,7 @@ doCoxphMultivariable <- function(
   round.small = FALSE, scientific = FALSE,
   caption = NA, html.table.border = 0, banded.rows = FALSE,
   css.class.name.odd = "odd", css.class.name.even = "even",
-  split.table = 300, ...) {
+  split.table = 300, format = c("long", "wide"), ...) {
 
   # Constants
   kLocalConstantHrSepFlag <- "kLocalConstantHrSepFlag" # separates HR estimates
@@ -240,6 +242,35 @@ doCoxphMultivariable <- function(
         result.table.bamboo.base.indexes[(i + 1):num.surv] <- result.table.bamboo.base.indexes[(i + 1):num.surv] + rows.added
       }
     }
+  }
+
+  # Reformat if "wide" format chosen
+  format <- match.arg(format)
+  if (format == "wide") {
+    group_size <- nrow(result.table.bamboo) / num.surv
+    splits <- purrr::map(result.table.bamboo.base.indexes, seq, length.out = group_size)
+    tab_splits <- purrr::map(splits, ~ result.table.bamboo[., ])
+
+    tmp <- purrr::map(tab_splits, ~ {
+      tmp_vars <- rownames(.)
+      tmp_e.n <- .[1, 1]
+      tmp_df <- data.frame(
+        Variable = tmp_vars[-1],
+        Levels = .[-1, 2],
+        .[-1, 3:4],
+        check.names = FALSE,
+        stringsAsFactors = FALSE
+      ) %>%
+        dplyr::rename_at(3:4, ~ paste(tmp_vars[1], ., sep = ": ")) %>%
+        rbind(c("# of events / n", "", paste(tmp_vars[1], tmp_e.n, sep = ": "), ""), .) %>%
+        magrittr::set_rownames(NULL)
+    }) %>%
+      purrr::reduce(dplyr::inner_join, by = c("Variable", "Levels")) %>%
+      dplyr::rename_all(~ gsub(".*: ", "", .))
+
+    tmp_colnames <- colnames(tmp)
+    colnames(tmp) <- tmp[1, ]
+    result.table.bamboo <- as.matrix(rbind(tmp_colnames, tmp[-1, ]))
   }
 
   # subscript ("<sup>|</sup>") and line break ("<br>") syntax for pandoc

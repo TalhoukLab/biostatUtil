@@ -32,7 +32,7 @@ doCoxphMultivariable(input.d, var.names, var.descriptions,
   round.small = FALSE, scientific = FALSE, caption = NA,
   html.table.border = 0, banded.rows = FALSE,
   css.class.name.odd = "odd", css.class.name.even = "even",
-  split.table = 300, ...)
+  split.table = 300, format = c("long", "wide"), ...)
 }
 \arguments{
 \item{input.d}{The \code{data.frame} containing the data}
@@ -100,6 +100,9 @@ per instruction from Aline 2015-04-14,15).}
 Applies to the pandoc table output.}
 
 \item{...}{additional arguments to \code{\link[pander:pandoc.table.return]{pander::pandoc.table.return()}}}
+
+\item{format}{Either a "long" or "wide" format for the \code{result.table.bamboo}
+result element}
 }
 \value{
 A list with the following elements
