@@ -37,31 +37,26 @@ ms_summarize <- function(x, g, level = c("Gene", "Peptide"), col.names = NULL,
     magrittr::extract(c("pep", "l2", "vsn")) %>%
     unname() %>%
     purrr::invoke(cbind, .) %>%
-    mutate_(.dots = stats::setNames(list(
-      lazyeval::interp(~paste(A, G, D, sep = " || "),
-                       A = quote(Accession), G = quote(Gene),
-                       D = quote(Description)),
-      lazyeval::interp(~paste(A, G, D, S, M, sep = " || "),
-                       A = quote(Accession), G = quote(Gene),
-                       D = quote(Descriptions), S = quote(Sequence),
-                       M = quote(Modifications)),
-      lazyeval::interp(~as.character(R), R = quote(Reporter.Quan.Result.ID))),
-      c("AGD", "AGDSM", "Block"))) %>%
-    select(one_of(c(info.vars, "Block", colnames(x$vsn))))
+    dplyr::mutate(
+      AGD = paste(.data$Accession, .data$Gene, .data$Description, sep = " || "),
+      AGDSM = paste(.data$Accession, .data$Gene, .data$Description, .data$Sequence, .data$Modifications, sep = " || "),
+      Block = as.character(.data$Reporter.Quan.Result.ID)
+    ) %>%
+    dplyr::select(dplyr::one_of(c(info.vars, "Block", colnames(x$vsn))))
   res <- purrr::map(sort(unique(expr[[var.split]])), ~
-                      ms_analyze(expr[expr[[var.split]] == .x, ], g = g,
-                                 level = level, col.names = col.names,
-                                 info.vars = info.vars[-1])) %>%
+                       ms_analyze(expr[expr[[var.split]] == .x, ], g = g,
+                                  level = level, col.names = col.names,
+                                  info.vars = info.vars[-1])) %>%
     purrr::invoke(rbind, .) %>%
     as.data.frame(stringsAsFactors = FALSE) %>%
-    mutate_at(.cols = vars(-one_of(info.vars), matches("dir|adj")),
-              .funs = as.numeric)
+    dplyr::mutate_at(dplyr::vars(-dplyr::one_of(info.vars), dplyr::matches("dir|adj")),
+                     as.numeric)
 
   # Data only with adjusted p-values (BH), synced column names
   adj <- res %>%
-    mutate_at(.cols = vars(matches("p-*val"), -matches("adj")),
-              .funs = list(Temp = ~stats::p.adjust(., method = "BH"))) %>%
-    select(contains("Temp")) %>%
+    dplyr::mutate_at(dplyr::vars(dplyr::matches("p-*val"), -dplyr::matches("adj")),
+                     list(Temp = ~stats::p.adjust(., method = "BH"))) %>%
+    dplyr::select(dplyr::contains("Temp")) %>%
     magrittr::set_names(grep("adj", col.names, value = TRUE))
 
   # Replace placeholder columns using new columns with adjusted p-values
@@ -80,11 +75,10 @@ ms_summarize <- function(x, g, level = c("Gene", "Peptide"), col.names = NULL,
 ms_analyze <- function(x, g, level, col.names, info.vars) {
   # Create factor variable for different treatments in gene-specific data frame
   # Modify `mutate_()` call depending on variable coding
-  adf <- tidyr::gather(data = x, key = "Sample", value = "tInt",
-                       matches("vsn")) %>%
-    mutate_(.dots = stats::setNames(list(lazyeval::interp(
-      ~factor(gsub("vsn_(.*)_.+", "\\1", var), levels = g),
-      var = quote(Sample))), "Trtf"))
+  adf <- x %>%
+    tidyr::gather(key = "Sample", value = "tInt", dplyr::matches("vsn")) %>%
+    dplyr::mutate(Trtf = factor(gsub("vsn_(.*)_.+", "\\1", .data$Sample),
+                                levels = g))
 
   # Test interaction model if more than one block, otherwise test null model
   if (length(unique(adf$Block)) > 1) {

@@ -44,7 +44,6 @@ Imports:
     irr,
     KMsurv,
     knitr,
-    lazyeval,
     limma,
     lubridate,
     magrittr,
