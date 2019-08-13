@@ -1,7 +1,6 @@
 
 context("Compute cohort characteristics")
 
-library(htmlTable)
 mtcars$vs <- as.factor(mtcars$vs)
 
 test_that("defaults can be changed and output is a length 4 list", {

@@ -222,28 +222,32 @@ test_that(
 )
 
 test_that("left-truncated survival works", {
-  res1 <- doCoxphGeneric(input.d = lung,
-                         var.names = "sex",
-                         var.descriptions = "Sex",
-                         show.var.detail = TRUE,
-                         var.names.surv.time = "time",
-                         var.names.surv.time2 = "time2",
-                         var.names.surv.status = "status",
-                         event.codes.surv = "2",
-                         surv.descriptions = "OS",
-                         caption = "")
-  res2 <- doCoxphMultivariable(input.d = lung,
-                               var.names = "sex",
-                               var.descriptions = "Sex",
-                               show.var.detail = TRUE,
-                               var.names.surv.time = "time",
-                               var.names.surv.time2 = "time2",
-                               var.names.surv.status = "status",
-                               event.codes.surv = "2",
-                               surv.descriptions = "OS",
-                               caption = "",
-                               var.ref.groups = "2",
-                               round.small = TRUE)
+  expect_warning(
+    res1 <- doCoxphGeneric(input.d = lung,
+                           var.names = "sex",
+                           var.descriptions = "Sex",
+                           show.var.detail = TRUE,
+                           var.names.surv.time = "time",
+                           var.names.surv.time2 = "time2",
+                           var.names.surv.status = "status",
+                           event.codes.surv = "2",
+                           surv.descriptions = "OS",
+                           caption = "")
+  )
+  expect_warning(
+    res2 <- doCoxphMultivariable(input.d = lung,
+                                 var.names = "sex",
+                                 var.descriptions = "Sex",
+                                 show.var.detail = TRUE,
+                                 var.names.surv.time = "time",
+                                 var.names.surv.time2 = "time2",
+                                 var.names.surv.status = "status",
+                                 event.codes.surv = "2",
+                                 surv.descriptions = "OS",
+                                 caption = "",
+                                 var.ref.groups = "2",
+                                 round.small = TRUE)
+  )
   expect_length(res1, 3)
   expect_length(res2, 4)
 })
