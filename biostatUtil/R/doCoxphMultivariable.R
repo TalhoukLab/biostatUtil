@@ -257,7 +257,7 @@ doCoxphMultivariable <- function(
       tmp_df <- data.frame(
         Variable = tmp_vars[-1],
         Levels = .[-1, 2],
-        .[-1, 3:4],
+        .[-1, 3:4, drop = FALSE],
         check.names = FALSE,
         stringsAsFactors = FALSE
       ) %>%
