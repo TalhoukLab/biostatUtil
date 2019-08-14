@@ -18,6 +18,7 @@
 #'
 #' @docType package
 #' @name biostatUtil
-#' @import dplyr htmltools ggplot2 survival
-#' @importFrom purrr %||%
+#' @import htmltools ggplot2 survival
+#' @importFrom magrittr %>%
+#' @importFrom rlang %||%
 NULL
