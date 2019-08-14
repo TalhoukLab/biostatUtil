@@ -1,8 +1,42 @@
-# biostatUtil installation
 
-When updating R to a new version, there are several administrative tasks to perform to ensure the package can still be installed.
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
-1. Run `devtools::install()` to install all dependencies. These are all packages listed in the `DESCRIPTION` `Imports` field
-2. Install any remaining dependencies from Bioconductor
-3. Run `devtools::check()` to see which packages to install from `DESCRIPTION` `Suggests` field
-4. Open Terminal and run `R CMD javareconf` to reconfigure Java paths and other configurations. Note that Java v1.8.0 is required for java dependencies to successfully load when `biostatUtil` is attached.
+# biostatUtil
+
+The goal of biostatUtil is to provide utility functions for date
+formatting, survival analysis, confusion matrices, contingency tables,
+and data visualization.
+
+## Local Installation
+
+You can install a local version of biostatUtil with:
+
+``` r
+remotes::install_local()
+```
+
+in the project root. Note that there are a few administrative tasks to
+perform to ensure the package can still be installed when the R version
+is updated.
+
+1.  Run `remotes::install_local()` to install all dependencies (these
+    are packages listed in the `Imports` field of `DESCRIPTION`)
+2.  Install remaining Bioconductor dependencies with
+    `BiocManager::install()`
+3.  Run `devtools::check()` to see which packages to install from
+    `Suggests` field of `DESCRIPTION`
+4.  Open Terminal and run `R CMD javareconf` to reconfigure Java paths
+    and other configurations. Note that Java v1.8.0 is required for java
+    dependencies to successfully load when `biostatUtil` is attached.
+
+## Remote Installation
+
+To install biostatUtil directly from the remote repository, run:
+
+``` r
+remotes::install_git(
+  url = "https://svn.bcgsc.ca/bitbucket/scm/bc/packages.git",
+  subdir = "biostatUtil",
+  git = "external"
+)
+```
