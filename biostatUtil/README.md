@@ -19,8 +19,8 @@ in the project root. Note that there are a few administrative tasks to
 perform to ensure the package can still be installed when the R version
 is updated.
 
-1.  Run `remotes::install_local()` to install all dependencies (these
-    are packages listed in the `Imports` field of `DESCRIPTION`)
+1.  Run `remotes::install_deps()` to install all dependencies (these are
+    packages listed in the `Imports` field of `DESCRIPTION`)
 2.  Install remaining Bioconductor dependencies with
     `BiocManager::install()`
 3.  Run `devtools::check()` to see which packages to install from
