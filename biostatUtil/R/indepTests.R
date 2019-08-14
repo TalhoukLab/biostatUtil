@@ -56,7 +56,7 @@ indepTests <- function(x, digits = 3) {
     }
   }
 
-  G.test <- tryCatch(Deducer::likelihood.test(x$tab),
+  G.test <- tryCatch(DescTools::GTest(x$tab),
                      error = function(e) return(NULL))
   if (!is.null(G.test)) {
     G.test.obj <- c(G.test$statistic, G.test$parameter, G.test$p.value)
