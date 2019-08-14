@@ -30,7 +30,7 @@ remove_dup <- function(x, cols) {
     # Otherwise take first element after collapsing info from non-missing rows
     odf <- dplyr::mutate_at(x,
                             dplyr::vars(dplyr::one_of(cols)),
-                            dplyr::funs(collapse_var(.[. != "" & !is.na(.)])), collapse = " | ")[1, ]
+                            list(~ collapse_var(.[. != "" & !is.na(.)], collapse = " | ")))[1, ]
   }
   return(odf)
 }
