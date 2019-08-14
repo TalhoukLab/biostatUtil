@@ -53,6 +53,7 @@ Imports:
     purrr,
     Rd2roxygen,
     readr,
+    rlang,
     rms,
     stringr,
     survival,

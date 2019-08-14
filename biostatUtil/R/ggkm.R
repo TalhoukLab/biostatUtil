@@ -86,10 +86,10 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
   # Data for KM plot
   .df <- sfit %>%
     broom::tidy() %>%
-    select(time, n.risk, n.event, n.censor, surv = estimate,
-           strata, upper = conf.high, lower = conf.low) %>%
-    mutate(strata = factor(s2, labels = ystratalabs)) %>%
-    bind_rows(
+    dplyr::select(time, n.risk, n.event, n.censor, surv = estimate,
+                  strata, upper = conf.high, lower = conf.low) %>%
+    dplyr::mutate(strata = factor(s2, labels = ystratalabs)) %>%
+    dplyr::bind_rows(
       data.frame(time = 0, surv = 1,
                  strata = factor(ystratalabs, levels = levels(.$strata)),
                  upper = 1, lower = 1), .)

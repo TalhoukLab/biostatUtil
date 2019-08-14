@@ -61,7 +61,7 @@ maxDateArray <- function(t.arr, date.format = "MM.DD.YYYY",
                          existing.missing.codes = NA,
                          return.missing.code = NA, sep = "/") {
   t.arr <- t.arr[!is.na(t.arr)]
-  if (n_distinct(existing.missing.codes, na.rm = TRUE) > 0)
+  if (dplyr::n_distinct(existing.missing.codes, na.rm = TRUE) > 0)
     t.arr <- t.arr[!(t.arr %in% existing.missing.codes)]
   if (length(t.arr) == 0)
     return(return.missing.code)
@@ -80,7 +80,7 @@ minDateArray <- function(t.arr, date.format = "MM.DD.YYYY",
                          existing.missing.codes = NA,
                          return.missing.code = NA, sep = "/") {
   t.arr <- t.arr[!is.na(t.arr)]
-  if (n_distinct(existing.missing.codes, na.rm = TRUE) > 0)
+  if (dplyr::n_distinct(existing.missing.codes, na.rm = TRUE) > 0)
     t.arr <- t.arr[!(t.arr %in% existing.missing.codes)]
   if (length(t.arr) == 0)
     return(return.missing.code)

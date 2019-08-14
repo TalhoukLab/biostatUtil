@@ -21,13 +21,15 @@ pairwiseCor <- function(x) {
     magrittr::set_rownames(paste0("Variable", 1:2))
   pairwiseCorDF <- data.frame(Cor = apply(pairs, 2, function(df)
     stats::cor(x[, df]))[2, ]) %>%
-    mutate(AbsCor = abs(Cor),
-           Pval = purrr::map2_dbl(x[pairs[1, ]], x[pairs[2, ]],
-                                  ~ stats::cor.test(.x, .y)$p.value),
-           AdjP = stats::p.adjust(Pval, "fdr")) %>%
-    select(AbsCor, Cor, Pval, AdjP) %>%
+    dplyr::mutate(
+      AbsCor = abs(Cor),
+      Pval = purrr::map2_dbl(x[pairs[1, ]], x[pairs[2, ]],
+                             ~ stats::cor.test(.x, .y)$p.value),
+      AdjP = stats::p.adjust(Pval, "fdr")
+    ) %>%
+    dplyr::select(AbsCor, Cor, Pval, AdjP) %>%
     round(4) %>%
     data.frame(t(pairs), ., stringsAsFactors = FALSE) %>%
-    arrange(desc(AbsCor))
+    dplyr::arrange(dplyr::desc(AbsCor))
   return(pairwiseCorDF)
 }

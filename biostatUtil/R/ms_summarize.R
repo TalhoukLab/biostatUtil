@@ -120,8 +120,8 @@ ms_analyze <- function(x, g, level, col.names, info.vars) {
 
   # Descriptive information
   Desc_obj <- adf %>%
-    select(one_of(info.vars)) %>%
-    mutate_all(collapse_var) %>%
+    dplyr::select(dplyr::one_of(info.vars)) %>%
+    dplyr::mutate_all(collapse_var) %>%
     unique() %>%
     as.character()
 

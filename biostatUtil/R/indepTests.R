@@ -88,10 +88,10 @@ indepTests <- function(x, digits = 3) {
                              "Likelihood Ratio",
                              "Fisher's Exact Test",
                              "Linear-by-Linear Association")) %>%
-    mutate(Test = rownames(.)) %>%
-    mutate_each(list(~ round(., digits)), 1:2) %>%
-    mutate(`P-Value` = round_small(`P-Value`, digits = digits)) %>%
-    select(Test, Value, df, `P-Value`) %>%
+    dplyr::mutate(Test = rownames(.)) %>%
+    dplyr::mutate_each(list(~ round(., digits)), 1:2) %>%
+    dplyr::mutate(`P-Value` = round_small(`P-Value`, digits = digits)) %>%
+    dplyr::select(Test, Value, df, `P-Value`) %>%
     rbind(., c("N of Valid Cases", x$gt, "", ""))
   return(res)
 }

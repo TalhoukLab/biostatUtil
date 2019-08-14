@@ -39,8 +39,8 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
                            stats = c("mean", "sd", "median", "IQR", "range",
                                      "missing"), digits = 3,
                            format = c("raw", "pandoc", "html", "long")) {
-  assertthat::assert_that(n_distinct(data[, by1]) >= 2,
-                          n_distinct(data[, by2]) >= 2)
+  assertthat::assert_that(dplyr::n_distinct(data[, by1]) >= 2,
+                          dplyr::n_distinct(data[, by2]) >= 2)
   bys <- c(by1, by2)
   stats <- match.arg(stats, c("mean", "sd", "median", "IQR", "range",
                               "missing"), several.ok = TRUE)
@@ -53,9 +53,9 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
   num.long <- num.res <- fac.long <- fac.res <- NULL
   col.names <- data[, bys] %>%
     unique() %>%
-    rbind(matrix(c(unique(data[, by1]), rep(NA, n_distinct(data[, by1]))),
+    rbind(matrix(c(unique(data[, by1]), rep(NA, dplyr::n_distinct(data[, by1]))),
                  ncol = 2, dimnames = list(NULL, bys))) %>%
-    arrange(.data[[by1]], .data[[by2]]) %>%
+    dplyr::arrange(.data[[by1]], .data[[by2]]) %>%
     purrr::map2(names(.), ., paste, sep = "=") %>%
     purrr::pmap_chr(paste, sep = ", ") %>%
     ifelse(grepl("NA", .), gsub(",.*", "\\1", .), .)
@@ -72,16 +72,16 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
     num.val <- paste_formula(num.var, bys) %>%
       doBy::summaryBy(num.dat, FUN = contSumFunc, digits = digits,
                       stats = stats) %>%
-      mutate_all(funs(as.character))
+      dplyr::mutate_all(as.character)
     num.val.tot <- paste_formula(num.var, by1) %>%
       doBy::summaryBy(num.dat, FUN = contSumFunc, digits = digits,
                       stats = stats) %>%
-      mutate_all(funs(as.character))
+      dplyr::mutate_all(as.character)
     num.all <- list(num.val, num.val.tot)
     num.long <- num.all %>%
       dplyr::bind_rows() %>%
       wtl(by1, by2)
-    nnum <- n_distinct(num.long[, bys])
+    nnum <- dplyr::n_distinct(num.long[, bys])
     num.res <- matrix(num.long$value, ncol = nnum,
                       dimnames = list(grep(collapse_var(num.var, "|"),
                                            names(num.val), value = TRUE),
@@ -115,7 +115,7 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
     fac.all <- dplyr::bind_rows(list(fac.val, fac.val.tot))
     fac.long <- wtl(fac.all, by1, by2)
     fac.pct <- fac.val %>%
-      select(-one_of(bys)) %>%
+      dplyr::select(-dplyr::one_of(bys)) %>%
       t() %>%
       as.data.frame() %>%
       split(factor(gsub("\\..*", "\\1", rownames(.)), levels = fac.var)) %>%
@@ -124,7 +124,7 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
     fac.pct.tot <- fac.val.tot %>%
       split(.[, by1]) %>%
       purrr::map(~ .x %>%
-                   select(-matches(by1)) %>%
+                   dplyr::select(-dplyr::matches(by1)) %>%
                    t() %>%
                    as.data.frame() %>%
                    split(rep(seq_len(nrow(.) / 2), each = 2)) %>%
@@ -230,5 +230,5 @@ wtl <- function(data, by1, by2) {
                    grep(collapse_var(c(by1, by2), "|"), names(.),
                         invert = TRUE, value = TRUE)) %>%
     tidyr::separate_("stat", c("var", "stat"), "\\.") %>%
-    arrange(.data[[by1]], .data[[by2]])
+    dplyr::arrange(.data[[by1]], .data[[by2]])
 }

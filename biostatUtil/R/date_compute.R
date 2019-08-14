@@ -94,7 +94,7 @@ diffDate <- function(d1, d2, date.format = "MM.DD.YYYY",
                      existing.missing.codes = NA, return.missing.code = NA,
                      sep = "/") {
   if (is.na(d1) | is.na(d2)) return(NA)
-  if (n_distinct(existing.missing.codes, na.rm = TRUE) > 0 &
+  if (dplyr::n_distinct(existing.missing.codes, na.rm = TRUE) > 0 &
       any(c(d1, d2) %in% existing.missing.codes))
     return(return.missing.code)
   result <- c(d1, d2) %>%

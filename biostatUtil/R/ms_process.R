@@ -48,8 +48,8 @@ ms_process <- function(psm, protein, treatment, samples = NULL,
   #   - insufficient data: use ms_condition()
   #   - Master Protein Accession missing or "sp"
   pep <- psm %>%
-    select(one_of(psmKeepVars)) %>%
-    rename_at(samples, ~ sample.id) %>%
+    dplyr::select(dplyr::one_of(psmKeepVars)) %>%
+    dplyr::rename_at(samples, ~ sample.id) %>%
     dplyr::filter(
       .data$Number.of.Proteins == 1,
       !grepl("NoQuanValues", .data$Quan.Info),
@@ -62,16 +62,16 @@ ms_process <- function(psm, protein, treatment, samples = NULL,
 
   # For each Reporter.Quan.Result.ID in pep, remove duplicates for 4 vars
   pep <- pep %>%
-    group_by(.data$Reporter.Quan.Result.ID) %>%
-    do(remove_dup(., c("Annotated.Sequence", "Modifications",
-                       "Master.Protein.Accessions", "Protein.Accessions")))
+    dplyr::group_by(.data$Reporter.Quan.Result.ID) %>%
+    dplyr::do(remove_dup(., c("Annotated.Sequence", "Modifications",
+                              "Master.Protein.Accessions", "Protein.Accessions")))
 
   # Parse peptide accession and merge the protein descriptions with the peptide file
   pep <- pep %>%
-    mutate(Accession = purrr::map_chr(strsplit(as.character(.data$Master.Protein.Accessions), ";"), `[`, 1)) %>%  # Strip ";"
-    mutate(Accession = purrr::map_chr(strsplit(as.character(.data$Accession), " | "), `[`, 1)) %>%  # Strip " | "
+    dplyr::mutate(Accession = purrr::map_chr(strsplit(as.character(.data$Master.Protein.Accessions), ";"), `[`, 1)) %>%  # Strip ";"
+    dplyr::mutate(Accession = purrr::map_chr(strsplit(as.character(.data$Accession), " | "), `[`, 1)) %>%  # Strip " | "
     merge(pro, by = "Accession") %>%  # Merge with protein set on Accession
-    mutate(
+    dplyr::mutate(
       Gene = sub(".*?GN=(.*?)( .*|$)", "\\1", .data$Description),  # Get the gene name out
       Sequence = toupper(sub(".*?\\.(.*?)(\\..*|$)", "\\1", .data$Annotated.Sequence)),  # Parse the peptide column for amino acids
       Descriptions = sub("(.*?)( OS=.*|$)", "\\1", .data$Description)  # Filter information from Description

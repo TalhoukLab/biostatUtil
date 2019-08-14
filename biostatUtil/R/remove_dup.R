@@ -28,8 +28,9 @@ remove_dup <- function(x, cols) {
     odf <- x[which(idxp)[1], ]
   } else {
     # Otherwise take first element after collapsing info from non-missing rows
-    odf <- mutate_at(x, vars(one_of(cols)),
-                     funs(collapse_var(.[. != "" & !is.na(.)])), collapse = " | ")[1, ]
+    odf <- dplyr::mutate_at(x,
+                            dplyr::vars(dplyr::one_of(cols)),
+                            dplyr::funs(collapse_var(.[. != "" & !is.na(.)])), collapse = " | ")[1, ]
   }
   return(odf)
 }
