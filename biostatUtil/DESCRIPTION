@@ -43,7 +43,6 @@ Imports:
     htmltools,
     irr,
     KMsurv,
-    knitr,
     limma,
     lubridate,
     magrittr,
