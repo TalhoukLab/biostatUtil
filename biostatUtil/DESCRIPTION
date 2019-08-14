@@ -49,7 +49,6 @@ Imports:
     magrittr,
     pander,
     PerformanceAnalytics,
-    psy,
     purrr,
     Rd2roxygen,
     readr,

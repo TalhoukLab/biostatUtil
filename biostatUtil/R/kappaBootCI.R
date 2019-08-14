@@ -28,8 +28,8 @@ kappaBootCI <- function(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
                         type = "nominal") {
   set.seed(seed)
   fun <- switch(match.arg(method),
-                cohen = function(data, x)
-                  psy::ckappa(data[x, ])[[2]],
+                cohen = function(data, x, weight = "unweighted")
+                  irr::kappa2(data[x, ], weight)$value,
                 weighted = function(data, x, weight = "squared")
                   irr::kappa2(data[x, ], weight)$value,
                 fleiss = function(data, x)
