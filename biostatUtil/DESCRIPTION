@@ -58,7 +58,6 @@ Imports:
     survival,
     tibble,
     tidyr,
-    tools,
     vsn
 Suggests: 
     logistf,
