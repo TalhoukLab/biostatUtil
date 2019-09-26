@@ -190,3 +190,30 @@ round_pval <- function(pvalue, round.small = TRUE, scientific = FALSE,
     sprintf(paste0("%.", digits, "f"), round(pvalue, digits = digits))
   }
 }
+
+#' Date of censoring
+#'
+#' Calculate date of censoring using date of diagnosis and last follow-up.
+#'
+#' The cutoff date is `cutoff_yr` years after the date of diagnosis, on December
+#' 31st. If the cutoff date is earlier than the date of last follow-up, then the
+#' cutoff date is the new date of censoring, otherwise use the date of last
+#' follow-up.
+#'
+#' @param date_dx date of diagnosis
+#' @param date_lfu date of last follow-up
+#' @param cutoff_yr number of years to cutoff at
+#' @return date of censoring
+#' @author Derek Chiu
+#'
+#' @export
+#' @examples
+#' date_dx <- as.Date("2003-03-08")
+#' date_lfu <- as.Date("2009-08-09")
+#' censor_date(date_dx, date_lfu, 5)
+#' censor_date(date_dx, date_lfu, 6)
+censor_date <- function(date_dx, date_lfu, cutoff_yr) {
+  date_cutoff <-
+    lubridate::make_date(lubridate::year(date_dx) + cutoff_yr, 12, 31)
+  dplyr::if_else(date_cutoff < date_lfu, date_cutoff, date_lfu)
+}
