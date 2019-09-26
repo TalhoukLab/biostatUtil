@@ -26,8 +26,9 @@ getFormat("12/09/1993", "MM.DD.YYYY")
 getFormat("2005-09-13", "YYYY.MM.DD")
 }
 \seealso{
-Other date formatting functions: \code{\link{cleanDate}},
-  \code{\link{formatDate}}, \code{\link{numericToDate}}
+Other date formatting functions: \code{\link{chr_to_date}},
+  \code{\link{cleanDate}}, \code{\link{formatDate}},
+  \code{\link{numericToDate}}
 }
 \author{
 Derek Chiu

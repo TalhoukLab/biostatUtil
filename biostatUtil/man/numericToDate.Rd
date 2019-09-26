@@ -22,8 +22,9 @@ numericToDate(10)
 numericToDate(10, "2000-09-11")
 }
 \seealso{
-Other date formatting functions: \code{\link{cleanDate}},
-  \code{\link{formatDate}}, \code{\link{getFormat}}
+Other date formatting functions: \code{\link{chr_to_date}},
+  \code{\link{cleanDate}}, \code{\link{formatDate}},
+  \code{\link{getFormat}}
 }
 \author{
 Samuel Leung

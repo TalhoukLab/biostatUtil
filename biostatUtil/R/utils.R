@@ -94,6 +94,7 @@ YYYYMMDD   <- "%Y%m%d"
 DDMMYYYY   <- "%d%m%Y"
 MMDDYYYY   <- "%m%d%Y"
 DATE.ORIGIN <- as.Date("1970-01-01")
+EXCEL.ORIGIN <- as.Date("1899-12-30")
 NUM.DAYS.IN.YEAR <- 365.241 #365.25
 NUM.DAYS.IN.MONTH <- 30.5
 

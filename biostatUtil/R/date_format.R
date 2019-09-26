@@ -12,7 +12,24 @@
 #' numericToDate(10)
 #' numericToDate(10, "2000-09-11")
 numericToDate <- function(x, date.origin = DATE.ORIGIN) {
-  return(as.Date(x, origin = date.origin))
+  as.Date(x, origin = date.origin)
+}
+
+#' Change character to date
+#'
+#' Change a numeric value stored as a character string to a date object.
+#'
+#' The default `date.origin` used is the Excel 1900 version.
+#'
+#' @inheritParams numericToDate
+#' @return A date object, converted from a character string.
+#' @family date formatting functions
+#' @author Derek Chiu
+#' @export
+#' @examples
+#' chr_to_date("41041")
+chr_to_date <- function(x, date.origin = EXCEL.ORIGIN) {
+  numericToDate(as.numeric(x), date.origin = EXCEL.ORIGIN)
 }
 
 #' Get date format from character text
