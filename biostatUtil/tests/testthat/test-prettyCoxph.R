@@ -57,7 +57,7 @@ test_that("reference group can be redefined", {
 })
 
 test_that("PH residual plot can be saved", {
-  expect_error(prettyCoxph(Surv(time, status) ~ x + strata(sex), test1,
+  expect_error(prettyCoxph(Surv(time, status) ~ x + sex, test1,
                            ph.test.plot.filename = "PH.pdf", check.ph = TRUE),
                NA)
   file.remove("PH.pdf")
