@@ -43,7 +43,6 @@ ms_gg_boxplot <- function(x, title) {
   return(p)
 }
 
-#' @inheritParams ms_plot
 #' @param g vector of treatment groups
 #' @param title vector of titles for each `g`
 #' @name ms_plot

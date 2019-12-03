@@ -1,6 +1,5 @@
 #' Fit a multivariable Cox model
 #'
-#' @inheritParams doCoxphGeneric
 #' @param format Either a "long" or "wide" format for the `result.table.bamboo`
 #'   result element
 #' @name doCoxph

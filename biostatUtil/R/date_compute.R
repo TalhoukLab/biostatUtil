@@ -83,7 +83,6 @@ addToDate <- function(org.date, delta, date.format = "MM.DD.YYYY",
 
 #' @param d1 later date
 #' @param d2 earlier date
-#' @inheritParams addToDate
 #' @return `diffDate` returns the difference between two dates `d1 -
 #'   d2` in the specified unit of time.
 #' @rdname date_compute
@@ -135,7 +134,6 @@ diff_years <- function(start, stop) {
   lubridate::interval(start, stop) / lubridate::years(1)
 }
 
-#' @inheritParams diffDate
 #' @return `compareDate` returns 1 if `d1 > d2`, -1 if `d1 < d2`,
 #'   and 0 if `d1 == d2`.
 #' @rdname date_compute
