@@ -5,7 +5,7 @@
 #' @param status status indicator
 #' @param var.name name of variable to make Kaplan-Meier plots on
 #' @param var.description description for `var.name`
-#' @param surv.type survival outcome. Either "os", "dss", or "pfs".
+#' @param surv.type survival outcome. Either "os", "dss", "pfs", or "aefs".
 #' @param shading.colors colors for survival curves
 #' @param line.name names for each survival curve
 #' @param line.pattern line type for survival curves
