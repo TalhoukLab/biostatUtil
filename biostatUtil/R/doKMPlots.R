@@ -29,7 +29,7 @@
 #' @author Samuel Leung, Derek Chiu
 #' @export
 doKMPlots <- function(input.d, time, status, var.name, var.description,
-                      surv.type = c("os", "dss", "pfs"),
+                      surv.type = c("os", "dss", "pfs", "aefs"),
                       shading.colors = c("blue2", "red2", "deepskyblue",
                                          "indianred3"),
                       line.name = NULL, line.pattern = NULL, legend = FALSE,
