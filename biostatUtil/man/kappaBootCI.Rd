@@ -4,9 +4,15 @@
 \alias{kappaBootCI}
 \title{Bootstrapped confidence interval for kappa statistic.}
 \usage{
-kappaBootCI(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
+kappaBootCI(
+  x,
+  y,
+  seed = 20,
+  num.boot = 1000,
+  conf.level = 0.95,
   method = c("cohen", "weighted", "fleiss", "krippendorff"),
-  type = "nominal")
+  type = "nominal"
+)
 }
 \arguments{
 \item{x}{vector of binary scores from first rater}
@@ -17,7 +23,7 @@ kappaBootCI(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
 
 \item{num.boot}{number of times to bootstrap. Defaults to 1000.}
 
-\item{conf.level}{confidence level. Defaults to 95\%.}
+\item{conf.level}{confidence level. Defaults to 95\\%.}
 
 \item{method}{statistic to calculate bootstrap estimate}
 

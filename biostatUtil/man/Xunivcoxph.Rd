@@ -13,7 +13,7 @@ Xunivcoxph(mod, digits = 3)
 \item{digits}{number of digits to round}
 }
 \value{
-Hazard ratio and 95/% confidence interval
+Hazard ratio and 95/\% confidence interval
 }
 \description{
 Concatenates hazard ratios and confidence limits for every covariate in a Cox

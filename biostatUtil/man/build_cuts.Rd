@@ -4,8 +4,7 @@
 \alias{build_cuts}
 \title{Build cutpoint variables}
 \usage{
-build_cuts(x, n = c("b", "t", "qd", "qn"), var.prefix = NULL,
-  list = FALSE)
+build_cuts(x, n = c("b", "t", "qd", "qn"), var.prefix = NULL, list = FALSE)
 }
 \arguments{
 \item{x}{vector to split by certain cutpoints}

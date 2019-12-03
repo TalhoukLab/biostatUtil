@@ -4,9 +4,17 @@
 \alias{doHist}
 \title{Do histogram with median}
 \usage{
-doHist(data, var, xlab = var, title = NULL, show.title = TRUE,
-  br = ceiling(sqrt(nrow(data))), digits = 3, score.lab = "scorable",
-  ...)
+doHist(
+  data,
+  var,
+  xlab = var,
+  title = NULL,
+  show.title = TRUE,
+  br = ceiling(sqrt(nrow(data))),
+  digits = 3,
+  score.lab = "scorable",
+  ...
+)
 }
 \arguments{
 \item{data}{data.frame with column names}

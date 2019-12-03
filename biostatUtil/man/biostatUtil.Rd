@@ -3,7 +3,6 @@
 \docType{package}
 \name{biostatUtil}
 \alias{biostatUtil}
-\alias{biostatUtil-package}
 \title{biostatUtil: utility functions for biostatistical projects}
 \description{
 biostatUtil provides a wide variety of data analysis, visualization, and

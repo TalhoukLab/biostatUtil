@@ -4,8 +4,16 @@
 \alias{binaryCMAsHTML}
 \title{Confusion matrix results in HTML}
 \usage{
-binaryCMAsHTML(x, y, ref.description = NULL, digits = 4, seed = 20,
-  num.boot = 1000, conf.level = 0.95, show.ci = TRUE)
+binaryCMAsHTML(
+  x,
+  y,
+  ref.description = NULL,
+  digits = 4,
+  seed = 20,
+  num.boot = 1000,
+  conf.level = 0.95,
+  show.ci = TRUE
+)
 }
 \arguments{
 \item{x}{vector of reference classes}
@@ -20,7 +28,7 @@ binaryCMAsHTML(x, y, ref.description = NULL, digits = 4, seed = 20,
 
 \item{num.boot}{number of bootstrap confidence intervals}
 
-\item{conf.level}{confidence level. Defaults to 95\%.}
+\item{conf.level}{confidence level. Defaults to 95\\%.}
 
 \item{show.ci}{if \code{TRUE} (default), the confidence intervals are shown.}
 }
@@ -46,8 +54,9 @@ FALSE)
 htmlTable(results.no.ci)
 }
 \seealso{
-Other confusion matrix functions: \code{\link{binaryCM}},
-  \code{\link{multiClassCM}}
+Other confusion matrix functions: 
+\code{\link{binaryCM}()},
+\code{\link{multiClassCM}()}
 }
 \author{
 Samuel Leung, Derek Chiu

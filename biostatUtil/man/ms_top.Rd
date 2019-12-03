@@ -4,8 +4,7 @@
 \alias{ms_top}
 \title{Top variables in mass spectrometry analysis}
 \usage{
-ms_top(x, level = c("Gene", "Peptide"), alpha = 0.05, fc = 1.25,
-  path = NULL)
+ms_top(x, level = c("Gene", "Peptide"), alpha = 0.05, fc = 1.25, path = NULL)
 }
 \arguments{
 \item{x}{data frame object returned by \code{ms_summarize}}
@@ -36,7 +35,7 @@ those that show statistical significance in an overall test and a
 scientifically relevant effect size. Variables of interest are summarized
 either on the gene level or peptide level.
 
-By default, the level of statistical significance is set to 5\% for the
+By default, the level of statistical significance is set to 5\\% for the
 Benjamini-Hochberg adjusted omnibus test p-value. The minimum absolute fold
 change for determining scientific relevance is 1.25 by default. These default
 values can be modified for different studies or projects, but offer a general
@@ -50,9 +49,11 @@ on the fold change criterion where the absolute fold change is greater than
 \code{fc} for \emph{either} A vs. control or B vs. control.
 }
 \seealso{
-Other Mass Spectrometry functions: \code{\link{ms_condition}},
-  \code{\link{ms_plot}}, \code{\link{ms_process}},
-  \code{\link{ms_summarize}}
+Other Mass Spectrometry functions: 
+\code{\link{ms_condition}()},
+\code{\link{ms_plot}},
+\code{\link{ms_process}()},
+\code{\link{ms_summarize}()}
 }
 \author{
 Derek Chiu

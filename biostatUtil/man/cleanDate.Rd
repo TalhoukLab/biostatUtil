@@ -4,8 +4,14 @@
 \alias{cleanDate}
 \title{Clean dates}
 \usage{
-cleanDate(x, original.format, preferred.format,
-  existing.missing.codes = "", return.missing.code = NA, sep = "/")
+cleanDate(
+  x,
+  original.format,
+  preferred.format,
+  existing.missing.codes = "",
+  return.missing.code = NA,
+  sep = "/"
+)
 }
 \arguments{
 \item{x}{a date string or a numeric representation of a date
@@ -34,9 +40,11 @@ cleanDate(11091991, original.format = "DD.MM.YYYY", preferred.format = "YYYY.MMM
 cleanDate(11091991, original.format = "DD.MM.YYYY", preferred.format = "YYYY.MMM.DD", sep = "-")
 }
 \seealso{
-Other date formatting functions: \code{\link{chr_to_date}},
-  \code{\link{formatDate}}, \code{\link{getFormat}},
-  \code{\link{numericToDate}}
+Other date formatting functions: 
+\code{\link{chr_to_date}()},
+\code{\link{formatDate}()},
+\code{\link{getFormat}()},
+\code{\link{numericToDate}()}
 }
 \author{
 Samuel Leung, Derek Chiu

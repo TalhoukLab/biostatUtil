@@ -8,8 +8,7 @@
 \usage{
 ms_boxplot(x, width = 8, height = 10, path = NULL)
 
-ms_mean_var(x, g, title = NULL, width = 8, height = 10,
-  path = NULL)
+ms_mean_var(x, g, title = NULL, width = 8, height = 10, path = NULL)
 }
 \arguments{
 \item{x}{data object returned by \code{ms_process}}
@@ -36,9 +35,11 @@ the vsn transformed values and mean-sd plots for each treatment group.
 mean-variance relationship.
 }
 \seealso{
-Other Mass Spectrometry functions: \code{\link{ms_condition}},
-  \code{\link{ms_process}}, \code{\link{ms_summarize}},
-  \code{\link{ms_top}}
+Other Mass Spectrometry functions: 
+\code{\link{ms_condition}()},
+\code{\link{ms_process}()},
+\code{\link{ms_summarize}()},
+\code{\link{ms_top}()}
 }
 \author{
 Derek Chiu

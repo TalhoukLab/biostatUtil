@@ -4,8 +4,7 @@
 \alias{doBarplot}
 \title{Barplot with counts}
 \usage{
-doBarplot(data, var, xlab = var, ylab = "Frequency", title = NULL,
-  digits = 3)
+doBarplot(data, var, xlab = var, ylab = "Frequency", title = NULL, digits = 3)
 }
 \arguments{
 \item{data}{data.frame with column names}

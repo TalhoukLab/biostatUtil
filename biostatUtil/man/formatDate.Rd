@@ -4,8 +4,14 @@
 \alias{formatDate}
 \title{Format a date.}
 \usage{
-formatDate(d, m, y, date.format = c("MM.DD.YYYY", "MMM.DD.YYYY",
-  "DD.MM.YYYY", "DD.MMM.YYYY", "YYYY.MM.DD", "YYYY.MMM.DD"), sep = "/")
+formatDate(
+  d,
+  m,
+  y,
+  date.format = c("MM.DD.YYYY", "MMM.DD.YYYY", "DD.MM.YYYY", "DD.MMM.YYYY",
+    "YYYY.MM.DD", "YYYY.MMM.DD"),
+  sep = "/"
+)
 }
 \arguments{
 \item{d}{day of the month (1-31)}
@@ -39,9 +45,11 @@ formatDate(8, 7, 2011, date.format = "DD.MM.YYYY", sep = "-")
 formatDate(10, 1, 2015, date.format = "MMM.DD.YYYY", sep = "-")
 }
 \seealso{
-Other date formatting functions: \code{\link{chr_to_date}},
-  \code{\link{cleanDate}}, \code{\link{getFormat}},
-  \code{\link{numericToDate}}
+Other date formatting functions: 
+\code{\link{chr_to_date}()},
+\code{\link{cleanDate}()},
+\code{\link{getFormat}()},
+\code{\link{numericToDate}()}
 }
 \author{
 Samuel Leung, Derek Chiu

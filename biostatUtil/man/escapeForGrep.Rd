@@ -14,7 +14,7 @@ A character vector with opening and closing square brackets and
 parentheses escaped for use in \code{grep}.
 }
 \description{
-Escape \code{[}, \code{]}, \code{(}, and \code{)} for use in \code{grep}.
+Escape \code{[}, \verb{]}, \code{(}, and \verb{)} for use in \code{grep}.
 }
 \examples{
 escapeForGrep("[index]")

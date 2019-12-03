@@ -4,8 +4,14 @@
 \alias{freqTable}
 \title{Generate a Frequency Table}
 \usage{
-freqTable(x, levels = sort(unique(as.character(x))), missing = NULL,
-  description = NULL, round = 1, plot = FALSE)
+freqTable(
+  x,
+  levels = sort(unique(as.character(x))),
+  missing = NULL,
+  description = NULL,
+  round = 1,
+  plot = FALSE
+)
 }
 \arguments{
 \item{x}{vector of values to show frequencies for}

@@ -34,7 +34,7 @@ Returns various statistics, with the ability to specify which values are
 missing.
 }
 \details{
-The statistics supported include \code{min, max, mean, sum, prod}, as
+The statistics supported include \verb{min, max, mean, sum, prod}, as
 indicated by each function's prefix. In addition, \code{ratioWithMissing}
 calculates the ratio \code{x / y}.
 }

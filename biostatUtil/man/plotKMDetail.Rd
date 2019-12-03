@@ -4,13 +4,30 @@
 \alias{plotKMDetail}
 \title{Plot detailed Kaplan-Meier curves}
 \usage{
-plotKMDetail(input.data, surv.formula, main.text = "", xlab.text = "",
-  ylab.text = "", line.name, line.color, line.pattern = NULL,
-  line.width = NULL, show.test = "single",
-  single.test.type = "logrank", round.digits.p.value = 4, obs.survyrs,
-  ten.years.surv.95CI, event.count, legend.pos = "bottomleft",
-  file.name = "no.file", file.width = 7, file.height = 7,
-  grey.scale = FALSE, show.single.test.pos, ...)
+plotKMDetail(
+  input.data,
+  surv.formula,
+  main.text = "",
+  xlab.text = "",
+  ylab.text = "",
+  line.name,
+  line.color,
+  line.pattern = NULL,
+  line.width = NULL,
+  show.test = "single",
+  single.test.type = "logrank",
+  round.digits.p.value = 4,
+  obs.survyrs,
+  ten.years.surv.95CI,
+  event.count,
+  legend.pos = "bottomleft",
+  file.name = "no.file",
+  file.width = 7,
+  file.height = 7,
+  grey.scale = FALSE,
+  show.single.test.pos,
+  ...
+)
 }
 \arguments{
 \item{input.data}{input \code{data.frame}}
@@ -41,7 +58,7 @@ comparisons). If \code{"none"}, then no test is show.}
 
 \item{obs.survyrs}{show the observed survival years survival rate on KM plot}
 
-\item{ten.years.surv.95CI}{show ten year survival 95\% confidence interval}
+\item{ten.years.surv.95CI}{show ten year survival 95\\% confidence interval}
 
 \item{event.count}{show the number of events at each time point}
 

@@ -4,8 +4,12 @@
 \alias{getFormat}
 \title{Get date format from character text}
 \usage{
-getFormat(date, char.format = c("MM.DD.YYYY", "MMM.DD.YYYY",
-  "DD.MM.YYYY", "DD.MMM.YYYY", "YYYY.MM.DD", "YYYY.MMM.DD"), sep = "")
+getFormat(
+  date,
+  char.format = c("MM.DD.YYYY", "MMM.DD.YYYY", "DD.MM.YYYY", "DD.MMM.YYYY",
+    "YYYY.MM.DD", "YYYY.MMM.DD"),
+  sep = ""
+)
 }
 \arguments{
 \item{date}{character string of date}
@@ -26,9 +30,11 @@ getFormat("12/09/1993", "MM.DD.YYYY")
 getFormat("2005-09-13", "YYYY.MM.DD")
 }
 \seealso{
-Other date formatting functions: \code{\link{chr_to_date}},
-  \code{\link{cleanDate}}, \code{\link{formatDate}},
-  \code{\link{numericToDate}}
+Other date formatting functions: 
+\code{\link{chr_to_date}()},
+\code{\link{cleanDate}()},
+\code{\link{formatDate}()},
+\code{\link{numericToDate}()}
 }
 \author{
 Derek Chiu

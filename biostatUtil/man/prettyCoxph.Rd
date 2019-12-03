@@ -4,9 +4,16 @@
 \alias{prettyCoxph}
 \title{Nicer outputs from coxph model fits}
 \usage{
-prettyCoxph(input.formula, input.d, ref.grp = NULL, use.firth = 1,
-  check.ph = FALSE, plot.ph = TRUE, ph.test.plot.filename = NULL,
-  ...)
+prettyCoxph(
+  input.formula,
+  input.d,
+  ref.grp = NULL,
+  use.firth = 1,
+  check.ph = FALSE,
+  plot.ph = TRUE,
+  ph.test.plot.filename = NULL,
+  ...
+)
 }
 \arguments{
 \item{input.formula}{a formula object, with the response on the left of a

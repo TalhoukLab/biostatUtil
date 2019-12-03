@@ -24,9 +24,11 @@ The default \code{date.origin} used is the Excel 1900 version.
 chr_to_date("41041")
 }
 \seealso{
-Other date formatting functions: \code{\link{cleanDate}},
-  \code{\link{formatDate}}, \code{\link{getFormat}},
-  \code{\link{numericToDate}}
+Other date formatting functions: 
+\code{\link{cleanDate}()},
+\code{\link{formatDate}()},
+\code{\link{getFormat}()},
+\code{\link{numericToDate}()}
 }
 \author{
 Derek Chiu

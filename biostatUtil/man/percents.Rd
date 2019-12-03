@@ -16,19 +16,46 @@ rowPercent(t, pretty.text = FALSE, keep = TRUE, digits = 4)
 
 rowColPercent(t, keep = TRUE, ...)
 
-colPercentAsHTML(t, keep = TRUE, row.names = NULL,
-  column.names = NULL, html.table.border = 0, banded.rows = FALSE,
-  col.odd = "none", col.even = "lightgrey", caption = NA,
-  transpose = FALSE, ...)
+colPercentAsHTML(
+  t,
+  keep = TRUE,
+  row.names = NULL,
+  column.names = NULL,
+  html.table.border = 0,
+  banded.rows = FALSE,
+  col.odd = "none",
+  col.even = "lightgrey",
+  caption = NA,
+  transpose = FALSE,
+  ...
+)
 
-rowPercentAsHTML(t, keep = TRUE, row.names = NULL,
-  column.names = NULL, html.table.border = 0, banded.rows = FALSE,
-  col.odd = "none", col.even = "lightgrey", caption = NA,
-  transpose = FALSE, ...)
+rowPercentAsHTML(
+  t,
+  keep = TRUE,
+  row.names = NULL,
+  column.names = NULL,
+  html.table.border = 0,
+  banded.rows = FALSE,
+  col.odd = "none",
+  col.even = "lightgrey",
+  caption = NA,
+  transpose = FALSE,
+  ...
+)
 
-rowColPercentAsHTML(t, keep = TRUE, row.names = NULL,
-  column.names = NULL, html.table.border = 0, banded.rows = FALSE,
-  col.odd = "none", col.even = "lightgrey", caption = NA, ...)
+rowColPercentAsHTML(
+  t,
+  keep = TRUE,
+  row.names = NULL,
+  column.names = NULL,
+  html.table.border = 0,
+  banded.rows = FALSE,
+  col.odd = "none",
+  col.even = "lightgrey",
+  caption = NA,
+  ...
+)
 }
 \arguments{
 \item{t}{a matrix}
@@ -78,7 +105,7 @@ both row and column percentages.
 }
 \details{
 Generates a table of row and/or column percentages given table \code{t}.
-Using \code{pretty.text = TRUE} will add the \% sign to the percentages.
+Using \code{pretty.text = TRUE} will add the \\% sign to the percentages.
 
 Row and column names can be replaced by \code{row.names} and
 \code{column.names}. Higher values of \code{html.table.border} make the table

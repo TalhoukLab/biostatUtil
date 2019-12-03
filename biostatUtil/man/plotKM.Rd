@@ -4,13 +4,32 @@
 \alias{plotKM}
 \title{Plot Kaplan-Meier curves}
 \usage{
-plotKM(input.d, input.formula, main.text = "", xlab.text = "",
-  ylab.text = "", line.name, line.color, line.pattern = NULL,
-  line.width = NULL, show.test = "single",
-  single.test.type = "logrank", digits = 3, obs.survyrs = 3,
-  legend.pos = "bottomleft", file.name = "no.file", file.width = 7,
-  file.height = 7, grey.scale = FALSE, show.single.test.pos = 0.1,
-  xlabs = NULL, legend.xy = NULL, ylabs = NULL, timeby = NULL, ...)
+plotKM(
+  input.d,
+  input.formula,
+  main.text = "",
+  xlab.text = "",
+  ylab.text = "",
+  line.name,
+  line.color,
+  line.pattern = NULL,
+  line.width = NULL,
+  show.test = "single",
+  single.test.type = "logrank",
+  digits = 3,
+  obs.survyrs = 3,
+  legend.pos = "bottomleft",
+  file.name = "no.file",
+  file.width = 7,
+  file.height = 7,
+  grey.scale = FALSE,
+  show.single.test.pos = 0.1,
+  xlabs = NULL,
+  legend.xy = NULL,
+  ylabs = NULL,
+  timeby = NULL,
+  ...
+)
 }
 \arguments{
 \item{input.d}{input \code{data.frame}}

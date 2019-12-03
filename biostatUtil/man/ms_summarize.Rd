@@ -4,8 +4,14 @@
 \alias{ms_summarize}
 \title{Summarize mass spectrometry data}
 \usage{
-ms_summarize(x, g, level = c("Gene", "Peptide"), col.names = NULL,
-  info.vars = NULL, path = NULL)
+ms_summarize(
+  x,
+  g,
+  level = c("Gene", "Peptide"),
+  col.names = NULL,
+  info.vars = NULL,
+  path = NULL
+)
 }
 \arguments{
 \item{x}{data frame with expression values}
@@ -36,9 +42,11 @@ Descriptions, Sequence, and Modifications variables. This combined variable
 is renamed to "AGDSM".
 }
 \seealso{
-Other Mass Spectrometry functions: \code{\link{ms_condition}},
-  \code{\link{ms_plot}}, \code{\link{ms_process}},
-  \code{\link{ms_top}}
+Other Mass Spectrometry functions: 
+\code{\link{ms_condition}()},
+\code{\link{ms_plot}},
+\code{\link{ms_process}()},
+\code{\link{ms_top}()}
 }
 \author{
 Derek Chiu

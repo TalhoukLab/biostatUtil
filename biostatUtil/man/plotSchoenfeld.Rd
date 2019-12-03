@@ -4,8 +4,7 @@
 \alias{plotSchoenfeld}
 \title{Do Schoenfeld residual plot}
 \usage{
-plotSchoenfeld(input.d, input.formula, vars.to.plot = NULL,
-  main = NULL)
+plotSchoenfeld(input.d, input.formula, vars.to.plot = NULL, main = NULL)
 }
 \arguments{
 \item{input.d}{input \code{data.frame}}

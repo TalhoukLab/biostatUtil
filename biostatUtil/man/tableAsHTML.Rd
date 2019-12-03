@@ -4,9 +4,16 @@
 \alias{tableAsHTML}
 \title{Table as HTML format}
 \usage{
-tableAsHTML(t, row.names = NULL, column.names = NULL,
-  html.table.border = 0, banded.rows = FALSE, col.odd = "none",
-  col.even = "lightgrey", caption = NA)
+tableAsHTML(
+  t,
+  row.names = NULL,
+  column.names = NULL,
+  html.table.border = 0,
+  banded.rows = FALSE,
+  col.odd = "none",
+  col.even = "lightgrey",
+  caption = NA
+)
 }
 \arguments{
 \item{t}{a matrix}

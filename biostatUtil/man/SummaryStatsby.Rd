@@ -4,9 +4,15 @@
 \alias{SummaryStatsBy}
 \title{Generate summary statistics}
 \usage{
-SummaryStatsBy(data, by1, by2, var.names, stats = c("mean", "sd",
-  "median", "IQR", "range", "missing"), digits = 3, format = c("raw",
-  "pandoc", "html", "long"))
+SummaryStatsBy(
+  data,
+  by1,
+  by2,
+  var.names,
+  stats = c("mean", "sd", "median", "IQR", "range", "missing"),
+  digits = 3,
+  format = c("raw", "pandoc", "html", "long")
+)
 }
 \arguments{
 \item{data}{The \code{data.frame} containing the data}
@@ -32,7 +38,7 @@ variable.
 \details{
 The \code{data} is split by two variables, \code{by1} and \code{by2}, and
 statistics are computed for continuous variables. Statistics currently
-supported include \code{mean, sd, median, IQR, range}, and the number of
+supported include \verb{mean, sd, median, IQR, range}, and the number of
 missing cases. For factor variables, the counts, column and row percentages
 are shown for each of the variable levels.
 

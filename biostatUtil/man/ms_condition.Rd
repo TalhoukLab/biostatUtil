@@ -4,8 +4,7 @@
 \alias{ms_condition}
 \title{Sample count condition for MS analyses}
 \usage{
-ms_condition(data, treatment, control = NULL, condition = c("VC",
-  "MRC", "MC"))
+ms_condition(data, treatment, control = NULL, condition = c("VC", "MRC", "MC"))
 }
 \arguments{
 \item{data}{The data matrix with rows as observations, columns as variables}
@@ -60,9 +59,11 @@ ms_condition(A, treatment = c("_2", "_3"), control = "_1", condition = "MRC")
 ms_condition(A, treatment = c("_2", "_3"), control = "_1", condition = "MC")
 }
 \seealso{
-Other Mass Spectrometry functions: \code{\link{ms_plot}},
-  \code{\link{ms_process}}, \code{\link{ms_summarize}},
-  \code{\link{ms_top}}
+Other Mass Spectrometry functions: 
+\code{\link{ms_plot}},
+\code{\link{ms_process}()},
+\code{\link{ms_summarize}()},
+\code{\link{ms_top}()}
 }
 \author{
 Derek Chiu

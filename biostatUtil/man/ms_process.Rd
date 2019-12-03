@@ -4,8 +4,15 @@
 \alias{ms_process}
 \title{Process mass spectrometry data}
 \usage{
-ms_process(psm, protein, treatment, samples = NULL, sample.id = NULL,
-  path = NULL, ...)
+ms_process(
+  psm,
+  protein,
+  treatment,
+  samples = NULL,
+  sample.id = NULL,
+  path = NULL,
+  ...
+)
 }
 \arguments{
 \item{psm}{PSM file}
@@ -35,9 +42,11 @@ Process mass spectrometry data for filtering out contaminant samples,
 manipulating variables, removing duplicates, and more.
 }
 \seealso{
-Other Mass Spectrometry functions: \code{\link{ms_condition}},
-  \code{\link{ms_plot}}, \code{\link{ms_summarize}},
-  \code{\link{ms_top}}
+Other Mass Spectrometry functions: 
+\code{\link{ms_condition}()},
+\code{\link{ms_plot}},
+\code{\link{ms_summarize}()},
+\code{\link{ms_top}()}
 }
 \author{
 Derek Chiu

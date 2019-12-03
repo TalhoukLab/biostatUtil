@@ -4,8 +4,15 @@
 \alias{multiClassCM}
 \title{Confusion matrix summaries}
 \usage{
-multiClassCM(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
-  digits = 2, method = "wilson")
+multiClassCM(
+  x,
+  y,
+  seed = 20,
+  num.boot = 1000,
+  conf.level = 0.95,
+  digits = 2,
+  method = "wilson"
+)
 }
 \arguments{
 \item{x}{a vector of reference classes}
@@ -16,7 +23,7 @@ multiClassCM(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
 
 \item{num.boot}{number of times to bootstrap. Defaults to 1000.}
 
-\item{conf.level}{confidence level. Defaults to 95\%.}
+\item{conf.level}{confidence level. Defaults to 95\\%.}
 
 \item{digits}{number of digits to round summaries to}
 
@@ -67,8 +74,9 @@ multiClassCM(x, y, num.boot = 500, conf.level = 0.90)
 multiClassCM(x, y, digits = 2)
 }
 \seealso{
-Other confusion matrix functions: \code{\link{binaryCMAsHTML}},
-  \code{\link{binaryCM}}
+Other confusion matrix functions: 
+\code{\link{binaryCMAsHTML}()},
+\code{\link{binaryCM}()}
 }
 \author{
 Aline Talhouk, Derek Chiu
