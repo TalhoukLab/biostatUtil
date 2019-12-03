@@ -1,8 +1,8 @@
 Type: Package
 Package: biostatUtil
 Title: Utility Functions Used in Biostatistics Projects
-Version: 0.0.0.9089
-Date: 2019-09-26
+Version: 0.0.0.9090
+Date: 2019-12-03
 Authors@R: 
     c(person(given = "Derek",
              family = "Chiu",
@@ -54,7 +54,7 @@ Imports:
     rlang,
     rms,
     stringr,
-    survival,
+    survival (>= 3.1-8),
     tibble,
     tidyr,
     vsn
@@ -65,4 +65,4 @@ Suggests:
 Encoding: UTF-8
 LazyData: FALSE
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
