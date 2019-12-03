@@ -111,7 +111,7 @@ prettyCoxph <- function(input.formula, input.d, ref.grp = NULL, use.firth = 1,
   }
 
   if (check.ph) {
-    ph.test <- cox.zph(fit)
+    ph.test <- cox.zph(fit, terms = FALSE)
     ph.check <- ph.test$table %>%
       magrittr::extract(rownames(.) != "GLOBAL", "p") %>%
       cbind("PH test" = .)
