@@ -12,7 +12,7 @@ coxphOut(object, coefnames = NULL, conf.level = 0.95, digits = 2)
 \item{coefnames}{a vector of labels for the coefficient names returned by the
 fit. \code{NULL} by default, uses original coefficient names.}
 
-\item{conf.level}{confidence level for hazard ratio. Defaults to 95\\%.}
+\item{conf.level}{confidence level for hazard ratio. Defaults to 95\%.}
 
 \item{digits}{number of digits to round to}
 }

@@ -8,7 +8,7 @@
 #' @param digits number of digits to round p-values to
 #' @param seed random seed for bootstrap resampling
 #' @param num.boot number of bootstrap confidence intervals
-#' @param conf.level confidence level. Defaults to 95\%.
+#' @param conf.level confidence level. Defaults to 95%.
 #' @param show.ci if `TRUE` (default), the confidence intervals are shown.
 #' @return A character string that can be parsed as HTML code to display a nice
 #'   confusion matrix summary.

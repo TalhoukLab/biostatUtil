@@ -28,7 +28,7 @@ binaryCMAsHTML(
 
 \item{num.boot}{number of bootstrap confidence intervals}
 
-\item{conf.level}{confidence level. Defaults to 95\\%.}
+\item{conf.level}{confidence level. Defaults to 95\%.}
 
 \item{show.ci}{if \code{TRUE} (default), the confidence intervals are shown.}
 }

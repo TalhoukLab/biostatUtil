@@ -10,7 +10,7 @@
 #' @param y vector of binary scores from second rater
 #' @param seed random seed for bootstrapping
 #' @param num.boot number of times to bootstrap. Defaults to 1000.
-#' @param conf.level confidence level. Defaults to 95\%.
+#' @param conf.level confidence level. Defaults to 95%.
 #' @param method statistic to calculate bootstrap estimate
 #' @param type method setting for `method = "krippendorff"`
 #' @return bootstraped confidence interval for Cohen's kappa.

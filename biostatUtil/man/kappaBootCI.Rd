@@ -23,7 +23,7 @@ kappaBootCI(
 
 \item{num.boot}{number of times to bootstrap. Defaults to 1000.}
 
-\item{conf.level}{confidence level. Defaults to 95\\%.}
+\item{conf.level}{confidence level. Defaults to 95\%.}
 
 \item{method}{statistic to calculate bootstrap estimate}
 

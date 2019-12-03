@@ -58,7 +58,7 @@ comparisons). If \code{"none"}, then no test is show.}
 
 \item{obs.survyrs}{show the observed survival years survival rate on KM plot}
 
-\item{ten.years.surv.95CI}{show ten year survival 95\\% confidence interval}
+\item{ten.years.surv.95CI}{show ten year survival 95\% confidence interval}
 
 \item{event.count}{show the number of events at each time point}
 

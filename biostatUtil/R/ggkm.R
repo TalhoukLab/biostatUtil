@@ -29,7 +29,7 @@
 #' @param pval logical; if `TRUE` (default), the logrank test p-value is
 #'   shown on the plot
 #' @param HR logical; if `TRUE` (default), the estimated hazard ratio and
-#'   its 95\% confidence interval will be shown
+#'   its 95% confidence interval will be shown
 #' @param use.firth Firth's method for Cox regression is used if the percentage
 #'   of censored cases exceeds `use.firth`. Setting `use.firth = 1`
 #'   (default) means Firth is never used, and `use.firth = -1` means Firth

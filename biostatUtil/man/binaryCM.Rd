@@ -28,7 +28,7 @@ binaryCM(
 \item{pcond}{a string or value to be considered positive condition; defaults
 to 1.}
 
-\item{conf.level}{confidence level. Defaults to 95\\%.}
+\item{conf.level}{confidence level. Defaults to 95\%.}
 
 \item{digits}{number of digits to round summaries to}
 

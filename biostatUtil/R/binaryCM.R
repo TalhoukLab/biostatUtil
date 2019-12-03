@@ -17,7 +17,7 @@
 #'   to 1.
 #' @param seed random seed for bootstrapping
 #' @param num.boot number of times to bootstrap. Defaults to 1000.
-#' @param conf.level confidence level. Defaults to 95\%.
+#' @param conf.level confidence level. Defaults to 95%.
 #' @param digits number of digits to round summaries to
 #' @param method method for obtaining confidence intervals for binomial
 #'   probabilities. See `Hmisc::binconf` for details.

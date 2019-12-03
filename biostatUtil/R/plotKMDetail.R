@@ -18,7 +18,7 @@
 #'   `"wilcoxon"`, `"taroneware"`, or `"all"`.
 #' @param round.digits.p.value number of digits for p-value
 #' @param obs.survyrs show the observed survival years survival rate on KM plot
-#' @param ten.years.surv.95CI show ten year survival 95\% confidence interval
+#' @param ten.years.surv.95CI show ten year survival 95% confidence interval
 #' @param event.count show the number of events at each time point
 #' @param legend.pos legend position keyword
 #' @param file.name name of file to save plot to

@@ -77,7 +77,7 @@ entire range of follow-up. Defaults to 5.}
 shown on the plot}
 
 \item{HR}{logical; if \code{TRUE} (default), the estimated hazard ratio and
-its 95\\% confidence interval will be shown}
+its 95\% confidence interval will be shown}
 
 \item{use.firth}{Firth's method for Cox regression is used if the percentage
 of censored cases exceeds \code{use.firth}. Setting \code{use.firth = 1}
