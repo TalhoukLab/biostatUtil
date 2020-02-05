@@ -4,8 +4,7 @@
 \alias{DSC}
 \title{Dispersion Separability Criterion (DSC)}
 \usage{
-DSC(data, Y, permut = 10, digits.d = 3, digits.p = floor(log10(permut)) +
-  1)
+DSC(data, Y, permut = 10, digits.d = 3, digits.p = floor(log10(permut)) + 1)
 }
 \arguments{
 \item{data}{a combined data set}
