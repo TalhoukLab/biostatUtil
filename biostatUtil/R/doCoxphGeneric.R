@@ -39,6 +39,7 @@
 #'   Cox regression. If `use.firth = 1` (default), Firth is never used and if
 #'   `use.firth = -1` Firth is always used.
 #' @param firth.caption subscript in html table output indicating Firth was used
+#' @param ci if `TRUE`, show 95% confidence intervals
 #' @param stat.test the overall model test to perform on the Cox regression
 #'   model. Can be any of "waldtest", "logtest", or "sctest". If Firth is used,
 #'   only "logtest" can be performed. Test p-values are never Firth corrected (
@@ -81,7 +82,7 @@ doCoxphGeneric <- function(
   event.codes.surv = c("os.event", "dss.event", "rfs.event"),
   surv.descriptions = c("OS", "DSS", "PFS"),
   missing.codes = c("N/A", "", "Unk"),
-  use.firth = 1, firth.caption = FIRTH.CAPTION,
+  use.firth = 1, firth.caption = FIRTH.CAPTION, ci = TRUE,
   stat.test = "waldtest", round.digits.p.value = 4,
   round.small = FALSE, scientific = FALSE,
   caption = NA, html.table.border = 0, banded.rows = FALSE,
@@ -118,7 +119,8 @@ doCoxphGeneric <- function(
   var.ref.groups <- var.ref.groups %||% rep(NA, nvar)
   rn <- paste(rep(var.names, each = num.surv.endpoints), surv.descriptions,
               sep = "-")
-  cn <- c("# of events / n", "Hazard Ratio (95% CI)",
+  cn <- c("# of events / n",
+          ifelse(ci, "Hazard Ratio (95% CI)", "Hazard Ratio"),
           paste0(ifelse(stat.test == "logtest", "LRT ", ""), "P-value"))
   result.table <- matrix(NA_character_, nrow = nvar * num.surv.endpoints,
                          ncol = 3, dimnames = list(rn, cn))
@@ -151,11 +153,19 @@ doCoxphGeneric <- function(
                                input.d = temp.d.no.missing.survival,
                                use.firth = use.firth)
       e.n <- paste(cox.stats$nevent, "/", cox.stats$n)
-      hr.ci <- cox.stats$output %>%
-        magrittr::extract(c("estimate", "conf.low", "conf.high")) %>%
-        format_hr_ci(digits = 2, labels = FALSE, method = "Sci") %>%
-        paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>%
-        paste(collapse = kLocalConstantHrSepFlag)
+      if (ci) {
+        hr.ci <- cox.stats$output %>%
+          magrittr::extract(c("estimate", "conf.low", "conf.high")) %>%
+          format_hr_ci(digits = 2, labels = FALSE, method = "Sci") %>%
+          paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>%
+          paste(collapse = kLocalConstantHrSepFlag)
+      } else {
+        hr.ci <- cox.stats$output %>%
+          magrittr::extract("estimate") %>%
+          round(digits = 2) %>%
+          paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>%
+          paste(collapse = kLocalConstantHrSepFlag)
+      }
       pval <- summary(cox.stats$fit)[[stat.test]][["pvalue"]] %>%
         round_pval(round.small = round.small, scientific = scientific,
                    digits = round.digits.p.value)

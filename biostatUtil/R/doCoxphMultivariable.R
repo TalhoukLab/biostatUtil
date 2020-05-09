@@ -13,7 +13,7 @@ doCoxphMultivariable <- function(
   event.codes.surv = c("os.event", "dss.event", "rfs.event"),
   surv.descriptions = c("OS", "DSS", "PFS"),
   missing.codes = c("N/A", "", "Unk"),
-  use.firth = 1, firth.caption = FIRTH.CAPTION,
+  use.firth = 1, firth.caption = FIRTH.CAPTION, ci = TRUE,
   stat.test = "waldtest", round.digits.p.value = 4,
   round.small = FALSE, scientific = FALSE,
   caption = NA, html.table.border = 0, banded.rows = FALSE,
@@ -51,7 +51,8 @@ doCoxphMultivariable <- function(
   nvar <- length(var.names)
   var.ref.groups <- var.ref.groups %||% rep(NA, nvar)
   rn <- paste(var.names, rep(surv.descriptions, each = nvar), sep = "-")
-  cn <- c("# of events / n", "Hazard Ratio (95% CI)",
+  cn <- c("# of events / n",
+          ifelse(ci, "Hazard Ratio (95% CI)", "Hazard Ratio"),
           paste0(ifelse(stat.test == "logtest", "LRT ", ""), "P-value"))
   result.table <- matrix(NA_character_, nrow = nvar * num.surv.endpoints,
                          ncol = 3, dimnames = list(rn, cn))
@@ -91,11 +92,19 @@ doCoxphMultivariable <- function(
       if (!is.na(var.ref.groups[i]))
         var.idx <- var.idx:(var.idx + nlevels(temp.d[[var.name]]) - 2)
       e.n <- paste(cox.stats$nevent, "/", cox.stats$n)
-      hr.ci <- cox.stats$output %>%
-        magrittr::extract(var.idx, c("estimate", "conf.low", "conf.high")) %>%
-        format_hr_ci(digits = 2, labels = FALSE, method = "Sci") %>%
-        paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>%
-        paste(collapse = kLocalConstantHrSepFlag)
+      if (ci) {
+        hr.ci <- cox.stats$output %>%
+          magrittr::extract(var.idx, c("estimate", "conf.low", "conf.high")) %>%
+          format_hr_ci(digits = 2, labels = FALSE, method = "Sci") %>%
+          paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>%
+          paste(collapse = kLocalConstantHrSepFlag)
+      } else {
+        hr.ci <- cox.stats$output %>%
+          magrittr::extract(var.idx, "estimate") %>%
+          round(digits = 2) %>%
+          paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>%
+          paste(collapse = kLocalConstantHrSepFlag)
+      }
       p.value <- switch(
         stat.test,
         logtest = {
