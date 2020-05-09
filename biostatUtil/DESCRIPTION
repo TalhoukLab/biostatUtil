@@ -34,6 +34,7 @@ Imports:
     DescTools,
     doBy,
     dplyr,
+    e1071,
     gdata,
     ggplot2,
     grid,
