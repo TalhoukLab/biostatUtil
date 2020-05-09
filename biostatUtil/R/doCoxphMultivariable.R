@@ -13,7 +13,7 @@ doCoxphMultivariable <- function(
   event.codes.surv = c("os.event", "dss.event", "rfs.event"),
   surv.descriptions = c("OS", "DSS", "PFS"),
   missing.codes = c("N/A", "", "Unk"),
-  use.firth = 1, firth.caption = FIRTH.CAPTION, ci = TRUE,
+  use.firth = 1, firth.caption = FIRTH.CAPTION, add_log_hr = FALSE, ci = TRUE,
   stat.test = "waldtest", round.digits.p.value = 4,
   round.small = FALSE, scientific = FALSE,
   caption = NA, html.table.border = 0, banded.rows = FALSE,
@@ -54,8 +54,15 @@ doCoxphMultivariable <- function(
   cn <- c("# of events / n",
           ifelse(ci, "Hazard Ratio (95% CI)", "Hazard Ratio"),
           paste0(ifelse(stat.test == "logtest", "LRT ", ""), "P-value"))
-  result.table <- matrix(NA_character_, nrow = nvar * num.surv.endpoints,
-                         ncol = 3, dimnames = list(rn, cn))
+  if (add_log_hr) {
+    cn <- append(cn, "Log Hazard Ratio", 1)
+  }
+  result.table <- matrix(
+    NA_character_,
+    nrow = nvar * num.surv.endpoints,
+    ncol = length(cn),
+    dimnames = list(rn, cn)
+  )
   for (i in seq_along(var.names)) {
     x <- var.names[i]
     input.d <- input.d %>%  # remove any cases with NA's or missing values
@@ -127,7 +134,17 @@ doCoxphMultivariable <- function(
       ) %>%
         round_pval(round.small = round.small, scientific = scientific,
                    digits = round.digits.p.value)
-      result.table[nvar * (j - 1) + i, ] <- c(e.n, hr.ci, p.value)
+      res <- c(e.n, hr.ci, p.value)
+      if (add_log_hr) {
+        log_hr <- cox.stats$output %>%
+          magrittr::extract(var.idx, "estimate") %>%
+          log() %>%
+          round(digits = 2) %>%
+          paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>%
+          paste(collapse = kLocalConstantHrSepFlag)
+        res <- append(res, log_hr, 1)
+      }
+      result.table[nvar * (j - 1) + i, ] <- res
       cox.stats.output[[surv.descriptions[j]]] <- cox.stats
     }
   }

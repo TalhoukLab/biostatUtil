@@ -39,6 +39,7 @@
 #'   Cox regression. If `use.firth = 1` (default), Firth is never used and if
 #'   `use.firth = -1` Firth is always used.
 #' @param firth.caption subscript in html table output indicating Firth was used
+#' @param add_log_hr if `TRUE`, show the log hazard ratio
 #' @param ci if `TRUE`, show 95% confidence intervals
 #' @param stat.test the overall model test to perform on the Cox regression
 #'   model. Can be any of "waldtest", "logtest", or "sctest". If Firth is used,
@@ -82,7 +83,7 @@ doCoxphGeneric <- function(
   event.codes.surv = c("os.event", "dss.event", "rfs.event"),
   surv.descriptions = c("OS", "DSS", "PFS"),
   missing.codes = c("N/A", "", "Unk"),
-  use.firth = 1, firth.caption = FIRTH.CAPTION, ci = TRUE,
+  use.firth = 1, firth.caption = FIRTH.CAPTION, add_log_hr = FALSE, ci = TRUE,
   stat.test = "waldtest", round.digits.p.value = 4,
   round.small = FALSE, scientific = FALSE,
   caption = NA, html.table.border = 0, banded.rows = FALSE,
@@ -122,8 +123,15 @@ doCoxphGeneric <- function(
   cn <- c("# of events / n",
           ifelse(ci, "Hazard Ratio (95% CI)", "Hazard Ratio"),
           paste0(ifelse(stat.test == "logtest", "LRT ", ""), "P-value"))
-  result.table <- matrix(NA_character_, nrow = nvar * num.surv.endpoints,
-                         ncol = 3, dimnames = list(rn, cn))
+  if (add_log_hr) {
+    cn <- append(cn, "Log Hazard Ratio", 1)
+  }
+  result.table <- matrix(
+    NA_character_,
+    nrow = nvar * num.surv.endpoints,
+    ncol = length(cn),
+    dimnames = list(rn, cn)
+  )
   for (i in seq_along(var.names)) {
     x <- var.names[i]
     temp.d <- input.d %>%  # remove any cases with NA's or missing values
@@ -169,7 +177,17 @@ doCoxphGeneric <- function(
       pval <- summary(cox.stats$fit)[[stat.test]][["pvalue"]] %>%
         round_pval(round.small = round.small, scientific = scientific,
                    digits = round.digits.p.value)
-      result.table[num.surv.endpoints * (i - 1) + j, ] <- c(e.n, hr.ci, pval)
+      res <- c(e.n, hr.ci, pval)
+      if (add_log_hr) {
+        log_hr <- cox.stats$output %>%
+          magrittr::extract("estimate") %>%
+          log() %>%
+          round(digits = 2) %>%
+          paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>%
+          paste(collapse = kLocalConstantHrSepFlag)
+        res <- append(res, log_hr, 1)
+      }
+      result.table[num.surv.endpoints * (i - 1) + j, ] <- res
     }
   }
 
