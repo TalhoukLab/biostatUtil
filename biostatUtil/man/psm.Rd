@@ -4,7 +4,9 @@
 \name{psm}
 \alias{psm}
 \title{Peptide-Spectrum Match (PSM) file from Mass Spectrometry experiment}
-\format{A data frame with 4146 rows and 43 columns}
+\format{
+A data frame with 4146 rows and 43 columns
+}
 \usage{
 psm
 }

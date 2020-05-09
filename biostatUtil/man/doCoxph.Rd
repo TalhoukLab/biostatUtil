@@ -21,6 +21,8 @@ doCoxphGeneric(
   missing.codes = c("N/A", "", "Unk"),
   use.firth = 1,
   firth.caption = FIRTH.CAPTION,
+  add_log_hr = FALSE,
+  ci = TRUE,
   stat.test = "waldtest",
   round.digits.p.value = 4,
   round.small = FALSE,
@@ -49,6 +51,8 @@ doCoxphMultivariable(
   missing.codes = c("N/A", "", "Unk"),
   use.firth = 1,
   firth.caption = FIRTH.CAPTION,
+  add_log_hr = FALSE,
+  ci = TRUE,
   stat.test = "waldtest",
   round.digits.p.value = 4,
   round.small = FALSE,
@@ -103,6 +107,10 @@ Cox regression. If \code{use.firth = 1} (default), Firth is never used and if
 \code{use.firth = -1} Firth is always used.}
 
 \item{firth.caption}{subscript in html table output indicating Firth was used}
+
+\item{add_log_hr}{if \code{TRUE}, show the log hazard ratio}
+
+\item{ci}{if \code{TRUE}, show 95\% confidence intervals}
 
 \item{stat.test}{the overall model test to perform on the Cox regression
 model. Can be any of "waldtest", "logtest", or "sctest". If Firth is used,

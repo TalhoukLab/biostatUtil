@@ -4,7 +4,9 @@
 \name{pro}
 \alias{pro}
 \title{Protein file from Mass Spectrometry experiment}
-\format{A data frame with 886 rows and 34 columns}
+\format{
+A data frame with 886 rows and 34 columns
+}
 \usage{
 pro
 }
