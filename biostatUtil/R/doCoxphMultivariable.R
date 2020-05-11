@@ -38,12 +38,12 @@ doCoxphMultivariable <- function(
 
   # Remove all variables not used in analysis, ensure survival times are numeric
   input.d <- input.d %>%
-    dplyr::select(c(
+    dplyr::select(tidyselect::all_of(c(
       var.names,
       var.names.surv.time,
       var.names.surv.time2,
       var.names.surv.status
-    )) %>%
+    ))) %>%
     droplevels() %>%
     dplyr::mutate_at(c(var.names.surv.time, var.names.surv.time2), as.numeric)
 
