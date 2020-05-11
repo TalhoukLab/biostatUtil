@@ -184,7 +184,7 @@ doCoxphMultivariable <- function(
                       result.table[i, 1]),
                ""),
         "</td><td style='", row.td.style.for.multi.cox, "'>",
-        paste0(gsub(kLocalConstantHrSepFlag, "<br>", result.table[i, 2:3]),
+        paste0(gsub(kLocalConstantHrSepFlag, "<br>", result.table[i, -1]),
                collapse = paste("</td><td style='", row.td.style.for.multi.cox, "'>")), "</td></tr>")
       is.first.row <- FALSE # if run any time after the first row, must not be the first row any more
       i <- i + 1
@@ -223,7 +223,8 @@ doCoxphMultivariable <- function(
   # whenever reference group is specified
   if (sum(is.na(var.ref.groups)) != length(var.ref.groups)) {
     first.col.name <- colnames(result.table.bamboo)[1]
-    result.table.bamboo <- cbind(result.table.bamboo[, 1], "", result.table.bamboo[, 2:3])
+    result.table.bamboo <- cbind(result.table.bamboo[, 1], "",
+                                 result.table.bamboo[, -1])
     colnames(result.table.bamboo)[1] <- first.col.name
     hr.col.index <- 3 # column with the hazard ratios
     for (i in seq_len(num.surv)) {
