@@ -226,7 +226,8 @@ doCoxphMultivariable <- function(
     result.table.bamboo <- cbind(result.table.bamboo[, 1], "",
                                  result.table.bamboo[, -1])
     colnames(result.table.bamboo)[1] <- first.col.name
-    hr.col.index <- 3 # column with the hazard ratios
+    # column with the hazard ratios
+    if (add_log_hr) hr.col.index <- 3:4 else hr.col.index <- 3
     for (i in seq_len(num.surv)) {
       result.table.bamboo.base.index <- result.table.bamboo.base.indexes[i]
       rows.added <- 0
@@ -256,9 +257,14 @@ doCoxphMultivariable <- function(
             }
           }
           if (num.other.groups > 1 | show.group.name.for.bin.var) {
-            result.table.bamboo[curr.base.index:(curr.base.index + num.other.groups - 1), hr.col.index] <-
-              strsplit(result.table.bamboo[curr.base.index, hr.col.index], kLocalConstantHrSepFlag)[[1]]
-            result.table.bamboo[curr.base.index:(curr.base.index + num.other.groups - 1), hr.col.index - 1] <- other.groups
+            base_rows <- curr.base.index:(curr.base.index + num.other.groups - 1)
+            result.table.bamboo[base_rows, hr.col.index] <-
+              stringr::str_split_fixed(
+                string = result.table.bamboo[curr.base.index, hr.col.index],
+                pattern = kLocalConstantHrSepFlag,
+                n = num.other.groups) %>%
+              t()
+            result.table.bamboo[base_rows, 2] <- other.groups
           }
         }
       }
