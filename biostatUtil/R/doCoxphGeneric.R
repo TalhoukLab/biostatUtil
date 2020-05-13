@@ -180,7 +180,7 @@ doCoxphGeneric <- function(
       res <- c(e.n, hr.ci, pval)
       if (add_log_hr) {
         log_hr <- cox.stats$output %>%
-          magrittr::extract("estimate") %>%
+          magrittr::extract(, "estimate") %>%
           log() %>%
           round(digits = 2) %>%
           paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>%
