@@ -163,13 +163,13 @@ doCoxphGeneric <- function(
       e.n <- paste(cox.stats$nevent, "/", cox.stats$n)
       if (ci) {
         hr.ci <- cox.stats$output %>%
-          magrittr::extract(c("estimate", "conf.low", "conf.high")) %>%
+          magrittr::extract(, c("estimate", "conf.low", "conf.high")) %>%
           format_hr_ci(digits = 2, labels = FALSE, method = "Sci") %>%
           paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>%
           paste(collapse = kLocalConstantHrSepFlag)
       } else {
         hr.ci <- cox.stats$output %>%
-          magrittr::extract("estimate") %>%
+          magrittr::extract(, "estimate") %>%
           round(digits = 2) %>%
           paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>%
           paste(collapse = kLocalConstantHrSepFlag)
