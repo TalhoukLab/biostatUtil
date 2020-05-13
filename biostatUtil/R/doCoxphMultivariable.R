@@ -285,16 +285,16 @@ doCoxphMultivariable <- function(
 
     tmp <- purrr::map(tab_splits, ~ {
       tmp_vars <- rownames(.)
-      tmp_e.n <- .[1, 1]
+      tmp_e.n <- paste(tmp_vars[1], .[1, 1], sep = ": ")
       tmp_df <- data.frame(
         Variable = tmp_vars[-1],
         Levels = .[-1, 2],
-        .[-1, 3:4, drop = FALSE],
+        .[-1, -1:-2, drop = FALSE],
         check.names = FALSE,
         stringsAsFactors = FALSE
       ) %>%
-        dplyr::rename_at(3:4, ~ paste(tmp_vars[1], ., sep = ": ")) %>%
-        rbind(c("# of events / n", "", paste(tmp_vars[1], tmp_e.n, sep = ": "), ""), .) %>%
+        dplyr::rename_at(-1:-2, ~ paste(tmp_vars[1], ., sep = ": ")) %>%
+        rbind(c("# of events / n", "", tmp_e.n, rep("", 1 + add_log_hr)), .) %>%
         magrittr::set_rownames(NULL)
     }) %>%
       purrr::reduce(dplyr::inner_join, by = c("Variable", "Levels")) %>%
