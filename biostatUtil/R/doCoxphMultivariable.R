@@ -289,7 +289,7 @@ doCoxphMultivariable <- function(
         magrittr::set_rownames(NULL)
     }) %>%
       purrr::reduce(dplyr::inner_join, by = c("Variable", "Levels")) %>%
-      dplyr::rename_all(~ gsub(".*: ", "", .))
+      rlang::set_names(gsub(".*: ", "", names(.)))
 
     tmp_colnames <- colnames(tmp)
     colnames(tmp) <- tmp[1, ]
