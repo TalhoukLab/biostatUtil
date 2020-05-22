@@ -274,7 +274,7 @@ doCoxphMultivariable <- function(
     splits <- purrr::map(result.table.bamboo.base.indexes, seq, length.out = group_size)
     tab_splits <- purrr::map(splits, ~ result.table.bamboo[., ])
 
-    tmp <- purrr::map(tab_splits, ~ {
+    tmp <- purrr::map_dfc(tab_splits, ~ {
       tmp_vars <- rownames(.)
       tmp_e.n <- paste(tmp_vars[1], .[1, 1], sep = ": ")
       tmp_df <- data.frame(
@@ -288,7 +288,7 @@ doCoxphMultivariable <- function(
         rbind(c("# of events / n", "", tmp_e.n, rep("", 1 + add_log_hr)), .) %>%
         magrittr::set_rownames(NULL)
     }) %>%
-      purrr::reduce(dplyr::inner_join, by = c("Variable", "Levels")) %>%
+      dplyr::select(c("Variable", "Levels"), matches("\\*")) %>%
       rlang::set_names(gsub(".*: ", "", names(.)))
 
     tmp_colnames <- colnames(tmp)
