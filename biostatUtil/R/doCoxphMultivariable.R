@@ -288,7 +288,7 @@ doCoxphMultivariable <- function(
         rbind(c("# of events / n", "", tmp_e.n, rep("", 1 + add_log_hr)), .) %>%
         magrittr::set_rownames(NULL)
     }) %>%
-      dplyr::select(c("Variable", "Levels"), matches("\\*")) %>%
+      dplyr::select(c("Variable", "Levels"), dplyr::matches("\\*")) %>%
       rlang::set_names(gsub(".*: ", "", names(.)))
 
     tmp_colnames <- colnames(tmp)
