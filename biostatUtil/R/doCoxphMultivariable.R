@@ -36,6 +36,11 @@ doCoxphMultivariable <- function(
     assertthat::assert_that(num.surv.endpoints == length(var.names.surv.time2))
   }
 
+  # Ensure variable names are not named vectors
+  var.names <- unname(var.names)
+  var.names.surv.time <- unname(var.names.surv.time)
+  var.names.surv.status <- unname(var.names.surv.status)
+
   # Remove all variables not used in analysis, ensure survival times are numeric
   input.d <- input.d %>%
     dplyr::select(tidyselect::all_of(c(
