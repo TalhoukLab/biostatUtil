@@ -106,6 +106,7 @@ doCoxphGeneric <- function(
   # Ensure variable names are not named vectors
   var.names <- unname(var.names)
   var.names.surv.time <- unname(var.names.surv.time)
+  var.names.surv.time2 <- unname(var.names.surv.time2)
   var.names.surv.status <- unname(var.names.surv.status)
 
   # Remove all variables not used in analysis, ensure survival times are numeric
