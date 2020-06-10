@@ -53,6 +53,9 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
     assign("formula.obj", formula.obj, envir = as.environment(pos))
     assign("input.d", input.d, envir = as.environment(pos))
     sfit <- survival::survfit(formula.obj, data = input.d)
+    if (is.null(sfit$strata)) {
+      sfit$strata <- stats::setNames(sfit$n, paste0(var.name, "=", levs))
+    }
 
     ggkm(sfit, shading.colors = shading.colors, ystratalabs = line.name,
          line.pattern = line.pattern, legend = legend,
