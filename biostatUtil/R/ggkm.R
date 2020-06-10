@@ -124,7 +124,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
                         aes(x = time, y = surv), shape = "/", size = 4)
 
   # HR statistic (95% CI), log rank test p-value for sfit (or sfit2, if exists)
-  if (pval) {
+  if (pval && length(sfit$strata) > 1) {
     fit <- sfit2 %||% sfit
     p <- summarize_km(fit = fit, p = p, digits = digits, HR = HR,
                       cox.ref.grp = cox.ref.grp, use.firth = use.firth,
