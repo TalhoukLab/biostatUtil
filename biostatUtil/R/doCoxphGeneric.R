@@ -34,6 +34,8 @@
 #' @param event.codes.surv event coding of survival status variable
 #' @param surv.descriptions names abbreviated survival endpoints in returned
 #'   output
+#' @param var.strata optional variable name to stratify by using
+#'   [survival::strata()]
 #' @param missing.codes character strings of missing values used in `input.d`
 #' @param use.firth percentage of censored cases before using Firth's method for
 #'   Cox regression. If `use.firth = 1` (default), Firth is never used and if

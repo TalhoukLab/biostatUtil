@@ -100,6 +100,9 @@ not \code{NULL}.}
 \item{surv.descriptions}{names abbreviated survival endpoints in returned
 output}
 
+\item{var.strata}{optional variable name to stratify by using
+\code{\link[survival:strata]{survival::strata()}}}
+
 \item{missing.codes}{character strings of missing values used in \code{input.d}}
 
 \item{use.firth}{percentage of censored cases before using Firth's method for
