@@ -12,6 +12,7 @@ doCoxphMultivariable <- function(
   var.names.surv.status = c("os.sts", "dss.sts", "rfs.sts"),
   event.codes.surv = c("os.event", "dss.event", "rfs.event"),
   surv.descriptions = c("OS", "DSS", "PFS"),
+  var.strata = NULL,
   missing.codes = c("N/A", "", "Unk"),
   use.firth = 1, firth.caption = FIRTH.CAPTION, add_log_hr = FALSE,
   stat.test = "waldtest", round.digits.p.value = 4,
@@ -41,6 +42,7 @@ doCoxphMultivariable <- function(
   var.names.surv.time <- unname(var.names.surv.time)
   var.names.surv.time2 <- unname(var.names.surv.time2)
   var.names.surv.status <- unname(var.names.surv.status)
+  var.strata <- unname(var.strata)
 
   # Remove all variables not used in analysis, ensure survival times are numeric
   input.d <- input.d %>%
@@ -48,7 +50,8 @@ doCoxphMultivariable <- function(
       var.names,
       var.names.surv.time,
       var.names.surv.time2,
-      var.names.surv.status
+      var.names.surv.status,
+      var.strata
     ))) %>%
     droplevels() %>%
     dplyr::mutate_at(c(var.names.surv.time, var.names.surv.time2), as.numeric)
@@ -86,11 +89,12 @@ doCoxphMultivariable <- function(
   cox.stats.output <- list()
   for (j in seq_len(num.surv.endpoints)) {
     surv.formula <- surv_formula(
-      var.names.surv.time[j],
-      var.names.surv.status[j],
-      event.codes.surv[j],
-      var.names,
-      var.names.surv.time2[j]
+      time = var.names.surv.time[j],
+      status = var.names.surv.status[j],
+      event = event.codes.surv[j],
+      terms = var.names,
+      time2 = var.names.surv.time2[j],
+      strata = var.strata
     )
     temp.d <- input.d %>%
       dplyr::filter(!is.na(.[, var.names.surv.status[[j]]]) &
