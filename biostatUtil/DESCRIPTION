@@ -58,7 +58,7 @@ Imports:
     survival (>= 3.1-8),
     tibble,
     tidyr,
-    tidyselect,
+    tidyselect (>= 1.0.0),
     vsn
 Suggests: 
     logistf,
