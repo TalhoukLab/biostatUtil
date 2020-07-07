@@ -7,17 +7,16 @@ The goal of biostatUtil is to provide utility functions for date
 formatting, survival analysis, confusion matrices, contingency tables,
 and data visualization.
 
-## Local Installation
+## Installation
 
-You can install a local version of biostatUtil with:
+You can install biostatUtil from GitHub with:
 
 ``` r
-remotes::install_local()
+remotes::install_github("TalhoukLab/biostatUtil")
 ```
 
-in the project root. Note that there are a few administrative tasks to
-perform to ensure the package can still be installed when the R version
-is updated.
+Note that there are a few administrative tasks to perform to ensure the
+package can still be installed when the R version is updated.
 
 1.  Run `remotes::install_deps()` to install all dependencies (these are
     packages listed in the `Imports` field of `DESCRIPTION`)
@@ -28,15 +27,3 @@ is updated.
 4.  Open Terminal and run `R CMD javareconf` to reconfigure Java paths
     and other configurations. Note that Java v1.8.0 is required for java
     dependencies to successfully load when `biostatUtil` is attached.
-
-## Remote Installation
-
-To install biostatUtil directly from the remote repository, run:
-
-``` r
-remotes::install_git(
-  url = "https://svn.bcgsc.ca/bitbucket/scm/bc/packages.git",
-  subdir = "biostatUtil",
-  git = "external"
-)
-```
