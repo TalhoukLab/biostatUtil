@@ -89,7 +89,7 @@ indepTests <- function(x, digits = 3) {
                              "Fisher's Exact Test",
                              "Linear-by-Linear Association")) %>%
     dplyr::mutate(Test = rownames(.)) %>%
-    dplyr::mutate_each(list(~ round(., digits)), 1:2) %>%
+    dplyr::mutate_at(1:2, ~ round(., digits)) %>%
     dplyr::mutate(`P-Value` = round_small(`P-Value`, digits = digits)) %>%
     dplyr::select(Test, Value, df, `P-Value`) %>%
     rbind(., c("N of Valid Cases", x$gt, "", ""))
