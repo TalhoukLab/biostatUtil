@@ -37,6 +37,7 @@ Imports:
     e1071,
     gdata,
     ggplot2,
+    ggtext,
     grid,
     gridExtra,
     Hmisc,

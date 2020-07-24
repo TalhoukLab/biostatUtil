@@ -69,6 +69,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
   # Specifying plot parameter defaults
   shading.colors <- shading.colors %||% c("blue2", "red2",
                                           "deepskyblue", "indianred3")
+  shading.colors <- utils::head(shading.colors, nlevels(s))
   xlims <- xlims %||% c(0, max(sfit$time))
   ylims <- ylims %||% c(0, 1)
   legend.xy <- legend.xy %||% c(0.8, 0.88)
@@ -147,8 +148,8 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
             panel.border = element_blank(),
             axis.ticks = element_blank(),
             axis.text.x = element_blank(),
-            axis.text.y = element_text(color = shading.colors,
-                                       face = "bold", hjust = 1),
+            axis.text.y = element_markdown(color = shading.colors,
+                                           face = "bold", hjust = 1),
             axis.title.x = element_text(size = 12, vjust = 1),
             legend.position = "none",
             plot.margin = grid::unit(c(0.5, 1.25, 0.5, mleft$margin.rt),

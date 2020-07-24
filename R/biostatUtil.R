@@ -21,4 +21,5 @@
 #' @import htmltools ggplot2 survival
 #' @importFrom magrittr %>%
 #' @importFrom rlang %||%
+#' @importFrom ggtext element_markdown
 NULL
