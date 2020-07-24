@@ -253,17 +253,19 @@ test_that("left-truncated survival works", {
 })
 
 test_that("wide format works", {
-  res_wide <- doCoxphMultivariable(input.d = lung,
-                                   var.names = "sex",
-                                   var.descriptions = "Sex",
-                                   show.var.detail = TRUE,
-                                   var.names.surv.time = "time",
-                                   var.names.surv.status = "status",
-                                   event.codes.surv = "2",
-                                   surv.descriptions = "OS",
-                                   caption = "",
-                                   var.ref.groups = "2",
-                                   round.small = TRUE,
-                                   format = "wide")
+  res_wide <- doCoxphMultivariable(
+    input.d = lung,
+    var.names = "sex",
+    var.descriptions = "Sex",
+    show.var.detail = TRUE,
+    var.names.surv.time = c("time", "time2"),
+    var.names.surv.status = c("status", "status2"),
+    event.codes.surv = c("2", "2"),
+    surv.descriptions = c("OS", "DSS"),
+    caption = "",
+    var.ref.groups = "2",
+    round.small = TRUE,
+    format = "wide"
+  )
   expect_length(res_wide, 4)
 })
