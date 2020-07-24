@@ -64,9 +64,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
   time <- surv <- lower <- upper <- n.censor <- n.risk <- n.event <-
     estimate <- conf.high <- conf.low <- NULL
   times <- seq.int(0, max(sfit$time), by = timeby)
-  s1 <- levels(summary(sfit)$strata)
-  s2 <- summary(sfit, censored = TRUE)$strata
-  s3 <- summary(sfit, times = times, extend = TRUE)$strata
+  s <- summary(sfit, censored = TRUE)$strata
 
   # Specifying plot parameter defaults
   shading.colors <- shading.colors %||% c("blue2", "red2",
@@ -88,7 +86,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
     broom::tidy() %>%
     dplyr::select(time, n.risk, n.event, n.censor, surv = estimate,
                   strata, upper = conf.high, lower = conf.low) %>%
-    dplyr::mutate(strata = factor(s2, labels = ystratalabs)) %>%
+    dplyr::mutate(strata = factor(s, labels = ystratalabs)) %>%
     dplyr::bind_rows(
       data.frame(time = 0, surv = 1,
                  strata = factor(ystratalabs, levels = levels(.$strata)),
