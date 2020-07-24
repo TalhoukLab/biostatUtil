@@ -32,7 +32,7 @@ indexOf("Animals", "A")
 indexOf("Animals", "a", ignore.case = TRUE)
 }
 \seealso{
-\code{\link[stringr:str_locate_all]{stringr::str_locate_all()}}
+\code{\link[stringr:str_locate]{stringr::str_locate_all()}}
 }
 \author{
 Samuel Leung
