@@ -51,7 +51,7 @@ freqTable <- function(x, levels = sort(unique(as.character(x))),
             sum(.$Frequency[!is.na(.$`Valid Percent`) & .$Class == "Valid"]),
             sum(.$Percent[!is.na(.$`Valid Percent`) & .$Class == "Valid"]), 100)) %>%
     dplyr::arrange(Class, Score) %>%
-    dplyr::mutate_each(list(as.numeric), dplyr::matches("Frequency|Percent")) %>%
+    dplyr::mutate_at(dplyr::vars(dplyr::matches("Frequency|Percent")), as.numeric) %>%
     dplyr::mutate(
       Score = ifelse(Class == "Total" & Score == "Total", "",
                      ifelse(is.na(Score), "Total", as.character(Score))),
@@ -59,7 +59,7 @@ freqTable <- function(x, levels = sort(unique(as.character(x))),
       `Cumulative Percent` = ifelse(!is.na(`Valid Percent`) & Score != "Total",
                                     cumsum(Frequency) / max(Frequency[Class == "Valid"]) * 100, NA),
       Class = ifelse(duplicated(Class), "", as.character(Class))) %>%
-    dplyr::mutate_each(list(~round(., 1)), dplyr::contains("Percent"))
+    dplyr::mutate_at(dplyr::vars(dplyr::contains("Percent")), ~ round(., 1))
   if (is.null(missing)) {
     tab <- tab %>%
       magrittr::extract(-which(.$Class == "Total"), ) %>%
