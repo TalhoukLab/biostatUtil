@@ -40,7 +40,3 @@ test_that("Xunivcoxph prints HR & CI for coxph/coxphf, but nothing else", {
     Xunivcoxph(survdiff(Surv(time, status) ~ x + strata(sex), test1))
   )
 })
-
-test_that("printCoxMod prints HTML Cox model output", {
-  expect_output(printCoxMod(summary(mod1)$coef))
-})

@@ -143,22 +143,6 @@ paste_hr_ci <- function(hr, ci.lo, ci.hi, labels = TRUE,
          hr_ci[[2]], "-", hr_ci[[3]], ")")
 }
 
-#' Print Cox model output
-#'
-#' Prints a Cox model output in a nice HTML table
-#' @param cox is the matrix `summary(x)$coef`, where x is an object of
-#'   class `coxph`
-#' @param Capt a caption
-#' @author Aline Talhouk
-#' @export
-printCoxMod <- function(cox, Capt) {
-  TAB <- htmlTable::htmlTable(cox,
-                              rowlabel = "Predictors",
-                              caption = Capt,
-                              ctable = TRUE)
-  pander::pander(TAB, style = "rmarkdown")
-}
-
 #' Create a survival formula from time, status, event code and terms strings
 #' Left-truncated survival can be used by inserting a time2 arg
 #' @noRd
