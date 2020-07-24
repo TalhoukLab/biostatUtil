@@ -14,7 +14,6 @@ test_that("Score label and description label match up", {
   expect_length(ftdf, 7)
   expect_equal(nrow(ftdf), length(letters) + 2)
   expect_identical(ftdf[idxp, "Score"], ftdf[idxp, "Description"])
-  if (file.exists("Rplots.pdf")) file.remove("Rplots.pdf")
 })
 
 test_that("Different layout if no missing cases", {
@@ -23,3 +22,6 @@ test_that("Different layout if no missing cases", {
   expect_length(ftdf2, 5)
   expect_equal(nrow(ftdf2), length(letters) + 1)
 })
+
+dev.off()
+if (file.exists("Rplots.pdf")) file.remove("Rplots.pdf")

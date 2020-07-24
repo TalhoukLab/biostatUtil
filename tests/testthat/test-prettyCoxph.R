@@ -53,7 +53,6 @@ test_that("PH residual plot can be saved", {
   expect_error(prettyCoxph(Surv(time, status) ~ x + sex, test1,
                            ph.test.plot.filename = "PH.pdf", check.ph = TRUE),
                NA)
-  file.remove("PH.pdf")
 })
 
 test_that("Firth's correction can be used", {
@@ -64,3 +63,7 @@ test_that("Firth's correction can be used", {
 test_that("Univariable model has no formatting issues", {
   expect_error(prettyCoxph(Surv(time, status) ~ sex, test1), NA)
 })
+
+dev.off()
+if (file.exists("Rplots.pdf")) file.remove("Rplots.pdf")
+if (file.exists("PH.pdf")) file.remove("PH.pdf")

@@ -1,6 +1,9 @@
 
 context("Utility functions")
 
+library(survival)
+data(lung)
+
 test_that("collapse_var combines unique elements of string", {
   x <- c("A", "A", "B", "C", "C")
   expect_equal(nchar(collapse_var(x)), 11)
@@ -38,3 +41,6 @@ test_that("sem calculates standard error of the mean", {
   x[6] <- 0
   expect_is(sem(x, missing.value = 0), "numeric")
 })
+
+dev.off()
+if (file.exists("Rplots.pdf")) file.remove("Rplots.pdf")

@@ -92,3 +92,6 @@ test_that("HR is shown for all levels of multilevel predictor", {
                   cox.ref.group = "0")
   expect_error(p6, NA)
 })
+
+dev.off()
+if (file.exists("Rplots.pdf")) file.remove("Rplots.pdf")

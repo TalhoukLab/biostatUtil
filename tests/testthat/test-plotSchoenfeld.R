@@ -17,3 +17,6 @@ test_that("Schoenfeld residual plot works whether variable to plot is given or n
     NA
   )
 })
+
+dev.off()
+if (file.exists("Rplots.pdf")) file.remove("Rplots.pdf")

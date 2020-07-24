@@ -32,3 +32,6 @@ test_that("doJitterplotAmongSubtypes works albeit p-value warning", {
                                            "qsec", "QSEC",
                                            "vs", "VS"))
 })
+
+dev.off()
+if (file.exists("Rplots.pdf")) file.remove("Rplots.pdf")
