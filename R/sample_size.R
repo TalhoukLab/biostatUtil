@@ -20,6 +20,7 @@
 #'   input parameters.
 #' @author Derek Chiu
 #' @references https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4603804/
+#' @export
 ssize_D <- function(fit, D = NULL, cens = NULL, p = 0.1, alpha = 0.05,
                     power = 0.8, delta = 0.25,
                     trial = c("superiority", "non-inferiority")) {
@@ -53,6 +54,7 @@ ssize_D <- function(fit, D = NULL, cens = NULL, p = 0.1, alpha = 0.05,
 #' @param R2 R-squared
 #' @return The Royston & Sauerbrei D measure
 #' @author Derek Chiu
+#' @export
 R2_to_D <- function(R2) {
   beta <- sqrt((R2 * pi ^ 2) / (6 * (1 - R2)))
   D <- beta * sqrt(8 / pi)
