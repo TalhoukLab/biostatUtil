@@ -5,8 +5,9 @@
 \title{Sample Size Calculation}
 \usage{
 ssize_D(
-  D = 1.4,
-  cens = 0.1,
+  fit,
+  D = NULL,
+  cens = NULL,
   p = 0.1,
   alpha = 0.05,
   power = 0.8,
@@ -15,10 +16,13 @@ ssize_D(
 )
 }
 \arguments{
-\item{D}{discrimination measure D, defaults to 1.4 without any guidance or
-prior models.}
+\item{fit}{an object fit of class \code{coxph}}
 
-\item{cens}{censoring proportion, defaults to 10\%.}
+\item{D}{discrimination measure D, defaults to output of
+\code{survival::royston()} for \code{fit}}
+
+\item{cens}{censoring proportion, defaults to proportion calculated from
+\code{fit}}
 
 \item{p}{proportion of \code{D} accepted as \code{delta}, defaults to 10\%.}
 
