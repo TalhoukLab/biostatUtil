@@ -39,7 +39,6 @@ minDate <- function(dates, na.rm = TRUE) {
 #' @param date.format format of the array of dates
 #' @param existing.missing.codes missing dates
 #' @param return.missing.code what to return if there is a missing input
-#' @param ... additional arguments to `formatDate`
 #' @param sep date separator. Defaults to "/"
 #' @rdname date_extremes
 #' @export

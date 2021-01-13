@@ -42,8 +42,6 @@ minDateArray(
 \item{return.missing.code}{what to return if there is a missing input}
 
 \item{sep}{date separator. Defaults to "/"}
-
-\item{...}{additional arguments to \code{formatDate}}
 }
 \value{
 The latest or earliest date from a vector of dates.
