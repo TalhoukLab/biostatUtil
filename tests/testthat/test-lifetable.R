@@ -20,5 +20,5 @@ test_that("can hide strata name", {
 test_that("dimensions are correct", {
   lto <- lifetable(obj, ntimes = 5)
   expect_length(lto, 12)
-  expect_equal(nlevels(lto$strata) * nlevels(lto$times), nrow(lto))
+  expect_equal(length(unique(lto$strata)) * length(unique(lto$times)), nrow(lto))
 })
