@@ -47,7 +47,7 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
   types <- data[, var.names, drop = FALSE] %>% purrr::map_chr(class)
   num.ind <- types %in% c("numeric", "integer")
   fac.ind <- types %in% c("factor", "character")
-  if (!(num.ind || fac.ind)) {
+  if (any(!(num.ind | fac.ind))) {
     stop("Variables must be numeric, integer, factor, or character.")
   }
   num.long <- num.res <- fac.long <- fac.res <- NULL
