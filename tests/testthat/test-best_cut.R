@@ -2,7 +2,7 @@
 context("Best cutpoint")
 
 library(survival)
-set.seed(1108)
+set.seed(2021)
 n <- 4
 lung_mod <- cbind(lung, fac = sample(1:n, nrow(lung), replace = TRUE))
 
