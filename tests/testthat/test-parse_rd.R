@@ -2,7 +2,7 @@
 context("Parse Rd files")
 
 pr <- parse_rd()
-prs <- parse_rd(path = "function_dictionary.csv")
+prs <- parse_rd(file = "function_dictionary.csv")
 
 test_that("parse_rd has expected number of functions", {
   expect_equal(nrow(pr), length(list.files("man")))
