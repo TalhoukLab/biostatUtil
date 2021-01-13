@@ -5,7 +5,7 @@ s <- 12
 set.seed(s)
 a <- rbinom(n = 100, size = 1, prob = 0.3)
 b <- rbinom(n = 100, size = 1, prob = 0.7)
-nb <- 100
+nb <- 200
 
 test_that("different methods of calculating kappa", {
   expect_error(kappaBootCI(a, b, s, nb, method = "cohen"), NA)
