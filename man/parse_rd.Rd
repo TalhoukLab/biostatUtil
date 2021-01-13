@@ -4,10 +4,10 @@
 \alias{parse_rd}
 \title{Parse all Rd files in package}
 \usage{
-parse_rd(path = NULL, tags = c("name", "title", "desc", "details"))
+parse_rd(file = NULL, tags = c("name", "title", "desc", "details"))
 }
 \arguments{
-\item{path}{file path to save table}
+\item{file}{file path to save table}
 
 \item{tags}{sections to extract from Rd files. Missing entries labelled as
 \code{NA}}

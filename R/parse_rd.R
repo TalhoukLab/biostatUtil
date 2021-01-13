@@ -5,7 +5,7 @@
 #' The function requires that the working directory is set to the package's root
 #' directory.
 #'
-#' @param path file path to save table
+#' @param file file path to save table
 #' @param tags sections to extract from Rd files. Missing entries labelled as
 #'   `NA`
 #'
@@ -19,7 +19,7 @@
 #' tab <- parse_rd()
 #' str(tab)
 #' }
-parse_rd <- function(path = NULL, tags = c("name", "title", "desc",
+parse_rd <- function(file = NULL, tags = c("name", "title", "desc",
                                            "details")) {
   rd.files <- list.files("man", full.names = TRUE)
   info.table <- rd.files %>%
@@ -29,6 +29,6 @@ parse_rd <- function(path = NULL, tags = c("name", "title", "desc",
     purrr::transpose() %>%
     purrr::map(unlist) %>%
     data.frame(stringsAsFactors = FALSE)
-  if (!is.null(path)) readr::write_csv(info.table, path = path)
+  if (!is.null(file)) readr::write_csv(info.table, file = file)
   info.table
 }
