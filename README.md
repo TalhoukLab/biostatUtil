@@ -3,6 +3,11 @@
 
 # biostatUtil
 
+<!-- badges: start -->
+
+[![R-CMD-check](https://github.com/TalhoukLab/biostatUtil/workflows/R-CMD-check/badge.svg)](https://github.com/TalhoukLab/biostatUtil/actions)
+<!-- badges: end -->
+
 The goal of biostatUtil is to provide utility functions for date
 formatting, survival analysis, confusion matrices, contingency tables,
 and data visualization.
