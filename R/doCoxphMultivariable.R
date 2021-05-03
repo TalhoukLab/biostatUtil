@@ -15,8 +15,8 @@ doCoxphMultivariable <- function(
   var.strata = NULL,
   missing.codes = c("N/A", "", "Unk"),
   use.firth = 1, firth.caption = FIRTH.CAPTION, add_log_hr = FALSE,
-  stat.test = "waldtest", round.digits.p.value = 4,
-  round.small = FALSE, scientific = FALSE,
+  stat.test = "waldtest", bold_pval = FALSE, sig.level = 0.05,
+  round.digits.p.value = 4, round.small = FALSE, scientific = FALSE,
   caption = NA, html.table.border = 0, banded.rows = FALSE,
   css.class.name.odd = "odd", css.class.name.even = "even",
   split.table = 300, format = c("long", "wide"), ...) {
@@ -113,7 +113,7 @@ doCoxphMultivariable <- function(
         format_hr_ci(digits = 2, labels = FALSE, method = "Sci") %>%
         paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>%
         paste(collapse = kLocalConstantHrSepFlag)
-      p.value <- switch(
+      pval <- switch(
         stat.test,
         logtest = {
           cox.exclude.var <- coxph(surv_formula(var.names.surv.time[j],
@@ -132,10 +132,13 @@ doCoxphMultivariable <- function(
                                              var.names.surv.time2[j]),
                                 temp.d))[i, "P"]
         }
-      ) %>%
-        round_pval(round.small = round.small, scientific = scientific,
-                   digits = round.digits.p.value)
-      res <- c(e.n, hr.ci, p.value)
+      )
+      pval_f <- pval %>%
+        round_pval(round.small = round.small,
+                   scientific = scientific,
+                   digits = round.digits.p.value) %>%
+        ifelse(bold_pval & pval < sig.level, paste0("**", ., "**"), .)
+      res <- c(e.n, hr.ci, pval_f)
       if (add_log_hr) {
         log_hr <- cox.stats$output %>%
           magrittr::extract(var.idx, "estimate") %>%

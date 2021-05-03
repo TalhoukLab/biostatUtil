@@ -46,6 +46,9 @@
 #'   model. Can be any of "waldtest", "logtest", or "sctest". If Firth is used,
 #'   only "logtest" can be performed. Test p-values are never Firth corrected (
 #'   per instruction from Aline 2015-04-14,15).
+#' @param bold_pval logical; if `TRUE`, p-values are bolded if statistically
+#'   significant at `sig.level`
+#' @param sig.level significance level; default 0.05
 #' @param round.digits.p.value number of digits for p-value
 #' @param round.small if `TRUE`, uses small number rounding via [round_small()]
 #' @param scientific if `TRUE`, uses scientific notation when rounding
@@ -86,8 +89,8 @@ doCoxphGeneric <- function(
   var.strata = NULL,
   missing.codes = c("N/A", "", "Unk"),
   use.firth = 1, firth.caption = FIRTH.CAPTION, add_log_hr = FALSE,
-  stat.test = "waldtest", round.digits.p.value = 4,
-  round.small = FALSE, scientific = FALSE,
+  stat.test = "waldtest", bold_pval = FALSE, sig.level = 0.05,
+  round.digits.p.value = 4, round.small = FALSE, scientific = FALSE,
   caption = NA, html.table.border = 0, banded.rows = FALSE,
   css.class.name.odd = "odd", css.class.name.even = "even",
   split.table = 300, ...) {
@@ -176,10 +179,13 @@ doCoxphGeneric <- function(
         format_hr_ci(digits = 2, labels = FALSE, method = "Sci") %>%
         paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>%
         paste(collapse = kLocalConstantHrSepFlag)
-      pval <- summary(cox.stats$fit)[[stat.test]][["pvalue"]] %>%
-        round_pval(round.small = round.small, scientific = scientific,
-                   digits = round.digits.p.value)
-      res <- c(e.n, hr.ci, pval)
+      pval <- summary(cox.stats$fit)[[stat.test]][["pvalue"]]
+      pval_f <- pval %>%
+        round_pval(round.small = round.small,
+                   scientific = scientific,
+                   digits = round.digits.p.value) %>%
+        ifelse(bold_pval & pval < sig.level, paste0("**", ., "**"), .)
+      res <- c(e.n, hr.ci, pval_f)
       if (add_log_hr) {
         log_hr <- cox.stats$output %>%
           magrittr::extract(, "estimate") %>%

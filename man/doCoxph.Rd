@@ -24,6 +24,8 @@ doCoxphGeneric(
   firth.caption = FIRTH.CAPTION,
   add_log_hr = FALSE,
   stat.test = "waldtest",
+  bold_pval = FALSE,
+  sig.level = 0.05,
   round.digits.p.value = 4,
   round.small = FALSE,
   scientific = FALSE,
@@ -54,6 +56,8 @@ doCoxphMultivariable(
   firth.caption = FIRTH.CAPTION,
   add_log_hr = FALSE,
   stat.test = "waldtest",
+  bold_pval = FALSE,
+  sig.level = 0.05,
   round.digits.p.value = 4,
   round.small = FALSE,
   scientific = FALSE,
@@ -117,6 +121,11 @@ Cox regression. If \code{use.firth = 1} (default), Firth is never used and if
 model. Can be any of "waldtest", "logtest", or "sctest". If Firth is used,
 only "logtest" can be performed. Test p-values are never Firth corrected (
 per instruction from Aline 2015-04-14,15).}
+
+\item{bold_pval}{logical; if \code{TRUE}, p-values are bolded if statistically
+significant at \code{sig.level}}
+
+\item{sig.level}{significance level; default 0.05}
 
 \item{round.digits.p.value}{number of digits for p-value}
 
