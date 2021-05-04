@@ -18,6 +18,8 @@ doKMPlots(
   cox.ref.group = NULL,
   use.firth = -1,
   CI = TRUE,
+  bold_pval = FALSE,
+  sig.level = 0.05,
   HR = TRUE,
   show.risk = TRUE,
   km.plot.ref.group = "single",
@@ -54,6 +56,11 @@ ratio(s)}
 \item{use.firth}{Whether to use Firth's correction for plotting the curves}
 
 \item{CI}{logical; if \code{TRUE}, will plot confidence bands}
+
+\item{bold_pval}{logical; if \code{TRUE}, p-values are bolded if statistically
+significant at \code{sig.level}}
+
+\item{sig.level}{significance level; default 0.05}
 
 \item{HR}{logical; if \code{TRUE}, will show hazard ratios}
 

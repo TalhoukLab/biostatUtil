@@ -28,6 +28,9 @@
 #'   entire range of follow-up. Defaults to 5.
 #' @param pval logical; if `TRUE` (default), the logrank test p-value is
 #'   shown on the plot
+#' @param bold_pval logical; if `TRUE`, p-values are bolded if statistically
+#'   significant at `sig.level`
+#' @param sig.level significance level; default 0.05
 #' @param HR logical; if `TRUE` (default), the estimated hazard ratio and
 #'   its 95% confidence interval will be shown
 #' @param use.firth Firth's method for Cox regression is used if the percentage
@@ -58,7 +61,8 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
                  main = "Kaplan-Meier Plot", xlabs = "Time",
                  ylabs = "Survival Probability", xlims = NULL, ylims = NULL,
                  ystratalabs = NULL, cox.ref.grp = NULL, timeby = 5,
-                 pval = TRUE, HR = TRUE, use.firth = 1, legend = FALSE,
+                 pval = TRUE, bold_pval = FALSE, sig.level = 0.05,
+                 HR = TRUE, use.firth = 1, legend = FALSE,
                  legend.xy = NULL, legend.direction = "horizontal",
                  line.y.increment = 0.05, digits = 3, ...) {
   time <- surv <- lower <- upper <- n.censor <- n.risk <- n.event <-
@@ -125,7 +129,8 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
   # HR statistic (95% CI), log rank test p-value for sfit (or sfit2, if exists)
   if (pval && length(sfit$strata) > 1) {
     fit <- sfit2 %||% sfit
-    p <- summarize_km(fit = fit, p = p, digits = digits, HR = HR,
+    p <- summarize_km(fit = fit, p = p, digits = digits, bold_pval = bold_pval,
+                      sig.level = sig.level, HR = HR,
                       cox.ref.grp = cox.ref.grp, use.firth = use.firth,
                       ystratalabs = ystratalabs,
                       line.y.increment = line.y.increment)
@@ -186,7 +191,7 @@ left_margin <- function(labels) {
 
 #' Numerical summaries of km fit: HR (95\% CI), Log rank test p-value
 #' @noRd
-summarize_km <- function(fit, p, digits, HR, cox.ref.grp,
+summarize_km <- function(fit, p, digits, bold_pval, sig.level, HR, cox.ref.grp,
                          use.firth, ystratalabs, line.y.increment) {
   f <- eval(fit$call$formula)
   d <- eval(fit$call$data)
@@ -197,11 +202,25 @@ summarize_km <- function(fit, p, digits, HR, cox.ref.grp,
     pvalsep <- " = "
     # the following line tries to figure out how to print p-values with specified digits
     # e.g. digits=2 -> "0.20" NOT "0.2"
-    pvalue <- sprintf(paste0("%.", (max(digits, min(grep("[1-9]", strsplit(as.character(pvalue), "")[[1]]) - 3 + digits))), "f"), pvalue)
+    pvalue_f <- sprintf(paste0("%.", (max(digits, min(grep("[1-9]", strsplit(as.character(pvalue), "")[[1]]) - 3 + digits))), "f"), pvalue)
   } else {
     pvalsep <- " "
+    pvalue_f <- pvalue
   }
-  pvaltxt <- paste("Log Rank p", pvalue, sep = pvalsep)
+  # pvaltxt <- paste("Log Rank p", pvalue, sep = pvalsep)
+  # Bold p-value if requested and significant at sig.level
+  parse_pval <- bold_pval & pvalue < sig.level
+  if (parse_pval) {
+    pvaltxt <- paste0(
+      "paste(",
+      paste0("\"", "Log Rank p", "\","),
+      paste0("\"", pvalsep, "\","),
+      paste0("bold(\"", pvalue_f, "\")"),
+      ")"
+    )
+  } else {
+    pvaltxt <- paste("Log Rank p", pvalue_f, sep = pvalsep)
+  }
   if (HR) {
     pretty.coxph.obj <- prettyCoxph(input.formula = f,
                                     input.d = d,
@@ -227,6 +246,7 @@ summarize_km <- function(fit, p, digits, HR, cox.ref.grp,
                         size = 3)
     }
   }
-  p <- p + annotate("text", x = 0.2 * max(fit$time), hjust = 0, y = 0.01,
-                    label = pvaltxt, size = 3)
+  p <- p + annotate("text", x = 0.2 * max(fit$time), hjust = 0,
+                    y = 0.01 / 2 ^ parse_pval,
+                    label = pvaltxt, size = 3, parse = parse_pval)
 }

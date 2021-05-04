@@ -15,6 +15,9 @@
 #'   ratio(s)
 #' @param use.firth Whether to use Firth's correction for plotting the curves
 #' @param CI logical; if `TRUE`, will plot confidence bands
+#' @param bold_pval logical; if `TRUE`, p-values are bolded if statistically
+#'   significant at `sig.level`
+#' @param sig.level significance level; default 0.05
 #' @param HR logical; if `TRUE`, will show hazard ratios
 #' @param show.risk logical; if `TRUE`, will show the number of people at
 #'   risk at each time of death beneath the plot
@@ -34,6 +37,7 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
                                          "indianred3"),
                       line.name = NULL, line.pattern = NULL, legend = FALSE,
                       cox.ref.group = NULL, use.firth = -1, CI = TRUE,
+                      bold_pval = FALSE, sig.level = 0.05,
                       HR = TRUE, show.risk = TRUE, km.plot.ref.group = "single",
                       single.test.type = "logrank", use.ggkm = FALSE, ...) {
 
@@ -59,7 +63,8 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
 
     ggkm(sfit, shading.colors = shading.colors, ystratalabs = line.name,
          line.pattern = line.pattern, legend = legend,
-         cox.ref.grp = cox.ref.group, use.firth = use.firth, CI = CI, HR = HR,
+         cox.ref.grp = cox.ref.group, use.firth = use.firth, CI = CI,
+         bold_pval = bold_pval, sig.level = sig.level, HR = HR,
          table = show.risk, main = main, ...)
 
   } else {

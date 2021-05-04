@@ -22,6 +22,8 @@ ggkm(
   cox.ref.grp = NULL,
   timeby = 5,
   pval = TRUE,
+  bold_pval = FALSE,
+  sig.level = 0.05,
   HR = TRUE,
   use.firth = 1,
   legend = FALSE,
@@ -75,6 +77,11 @@ entire range of follow-up. Defaults to 5.}
 
 \item{pval}{logical; if \code{TRUE} (default), the logrank test p-value is
 shown on the plot}
+
+\item{bold_pval}{logical; if \code{TRUE}, p-values are bolded if statistically
+significant at \code{sig.level}}
+
+\item{sig.level}{significance level; default 0.05}
 
 \item{HR}{logical; if \code{TRUE} (default), the estimated hazard ratio and
 its 95\% confidence interval will be shown}
