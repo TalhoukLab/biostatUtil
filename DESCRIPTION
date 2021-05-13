@@ -35,7 +35,6 @@ Imports:
     doBy,
     dplyr,
     e1071,
-    forcats,
     gdata,
     ggplot2,
     ggtext,
