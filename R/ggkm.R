@@ -142,7 +142,10 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
     risk.data <- sfit %>%
       summary(times = times, extend = TRUE) %>%
       list() %>%
-      purrr::map_df(`[`, c("strata", "time", "n.risk"))
+      purrr::map_df(`[`, c("strata", "time", "n.risk")) %>%
+      dplyr::mutate(strata = forcats::fct_relabel(
+        strata, ~ gsub("<", "&lt;", .) %>% gsub(">", "&gt;", .)
+      ))
     data.table <- ggplot(risk.data, aes(x = time, y = strata,
                                         label = format(n.risk, nsmall = 0))) +
       geom_text(size = 3.5) +
