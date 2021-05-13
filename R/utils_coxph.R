@@ -115,6 +115,12 @@ Xunivcoxph.coxphf <- function(mod, digits = 3) {
     purrr::map_at("coefficients", exp) %>%
     format_hr_ci(digits) %>%
     paste("HR(F)", .)
+  # In case we want to use superscript for Firth indicator (F)
+  # hr_ci <- mod %>%
+  #   magrittr::extract(c("coefficients", "ci.lower", "ci.upper")) %>%
+  #   purrr::map_at("coefficients", exp) %>%
+  #   format_hr_ci(digits)
+  # bquote(HR^("F") ~ .(hr_ci))
 }
 
 #' @noRd
