@@ -1,7 +1,7 @@
 Type: Package
 Package: biostatUtil
 Title: Utility Functions Used in Biostatistics Projects
-Version: 0.0.0.9100
+Version: 0.0.0.9101
 Date: 2021-05-03
 Authors@R: 
     c(person(given = "Derek",
@@ -35,6 +35,7 @@ Imports:
     doBy,
     dplyr,
     e1071,
+    forcats,
     gdata,
     ggplot2,
     ggtext,
