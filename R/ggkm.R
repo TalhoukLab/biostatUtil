@@ -43,7 +43,11 @@
 #' @param legend.direction layout of items in legends ("horizontal" (default) or
 #'   "vertical")
 #' @param line.y.increment how much y should be incremented for each line
-#' @param digits number of digits to round: p-values digits=nunber of
+#' @param size.plot text size of main plot
+#' @param size.summary text size of numerical summaries
+#' @param size.table text size of risk table
+#' @param size.table.labels text size of risk table axis labels
+#' @param digits number of digits to round: p-values digits=number of
 #'   significant digits, HR digits=number of digits after decimal point NOT
 #'   significant digits
 #' @param ... additional arguments to other methods
@@ -64,7 +68,8 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
                  pval = TRUE, bold_pval = FALSE, sig.level = 0.05,
                  HR = TRUE, use.firth = 1, legend = FALSE,
                  legend.xy = NULL, legend.direction = "horizontal",
-                 line.y.increment = 0.05, digits = 3, ...) {
+                 line.y.increment = 0.05, size.plot = 11, size.summary = 3,
+                 size.table = 3.5, size.table.labels = 12, digits = 3, ...) {
   time <- surv <- lower <- upper <- n.censor <- n.risk <- n.event <-
     estimate <- conf.high <- conf.low <- NULL
   times <- seq.int(0, max(sfit$time), by = timeby)
@@ -107,12 +112,17 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
     scale_x_continuous(xlabs, breaks = times, limits = xlims) +
     scale_y_continuous(ylabs, limits = ylims) +
     theme_bw() +
-    theme(axis.title.x = element_text(vjust = 0.5),
-          panel.background = element_blank(),
-          panel.grid = element_blank(),
-          plot.margin = grid::unit(c(0.5, 1, .5, mleft$margin.km),
-                                   c("lines", "lines", "lines", "in")),
-          legend.position = "none") +
+    theme(
+      text = element_text(size = size.plot),
+      axis.title.x = element_text(vjust = 0.5),
+      panel.background = element_blank(),
+      panel.grid = element_blank(),
+      plot.margin = grid::unit(
+        c(0.5, 1, .5, mleft$margin.km),
+        c("lines", "lines", "lines", "in")
+      ),
+      legend.position = "none"
+    ) +
     ggtitle(main)
   if (legend)  # Legend
     p <- p + theme(legend.position = legend.xy,
@@ -133,7 +143,8 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
                       sig.level = sig.level, HR = HR,
                       cox.ref.grp = cox.ref.grp, use.firth = use.firth,
                       ystratalabs = ystratalabs,
-                      line.y.increment = line.y.increment)
+                      line.y.increment = line.y.increment,
+                      size.summary = size.summary)
   }
 
   # Create table graphic to include at-risk numbers, keep at-risk numbers
@@ -147,20 +158,23 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
       stringr::str_replace_all(ystratalabs, c("<" = "&lt;", ">" = "&gt;"))
     data.table <- ggplot(risk.data, aes(x = time, y = strata,
                                         label = format(n.risk, nsmall = 0))) +
-      geom_text(size = 3.5) +
+      geom_text(size = size.table) +
       scale_y_discrete(labels = ystratalabs_md) +
       scale_x_continuous("Numbers at risk", limits = xlims) +
       theme_bw() +
-      theme(panel.grid = element_blank(),
-            panel.border = element_blank(),
-            axis.ticks = element_blank(),
-            axis.text.x = element_blank(),
-            axis.text.y = element_markdown(color = shading.colors,
-                                           face = "bold", hjust = 1),
-            axis.title.x = element_text(size = 12, vjust = 1),
-            legend.position = "none",
-            plot.margin = grid::unit(c(0.5, 1.25, 0.5, mleft$margin.rt),
-                                     "lines")) +
+      theme(
+        text = element_text(size = size.table.labels),
+        panel.grid = element_blank(),
+        panel.border = element_blank(),
+        axis.ticks = element_blank(),
+        axis.text.x = element_blank(),
+        axis.text.y = element_markdown(color = shading.colors,
+                                       face = "bold",
+                                       hjust = 1),
+        axis.title.x = element_text(vjust = 1),
+        legend.position = "none",
+        plot.margin = grid::unit(c(0.5, 1.25, 0.5, mleft$margin.rt), "lines")
+      ) +
       labs(y = NULL)
     if (returns)
       gridExtra::grid.arrange(p, data.table, clip = FALSE, nrow = 2, ncol = 1,
@@ -194,7 +208,7 @@ left_margin <- function(labels) {
 #' Numerical summaries of km fit: HR (95\% CI), Log rank test p-value
 #' @noRd
 summarize_km <- function(fit, p, digits, bold_pval, sig.level, HR, cox.ref.grp,
-                         use.firth, ystratalabs, line.y.increment) {
+                         use.firth, ystratalabs, line.y.increment, size.summary) {
   f <- eval(fit$call$formula)
   d <- eval(fit$call$data)
   pvalue <- survdiff(f, d) %>%
@@ -245,10 +259,10 @@ summarize_km <- function(fit, p, digits, bold_pval, sig.level, HR, cox.ref.grp,
                         " vs. ", cox.strata.labs[1])
       p <- p + annotate("text", x = 0.2 * max(fit$time), hjust = 0,
                         y = 0.01 + line.y.increment * i, label = HRtxt,
-                        size = 3)
+                        size = size.summary)
     }
   }
   p <- p + annotate("text", x = 0.2 * max(fit$time), hjust = 0,
                     y = 0.01 / 2 ^ parse_pval,
-                    label = pvaltxt, size = 3, parse = parse_pval)
+                    label = pvaltxt, size = size.summary, parse = parse_pval)
 }

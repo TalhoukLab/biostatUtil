@@ -30,6 +30,10 @@ ggkm(
   legend.xy = NULL,
   legend.direction = "horizontal",
   line.y.increment = 0.05,
+  size.plot = 11,
+  size.summary = 3,
+  size.table = 3.5,
+  size.table.labels = 12,
   digits = 3,
   ...
 )
@@ -101,7 +105,15 @@ is always used.}
 
 \item{line.y.increment}{how much y should be incremented for each line}
 
-\item{digits}{number of digits to round: p-values digits=nunber of
+\item{size.plot}{text size of main plot}
+
+\item{size.summary}{text size of numerical summaries}
+
+\item{size.table}{text size of risk table}
+
+\item{size.table.labels}{text size of risk table axis labels}
+
+\item{digits}{number of digits to round: p-values digits=number of
 significant digits, HR digits=number of digits after decimal point NOT
 significant digits}
 
