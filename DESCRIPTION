@@ -1,8 +1,8 @@
 Type: Package
 Package: biostatUtil
 Title: Utility Functions Used in Biostatistics Projects
-Version: 0.0.0.9102
-Date: 2021-06-11
+Version: 0.0.0.9103
+Date: 2021-08-25
 Authors@R: 
     c(person(given = "Derek",
              family = "Chiu",
