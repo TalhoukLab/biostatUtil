@@ -1,8 +1,8 @@
 Type: Package
 Package: biostatUtil
 Title: Utility Functions Used in Biostatistics Projects
-Version: 0.0.0.9103
-Date: 2021-08-25
+Version: 0.1.0.9104
+Date: 2021-09-10
 Authors@R: 
     c(person(given = "Derek",
              family = "Chiu",
@@ -16,27 +16,20 @@ Authors@R:
              family = "Leung",
              role = "aut",
              email = "Samuel.Leung@vch.ca"))
-Description: Provides some commonly used utility functions used
-    in biostatistics, such as row and column percentages in a table, date
+Description: Provides some commonly used utility functions used in
+    biostatistics, such as row and column percentages in a table, date
     formatting, survival functions, confusion matrices, contingency
     tables, plotting functions, and more.
 License: GPL-2
 Depends: 
     R (>= 3.2.0)
 Imports: 
-    arsenal,
     assertthat,
-    boot,
     broom,
-    caret,
-    coin,
     coxphf,
     descr,
-    DescTools,
-    doBy,
-    dplyr,
+    dplyr (>= 1.0.0),
     e1071,
-    gdata,
     ggplot2,
     ggtext,
     grid,
@@ -44,28 +37,31 @@ Imports:
     Hmisc,
     htmlTable,
     htmltools,
-    irr,
-    KMsurv,
-    limma,
     lubridate,
     magrittr,
     pander,
-    PerformanceAnalytics,
     purrr,
-    Rd2roxygen,
     readr,
     rlang,
-    rms,
     stringr,
     survival (>= 3.1-8),
-    tibble,
-    tidyr,
-    tidyselect (>= 1.0.0),
-    vsn
+    tidyr
 Suggests: 
+    boot,
+    caret,
+    coin,
+    DescTools,
+    irr,
+    KMsurv,
+    limma,
     logistf,
     meta,
-    testthat
+    PerformanceAnalytics,
+    Rd2roxygen,
+    rms,
+    testthat,
+    tidyselect (>= 1.0.0),
+    vsn
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
