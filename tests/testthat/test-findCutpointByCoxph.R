@@ -1,7 +1,7 @@
 
 context("Find cutpoint by coxph")
 
-data(lung)
+data(cancer, package = "survival")
 
 test_that("findCutpointByCoxph works for univariable case", {
   suppressWarnings(obj <- findCutpointByCoxph(lung, Surv(time, status) ~ age))

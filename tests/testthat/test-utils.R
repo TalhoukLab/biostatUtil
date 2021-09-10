@@ -1,8 +1,7 @@
 
 context("Utility functions")
 
-library(survival)
-data(lung)
+data(cancer, package = "survival")
 
 test_that("collapse_var combines unique elements of string", {
   x <- c("A", "A", "B", "C", "C")

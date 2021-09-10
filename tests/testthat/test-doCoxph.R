@@ -1,7 +1,6 @@
 context("Cox model generic")
 
-library(survival)
-data(lung)
+data(cancer, package = "survival")
 set.seed(1)
 lung$time2 <- sample(lung$time, replace = TRUE)
 lung$status2 <- sample(lung$status, replace = TRUE)

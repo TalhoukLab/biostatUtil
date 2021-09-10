@@ -1,7 +1,6 @@
 context("Plot KM")
 
-library(survival)
-data(lung)
+data(cancer, package = "survival")
 
 test_that("doKMPlots calls ggkm or plotKM", {
   expect_error(
