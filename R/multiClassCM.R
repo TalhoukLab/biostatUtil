@@ -59,7 +59,17 @@ multiClassCM <- function(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
   spec <- TN / (N - clm)
   BA <- (sens + spec) / 2
   # Overall
-  cc <- round(caret::confusionMatrix(y, x)$overall, digits)
+  cc <- table(y, x) %>% {
+    c(
+      unlist(e1071::classAgreement(.))[c("diag", "kappa")],
+      propCI(.),
+      propTest(.),
+      stats::mcnemar.test(.)$p.value
+    )
+  } %>%
+    stats::setNames(c("Accuracy", "Kappa", "AccuracyLower",
+                      "AccuracyUpper", "AccuracyNull", "AccuracyPValue", "McnemarPValue")) %>%
+    round(digits = digits)
   ckappa <- round(kappaBootCI(x, y, seed, num.boot, conf.level), digits)
   overall <- rbind(printCI(cc[c("Accuracy", "AccuracyLower", "AccuracyUpper")]),
                    printCI(ckappa),
@@ -87,4 +97,27 @@ multiClassCM <- function(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
     rbind(`Balanced Accuracy` = round(c(mean(BA), BA), digits))
 
   list(CM = stats::addmargins(CM), overall = overall, table = table)
+}
+
+#' 95% confidence interval for overall accuracy
+#' Helper function from `caret`
+#' @noRd
+propCI <- function(x) {
+  res <- try(stats::binom.test(sum(diag(x)), sum(x))$conf.int,
+             silent = TRUE)
+  if (inherits(res, "try-error"))
+    res <- rep(NA, 2)
+  res
+}
+
+#' One-sided test to compare accuracy > no information rate
+#' Helper function from `caret`
+#' @noRd
+propTest <- function(x) {
+  res <- try(stats::binom.test(sum(diag(x)), sum(x), p = max(apply(x,
+                                                            2, sum)/sum(x)), alternative = "greater"), silent = TRUE)
+  res <- if (inherits(res, "try-error"))
+    c(`null.value.probability of success` = NA, p.value = NA)
+  else res <- unlist(res[c("null.value", "p.value")])
+  res
 }

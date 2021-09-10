@@ -36,7 +36,13 @@ colPercent <- function(t, pretty.text = FALSE, keep = TRUE, digits = 4) {
     pcts <- apply(pcts * 100, 1:2,
                   function(x) ifelse(!is.nan(x), paste0(x, "%"), "-"))
   if (keep) {
-    pcts <- gdata::interleave(t, pcts)
+    pcts <- matrix(
+      rbind(t(t), t(pcts)),
+      ncol = ncol(t),
+      byrow = TRUE,
+      dimnames = list(rep(rownames(t), each = 2),
+                      colnames(t))
+    )
     rownames(pcts) <- paste0(rownames(pcts), rep(c("", " Col %"), nrow(t)))
   }
   return(pcts)
@@ -53,7 +59,13 @@ rowPercent <- function(t, pretty.text = FALSE, keep = TRUE, digits = 4) {
     pcts <- apply(pcts * 100, 1:2,
                   function(x) ifelse(!is.nan(x), paste0(x, "%"), "-"))
   if (keep) {
-    pcts <- gdata::interleave(t, pcts)
+    pcts <- matrix(
+      rbind(t(t), t(pcts)),
+      ncol = ncol(t),
+      byrow = TRUE,
+      dimnames = list(rep(rownames(t), each = 2),
+                      colnames(t))
+    )
     rownames(pcts) <- paste0(rownames(pcts), rep(c("", " Row %"), nrow(t)))
   }
   return(pcts)
@@ -70,10 +82,22 @@ rowColPercent <- function(t, keep = TRUE, ...) {
   row.p <- rowPercent(t, keep = !keep, ...)
   col.p <- colPercent(t, keep = !keep, ...)
   if (keep) {
-    result <- as.matrix(gdata::interleave(t, row.p, col.p)) %>%
+    result <- matrix(
+      rbind(t(t), t(row.p), t(col.p)),
+      ncol = ncol(t),
+      byrow = TRUE,
+      dimnames = list(rep(rownames(t), each = 3),
+                      colnames(t))
+    ) %>%
       magrittr::set_rownames(paste0(rownames(.), rep(c("", " Row %", " Col %"), nrow(t))))
   } else {
-    result <- as.matrix(gdata::interleave(row.p, col.p)) %>%
+    result <- matrix(
+      rbind(t(row.p), t(col.p)),
+      ncol = ncol(t),
+      byrow = TRUE,
+      dimnames = list(unlist(purrr::map2(rownames(row.p), rownames(col.p), c)),
+                      colnames(t))
+    ) %>%
       magrittr::extract(grep("%", rownames(.)), )
   }
   return(result)

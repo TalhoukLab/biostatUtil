@@ -118,7 +118,7 @@ doCoxphGeneric <- function(
 
   # Remove all variables not used in analysis, ensure survival times are numeric
   input.d <- input.d %>%
-    dplyr::select(tidyselect::all_of(c(
+    dplyr::select(dplyr::all_of(c(
       var.names,
       var.names.surv.time,
       var.names.surv.time2,

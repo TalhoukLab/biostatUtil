@@ -46,7 +46,7 @@ doCoxphMultivariable <- function(
 
   # Remove all variables not used in analysis, ensure survival times are numeric
   input.d <- input.d %>%
-    dplyr::select(tidyselect::all_of(c(
+    dplyr::select(dplyr::all_of(c(
       var.names,
       var.names.surv.time,
       var.names.surv.time2,
@@ -125,12 +125,17 @@ doCoxphMultivariable <- function(
           stats::anova(cox.stats$fit, cox.exclude.var)[["P(>|Chi|)"]][2]
         },
         waldtest = {
-          stats::anova(rms::cph(surv_formula(var.names.surv.time[j],
-                                             var.names.surv.status[j],
-                                             event.codes.surv[j],
-                                             var.names,
-                                             var.names.surv.time2[j]),
-                                temp.d))[i, "P"]
+          if (!requireNamespace("rms", quietly = TRUE)) {
+            stop("Package \"rms\" is required. Please install it.",
+                 call. = FALSE)
+          } else {
+            stats::anova(rms::cph(surv_formula(var.names.surv.time[j],
+                                               var.names.surv.status[j],
+                                               event.codes.surv[j],
+                                               var.names,
+                                               var.names.surv.time2[j]),
+                                  temp.d))[i, "P"]
+          }
         }
       )
       pval_f <- pval %>%

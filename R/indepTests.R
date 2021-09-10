@@ -33,6 +33,14 @@
 #' ct <- CrossTable(A, B)
 #' indepTests(ct)
 indepTests <- function(x, digits = 3) {
+  if (!requireNamespace("coin", quietly = TRUE)) {
+    stop("Package \"coin\" is required. Please install it.",
+         call. = FALSE)
+  }
+  if (!requireNamespace("DescTools", quietly = TRUE)) {
+    stop("Package \"DescTools\" is required. Please install it.",
+         call. = FALSE)
+  }
   . <- `P-Value` <- Test <- Value <- df <- NULL
   Pearson <- x$CST
   if (any(is.na(Pearson))) {

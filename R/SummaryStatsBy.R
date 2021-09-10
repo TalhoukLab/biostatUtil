@@ -69,14 +69,34 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
     if (all(c("mean", "sd") %in% stats)) {
       num.ord <- num.ord[-grep("sd", num.ord)]
     }
-    num.val <- paste_formula(num.var, bys) %>%
-      doBy::summaryBy(num.dat, FUN = contSumFunc, digits = digits,
-                      stats = stats) %>%
-      dplyr::mutate_all(as.character)
-    num.val.tot <- paste_formula(num.var, by1) %>%
-      doBy::summaryBy(num.dat, FUN = contSumFunc, digits = digits,
-                      stats = stats) %>%
-      dplyr::mutate_all(as.character)
+    num.val <- num.dat %>%
+      dplyr::group_by(dplyr::across(bys)) %>%
+      dplyr::summarise(dplyr::across(num.var,
+                                     contSumFunc,
+                                     digits = digits,
+                                     stats = stats),
+                       .groups = "drop") %>%
+      tidyr::pivot_longer(num.var, names_to = "var", values_to = "value") %>%
+      dplyr::arrange(.data$var) %>%
+      dplyr::mutate(stat = attr(.data$value, "names")) %>%
+      tidyr::unite(col = "var.stat", .data$var, .data$stat, sep = ".") %>%
+      tidyr::pivot_wider(bys, names_from = "var.stat", values_from = "value") %>%
+      dplyr::mutate(dplyr::across(.fns = as.character)) %>%
+      as.data.frame()
+    num.val.tot <- num.dat %>%
+      dplyr::group_by(dplyr::across(by1)) %>%
+      dplyr::summarise(dplyr::across(num.var,
+                                     contSumFunc,
+                                     digits = digits,
+                                     stats = stats),
+                       .groups = "drop") %>%
+      tidyr::pivot_longer(num.var, names_to = "var", values_to = "value") %>%
+      dplyr::arrange(.data$var) %>%
+      dplyr::mutate(stat = attr(.data$value, "names")) %>%
+      tidyr::unite(col = "var.stat", .data$var, .data$stat, sep = ".") %>%
+      tidyr::pivot_wider(by1, names_from = "var.stat", values_from = "value") %>%
+      dplyr::mutate(dplyr::across(.fns = as.character)) %>%
+      as.data.frame()
     num.all <- list(num.val, num.val.tot)
     num.long <- num.all %>%
       dplyr::bind_rows() %>%
@@ -172,7 +192,7 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
 #' @noRd
 split_pcts <- function(x, n) {
   x %>%
-    tibble::as_tibble(.name_repair = "unique") %>%
+    as.data.frame() %>%
     split(rep(seq_len(nrow(.) / n), each = n)) %>%
     purrr::map_df(., . %>% purrr::map_df(pandoc_pcts))
 }

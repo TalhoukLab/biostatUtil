@@ -21,6 +21,10 @@
 #' }
 parse_rd <- function(file = NULL, tags = c("name", "title", "desc",
                                            "details")) {
+  if (!requireNamespace("Rd2roxygen", quietly = TRUE)) {
+    stop("Package \"Rd2roxygen\" is required. Please install it.",
+         call. = FALSE)
+  }
   rd.files <- list.files("man", full.names = TRUE)
   info.table <- rd.files %>%
     purrr::set_names() %>%
@@ -28,7 +32,7 @@ parse_rd <- function(file = NULL, tags = c("name", "title", "desc",
     purrr::map(~ replace(.x[tags], purrr::map_lgl(.x[tags], is.null), "")) %>%
     purrr::transpose() %>%
     purrr::map(unlist) %>%
-    data.frame(stringsAsFactors = FALSE)
+    data.frame()
   if (!is.null(file)) readr::write_csv(info.table, file = file)
   info.table
 }

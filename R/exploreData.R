@@ -10,6 +10,10 @@
 #' exploreData(mtcars)
 #' file.remove("DataSummary.pdf")
 exploreData <- function(datmat) {
+  if (!requireNamespace("PerformanceAnalytics", quietly = TRUE)) {
+    stop("Package \"PerformanceAnalytics\" is required. Please install it.",
+         call. = FALSE)
+  }
   types <- unname(purrr::map_chr(datmat, class))
   fd <- datmat[, types %in% c("factor", "numeric", "integer")]
   type.fd <- unname(purrr::map_chr(fd, class))

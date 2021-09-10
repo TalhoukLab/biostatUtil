@@ -18,6 +18,6 @@ design_matrix <- function(data, order = 2) {
   x <- c(paste0("(", nms[1]),
          nms[-c(1, length(nms))],
          paste0(nms[length(nms)], ")^", order))
-  f <- arsenal::formulize(x = x, collapse = "+")
+  f <- stats::as.formula(paste0("~ ", paste0(x, collapse = " + ")))
   stats::model.matrix(f, data)
 }

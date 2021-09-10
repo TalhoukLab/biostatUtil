@@ -21,6 +21,10 @@
 #' @export
 ms_process <- function(psm, protein, treatment, samples = NULL,
                        sample.id = NULL, path = NULL, ...) {
+  if (!requireNamespace("limma", quietly = TRUE)) {
+    stop("Package \"limma\" is required. Please install it.",
+         call. = FALSE)
+  }
   # Make raw data file column names into R column names
   psm <- psm %>% magrittr::set_colnames(make.names(colnames(.)))
   protein <- protein %>% magrittr::set_colnames(make.names(colnames(.)))
@@ -90,5 +94,5 @@ ms_process <- function(psm, protein, treatment, samples = NULL,
     magrittr::set_colnames(paste("l2", names(.), sep = "_"))
   vsn <- limma::normalizeVSN(raw, verbose = FALSE) %>%
     magrittr::set_colnames(paste("vsn", colnames(.), sep = "_"))
-  tibble::lst(pep, raw, l2, vsn)
+  rlang::dots_list(pep, raw, l2, vsn, .named = TRUE)
 }

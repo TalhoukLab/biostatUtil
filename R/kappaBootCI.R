@@ -26,20 +26,28 @@
 kappaBootCI <- function(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
                         method = c("cohen", "weighted", "fleiss", "krippendorff"),
                         type = "nominal") {
-  set.seed(seed)
-  fun <- switch(match.arg(method),
-                cohen = function(data, x, weight = "unweighted")
-                  irr::kappa2(data[x, ], weight)$value,
-                weighted = function(data, x, weight = "squared")
-                  irr::kappa2(data[x, ], weight)$value,
-                fleiss = function(data, x)
-                  irr::kappam.fleiss(data[x, ])$value,
-                krippendorff = function(data, x, method = type)
-                  irr::kripp.alpha(data[x, ], method)$value)
-  res <- boot::boot(cbind(x, y), fun, num.boot)
-  bootCI <- boot::boot.ci(res, type = "bca", conf = conf.level)
-  kappa <- c(PointEst = bootCI[[2]], bootCI[[4]][4:5])
-  names(kappa)[2:3] <- c(paste0((1 - conf.level) / 2 * 100, "%"),
-                         paste0((1 - (1 - conf.level) / 2) * 100, "%"))
-  return(kappa)
+  if (!requireNamespace("irr", quietly = TRUE)) {
+    stop("Package \"irr\" is required. Please install it.",
+         call. = FALSE)
+  } else if (!requireNamespace("boot", quietly = TRUE)) {
+    stop("Package \"boot\" is required. Please install it.",
+         call. = FALSE)
+  } else {
+    set.seed(seed)
+    fun <- switch(match.arg(method),
+                  cohen = function(data, x, weight = "unweighted")
+                    irr::kappa2(data[x, ], weight)$value,
+                  weighted = function(data, x, weight = "squared")
+                    irr::kappa2(data[x, ], weight)$value,
+                  fleiss = function(data, x)
+                    irr::kappam.fleiss(data[x, ])$value,
+                  krippendorff = function(data, x, method = type)
+                    irr::kripp.alpha(data[x, ], method)$value)
+    res <- boot::boot(cbind(x, y), fun, num.boot)
+    bootCI <- boot::boot.ci(res, type = "bca", conf = conf.level)
+    kappa <- c(PointEst = bootCI[[2]], bootCI[[4]][4:5])
+    names(kappa)[2:3] <- c(paste0((1 - conf.level) / 2 * 100, "%"),
+                           paste0((1 - (1 - conf.level) / 2) * 100, "%"))
+    return(kappa)
+  }
 }
