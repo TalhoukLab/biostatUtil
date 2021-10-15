@@ -37,6 +37,10 @@
 #'   of censored cases exceeds `use.firth`. Setting `use.firth = 1`
 #'   (default) means Firth is never used, and `use.firth = -1` means Firth
 #'   is always used.
+#' @param hide.border logical; if `TRUE`, the upper and right plot borders are
+#'   not shown.
+#' @param expand.scale logical; if `TRUE` (default), the scales are expanded by
+#'   5% so that the data are placed a slight distance away from the axes
 #' @param legend logical; if `TRUE`, the legend is overlaid on the graph
 #'   (instead of on the side).
 #' @param legend.xy named vector specifying the x/y position of the legend
@@ -66,8 +70,8 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
                  ylabs = "Survival Probability", xlims = NULL, ylims = NULL,
                  ystratalabs = NULL, cox.ref.grp = NULL, timeby = 5,
                  pval = TRUE, bold_pval = FALSE, sig.level = 0.05,
-                 HR = TRUE, use.firth = 1, legend = FALSE,
-                 legend.xy = NULL, legend.direction = "horizontal",
+                 HR = TRUE, use.firth = 1, hide.border = FALSE, expand.scale = TRUE,
+                 legend = FALSE, legend.xy = NULL, legend.direction = "horizontal",
                  line.y.increment = 0.05, size.plot = 11, size.summary = 3,
                  size.table = 3.5, size.table.labels = 12, digits = 3, ...) {
   time <- surv <- lower <- upper <- n.censor <- n.risk <- n.event <-
@@ -87,6 +91,13 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
     line.pattern <- stats::setNames(rep(1, length(sfit$strata)), ystratalabs)
   if (!is.null(cox.ref.grp))
     names(cox.ref.grp) <- all.vars(sfit$call)[3]  # works for two-sided formulas
+  if (expand.scale) {
+    expand <- waiver()
+    lab.offset <- 0.01
+  } else {
+    expand <- c(0, 0)
+    lab.offset <- 0.05
+  }
 
   # Left margins for km plot and risk table
   mleft <- left_margin(ystratalabs)
@@ -109,8 +120,8 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
     scale_colour_manual(values = shading.colors) +
     scale_fill_manual(values = shading.colors) +
     scale_linetype_manual(values = line.pattern) +
-    scale_x_continuous(xlabs, breaks = times, limits = xlims) +
-    scale_y_continuous(ylabs, limits = ylims) +
+    scale_x_continuous(xlabs, breaks = times, limits = xlims, expand = expand) +
+    scale_y_continuous(ylabs, limits = ylims, expand = expand) +
     theme_bw() +
     theme(
       text = element_text(size = size.plot),
@@ -124,6 +135,9 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
       legend.position = "none"
     ) +
     ggtitle(main)
+  if (hide.border)  # Suppress upper and right plot borders
+    p <- p + theme(axis.line = element_line(color = "black"),
+                   panel.border = element_blank())
   if (legend)  # Legend
     p <- p + theme(legend.position = legend.xy,
                    legend.key = element_rect(colour = NA),
@@ -144,7 +158,8 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
                       cox.ref.grp = cox.ref.grp, use.firth = use.firth,
                       ystratalabs = ystratalabs,
                       line.y.increment = line.y.increment,
-                      size.summary = size.summary)
+                      size.summary = size.summary,
+                      lab.offset = lab.offset)
   }
 
   # Create table graphic to include at-risk numbers, keep at-risk numbers
@@ -208,7 +223,8 @@ left_margin <- function(labels) {
 #' Numerical summaries of km fit: HR (95\% CI), Log rank test p-value
 #' @noRd
 summarize_km <- function(fit, p, digits, bold_pval, sig.level, HR, cox.ref.grp,
-                         use.firth, ystratalabs, line.y.increment, size.summary) {
+                         use.firth, ystratalabs, line.y.increment, size.summary,
+                         lab.offset) {
   f <- eval(fit$call$formula)
   d <- eval(fit$call$data)
   pvalue <- survdiff(f, d) %>%
@@ -257,12 +273,23 @@ summarize_km <- function(fit, p, digits, bold_pval, sig.level, HR, cox.ref.grp,
       HRtxt <- HRtxts[i]
       HRtxt <- paste0(HRtxt, " ~ ", cox.strata.labs[i + 1],
                         " vs. ", cox.strata.labs[1])
-      p <- p + annotate("text", x = 0.2 * max(fit$time), hjust = 0,
-                        y = 0.01 + line.y.increment * i, label = HRtxt,
-                        size = size.summary)
+      p <- p + annotate(
+        "text",
+        x = 0.2 * max(fit$time),
+        hjust = 0,
+        y = lab.offset + line.y.increment * i,
+        label = HRtxt,
+        size = size.summary
+      )
     }
   }
-  p <- p + annotate("text", x = 0.2 * max(fit$time), hjust = 0,
-                    y = 0.01 / 2 ^ parse_pval,
-                    label = pvaltxt, size = size.summary, parse = parse_pval)
+  p <- p + annotate(
+    "text",
+    x = 0.2 * max(fit$time),
+    hjust = 0,
+    y = lab.offset / 2 ^ parse_pval,
+    label = pvaltxt,
+    size = size.summary,
+    parse = parse_pval
+  )
 }

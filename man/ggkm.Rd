@@ -26,6 +26,8 @@ ggkm(
   sig.level = 0.05,
   HR = TRUE,
   use.firth = 1,
+  hide.border = FALSE,
+  expand.scale = TRUE,
   legend = FALSE,
   legend.xy = NULL,
   legend.direction = "horizontal",
@@ -94,6 +96,12 @@ its 95\% confidence interval will be shown}
 of censored cases exceeds \code{use.firth}. Setting \code{use.firth = 1}
 (default) means Firth is never used, and \code{use.firth = -1} means Firth
 is always used.}
+
+\item{hide.border}{logical; if \code{TRUE}, the upper and right plot borders are
+not shown.}
+
+\item{expand.scale}{logical; if \code{TRUE} (default), the scales are expanded by
+5\% so that the data are placed a slight distance away from the axes}
 
 \item{legend}{logical; if \code{TRUE}, the legend is overlaid on the graph
 (instead of on the side).}
