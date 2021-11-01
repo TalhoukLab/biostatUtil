@@ -19,6 +19,7 @@ doCohortCharacteristics(
   stat.tests = NULL,
   chisq.test.simulate.p.value = FALSE,
   stat.test.column.header = "association/correlation test",
+  show.test.name = TRUE,
   round.digits.p.value = 4,
   num.boot = 1000,
   missing.codes.highlight = NULL,
@@ -76,6 +77,9 @@ value=FALSE}
 
 \item{stat.test.column.header}{The name to show on the header defaults to
 "association/correlation test"}
+
+\item{show.test.name}{logical; if \code{TRUE} (default), the name of each test is
+prepended to the p-value}
 
 \item{round.digits.p.value}{The number of digits to round the P values}
 

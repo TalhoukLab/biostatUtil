@@ -27,6 +27,8 @@
 #'   value=FALSE
 #' @param stat.test.column.header The name to show on the header defaults to
 #'   "association/correlation test"
+#' @param show.test.name logical; if `TRUE` (default), the name of each test is
+#'   prepended to the p-value
 #' @param round.digits.p.value The number of digits to round the P values
 #' @param num.boot the number of bootstrap samples for any bootstrap method that
 #'   may be used
@@ -71,6 +73,7 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
                                     chisq.test.simulate.p.value = FALSE,
                                     stat.test.column.header =
                                       "association/correlation test",
+                                    show.test.name = TRUE,
                                     round.digits.p.value = 4,
                                     num.boot = 1000,
                                     missing.codes.highlight = NULL,
@@ -209,26 +212,31 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
                  spearman.result <- stats::cor.test(input.d.no.missing.var[, var.name],
                                                     as.numeric(input.d.no.missing.var[, marker.name]),
                                                     method = "spearman")
-                 stat.test.result <- paste0("Spearman correlation", kLocalConstantStatTestBeginFlag,
-                                            "rho = ", round(spearman.result$estimate, 2),
+                 stat.test.result <- paste0("rho = ", round(spearman.result$estimate, 2),
                                             kLocalConstantNewLineFlag, "P = ",
                                             sprintf(paste0("%.", round.digits.p.value, "f"),
                                                     round(spearman.result$p.value, digits = round.digits.p.value)))
+                 if (show.test.name) {
+                   stat.test.result <- paste0("Spearman correlation", kLocalConstantStatTestBeginFlag, stat.test.result)
+                 }
                },
                kruskal = {
                  kruskal.result <- stats::kruskal.test(input.d.no.missing.var[, var.name] ~
                                                          as.numeric(input.d.no.missing.var[, marker.name]))
-                 stat.test.result <- paste0("Kruskal-Wallis rank sum test", kLocalConstantStatTestBeginFlag,
-                                            kLocalConstantNewLineFlag, "P = ",
-                                            sprintf(paste0("%.", round.digits.p.value, "f"),
-                                                    round(kruskal.result$p.value, digits = round.digits.p.value)))
+                 stat.test.result <- paste0("P = ", sprintf(paste0("%.", round.digits.p.value, "f"),
+                                                            round(kruskal.result$p.value, digits = round.digits.p.value)))
+                 if (show.test.name) {
+                   stat.test.result <- paste0("Kruskal-Wallis rank sum test", kLocalConstantStatTestBeginFlag, stat.test.result)
+                 }
                },
                wilcox = {
                  wilcox.result <- stats::wilcox.test(input.d.no.missing.var[, var.name] ~
                                                        as.numeric(input.d.no.missing.var[, marker.name]))
-                 stat.test.result <- paste0("Wilcoxon rank sum test", kLocalConstantStatTestBeginFlag, "P = ",
-                                            sprintf(paste0("%.", round.digits.p.value, "f"),
-                                                    round(wilcox.result$p.value, digits = round.digits.p.value)))
+                 stat.test.result <- paste0("P = ", sprintf(paste0("%.", round.digits.p.value, "f"),
+                                                            round(wilcox.result$p.value, digits = round.digits.p.value)))
+                 if (show.test.name) {
+                   stat.test.result <- paste0("Wilcoxon rank sum test", kLocalConstantStatTestBeginFlag, stat.test.result)
+                 }
                }
         )
         stat.tests.results <- c(stat.tests.results, stat.test.result)
@@ -302,25 +310,31 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
                kendall = {
                  kendall.result <- stats::cor.test(as.numeric(input.d.no.missing.var[, var.name]),
                                                    as.numeric(input.d.no.missing.var[, marker.name]), method = "kendall")
-                 stat.test.result <- paste0("Kendall correlation", kLocalConstantStatTestBeginFlag,
-                                            "tau = ", round(kendall.result$estimate, 2),
+                 stat.test.result <- paste0("tau = ", round(kendall.result$estimate, 2),
                                             kLocalConstantNewLineFlag, "P = ",
                                             sprintf(paste0("%.", round.digits.p.value, "f"),
                                                     round(kendall.result$p.value, digits = round.digits.p.value)))
+                 if (show.test.name) {
+                   stat.test.result <- paste0("Kendall correlation", kLocalConstantStatTestBeginFlag, stat.test.result)
+                 }
                },
                chisq = {
                  chisq.result <- stats::chisq.test(table(input.d.no.missing.var[, var.name],
                                                          input.d.no.missing.var[, marker.name]), simulate.p.value = chisq.test.simulate.p.value)
-                 stat.test.result <- paste0("Chi-square test", kLocalConstantStatTestBeginFlag,
-                                            "P = ", sprintf(paste0("%.", round.digits.p.value, "f"),
+                 stat.test.result <- paste0("P = ", sprintf(paste0("%.", round.digits.p.value, "f"),
                                                             round(chisq.result$p.value, digits = round.digits.p.value)))
+                 if (show.test.name) {
+                   stat.test.result <- paste0("Chi-square test", kLocalConstantStatTestBeginFlag, stat.test.result)
+                 }
                },
                fisher = {
                  fisher.result <- stats::fisher.test(table(input.d.no.missing.var[, var.name],
                                                            input.d.no.missing.var[, marker.name]), workspace = 2e6)
-                 stat.test.result <- paste0("Fisher's exact test", kLocalConstantStatTestBeginFlag, "P = ",
-                                            sprintf(paste0("%.", round.digits.p.value, "f"),
-                                                    round(fisher.result$p.value, digits = round.digits.p.value)))
+                 stat.test.result <- paste0("P = ", sprintf(paste0("%.", round.digits.p.value, "f"),
+                                                            round(fisher.result$p.value, digits = round.digits.p.value)))
+                 if (show.test.name) {
+                   stat.test.result <- paste0("Fisher's exact test", kLocalConstantStatTestBeginFlag, stat.test.result)
+                 }
                },
                confusionMarkerAsRef = {
                  # confusion matrix, marker as the reference
