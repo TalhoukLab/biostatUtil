@@ -275,7 +275,7 @@ summarize_km <- function(fit, p, digits, bold_pval, sig.level, HR, cox.ref.grp,
                         " vs. ", cox.strata.labs[1])
       p <- p + annotate(
         "text",
-        x = 0.2 * max(fit$time),
+        x = 0.1 * max(fit$time),
         hjust = 0,
         y = lab.offset + line.y.increment * i,
         label = HRtxt,
@@ -285,7 +285,7 @@ summarize_km <- function(fit, p, digits, bold_pval, sig.level, HR, cox.ref.grp,
   }
   p <- p + annotate(
     "text",
-    x = 0.2 * max(fit$time),
+    x = 0.1 * max(fit$time),
     hjust = 0,
     y = lab.offset / 2 ^ parse_pval,
     label = pvaltxt,
