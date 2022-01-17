@@ -287,7 +287,7 @@ summarize_km <- function(fit, p, digits, bold_pval, sig.level, HR, cox.ref.grp,
     "text",
     x = 0.1 * max(fit$time),
     hjust = 0,
-    y = lab.offset / 2 ^ parse_pval,
+    y = lab.offset,
     label = pvaltxt,
     size = size.summary,
     parse = parse_pval
