@@ -1,0 +1,12 @@
+url: https://talhouklab.github.io/biostatUtil/
+
+template:
+  bootstrap: 5
+  params:
+    bootswatch: cerulean
+
+navbar:
+  title: ~
+  right:
+  - icon: fa-github
+    href: https://github.com/TalhoukLab/biostatUtil

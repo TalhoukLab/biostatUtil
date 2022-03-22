@@ -4,3 +4,6 @@ biostatUtil_functions.docx
 ^README\.Rmd$
 ^\.github$
 ^codecov\.yml$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
