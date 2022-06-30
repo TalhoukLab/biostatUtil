@@ -246,9 +246,9 @@ paste_formula <- function(response, terms) {
 #' @noRd
 wtl <- function(data, by1, by2) {
   data %>%
-    tidyr::gather_("stat", "value",
-                   grep(collapse_var(c(by1, by2), "|"), names(.),
-                        invert = TRUE, value = TRUE)) %>%
-    tidyr::separate_("stat", c("var", "stat"), "\\.") %>%
+    tidyr::gather("stat", "value",
+                  grep(collapse_var(c(by1, by2), "|"), names(.),
+                       invert = TRUE, value = TRUE)) %>%
+    tidyr::separate(stat, c("var", "stat"), "\\.") %>%
     dplyr::arrange(.data[[by1]], .data[[by2]])
 }
