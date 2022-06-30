@@ -380,7 +380,7 @@ doCohortCharacteristics <- function(input.d, marker.name, marker.description,
                                    ifelse(sum(input.d.no.missing.var[, var.name] == var.category) > 0,
                                           format(round(sum(input.d.no.missing.var[, var.name] == var.category &
                                                              input.d.no.missing.var[, marker.name] == x) /
-                                                         sum(input.d.no.missing.var[, var.name] == x) * 100, decimal), nsmall = decimal), 0),
+                                                         sum(input.d.no.missing.var[, var.name] == var.category) * 100, decimal), nsmall = decimal), 0),
                                    "%)"))
                    }))
                  },
