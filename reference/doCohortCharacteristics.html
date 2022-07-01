@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">biostatUtil</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9109</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9110</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,123 +48,182 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">doCohortCharacteristics</span><span class="op">(</span>
-  <span class="va">input.d</span>,
-  <span class="va">marker.name</span>,
-  <span class="va">marker.description</span>,
-  <span class="va">var.names</span>,
-  <span class="va">is.var.continuous</span>,
-  <span class="va">var.descriptions</span>,
-  marker.value.labels.tolower <span class="op">=</span> <span class="cn">TRUE</span>,
-  show.missing <span class="op">=</span> <span class="cn">TRUE</span>,
-  show.missing.continuous <span class="op">=</span> <span class="cn">TRUE</span>,
-  do.droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
-  show.percent <span class="op">=</span> <span class="st">"both"</span>,
-  stat.tests <span class="op">=</span> <span class="cn">NULL</span>,
-  chisq.test.simulate.p.value <span class="op">=</span> <span class="cn">FALSE</span>,
-  stat.test.column.header <span class="op">=</span> <span class="st">"association/correlation test"</span>,
-  show.test.name <span class="op">=</span> <span class="cn">TRUE</span>,
-  round.digits.p.value <span class="op">=</span> <span class="fl">4</span>,
-  num.boot <span class="op">=</span> <span class="fl">1000</span>,
-  missing.codes.highlight <span class="op">=</span> <span class="cn">NULL</span>,
-  missing.codes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"N/A"</span>, <span class="st">""</span>, <span class="st">"Unk"</span><span class="op">)</span>,
-  decimal <span class="op">=</span> <span class="fl">0</span>,
-  caption <span class="op">=</span> <span class="cn">NA</span>,
-  html.table.border <span class="op">=</span> <span class="fl">0</span>,
-  banded.rows <span class="op">=</span> <span class="cn">FALSE</span>,
-  css.class.name.odd <span class="op">=</span> <span class="st">"odd"</span>,
-  css.class.name.even <span class="op">=</span> <span class="st">"even"</span>,
-  custom.marker.labels <span class="op">=</span> <span class="cn">NULL</span>,
-  custom.total.label <span class="op">=</span> <span class="cn">NULL</span>,
-  split.table <span class="op">=</span> <span class="fl">200</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">doCohortCharacteristics</span><span class="op">(</span></span>
+<span>  <span class="va">input.d</span>,</span>
+<span>  <span class="va">marker.name</span>,</span>
+<span>  <span class="va">marker.description</span>,</span>
+<span>  <span class="va">var.names</span>,</span>
+<span>  <span class="va">is.var.continuous</span>,</span>
+<span>  <span class="va">var.descriptions</span>,</span>
+<span>  marker.value.labels.tolower <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  show.missing <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  show.missing.continuous <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  do.droplevels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  show.percent <span class="op">=</span> <span class="st">"both"</span>,</span>
+<span>  stat.tests <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  chisq.test.simulate.p.value <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  stat.test.column.header <span class="op">=</span> <span class="st">"association/correlation test"</span>,</span>
+<span>  show.test.name <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  round.digits.p.value <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  num.boot <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  missing.codes.highlight <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  missing.codes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"N/A"</span>, <span class="st">""</span>, <span class="st">"Unk"</span><span class="op">)</span>,</span>
+<span>  decimal <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  caption <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  html.table.border <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  banded.rows <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  css.class.name.odd <span class="op">=</span> <span class="st">"odd"</span>,</span>
+<span>  css.class.name.even <span class="op">=</span> <span class="st">"even"</span>,</span>
+<span>  custom.marker.labels <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  custom.total.label <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  split.table <span class="op">=</span> <span class="fl">200</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>input.d</dt>
 <dd><p>The <code>data.frame</code> containing the data</p></dd>
+
+
 <dt>marker.name</dt>
 <dd><p>The variable that you want to split into different columns</p></dd>
+
+
 <dt>marker.description</dt>
 <dd><p>The description for the variable(s) to split</p></dd>
+
+
 <dt>var.names</dt>
 <dd><p>The variables that you want the statistics for</p></dd>
+
+
 <dt>is.var.continuous</dt>
 <dd><p>Vector of length equal to the length of var.names
 with 1 indicating a continuous variable and 0 otherwise (this should be
 inferred in the function)</p></dd>
+
+
 <dt>var.descriptions</dt>
 <dd><p>Vector of strings to describe the variables as they
 are to appear in the table</p></dd>
+
+
 <dt>marker.value.labels.tolower</dt>
 <dd><p>Indicator as to whether to put marker
 value labels to lower case</p></dd>
+
+
 <dt>show.missing</dt>
 <dd><p>an indicator to whether to show missing values</p></dd>
+
+
 <dt>show.missing.continuous</dt>
 <dd><p>if set to <code>FALSE</code> and <code>show.missing == FALSE</code>, will not show the number of missing cases for continuous
 variables. Otherwise, it shows the number of missing for continuous
 variables even if <code>show.missing == FALSE</code>.</p></dd>
+
+
 <dt>do.droplevels</dt>
 <dd><p>drop categories of unobserved levels set to <code>TRUE</code></p></dd>
+
+
 <dt>show.percent</dt>
 <dd><p>defaults to "both" which shows both rows and columns
 other possible values: "column", "row".</p></dd>
+
+
 <dt>stat.tests</dt>
 <dd><p>statistical test to perform. <code>NULL</code> indicates do not
 do test for all variables, <code>NA</code> indicates do not do test for specified
 variable. Tests: chisq, fisher, ttest, wilcox, kendall, spearman, pearson,
 kruskal, confusionMarkerAsRef, confusionVarAsRef</p></dd>
+
+
 <dt>chisq.test.simulate.p.value</dt>
 <dd><p>Whether to simulate p-value for chi-square
 test. this parameter is ignored if chi-square is not used.  Default
 value=FALSE</p></dd>
+
+
 <dt>stat.test.column.header</dt>
 <dd><p>The name to show on the header defaults to
 "association/correlation test"</p></dd>
+
+
 <dt>show.test.name</dt>
 <dd><p>logical; if <code>TRUE</code> (default), the name of each test is
 prepended to the p-value</p></dd>
+
+
 <dt>round.digits.p.value</dt>
 <dd><p>The number of digits to round the P values</p></dd>
+
+
 <dt>num.boot</dt>
 <dd><p>the number of bootstrap samples for any bootstrap method that
 may be used</p></dd>
+
+
 <dt>missing.codes.highlight</dt>
 <dd><p>default to <code>NULL</code> this indicates whether
 we wanted the missing values broken down down or lumped together.</p></dd>
+
+
 <dt>missing.codes</dt>
 <dd><p>a vector to indicate how missing values are coded,
 default is <code>c("N/A", "", "Unk")</code></p></dd>
+
+
 <dt>decimal</dt>
 <dd><p>number of decimal places to show for aggregate numbers such as
 proportions or averages; default to 0</p></dd>
+
+
 <dt>caption</dt>
 <dd><p>caption to use for the Table</p></dd>
+
+
 <dt>html.table.border</dt>
 <dd><p>the border type to use for html tables</p></dd>
+
+
 <dt>banded.rows</dt>
 <dd><p>If <code>TRUE</code>, rows have alternating shading colour</p></dd>
+
+
 <dt>css.class.name.odd</dt>
 <dd><p>Used to set the row colour for odd rows</p></dd>
+
+
 <dt>css.class.name.even</dt>
 <dd><p>Used to set the row colour for even rows</p></dd>
+
+
 <dt>custom.marker.labels</dt>
 <dd><p>labels of marker to show; default <code>NULL</code>
 means using existing value label of the marker</p></dd>
+
+
 <dt>custom.total.label</dt>
 <dd><p>label of the "Total" column; default <code>NULL</code>
 means show "Total"</p></dd>
+
+
 <dt>split.table</dt>
 <dd><p>number of chars per row before table is split.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>additional arguments to <code>pander</code></p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A table with statistics reported for multiple variables, such as
+    
+
+<p>A table with statistics reported for multiple variables, such as
 mean, median, and range for continuous variables and proportions and
 percentages for categorical variables. Relevant association and correlation
 tests are performed as well.</p>
@@ -176,11 +235,11 @@ tests are performed as well.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">dcc</span> <span class="op">&lt;-</span> <span class="fu">doCohortCharacteristics</span><span class="op">(</span> input.d <span class="op">=</span> <span class="va">mtcars</span>, marker.name <span class="op">=</span> <span class="st">"cyl"</span>,</span>
-<span class="r-in">marker.description <span class="op">=</span> <span class="st">"cylinders"</span>, var.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"disp"</span>, <span class="st">"hp"</span><span class="op">)</span>,</span>
-<span class="r-in">var.descriptions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"displacement"</span>, <span class="st">"horsepower"</span><span class="op">)</span>, is.var.continuous <span class="op">=</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span>, caption <span class="op">=</span> <span class="st">"Some mtcars summaries"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">htmlTable</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/htmlTable/man/htmlTable.html" class="external-link">htmlTable</a></span><span class="op">(</span><span class="va">dcc</span><span class="op">$</span><span class="va">result.table.html</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">dcc</span> <span class="op">&lt;-</span> <span class="fu">doCohortCharacteristics</span><span class="op">(</span> input.d <span class="op">=</span> <span class="va">mtcars</span>, marker.name <span class="op">=</span> <span class="st">"cyl"</span>,</span></span>
+<span class="r-in"><span>marker.description <span class="op">=</span> <span class="st">"cylinders"</span>, var.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"disp"</span>, <span class="st">"hp"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>var.descriptions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"displacement"</span>, <span class="st">"horsepower"</span><span class="op">)</span>, is.var.continuous <span class="op">=</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span>, caption <span class="op">=</span> <span class="st">"Some mtcars summaries"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">htmlTable</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/htmlTable/man/htmlTable.html" class="external-link">htmlTable</a></span><span class="op">(</span><span class="va">dcc</span><span class="op">$</span><span class="va">result.table.html</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;table class='gmisc_table' style='border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;'  id='table_4'&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;tbody&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;tr style='border-top: 2px solid grey;'&gt;</span>
@@ -199,7 +258,7 @@ tests are performed as well.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

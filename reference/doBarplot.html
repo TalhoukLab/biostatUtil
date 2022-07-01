@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">biostatUtil</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9109</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9110</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,27 +48,40 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">doBarplot</span><span class="op">(</span><span class="va">data</span>, <span class="va">var</span>, xlab <span class="op">=</span> <span class="va">var</span>, ylab <span class="op">=</span> <span class="st">"Frequency"</span>, title <span class="op">=</span> <span class="cn">NULL</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">doBarplot</span><span class="op">(</span><span class="va">data</span>, <span class="va">var</span>, xlab <span class="op">=</span> <span class="va">var</span>, ylab <span class="op">=</span> <span class="st">"Frequency"</span>, title <span class="op">=</span> <span class="cn">NULL</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
 <dd><p>data.frame with column names</p></dd>
+
+
 <dt>var</dt>
 <dd><p>string of variable in <code>data</code> to graph on</p></dd>
+
+
 <dt>xlab</dt>
 <dd><p>x-axis label</p></dd>
+
+
 <dt>ylab</dt>
 <dd><p>y-axis label</p></dd>
+
+
 <dt>title</dt>
 <dd><p>barplot title</p></dd>
+
+
 <dt>digits</dt>
 <dd><p>number of digits to round to</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Barplot of frequencies for each group</p>
+    
+
+<p>Barplot of frequencies for each group</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -88,9 +101,9 @@ as this function reports missing data frequencies.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">doBarplot</span><span class="op">(</span><span class="va">mtcars</span>, <span class="st">"cyl"</span>, <span class="st">"title = Number of cylinders"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">doBarplot</span><span class="op">(</span><span class="va">mtcars</span>, <span class="st">"cyl"</span>, <span class="st">"title = Number of cylinders"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="doBarplot-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="fu">doBarplot</span><span class="op">(</span><span class="va">mtcars</span>, <span class="st">"cyl"</span>, <span class="st">"Cylinders"</span>, title <span class="op">=</span> <span class="st">"Number of cylinders"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">doBarplot</span><span class="op">(</span><span class="va">mtcars</span>, <span class="st">"cyl"</span>, <span class="st">"Cylinders"</span>, title <span class="op">=</span> <span class="st">"Number of cylinders"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="doBarplot-2.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
@@ -103,7 +116,7 @@ as this function reports missing data frequencies.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

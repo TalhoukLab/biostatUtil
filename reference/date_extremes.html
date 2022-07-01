@@ -14,7 +14,7 @@ opposed to a vector."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/
     
     <a class="navbar-brand me-2" href="../index.html">biostatUtil</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9109</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9110</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,47 +54,62 @@ opposed to a vector.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">maxDate</span><span class="op">(</span><span class="va">dates</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu">minDate</span><span class="op">(</span><span class="va">dates</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu">maxDateArray</span><span class="op">(</span>
-  <span class="va">t.arr</span>,
-  date.format <span class="op">=</span> <span class="st">"MM.DD.YYYY"</span>,
-  existing.missing.codes <span class="op">=</span> <span class="cn">NA</span>,
-  return.missing.code <span class="op">=</span> <span class="cn">NA</span>,
-  sep <span class="op">=</span> <span class="st">"/"</span>
-<span class="op">)</span>
-
-<span class="fu">minDateArray</span><span class="op">(</span>
-  <span class="va">t.arr</span>,
-  date.format <span class="op">=</span> <span class="st">"MM.DD.YYYY"</span>,
-  existing.missing.codes <span class="op">=</span> <span class="cn">NA</span>,
-  return.missing.code <span class="op">=</span> <span class="cn">NA</span>,
-  sep <span class="op">=</span> <span class="st">"/"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">maxDate</span><span class="op">(</span><span class="va">dates</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">minDate</span><span class="op">(</span><span class="va">dates</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">maxDateArray</span><span class="op">(</span></span>
+<span>  <span class="va">t.arr</span>,</span>
+<span>  date.format <span class="op">=</span> <span class="st">"MM.DD.YYYY"</span>,</span>
+<span>  existing.missing.codes <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  return.missing.code <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  sep <span class="op">=</span> <span class="st">"/"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">minDateArray</span><span class="op">(</span></span>
+<span>  <span class="va">t.arr</span>,</span>
+<span>  date.format <span class="op">=</span> <span class="st">"MM.DD.YYYY"</span>,</span>
+<span>  existing.missing.codes <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  return.missing.code <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  sep <span class="op">=</span> <span class="st">"/"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>dates</dt>
 <dd><p>vector of dates</p></dd>
+
+
 <dt>na.rm</dt>
 <dd><p>logical. Should NAs be removed?</p></dd>
+
+
 <dt>t.arr</dt>
 <dd><p>array of date strings</p></dd>
+
+
 <dt>date.format</dt>
 <dd><p>format of the array of dates</p></dd>
+
+
 <dt>existing.missing.codes</dt>
 <dd><p>missing dates</p></dd>
+
+
 <dt>return.missing.code</dt>
 <dd><p>what to return if there is a missing input</p></dd>
+
+
 <dt>sep</dt>
 <dd><p>date separator. Defaults to "/"</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>The latest or earliest date from a vector of dates.</p>
+    
+
+<p>The latest or earliest date from a vector of dates.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -109,39 +124,39 @@ values, then the function will also return <code>NA</code>.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co">## No NA</span></span>
-<span class="r-in"><span class="va">t1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2015-03-01"</span>, <span class="st">"2015-02-15"</span>, <span class="st">"2015-05-01"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">minDate</span><span class="op">(</span><span class="va">t1</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## No NA</span></span></span>
+<span class="r-in"><span><span class="va">t1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2015-03-01"</span>, <span class="st">"2015-02-15"</span>, <span class="st">"2015-05-01"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">minDate</span><span class="op">(</span><span class="va">t1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2015-02-15"</span>
-<span class="r-in"><span class="fu">maxDate</span><span class="op">(</span><span class="va">t1</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">maxDate</span><span class="op">(</span><span class="va">t1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2015-05-01"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## With NA</span></span>
-<span class="r-in"><span class="va">t2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2015-03-01"</span>, <span class="st">"2015-02-15"</span>, <span class="cn">NA</span>, <span class="st">"2014-05-01"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">maxDate</span><span class="op">(</span><span class="va">t2</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## With NA</span></span></span>
+<span class="r-in"><span><span class="va">t2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2015-03-01"</span>, <span class="st">"2015-02-15"</span>, <span class="cn">NA</span>, <span class="st">"2014-05-01"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">maxDate</span><span class="op">(</span><span class="va">t2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2015-03-01"</span>
-<span class="r-in"><span class="fu">minDate</span><span class="op">(</span><span class="va">t2</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">minDate</span><span class="op">(</span><span class="va">t2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2014-05-01"</span>
-<span class="r-in"><span class="fu">minDate</span><span class="op">(</span><span class="va">t2</span>, na.rm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">minDate</span><span class="op">(</span><span class="va">t2</span>, na.rm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## Array of dates</span></span>
-<span class="r-in"><span class="va">many.dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"03/21/1992"</span>, <span class="st">"04/21/2013"</span>, <span class="st">"10/10/2015"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">maxDateArray</span><span class="op">(</span><span class="va">many.dates</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Array of dates</span></span></span>
+<span class="r-in"><span><span class="va">many.dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"03/21/1992"</span>, <span class="st">"04/21/2013"</span>, <span class="st">"10/10/2015"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">maxDateArray</span><span class="op">(</span><span class="va">many.dates</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "10/10/2015"</span>
-<span class="r-in"><span class="fu">minDateArray</span><span class="op">(</span><span class="va">many.dates</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">minDateArray</span><span class="op">(</span><span class="va">many.dates</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "03/21/1992"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">many.dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2009-03-01"</span>, <span class="st">"2010-01-12"</span>, <span class="st">"2015-01-11"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">maxDateArray</span><span class="op">(</span><span class="va">many.dates</span>, sep <span class="op">=</span> <span class="st">"-"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">many.dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2009-03-01"</span>, <span class="st">"2010-01-12"</span>, <span class="st">"2015-01-11"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">maxDateArray</span><span class="op">(</span><span class="va">many.dates</span>, sep <span class="op">=</span> <span class="st">"-"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2015-01-11"</span>
-<span class="r-in"><span class="fu">minDateArray</span><span class="op">(</span><span class="va">many.dates</span>, sep <span class="op">=</span> <span class="st">"-"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">minDateArray</span><span class="op">(</span><span class="va">many.dates</span>, sep <span class="op">=</span> <span class="st">"-"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2009-03-01"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">ties.dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2009-03-01"</span>, <span class="st">"2010-01-12"</span>, <span class="st">"2010-01-12"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">maxDateArray</span><span class="op">(</span><span class="va">ties.dates</span>, sep <span class="op">=</span> <span class="st">"-"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">ties.dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2009-03-01"</span>, <span class="st">"2010-01-12"</span>, <span class="st">"2010-01-12"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">maxDateArray</span><span class="op">(</span><span class="va">ties.dates</span>, sep <span class="op">=</span> <span class="st">"-"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2010-01-12"</span>
-<span class="r-in"><span class="fu">minDateArray</span><span class="op">(</span><span class="va">ties.dates</span>, sep <span class="op">=</span> <span class="st">"-"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">minDateArray</span><span class="op">(</span><span class="va">ties.dates</span>, sep <span class="op">=</span> <span class="st">"-"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2009-03-01"</span>
 </code></pre></div>
     </div>
@@ -154,7 +169,7 @@ values, then the function will also return <code>NA</code>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

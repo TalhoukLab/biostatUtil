@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">biostatUtil</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9109</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9110</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,85 +48,128 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">doKMPlots</span><span class="op">(</span>
-  <span class="va">input.d</span>,
-  <span class="va">time</span>,
-  <span class="va">status</span>,
-  <span class="va">var.name</span>,
-  <span class="va">var.description</span>,
-  surv.type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"os"</span>, <span class="st">"dss"</span>, <span class="st">"pfs"</span>, <span class="st">"aefs"</span><span class="op">)</span>,
-  shading.colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue2"</span>, <span class="st">"red2"</span>, <span class="st">"deepskyblue"</span>, <span class="st">"indianred3"</span><span class="op">)</span>,
-  line.name <span class="op">=</span> <span class="cn">NULL</span>,
-  line.pattern <span class="op">=</span> <span class="cn">NULL</span>,
-  legend <span class="op">=</span> <span class="cn">FALSE</span>,
-  cox.ref.group <span class="op">=</span> <span class="cn">NULL</span>,
-  use.firth <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>,
-  CI <span class="op">=</span> <span class="cn">TRUE</span>,
-  bold_pval <span class="op">=</span> <span class="cn">FALSE</span>,
-  sig.level <span class="op">=</span> <span class="fl">0.05</span>,
-  HR <span class="op">=</span> <span class="cn">TRUE</span>,
-  show.risk <span class="op">=</span> <span class="cn">TRUE</span>,
-  km.plot.ref.group <span class="op">=</span> <span class="st">"single"</span>,
-  single.test.type <span class="op">=</span> <span class="st">"logrank"</span>,
-  use.ggkm <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">doKMPlots</span><span class="op">(</span></span>
+<span>  <span class="va">input.d</span>,</span>
+<span>  <span class="va">time</span>,</span>
+<span>  <span class="va">status</span>,</span>
+<span>  <span class="va">var.name</span>,</span>
+<span>  <span class="va">var.description</span>,</span>
+<span>  surv.type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"os"</span>, <span class="st">"dss"</span>, <span class="st">"pfs"</span>, <span class="st">"aefs"</span><span class="op">)</span>,</span>
+<span>  shading.colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue2"</span>, <span class="st">"red2"</span>, <span class="st">"deepskyblue"</span>, <span class="st">"indianred3"</span><span class="op">)</span>,</span>
+<span>  line.name <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  line.pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  cox.ref.group <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  use.firth <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>,</span>
+<span>  CI <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  bold_pval <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  sig.level <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  HR <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  show.risk <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  km.plot.ref.group <span class="op">=</span> <span class="st">"single"</span>,</span>
+<span>  single.test.type <span class="op">=</span> <span class="st">"logrank"</span>,</span>
+<span>  use.ggkm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>input.d</dt>
 <dd><p><code>data.frame</code> containing data</p></dd>
+
+
 <dt>time</dt>
 <dd><p>follow up time</p></dd>
+
+
 <dt>status</dt>
 <dd><p>status indicator</p></dd>
+
+
 <dt>var.name</dt>
 <dd><p>name of variable to make Kaplan-Meier plots on</p></dd>
+
+
 <dt>var.description</dt>
 <dd><p>description for <code>var.name</code></p></dd>
+
+
 <dt>surv.type</dt>
 <dd><p>survival outcome. Either "os", "dss", "pfs", or "aefs".</p></dd>
+
+
 <dt>shading.colors</dt>
 <dd><p>colors for survival curves</p></dd>
+
+
 <dt>line.name</dt>
 <dd><p>names for each survival curve</p></dd>
+
+
 <dt>line.pattern</dt>
 <dd><p>line type for survival curves</p></dd>
+
+
 <dt>legend</dt>
 <dd><p>logical; if <code>TRUE</code>, the legend is overlaid on the graph
 (instead of on the side).</p></dd>
+
+
 <dt>cox.ref.group</dt>
 <dd><p>specify reference group for cox model i.e. hazard
 ratio(s)</p></dd>
+
+
 <dt>use.firth</dt>
 <dd><p>Whether to use Firth's correction for plotting the curves</p></dd>
+
+
 <dt>CI</dt>
 <dd><p>logical; if <code>TRUE</code>, will plot confidence bands</p></dd>
+
+
 <dt>bold_pval</dt>
 <dd><p>logical; if <code>TRUE</code>, p-values are bolded if statistically
 significant at <code>sig.level</code></p></dd>
+
+
 <dt>sig.level</dt>
 <dd><p>significance level; default 0.05</p></dd>
+
+
 <dt>HR</dt>
 <dd><p>logical; if <code>TRUE</code>, will show hazard ratios</p></dd>
+
+
 <dt>show.risk</dt>
 <dd><p>logical; if <code>TRUE</code>, will show the number of people at
 risk at each time of death beneath the plot</p></dd>
+
+
 <dt>km.plot.ref.group</dt>
 <dd><p>specify KM plot reference group; "single" means a
 lump log-rank statistic</p></dd>
+
+
 <dt>single.test.type</dt>
 <dd><p>test to use for survival curves. Defaults to
 "logrank".</p></dd>
+
+
 <dt>use.ggkm</dt>
 <dd><p>if <code>TRUE</code>, will use function <code>ggkm</code> for plotting</p></dd>
+
+
 <dt>...</dt>
 <dd><p>additional arguments to other functions and methods</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A Kaplan-Meier plot for the specified survival outcome split on the
+    
+
+<p>A Kaplan-Meier plot for the specified survival outcome split on the
 desired variable.</p>
     </div>
     <div class="section level2">
@@ -143,7 +186,7 @@ desired variable.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

@@ -12,7 +12,7 @@ PH model. Also plots survival curves for each cutpoint."><!-- mathjax --><script
     
     <a class="navbar-brand me-2" href="../index.html">biostatUtil</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9109</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9110</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,65 +51,93 @@ PH model. Also plots survival curves for each cutpoint.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">best_cut</span><span class="op">(</span>
-  <span class="va">f</span>,
-  <span class="va">d</span>,
-  n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"b"</span>, <span class="st">"t"</span>, <span class="st">"qd"</span>, <span class="st">"qn"</span><span class="op">)</span>,
-  AIC.range <span class="op">=</span> <span class="fl">3</span>,
-  nround <span class="op">=</span> <span class="fl">3</span>,
-  plot <span class="op">=</span> <span class="cn">TRUE</span>,
-  filename <span class="op">=</span> <span class="cn">NULL</span>,
-  nrow <span class="op">=</span> <span class="cn">NULL</span>,
-  ncol <span class="op">=</span> <span class="cn">NULL</span>,
-  title <span class="op">=</span> <span class="st">""</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">best_cut</span><span class="op">(</span></span>
+<span>  <span class="va">f</span>,</span>
+<span>  <span class="va">d</span>,</span>
+<span>  n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"b"</span>, <span class="st">"t"</span>, <span class="st">"qd"</span>, <span class="st">"qn"</span><span class="op">)</span>,</span>
+<span>  AIC.range <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  nround <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  filename <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  nrow <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ncol <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  title <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>f</dt>
 <dd><p>formula object</p></dd>
+
+
 <dt>d</dt>
 <dd><p>data frame</p></dd>
+
+
 <dt>n</dt>
 <dd><p>number of groups to transform variable into. Options are "b" (two),
 "t" (three), "qd" (four), and "qn" (five)</p></dd>
+
+
 <dt>AIC.range</dt>
 <dd><p>If range of AIC is within <code>AIC.range</code> units, the
 likelihood is too flat. We choose the best cutpoint using the alternative
 method.</p></dd>
+
+
 <dt>nround</dt>
 <dd><p>number of digits to round AIC and p-value on plots</p></dd>
+
+
 <dt>plot</dt>
 <dd><p>logical; If <code>TRUE</code>, shows the survival curves for each
 cutpoint in a facetted figure</p></dd>
+
+
 <dt>filename</dt>
 <dd><p>file name for saving a png image of figure</p></dd>
+
+
 <dt>nrow</dt>
 <dd><p>number of rows in facetted plot</p></dd>
+
+
 <dt>ncol</dt>
 <dd><p>number of columns in facetted plot</p></dd>
+
+
 <dt>title</dt>
 <dd><p>title for plot</p></dd>
+
+
 <dt>...</dt>
 <dd><p>additional arguments for <code>plot</code></p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list with the following elements</p>
+    
+
+<p>A list with the following elements</p>
 <dl><dt>cuts</dt>
 <dd><p>vector of cutpoints considered</p></dd>
+
 <dt>fits</dt>
 <dd><p>A list of <code>coxph</code> objects run for each cutpoint</p></dd>
+
 <dt>results</dt>
 <dd><p>A table showing the likelihood ratio test p-value,
 log likelihood, and AIC for each cutpoint</p></dd>
+
 <dt>opt.cut</dt>
 <dd><p>optimal cutpoint value</p></dd>
+
 <dt>flat.lik</dt>
 <dd><p>If <code>TRUE</code>, the likelihood was too flat and the
 alternative method was used</p></dd>
+
 </dl><p>Additionally, if <code>plot = TRUE</code>, the function also returns KM survival
 curves for each possible cutpoint.</p>
     </div>
@@ -134,7 +162,7 @@ variable into anywhere from 2 to 5 groups.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

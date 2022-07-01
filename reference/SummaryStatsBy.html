@@ -12,7 +12,7 @@ variable."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/m
     
     <a class="navbar-brand me-2" href="../index.html">biostatUtil</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9109</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9110</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,35 +51,48 @@ variable.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">SummaryStatsBy</span><span class="op">(</span>
-  <span class="va">data</span>,
-  <span class="va">by1</span>,
-  <span class="va">by2</span>,
-  <span class="va">var.names</span>,
-  stats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="st">"median"</span>, <span class="st">"IQR"</span>, <span class="st">"range"</span>, <span class="st">"missing"</span><span class="op">)</span>,
-  digits <span class="op">=</span> <span class="fl">3</span>,
-  format <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"raw"</span>, <span class="st">"pandoc"</span>, <span class="st">"html"</span>, <span class="st">"long"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">SummaryStatsBy</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">by1</span>,</span>
+<span>  <span class="va">by2</span>,</span>
+<span>  <span class="va">var.names</span>,</span>
+<span>  stats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="st">"median"</span>, <span class="st">"IQR"</span>, <span class="st">"range"</span>, <span class="st">"missing"</span><span class="op">)</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  format <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"raw"</span>, <span class="st">"pandoc"</span>, <span class="st">"html"</span>, <span class="st">"long"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
 <dd><p>The <code>data.frame</code> containing the data</p></dd>
+
+
 <dt>by1</dt>
 <dd><p>character string of splitting variable 1</p></dd>
+
+
 <dt>by2</dt>
 <dd><p>character string of splitting variable 2</p></dd>
+
+
 <dt>var.names</dt>
 <dd><p>character vector of variables to compute statistics for</p></dd>
+
+
 <dt>stats</dt>
 <dd><p>statistics to compute for continuous variables</p></dd>
+
+
 <dt>digits</dt>
 <dd><p>number of digits to round to</p></dd>
+
+
 <dt>format</dt>
 <dd><p>format to return the table in. Either "raw", "pandoc" (for Word
 and PDF), "html", or "long" format for graphing and data manipulation using
 raw values.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -102,17 +115,9 @@ tidy version of <code>raw</code>.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">mtcars</span><span class="op">$</span><span class="va">vs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">vs</span><span class="op">)</span>; <span class="va">mtcars</span><span class="op">$</span><span class="va">am</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">am</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">SummaryStatsBy</span><span class="op">(</span><span class="va">mtcars</span>, by1 <span class="op">=</span> <span class="st">"cyl"</span>, by2 <span class="op">=</span> <span class="st">"gear"</span>, var.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"vs"</span>,</span>
-<span class="r-in"><span class="st">"qsec"</span>, <span class="st">"am"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`separate_()` was deprecated in tidyr 1.2.0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Please use `separate()` instead.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`gather_()` was deprecated in tidyr 1.2.0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Please use `gather()` instead.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">mtcars</span><span class="op">$</span><span class="va">vs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">vs</span><span class="op">)</span>; <span class="va">mtcars</span><span class="op">$</span><span class="va">am</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">am</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">SummaryStatsBy</span><span class="op">(</span><span class="va">mtcars</span>, by1 <span class="op">=</span> <span class="st">"cyl"</span>, by2 <span class="op">=</span> <span class="st">"gear"</span>, var.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"vs"</span>,</span></span>
+<span class="r-in"><span><span class="st">"qsec"</span>, <span class="st">"am"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          cyl=4, gear=3     cyl=4, gear=4         cyl=4, gear=5      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> **mpg**  ""                ""                    ""                 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> mean     "21.5 &amp;#177; NA"  "26.925 &amp;#177; 4.807" "28.2 &amp;#177; 3.111"</span>
@@ -189,8 +194,8 @@ tidy version of <code>raw</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> **am**   ""                   ""                   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0        "0 (0%, 0%)"         "12 (85.71%)"        </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1        "2 (15.38%, 100%)"   "2 (14.29%)"         </span>
-<span class="r-in"><span class="fu">SummaryStatsBy</span><span class="op">(</span><span class="va">mtcars</span>, by1 <span class="op">=</span> <span class="st">"cyl"</span>, by2 <span class="op">=</span> <span class="st">"gear"</span>, var.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"vs"</span>,</span>
-<span class="r-in"><span class="st">"qsec"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">SummaryStatsBy</span><span class="op">(</span><span class="va">mtcars</span>, by1 <span class="op">=</span> <span class="st">"cyl"</span>, by2 <span class="op">=</span> <span class="st">"gear"</span>, var.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"vs"</span>,</span></span>
+<span class="r-in"><span><span class="st">"qsec"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          cyl=4, gear=3     cyl=4, gear=4         cyl=4, gear=5      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> **vs**   ""                ""                    ""                 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0        "0 (0%, 0%)"      "0 (0%, 0%)"          "1 (5.56%, 50%)"   </span>
@@ -231,7 +236,7 @@ tidy version of <code>raw</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> IQR      "0.05"               "1.457"              </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> range    "14.5-14.6"          "14.5-18"            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> missing  "0"                  "0"                  </span>
-<span class="r-in"><span class="fu">SummaryStatsBy</span><span class="op">(</span><span class="va">mtcars</span>, by1 <span class="op">=</span> <span class="st">"cyl"</span>, by2 <span class="op">=</span> <span class="st">"gear"</span>, var.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">SummaryStatsBy</span><span class="op">(</span><span class="va">mtcars</span>, by1 <span class="op">=</span> <span class="st">"cyl"</span>, by2 <span class="op">=</span> <span class="st">"gear"</span>, var.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         cyl=4, gear=3    cyl=4, gear=4         cyl=4, gear=5      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> **mpg** ""               ""                    ""                 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> mean    "21.5 &amp;#177; NA" "26.925 &amp;#177; 4.807" "28.2 &amp;#177; 3.111"</span>
@@ -271,7 +276,7 @@ tidy version of <code>raw</code>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">biostatUtil</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9109</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9110</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,81 +48,124 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">plotKMDetail</span><span class="op">(</span>
-  <span class="va">input.data</span>,
-  <span class="va">surv.formula</span>,
-  main.text <span class="op">=</span> <span class="st">""</span>,
-  xlab.text <span class="op">=</span> <span class="st">""</span>,
-  ylab.text <span class="op">=</span> <span class="st">""</span>,
-  <span class="va">line.name</span>,
-  <span class="va">line.color</span>,
-  line.pattern <span class="op">=</span> <span class="cn">NULL</span>,
-  line.width <span class="op">=</span> <span class="cn">NULL</span>,
-  show.test <span class="op">=</span> <span class="st">"single"</span>,
-  single.test.type <span class="op">=</span> <span class="st">"logrank"</span>,
-  round.digits.p.value <span class="op">=</span> <span class="fl">4</span>,
-  <span class="va">obs.survyrs</span>,
-  <span class="va">ten.years.surv.95CI</span>,
-  <span class="va">event.count</span>,
-  legend.pos <span class="op">=</span> <span class="st">"bottomleft"</span>,
-  file.name <span class="op">=</span> <span class="st">"no.file"</span>,
-  file.width <span class="op">=</span> <span class="fl">7</span>,
-  file.height <span class="op">=</span> <span class="fl">7</span>,
-  grey.scale <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">show.single.test.pos</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plotKMDetail</span><span class="op">(</span></span>
+<span>  <span class="va">input.data</span>,</span>
+<span>  <span class="va">surv.formula</span>,</span>
+<span>  main.text <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  xlab.text <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  ylab.text <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  <span class="va">line.name</span>,</span>
+<span>  <span class="va">line.color</span>,</span>
+<span>  line.pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  line.width <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  show.test <span class="op">=</span> <span class="st">"single"</span>,</span>
+<span>  single.test.type <span class="op">=</span> <span class="st">"logrank"</span>,</span>
+<span>  round.digits.p.value <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  <span class="va">obs.survyrs</span>,</span>
+<span>  <span class="va">ten.years.surv.95CI</span>,</span>
+<span>  <span class="va">event.count</span>,</span>
+<span>  legend.pos <span class="op">=</span> <span class="st">"bottomleft"</span>,</span>
+<span>  file.name <span class="op">=</span> <span class="st">"no.file"</span>,</span>
+<span>  file.width <span class="op">=</span> <span class="fl">7</span>,</span>
+<span>  file.height <span class="op">=</span> <span class="fl">7</span>,</span>
+<span>  grey.scale <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">show.single.test.pos</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>input.data</dt>
 <dd><p>input <code>data.frame</code></p></dd>
+
+
 <dt>surv.formula</dt>
 <dd><p>survival formula to <code>Surv</code></p></dd>
+
+
 <dt>main.text</dt>
 <dd><p>plot title</p></dd>
+
+
 <dt>xlab.text</dt>
 <dd><p>x-axis label</p></dd>
+
+
 <dt>ylab.text</dt>
 <dd><p>y-axis label</p></dd>
+
+
 <dt>line.name</dt>
 <dd><p>name of legend</p></dd>
+
+
 <dt>line.color</dt>
 <dd><p>line colour of survival curves</p></dd>
+
+
 <dt>line.pattern</dt>
 <dd><p>line pattern of survival curves</p></dd>
+
+
 <dt>line.width</dt>
 <dd><p>line width of survival curves</p></dd>
+
+
 <dt>show.test</dt>
 <dd><p>show single or the reference group value (for pairwise
 comparisons). If <code>"none"</code>, then no test is show.</p></dd>
+
+
 <dt>single.test.type</dt>
 <dd><p>test to show if specified <code>show.test = "single"</code>. Possible choices are <code>"logrank"</code> (default),
 <code>"wilcoxon"</code>, <code>"taroneware"</code>, or <code>"all"</code>.</p></dd>
+
+
 <dt>round.digits.p.value</dt>
 <dd><p>number of digits for p-value</p></dd>
+
+
 <dt>obs.survyrs</dt>
 <dd><p>show the observed survival years survival rate on KM plot</p></dd>
+
+
 <dt>ten.years.surv.95CI</dt>
 <dd><p>show ten year survival 95% confidence interval</p></dd>
+
+
 <dt>event.count</dt>
 <dd><p>show the number of events at each time point</p></dd>
+
+
 <dt>legend.pos</dt>
 <dd><p>legend position keyword</p></dd>
+
+
 <dt>file.name</dt>
 <dd><p>name of file to save plot to</p></dd>
+
+
 <dt>file.width</dt>
 <dd><p>width of figure in saved file</p></dd>
+
+
 <dt>file.height</dt>
 <dd><p>height of figure in saved file</p></dd>
+
+
 <dt>grey.scale</dt>
 <dd><p>logical. If <code>TRUE</code>, the plot will be in grey scale.</p></dd>
+
+
 <dt>show.single.test.pos</dt>
 <dd><p>position to show single test; defaults to 0.5 if
 <code>legend.pos = "top"</code>. Otherwise 0.1</p></dd>
+
+
 <dt>...</dt>
 <dd><p>additional arguments to <code>plot</code></p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -146,7 +189,7 @@ comparisons). If <code>"none"</code>, then no test is show.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

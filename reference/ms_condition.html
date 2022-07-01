@@ -12,7 +12,7 @@ can be used in subsequent analyses."><!-- mathjax --><script src="https://cdnjs.
     
     <a class="navbar-brand me-2" href="../index.html">biostatUtil</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9109</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9110</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,27 +51,36 @@ can be used in subsequent analyses.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">ms_condition</span><span class="op">(</span><span class="va">data</span>, <span class="va">treatment</span>, control <span class="op">=</span> <span class="cn">NULL</span>, condition <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"VC"</span>, <span class="st">"MRC"</span>, <span class="st">"MC"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ms_condition</span><span class="op">(</span><span class="va">data</span>, <span class="va">treatment</span>, control <span class="op">=</span> <span class="cn">NULL</span>, condition <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"VC"</span>, <span class="st">"MRC"</span>, <span class="st">"MC"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
 <dd><p>The data matrix with rows as observations, columns as variables</p></dd>
+
+
 <dt>treatment</dt>
 <dd><p>A character vector indicating how different treatment groups
 are coded. Regular expression is used on the column names to find all
 relevant treatment variables.</p></dd>
+
+
 <dt>control</dt>
 <dd><p>Optionally specify a character string indicating the control
 group if it exists. Regular expression is used on the column names to find
 all relevant control variables.</p></dd>
+
+
 <dt>condition</dt>
 <dd><p>Either one of "VC" (default), "MRC", or "MC". See details.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A logical vector of length equal to the number of rows in
+    
+
+<p>A logical vector of length equal to the number of rows in
 <code>data</code>, indicating which observations are kept and which are to be
 removed.</p>
     </div>
@@ -102,27 +111,27 @@ treatment groups. MC is not generally suggested in practice.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Example data matrix with some missing sample values</span></span>
-<span class="r-in"><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X5"</span>, <span class="st">"X19"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">col.nm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span><span class="va">g</span>, <span class="va">r</span><span class="op">)</span>, <span class="fl">1</span>, <span class="va">paste</span>, collapse <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">A</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">36</span><span class="op">)</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">6</span>, byrow <span class="op">=</span> <span class="cn">FALSE</span>, dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="cn">NULL</span>, <span class="va">col.nm</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">A</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">21</span>, <span class="fl">26</span>, <span class="fl">7</span>, <span class="fl">17</span>, <span class="fl">8</span>, <span class="fl">23</span>, <span class="fl">4</span>, <span class="fl">16</span>, <span class="fl">19</span>, <span class="fl">5</span>, <span class="fl">25</span>, <span class="fl">12</span>, <span class="fl">18</span>, <span class="fl">24</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Two treatment experimental design</span></span>
-<span class="r-in"><span class="fu">ms_condition</span><span class="op">(</span><span class="va">A</span>, treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X19"</span>, <span class="st">"X5"</span><span class="op">)</span>, condition <span class="op">=</span> <span class="st">"VC"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Example data matrix with some missing sample values</span></span></span>
+<span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X5"</span>, <span class="st">"X19"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">col.nm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span><span class="va">g</span>, <span class="va">r</span><span class="op">)</span>, <span class="fl">1</span>, <span class="va">paste</span>, collapse <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">A</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">36</span><span class="op">)</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">6</span>, byrow <span class="op">=</span> <span class="cn">FALSE</span>, dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="cn">NULL</span>, <span class="va">col.nm</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">A</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">21</span>, <span class="fl">26</span>, <span class="fl">7</span>, <span class="fl">17</span>, <span class="fl">8</span>, <span class="fl">23</span>, <span class="fl">4</span>, <span class="fl">16</span>, <span class="fl">19</span>, <span class="fl">5</span>, <span class="fl">25</span>, <span class="fl">12</span>, <span class="fl">18</span>, <span class="fl">24</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Two treatment experimental design</span></span></span>
+<span class="r-in"><span><span class="fu">ms_condition</span><span class="op">(</span><span class="va">A</span>, treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X19"</span>, <span class="st">"X5"</span><span class="op">)</span>, condition <span class="op">=</span> <span class="st">"VC"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE  TRUE  TRUE FALSE FALSE FALSE</span>
-<span class="r-in"><span class="fu">ms_condition</span><span class="op">(</span><span class="va">A</span>, treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X19"</span>, <span class="st">"X5"</span><span class="op">)</span>, condition <span class="op">=</span> <span class="st">"MRC"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">ms_condition</span><span class="op">(</span><span class="va">A</span>, treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X19"</span>, <span class="st">"X5"</span><span class="op">)</span>, condition <span class="op">=</span> <span class="st">"MRC"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE</span>
-<span class="r-in"><span class="fu">ms_condition</span><span class="op">(</span><span class="va">A</span>, treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X19"</span>, <span class="st">"X5"</span><span class="op">)</span>, condition <span class="op">=</span> <span class="st">"MC"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">ms_condition</span><span class="op">(</span><span class="va">A</span>, treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X19"</span>, <span class="st">"X5"</span><span class="op">)</span>, condition <span class="op">=</span> <span class="st">"MC"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE TRUE TRUE TRUE TRUE TRUE</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Control ends in "_1", Treatments ends in "_2", "_3"</span></span>
-<span class="r-in"><span class="fu">ms_condition</span><span class="op">(</span><span class="va">A</span>, treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"_2"</span>, <span class="st">"_3"</span><span class="op">)</span>, control <span class="op">=</span> <span class="st">"_1"</span>, condition <span class="op">=</span> <span class="st">"VC"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Control ends in "_1", Treatments ends in "_2", "_3"</span></span></span>
+<span class="r-in"><span><span class="fu">ms_condition</span><span class="op">(</span><span class="va">A</span>, treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"_2"</span>, <span class="st">"_3"</span><span class="op">)</span>, control <span class="op">=</span> <span class="st">"_1"</span>, condition <span class="op">=</span> <span class="st">"VC"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE FALSE  TRUE FALSE FALSE FALSE</span>
-<span class="r-in"><span class="fu">ms_condition</span><span class="op">(</span><span class="va">A</span>, treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"_2"</span>, <span class="st">"_3"</span><span class="op">)</span>, control <span class="op">=</span> <span class="st">"_1"</span>, condition <span class="op">=</span> <span class="st">"MRC"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">ms_condition</span><span class="op">(</span><span class="va">A</span>, treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"_2"</span>, <span class="st">"_3"</span><span class="op">)</span>, control <span class="op">=</span> <span class="st">"_1"</span>, condition <span class="op">=</span> <span class="st">"MRC"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE FALSE  TRUE  TRUE FALSE FALSE</span>
-<span class="r-in"><span class="fu">ms_condition</span><span class="op">(</span><span class="va">A</span>, treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"_2"</span>, <span class="st">"_3"</span><span class="op">)</span>, control <span class="op">=</span> <span class="st">"_1"</span>, condition <span class="op">=</span> <span class="st">"MC"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">ms_condition</span><span class="op">(</span><span class="va">A</span>, treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"_2"</span>, <span class="st">"_3"</span><span class="op">)</span>, control <span class="op">=</span> <span class="st">"_1"</span>, condition <span class="op">=</span> <span class="st">"MC"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE FALSE  TRUE  TRUE FALSE  TRUE</span>
 </code></pre></div>
     </div>
@@ -135,7 +144,7 @@ treatment groups. MC is not generally suggested in practice.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

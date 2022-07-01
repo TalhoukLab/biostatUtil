@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">biostatUtil</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9109</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9110</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,40 +48,57 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">binaryCMAsHTML</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">y</span>,
-  ref.description <span class="op">=</span> <span class="cn">NULL</span>,
-  digits <span class="op">=</span> <span class="fl">4</span>,
-  seed <span class="op">=</span> <span class="fl">20</span>,
-  num.boot <span class="op">=</span> <span class="fl">1000</span>,
-  conf.level <span class="op">=</span> <span class="fl">0.95</span>,
-  show.ci <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">binaryCMAsHTML</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">y</span>,</span>
+<span>  ref.description <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>  num.boot <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  conf.level <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  show.ci <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
 <dd><p>vector of reference classes</p></dd>
+
+
 <dt>y</dt>
 <dd><p>vector of predicted classes</p></dd>
+
+
 <dt>ref.description</dt>
 <dd><p>description of classes</p></dd>
+
+
 <dt>digits</dt>
 <dd><p>number of digits to round p-values to</p></dd>
+
+
 <dt>seed</dt>
 <dd><p>random seed for bootstrap resampling</p></dd>
+
+
 <dt>num.boot</dt>
 <dd><p>number of bootstrap confidence intervals</p></dd>
+
+
 <dt>conf.level</dt>
 <dd><p>confidence level. Defaults to 95%.</p></dd>
+
+
 <dt>show.ci</dt>
 <dd><p>if <code>TRUE</code> (default), the confidence intervals are shown.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A character string that can be parsed as HTML code to display a nice
+    
+
+<p>A character string that can be parsed as HTML code to display a nice
 confusion matrix summary.</p>
     </div>
     <div class="section level2">
@@ -97,14 +114,14 @@ confusion matrix summary.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># 95% CI from 5 bootstraped samples</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gforge.se/packages/" class="external-link">htmlTable</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">547</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">20</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="va">n</span>, size <span class="op">=</span> <span class="fl">1</span>, prob <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="va">n</span>, size <span class="op">=</span> <span class="fl">1</span>, prob <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">binaryCMAsHTML</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="st">"Test"</span>, num.boot <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/htmlTable/man/htmlTable.html" class="external-link">htmlTable</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># 95% CI from 5 bootstraped samples</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gforge.se/packages/" class="external-link">htmlTable</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">547</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">20</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="va">n</span>, size <span class="op">=</span> <span class="fl">1</span>, prob <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="va">n</span>, size <span class="op">=</span> <span class="fl">1</span>, prob <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">binaryCMAsHTML</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="st">"Test"</span>, num.boot <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/htmlTable/man/htmlTable.html" class="external-link">htmlTable</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;table class='gmisc_table' style='border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;'  id='table_3'&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;tbody&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;tr style='border-top: 2px solid grey;'&gt;</span>
@@ -112,10 +129,10 @@ confusion matrix summary.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/tr&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/tbody&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/table&gt;</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">results.no.ci</span> <span class="op">&lt;-</span> <span class="fu">binaryCMAsHTML</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="st">"Test"</span>, num.boot <span class="op">=</span> <span class="fl">1000</span>, show.ci <span class="op">=</span></span>
-<span class="r-in"><span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/htmlTable/man/htmlTable.html" class="external-link">htmlTable</a></span><span class="op">(</span><span class="va">results.no.ci</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">results.no.ci</span> <span class="op">&lt;-</span> <span class="fu">binaryCMAsHTML</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="st">"Test"</span>, num.boot <span class="op">=</span> <span class="fl">1000</span>, show.ci <span class="op">=</span></span></span>
+<span class="r-in"><span><span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/htmlTable/man/htmlTable.html" class="external-link">htmlTable</a></span><span class="op">(</span><span class="va">results.no.ci</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;table class='gmisc_table' style='border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;'  id='table_4'&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;tbody&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;tr style='border-top: 2px solid grey;'&gt;</span>
@@ -134,7 +151,7 @@ confusion matrix summary.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

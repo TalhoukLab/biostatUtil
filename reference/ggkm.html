@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">biostatUtil</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9109</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9110</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,41 +48,41 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">ggkm</span><span class="op">(</span>
-  <span class="va">sfit</span>,
-  sfit2 <span class="op">=</span> <span class="cn">NULL</span>,
-  table <span class="op">=</span> <span class="cn">TRUE</span>,
-  returns <span class="op">=</span> <span class="cn">TRUE</span>,
-  marks <span class="op">=</span> <span class="cn">TRUE</span>,
-  CI <span class="op">=</span> <span class="cn">TRUE</span>,
-  line.pattern <span class="op">=</span> <span class="cn">NULL</span>,
-  shading.colors <span class="op">=</span> <span class="cn">NULL</span>,
-  main <span class="op">=</span> <span class="st">"Kaplan-Meier Plot"</span>,
-  xlabs <span class="op">=</span> <span class="st">"Time"</span>,
-  ylabs <span class="op">=</span> <span class="st">"Survival Probability"</span>,
-  xlims <span class="op">=</span> <span class="cn">NULL</span>,
-  ylims <span class="op">=</span> <span class="cn">NULL</span>,
-  ystratalabs <span class="op">=</span> <span class="cn">NULL</span>,
-  cox.ref.grp <span class="op">=</span> <span class="cn">NULL</span>,
-  timeby <span class="op">=</span> <span class="fl">5</span>,
-  pval <span class="op">=</span> <span class="cn">TRUE</span>,
-  bold_pval <span class="op">=</span> <span class="cn">FALSE</span>,
-  sig.level <span class="op">=</span> <span class="fl">0.05</span>,
-  HR <span class="op">=</span> <span class="cn">TRUE</span>,
-  use.firth <span class="op">=</span> <span class="fl">1</span>,
-  hide.border <span class="op">=</span> <span class="cn">FALSE</span>,
-  expand.scale <span class="op">=</span> <span class="cn">TRUE</span>,
-  legend <span class="op">=</span> <span class="cn">FALSE</span>,
-  legend.xy <span class="op">=</span> <span class="cn">NULL</span>,
-  legend.direction <span class="op">=</span> <span class="st">"horizontal"</span>,
-  line.y.increment <span class="op">=</span> <span class="fl">0.05</span>,
-  size.plot <span class="op">=</span> <span class="fl">11</span>,
-  size.summary <span class="op">=</span> <span class="fl">3</span>,
-  size.table <span class="op">=</span> <span class="fl">3.5</span>,
-  size.table.labels <span class="op">=</span> <span class="fl">12</span>,
-  digits <span class="op">=</span> <span class="fl">3</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ggkm</span><span class="op">(</span></span>
+<span>  <span class="va">sfit</span>,</span>
+<span>  sfit2 <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  table <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  returns <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  marks <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  CI <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  line.pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  shading.colors <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  main <span class="op">=</span> <span class="st">"Kaplan-Meier Plot"</span>,</span>
+<span>  xlabs <span class="op">=</span> <span class="st">"Time"</span>,</span>
+<span>  ylabs <span class="op">=</span> <span class="st">"Survival Probability"</span>,</span>
+<span>  xlims <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ylims <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ystratalabs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cox.ref.grp <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  timeby <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  pval <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  bold_pval <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  sig.level <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  HR <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  use.firth <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  hide.border <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  expand.scale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  legend.xy <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  legend.direction <span class="op">=</span> <span class="st">"horizontal"</span>,</span>
+<span>  line.y.increment <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  size.plot <span class="op">=</span> <span class="fl">11</span>,</span>
+<span>  size.summary <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  size.table <span class="op">=</span> <span class="fl">3.5</span>,</span>
+<span>  size.table.labels <span class="op">=</span> <span class="fl">12</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -90,93 +90,160 @@
     <dl><dt>sfit</dt>
 <dd><p>an object of class <code>survfit</code> containing one or more survival
 curves</p></dd>
+
+
 <dt>sfit2</dt>
 <dd><p>an (optional) second object of class <code>survfit</code> to compare
 with <code>sfit</code></p></dd>
+
+
 <dt>table</dt>
 <dd><p>logical; if <code>TRUE</code> (default), the numbers at risk at each
 time of death is shown as a table underneath the plot</p></dd>
+
+
 <dt>returns</dt>
 <dd><p>logical; if <code>TRUE</code> the plot is returned</p></dd>
+
+
 <dt>marks</dt>
 <dd><p>logical; if <code>TRUE</code> (default), censoring marks are shown on
 survival curves</p></dd>
+
+
 <dt>CI</dt>
 <dd><p>logical; if <code>TRUE</code> (default), confidence bands are drawn for
 survival curves the using cumulative hazard, or log(survival).</p></dd>
+
+
 <dt>line.pattern</dt>
 <dd><p>linetype for survival curves</p></dd>
+
+
 <dt>shading.colors</dt>
 <dd><p>vector of colours for each survival curve</p></dd>
+
+
 <dt>main</dt>
 <dd><p>plot title</p></dd>
+
+
 <dt>xlabs</dt>
 <dd><p>horizontal axis label</p></dd>
+
+
 <dt>ylabs</dt>
 <dd><p>vertical axis label</p></dd>
+
+
 <dt>xlims</dt>
 <dd><p>horizontal limits for plot</p></dd>
+
+
 <dt>ylims</dt>
 <dd><p>vertical limits for plot</p></dd>
+
+
 <dt>ystratalabs</dt>
 <dd><p>labels for the strata being compared in <code>survfit</code></p></dd>
+
+
 <dt>cox.ref.grp</dt>
 <dd><p>indicates reference group for the variable of interest in
 the cox model.  this parameter will be ignored if not applicable, e.g. for
 continuous variable</p></dd>
+
+
 <dt>timeby</dt>
 <dd><p>length of time between consecutive time points spanning the
 entire range of follow-up. Defaults to 5.</p></dd>
+
+
 <dt>pval</dt>
 <dd><p>logical; if <code>TRUE</code> (default), the logrank test p-value is
 shown on the plot</p></dd>
+
+
 <dt>bold_pval</dt>
 <dd><p>logical; if <code>TRUE</code>, p-values are bolded if statistically
 significant at <code>sig.level</code></p></dd>
+
+
 <dt>sig.level</dt>
 <dd><p>significance level; default 0.05</p></dd>
+
+
 <dt>HR</dt>
 <dd><p>logical; if <code>TRUE</code> (default), the estimated hazard ratio and
 its 95% confidence interval will be shown</p></dd>
+
+
 <dt>use.firth</dt>
 <dd><p>Firth's method for Cox regression is used if the percentage
 of censored cases exceeds <code>use.firth</code>. Setting <code>use.firth = 1</code>
 (default) means Firth is never used, and <code>use.firth = -1</code> means Firth
 is always used.</p></dd>
+
+
 <dt>hide.border</dt>
 <dd><p>logical; if <code>TRUE</code>, the upper and right plot borders are
 not shown.</p></dd>
+
+
 <dt>expand.scale</dt>
 <dd><p>logical; if <code>TRUE</code> (default), the scales are expanded by
 5% so that the data are placed a slight distance away from the axes</p></dd>
+
+
 <dt>legend</dt>
 <dd><p>logical; if <code>TRUE</code>, the legend is overlaid on the graph
 (instead of on the side).</p></dd>
+
+
 <dt>legend.xy</dt>
 <dd><p>named vector specifying the x/y position of the legend</p></dd>
+
+
 <dt>legend.direction</dt>
 <dd><p>layout of items in legends ("horizontal" (default) or
 "vertical")</p></dd>
+
+
 <dt>line.y.increment</dt>
 <dd><p>how much y should be incremented for each line</p></dd>
+
+
 <dt>size.plot</dt>
 <dd><p>text size of main plot</p></dd>
+
+
 <dt>size.summary</dt>
 <dd><p>text size of numerical summaries</p></dd>
+
+
 <dt>size.table</dt>
 <dd><p>text size of risk table</p></dd>
+
+
 <dt>size.table.labels</dt>
 <dd><p>text size of risk table axis labels</p></dd>
+
+
 <dt>digits</dt>
 <dd><p>number of digits to round: p-values digits=number of
 significant digits, HR digits=number of digits after decimal point NOT
 significant digits</p></dd>
+
+
 <dt>...</dt>
 <dd><p>additional arguments to other methods</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A kaplan-meier plot with optional annotations for hazard ratios, log
+    
+
+<p>A kaplan-meier plot with optional annotations for hazard ratios, log
 rank test p-values, and risk table counts for each stratum.</p>
     </div>
     <div class="section level2">
@@ -186,9 +253,9 @@ rank test p-values, and risk table counts for each stratum.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/therneau/survival" class="external-link">survival</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="va">sfit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/survfit.html" class="external-link">survfit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="va">sex</span>, <span class="va">lung</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">ggkm</span><span class="op">(</span><span class="va">sfit</span>, timeby <span class="op">=</span> <span class="fl">200</span>, main <span class="op">=</span> <span class="st">"Survival curves by sex"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/therneau/survival" class="external-link">survival</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sfit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/survfit.html" class="external-link">survfit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="va">sex</span>, <span class="va">lung</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">ggkm</span><span class="op">(</span><span class="va">sfit</span>, timeby <span class="op">=</span> <span class="fl">200</span>, main <span class="op">=</span> <span class="st">"Survival curves by sex"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="ggkm-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
@@ -201,7 +268,7 @@ rank test p-values, and risk table counts for each stratum.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>
