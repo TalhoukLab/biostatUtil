@@ -21,7 +21,6 @@ Imports:
     coxphf,
     descr,
     dplyr (>= 1.0.0),
-    e1071,
     forcats,
     ggplot2,
     ggtext,

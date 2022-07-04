@@ -58,17 +58,18 @@ multiClassCM <- function(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
   sens <- TP / clm
   spec <- TN / (N - clm)
   BA <- (sens + spec) / 2
+  po <- sum(TP) / N
+  pc <- sum(clm / N * rwm / N)
   # Overall
   cc <- table(y, x) %>% {
     c(
-      unlist(e1071::classAgreement(.))[c("diag", "kappa")],
+      Accuracy = po,
+      Kappa = (po - pc) / (1 - pc),
       propCI(.),
       propTest(.),
-      stats::mcnemar.test(.)$p.value
+      McnemarPValue = stats::mcnemar.test(.)$p.value
     )
   } %>%
-    stats::setNames(c("Accuracy", "Kappa", "AccuracyLower",
-                      "AccuracyUpper", "AccuracyNull", "AccuracyPValue", "McnemarPValue")) %>%
     round(digits = digits)
   ckappa <- round(kappaBootCI(x, y, seed, num.boot, conf.level), digits)
   overall <- rbind(printCI(cc[c("Accuracy", "AccuracyLower", "AccuracyUpper")]),
@@ -105,6 +106,7 @@ multiClassCM <- function(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
 propCI <- function(x) {
   res <- try(stats::binom.test(sum(diag(x)), sum(x))$conf.int,
              silent = TRUE)
+  res <- setNames(res, c("AccuracyLower", "AccuracyUpper"))
   if (inherits(res, "try-error"))
     res <- rep(NA, 2)
   res
@@ -116,8 +118,12 @@ propCI <- function(x) {
 propTest <- function(x) {
   res <- try(stats::binom.test(sum(diag(x)), sum(x), p = max(apply(x,
                                                             2, sum)/sum(x)), alternative = "greater"), silent = TRUE)
-  res <- if (inherits(res, "try-error"))
-    c(`null.value.probability of success` = NA, p.value = NA)
-  else res <- unlist(res[c("null.value", "p.value")])
+  res <- if (inherits(res, "try-error")) {
+    c(AccuracyNull = NA, AccuracyPValue = NA)
+  } else {
+    # unlist(res[c("null.value", "p.value")])
+    c(AccuracyNull = unname(res[["null.value"]]),
+      AccuracyPValue = res[["p.value"]])
+  }
   res
 }
