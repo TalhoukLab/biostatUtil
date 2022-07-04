@@ -106,7 +106,7 @@ multiClassCM <- function(x, y, seed = 20, num.boot = 1000, conf.level = 0.95,
 propCI <- function(x) {
   res <- try(stats::binom.test(sum(diag(x)), sum(x))$conf.int,
              silent = TRUE)
-  res <- setNames(res, c("AccuracyLower", "AccuracyUpper"))
+  res <- stats::setNames(res, c("AccuracyLower", "AccuracyUpper"))
   if (inherits(res, "try-error"))
     res <- rep(NA, 2)
   res
