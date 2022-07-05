@@ -29,10 +29,10 @@ gg_diagnostic_prev <- function(data, se, sp, p, result = c("PPV", "NPV")) {
       ppv = ppv({{ se }}, {{ sp }}, {{ p }}),
       npv = npv({{ se }}, {{ sp }}, {{ p }}),
       se = factor({{ se }}) %>%
-        forcats::fct_relabel(~ scales::percent(as.numeric(.))),
+        factor(labels = scales::percent(as.numeric(levels(.)))),
       p = factor({{ p }}) %>%
-        forcats::fct_relabel(~ scales::percent(as.numeric(.))) %>%
-        forcats::fct_relabel(~ paste0("(", letters[seq_along(.)], ") ", ., " prevalence"))
+        factor(labels = paste0("(", letters[seq_along(levels(.))], ") ",
+                               scales::percent(as.numeric(levels(.))), " prevalence"))
     )
   if (result == "PPV") {
     var <- rlang::quo(ppv)
