@@ -34,7 +34,6 @@ Imports:
     purrr,
     readr,
     rlang,
-    scales,
     stringr,
     survival (>= 3.1-8),
     tidyr
@@ -52,6 +51,7 @@ Suggests:
     PerformanceAnalytics,
     Rd2roxygen,
     rms,
+    scales,
     testthat,
     tidyselect (>= 1.0.0),
     vsn

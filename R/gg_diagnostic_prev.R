@@ -24,16 +24,21 @@
 #' gg_diagnostic_prev(df, se, sp, p, result = "NPV")
 gg_diagnostic_prev <- function(data, se, sp, p, result = c("PPV", "NPV")) {
   result <- match.arg(result)
-  df <- data %>%
-    dplyr::mutate(
-      ppv = ppv({{ se }}, {{ sp }}, {{ p }}),
-      npv = npv({{ se }}, {{ sp }}, {{ p }}),
-      se = factor({{ se }}) %>%
-        factor(labels = scales::percent(as.numeric(levels(.)))),
-      p = factor({{ p }}) %>%
-        factor(labels = paste0("(", letters[seq_along(levels(.))], ") ",
-                               scales::percent(as.numeric(levels(.))), " prevalence"))
-    )
+  if (!requireNamespace("scales", quietly = TRUE)) {
+    stop("Package \"scales\" is needed. Please install it.",
+         call. = FALSE)
+  } else {
+    df <- data %>%
+      dplyr::mutate(
+        ppv = ppv({{ se }}, {{ sp }}, {{ p }}),
+        npv = npv({{ se }}, {{ sp }}, {{ p }}),
+        se = factor({{ se }}) %>%
+          factor(labels = scales::percent(as.numeric(levels(.)))),
+        p = factor({{ p }}) %>%
+          factor(labels = paste0("(", letters[seq_along(levels(.))], ") ",
+                                 scales::percent(as.numeric(levels(.))), " prevalence"))
+      )
+  }
   if (result == "PPV") {
     var <- rlang::quo(ppv)
   } else {
