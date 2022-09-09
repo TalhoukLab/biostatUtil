@@ -1,8 +1,8 @@
 Type: Package
 Package: biostatUtil
 Title: Utility Functions Used in Biostatistics Projects
-Version: 0.1.0.9111
-Date: 2022-07-04
+Version: 0.2.0.9112
+Date: 2022-09-08
 Authors@R: c(
     person("Derek", "Chiu", , "dchiu@bccrc.ca", role = c("aut", "cre")),
     person("Aline", "Talhouk", , "atalhouk@bccrc.ca", role = "aut"),
@@ -13,8 +13,9 @@ Description: Provides some commonly used utility functions used in
     formatting, survival functions, confusion matrices, contingency
     tables, plotting functions, and more.
 License: GPL-2
+URL: https://talhouklab.github.io/biostatUtil/
 Depends: 
-    R (>= 3.2.0)
+    R (>= 4.0.0)
 Imports: 
     assertthat,
     broom,
@@ -50,6 +51,7 @@ Suggests:
     meta,
     PerformanceAnalytics,
     Rd2roxygen,
+    rmarkdown,
     rms,
     scales,
     testthat,
@@ -58,5 +60,4 @@ Suggests:
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.0
-URL: https://talhouklab.github.io/biostatUtil/
+RoxygenNote: 7.2.1
