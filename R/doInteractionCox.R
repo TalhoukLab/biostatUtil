@@ -121,7 +121,7 @@ doInteractionCox <- function(
       } else {
         p.value <- stats::anova(
           coxph(stats::as.formula(paste(surv.formula, paste(curr.var.names[-length(curr.var.names)], collapse = "+"))), data = temp.d),
-          cox.stats$fit)[2, "P(>|Chi|)"]
+          cox.stats$fit)[2, "Pr(>|Chi|)"]
       }
       p.value <- round_pval(p.value, round.small = round.small,
                             scientific = scientific,
