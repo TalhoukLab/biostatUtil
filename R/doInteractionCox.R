@@ -117,11 +117,15 @@ doInteractionCox <- function(
         paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>%
         paste(collapse = kLocalConstantHrSepFlag)
       if (length(curr.var.names) == 1) {
-        p.value <- stats::anova(cox.stats$fit)[2, "Pr(>|Chi|)"]
+        p.value <- stats::anova(cox.stats$fit) %>%
+          dplyr::pull(-1) %>%
+          magrittr::extract(2)
       } else {
         p.value <- stats::anova(
           coxph(stats::as.formula(paste(surv.formula, paste(curr.var.names[-length(curr.var.names)], collapse = "+"))), data = temp.d),
-          cox.stats$fit)[2, "Pr(>|Chi|)"]
+          cox.stats$fit) %>%
+          dplyr::pull(-1) %>%
+          magrittr::extract(2)
       }
       p.value <- round_pval(p.value, round.small = round.small,
                             scientific = scientific,

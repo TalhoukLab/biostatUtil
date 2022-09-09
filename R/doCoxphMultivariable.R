@@ -122,7 +122,9 @@ doCoxphMultivariable <- function(
                                                 var.names[-i],
                                                 var.names.surv.time2[j]),
                                    temp.d)
-          stats::anova(cox.stats$fit, cox.exclude.var)[["Pr(>|Chi|)"]][2]
+          stats::anova(cox.stats$fit, cox.exclude.var) %>%
+            dplyr::pull(-1) %>%
+            magrittr::extract(2)
         },
         waldtest = {
           if (!requireNamespace("rms", quietly = TRUE)) {
