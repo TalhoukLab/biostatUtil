@@ -6,8 +6,8 @@
 \usage{
 getFormat(
   date,
-  char.format = c("MM.DD.YYYY", "MMM.DD.YYYY", "DD.MM.YYYY", "DD.MMM.YYYY",
-    "YYYY.MM.DD", "YYYY.MMM.DD"),
+  char.format = c("MM.DD.YYYY", "MMM.DD.YYYY", "DD.MM.YYYY", "DD.MMM.YYYY", "YYYY.MM.DD",
+    "YYYY.MMM.DD"),
   sep = ""
 )
 }
