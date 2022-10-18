@@ -30,8 +30,8 @@ gg_diagnostic_prev <- function(data, se, sp, p, result = c("PPV", "NPV")) {
   } else {
     df <- data %>%
       dplyr::mutate(
-        ppv = ppv({{ se }}, {{ sp }}, {{ p }}),
-        npv = npv({{ se }}, {{ sp }}, {{ p }}),
+        ppv = ppv({{ se }}, {{ sp }}, {{ p }}, 4),
+        npv = npv({{ se }}, {{ sp }}, {{ p }}, 4),
         se = factor({{ se }}) %>%
           factor(labels = scales::percent(as.numeric(levels(.)))),
         p = factor({{ p }}) %>%
