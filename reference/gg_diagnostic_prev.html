@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">biostatUtil</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9113</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9114</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,42 +48,47 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gg_diagnostic_prev</span><span class="op">(</span><span class="va">data</span>, <span class="va">se</span>, <span class="va">sp</span>, <span class="va">p</span>, result <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PPV"</span>, <span class="st">"NPV"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gg_diagnostic_prev</span><span class="op">(</span><span class="va">se</span>, <span class="va">sp</span>, <span class="va">p</span>, result <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PPV"</span>, <span class="st">"NPV"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">gg_prev_fixed</span><span class="op">(</span><span class="va">se</span>, <span class="va">sp</span>, <span class="va">p</span>, result <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PPV"</span>, <span class="st">"NPV"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>data</dt>
-<dd><p>input data with metrics</p></dd>
-
-
-<dt>se</dt>
-<dd><p>column name for sensitivity</p></dd>
+    <dl><dt>se</dt>
+<dd><p>a vector of sensitivity estimates. For <code>gg_prev_fixed</code>, must be a
+vector of length 3 for lower bound, pooled estimate, and upper bound.</p></dd>
 
 
 <dt>sp</dt>
-<dd><p>column name for specificity</p></dd>
+<dd><p>a vector of specificity estimates. For <code>gg_prev_fixed</code>, must be a
+vector of length 3 for lower bound, pooled estimate, and upper bound. For
+<code>gg_diagnostic_prev</code>, a sequence of values to plot along x-axis.</p></dd>
 
 
 <dt>p</dt>
-<dd><p>column name for prevalence</p></dd>
+<dd><p>a vector of prevalence values. For <code>gg_prev_fixed</code>, must be a
+sequence of values to plot along x-axis.</p></dd>
 
 
 <dt>result</dt>
-<dd><p>whether to return the PPV or NPV</p></dd>
+<dd><p>whether to show the PPV or NPV on the y-axis</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A graph of the NPV or PPV by specificity, sensitivty, and prevalence.</p>
+<p>Graph of PPV or NPV by specificity, sensitivity, and prevalence.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>A graph of positive predictive value (PPV) or negative predictive value (NPV)
-is shown a function of specificity. Sensitivity is separated by line types,
-and prevalence is shown as different facets.</p>
+    <p><code>gg_diagnostic_prev</code> plots positive predictive value (PPV) or negative
+predictive value (NPV) as a function of specificity, with sensitivity
+separated by line types and prevalence shown across facets.</p>
+<p><code>gg_prev_fixed</code> plots PPV or NPV as a function of prevalence, with coloured
+lines separating fixed pairs of sensitivity and specificity for the lower
+bound, pooled estimate, and upper bound.</p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -92,15 +97,21 @@ and prevalence is shown as different facets.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  se <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.7</span>, <span class="fl">0.9</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">240</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  sp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.21</span>, <span class="fl">1</span>, <span class="fl">0.01</span><span class="op">)</span>, <span class="fl">9</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.32</span>, <span class="fl">0.09</span>, <span class="fl">0.026</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">720</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">gg_diagnostic_prev</span><span class="op">(</span><span class="va">df</span>, <span class="va">se</span>, <span class="va">sp</span>, <span class="va">p</span>, result <span class="op">=</span> <span class="st">"PPV"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.7</span>, <span class="fl">0.9</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.21</span>, <span class="fl">1</span>, <span class="fl">0.01</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.32</span>, <span class="fl">0.09</span>, <span class="fl">0.026</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">gg_diagnostic_prev</span><span class="op">(</span><span class="va">se</span>, <span class="va">sp</span>, <span class="va">p</span>, result <span class="op">=</span> <span class="st">"PPV"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="gg_diagnostic_prev-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span><span class="fu">gg_diagnostic_prev</span><span class="op">(</span><span class="va">df</span>, <span class="va">se</span>, <span class="va">sp</span>, <span class="va">p</span>, result <span class="op">=</span> <span class="st">"NPV"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">gg_diagnostic_prev</span><span class="op">(</span><span class="va">se</span>, <span class="va">sp</span>, <span class="va">p</span>, result <span class="op">=</span> <span class="st">"NPV"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="gg_diagnostic_prev-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">gg_prev_fixed</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  se <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.67</span>, <span class="fl">0.83</span>, <span class="fl">0.97</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  sp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.86</span>, <span class="fl">0.94</span>, <span class="fl">0.99</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.30</span>, <span class="fl">0.01</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  result <span class="op">=</span> <span class="st">"PPV"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="gg_diagnostic_prev-3.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
