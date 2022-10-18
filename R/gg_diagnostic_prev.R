@@ -2,39 +2,49 @@
 #'
 #' Compare PPV or NPV by sensitivity, specificity, and prevalence.
 #'
-#' A graph of positive predictive value (PPV) or negative predictive value (NPV)
-#' is shown a function of specificity. Sensitivity is separated by line types,
-#' and prevalence is shown as different facets.
+#' `gg_diagnostic_prev` plots positive predictive value (PPV) or negative
+#' predictive value (NPV) as a function of specificity, with sensitivity
+#' separated by line types and prevalence shown across facets.
 #'
-#' @param data input data with metrics
-#' @param se column name for sensitivity
-#' @param sp column name for specificity
-#' @param p column name for prevalence
-#' @param result whether to return the PPV or NPV
-#' @return A graph of the NPV or PPV by specificity, sensitivty, and prevalence.
+#' `gg_prev_fixed` plots PPV or NPV as a function of prevalence, with coloured
+#' lines separating fixed pairs of sensitivity and specificity for the lower
+#' bound, pooled estimate, and upper bound.
+#'
+#' @param se a vector of sensitivity estimates. For `gg_prev_fixed`, must be a
+#'   vector of length 3 for lower bound, pooled estimate, and upper bound.
+#' @param sp a vector of specificity estimates. For `gg_prev_fixed`, must be a
+#'   vector of length 3 for lower bound, pooled estimate, and upper bound. For
+#'   `gg_diagnostic_prev`, a sequence of values to plot along x-axis.
+#' @param p a vector of prevalence values. For `gg_prev_fixed`, must be a
+#'   sequence of values to plot along x-axis.
+#' @param result whether to show the PPV or NPV on the y-axis
+#' @return Graph of PPV or NPV by specificity, sensitivity, and prevalence.
 #' @author Derek Chiu
 #' @export
 #' @examples
-#' df <- data.frame(
-#'   se = rep(c(0.5, 0.7, 0.9), each = 240),
-#'   sp = rep(seq(0.21, 1, 0.01), 9),
-#'   p = rep(c(0.32, 0.09, 0.026), length = 720)
-#' )
-#' gg_diagnostic_prev(df, se, sp, p, result = "PPV")
-#' gg_diagnostic_prev(df, se, sp, p, result = "NPV")
-gg_diagnostic_prev <- function(data, se, sp, p, result = c("PPV", "NPV")) {
+#' se <- c(0.5, 0.7, 0.9)
+#' sp <- seq(0.21, 1, 0.01)
+#' p <- c(0.32, 0.09, 0.026)
+#' gg_diagnostic_prev(se, sp, p, result = "PPV")
+#' gg_diagnostic_prev(se, sp, p, result = "NPV")
+gg_diagnostic_prev <- function(se, sp, p, result = c("PPV", "NPV")) {
   result <- match.arg(result)
   if (!requireNamespace("scales", quietly = TRUE)) {
     stop("Package \"scales\" is needed. Please install it.",
          call. = FALSE)
   } else {
-    df <- data %>%
+    points <- length(sp)
+    df <- data.frame(
+      se = rep(se, each = points * 3),
+      sp = rep(sp, 9),
+      p =  rep(p, length = points * 9)
+    ) %>%
       dplyr::mutate(
-        ppv = ppv({{ se }}, {{ sp }}, {{ p }}, 4),
-        npv = npv({{ se }}, {{ sp }}, {{ p }}, 4),
-        se = factor({{ se }}) %>%
+        ppv = ppv(se, sp, p, 4),
+        npv = npv(se, sp, p, 4),
+        se = factor(se) %>%
           factor(labels = scales::percent(as.numeric(levels(.)))),
-        p = factor({{ p }}) %>%
+        p = factor(p) %>%
           factor(labels = paste0("(", letters[seq_along(levels(.))], ") ",
                                  scales::percent(as.numeric(levels(.))), " prevalence"))
       )
@@ -44,16 +54,59 @@ gg_diagnostic_prev <- function(data, se, sp, p, result = c("PPV", "NPV")) {
   } else {
     var <- rlang::quo(npv)
   }
-  ggplot(df, aes(x = {{ sp }}, y = {{ var }}, linetype = {{ se }})) +
+  ggplot(df, aes(x = sp, y = {{ var }}, linetype = se)) +
     geom_line() +
     scale_x_continuous(labels = scales::percent) +
-    facet_wrap(vars({{ p }}), nrow = 1) +
+    facet_wrap(vars(p), nrow = 1) +
     labs(
       x = "Specificity",
       y = result,
       linetype = "Sensitivity"
     ) +
+    theme_bw() +
     theme(panel.spacing = unit(1, "lines"))
+}
+
+#' @rdname gg_diagnostic_prev
+#' @export
+#' @examples
+#'
+#' gg_prev_fixed(
+#'   se = c(0.67, 0.83, 0.97),
+#'   sp = c(0.86, 0.94, 0.99),
+#'   p = seq(0.01, 0.30, 0.01),
+#'   result = "PPV"
+#' )
+gg_prev_fixed <- function(se, sp, p, result = c("PPV", "NPV")) {
+  points <- length(p)
+  df <- data.frame(
+    se = rep(se, each = points),
+    sp = rep(sp, each = points),
+    p =  rep(p, 3)
+  ) %>%
+    dplyr::mutate(
+      ppv = ppv(se, sp, p, 4),
+      npv = npv(se, sp, p, 4),
+      point = rep(c("lower bound", "pooled estimate", "upper bound"), each = points),
+      label = factor(paste0(.data$point, " (se: ", se, ", sp: ", sp, ")"))
+    )
+  if (result == "PPV") {
+    var <- rlang::quo(ppv)
+  } else {
+    var <- rlang::quo(npv)
+  }
+  ggplot(df, aes(x = p, y = {{ var }}, color = .data$label, linetype = .data$label)) +
+    scale_x_continuous(n.breaks = 8) +
+    scale_linetype_manual(values = c(2, 1, 2)) +
+    geom_line() +
+    labs(
+      x = "Prevalence",
+      y = result,
+      title = paste(result, "vs. Prevalence for Fixed Sensitivity/Specificity")
+    ) +
+    theme_bw() +
+    theme(legend.title = element_blank(),
+          panel.grid.minor = element_blank())
 }
 
 #' Calculate PPV as a function of sensitivity, specificty, and prevalence

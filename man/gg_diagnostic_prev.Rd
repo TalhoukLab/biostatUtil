@@ -2,40 +2,54 @@
 % Please edit documentation in R/gg_diagnostic_prev.R
 \name{gg_diagnostic_prev}
 \alias{gg_diagnostic_prev}
+\alias{gg_prev_fixed}
 \title{Diagnostic Prevalence}
 \usage{
-gg_diagnostic_prev(data, se, sp, p, result = c("PPV", "NPV"))
+gg_diagnostic_prev(se, sp, p, result = c("PPV", "NPV"))
+
+gg_prev_fixed(se, sp, p, result = c("PPV", "NPV"))
 }
 \arguments{
-\item{data}{input data with metrics}
+\item{se}{a vector of sensitivity estimates. For \code{gg_prev_fixed}, must be a
+vector of length 3 for lower bound, pooled estimate, and upper bound.}
 
-\item{se}{column name for sensitivity}
+\item{sp}{a vector of specificity estimates. For \code{gg_prev_fixed}, must be a
+vector of length 3 for lower bound, pooled estimate, and upper bound. For
+\code{gg_diagnostic_prev}, a sequence of values to plot along x-axis.}
 
-\item{sp}{column name for specificity}
+\item{p}{a vector of prevalence values. For \code{gg_prev_fixed}, must be a
+sequence of values to plot along x-axis.}
 
-\item{p}{column name for prevalence}
-
-\item{result}{whether to return the PPV or NPV}
+\item{result}{whether to show the PPV or NPV on the y-axis}
 }
 \value{
-A graph of the NPV or PPV by specificity, sensitivty, and prevalence.
+Graph of PPV or NPV by specificity, sensitivity, and prevalence.
 }
 \description{
 Compare PPV or NPV by sensitivity, specificity, and prevalence.
 }
 \details{
-A graph of positive predictive value (PPV) or negative predictive value (NPV)
-is shown a function of specificity. Sensitivity is separated by line types,
-and prevalence is shown as different facets.
+\code{gg_diagnostic_prev} plots positive predictive value (PPV) or negative
+predictive value (NPV) as a function of specificity, with sensitivity
+separated by line types and prevalence shown across facets.
+
+\code{gg_prev_fixed} plots PPV or NPV as a function of prevalence, with coloured
+lines separating fixed pairs of sensitivity and specificity for the lower
+bound, pooled estimate, and upper bound.
 }
 \examples{
-df <- data.frame(
-  se = rep(c(0.5, 0.7, 0.9), each = 240),
-  sp = rep(seq(0.21, 1, 0.01), 9),
-  p = rep(c(0.32, 0.09, 0.026), length = 720)
+se <- c(0.5, 0.7, 0.9)
+sp <- seq(0.21, 1, 0.01)
+p <- c(0.32, 0.09, 0.026)
+gg_diagnostic_prev(se, sp, p, result = "PPV")
+gg_diagnostic_prev(se, sp, p, result = "NPV")
+
+gg_prev_fixed(
+  se = c(0.67, 0.83, 0.97),
+  sp = c(0.86, 0.94, 0.99),
+  p = seq(0.01, 0.30, 0.01),
+  result = "PPV"
 )
-gg_diagnostic_prev(df, se, sp, p, result = "PPV")
-gg_diagnostic_prev(df, se, sp, p, result = "NPV")
 }
 \author{
 Derek Chiu
