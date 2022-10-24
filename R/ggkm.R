@@ -26,6 +26,7 @@
 #'   continuous variable
 #' @param timeby length of time between consecutive time points spanning the
 #'   entire range of follow-up. Defaults to 5.
+#' @param test type of test. Either "Log Rank" (default) or "Tarone-Ware".
 #' @param pval logical; if `TRUE` (default), the logrank test p-value is
 #'   shown on the plot
 #' @param bold_pval logical; if `TRUE`, p-values are bolded if statistically
@@ -69,11 +70,13 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
                  main = "Kaplan-Meier Plot", xlabs = "Time",
                  ylabs = "Survival Probability", xlims = NULL, ylims = NULL,
                  ystratalabs = NULL, cox.ref.grp = NULL, timeby = 5,
+                 test = c("Log Rank", "Tarone-Ware"),
                  pval = TRUE, bold_pval = FALSE, sig.level = 0.05,
                  HR = TRUE, use.firth = 1, hide.border = FALSE, expand.scale = TRUE,
                  legend = FALSE, legend.xy = NULL, legend.direction = "horizontal",
                  line.y.increment = 0.05, size.plot = 11, size.summary = 3,
                  size.table = 3.5, size.table.labels = 12, digits = 3, ...) {
+  test <- match.arg(test)
   time <- surv <- lower <- upper <- n.censor <- n.risk <- n.event <-
     estimate <- conf.high <- conf.low <- NULL
   times <- seq.int(0, max(sfit$time), by = timeby)
@@ -153,13 +156,21 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
   # HR statistic (95% CI), log rank test p-value for sfit (or sfit2, if exists)
   if (pval && length(sfit$strata) > 1) {
     fit <- sfit2 %||% sfit
-    p <- summarize_km(fit = fit, p = p, digits = digits, bold_pval = bold_pval,
-                      sig.level = sig.level, HR = HR,
-                      cox.ref.grp = cox.ref.grp, use.firth = use.firth,
-                      ystratalabs = ystratalabs,
-                      line.y.increment = line.y.increment,
-                      size.summary = size.summary,
-                      lab.offset = lab.offset)
+    p <- summarize_km(
+      fit = fit,
+      p = p,
+      test = test,
+      digits = digits,
+      bold_pval = bold_pval,
+      sig.level = sig.level,
+      HR = HR,
+      cox.ref.grp = cox.ref.grp,
+      use.firth = use.firth,
+      ystratalabs = ystratalabs,
+      line.y.increment = line.y.increment,
+      size.summary = size.summary,
+      lab.offset = lab.offset
+    )
   }
 
   # Create table graphic to include at-risk numbers, keep at-risk numbers
@@ -222,14 +233,17 @@ left_margin <- function(labels) {
 
 #' Numerical summaries of km fit: HR (95\% CI), Log rank test p-value
 #' @noRd
-summarize_km <- function(fit, p, digits, bold_pval, sig.level, HR, cox.ref.grp,
+summarize_km <- function(fit, p, test, digits, bold_pval, sig.level, HR, cox.ref.grp,
                          use.firth, ystratalabs, line.y.increment, size.summary,
                          lab.offset) {
   f <- eval(fit$call$formula)
   d <- eval(fit$call$data)
-  pvalue <- survdiff(f, d) %>%
-    getPval() %>%
-    round_small(method = "signif", digits = digits)
+  res <- switch(
+    test,
+    `Log Rank` = getPval(survdiff(f, d)),
+    `Tarone-Ware` = coin::pvalue(coin::logrank_test(f, d, type = test))
+  )
+  pvalue <- round_small(x = res, method = "signif", digits = digits)
   if (is.numeric(pvalue)) {
     pvalsep <- " = "
     # the following line tries to figure out how to print p-values with specified digits
@@ -245,13 +259,13 @@ summarize_km <- function(fit, p, digits, bold_pval, sig.level, HR, cox.ref.grp,
   if (parse_pval) {
     pvaltxt <- paste0(
       "paste(",
-      paste0("\"", "Log Rank p", "\","),
+      paste0("\"", test, " p", "\","),
       paste0("\"", pvalsep, "\","),
       paste0("bold(\"", pvalue_f, "\")"),
       ")"
     )
   } else {
-    pvaltxt <- paste("Log Rank p", pvalue_f, sep = pvalsep)
+    pvaltxt <- paste(paste(test, "p"), pvalue_f, sep = pvalsep)
   }
   if (HR) {
     pretty.coxph.obj <- prettyCoxph(input.formula = f,

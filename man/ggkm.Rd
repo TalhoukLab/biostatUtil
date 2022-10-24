@@ -21,6 +21,7 @@ ggkm(
   ystratalabs = NULL,
   cox.ref.grp = NULL,
   timeby = 5,
+  test = c("Log Rank", "Tarone-Ware"),
   pval = TRUE,
   bold_pval = FALSE,
   sig.level = 0.05,
@@ -80,6 +81,8 @@ continuous variable}
 
 \item{timeby}{length of time between consecutive time points spanning the
 entire range of follow-up. Defaults to 5.}
+
+\item{test}{type of test. Either "Log Rank" (default) or "Tarone-Ware".}
 
 \item{pval}{logical; if \code{TRUE} (default), the logrank test p-value is
 shown on the plot}
