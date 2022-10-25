@@ -77,6 +77,10 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
                  line.y.increment = 0.05, size.plot = 11, size.summary = 3,
                  size.table = 3.5, size.table.labels = 12, digits = 3, ...) {
   test <- match.arg(test)
+  if (test == "Tarone-Ware" && !requireNamespace("coin", quietly = TRUE)) {
+    stop("Package \"coin\" is required for Tarone-Ware test. Please install it.",
+         call. = FALSE)
+  }
   time <- surv <- lower <- upper <- n.censor <- n.risk <- n.event <-
     estimate <- conf.high <- conf.low <- NULL
   times <- seq.int(0, max(sfit$time), by = timeby)
