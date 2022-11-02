@@ -182,7 +182,6 @@ of > 2 categories).
 }
 \examples{
 library(survival)
-data(lung)
 doCoxphGeneric(input.d = lung, var.names = "sex", var.descriptions = "Sex",
                var.names.surv.time = "time",
                var.names.surv.status = "status", event.codes.surv = "2",
