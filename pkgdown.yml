@@ -1,8 +1,8 @@
-pandoc: 2.14.2
+pandoc: 2.19.2
 pkgdown: 2.0.6
 pkgdown_sha: ~
 articles: {}
-last_built: 2022-10-25T00:22Z
+last_built: 2022-11-02T00:16Z
 urls:
   reference: https://talhouklab.github.io/biostatUtil/reference
   article: https://talhouklab.github.io/biostatUtil/articles
