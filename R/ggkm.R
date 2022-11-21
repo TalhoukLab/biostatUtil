@@ -148,6 +148,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
   if (legend)  # Legend
     p <- p + theme(legend.position = legend.xy,
                    legend.key = element_rect(colour = NA),
+                   legend.background = element_rect(fill = NA),
                    legend.title = element_blank(),
                    legend.direction = legend.direction)
   if (CI)  # Confidence Bands
