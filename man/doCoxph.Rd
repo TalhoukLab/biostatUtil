@@ -35,6 +35,7 @@ doCoxphGeneric(
   css.class.name.odd = "odd",
   css.class.name.even = "even",
   split.table = 300,
+  format = c("long", "wide"),
   ...
 )
 
@@ -146,10 +147,10 @@ significant at \code{sig.level}}
 \item{split.table}{number of characters per row before splitting the table.
 Applies to the pandoc table output.}
 
-\item{...}{additional arguments to \code{\link[pander:pandoc.table.return]{pander::pandoc.table.return()}}}
-
 \item{format}{Either a "long" or "wide" format for the \code{result.table.bamboo}
 result element}
+
+\item{...}{additional arguments to \code{\link[pander:pandoc.table.return]{pander::pandoc.table.return()}}}
 }
 \value{
 A list with the following elements

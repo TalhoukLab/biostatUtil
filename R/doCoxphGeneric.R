@@ -59,6 +59,8 @@
 #' @param css.class.name.even Used to set the row colour for even rows
 #' @param split.table number of characters per row before splitting the table.
 #'   Applies to the pandoc table output.
+#' @param format Either a "long" or "wide" format for the `result.table.bamboo`
+#'   result element
 #' @param ... additional arguments to [pander::pandoc.table.return()]
 #' @return A list with the following elements
 #' * `result.table`: a data frame with the Cox model results.
@@ -92,7 +94,7 @@ doCoxphGeneric <- function(
   round.digits.p.value = 4, round.small = FALSE, scientific = FALSE,
   caption = NA, html.table.border = 0, banded.rows = FALSE,
   css.class.name.odd = "odd", css.class.name.even = "even",
-  split.table = 300, ...) {
+  split.table = 300, format = c("long", "wide"), ...) {
 
   # Constants
   kLocalConstantHrSepFlag <- "kLocalConstantHrSepFlag" # separates HR estimates
@@ -332,6 +334,34 @@ doCoxphGeneric <- function(
       hr.col.index <- hr.col.index - 1
       result.table.bamboo <- result.table.bamboo[, -hr.col.index]
     }
+  }
+
+  # Reformat if "wide" format chosen
+  format <- match.arg(format)
+  if (format == "wide") {
+    group_sizes <- diff(c(result.table.bamboo.base.indexes, nrow(result.table.bamboo) + 1))
+    splits <- purrr::map2(result.table.bamboo.base.indexes, group_sizes, ~ seq(from = .x, length.out = .y))
+    tab_splits <- purrr::map(splits, ~ result.table.bamboo[., ])
+
+    result.table.bamboo <- purrr::map_dfr(tab_splits, ~ {
+      data.frame(outcome = rownames(.x), .x, check.names = FALSE) %>%
+        dplyr::rename_if(names(.) == "V2", ~ "Levels") %>%
+        dplyr::mutate(Variable = .[["outcome"]][1]) %>%
+        dplyr::relocate(Variable, .before = 1) %>%
+        utils::tail(-1) %>%
+        dplyr::mutate(across("outcome", ~ ifelse(. == "", NA, .))) %>%
+        tidyr::fill(outcome) %>%
+        tidyr::pivot_longer(
+          cols = c("# of events / n", "Hazard Ratio (95% CI)", matches("P-value")),
+          names_to = "stat",
+          values_to = "values"
+        ) %>%
+        tidyr::unite(outcome.stat, c("outcome", "stat"), sep = ": ") %>%
+        tidyr::pivot_wider(names_from = "outcome.stat", values_from = "values") %>%
+        dplyr::mutate(Variable = ifelse(duplicated(.data$Variable), "", .data$Variable))
+    }) %>%
+      rlang::set_names(gsub(".*:.*(Hazard|P-value)", "\\1", names(.))) %>%
+      as.matrix()
   }
 
   # subscript ("<sup>|</sup>") and line break ("<br>") syntax for pandoc
