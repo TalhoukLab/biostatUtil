@@ -162,10 +162,10 @@ surv_formula <- function(time, status, event, terms, time2 = NULL,
       paste0("Surv(", time, ", ", time2, ", ", status, " == '", event, "')")
   }
   if (is.null(strata)) {
-    covariates <- paste(terms, collapse = " + ")
+    covariates <- paste(rlang::syms(terms), collapse = " + ")
   } else {
     covariates <-
-      paste(c(terms, paste0("strata(", strata, ")")), collapse = " + ")
+      paste(c(rlang::syms(terms), paste0("strata(", strata, ")")), collapse = " + ")
   }
   stats::as.formula(paste(response, covariates, sep = " ~ "))
 }
