@@ -27,7 +27,7 @@ grhoTests <- function(formula, data, digits = 4) {
     p <- stats::pchisq(c, d, lower.tail = FALSE)
     data.frame(c, d, p)
   }) %>%
-    purrr::invoke(rbind, .) %>%
+    rlang::exec(rbind, !!!.) %>%
     signif(digits) %>%
     magrittr::set_rownames(c("Log Rank (Mantel-Cox)",
                              "Breslow (Generalized Wilcoxon)")) %>%

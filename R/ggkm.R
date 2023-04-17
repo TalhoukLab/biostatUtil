@@ -123,7 +123,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
   # KM plot
   p <- ggplot(.df, aes(time, surv, color = strata, fill = strata,
                        linetype = strata)) +
-    geom_step(size = .7) +
+    geom_step(linewidth = 0.7) +
     scale_colour_manual(values = shading.colors) +
     scale_fill_manual(values = shading.colors) +
     scale_linetype_manual(values = line.pattern) +

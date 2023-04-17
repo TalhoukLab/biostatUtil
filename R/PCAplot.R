@@ -23,9 +23,13 @@ PCAplot <- function(by, tdat) {
                           ~ ggplot(df, aes(df[, .x], df[, .y],
                                            colour = var.name)) +
                             geom_point() +
-                            stat_ellipse(geom = "polygon", level = 0.9,
-                                         alpha = 0.1, size = 0.05,
-                                         aes(fill = var.name)) +
+                            stat_ellipse(
+                              geom = "polygon",
+                              level = 0.9,
+                              alpha = 0.1,
+                              linewidth = 0.05,
+                              aes(fill = var.name)
+                            ) +
                             theme_bw() +
                             theme(legend.title = element_blank()) +
                             labs(x = PCA_labs[.x], y = PCA_labs[.y]))

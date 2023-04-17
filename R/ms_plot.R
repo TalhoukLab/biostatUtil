@@ -32,7 +32,7 @@ ms_boxplot <- function(x, width = 8, height = 10, path = NULL) {
 #' ggplot boxplot applied to each data source
 #' @noRd
 ms_gg_boxplot <- function(x, title) {
-  p <- ggplot(x, aes_(x = quote(Sample), y = quote(Expression))) +
+  p <- ggplot(x, aes(x = Sample, y = Expression)) +
     stat_boxplot(geom = "errorbar", width = 0.4) +
     geom_boxplot() +
     theme_linedraw() +

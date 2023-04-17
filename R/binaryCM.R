@@ -103,7 +103,7 @@ binaryCM <- function(x, y, seed = 20, num.boot = 1000, pcond = 1,
   }
   # Result table
   table <- stats %>%
-    purrr::invoke(rbind, .) %>%
+    rlang::exec(rbind, !!!.) %>%
     magrittr::set_rownames(names(stats)) %>%
     magrittr::set_colnames(c("Point Estimate", "Lower CI", "Upper CI"))
   c(dplyr::lst(CM), stats, dplyr::lst(table))

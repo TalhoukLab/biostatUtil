@@ -70,32 +70,36 @@ SummaryStatsBy <- function(data, by1, by2, var.names,
       num.ord <- num.ord[-grep("sd", num.ord)]
     }
     num.val <- num.dat %>%
-      dplyr::group_by(dplyr::across(bys)) %>%
-      dplyr::summarise(dplyr::across(num.var,
-                                     contSumFunc,
-                                     digits = digits,
-                                     stats = stats),
-                       .groups = "drop") %>%
-      tidyr::pivot_longer(num.var, names_to = "var", values_to = "value") %>%
-      dplyr::arrange(.data$var) %>%
-      dplyr::mutate(stat = attr(.data$value, "names")) %>%
-      tidyr::unite(col = "var.stat", .data$var, .data$stat, sep = ".") %>%
-      tidyr::pivot_wider(bys, names_from = "var.stat", values_from = "value") %>%
-      dplyr::mutate(dplyr::across(.fns = as.character)) %>%
+      dplyr::group_by(dplyr::across(all_of(bys))) %>%
+      dplyr::reframe(dplyr::across(all_of(num.var),
+                                   ~ contSumFunc(.,
+                                                 digits = digits,
+                                                 stats = stats))) %>%
+      tidyr::pivot_longer(all_of(num.var), names_to = "var", values_to = "value") %>%
+      dplyr::arrange(var) %>%
+      dplyr::mutate(stat = attr(value, "names")) %>%
+      tidyr::unite(col = "var.stat", var, stat, sep = ".") %>%
+      tidyr::pivot_wider(id_cols = all_of(bys),
+                         names_from = "var.stat",
+                         values_from = "value") %>%
+      dplyr::mutate(dplyr::across(.cols = dplyr::everything(),
+                                  .fns = as.character)) %>%
       as.data.frame()
     num.val.tot <- num.dat %>%
-      dplyr::group_by(dplyr::across(by1)) %>%
-      dplyr::summarise(dplyr::across(num.var,
-                                     contSumFunc,
-                                     digits = digits,
-                                     stats = stats),
-                       .groups = "drop") %>%
-      tidyr::pivot_longer(num.var, names_to = "var", values_to = "value") %>%
-      dplyr::arrange(.data$var) %>%
-      dplyr::mutate(stat = attr(.data$value, "names")) %>%
-      tidyr::unite(col = "var.stat", .data$var, .data$stat, sep = ".") %>%
-      tidyr::pivot_wider(by1, names_from = "var.stat", values_from = "value") %>%
-      dplyr::mutate(dplyr::across(.fns = as.character)) %>%
+      dplyr::group_by(dplyr::across(all_of(by1))) %>%
+      dplyr::reframe(dplyr::across(all_of(num.var),
+                                   ~ contSumFunc(.,
+                                                 digits = digits,
+                                                 stats = stats))) %>%
+      tidyr::pivot_longer(all_of(num.var), names_to = "var", values_to = "value") %>%
+      dplyr::arrange(var) %>%
+      dplyr::mutate(stat = attr(value, "names")) %>%
+      tidyr::unite(col = "var.stat", var, stat, sep = ".") %>%
+      tidyr::pivot_wider(id_cols = all_of(by1),
+                         names_from = "var.stat",
+                         values_from = "value") %>%
+      dplyr::mutate(dplyr::across(.cols = dplyr::everything(),
+                                  .fns = as.character)) %>%
       as.data.frame()
     num.all <- list(num.val, num.val.tot)
     num.long <- num.all %>%

@@ -103,7 +103,7 @@ diffDate <- function(d1, d2, date.format = "MM.DD.YYYY",
                 existing.missing.codes = existing.missing.codes,
                 return.missing.code = return.missing.code, sep = sep),
       format = getFormat(.x, date.format))) %>%
-    purrr::invoke(difftime, .) %>%
+    rlang::exec(difftime, !!!.) %>%
     as.numeric()
   switch(match.arg(units),
          days = result,

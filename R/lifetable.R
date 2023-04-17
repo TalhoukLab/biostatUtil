@@ -68,7 +68,7 @@ lifetable <- function(obj, ntimes = 3, times = NULL, nround = 3,
                      tis = c(0, times)) %>%
     purrr::map(round, nround) %>%
     purrr::map(~ cbind(times = rownames(.x), .)) %>%
-    purrr::invoke(rbind, .) %>%
+    rlang::exec(rbind, !!!.) %>%
     cbind(strata = rep(strata, each = ntimes), .) %>%
     magrittr::set_rownames(NULL)
   if (summary) {
