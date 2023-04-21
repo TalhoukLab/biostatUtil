@@ -49,8 +49,10 @@
 #' @param bold_pval logical; if `TRUE`, p-values are bolded if statistically
 #'   significant at `sig.level`
 #' @param sig.level significance level; default 0.05
+#' @param round.digits.hr number of digits for hazard ratio
 #' @param round.digits.p.value number of digits for p-value
 #' @param round.small if `TRUE`, uses small number rounding via [round_small()]
+#'   for p-values
 #' @param scientific if `TRUE`, uses scientific notation when rounding
 #' @param caption caption for returned object
 #' @param html.table.border the border type to use for html tables
@@ -91,6 +93,7 @@ doCoxphGeneric <- function(
   missing.codes = c("N/A", "", "Unk"),
   use.firth = 1, firth.caption = FIRTH.CAPTION, add_log_hr = FALSE,
   stat.test = "waldtest", bold_pval = FALSE, sig.level = 0.05,
+  round.digits.hr = 2,
   round.digits.p.value = 4, round.small = FALSE, scientific = FALSE,
   caption = NA, html.table.border = 0, banded.rows = FALSE,
   css.class.name.odd = "odd", css.class.name.even = "even",
@@ -191,7 +194,7 @@ doCoxphGeneric <- function(
         log_hr <- cox.stats$output %>%
           magrittr::extract(, "estimate") %>%
           log() %>%
-          round(digits = 2) %>%
+          round(digits = round.digits.hr) %>%
           paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>%
           paste(collapse = kLocalConstantHrSepFlag)
         res <- append(res, log_hr, 1)

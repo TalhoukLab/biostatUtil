@@ -26,6 +26,7 @@ doCoxphGeneric(
   stat.test = "waldtest",
   bold_pval = FALSE,
   sig.level = 0.05,
+  round.digits.hr = 2,
   round.digits.p.value = 4,
   round.small = FALSE,
   scientific = FALSE,
@@ -59,6 +60,7 @@ doCoxphMultivariable(
   stat.test = "waldtest",
   bold_pval = FALSE,
   sig.level = 0.05,
+  round.digits.hr = 2,
   round.digits.p.value = 4,
   round.small = FALSE,
   scientific = FALSE,
@@ -128,9 +130,12 @@ significant at \code{sig.level}}
 
 \item{sig.level}{significance level; default 0.05}
 
+\item{round.digits.hr}{number of digits for hazard ratio}
+
 \item{round.digits.p.value}{number of digits for p-value}
 
-\item{round.small}{if \code{TRUE}, uses small number rounding via \code{\link[=round_small]{round_small()}}}
+\item{round.small}{if \code{TRUE}, uses small number rounding via \code{\link[=round_small]{round_small()}}
+for p-values}
 
 \item{scientific}{if \code{TRUE}, uses scientific notation when rounding}
 

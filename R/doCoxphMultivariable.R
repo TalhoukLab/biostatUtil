@@ -14,6 +14,7 @@ doCoxphMultivariable <- function(
   missing.codes = c("N/A", "", "Unk"),
   use.firth = 1, firth.caption = FIRTH.CAPTION, add_log_hr = FALSE,
   stat.test = "waldtest", bold_pval = FALSE, sig.level = 0.05,
+  round.digits.hr = 2,
   round.digits.p.value = 4, round.small = FALSE, scientific = FALSE,
   caption = NA, html.table.border = 0, banded.rows = FALSE,
   css.class.name.odd = "odd", css.class.name.even = "even",
@@ -148,7 +149,7 @@ doCoxphMultivariable <- function(
         log_hr <- cox.stats$output %>%
           magrittr::extract(var.idx, "estimate") %>%
           log() %>%
-          round(digits = 2) %>%
+          round(digits = round.digits.hr) %>%
           paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>%
           paste(collapse = kLocalConstantHrSepFlag)
         res <- append(res, log_hr, 1)

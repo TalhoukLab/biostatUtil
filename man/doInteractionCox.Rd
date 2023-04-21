@@ -69,7 +69,8 @@ Cox regression. If \code{use.firth = 1} (default), Firth is never used and if
 
 \item{round.digits.p.value}{number of digits for p-value}
 
-\item{round.small}{if \code{TRUE}, uses small number rounding via \code{\link[=round_small]{round_small()}}}
+\item{round.small}{if \code{TRUE}, uses small number rounding via \code{\link[=round_small]{round_small()}}
+for p-values}
 
 \item{scientific}{if \code{TRUE}, uses scientific notation when rounding}
 
