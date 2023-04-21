@@ -14,7 +14,7 @@ multivariable model for all variables together in var.names."><!-- mathjax --><s
     
     <a class="navbar-brand me-2" href="../index.html">biostatUtil</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,6 +74,7 @@ multivariable model for all variables together in <code>var.names</code>.</p>
 <span>  stat.test <span class="op">=</span> <span class="st">"waldtest"</span>,</span>
 <span>  bold_pval <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  sig.level <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  round.digits.hr <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  round.digits.p.value <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  round.small <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  scientific <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -107,6 +108,7 @@ multivariable model for all variables together in <code>var.names</code>.</p>
 <span>  stat.test <span class="op">=</span> <span class="st">"waldtest"</span>,</span>
 <span>  bold_pval <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  sig.level <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  round.digits.hr <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  round.digits.p.value <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  round.small <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  scientific <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -216,12 +218,17 @@ significant at <code>sig.level</code></p></dd>
 <dd><p>significance level; default 0.05</p></dd>
 
 
+<dt>round.digits.hr</dt>
+<dd><p>number of digits for hazard ratio</p></dd>
+
+
 <dt>round.digits.p.value</dt>
 <dd><p>number of digits for p-value</p></dd>
 
 
 <dt>round.small</dt>
-<dd><p>if <code>TRUE</code>, uses small number rounding via <code><a href="round_small.html">round_small()</a></code></p></dd>
+<dd><p>if <code>TRUE</code>, uses small number rounding via <code><a href="round_small.html">round_small()</a></code>
+for p-values</p></dd>
 
 
 <dt>scientific</dt>
