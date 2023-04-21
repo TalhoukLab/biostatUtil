@@ -20,6 +20,6 @@
 #' @name biostatUtil
 #' @import htmltools ggplot2 survival
 #' @importFrom magrittr %>%
-#' @importFrom rlang %||%
+#' @importFrom rlang %||% .data
 #' @importFrom ggtext element_markdown
 NULL
