@@ -180,7 +180,7 @@ doCoxphGeneric <- function(
       e.n <- paste(cox.stats$nevent, "/", cox.stats$n)
       hr.ci <- cox.stats$output %>%
         magrittr::extract(, c("estimate", "conf.low", "conf.high")) %>%
-        format_hr_ci(digits = 2, labels = FALSE, method = "Sci") %>%
+        format_hr_ci(digits = round.digits.hr, labels = FALSE, method = "Sci") %>%
         paste0(ifelse(cox.stats$used.firth, firth.caption, "")) %>%
         paste(collapse = kLocalConstantHrSepFlag)
       pval <- summary(cox.stats$fit)[[stat.test]][["pvalue"]]
