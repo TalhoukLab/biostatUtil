@@ -151,7 +151,7 @@ doCoxphGeneric <- function(
   for (i in seq_along(var.names)) {
     x <- var.names[i]
     temp.d <- input.d %>%  # remove any cases with NA's or missing values
-      dplyr::filter(!is.na(.[, x]) & !(.[, x] %in% missing.codes))
+      dplyr::filter(!is.na(.[[x]]) & !(.[[x]] %in% missing.codes))
     # automatically set ref.group to lowest group if not specified
     if (is.factor(temp.d[[x]]) & is.na(var.ref.groups[i])) {
       var.ref.groups[i] <- names(table(temp.d[[x]]))[1]
@@ -172,8 +172,8 @@ doCoxphGeneric <- function(
         strata = var.strata
       )
       temp.d.no.missing.survival <- temp.d %>%
-        dplyr::filter(!is.na(.[, var.names.surv.status[[j]]]) &
-                        !is.na(.[, var.names.surv.time[[j]]]))
+        dplyr::filter(!is.na(.[[var.names.surv.status[[j]]]]),
+                      !is.na(.[[var.names.surv.time[[j]]]]))
       cox.stats <- prettyCoxph(surv.formula,
                                input.d = temp.d.no.missing.survival,
                                use.firth = use.firth)
