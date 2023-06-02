@@ -89,14 +89,19 @@ model.</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="va">x</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/strata.html" class="external-link">strata</a></span><span class="op">(</span><span class="va">sex</span><span class="op">)</span>, <span class="va">test1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">Xunivcoxph</span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in as_plotmath(.):</span> object '.' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "HR==2.231~(95*'%'~CI:~0.445-11.18)"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Multiple predictors</span></span></span>
 <span class="r-in"><span><span class="va">bladder1</span> <span class="op">&lt;-</span> <span class="va">bladder</span><span class="op">[</span><span class="va">bladder</span><span class="op">$</span><span class="va">enum</span> <span class="op">&lt;</span> <span class="fl">5</span>, <span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">stop</span>, <span class="va">event</span><span class="op">)</span> <span class="op">~</span> <span class="op">(</span><span class="va">rx</span> <span class="op">+</span> <span class="va">size</span> <span class="op">+</span> <span class="va">number</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/strata.html" class="external-link">strata</a></span><span class="op">(</span><span class="va">enum</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/cluster.html" class="external-link">cluster</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span>, <span class="va">bladder1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">Xunivcoxph</span><span class="op">(</span><span class="va">mod</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in as_plotmath(.):</span> object '.' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "HR==0.59~(95*'%'~CI:~0.32-1.1)"  "HR==1.07~(95*'%'~CI:~0.9-1.28)" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3] "HR==1.27~(95*'%'~CI:~1.1-1.47)"  "HR==0.9~(95*'%'~CI:~0.47-1.73)" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5] "HR==0.84~(95*'%'~CI:~0.39-1.84)" "HR==0.9~(95*'%'~CI:~0.33-2.42)" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "HR==0.86~(95*'%'~CI:~0.69-1.08)" "HR==0.75~(95*'%'~CI:~0.56-1.01)"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "HR==0.76~(95*'%'~CI:~0.52-1.1)"  "HR==0.9~(95*'%'~CI:~0.72-1.14)" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11] "HR==0.94~(95*'%'~CI:~0.74-1.19)" "HR==1.1~(95*'%'~CI:~0.87-1.39)" </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Firth's correction</span></span></span>
 <span class="r-in"><span><span class="va">test2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
@@ -108,7 +113,7 @@ model.</p>
 <span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/coxphf/man/coxphf.html" class="external-link">coxphf</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">start</span>, <span class="va">stop</span>, <span class="va">event</span><span class="op">)</span> <span class="op">~</span> <span class="va">x</span>, pl <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>data <span class="op">=</span> <span class="va">test2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">Xunivcoxph</span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in as_plotmath(.):</span> object '.' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "HR^(F)==0.886~(95*'%'~CI:~0.188-4.183)"</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

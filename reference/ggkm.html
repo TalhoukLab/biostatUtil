@@ -261,7 +261,7 @@ rank test p-values, and risk table counts for each stratum.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/therneau/survival" class="external-link">survival</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">sfit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/survfit.html" class="external-link">survfit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="va">sex</span>, <span class="va">lung</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">ggkm</span><span class="op">(</span><span class="va">sfit</span>, timeby <span class="op">=</span> <span class="fl">200</span>, main <span class="op">=</span> <span class="st">"Survival curves by sex"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in as_plotmath(.):</span> object '.' not found</span>
+<span class="r-plt img"><img src="ggkm-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
