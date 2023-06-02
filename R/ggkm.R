@@ -200,7 +200,8 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
       ) +
       labs(y = NULL)
     if (returns) {
-      patchwork::wrap_plots(p, data.table, heights = c(4, 1))
+      p <- patchwork::wrap_plots(p, data.table, heights = c(4, 1))
+      plot(p)
     }
   } else {
     return(p)
