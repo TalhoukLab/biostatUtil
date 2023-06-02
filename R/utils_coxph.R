@@ -105,7 +105,8 @@ Xunivcoxph.coxph <- function(mod, digits = 3) {
     broom::tidy(exponentiate = TRUE, conf.int = TRUE) %>%
     magrittr::extract(c("estimate", "conf.low", "conf.high")) %>%
     format_hr_ci(digits) %>%
-    paste("HR", .)
+    as_plotmath() %>%
+    paste0("HR==", .)
 }
 
 #' @export
@@ -114,13 +115,14 @@ Xunivcoxph.coxphf <- function(mod, digits = 3) {
     magrittr::extract(c("coefficients", "ci.lower", "ci.upper")) %>%
     purrr::map_at("coefficients", exp) %>%
     format_hr_ci(digits) %>%
-    paste("HR(F)", .)
-  # In case we want to use superscript for Firth indicator (F)
-  # hr_ci <- mod %>%
-  #   magrittr::extract(c("coefficients", "ci.lower", "ci.upper")) %>%
-  #   purrr::map_at("coefficients", exp) %>%
-  #   format_hr_ci(digits)
-  # bquote(HR^("F") ~ .(hr_ci))
+    as_plotmath() %>%
+    paste0("HR^(F)==", .)
+}
+
+#' @noRd
+as_plotmath <- function(x) {
+  gsub(" ", "~", x) %>%
+    gsub("%", "*'%'", .)
 }
 
 #' @noRd
