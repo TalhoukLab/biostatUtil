@@ -106,9 +106,6 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
     lab.offset <- 0.05
   }
 
-  # Left margins for km plot and risk table
-  mleft <- left_margin(ystratalabs)
-
   # Data for KM plot
   .df <- sfit %>%
     broom::tidy() %>%
@@ -135,10 +132,6 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
       axis.title.x = element_text(vjust = 0.5),
       panel.background = element_blank(),
       panel.grid = element_blank(),
-      plot.margin = grid::unit(
-        c(0.5, 1, .5, mleft$margin.km),
-        c("lines", "lines", "lines", "in")
-      ),
       legend.position = "none"
     ) +
     ggtitle(main)
@@ -203,37 +196,15 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
                                        face = "bold",
                                        hjust = 1),
         axis.title.x = element_text(vjust = 1),
-        legend.position = "none",
-        plot.margin = grid::unit(c(0.5, 1.25, 0.5, mleft$margin.rt), "lines")
+        legend.position = "none"
       ) +
       labs(y = NULL)
-    if (returns)
-      gridExtra::grid.arrange(p, data.table, clip = FALSE, nrow = 2, ncol = 1,
-                              heights = grid::unit(c(2, .5), "null"))
+    if (returns) {
+      patchwork::wrap_plots(p, data.table, heights = c(4, 1))
+    }
   } else {
     return(p)
   }
-}
-
-#' Get left margin distances for km plot and risk table
-#' @noRd
-left_margin <- function(labels) {
-  max.nc <- max(nchar(labels))
-  if (max.nc <= 4) {
-    mleft.km <- 0
-    mleft.rt <- 2.4
-  } else {
-    mleft.km <- graphics::strwidth(labels[which.max(nchar(labels))],
-                                   units = "in")
-    if (max.nc <= 5) {
-      mleft.km <- mleft.km - (max.nc / 100 + 0.4)
-    } else {
-      mleft.km <- mleft.km - (max.nc / 100 + 0.5)
-    }
-    mleft.rt <- 0.5
-  }
-  return(list(margin.km = mleft.km,
-              margin.rt = mleft.rt))
 }
 
 #' Numerical summaries of km fit: HR (95\% CI), Log rank test p-value
