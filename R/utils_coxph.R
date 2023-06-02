@@ -121,8 +121,11 @@ Xunivcoxph.coxphf <- function(mod, digits = 3) {
 
 #' @noRd
 as_plotmath <- function(x) {
-  gsub(" ", "~", x) %>%
-    gsub("%", "*'%'", .)
+  x %>%
+    gsub(" ", "~", .) %>%
+    gsub("%", "*'%'", .) %>%
+    gsub(">=", "'>='*", .) %>%
+    gsub("<", "'<'*", .)
 }
 
 #' @noRd

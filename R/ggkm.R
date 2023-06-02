@@ -255,7 +255,7 @@ summarize_km <- function(fit, p, test, digits, bold_pval, sig.level, HR, cox.ref
       coxm <- pretty.coxph.obj$fit
     }
     HRtxts <- Xunivcoxph(coxm, digits = digits)
-    cox.strata.labs <- ystratalabs
+    cox.strata.labs <- as_plotmath(ystratalabs)
     if (!is.null(cox.ref.grp)) {
       cox.strata.labs <- c(cox.ref.grp,
                            ystratalabs[ystratalabs != cox.ref.grp])
