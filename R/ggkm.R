@@ -255,21 +255,21 @@ summarize_km <- function(fit, p, test, digits, bold_pval, sig.level, HR, cox.ref
       coxm <- pretty.coxph.obj$fit
     }
     HRtxts <- Xunivcoxph(coxm, digits = digits)
-    cox.strata.labs <- as_plotmath(ystratalabs)
+    cox.strata.labs <- ystratalabs
     if (!is.null(cox.ref.grp)) {
       cox.strata.labs <- c(cox.ref.grp,
                            ystratalabs[ystratalabs != cox.ref.grp])
     }
     for (i in seq_along(HRtxts)) {
       HRtxt <- HRtxts[i]
-      HRtxt <- paste0(HRtxt, "%~%", cox.strata.labs[i + 1],
-                      "~vs.~", cox.strata.labs[1])
+      HRtxt <- paste0(HRtxt, " ~ ", cox.strata.labs[i + 1],
+                      " vs. ", cox.strata.labs[1])
       p <- p + annotate(
         "text",
         x = 0.1 * max(fit$time),
         hjust = 0,
         y = lab.offset + line.y.increment * i,
-        label = HRtxt,
+        label = as_plotmath(HRtxt),
         size = size.summary,
         parse = TRUE
       )
