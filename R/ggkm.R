@@ -201,8 +201,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
       ) +
       labs(y = NULL, title = "Number at risk")
     if (returns) {
-      p <- patchwork::wrap_plots(p, data.table, heights = c(4, 1))
-      plot(p)
+      patchwork::wrap_plots(p, data.table, heights = c(4, 1))
     }
   } else {
     return(p)
