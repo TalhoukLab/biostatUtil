@@ -81,8 +81,6 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
     stop("Package \"coin\" is required for Tarone-Ware test. Please install it.",
          call. = FALSE)
   }
-  time <- surv <- lower <- upper <- n.censor <- n.risk <- n.event <-
-    estimate <- conf.high <- conf.low <- NULL
   times <- seq.int(0, max(sfit$time), by = timeby)
   s <- summary(sfit, censored = TRUE)$strata
 
@@ -109,17 +107,41 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
   # Data for KM plot
   .df <- sfit %>%
     broom::tidy() %>%
-    dplyr::select(time, n.risk, n.event, n.censor, surv = estimate,
-                  strata, upper = conf.high, lower = conf.low) %>%
+    dplyr::select(
+      c(
+        "time",
+        "n.risk",
+        "n.event",
+        "n.censor",
+        "estimate",
+        "strata",
+        "conf.high",
+        "conf.low"
+      )
+    ) %>%
+    dplyr::rename(
+      surv = .data$estimate,
+      upper = .data$conf.high,
+      lower = .data$conf.low
+    ) %>%
     dplyr::mutate(strata = factor(s, labels = ystratalabs)) %>%
-    dplyr::bind_rows(
-      data.frame(time = 0, surv = 1,
-                 strata = factor(ystratalabs, levels = levels(.$strata)),
-                 upper = 1, lower = 1), .)
+    dplyr::bind_rows(data.frame(
+      time = 0,
+      surv = 1,
+      strata = factor(ystratalabs, levels = levels(.$strata)),
+      upper = 1,
+      lower = 1
+    ), .)
 
   # KM plot
-  p <- ggplot(.df, aes(time, surv, color = strata, fill = strata,
-                       linetype = strata)) +
+  p <- ggplot(.df,
+              aes(
+                .data[["time"]],
+                .data[["surv"]],
+                color = strata,
+                fill = strata,
+                linetype = strata
+              )) +
     geom_step(linewidth = 0.7) +
     scale_colour_manual(values = shading.colors) +
     scale_fill_manual(values = shading.colors) +
@@ -139,17 +161,27 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
     p <- p + theme(axis.line = element_line(color = "black"),
                    panel.border = element_blank())
   if (legend)  # Legend
-    p <- p + theme(legend.position = legend.xy,
-                   legend.key = element_rect(colour = NA),
-                   legend.background = element_rect(fill = NA),
-                   legend.title = element_blank(),
-                   legend.direction = legend.direction)
+    p <- p + theme(
+      legend.position = legend.xy,
+      legend.key = element_rect(colour = NA),
+      legend.background = element_rect(fill = NA),
+      legend.title = element_blank(),
+      legend.direction = legend.direction
+    )
   if (CI)  # Confidence Bands
-    p <- p + geom_ribbon(data = .df, aes(ymin = lower, ymax = upper),
-                         alpha = 0.05, linetype = 0)
+    p <- p + geom_ribbon(
+      data = .df,
+      aes(ymin = .data[["lower"]], ymax = .data[["upper"]]),
+      alpha = 0.05,
+      linetype = 0
+    )
   if (marks)  # Censor Marks
-    p <- p + geom_point(data = subset(.df, n.censor >= 1),
-                        aes(x = time, y = surv), shape = "/", size = 4)
+    p <- p + geom_point(
+      data = .df %>% dplyr::filter(.data[["n.censor"]] >= 1),
+      aes(x = .data[["time"]], y = .data[["surv"]]),
+      shape = "/",
+      size = 4
+    )
 
   # HR statistic (95% CI), log rank test p-value for sfit (or sfit2, if exists)
   if (pval && length(sfit$strata) > 1) {
@@ -180,8 +212,11 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
       purrr::map_df(`[`, c("strata", "time", "n.risk"))
     ystratalabs_md <-
       stringr::str_replace_all(ystratalabs, c("<" = "&lt;", ">" = "&gt;"))
-    data.table <- ggplot(risk.data, aes(x = time, y = strata,
-                                        label = format(n.risk, nsmall = 0))) +
+    data.table <- ggplot(risk.data, aes(
+      x = .data[["time"]],
+      y = .data[["strata"]],
+      label = format(.data[["n.risk"]], nsmall = 0)
+    )) +
       geom_text(size = size.table) +
       scale_y_discrete(labels = ystratalabs_md) +
       scale_x_continuous(limits = xlims) +
