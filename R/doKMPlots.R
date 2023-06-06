@@ -51,8 +51,15 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
   if (is.null(shading.colors))
     shading.colors <- seq_along(levs)
   formula.obj <- stats::as.formula(paste0("Surv(", time, ", ", status, ") ~ ", var.name))
-  main <- main %||% ifelse(is.na(var.description) | var.description == "", "",
-                           paste0(var.description, " (", toupper(match.arg(surv.type)), ")"))
+  main <- if (is.null(main)) {
+    if (is.na(var.description) | var.description == "") {
+      NULL
+    } else {
+      paste0(var.description, " (", toupper(match.arg(surv.type)), ")")
+    }
+  } else {
+    main
+  }
   if (use.ggkm) {
     pos <- 1
     assign("formula.obj", formula.obj, envir = as.environment(pos))
