@@ -184,21 +184,22 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
                                         label = format(n.risk, nsmall = 0))) +
       geom_text(size = size.table) +
       scale_y_discrete(labels = ystratalabs_md) +
-      scale_x_continuous("Numbers at risk", limits = xlims) +
+      scale_x_continuous(limits = xlims) +
       theme_bw() +
       theme(
+        plot.title = element_text(size = size.table.labels),
         text = element_text(size = size.table.labels),
         panel.grid = element_blank(),
         panel.border = element_blank(),
         axis.ticks = element_blank(),
+        axis.title.x = element_blank(),
         axis.text.x = element_blank(),
         axis.text.y = element_markdown(color = shading.colors,
                                        face = "bold",
                                        hjust = 1),
-        axis.title.x = element_text(vjust = 1),
         legend.position = "none"
       ) +
-      labs(y = NULL)
+      labs(y = NULL, title = "Number at risk")
     if (returns) {
       p <- patchwork::wrap_plots(p, data.table, heights = c(4, 1))
       plot(p)
