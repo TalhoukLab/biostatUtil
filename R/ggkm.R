@@ -235,8 +235,12 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
         legend.position = "none"
       ) +
       labs(y = NULL, title = "Number at risk")
+
+    p <- patchwork::wrap_plots(p, data.table, heights = c(4, 1))
     if (returns) {
-      patchwork::wrap_plots(p, data.table, heights = c(4, 1))
+      plot(p)
+    } else {
+      return(p)
     }
   } else {
     return(p)
