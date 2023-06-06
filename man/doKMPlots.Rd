@@ -12,6 +12,7 @@ doKMPlots(
   var.description,
   surv.type = c("os", "dss", "pfs", "aefs"),
   shading.colors = c("blue2", "red2", "deepskyblue", "indianred3"),
+  main = NULL,
   line.name = NULL,
   line.pattern = NULL,
   legend = FALSE,
@@ -42,6 +43,8 @@ doKMPlots(
 \item{surv.type}{survival outcome. Either "os", "dss", "pfs", or "aefs".}
 
 \item{shading.colors}{colors for survival curves}
+
+\item{main}{plot title}
 
 \item{line.name}{names for each survival curve}
 

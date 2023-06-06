@@ -7,6 +7,7 @@
 #' @param var.description description for `var.name`
 #' @param surv.type survival outcome. Either "os", "dss", "pfs", or "aefs".
 #' @param shading.colors colors for survival curves
+#' @param main plot title
 #' @param line.name names for each survival curve
 #' @param line.pattern line type for survival curves
 #' @param legend logical; if `TRUE`, the legend is overlaid on the graph
@@ -35,6 +36,7 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
                       surv.type = c("os", "dss", "pfs", "aefs"),
                       shading.colors = c("blue2", "red2", "deepskyblue",
                                          "indianred3"),
+                      main = NULL,
                       line.name = NULL, line.pattern = NULL, legend = FALSE,
                       cox.ref.group = NULL, use.firth = -1, CI = TRUE,
                       bold_pval = FALSE, sig.level = 0.05,
@@ -49,9 +51,8 @@ doKMPlots <- function(input.d, time, status, var.name, var.description,
   if (is.null(shading.colors))
     shading.colors <- seq_along(levs)
   formula.obj <- stats::as.formula(paste0("Surv(", time, ", ", status, ") ~ ", var.name))
-  main <- ifelse(is.na(var.description) | var.description == "", "",
-                 paste0(var.description, " (", toupper(match.arg(surv.type)), ")"))
-
+  main <- main %||% ifelse(is.na(var.description) | var.description == "", "",
+                           paste0(var.description, " (", toupper(match.arg(surv.type)), ")"))
   if (use.ggkm) {
     pos <- 1
     assign("formula.obj", formula.obj, envir = as.environment(pos))
