@@ -75,7 +75,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
                  HR = TRUE, use.firth = 1, hide.border = FALSE, expand.scale = TRUE,
                  legend = FALSE, legend.xy = NULL, legend.direction = "horizontal",
                  line.y.increment = 0.05, size.plot = 11, size.summary = 3,
-                 size.table = 3.5, size.table.labels = 12, digits = 3, ...) {
+                 size.table = 3.5, size.table.labels = 11, digits = 3, ...) {
   test <- match.arg(test)
   if (test == "Tarone-Ware" && !requireNamespace("coin", quietly = TRUE)) {
     stop("Package \"coin\" is required for Tarone-Ware test. Please install it.",
