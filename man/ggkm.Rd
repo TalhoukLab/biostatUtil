@@ -36,7 +36,7 @@ ggkm(
   size.plot = 11,
   size.summary = 3,
   size.table = 3.5,
-  size.table.labels = 12,
+  size.table.labels = 11,
   digits = 3,
   ...
 )

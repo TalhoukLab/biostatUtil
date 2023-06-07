@@ -119,11 +119,9 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
         "conf.low"
       )
     ) %>%
-    dplyr::rename(
-      surv = .data$estimate,
-      upper = .data$conf.high,
-      lower = .data$conf.low
-    ) %>%
+    dplyr::rename(surv = "estimate",
+                  upper = "conf.high",
+                  lower = "conf.low") %>%
     dplyr::mutate(strata = factor(s, labels = ystratalabs)) %>%
     dplyr::bind_rows(data.frame(
       time = 0,
@@ -236,7 +234,8 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
       ) +
       labs(y = NULL, title = "Number at risk")
 
-    p <- patchwork::wrap_plots(p, data.table, heights = c(4, 1))
+    p <- patchwork::wrap_plots(p, data.table, heights = c(4, 1)) %>%
+      purrr::modify_in(list(2), ~ . + patchwork::plot_layout(tag_level = "new"))
     if (returns) {
       plot(p)
     } else {
