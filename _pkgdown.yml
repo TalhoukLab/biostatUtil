@@ -2,8 +2,9 @@ url: https://talhouklab.github.io/biostatUtil/
 
 template:
   bootstrap: 5
-  params:
-    bootswatch: cerulean
+  bootswatch: cerulean
+  bslib:
+    primary: "#0054AD"
 
 navbar:
   title: ~
