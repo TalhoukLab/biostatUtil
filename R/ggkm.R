@@ -209,7 +209,9 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
       list() %>%
       purrr::map_df(`[`, c("strata", "time", "n.risk"))
     ystratalabs_md <-
-      stringr::str_replace_all(ystratalabs, c("<" = "&lt;", ">" = "&gt;"))
+      stringr::str_replace_all(ystratalabs, c("<" = "&lt;",
+                                              ">" = "&gt;",
+                                              "/" = "\\\\/"))
     data.table <- ggplot(risk.data, aes(
       x = .data[["time"]],
       y = .data[["strata"]],
