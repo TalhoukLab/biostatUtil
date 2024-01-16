@@ -4,7 +4,7 @@ template:
   bootstrap: 5
   bootswatch: cerulean
   bslib:
-    primary: "#0054AD"
+    primary: "#E69F00"
 
 navbar:
   title: ~
