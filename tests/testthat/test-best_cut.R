@@ -1,6 +1,3 @@
-
-context("Best cutpoint")
-
 library(survival)
 set.seed(2021)
 n <- 4

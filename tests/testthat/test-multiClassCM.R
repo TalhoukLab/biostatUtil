@@ -1,6 +1,3 @@
-
-context("Multiclass confusion matrices")
-
 set.seed(23)
 k <- 3
 (x <- factor(sample(1:k, 100, replace = TRUE, prob = c(0.15, 0.25, 0.6))))

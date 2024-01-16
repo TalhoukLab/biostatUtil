@@ -1,6 +1,3 @@
-
-context("Compute cohort characteristics")
-
 mtcars$vs <- as.factor(mtcars$vs)
 
 test_that("defaults can be changed and output is a length 4 list", {
@@ -17,10 +14,10 @@ test_that("defaults can be changed and output is a length 4 list", {
     custom.marker.labels = c("V/S = 0", "V/S = 1"),
     stat.tests = c("spearman", "kruskal", "wilcox")))
   expect_length(dcc, 4)
-  expect_is(dcc$result.table, "matrix")
+  expect_type(dcc$result.table, "character")
   expect_length(dcc$stat.tests.results, 3)
-  expect_is(dcc$result.table.html, "character")
-  expect_is(dcc$result.table.bamboo, "character")
+  expect_type(dcc$result.table.html, "character")
+  expect_type(dcc$result.table.bamboo, "character")
 })
 
 test_that("statistical tests for categorical variables work", {

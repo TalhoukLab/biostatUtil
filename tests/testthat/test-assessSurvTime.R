@@ -1,6 +1,3 @@
-
-context("Assess survival time")
-
 set.seed(3)
 starts <- seq(as.Date("2000/1/1"), as.Date("2003/1/1"), by = "quarter")
 ends <-  seq(as.Date("2003/1/1"), as.Date("2006/1/1"), by = "quarter")
@@ -10,7 +7,7 @@ statuses[9:12] <- NA
 x2 <- assessSurvTime(starts, ends, statuses)
 
 test_that("output is a list of 5 real-valued elements", {
-  expect_is(x1, "list")
+  expect_type(x1, "list")
   expect_length(x1, 5)
 })
 

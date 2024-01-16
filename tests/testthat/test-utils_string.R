@@ -1,6 +1,3 @@
-
-context("String utility functions")
-
 test_that("Square brackets and parentheses are escaped", {
   expect_identical("\\[index\\]", escapeForGrep("[index]"))
   expect_identical("\\(parentheses\\)", escapeForGrep("(parentheses)"))

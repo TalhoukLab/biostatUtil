@@ -1,11 +1,9 @@
-
-context("Building cutpoints")
 set.seed(1108)
 x <- sample(0:4, size = 1000, replace = TRUE)
 
 test_that("build_cuts outputs correct data structure", {
-  expect_is(build_cuts(x, list = TRUE), "list")
-  expect_is(build_cuts(x), "data.frame")
+  expect_type(build_cuts(x, list = TRUE), "list")
+  expect_s3_class(build_cuts(x), "data.frame")
 })
 
 test_that(

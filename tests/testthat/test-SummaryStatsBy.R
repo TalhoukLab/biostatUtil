@@ -1,5 +1,3 @@
-
-context("Generating cohort characteristics")
 mtcars$vs <- as.factor(mtcars$vs)
 mtcars$am <- as.factor(mtcars$am)
 mtcars$onelev <- factor("d", levels = c("d", "e"))

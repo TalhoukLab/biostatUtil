@@ -1,6 +1,3 @@
-
-context("Principal component scatterplots and multiple plotting")
-
 test_that("PCAplot works", {
   expect_error(PCAplot(mtcars$cyl, mtcars), NA)
 })

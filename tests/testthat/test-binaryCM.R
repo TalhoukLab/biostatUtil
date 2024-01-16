@@ -1,6 +1,3 @@
-
-context("Binary class confusion matrices")
-
 set.seed(547)
 n <- 80
 tol <- .0002

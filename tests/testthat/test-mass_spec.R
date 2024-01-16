@@ -1,6 +1,3 @@
-
-context("Mass Spectrometry functions")
-
 data(psm, pro)
 dat1 <- ms_process(psm = psm, protein = pro, treatment = c("N-FLAG", "UNTAGGED"),
                    control = "EMPTY", condition = "MRC",

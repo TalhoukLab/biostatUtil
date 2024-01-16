@@ -1,6 +1,3 @@
-
-context("summary as HTML format")
-
 library(htmlTable)
 set.seed(1)
 x <- rnorm(100)

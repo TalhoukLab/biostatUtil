@@ -1,6 +1,3 @@
-
-context("Do Plots")
-
 mtcars$vs <- as.factor(mtcars$vs)
 
 test_that("doBarplot works", {

@@ -1,6 +1,3 @@
-
-context("Statistics with Missing Values")
-
 x <- c(10:1)
 y <- c(1:10)
 z <- c(10:1)

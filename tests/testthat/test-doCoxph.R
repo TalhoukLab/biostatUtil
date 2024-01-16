@@ -1,5 +1,3 @@
-context("Cox model generic")
-
 data(cancer, package = "survival")
 set.seed(1)
 lung$time2 <- sample(lung$time, replace = TRUE)
@@ -83,9 +81,6 @@ test_that("doCoxphGeneric factors use lowest group if no reference specified", {
                          caption = "")
   expect_identical(res1$result.table, res2$result.table)
 })
-
-
-context("Cox model multivariable")
 
 test_that("doCoxphMultivariable works for univariable case", {
   res <- doCoxphMultivariable(input.d = lung,
@@ -171,9 +166,6 @@ test_that("doCoxphMultivariable multiple survival outcomes works", {
   expect_equal(nrow(res$result.table), 4)
 })
 
-
-context("Cox model testing interaction")
-
 test_that("doInteractionCox works without an interaction term", {
   res <- suppressWarnings(
     doInteractionCox(input.d = lung,
@@ -235,20 +227,22 @@ test_that("left-truncated survival works", {
                            surv.descriptions = "OS",
                            caption = "")
   )
-  expect_warning(
-    res2 <- doCoxphMultivariable(input.d = lung,
-                                 var.names = "sex",
-                                 var.descriptions = "Sex",
-                                 show.var.detail = TRUE,
-                                 var.names.surv.time = "time",
-                                 var.names.surv.time2 = "time2",
-                                 var.names.surv.status = "status",
-                                 event.codes.surv = "2",
-                                 surv.descriptions = "OS",
-                                 caption = "",
-                                 var.ref.groups = "2",
-                                 round.small = TRUE)
-  )
+  suppressWarnings(expect_warning(
+    res2 <- doCoxphMultivariable(
+      input.d = lung,
+      var.names = "sex",
+      var.descriptions = "Sex",
+      show.var.detail = TRUE,
+      var.names.surv.time = "time",
+      var.names.surv.time2 = "time2",
+      var.names.surv.status = "status",
+      event.codes.surv = "2",
+      surv.descriptions = "OS",
+      caption = "",
+      var.ref.groups = "2",
+      round.small = TRUE
+    )
+  ))
   expect_length(res1, 3)
   expect_length(res2, 4)
 })

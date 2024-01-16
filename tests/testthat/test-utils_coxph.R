@@ -1,6 +1,3 @@
-
-context("Cox proportional hazards models utility functions")
-
 library(coxphf)
 test1 <- list(time = c(4, 3, 1, 1, 2, 2, 3),
               status = c(1, 1, 1, 0, 1, 1, 0),
@@ -17,7 +14,7 @@ test2 <- data.frame(list(
 mod2 <- coxphf(formula = Surv(start, stop, event) ~ x, pl = FALSE, data = test2)
 
 test_that("coxphOut matrix summary, with overwritable rownames", {
-  expect_is(coxphOut(mod1), "matrix")
+  expect_type(coxphOut(mod1), "double")
   expect_length(coxphOut(mod1), 9)
   expect_identical("x", rownames(coxphOut(mod1)))
   expect_identical("y", rownames(coxphOut(mod1, coefnames = "y")))

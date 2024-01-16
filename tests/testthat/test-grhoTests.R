@@ -1,5 +1,3 @@
-
-context("G-Rho Tests for Survival Differences")
 library(survival)
 
 test_that("formula and data work", {

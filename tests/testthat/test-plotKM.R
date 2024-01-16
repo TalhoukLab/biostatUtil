@@ -1,5 +1,3 @@
-context("Plot KM")
-
 data(cancer, package = "survival")
 
 test_that("doKMPlots calls ggkm or plotKM", {

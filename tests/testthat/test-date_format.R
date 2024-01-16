@@ -1,6 +1,3 @@
-
-context("Date formatting functions")
-
 x1 <- "2014-07-08"
 x2 <- "2014/07/08"
 x3 <- "2014|07|08"

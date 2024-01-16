@@ -1,6 +1,3 @@
-
-context("Date extremes")
-
 test_that("Min and max work for vectors", {
   t1 <- as.Date(c("2015-03-01", "2015-02-15", NA, "2014-05-01"))
   expect_identical(as.Date("2015-03-01"), maxDate(t1))

@@ -1,6 +1,3 @@
-
-context("Bootstrapped mean")
-
 set.seed(789)
 test.vec <- rnorm(n = 60, mean = 7, sd = 3)
 test.mat <- matrix(test.vec, nrow = 10)
@@ -39,7 +36,7 @@ test_that("NAs are handled when na.rm = TRUE", {
 })
 
 test_that("warnings if input is a character", {
-  expect_warning(bootMean("xx"))
+  suppressWarnings(expect_warning(bootMean("xx")))
 })
 
 test_that("NAs not handled when na.rm = FALSE", {

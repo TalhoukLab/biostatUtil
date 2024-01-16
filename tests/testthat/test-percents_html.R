@@ -1,6 +1,3 @@
-
-context("HTML output of Row and Column percentages")
-
 library(htmlTable)
 set.seed(13)
 B <- matrix(rbinom(20, size = 20, prob = 0.3), nrow = 5,

@@ -1,5 +1,3 @@
-context("Cox proportional hazard models")
-
 library(survival)
 set.seed(12)
 n <- 200  # number of cases

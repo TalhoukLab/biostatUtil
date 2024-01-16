@@ -1,6 +1,3 @@
-
-context("Date computation functions")
-
 x5 <- "1992/01/27"
 x6 <- "2003/03/21"
 

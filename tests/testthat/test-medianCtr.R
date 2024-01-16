@@ -1,6 +1,3 @@
-
-context("Median center")
-
 test_that("median centering works", {
   set.seed(1)
   x <- matrix(rnorm(200), nrow = 10)

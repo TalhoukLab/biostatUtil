@@ -1,6 +1,3 @@
-
-context("Kappa bootstrapped confidence interval")
-
 s <- 12
 set.seed(s)
 a <- rbinom(n = 100, size = 1, prob = 0.3)

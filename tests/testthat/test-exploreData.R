@@ -1,6 +1,3 @@
-
-context("Explore Data")
-
 test_that("PDF output generated", {
   mtcars$vs <- as.factor(mtcars$vs)
   mtcars$am <- as.factor(mtcars$am)

@@ -1,6 +1,3 @@
-
-context("Plot Schoenfeld residual plot")
-
 library(survival)
 test1 <- list(time = c(4, 3, 1, 1, 2, 2, 3),
               status = c(1, 1, 1, 0, 1, 1, 0),

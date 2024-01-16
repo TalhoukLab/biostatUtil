@@ -1,6 +1,3 @@
-
-context("Round small numbers")
-
 test_that("vector input works", {
   expect_error(round_small(2e-04), NA)
 })

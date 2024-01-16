@@ -1,6 +1,3 @@
-
-context("Table as HTML format")
-
 library(htmlTable)
 A <- matrix(c(2, 3, 5, 10), nrow = 2,
             dimnames = list(c("Row1", "Row2"), c("Col1", "Col2")))

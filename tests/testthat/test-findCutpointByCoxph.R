@@ -1,6 +1,3 @@
-
-context("Find cutpoint by coxph")
-
 data(cancer, package = "survival")
 
 test_that("findCutpointByCoxph works for univariable case", {

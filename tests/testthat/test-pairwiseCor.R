@@ -1,6 +1,3 @@
-
-context("Pairwise correlations")
-
 set.seed(123)
 x <- data.frame(matrix(rnorm(25), nrow = 5))
 y <- pairwiseCor(x)

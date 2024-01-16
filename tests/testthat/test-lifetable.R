@@ -1,6 +1,3 @@
-
-context("Lifetables")
-
 library(survival)
 obj <- survfit(Surv(futime, fustat) ~ rx, data = ovarian)
 

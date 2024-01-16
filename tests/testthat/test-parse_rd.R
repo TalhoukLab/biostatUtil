@@ -1,6 +1,3 @@
-
-context("Parse Rd files")
-
 pr <- parse_rd()
 prs <- parse_rd(file = "function_dictionary.csv")
 

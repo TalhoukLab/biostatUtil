@@ -1,6 +1,3 @@
-
-context("Generating frequency tables and histograms")
-
 # Create vector of randomly reordered alphabet with various frequencies
 # for each letter
 set.seed(123)
