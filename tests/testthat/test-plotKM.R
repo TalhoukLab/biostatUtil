@@ -92,5 +92,15 @@ test_that("HR is shown for all levels of multilevel predictor", {
   expect_error(p6, NA)
 })
 
+test_that("wrap_ggkm can combine multiple KM curves", {
+  p1 <- doKMPlots(lung, "time", "status", "sex", "Sex", use.ggkm = TRUE,
+                  timeby = 200, use.firth = 0.8, cox.ref.group = "2")
+  p2 <- doKMPlots(lung, "time", "status", "sex", "Sex", use.ggkm = TRUE,
+                  timeby = 200, use.firth = 0.8, cox.ref.group = "2",
+                  sfit2 = survfit(Surv(time, status) ~ age, lung))
+  p12 <- wrap_ggkm(list(p1, p2))
+  expect_error(p12, NA)
+})
+
 dev.off()
 if (file.exists("Rplots.pdf")) file.remove("Rplots.pdf")
