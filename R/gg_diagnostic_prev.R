@@ -88,7 +88,7 @@ gg_prev_fixed <- function(se, sp, p, result = c("PPV", "NPV")) {
       ppv = ppv(se, sp, p, 4),
       npv = npv(se, sp, p, 4),
       point = rep(c("lower bound", "pooled estimate", "upper bound"), each = points),
-      label = factor(paste0(.data$point, " (se: ", se, ", sp: ", sp, ")"))
+      label = forcats::fct_rev(paste0(.data$point, " (se: ", se, ", sp: ", sp, ")"))
     )
   if (result == "PPV") {
     var <- rlang::quo(ppv)
