@@ -2,6 +2,7 @@
 % Please edit documentation in R/biostatUtil.R
 \docType{package}
 \name{biostatUtil}
+\alias{biostatUtil-package}
 \alias{biostatUtil}
 \title{biostatUtil: utility functions for biostatistical projects}
 \description{
@@ -21,4 +22,21 @@ Functions can be categorized into one of the following: \itemize{
 \item Plotting survival-related figures
 \item Miscellaneous functions
 }
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://talhouklab.github.io/biostatUtil/}
+}
+
+}
+\author{
+\strong{Maintainer}: Derek Chiu \email{dchiu@bccrc.ca}
+
+Authors:
+\itemize{
+  \item Aline Talhouk \email{atalhouk@bccrc.ca}
+  \item Samuel Leung \email{Samuel.Leung@vch.ca}
+}
+
 }

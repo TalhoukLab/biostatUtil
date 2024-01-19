@@ -22,4 +22,4 @@
 #' @importFrom magrittr %>%
 #' @importFrom rlang %||% .data
 #' @importFrom ggtext element_markdown
-NULL
+"_PACKAGE"

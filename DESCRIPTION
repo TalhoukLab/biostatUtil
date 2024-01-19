@@ -1,8 +1,8 @@
 Type: Package
 Package: biostatUtil
 Title: Utility Functions Used in Biostatistics Projects
-Version: 0.5.0
-Date: 2024-01-16
+Version: 0.5.1
+Date: 2024-01-19
 Authors@R: c(
     person("Derek", "Chiu", , "dchiu@bccrc.ca", role = c("aut", "cre")),
     person("Aline", "Talhouk", , "atalhouk@bccrc.ca", role = "aut"),
@@ -61,5 +61,5 @@ Suggests:
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.0
 Config/testthat/edition: 3
