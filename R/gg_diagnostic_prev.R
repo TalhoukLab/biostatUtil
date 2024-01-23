@@ -98,7 +98,7 @@ gg_prev_fixed <- function(se, sp, p, result = c("PPV", "NPV")) {
   ggplot(df, aes(x = p, y = {{ var }}, color = .data$label, linetype = .data$label)) +
     scale_x_continuous(n.breaks = 8) +
     scale_linetype_manual(values = c(2, 1, 2)) +
-    geom_line() +
+    geom_line(linewidth = 1) +
     labs(
       x = "Prevalence",
       y = result,
