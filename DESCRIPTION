@@ -22,6 +22,7 @@ Imports:
     coxphf,
     descr,
     dplyr (>= 1.0.0),
+    forcats,
     ggplot2,
     ggtext,
     grid,
