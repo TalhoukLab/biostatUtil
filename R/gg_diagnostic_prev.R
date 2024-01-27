@@ -77,7 +77,9 @@ gg_diagnostic_prev <- function(se, sp, p, result = c("PPV", "NPV")) {
 #'   p = seq(0.01, 0.30, 0.01),
 #'   result = "PPV"
 #' )
-gg_prev_fixed <- function(se, sp, p, result = c("PPV", "NPV")) {
+gg_prev_fixed <- function(se, sp, p, result = c("PPV", "NPV"),
+                          layout = c("lines", "band")) {
+  layout <- match.arg(layout)
   points <- length(p)
   df <- data.frame(
     se = rep(se, each = points),
@@ -95,18 +97,63 @@ gg_prev_fixed <- function(se, sp, p, result = c("PPV", "NPV")) {
   } else {
     var <- rlang::quo(npv)
   }
-  ggplot(df, aes(x = p, y = {{ var }}, color = .data$label, linetype = .data$label)) +
-    scale_x_continuous(n.breaks = 8) +
-    scale_linetype_manual(values = c(2, 1, 2)) +
-    geom_line(linewidth = 1) +
-    labs(
-      x = "Prevalence",
-      y = result,
-      title = paste(result, "vs. Prevalence for Fixed Sensitivity/Specificity")
-    ) +
-    theme_bw() +
-    theme(legend.title = element_blank(),
-          panel.grid.minor = element_blank())
+  if (layout == "lines") {
+    ggplot(df, aes(x = p, y = {{ var }}, color = .data$label, linetype = .data$label)) +
+      scale_x_continuous(n.breaks = 8) +
+      scale_linetype_manual(values = c(2, 1, 2)) +
+      geom_line(linewidth = 1) +
+      labs(
+        x = "Prevalence",
+        y = result,
+        title = paste(result, "vs. Prevalence for Fixed Sensitivity/Specificity")
+      ) +
+      theme_bw() +
+      theme(legend.title = element_blank(),
+            panel.grid.minor = element_blank())
+  } else if (layout == "band") {
+    df2 <- df %>%
+      tidyr::pivot_wider(id_cols = "p",
+                         names_from = "point",
+                         values_from = !!var)
+
+    aes_df <- df %>%
+      dplyr::distinct(label) %>%
+      dplyr::mutate(aes = ifelse(grepl("bound", label), "fill", "color")) %>%
+      tidyr::pivot_wider(
+        names_from = "aes",
+        values_from = "label",
+        values_fn = ~ paste(., collapse = "\n")
+      )
+
+    ggplot(df2,
+           aes(
+             x = p,
+             y = `pooled estimate`,
+             ymin = `lower bound`,
+             ymax = `upper bound`
+           )) +
+      geom_ribbon(
+        aes(fill = aes_df[["fill"]]),
+        color = "orange",
+        alpha = 0.3,
+        linetype = 2,
+        linewidth = 1
+      ) +
+      geom_line(aes(color = aes_df[["color"]]), linewidth = 1) +
+      scale_x_continuous(n.breaks = 8) +
+      scale_color_manual("", values = c("blue")) +
+      scale_fill_manual("", values = "orange") +
+      labs(
+        x = "Prevalence",
+        y = result,
+        title = paste(result, "vs. Prevalence for Fixed Sensitivity/Specificity")
+      ) +
+      theme_bw() +
+      theme(legend.title = element_blank(),
+            panel.grid.minor = element_blank(),
+            #legend.margin = margin(-0.1, 0.2, -0.1, 0.2, unit = "cm")
+            )
+  }
 }
 
 #' Calculate PPV as a function of sensitivity, specificty, and prevalence
