@@ -111,12 +111,11 @@ gg_prev_fixed <- function(se, sp, p, result = c("PPV", "NPV"),
       theme(legend.title = element_blank(),
             panel.grid.minor = element_blank())
   } else if (layout == "band") {
-    df2 <- df %>%
+    tmp1 <- df %>%
       tidyr::pivot_wider(id_cols = "p",
                          names_from = "point",
                          values_from = !!var)
-
-    aes_df <- df %>%
+    tmp2 <- df %>%
       dplyr::distinct(label) %>%
       dplyr::mutate(aes = ifelse(grepl("bound", label), "fill", "color")) %>%
       tidyr::pivot_wider(
@@ -124,6 +123,7 @@ gg_prev_fixed <- function(se, sp, p, result = c("PPV", "NPV"),
         values_from = "label",
         values_fn = ~ paste(., collapse = "\n")
       )
+    df2 <- dplyr::bind_cols(tmp1, tmp2)
 
     ggplot(df2,
            aes(
@@ -133,13 +133,13 @@ gg_prev_fixed <- function(se, sp, p, result = c("PPV", "NPV"),
              ymax = `upper bound`
            )) +
       geom_ribbon(
-        aes(fill = aes_df[["fill"]]),
+        aes(fill = fill),
         color = "orange",
         alpha = 0.3,
         linetype = 2,
         linewidth = 1
       ) +
-      geom_line(aes(color = aes_df[["color"]]), linewidth = 1) +
+      geom_line(aes(color = color), linewidth = 1) +
       scale_x_continuous(n.breaks = 8) +
       scale_color_manual("", values = c("blue")) +
       scale_fill_manual("", values = "orange") +
