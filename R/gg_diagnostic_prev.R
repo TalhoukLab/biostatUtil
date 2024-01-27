@@ -141,7 +141,7 @@ gg_prev_fixed <- function(se, sp, p, result = c("PPV", "NPV"),
       ) +
       geom_line(aes(color = color), linewidth = 1) +
       scale_x_continuous(n.breaks = 8) +
-      scale_color_manual("", values = c("blue")) +
+      scale_color_manual("", values = "blue") +
       scale_fill_manual("", values = "orange") +
       labs(
         x = "Prevalence",
@@ -149,10 +149,11 @@ gg_prev_fixed <- function(se, sp, p, result = c("PPV", "NPV"),
         title = paste(result, "vs. Prevalence for Fixed Sensitivity/Specificity")
       ) +
       theme_bw() +
-      theme(legend.title = element_blank(),
-            panel.grid.minor = element_blank(),
-            #legend.margin = margin(-0.1, 0.2, -0.1, 0.2, unit = "cm")
-            )
+      theme(
+        legend.title = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.margin = margin(-0.1, 0.2,-0.1, 0.2, unit = "cm")
+      )
   }
 }
 
