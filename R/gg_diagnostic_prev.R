@@ -141,8 +141,8 @@ gg_prev_fixed <- function(se, sp, p, result = c("PPV", "NPV"),
       ) +
       geom_line(aes(color = color), linewidth = 1) +
       scale_x_continuous(n.breaks = 8) +
-      scale_color_manual("", values = "blue") +
-      scale_fill_manual("", values = "orange") +
+      scale_color_manual(NULL, values = "blue") +
+      scale_fill_manual(NULL, values = "orange") +
       labs(
         x = "Prevalence",
         y = result,
