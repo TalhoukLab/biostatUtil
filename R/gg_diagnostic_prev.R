@@ -152,8 +152,7 @@ gg_prev_fixed <- function(se, sp, p, result = c("PPV", "NPV"),
       theme_bw() +
       theme(
         legend.title = element_blank(),
-        panel.grid.minor = element_blank(),
-        legend.margin = margin(-0.1, 0.2,-0.1, 0.2, unit = "cm")
+        panel.grid.minor = element_blank()
       )
   }
 }
