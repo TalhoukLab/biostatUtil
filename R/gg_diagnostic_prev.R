@@ -117,7 +117,7 @@ gg_prev_fixed <- function(se, sp, p, result = c("PPV", "NPV"),
                          values_from = !!var)
     tmp2 <- df %>%
       dplyr::distinct(label) %>%
-      dplyr::mutate(aes = ifelse(grepl("bound", label), "fill", "color")) %>%
+      dplyr::mutate(aes = ifelse(grepl("bound", label), "bounds", "estimate")) %>%
       tidyr::pivot_wider(
         names_from = "aes",
         values_from = "label",
@@ -133,13 +133,13 @@ gg_prev_fixed <- function(se, sp, p, result = c("PPV", "NPV"),
              ymax = `upper bound`
            )) +
       geom_ribbon(
-        aes(fill = fill, color = fill),
+        aes(fill = bounds, color = bounds),
         alpha = 0.3,
         linetype = 2,
         linewidth = 1,
         show.legend = FALSE
       ) +
-      geom_line(aes(color = color), linewidth = 1) +
+      geom_line(aes(color = estimate), linewidth = 1) +
       scale_x_continuous(n.breaks = 8) +
       scale_color_manual(NULL,
                          values = c("orange", "blue"),
