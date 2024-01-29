@@ -133,16 +133,17 @@ gg_prev_fixed <- function(se, sp, p, result = c("PPV", "NPV"),
              ymax = `upper bound`
            )) +
       geom_ribbon(
-        aes(fill = fill),
-        color = "orange",
+        aes(fill = fill, color = fill),
         alpha = 0.3,
         linetype = 2,
-        linewidth = 1
+        linewidth = 1,
+        show.legend = FALSE
       ) +
       geom_line(aes(color = color), linewidth = 1) +
       scale_x_continuous(n.breaks = 8) +
-      scale_color_manual(NULL, values = "blue") +
-      scale_fill_manual(NULL, values = "orange") +
+      scale_color_manual(NULL,
+                         values = c("orange", "blue"),
+                         aesthetics = c("colour", "fill")) +
       labs(
         x = "Prevalence",
         y = result,
