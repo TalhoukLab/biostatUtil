@@ -50,7 +50,7 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gg_diagnostic_prev</span><span class="op">(</span><span class="va">se</span>, <span class="va">sp</span>, <span class="va">p</span>, result <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PPV"</span>, <span class="st">"NPV"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">gg_prev_fixed</span><span class="op">(</span><span class="va">se</span>, <span class="va">sp</span>, <span class="va">p</span>, result <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PPV"</span>, <span class="st">"NPV"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">gg_prev_fixed</span><span class="op">(</span><span class="va">se</span>, <span class="va">sp</span>, <span class="va">p</span>, result <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PPV"</span>, <span class="st">"NPV"</span><span class="op">)</span>, layout <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lines"</span>, <span class="st">"band"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -73,6 +73,11 @@ sequence of values to plot along x-axis.</p></dd>
 
 <dt>result</dt>
 <dd><p>whether to show the PPV or NPV on the y-axis</p></dd>
+
+
+<dt>layout</dt>
+<dd><p>whether to plot confidence region using "lines" or a filled
+"band."</p></dd>
 
 </dl></div>
     <div class="section level2">
