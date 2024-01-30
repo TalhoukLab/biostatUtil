@@ -7,7 +7,7 @@
 \usage{
 gg_diagnostic_prev(se, sp, p, result = c("PPV", "NPV"))
 
-gg_prev_fixed(se, sp, p, result = c("PPV", "NPV"))
+gg_prev_fixed(se, sp, p, result = c("PPV", "NPV"), layout = c("lines", "band"))
 }
 \arguments{
 \item{se}{a vector of sensitivity estimates. For \code{gg_prev_fixed}, must be a
@@ -21,6 +21,9 @@ vector of length 3 for lower bound, pooled estimate, and upper bound. For
 sequence of values to plot along x-axis.}
 
 \item{result}{whether to show the PPV or NPV on the y-axis}
+
+\item{layout}{whether to plot confidence region using "lines" or a filled
+"band."}
 }
 \value{
 Graph of PPV or NPV by specificity, sensitivity, and prevalence.

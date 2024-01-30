@@ -68,6 +68,8 @@ gg_diagnostic_prev <- function(se, sp, p, result = c("PPV", "NPV")) {
 }
 
 #' @rdname gg_diagnostic_prev
+#' @param layout whether to plot confidence region using "lines" or a filled
+#' "band."
 #' @export
 #' @examples
 #'
@@ -116,8 +118,8 @@ gg_prev_fixed <- function(se, sp, p, result = c("PPV", "NPV"),
                          names_from = "point",
                          values_from = !!var)
     tmp2 <- df %>%
-      dplyr::distinct(label) %>%
-      dplyr::mutate(aes = ifelse(grepl("bound", label), "bounds", "estimate")) %>%
+      dplyr::distinct(.data$label) %>%
+      dplyr::mutate(aes = ifelse(grepl("bound", .data$label), "bounds", "estimate")) %>%
       tidyr::pivot_wider(
         names_from = "aes",
         values_from = "label",
@@ -128,18 +130,18 @@ gg_prev_fixed <- function(se, sp, p, result = c("PPV", "NPV"),
     ggplot(df2,
            aes(
              x = p,
-             y = `pooled estimate`,
-             ymin = `lower bound`,
-             ymax = `upper bound`
+             y = .data$`pooled estimate`,
+             ymin = .data$`lower bound`,
+             ymax = .data$`upper bound`
            )) +
       geom_ribbon(
-        aes(fill = bounds, color = bounds),
+        aes(fill = .data$bounds, color = .data$bounds),
         alpha = 0.3,
         linetype = 2,
         linewidth = 1,
         show.legend = FALSE
       ) +
-      geom_line(aes(color = estimate), linewidth = 1) +
+      geom_line(aes(color = .data$estimate), linewidth = 1) +
       scale_x_continuous(n.breaks = 8) +
       scale_color_manual(NULL,
                          values = c("orange", "blue"),
