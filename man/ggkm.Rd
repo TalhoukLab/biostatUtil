@@ -26,6 +26,7 @@ ggkm(
   bold_pval = FALSE,
   sig.level = 0.05,
   HR = TRUE,
+  hide_hr_labels = FALSE,
   use.firth = 1,
   hide.border = FALSE,
   expand.scale = TRUE,
@@ -94,6 +95,10 @@ significant at \code{sig.level}}
 
 \item{HR}{logical; if \code{TRUE} (default), the estimated hazard ratio and
 its 95\% confidence interval will be shown}
+
+\item{hide_hr_labels}{logical; if \code{TRUE} and there are only two strata, the
+strata labels are hidden from HR summary because there is only contrast
+being compared}
 
 \item{use.firth}{Firth's method for Cox regression is used if the percentage
 of censored cases exceeds \code{use.firth}. Setting \code{use.firth = 1}

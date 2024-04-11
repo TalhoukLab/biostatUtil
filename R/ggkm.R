@@ -34,6 +34,9 @@
 #' @param sig.level significance level; default 0.05
 #' @param HR logical; if `TRUE` (default), the estimated hazard ratio and
 #'   its 95% confidence interval will be shown
+#' @param hide_hr_labels logical; if `TRUE` and there are only two strata, the
+#'   strata labels are hidden from HR summary because there is only contrast
+#'   being compared
 #' @param use.firth Firth's method for Cox regression is used if the percentage
 #'   of censored cases exceeds `use.firth`. Setting `use.firth = 1`
 #'   (default) means Firth is never used, and `use.firth = -1` means Firth
@@ -72,7 +75,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
                  ystratalabs = NULL, cox.ref.grp = NULL, timeby = 5,
                  test = c("Log Rank", "Tarone-Ware"),
                  pval = TRUE, bold_pval = FALSE, sig.level = 0.05,
-                 HR = TRUE, use.firth = 1, hide.border = FALSE, expand.scale = TRUE,
+                 HR = TRUE, hide_hr_labels = FALSE, use.firth = 1, hide.border = FALSE, expand.scale = TRUE,
                  legend = FALSE, legend.xy = NULL, legend.direction = "horizontal",
                  line.y.increment = 0.05, size.plot = 11, size.summary = 3,
                  size.table = 3.5, size.table.labels = 11, digits = 3, ...) {
@@ -197,7 +200,8 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
       ystratalabs = ystratalabs,
       line.y.increment = line.y.increment,
       size.summary = size.summary,
-      lab.offset = lab.offset
+      lab.offset = lab.offset,
+      hide_hr_labels = hide_hr_labels
     )
   }
 
@@ -252,7 +256,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
 #' @noRd
 summarize_km <- function(fit, p, test, digits, bold_pval, sig.level, HR, cox.ref.grp,
                          use.firth, ystratalabs, line.y.increment, size.summary,
-                         lab.offset) {
+                         lab.offset, hide_hr_labels) {
   f <- eval(fit$call$formula)
   d <- eval(fit$call$data)
   res <- switch(
@@ -302,8 +306,10 @@ summarize_km <- function(fit, p, test, digits, bold_pval, sig.level, HR, cox.ref
     }
     for (i in seq_along(HRtxts)) {
       HRtxt <- HRtxts[i]
-      HRtxt <- paste0(HRtxt, " ~ ", cox.strata.labs[i + 1],
-                      " vs. ", cox.strata.labs[1])
+      if (!(hide_hr_labels & length(HRtxts) == 1)) {
+        HRtxt <- paste0(HRtxt, " ~ ", cox.strata.labs[i + 1],
+                        " vs. ", cox.strata.labs[1])
+      }
       p <- p + annotate(
         "text",
         x = 0.1 * max(fit$time),
