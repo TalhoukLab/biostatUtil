@@ -14,6 +14,8 @@
 #' @param args list of arguments for survival analyses
 #' @param digits number of digits to round p-value
 #' @name extract_results
+#' @return Extracted result that can be used in the form of inline text as part
+#'   of the Executive Summary.
 #' @author Derek Chiu
 #' @export
 extract_km <- function(data, var, outcome, args, digits = 3) {
@@ -24,8 +26,8 @@ extract_km <- function(data, var, outcome, args, digits = 3) {
 
   survival::survdiff(f, data = data) %>%
     getPval() %>%
-    round_small(method = "signif", digits = digits) %>%
-    paste0("KM curves, Log rank test p=", .)
+    scales::pvalue(accuracy = 10 ^ -digits, add_p = TRUE) %>%
+    paste0(toupper(outcome), ": " , .)
 }
 
 #' @rdname extract_results

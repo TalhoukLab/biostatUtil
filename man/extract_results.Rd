@@ -23,6 +23,10 @@ extract_cox(x, var, outcome)
 
 \item{x}{an object from result of \code{doCoxphGeneric()} or \code{doCoxphMultivariable()}}
 }
+\value{
+Extracted result that can be used in the form of inline text as part
+of the Executive Summary.
+}
 \description{
 Extract statistical test results for Executive Summary section at beginning
 of an RSF.
