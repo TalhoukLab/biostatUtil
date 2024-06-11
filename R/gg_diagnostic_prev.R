@@ -141,7 +141,7 @@ gg_prev_fixed <- function(se, sp, p, result = c("PPV", "NPV"),
         linewidth = 1,
         show.legend = FALSE
       ) +
-      geom_line(aes(color = .data$estimate), linewidth = 1) +
+      geom_line(aes(color = .data$estimate), linewidth = 1, show.legend = TRUE) +
       scale_x_continuous(n.breaks = 8) +
       scale_color_manual(NULL,
                          values = c("orange", "blue"),
