@@ -30,7 +30,7 @@
 #' @param ... additional arguments to `plot`
 #' @author Samuel Leung
 #' @references
-#'   http://courses.nus.edu.sg/course/stacar/internet/st3242/handouts/notes2.pdf
+#'   \url{http://courses.nus.edu.sg/course/stacar/internet/st3242/handouts/notes2.pdf}
 #' @seealso [plotKM()]
 #' @export
 plotKMDetail <- function(input.data, surv.formula,

@@ -40,7 +40,7 @@ se_effects <- c(sdFromCI(0.43, 0.13, 1.37)$sd,
 metagen(effects, se_effects, studlab = studlab, sm = "HR", comb.fixed = TRUE)
 }
 \references{
-http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1920534/
+\url{http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1920534/}
 }
 \author{
 Aline Talhouk, Derek Chiu

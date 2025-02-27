@@ -98,7 +98,7 @@ isFirstLetterUpperCase <- function(x) {
 #' @return A character string with every word's first letter capitalized.
 #' @author Samuel Leung
 #' @references
-#'   http://stackoverflow.com/questions/6364783/capitalize-the-first-letter-of-both-words-in-a-two-word-string
+#'  \url{http://stackoverflow.com/questions/6364783/capitalize-the-first-letter-of-both-words-in-a-two-word-string}
 #'
 #' @export
 #' @examples

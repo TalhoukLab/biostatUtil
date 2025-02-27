@@ -19,7 +19,7 @@
 #' @return The final sample size needed in the new model using the supplied
 #'   input parameters.
 #' @author Derek Chiu
-#' @references https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4603804/
+#' @references \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4603804/}
 #' @export
 ssize_D <- function(fit, D = NULL, cens = NULL, p = 0.1, alpha = 0.05,
                     power = 0.8, delta = 0.25,

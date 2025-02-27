@@ -14,7 +14,7 @@
 #' \item{sd}{standard deviation of log HR}
 #' \item{pval}{estimated p-value}
 #' @author Aline Talhouk, Derek Chiu
-#' @references http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1920534/
+#' @references \url{http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1920534/}
 #' @export
 #' @examples
 #' library(meta)

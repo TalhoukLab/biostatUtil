@@ -10,7 +10,8 @@
 #' @return The output file name will have today's date appended at the end.
 #'
 #' @author Derek Chiu
-#' @references https://bookdown.org/yihui/rmarkdown-cookbook/custom-knit.html
+#' @references
+#'   \url{https://bookdown.org/yihui/rmarkdown-cookbook/custom-knit.html}
 #' @export
 knit_with_date <- (function(input, sep = "_", ...) {
   if (!requireNamespace("rmarkdown", quietly = TRUE)) {

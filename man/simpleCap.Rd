@@ -27,7 +27,7 @@ simpleCap("high grade serous carcinoma")
 simpleCap("ovarian cancer", first.only = TRUE)
 }
 \references{
-http://stackoverflow.com/questions/6364783/capitalize-the-first-letter-of-both-words-in-a-two-word-string
+\url{http://stackoverflow.com/questions/6364783/capitalize-the-first-letter-of-both-words-in-a-two-word-string}
 }
 \author{
 Samuel Leung

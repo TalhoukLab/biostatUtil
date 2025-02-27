@@ -11,7 +11,7 @@
 #' @param n sample size in each group
 #' @param alpha significance level
 #' @references
-#'   https://www.ncss.com/wp-content/themes/ncss/pdf/Procedures/PASS/Tests_for_Multiple_Proportions_in_a_One-Way_Design.pdf
+#'   \url{https://www.ncss.com/wp-content/themes/ncss/pdf/Procedures/PASS/Tests_for_Multiple_Proportions_in_a_One-Way_Design.pdf}
 #' @export
 #' @examples
 #' ## Examples from PASS Sample Size Software reference

@@ -46,5 +46,5 @@ sample_size_prop(power = 0.9038, props = c(0.4, 0.3, 0.1))
 sample_size_prop(props = c(0.475, 0.2, 0.2, 0.2), n = 25)
 }
 \references{
-https://www.ncss.com/wp-content/themes/ncss/pdf/Procedures/PASS/Tests_for_Multiple_Proportions_in_a_One-Way_Design.pdf
+\url{https://www.ncss.com/wp-content/themes/ncss/pdf/Procedures/PASS/Tests_for_Multiple_Proportions_in_a_One-Way_Design.pdf}
 }

@@ -47,7 +47,7 @@ The sample size calculation uses a discrimination measured based on
 multivariable prognostic time-to-event models.
 }
 \references{
-https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4603804/
+\url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4603804/}
 }
 \author{
 Derek Chiu

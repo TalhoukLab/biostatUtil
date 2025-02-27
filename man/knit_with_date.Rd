@@ -22,7 +22,7 @@ the default behaviour of the Knit button in R Studio. It is intended to be
 passed in the YAML \verb{knit:} field.
 }
 \references{
-https://bookdown.org/yihui/rmarkdown-cookbook/custom-knit.html
+\url{https://bookdown.org/yihui/rmarkdown-cookbook/custom-knit.html}
 }
 \author{
 Derek Chiu
