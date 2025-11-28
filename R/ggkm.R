@@ -238,10 +238,10 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
                                        hjust = 1),
         legend.position = "none"
       ) +
-      labs(y = NULL, title = "Number at risk")
+      labs(y = NULL, title = "Number at risk") +
+      patchwork::plot_layout(tag_level = "new")
 
-    p <- patchwork::wrap_plots(p, data.table, heights = c(4, 1)) %>%
-      purrr::modify_in(list(2), ~ . + patchwork::plot_layout(tag_level = "new"))
+    p <- patchwork::wrap_plots(p, data.table, heights = c(4, 1))
     if (returns) {
       plot(p)
     } else {
