@@ -1,0 +1,272 @@
+# Package index
+
+## All functions
+
+- [`PCAplot()`](https://talhouklab.github.io/biostatUtil/reference/PCAplot.md)
+  : Plot Principal Components
+
+- [`R2_to_D()`](https://talhouklab.github.io/biostatUtil/reference/R2_to_D.md)
+  : Convert R2 to D
+
+- [`SummaryStatsBy()`](https://talhouklab.github.io/biostatUtil/reference/SummaryStatsBy.md)
+  : Generate summary statistics
+
+- [`Xunivcoxph()`](https://talhouklab.github.io/biostatUtil/reference/Xunivcoxph.md)
+  : Univariate cox proprtional hazards model
+
+- [`addTableNumber()`](https://talhouklab.github.io/biostatUtil/reference/addTableNumber.md)
+  : Add table number
+
+- [`assessSurvTime()`](https://talhouklab.github.io/biostatUtil/reference/assessSurvTime.md)
+  : Assess survival time
+
+- [`barplotSum()`](https://talhouklab.github.io/biostatUtil/reference/barplotSum.md)
+  : Annotated Barplot
+
+- [`best_cut()`](https://talhouklab.github.io/biostatUtil/reference/best_cut.md)
+  : Find the best cutpoint for a covariate
+
+- [`binaryCM()`](https://talhouklab.github.io/biostatUtil/reference/binaryCM.md)
+  : Confusion matrix summaries
+
+- [`binaryCMAsHTML()`](https://talhouklab.github.io/biostatUtil/reference/binaryCMAsHTML.md)
+  : Confusion matrix results in HTML
+
+- [`biostatUtil-package`](https://talhouklab.github.io/biostatUtil/reference/biostatUtil.md)
+  [`biostatUtil`](https://talhouklab.github.io/biostatUtil/reference/biostatUtil.md)
+  : biostatUtil: utility functions for biostatistical projects
+
+- [`bootMean()`](https://talhouklab.github.io/biostatUtil/reference/bootMean.md)
+  : Mean and bootstrap confidence interval
+
+- [`boxplotSum()`](https://talhouklab.github.io/biostatUtil/reference/boxplotSum.md)
+  : Annotated Boxplot
+
+- [`build_cuts()`](https://talhouklab.github.io/biostatUtil/reference/build_cuts.md)
+  : Build cutpoint variables
+
+- [`censor_date()`](https://talhouklab.github.io/biostatUtil/reference/censor_date.md)
+  : Date of censoring
+
+- [`chr_to_date()`](https://talhouklab.github.io/biostatUtil/reference/chr_to_date.md)
+  : Change character to date
+
+- [`cleanDate()`](https://talhouklab.github.io/biostatUtil/reference/cleanDate.md)
+  : Clean dates
+
+- [`coxphOut()`](https://talhouklab.github.io/biostatUtil/reference/coxphOut.md)
+  : Nice output from Cox regression object
+
+- [`addToDate()`](https://talhouklab.github.io/biostatUtil/reference/date_compute.md)
+  [`diffDate()`](https://talhouklab.github.io/biostatUtil/reference/date_compute.md)
+  [`compareDate()`](https://talhouklab.github.io/biostatUtil/reference/date_compute.md)
+  : Date computations
+
+- [`maxDate()`](https://talhouklab.github.io/biostatUtil/reference/date_extremes.md)
+  [`minDate()`](https://talhouklab.github.io/biostatUtil/reference/date_extremes.md)
+  [`maxDateArray()`](https://talhouklab.github.io/biostatUtil/reference/date_extremes.md)
+  [`minDateArray()`](https://talhouklab.github.io/biostatUtil/reference/date_extremes.md)
+  : Latest and Earliest Dates
+
+- [`design_matrix()`](https://talhouklab.github.io/biostatUtil/reference/design_matrix.md)
+  : Design Matrix with interactions
+
+- [`diff_years()`](https://talhouklab.github.io/biostatUtil/reference/diff_years.md)
+  : Date difference in years
+
+- [`doBarplot()`](https://talhouklab.github.io/biostatUtil/reference/doBarplot.md)
+  : Barplot with counts
+
+- [`doBoxplotAmongSubtypes()`](https://talhouklab.github.io/biostatUtil/reference/doBoxplotAmongSubtypes.md)
+  : Do a boxplot among subtypes
+
+- [`doCohortCharacteristics()`](https://talhouklab.github.io/biostatUtil/reference/doCohortCharacteristics.md)
+  : Generate cohort characteristics
+
+- [`doCoxphGeneric()`](https://talhouklab.github.io/biostatUtil/reference/doCoxph.md)
+  [`doCoxphMultivariable()`](https://talhouklab.github.io/biostatUtil/reference/doCoxph.md)
+  : Fit a Cox proportional hazards regression model
+
+- [`doHist()`](https://talhouklab.github.io/biostatUtil/reference/doHist.md)
+  : Do histogram with median
+
+- [`doInteractionCox()`](https://talhouklab.github.io/biostatUtil/reference/doInteractionCox.md)
+  : Do interaction test with cox model likelihood ratio test only - two
+  terms only
+
+- [`doJitterplotAmongSubtypes()`](https://talhouklab.github.io/biostatUtil/reference/doJitterplotAmongSubtypes.md)
+  : Do a jitterplot among subtypes
+
+- [`doKMPlots()`](https://talhouklab.github.io/biostatUtil/reference/doKMPlots.md)
+  : Make Kaplan-Meier plots
+
+- [`escapeForGrep()`](https://talhouklab.github.io/biostatUtil/reference/escapeForGrep.md)
+  : Escape string for regular expression
+
+- [`exploreData()`](https://talhouklab.github.io/biostatUtil/reference/exploreData.md)
+  : Graphical Exploration of a Dataset
+
+- [`extract_km()`](https://talhouklab.github.io/biostatUtil/reference/extract_results.md)
+  [`extract_cox()`](https://talhouklab.github.io/biostatUtil/reference/extract_results.md)
+  : Extract results for executive summary
+
+- [`findCutpointByCoxph()`](https://talhouklab.github.io/biostatUtil/reference/findCutpointByCoxph.md)
+  : Find cutpoint by Cox model statistics
+
+- [`formatDate()`](https://talhouklab.github.io/biostatUtil/reference/formatDate.md)
+  : Format a date.
+
+- [`formatNA()`](https://talhouklab.github.io/biostatUtil/reference/formatNA.md)
+  : Missing Value Formatting
+
+- [`freqTable()`](https://talhouklab.github.io/biostatUtil/reference/freqTable.md)
+  : Generate a Frequency Table
+
+- [`g_legend()`](https://talhouklab.github.io/biostatUtil/reference/g_legend.md)
+  : Generate a legend
+
+- [`geoMean()`](https://talhouklab.github.io/biostatUtil/reference/geoMean.md)
+  : Geometric mean
+
+- [`getFormat()`](https://talhouklab.github.io/biostatUtil/reference/getFormat.md)
+  : Get date format from character text
+
+- [`getPval()`](https://talhouklab.github.io/biostatUtil/reference/getPval.md)
+  : Get the p-value
+
+- [`gg_diagnostic_prev()`](https://talhouklab.github.io/biostatUtil/reference/gg_diagnostic_prev.md)
+  [`gg_prev_fixed()`](https://talhouklab.github.io/biostatUtil/reference/gg_diagnostic_prev.md)
+  : Diagnostic Prevalence
+
+- [`ggkm()`](https://talhouklab.github.io/biostatUtil/reference/ggkm.md)
+  : Kaplan-Meier Plots using ggplot
+
+- [`grhoTests()`](https://talhouklab.github.io/biostatUtil/reference/grhoTests.md)
+  : Summary of Survival Curve differences using G-rho tests
+
+- [`histSum()`](https://talhouklab.github.io/biostatUtil/reference/histSum.md)
+  : Summary histogram
+
+- [`indepTests()`](https://talhouklab.github.io/biostatUtil/reference/indepTests.md)
+  : Tests for Independence in Contingency Tables
+
+- [`indexOf()`](https://talhouklab.github.io/biostatUtil/reference/indexOf.md)
+  : Find occurences of string within another string
+
+- [`isFirstLetterUpperCase()`](https://talhouklab.github.io/biostatUtil/reference/isFirstLetterUpperCase.md)
+  : Is the first letter uppercase?
+
+- [`kappaBootCI()`](https://talhouklab.github.io/biostatUtil/reference/kappaBootCI.md)
+  : Bootstrapped confidence interval for kappa statistic.
+
+- [`knit_with_date()`](https://talhouklab.github.io/biostatUtil/reference/knit_with_date.md)
+  : Knit R markdown report with today's date
+
+- [`lifetable()`](https://talhouklab.github.io/biostatUtil/reference/lifetable.md)
+  : Generate lifetables for multiclass variables
+
+- [`logistfPrint()`](https://talhouklab.github.io/biostatUtil/reference/logistfPrint.md)
+  : Print summaries from logistf
+
+- [`medianCtr()`](https://talhouklab.github.io/biostatUtil/reference/medianCtr.md)
+  : Median center rows
+
+- [`ms_condition()`](https://talhouklab.github.io/biostatUtil/reference/ms_condition.md)
+  : Sample count condition for MS analyses
+
+- [`ms_boxplot()`](https://talhouklab.github.io/biostatUtil/reference/ms_plot.md)
+  [`ms_mean_var()`](https://talhouklab.github.io/biostatUtil/reference/ms_plot.md)
+  : Plots for MS analyses
+
+- [`ms_process()`](https://talhouklab.github.io/biostatUtil/reference/ms_process.md)
+  : Process mass spectrometry data
+
+- [`ms_summarize()`](https://talhouklab.github.io/biostatUtil/reference/ms_summarize.md)
+  : Summarize mass spectrometry data
+
+- [`ms_top()`](https://talhouklab.github.io/biostatUtil/reference/ms_top.md)
+  : Top variables in mass spectrometry analysis
+
+- [`multiClassCM()`](https://talhouklab.github.io/biostatUtil/reference/multiClassCM.md)
+  : Confusion matrix summaries
+
+- [`multiplot()`](https://talhouklab.github.io/biostatUtil/reference/multiplot.md)
+  : Multiple plots
+
+- [`name_cuts()`](https://talhouklab.github.io/biostatUtil/reference/name_cuts.md)
+  : Name cutpoint variables
+
+- [`numericToDate()`](https://talhouklab.github.io/biostatUtil/reference/numericToDate.md)
+  : Change numeric to date
+
+- [`pairwiseCor()`](https://talhouklab.github.io/biostatUtil/reference/pairwiseCor.md)
+  : Pairwise Correlations
+
+- [`parse_rd()`](https://talhouklab.github.io/biostatUtil/reference/parse_rd.md)
+  : Parse all Rd files in package
+
+- [`colPercent()`](https://talhouklab.github.io/biostatUtil/reference/percents.md)
+  [`rowPercent()`](https://talhouklab.github.io/biostatUtil/reference/percents.md)
+  [`rowColPercent()`](https://talhouklab.github.io/biostatUtil/reference/percents.md)
+  [`colPercentAsHTML()`](https://talhouklab.github.io/biostatUtil/reference/percents.md)
+  [`rowPercentAsHTML()`](https://talhouklab.github.io/biostatUtil/reference/percents.md)
+  [`rowColPercentAsHTML()`](https://talhouklab.github.io/biostatUtil/reference/percents.md)
+  : Row and Column Percentages
+
+- [`plotKM()`](https://talhouklab.github.io/biostatUtil/reference/plotKM.md)
+  : Plot Kaplan-Meier curves
+
+- [`plotKMDetail()`](https://talhouklab.github.io/biostatUtil/reference/plotKMDetail.md)
+  : Plot detailed Kaplan-Meier curves
+
+- [`plotSchoenfeld()`](https://talhouklab.github.io/biostatUtil/reference/plotSchoenfeld.md)
+  : Do Schoenfeld residual plot
+
+- [`prettyCoxph()`](https://talhouklab.github.io/biostatUtil/reference/prettyCoxph.md)
+  : Nicer outputs from coxph model fits
+
+- [`pro`](https://talhouklab.github.io/biostatUtil/reference/pro.md) :
+  Protein file from Mass Spectrometry experiment
+
+- [`psm`](https://talhouklab.github.io/biostatUtil/reference/psm.md) :
+  Peptide-Spectrum Match (PSM) file from Mass Spectrometry experiment
+
+- [`remove_dup()`](https://talhouklab.github.io/biostatUtil/reference/remove_dup.md)
+  : Remove duplicates
+
+- [`round_small()`](https://talhouklab.github.io/biostatUtil/reference/round_small.md)
+  : Rounding of Small Numbers
+
+- [`sample_size_prop()`](https://talhouklab.github.io/biostatUtil/reference/sample_size_prop.md)
+  : Sample Size for Multiple Proportions in One-Way Design
+
+- [`sdFromCI()`](https://talhouklab.github.io/biostatUtil/reference/sdFromCI.md)
+  : Standard deviation of log hazard ratio
+
+- [`sem()`](https://talhouklab.github.io/biostatUtil/reference/sem.md) :
+  Standard error of the mean
+
+- [`simpleCap()`](https://talhouklab.github.io/biostatUtil/reference/simpleCap.md)
+  : Simple capitalization
+
+- [`ssize_D()`](https://talhouklab.github.io/biostatUtil/reference/ssize_D.md)
+  : Sample Size Calculation
+
+- [`minWithMissing()`](https://talhouklab.github.io/biostatUtil/reference/statsWithMissing.md)
+  [`maxWithMissing()`](https://talhouklab.github.io/biostatUtil/reference/statsWithMissing.md)
+  [`meanWithMissing()`](https://talhouklab.github.io/biostatUtil/reference/statsWithMissing.md)
+  [`sumWithMissing()`](https://talhouklab.github.io/biostatUtil/reference/statsWithMissing.md)
+  [`prodWithMissing()`](https://talhouklab.github.io/biostatUtil/reference/statsWithMissing.md)
+  [`ratioWithMissing()`](https://talhouklab.github.io/biostatUtil/reference/statsWithMissing.md)
+  : Calculates statistics with specifying missing values
+
+- [`summaryAsHTML()`](https://talhouklab.github.io/biostatUtil/reference/summaryAsHTML.md)
+  : Summary table in HTML format
+
+- [`tableAsHTML()`](https://talhouklab.github.io/biostatUtil/reference/tableAsHTML.md)
+  : Table as HTML format
+
+- [`wrap_ggkm()`](https://talhouklab.github.io/biostatUtil/reference/wrap_ggkm.md)
+  :
+
+  Wrap list of `ggkm` plots into a single patchwork
