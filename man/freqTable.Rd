@@ -55,7 +55,7 @@ freqTable(x, plot = TRUE)
 freqTable(x, missing = c("a", "e", "i", "o", "u"), round = 2)
 }
 \seealso{
-\code{\link[=freq]{freq()}}
+\code{\link[descr:freq]{descr::freq()}}
 }
 \author{
 Derek Chiu
