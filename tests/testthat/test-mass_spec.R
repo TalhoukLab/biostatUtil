@@ -19,7 +19,8 @@ test_that("ms_process works with/without controls and sample ids", {
 test_that("ms_boxplot shows boxplots of vsn values across samples", {
   bp <- ms_boxplot(dat1)
   expect_length(bp, 3)
-  expect_equal(unique(unlist(lapply(bp, class))), c("gg", "ggplot"))
+  expect_equal(unique(unlist(lapply(bp, class))),
+               c("ggplot2::ggplot", "ggplot", "ggplot2::gg", "S7_object", "gg"))
 })
 
 # Vector of groups
@@ -29,7 +30,8 @@ test_that("ms_mean_var shows mean variance relationship", {
   mv <- ms_mean_var(dat1, g = g,
                     title = c("No Flag", "CLK1 N-Flagged", "CLK1 Untagged"))
   expect_length(mv, length(g) + 1)
-  expect_equal(unique(unlist(lapply(mv, class))), c("gg", "ggplot"))
+  expect_equal(unique(unlist(lapply(mv, class))),
+               c("ggplot2::ggplot", "ggplot", "ggplot2::gg", "S7_object", "gg"))
 })
 
 test_that("ms_mean_var takes title from g if none provided", {
