@@ -85,7 +85,7 @@ test_that("margin widths adapt to length of predictor variable labels", {
 test_that("HR is shown for all levels of multilevel predictor", {
   lung$ph.ecog.f <- factor(lung$ph.ecog)
   p6 <- doKMPlots(lung, "time", "status", "ph.ecog.f", "PH.ECOG",
-                  use.ggkm = TRUE, timeby = 200, use.firth = 0.8,
+                  use.ggkm = TRUE, CI = FALSE, timeby = 200, use.firth = 0.8,
                   cox.ref.group = "0")
   expect_error(p6, NA)
 })
