@@ -15,7 +15,7 @@ Description: Provides some commonly used utility functions used in
 License: GPL-2
 URL: https://talhouklab.github.io/biostatUtil/
 Depends: 
-    R (>= 4.0.0)
+    R (>= 4.1.0)
 Imports: 
     assertthat,
     broom,
