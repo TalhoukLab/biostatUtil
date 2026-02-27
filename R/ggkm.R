@@ -58,6 +58,8 @@
 #' @param digits number of digits to round: p-values digits=number of
 #'   significant digits, HR digits=number of digits after decimal point NOT
 #'   significant digits
+#' @param heights vector of relative heights for KM plot and risk table,
+#'   respectively
 #' @param ... additional arguments to other methods
 #' @return A kaplan-meier plot with optional annotations for hazard ratios, log
 #'   rank test p-values, and risk table counts for each stratum.
@@ -78,7 +80,8 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
                  HR = TRUE, hide_hr_labels = FALSE, use.firth = 1, hide.border = FALSE, expand.scale = TRUE,
                  legend = FALSE, legend.xy = NULL, legend.direction = "horizontal",
                  line.y.increment = 0.05, size.plot = 11, size.summary = 3,
-                 size.table = 3.5, size.table.labels = 11, digits = 3, ...) {
+                 size.table = 3.5, size.table.labels = 11, digits = 3,
+                 heights = c(4, 1), ...) {
   test <- match.arg(test)
   if (test == "Tarone-Ware" && !requireNamespace("coin", quietly = TRUE)) {
     stop("Package \"coin\" is required for Tarone-Ware test. Please install it.",
@@ -241,7 +244,7 @@ ggkm <- function(sfit, sfit2 = NULL, table = TRUE, returns = TRUE, marks = TRUE,
       labs(y = NULL, title = "Number at risk") +
       patchwork::plot_layout(tag_level = "new")
 
-    p <- patchwork::wrap_plots(p, data.table, heights = c(4, 1))
+    p <- patchwork::wrap_plots(p, data.table, heights = heights)
     if (returns) {
       plot(p)
     } else {

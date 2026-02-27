@@ -39,6 +39,7 @@ ggkm(
   size.table = 3.5,
   size.table.labels = 11,
   digits = 3,
+  heights = c(4, 1),
   ...
 )
 }
@@ -132,6 +133,9 @@ not shown.}
 \item{digits}{number of digits to round: p-values digits=number of
 significant digits, HR digits=number of digits after decimal point NOT
 significant digits}
+
+\item{heights}{vector of relative heights for KM plot and risk table,
+respectively}
 
 \item{...}{additional arguments to other methods}
 }
