@@ -4,10 +4,14 @@
 \alias{wrap_ggkm}
 \title{Wrap list of \code{ggkm} plots into a single patchwork}
 \usage{
-wrap_ggkm(x, ...)
+wrap_ggkm(x, ncol = 1, nrow = NULL, ...)
 }
 \arguments{
 \item{x}{list of \code{ggkm()} figures}
+
+\item{ncol}{number of columns to wrap plots into. Default is 1.}
+
+\item{nrow}{number of rows to wrap plots into.}
 
 \item{...}{additional annotation parameters passed to
 \code{\link[patchwork:plot_annotation]{patchwork::plot_annotation()}}}
