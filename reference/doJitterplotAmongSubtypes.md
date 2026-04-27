@@ -80,5 +80,4 @@ Samuel Leung
 ``` r
 doJitterplotAmongSubtypes(mtcars, "Boxplot of qsec vs. vs", "qsec", "QSEC",
 "vs", "VS")
-#> Warning: cannot compute exact p-value with ties
 ```

@@ -57,8 +57,9 @@ Aline Talhouk, Derek Chiu
 
 ``` r
 library(meta)
+#> Loading required package: metabook
 #> Loading required package: metadat
-#> Loading 'meta' package (version 8.2-1).
+#> Loading 'meta' package (version 8.3-0).
 #> Type 'help(meta)' for a brief overview.
 studlab <- c("PORTEC", "Leuven", "TCGA", "Billingsley")
 effects <- log(c(0.43, 0.18, 0.12, 0.37))

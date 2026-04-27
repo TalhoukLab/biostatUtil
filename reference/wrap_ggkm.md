@@ -6,7 +6,7 @@ wrapped into a single figure.
 ## Usage
 
 ``` r
-wrap_ggkm(x, ...)
+wrap_ggkm(x, ncol = 1, nrow = NULL, ...)
 ```
 
 ## Arguments
@@ -16,6 +16,14 @@ wrap_ggkm(x, ...)
   list of
   [`ggkm()`](https://talhouklab.github.io/biostatUtil/reference/ggkm.md)
   figures
+
+- ncol:
+
+  number of columns to wrap plots into. Default is 1.
+
+- nrow:
+
+  number of rows to wrap plots into.
 
 - ...:
 
