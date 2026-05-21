@@ -79,7 +79,7 @@ A data frame with the following columns
 
 ## See also
 
-[`descr::freq()`](https://rdrr.io/pkg/descr/man/freq.html)
+[`freq()`](https://rdrr.io/pkg/descr/man/freq.html)
 
 ## Author
 

@@ -46,8 +46,8 @@ multiClassCM(
 - method:
 
   method for obtaining confidence intervals for binomial probabilities.
-  See [`Hmisc::binconf`](https://rdrr.io/pkg/Hmisc/man/binconf.html) for
-  details.
+  See [`Hmisc::binconf()`](https://rdrr.io/pkg/Hmisc/man/binconf.html)
+  for details.
 
 ## Value
 

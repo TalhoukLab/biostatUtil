@@ -34,6 +34,8 @@ Useful links:
 
 Authors:
 
+- Derek Chiu <dchiu@bccrc.ca>
+
 - Aline Talhouk <atalhouk@bccrc.ca>
 
 - Samuel Leung <Samuel.Leung@vch.ca>
