@@ -1,4 +1,4 @@
-mtcars$vs <- as.factor(mtcars$vs)
+mtcars$cyl <- as.factor(mtcars$cyl)
 
 test_that("doBarplot works", {
   expect_error(doBarplot(mtcars, "cyl", "title = Number of cylinders"), NA)
@@ -13,10 +13,10 @@ test_that("doBoxplotAmongSubtypes works with correct var names", {
                                       "gar", "GEAR"))
 })
 
-test_that("doBoxplotAmongSubtypes works with factors, Wilcox test warning", {
-  expect_warning(doBoxplotAmongSubtypes(mtcars, "Boxplot of qsec vs. vs",
+test_that("doBoxplotAmongSubtypes works with factors", {
+  expect_warning(doBoxplotAmongSubtypes(mtcars, "Boxplot of qsec vs. cyl",
                                         "qsec", "QSEC",
-                                        "vs", "VS"))
+                                        "cyl", "CYL"), NA)
 })
 
 test_that("doHist works with or without title", {
@@ -24,10 +24,10 @@ test_that("doHist works with or without title", {
   expect_error(doHist(mtcars, "mpg", show.title = FALSE), NA)
 })
 
-test_that("doJitterplotAmongSubtypes works albeit p-value warning", {
-  expect_warning(doJitterplotAmongSubtypes(mtcars, "Boxplot of qsec vs. vs",
+test_that("doJitterplotAmongSubtypes works with factors", {
+  expect_warning(doJitterplotAmongSubtypes(mtcars, "Boxplot of qsec vs. cyl",
                                            "qsec", "QSEC",
-                                           "vs", "VS"))
+                                           "cyl", "CYL"), NA)
 })
 
 dev.off()
