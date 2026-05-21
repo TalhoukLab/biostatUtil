@@ -26,8 +26,8 @@ Aline Talhouk
 mtcars$vs <- as.factor(mtcars$vs)
 mtcars$am <- as.factor(mtcars$am)
 exploreData(mtcars)
-#> agg_record_253876a59649 
-#>                       2 
+#> agg_record_2560cf93141 
+#>                      2 
 file.remove("DataSummary.pdf")
 #> [1] TRUE
 ```

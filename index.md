@@ -9,6 +9,7 @@ and data visualization.
 You can install biostatUtil from GitHub with:
 
 ``` r
+
 remotes::install_github("TalhoukLab/biostatUtil")
 ```
 
