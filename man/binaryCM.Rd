@@ -86,9 +86,9 @@ binaryCM(x, y, num.boot = 500, conf.level = 0.90)
 binaryCM(x, y, digits = 2)
 }
 \seealso{
-Other confusion matrix functions: 
-\code{\link{binaryCMAsHTML}()},
-\code{\link{multiClassCM}()}
+Other confusion matrix functions:
+\code{\link[=binaryCMAsHTML]{binaryCMAsHTML()}},
+\code{\link[=multiClassCM]{multiClassCM()}}
 }
 \author{
 Aline Talhouk, Derek Chiu

@@ -59,11 +59,11 @@ ms_condition(A, treatment = c("_2", "_3"), control = "_1", condition = "MRC")
 ms_condition(A, treatment = c("_2", "_3"), control = "_1", condition = "MC")
 }
 \seealso{
-Other Mass Spectrometry functions: 
+Other Mass Spectrometry functions:
 \code{\link{ms_plot}},
-\code{\link{ms_process}()},
-\code{\link{ms_summarize}()},
-\code{\link{ms_top}()}
+\code{\link[=ms_process]{ms_process()}},
+\code{\link[=ms_summarize]{ms_summarize()}},
+\code{\link[=ms_top]{ms_top()}}
 }
 \author{
 Derek Chiu

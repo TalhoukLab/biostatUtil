@@ -54,9 +54,9 @@ FALSE)
 htmlTable(results.no.ci)
 }
 \seealso{
-Other confusion matrix functions: 
-\code{\link{binaryCM}()},
-\code{\link{multiClassCM}()}
+Other confusion matrix functions:
+\code{\link[=binaryCM]{binaryCM()}},
+\code{\link[=multiClassCM]{multiClassCM()}}
 }
 \author{
 Samuel Leung, Derek Chiu

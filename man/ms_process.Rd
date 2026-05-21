@@ -42,11 +42,11 @@ Process mass spectrometry data for filtering out contaminant samples,
 manipulating variables, removing duplicates, and more.
 }
 \seealso{
-Other Mass Spectrometry functions: 
-\code{\link{ms_condition}()},
+Other Mass Spectrometry functions:
+\code{\link[=ms_condition]{ms_condition()}},
 \code{\link{ms_plot}},
-\code{\link{ms_summarize}()},
-\code{\link{ms_top}()}
+\code{\link[=ms_summarize]{ms_summarize()}},
+\code{\link[=ms_top]{ms_top()}}
 }
 \author{
 Derek Chiu

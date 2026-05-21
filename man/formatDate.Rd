@@ -45,11 +45,11 @@ formatDate(8, 7, 2011, date.format = "DD.MM.YYYY", sep = "-")
 formatDate(10, 1, 2015, date.format = "MMM.DD.YYYY", sep = "-")
 }
 \seealso{
-Other date formatting functions: 
-\code{\link{chr_to_date}()},
-\code{\link{cleanDate}()},
-\code{\link{getFormat}()},
-\code{\link{numericToDate}()}
+Other date formatting functions:
+\code{\link[=chr_to_date]{chr_to_date()}},
+\code{\link[=cleanDate]{cleanDate()}},
+\code{\link[=getFormat]{getFormat()}},
+\code{\link[=numericToDate]{numericToDate()}}
 }
 \author{
 Samuel Leung, Derek Chiu

@@ -40,11 +40,11 @@ cleanDate(11091991, original.format = "DD.MM.YYYY", preferred.format = "YYYY.MMM
 cleanDate(11091991, original.format = "DD.MM.YYYY", preferred.format = "YYYY.MMM.DD", sep = "-")
 }
 \seealso{
-Other date formatting functions: 
-\code{\link{chr_to_date}()},
-\code{\link{formatDate}()},
-\code{\link{getFormat}()},
-\code{\link{numericToDate}()}
+Other date formatting functions:
+\code{\link[=chr_to_date]{chr_to_date()}},
+\code{\link[=formatDate]{formatDate()}},
+\code{\link[=getFormat]{getFormat()}},
+\code{\link[=numericToDate]{numericToDate()}}
 }
 \author{
 Samuel Leung, Derek Chiu

@@ -35,11 +35,11 @@ the vsn transformed values and mean-sd plots for each treatment group.
 mean-variance relationship.
 }
 \seealso{
-Other Mass Spectrometry functions: 
-\code{\link{ms_condition}()},
-\code{\link{ms_process}()},
-\code{\link{ms_summarize}()},
-\code{\link{ms_top}()}
+Other Mass Spectrometry functions:
+\code{\link[=ms_condition]{ms_condition()}},
+\code{\link[=ms_process]{ms_process()}},
+\code{\link[=ms_summarize]{ms_summarize()}},
+\code{\link[=ms_top]{ms_top()}}
 }
 \author{
 Derek Chiu

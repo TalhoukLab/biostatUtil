@@ -49,11 +49,11 @@ on the fold change criterion where the absolute fold change is greater than
 \code{fc} for \emph{either} A vs. control or B vs. control.
 }
 \seealso{
-Other Mass Spectrometry functions: 
-\code{\link{ms_condition}()},
+Other Mass Spectrometry functions:
+\code{\link[=ms_condition]{ms_condition()}},
 \code{\link{ms_plot}},
-\code{\link{ms_process}()},
-\code{\link{ms_summarize}()}
+\code{\link[=ms_process]{ms_process()}},
+\code{\link[=ms_summarize]{ms_summarize()}}
 }
 \author{
 Derek Chiu
