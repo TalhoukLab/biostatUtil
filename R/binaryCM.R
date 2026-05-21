@@ -20,7 +20,7 @@
 #' @param conf.level confidence level. Defaults to 95%.
 #' @param digits number of digits to round summaries to
 #' @param method method for obtaining confidence intervals for binomial
-#'   probabilities. See `Hmisc::binconf` for details.
+#'   probabilities. See [Hmisc::binconf()] for details.
 #' @param verbose logical; if `TRUE`, outputs are printed to the screen
 #' @return A confusion matrix for the predicted and reference classes. Then
 #' the estimated statistics along with bootstrapped confidence intervals. A

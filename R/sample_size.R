@@ -7,7 +7,7 @@
 #'
 #' @param fit an object fit of class `coxph`
 #' @param D discrimination measure D, defaults to output of
-#'   `survival::royston()` for `fit`
+#'   [survival::royston()] for `fit`
 #' @param cens censoring proportion, defaults to proportion calculated from
 #'   `fit`
 #' @param p proportion of `D` accepted as `delta`, defaults to 10%.

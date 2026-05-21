@@ -19,7 +19,7 @@ ssize_D(
 \item{fit}{an object fit of class \code{coxph}}
 
 \item{D}{discrimination measure D, defaults to output of
-\code{survival::royston()} for \code{fit}}
+\code{\link[survival:royston]{survival::royston()}} for \code{fit}}
 
 \item{cens}{censoring proportion, defaults to proportion calculated from
 \code{fit}}

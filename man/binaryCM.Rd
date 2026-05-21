@@ -33,7 +33,7 @@ to 1.}
 \item{digits}{number of digits to round summaries to}
 
 \item{method}{method for obtaining confidence intervals for binomial
-probabilities. See \code{Hmisc::binconf} for details.}
+probabilities. See \code{\link[Hmisc:binconf]{Hmisc::binconf()}} for details.}
 
 \item{verbose}{logical; if \code{TRUE}, outputs are printed to the screen}
 }
