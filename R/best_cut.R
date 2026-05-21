@@ -47,18 +47,18 @@ best_cut <- function(f, d, n = c("b", "t", "qd", "qn"), AIC.range = 3,
 
   # Build cutpoints, cox and km fits, summarize results
   bins <- build_cuts(d[, all.vars(f)[3]], n = n, list = TRUE)
-  cuts <- stringr::str_extract_all(names(bins), ".v") %>%
+  cuts <- stringr::str_extract_all(names(bins), ".v") |>
     purrr::map_chr(~ paste(gsub("v", "", .x), collapse = ", "))
   coxs <- purrr::map(bins, ~
     coxph(stats::as.formula(paste(deparse(f[[2]]), "~ .x")), d))
   diffs <- purrr::map(bins, ~
     survfit(stats::as.formula(paste(deparse(f[[2]]), "~ .x")), d))
-  results <- coxs %>%
-    purrr::map_df(broom::glance, .id = "bin.names") %>%
-    as.data.frame() %>%
-    magrittr::set_rownames(.$bin.names) %>%
-    dplyr::select(p.value.log, logLik, AIC) %>%
-    cbind(cutpoints = cuts, .)
+  results <- coxs |>
+    purrr::map_df(broom::glance, .id = "bin.names") |>
+    as.data.frame() |>
+    dplyr::select(bin.names, p.value.log, logLik, AIC) |>
+    tibble::add_column(cutpoints = cuts, .after = 1) |>
+    tibble::column_to_rownames("bin.names")
   p.vals <- signif(results$p.value.log, nround)
   AIC.vals <- round(results$AIC, nround)
 
@@ -66,7 +66,7 @@ best_cut <- function(f, d, n = c("b", "t", "qd", "qn"), AIC.range = 3,
   if (diff(range(results$AIC)) < AIC.range) {
     # Cutpoint that distributes the group size and number of events most evenly
     opt.ind <- purrr::map_dbl(diffs, ~ prod(summary(.x)$table[, "events"] /
-                                              sum(summary(.x)$n.event))) %>%
+                                              sum(summary(.x)$n.event))) |>
       which.max()
     flat.lik <- TRUE
   } else {
@@ -75,7 +75,7 @@ best_cut <- function(f, d, n = c("b", "t", "qd", "qn"), AIC.range = 3,
   }
   # Add annotation to title indicating best cutpoint
   opt.cut <- results$cutpoints[[opt.ind]]
-  best.ind <- rep("", length(cuts)) %>%
+  best.ind <- rep("", length(cuts)) |>
     magrittr::inset(opt.ind, " (Best)")
   titles <- paste0(title, " ", names(bins), best.ind)
 

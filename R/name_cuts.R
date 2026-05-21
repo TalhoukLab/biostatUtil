@@ -25,10 +25,10 @@ name_cuts <- function(x, cuts) {
   n <- switch(as.character(length(cuts)),
               "2" = "b", "3" = "t", "4" = "qd", "5" = "qn")
   v.ind <- match(cuts[-length(cuts)], levs)
-  cut.name <- rep("", length(levs)) %>%
-    magrittr::inset(v.ind, "v") %>%
-    paste0(levs) %>%
-    paste(collapse = "") %>%
-    paste0(n, .)
+  cut.name <- rep("", length(levs)) |>
+    magrittr::inset(v.ind, "v")  |>
+    paste0(levs) |>
+    paste(collapse = "")  |>
+    paste0(n, ... = _)
   return(cut.name)
 }

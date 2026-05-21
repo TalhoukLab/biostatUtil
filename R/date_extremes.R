@@ -68,7 +68,7 @@ maxDateArray <- function(t.arr, date.format = "MM.DD.YYYY",
     cleanDate(.x, original.format = date.format, preferred.format = date.format,
               existing.missing.codes = existing.missing.codes,
               return.missing.code = return.missing.code, sep = sep),
-    format = getFormat(.x, date.format), origin = DATE.ORIGIN)) %>%
+    format = getFormat(.x, date.format), origin = DATE.ORIGIN)) |>
     which.max()
   return(t.arr[max.index])
 }
@@ -87,7 +87,7 @@ minDateArray <- function(t.arr, date.format = "MM.DD.YYYY",
     cleanDate(.x, original.format = date.format, preferred.format = date.format,
               existing.missing.codes = existing.missing.codes,
               return.missing.code = return.missing.code, sep = sep),
-    format = getFormat(.x, date.format), origin = DATE.ORIGIN)) %>%
+    format = getFormat(.x, date.format), origin = DATE.ORIGIN)) |>
     which.min()
   return(t.arr[min.index])
 }

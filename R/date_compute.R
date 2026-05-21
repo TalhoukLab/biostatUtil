@@ -64,19 +64,21 @@ addToDate <- function(org.date, delta, date.format = "MM.DD.YYYY",
        delta %in% existing.missing.codes))
     return(return.missing.code)
   units <- match.arg(units)
-  delta.time <- delta %>%
-    as.numeric() %>%
-    switch(units,
-           days = .,
-           weeks = . * 7,
-           months = . * NUM.DAYS.IN.MONTH,
-           years = . * NUM.DAYS.IN.YEAR)
+  delta.time <- delta |>
+    as.numeric() |>
+    (\(x) switch(
+      units,
+      days = x,
+      weeks = x * 7,
+      months = x * NUM.DAYS.IN.MONTH,
+      years = x * NUM.DAYS.IN.YEAR
+    ))()
   result <- cleanDate(org.date, date.format, date.format,
                       existing.missing.codes = existing.missing.codes,
-                      return.missing.code = return.missing.code, sep = sep) %>%
-    as.Date(format = getFormat(org.date, date.format), origin = DATE.ORIGIN) %>%
-    magrittr::add(delta.time) %>%
-    as.Date(origin = DATE.ORIGIN) %>%
+                      return.missing.code = return.missing.code, sep = sep) |>
+    as.Date(format = getFormat(org.date, date.format), origin = DATE.ORIGIN) |>
+    magrittr::add(delta.time) |>
+    as.Date(origin = DATE.ORIGIN) |>
     format(format = getFormat(org.date, date.format))
   return(result)
 }
@@ -96,14 +98,14 @@ diffDate <- function(d1, d2, date.format = "MM.DD.YYYY",
   if (dplyr::n_distinct(existing.missing.codes, na.rm = TRUE) > 0 &
       any(c(d1, d2) %in% existing.missing.codes))
     return(return.missing.code)
-  result <- c(d1, d2) %>%
-    unname() %>%
+  result <- c(d1, d2) |>
+    unname() |>
     purrr::map(~ strptime(
       cleanDate(.x, date.format, date.format,
                 existing.missing.codes = existing.missing.codes,
                 return.missing.code = return.missing.code, sep = sep),
-      format = getFormat(.x, date.format))) %>%
-    rlang::exec(difftime, !!!.) %>%
+      format = getFormat(.x, date.format))) |>
+    (\(x) rlang::exec(difftime, !!!x))() |>
     as.numeric()
   switch(match.arg(units),
          days = result,
