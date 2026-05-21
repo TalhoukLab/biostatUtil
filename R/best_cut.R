@@ -40,7 +40,6 @@
 best_cut <- function(f, d, n = c("b", "t", "qd", "qn"), AIC.range = 3,
                      nround = 3, plot = TRUE, filename = NULL,
                      nrow = NULL, ncol = NULL, title = "", ...) {
-  cutpoints <- p.value.log <- logLik <- AIC <- NULL
   pos <- 1
   assign("f", f, envir = as.environment(pos))
   assign("d", d, envir = as.environment(pos))
@@ -56,7 +55,7 @@ best_cut <- function(f, d, n = c("b", "t", "qd", "qn"), AIC.range = 3,
   results <- coxs |>
     purrr::map_df(broom::glance, .id = "bin.names") |>
     as.data.frame() |>
-    dplyr::select(bin.names, p.value.log, logLik, AIC) |>
+    dplyr::select("bin.names", "p.value.log", "logLik", "AIC") |>
     tibble::add_column(cutpoints = cuts, .after = 1) |>
     tibble::column_to_rownames("bin.names")
   p.vals <- signif(results$p.value.log, nround)
