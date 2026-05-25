@@ -51,7 +51,7 @@ lifetable <- function(obj, ntimes = 3, times = NULL, nround = 3,
   if (ntimes > 1) {
     ind <- purrr::map(split_pos(obj$time, cuts),
                       ~ purrr::map_int(times, function(.y)
-                        which.min(abs(.y - .x)))) %>%
+                        which.min(abs(.y - .x)))) |>
       purrr::map2(.y = obj$strata, ~ magrittr::inset(.x, ntimes, .y))
   } else {
     ind <- obj$strata
@@ -60,26 +60,31 @@ lifetable <- function(obj, ntimes = 3, times = NULL, nround = 3,
                     ~ purrr::map_dbl(split_pos(.x, .y), sum))
   es <- purrr::map2(split_pos(obj$n.event, cuts), ind,
                     ~ purrr::map_dbl(split_pos(.x, .y), sum))
-  if (show.strata)
+  if (show.strata) {
     strata <- names(obj$strata)
-  else
+  } else {
     strata <- gsub(".+=", "\\1", names(obj$strata))
-  tab <- purrr::pmap(list(obj$n, cs, es), KMsurv::lifetab,
-                     tis = c(0, times)) %>%
-    purrr::map(round, nround) %>%
-    purrr::map(~ cbind(times = rownames(.x), .)) %>%
-    rlang::exec(rbind, !!!.) %>%
-    cbind(strata = rep(strata, each = ntimes), .) %>%
-    magrittr::set_rownames(NULL)
+  }
+  tab <-
+    purrr::pmap(list(obj$n, cs, es), KMsurv::lifetab, tis = c(0, times)) |>
+    purrr::map(round, nround) |>
+    purrr::map(~ tibble::rownames_to_column(.x, "times")) |>
+    purrr::map2(strata, ~ tibble::add_column(.x, strata = .y, .before = 1)) |>
+    (\(x) rlang::exec(rbind, !!!x))()
+
   if (summary) {
-    tab <- tab %>%
-      dplyr::select(strata, nsubs, nevent, nlost) %>%
-      dplyr::mutate(strata = as.character(strata)) %>%
-      rbind(c("Overall", colSums(.[-1]))) %>%
-      dplyr::mutate_at(dplyr::vars(names(.)[-1]), as.numeric) %>%
-      dplyr::mutate(plost = paste0(sprintf("%.1f", nlost / nsubs * 100), "%")) %>%
-      dplyr::rename(`Total N` = nsubs, `N of Events` = nevent,
-                    `N of Censored` = nlost, `Percent Censored` = plost)
+    overall_row <- c("Overall", "Overall", colSums(tab[, -1:-2], na.rm = TRUE))
+    tab <- tab |>
+      rbind(overall_row) |>
+      dplyr::select("strata", "nsubs", "nevent", "nlost") |>
+      dplyr::mutate(dplyr::across(-c("strata"), as.numeric)) |>
+      dplyr::mutate(plost = paste0(sprintf("%.1f", nlost / nsubs * 100), "%")) |>
+      dplyr::rename(
+        `Total N` = nsubs,
+        `N of Events` = nevent,
+        `N of Censored` = nlost,
+        `Percent Censored` = plost
+      )
   }
   colnames(tab)[1] <- eval(strata.name)
   return(tab)

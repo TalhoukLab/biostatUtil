@@ -24,25 +24,25 @@ extract_km <- function(data, var, outcome, args, digits = 3) {
     !!rlang::parse_expr(args[[outcome]][["status"]])
   )), rlang::expr(!!rlang::sym(var)))
 
-  survival::survdiff(f, data = data) %>%
-    getPval() %>%
-    scales::pvalue(accuracy = 10 ^ -digits, add_p = TRUE) %>%
-    paste0(toupper(outcome), ": " , .)
+  survival::survdiff(f, data = data) |>
+    getPval() |>
+    scales::pvalue(accuracy = 10 ^ -digits, add_p = TRUE) |>
+    paste0(toupper(outcome), ": " , ... = _)
 }
 
 #' @rdname extract_results
 #' @param x an object from result of `doCoxphGeneric()` or `doCoxphMultivariable()`
 #' @export
 extract_cox <- function(x, var, outcome) {
-  res <- x[["result.table"]][paste(var, outcome, sep = "-"), 2:3] %>%
-    gsub("</*sup>", "^", .)
+  res <- x[["result.table"]][paste(var, outcome, sep = "-"), 2:3] |>
+    gsub(pattern = "</*sup>", replacement = "^", x = _)
   names(res)[1] <- "HR"
   names(res)[2] <- ifelse(
     grepl("<", res[2]),
     gsub("P-value", "p", names(res)[2]),
     gsub("P-value", "p =", names(res)[2])
   )
-  res %>%
-    purrr::imap_chr(~ paste(.y, .x)) %>%
+  res |>
+    purrr::imap_chr(~ paste(.y, .x)) |>
     paste(collapse = ", ")
 }
